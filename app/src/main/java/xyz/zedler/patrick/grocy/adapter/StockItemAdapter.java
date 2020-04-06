@@ -152,6 +152,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         // Actions
         holder.actionButtonConsume.setVisibility(View.VISIBLE);
+        holder.actionButtonConsume.requestFocus();
         holder.actionButtonConsume.setState(stockItem.getAmount() > 0);
         holder.actionButtonConsume.setOnClickListener(v -> {
             removeConsumed();

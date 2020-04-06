@@ -1,10 +1,15 @@
 package xyz.zedler.patrick.grocy.helper;
 
+import android.animation.ArgbEvaluator;
+import android.content.Context;
 import android.graphics.Canvas;
+import android.widget.LinearLayout;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 
 public class StockItemTouchHelperCallback extends ItemTouchHelperExtension.Callback {
@@ -43,9 +48,19 @@ public class StockItemTouchHelperCallback extends ItemTouchHelperExtension.Callb
         if (dY != 0 && dX == 0) super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         StockItemAdapter.ViewHolder holder = (StockItemAdapter.ViewHolder) viewHolder;
         if (viewHolder instanceof StockItemAdapter.ItemSwipeWithActionWidthViewHolder) {
+            LinearLayout fg = holder.linearLayoutItemContainer;
+            LinearLayout bg = holder.linearLayoutItemBackground;
+            Context context = fg.getContext();
             if (dX < -holder.linearLayoutItemBackground.getWidth()) {
                 dX = -holder.linearLayoutItemBackground.getWidth();
             }
+            bg.setBackgroundColor(
+                    (int) new ArgbEvaluator().evaluate(
+                            dX / bg.getWidth(),
+                            ContextCompat.getColor(context, R.color.background),
+                            ContextCompat.getColor(context, R.color.secondary)
+                    )
+            );
             holder.linearLayoutItemContainer.setTranslationX(dX);
         }
 
