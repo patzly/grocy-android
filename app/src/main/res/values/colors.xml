@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="retro_red">#e06a4e</color>
+    <color name="retro_red_translucent">#12e06a4e</color>
+    <color name="retro_yellow">#deb853</color>
+    <color name="retro_dirt">#e2d9a2</color>
+    <color name="retro_dirt_dark">#938950</color>
+    <color name="retro_green">#789f8a</color>
+    <color name="retro_green_translucent">#12789f8a</color>
+    <color name="retro_dark">#0a373a</color>
+    <color name="on_retro">#111111</color>
+
+    <color name="grey50">#f8f9fa</color>
+    <color name="grey100">#f1f3f4</color>
+    <color name="grey200">#e8eaed</color>
+    <color name="grey300">#dadce0</color>
+    <color name="grey400">#bdc1c6</color>
+    <color name="grey500">#9aa0a6</color>
+    <color name="grey600">#80868b</color>
+    <color name="grey700">#5f6368</color>
+    <color name="grey800">#3c4043</color>
+    <color name="grey900">#202124</color>
+
+    <!-- PRIMARY -->
+
+    <color name="primary">@color/white</color>
+    <color name="primary_variant">@color/white</color>
+    <color name="on_primary">#212121</color>
+
+    <!-- SECONDARY -->
+
+    <color name="secondary">@color/retro_green</color>
+    <color name="secondary_translucent">#226bad9e</color>
+    <color name="on_secondary">@color/white</color>
+    <color name="highlight_on_secondary">#22ffffff</color>
+
+    <!-- BACKGROUND -->
+
+    <color name="background">@color/white</color>
+    <color name="on_background">#dd000000</color>
+    <color name="on_background_variant">#212121</color>
+    <color name="on_background_secondary">@color/grey600</color>
+    <color name="on_background_tertiary">@color/grey100</color>
+
+    <!-- SURFACE -->
+
+    <color name="surface">@color/white</color>
+    <color name="on_surface">@color/black</color>
+    <color name="on_surface_secondary">@color/grey100</color>
+    <color name="on_surface_area">@color/grey100</color>
+
+    <!-- TOOLTIP -->
+
+    <color name="tooltip_background">#e6616161</color>
+    <color name="tooltip_foreground">@android:color/background_dark</color>
+
+    <!-- HIGHLIGHT -->
+
+    <color name="highlight">#11000000</color>
+
+    <!-- ERROR -->
+
+    <color name="error">@color/retro_red</color>
+
+    <!-- STROKES -->
+
+    <color name="stroke_primary">@color/grey600</color> <!-- textBox, chip -->
+    <color name="stroke_secondary">@color/grey300</color> <!-- card, divider -->
+    <color name="stroke_tertiary">@color/grey300</color>
+
+    <!-- ICONS -->
+
+    <color name="icon">@color/grey800</color> <!-- dd0a373a -->
+
+    <color name="mdc_square">#212121</color>
+    <color name="mdc_circle">#b2ff59</color>
+    <color name="mdc_overlay">#00e676</color>
+
+    <color name="logo">@color/retro_dark</color>
+
+    <color name="shortcut_bg">#f5f5f5</color>
+
+    <color name="status_bar_lollipop">#999999</color>
+
+    <!-- TEXT INPUT LAYOUT -->
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
+        @color/stroke_primary
+    </color>
+
+</resources>

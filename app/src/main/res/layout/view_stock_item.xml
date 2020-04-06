@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/secondary"/>
+
+    <LinearLayout
+        android:id="@+id/linear_stock_item_background"
+        android:orientation="horizontal"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <xyz.zedler.patrick.grocy.view.ActionButton
+            android:id="@+id/button_stock_item_consume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:icon="@drawable/ic_round_consume_product"/>
+
+        <xyz.zedler.patrick.grocy.view.ActionButton
+            android:id="@+id/button_stock_item_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:icon="@drawable/ic_round_open_product"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_stock_item_overview_item_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/bg_list_item"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/text_stock_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+        <TextView
+            android:id="@+id/text_stock_item_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+    </LinearLayout>
+
+</FrameLayout>

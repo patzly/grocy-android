@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TESTED -->
+
+    <style name="Theme.Grocy" parent="Base.Grocy">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="elevationOverlayEnabled">true</item>
+        <item name="android:windowSplashscreenContent">@drawable/splash_content</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>
+    </style>
+
+</resources>

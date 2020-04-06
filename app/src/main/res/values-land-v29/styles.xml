@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TESTED -->
+
+    <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
+        <item name="android:navigationBarColor">@color/primary</item>
+    </style>
+
+</resources>

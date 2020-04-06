@@ -1,0 +1,451 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Grocy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="android:colorForeground">@color/on_background</item>
+
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="snackbarButtonStyle">@style/Widget.Grocy.Button.TextButton.Snackbar</item>
+
+        <item name="android:colorControlNormal">@color/on_background</item>
+        <item name="android:colorControlActivated">@color/secondary</item>
+        <item name="android:colorControlHighlight">@color/highlight</item>
+        <item name="android:colorEdgeEffect">@color/highlight</item>
+
+        <item name="actionOverflowButtonStyle">@style/Widget.Grocy.OverFlow</item>
+
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="Theme.Grocy" parent="Base.Grocy">
+        <item name="android:statusBarColor">@color/status_bar_lollipop</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Grocy.NavBarDivider" parent="Theme.Grocy"/>
+
+    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy"/>
+
+    <style name="Theme.Grocy.BottomAppBar.SwipeToRefresh" parent="Theme.Grocy.BottomAppBar"/>
+
+    <style name="Base.Grocy.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="android:colorForeground">@color/on_background</item>
+
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+
+        <item name="android:colorControlNormal">@color/on_background</item>
+        <item name="android:colorControlActivated">@color/secondary</item>
+        <item name="android:colorControlHighlight">@color/highlight</item>
+        <item name="android:colorEdgeEffect">@color/highlight</item>
+
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+
+        <item name="bottomSheetStyle">@style/Shape.Grocy.BottomSheet</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <style name="Widget.Grocy.Button.TextButton.Snackbar" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+    </style>
+
+    <style name="Widget.Grocy.OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/icon</item>
+    </style>
+
+    <!-- Drawer -->
+    <style name="Theme.Grocy.DrawerItem" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_drawer_item_ripple</item>
+    </style>
+
+    <style name="Theme.Grocy.DrawerItem.Icon" parent="">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+    </style>
+
+    <style name="Theme.Grocy.DrawerItem.Text" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.BottomSheet.Item</item>
+    </style>
+
+    <!-- Card -->
+    <style name="Widget.Grocy.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardBackgroundColor">@color/transparent</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="strokeColor">@color/stroke_secondary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Widget.Grocy.Card.Main" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="cardBackgroundColor">@color/background</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="strokeColor">@color/stroke_secondary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="rippleColor">@color/highlight</item>
+    </style>
+
+    <style name="Theme.Grocy.Card.Grid" parent="Widget.Grocy.Card">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Theme.Grocy.Card.Grid.Image">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <!-- Text Input -->
+    <style name="Widget.Grocy.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundColor">@color/background</item>
+        <item name="boxStrokeColor">@color/secondary</item>
+        <item name="hintTextColor">@color/secondary</item>
+        <item name="android:textColorHint">@color/on_background_secondary</item>
+        <item name="errorTextColor">@color/error</item>
+    </style>
+
+    <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundColor">@color/on_background_tertiary</item>
+        <item name="boxStrokeColor">@color/secondary</item>
+        <item name="hintTextColor">@color/secondary</item>
+        <item name="android:textColorHint">@color/on_background_secondary</item>
+        <item name="errorTextColor">@color/error</item>
+    </style>
+
+    <!-- Divider -->
+    <style name="Theme.Grocy.Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">@color/stroke_secondary</item>
+    </style>
+
+    <!-- Switch -->
+    <style name="Widget.Grocy.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Widget.Grocy.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="rippleColor">@color/secondary_translucent</item>
+        <item name="iconTint">@color/icon</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="strokeColor">@color/stroke_secondary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Widget.Grocy.Button.UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="rippleColor">@color/highlight_on_secondary</item>
+        <item name="android:textColor">@color/on_secondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="backgroundTint">@color/secondary</item>
+    </style>
+
+    <style name="Widget.Grocy.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="rippleColor">@color/secondary_translucent</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+    </style>
+
+    <!-- Category -->
+    <style name="Theme.Grocy.Category" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">72dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.Category</item>
+    </style>
+
+    <!-- List -->
+    <style name="Theme.Grocy.ListItem" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.Clickable" parent="Theme.Grocy.ListItem">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item_ripple</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.SingleLine" parent="Theme.Grocy.ListItem">
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.SingleLine.Clickable" parent="Theme.Grocy.ListItem.SingleLine">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item_ripple</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TwoLine" parent="Theme.Grocy.ListItem">
+        <item name="android:minHeight">72dp</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TwoLine.Clickable" parent="Theme.Grocy.ListItem.TwoLine">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item_ripple</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.ThreeLine" parent="Theme.Grocy.ListItem">
+        <item name="android:minHeight">88dp</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.ThreeLine.Clickable" parent="Theme.Grocy.ListItem.ThreeLine">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item_ripple</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TextBox" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TextBox.Stretch" parent="Theme.Grocy.ListItem.TextBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.Title" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.ListItem.Title</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.Description" parent="Theme.Grocy.ListItem.Title">
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.ListItem.Description</item>
+        <item name="android:maxLines">10</item>
+    </style>
+
+    <!-- Icon -->
+    <style name="Theme.Grocy.ListItem.Icon" parent="">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">start|center_vertical</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.Icon.Middle" parent="Theme.Grocy.ListItem.Icon">
+        <item name="android:layout_gravity">start|center_vertical</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.Icon.Top" parent="Theme.Grocy.ListItem.Icon">
+        <item name="android:layout_gravity">start|top</item>
+    </style>
+
+    <!-- RADIO BUTTON -->
+    <style name="Widget.Grocy.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="Widget.Grocy.Toolbar" parent="@style/Widget.MaterialComponents.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:actionBarSize</item>
+        <item name="android:background">@color/primary</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Grocy.Toolbar</item>
+    </style>
+
+    <style name="Widget.Grocy.RadioButton.BottomSheet" parent="Widget.Grocy.RadioButton">
+        <item name="android:textSize">14.5sp</item>
+    </style>
+
+    <style name="Widget.Grocy.RadioButton.Dense" parent="Widget.Grocy.RadioButton">
+        <item name="android:minHeight">38dp</item>
+    </style>
+
+    <style name="Widget.Grocy.Slider" parent="Widget.MaterialComponents.Slider">
+        <item name="trackColorActive">@color/secondary</item>
+        <item name="trackColorInactive">@color/stroke_primary</item>
+        <item name="thumbColor">@color/secondary</item>
+        <item name="haloColor">@color/highlight</item>
+        <item name="tickColorActive">@color/background</item>
+        <item name="labelStyle">@style/Widget.Grocy.Tooltip</item>
+    </style>
+
+    <style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
+    </style>
+
+    <!-- CHECK BOX -->
+    <style name="Widget.Grocy.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:minHeight">38dp</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <!-- SHAPES -->
+
+    <style name="Shape.Grocy.BottomSheet" parent="">
+        <item name="android:background">@drawable/shape_bottom_sheet_background</item>
+    </style>
+
+    <!-- TEXT APPEARANCES -->
+
+    <style name="TextAppearance.Grocy.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+        <item name="fontFamily">@font/roboto_mono_regular</item>
+        <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Body2" parent="TextAppearance.Grocy.Body1">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Chip" parent="TextAppearance.Grocy.Body1">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/roboto_mono_medium</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Title" parent="TextAppearance.Grocy.Body1">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.Grocy.ListItem.Title">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/background</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Toolbar" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Category" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Tab" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="fontFamily">@font/roboto_mono_medium</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.ListItem.Title" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.ListItem.Description" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/on_background_secondary</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.BottomSheet.Title" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.BottomSheet.Text" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.BottomSheet.Text.Small" parent="TextAppearance.Grocy.BottomSheet.Text">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.BottomSheet.Item" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/on_surface</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.BottomSheet.Item.Secondary" parent="TextAppearance.Grocy.BottomSheet.Item">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+</resources>

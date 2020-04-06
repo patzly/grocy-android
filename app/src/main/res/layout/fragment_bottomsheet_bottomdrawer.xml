@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    tools:ignore="UseCompoundDrawables">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linear_stock_overview"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_help_outline_anim" />
+
+                <TextView
+                    android:id="@+id/text_saved"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Stock overview" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_shopping_list"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_copyright_anim" />
+
+                <TextView
+                    android:id="@+id/text_channels"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Shopping list" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_recipes"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_copyright_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Recipes" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_meal_plan"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_copyright_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Meal plan" />
+
+            </LinearLayout>
+
+            <View style="@style/Theme.Grocy.Divider" />
+
+            <LinearLayout
+                android:id="@+id/linear_settings"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    android:id="@+id/image_settings"
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_settings_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="@string/title_settings" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_feedback"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    android:id="@+id/image_feedback"
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_feedback_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="@string/action_send_feedback" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_help"
+                style="@style/Theme.Grocy.DrawerItem"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/image_help"
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_help_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="@string/title_help" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

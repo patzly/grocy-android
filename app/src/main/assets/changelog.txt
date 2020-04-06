@@ -1,0 +1,50 @@
+1.8:
+- Neu: Schreibrichtung in "Konsonanten schreiben"
+- Neu: Buttons in "Konsonanten lesen" + Option für Tastatur
+- Neu: App-Intro
+- Neu: Geschriebenes löschen in "Üben"
+- Neu: Smartwatch-Dialog
+- Neu: Leitfaden mit Tabs zur einfacheren Navigation
+- Neu: Vokalzeichen in Liste
+- Verbessert: Splash-Screen
+- Verbessert: Übungen im Querformat
+- Verbessert: Feedback in Übungen
+- Verbessert: Sprachausgabe
+- Behoben: Falsche Fortschritt-Visualisation
+
+1.7:
+- Neu: Sprachausgabe für Wörter und Verbergen des Wortes
+- Neu: Fortschritte verbergen und mit allen Buchstaben gleichzeitig üben
+- Neu: Leitfaden in der App öffnen
+- Neu: App-Shortcut "Üben" (Wörter schreiben)
+- Verbessert: Feedback
+- Verbessert: Übungskonzept ("Wörter schreiben" jetzt prominent "Üben")
+- Verbessert: Layout der Startseite
+- Verbessert: Texte
+- Behoben: Scroll- und Querformat-Verhalten
+
+1.6:
+- Verbessert: Wörter schreiben (Level im oberen Menü wählbar)
+- Verbessert: Konsonanten und Wörter schreiben im Querformat
+- Verbessert: Lizenzen und Feedback
+- Verbessert: Layout in Android 10
+
+1.5:
+- Behoben: Regler in "Wörter schreiben"
+- Verbessert: Feedback-Pop-Up
+
+1.4:
+- Neu: Feedback-Pop-Up
+- Neu (Wear OS): Fortschritt und Animationen ausschalten
+- Verbessert (Wear OS): Layout
+- Behoben (Wear OS): interner Fortschritt bei falscher Antwort
+
+1.3:
+- Behoben: Probleme mit der Wear-App
+
+1.2:
+- Neu: App-Modul für Wear OS & Android Wear (Konsonanten schreiben)
+
+1.1:
+- Behoben: Konsonanten-Alphabet
+- Verbessert: Interne Aktualisierungen

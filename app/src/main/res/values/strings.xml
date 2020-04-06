@@ -1,0 +1,140 @@
+<resources>
+
+    <string name="app_name">Grocy</string>
+    <string name="app_version" translatable="false">0.1</string>
+    <string name="app_developer" translatable="false">Patrick Zedler</string>
+    <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
+
+    <string name="action_consume_one">Consume 1 %1$s of %2$s</string>
+    <string name="action_consume_one_description">Consume 1 product</string>
+    <string name="action_open_one">Open 1 %1$s of %2$s</string>
+    <string name="action_open_one_description">Open 1 product</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_check">Check</string>
+    <string name="action_next">Next</string>
+    <string name="action_next_level">Next</string>
+    <string name="action_prev">Previous</string>
+    <string name="action_practice">Practice</string>
+    <string name="action_hide_progress">Hide progress</string>
+    <string name="action_send_feedback">Send feedback</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_open_in_browser">Open in browser</string>
+    <string name="action_play_pause">Play/Pause</string>
+    <string name="action_reload">Reload</string>
+    <string name="action_top_scroll">Scroll to top</string>
+    <string name="action_open">Open</string>
+    <string name="action_show_solution">Show solution</string>
+    <string name="action_show_example">Show</string>
+    <string name="action_right">Right</string>
+    <string name="action_wrong">Wrong</string>
+    <string name="action_send">Send</string>
+    <string name="action_close">Close</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_rate">Rate on Google Play</string>
+    <string name="action_rate_description">Support the development</string>
+    <string name="action_tap_to_view">Tap to view</string>
+    <string name="action_help">Help</string>
+    <string name="action_get_started">Get started</string>
+
+    <string name="msg_expiring_products">%1$d expiring soon</string>
+    <string name="msg_expired_products">%1$d expired</string>
+    <string name="msg_missing_products">%1$d below min. stock amount</string>
+
+    <string name="subtitle_amount">%1$d %2$s</string>
+    <string name="subtitle_amount_opened">(%1$d opened)</string>
+
+    <string name="title_product_overview">Product overview</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_about">About</string>
+    <string name="title_guideline">Guideline</string>
+    <string name="title_info">Information</string>
+    <string name="title_help">Help</string>
+
+    <string name="property_amount">Amount</string>
+    <string name="property_default_location">Default location</string>
+
+    <string name="msg_error_empty">Required</string>
+    <string name="msg_error_invalid_url">Invalid URL</string>
+    <string name="msg_exercise_wrong_answer">\"%1$s\" would have been correct %2$s</string>
+    <string name="msg_reset">Reset progress?</string>
+    <string name="msg_reset_all">Reset entire progress?</string>
+    <string name="msg_features">Start intro again in \"About\"</string>
+    <string name="msg_congrats">Congratulations 😊</string>
+    <string name="msg_vowels_error1">That was wrong 😬</string>
+    <string name="msg_vowels_error2">Position is missing…</string>
+    <string name="msg_vowels_error3">Level is missing…</string>
+    <string name="msg_vowels_error4">Level and position are missing…</string>
+    <string name="msg_practice_finished">Level %1$d finished!</string>
+    <string name="msg_tts_error_language">German not available</string>
+    <string name="msg_tts_error_speech_output">Speech output not available</string>
+    <string name="msg_tts_error">Not available at the moment</string>
+    <string name="msg_feedback">A great app requires a lot of time and lives from the feedback of its users.\n\nDo you have any wishes, comments or questions? Contact me!\nOtherwise I would be very happy about a nice review in the Play Store.</string>
+    <string name="msg_wear_title">Do you have a smart-watch?</string>
+    <string name="msg_wear_top">Stiefo gibt es auch für Wear OS und Android Wear!</string>
+    <string name="msg_wear_bottom">Wear OS: Öffne den Play Store auf deiner Smartwatch und suche nach \"Stiefo\".\nAndroid Wear: Nach einiger Zeit sollte die Stiefo-App auf deiner Uhr verfügbar sein.\n\nBald kommen neue Funktionen!</string>
+
+    <string name="info_help_description">Stiefografie is a German shorthand developed by Helmut Stief.</string>
+    <string name="info_guideline">www.stiefo-kompakt.de</string>
+    <string name="info_guideline_description">German</string>
+    <string name="info_intro">Replay intro</string>
+    <string name="info_intro_description">Showcasing features</string>
+    <string name="info_material_components_built_with">Built with</string>
+    <string name="info_material_components">Material Components</string>
+    <string name="info_version">Version</string>
+    <string name="info_changelog">Changelog</string>
+    <string name="info_changelog_description">What\'s new?</string>
+    <string name="info_developer">Developer</string>
+
+    <string name="feature_1_title">Write Stiefografie</string>
+    <string name="feature_1_description">Learn a German shorthand in a few days</string>
+    <string name="feature_2_title">Practice the components</string>
+    <string name="feature_2_description">Complete exercises with consonants, vowels and words</string>
+    <string name="feature_3_title">Show progress</string>
+    <string name="feature_3_description">Complete your exercise units</string>
+
+    <string name="category_exercises">Exercises</string>
+    <string name="category_licenses">Open source licenses</string>
+    <string name="category_alphabet">Alphabet</string>
+    <string name="category_appearance">Appearance</string>
+    <string name="category_behavior">Behavior</string>
+
+    <string name="hint_server">Server URL</string>
+    <string name="hint_key">Valid API key</string>
+
+    <string name="setting_dark_mode">Force dark mode</string>
+    <string name="setting_dark_mode_description">Off for system dependency</string>
+    <string name="setting_show_help">Show help</string>
+    <string name="setting_show_help_description">On the main page</string>
+    <string name="setting_show_guideline">Show guideline</string>
+    <string name="setting_show_guideline_description">www.stiefo-kompakt.de</string>
+    <string name="setting_speech_output">Speech output</string>
+    <string name="setting_speech_output_description">Requires Internet</string>
+    <string name="setting_hide_word">Hide word</string>
+    <string name="setting_hide_word_description">Hear only</string>
+    <string name="setting_use_keyboard">Use keyboard</string>
+    <string name="setting_use_keyboard_description">Read consonants</string>
+    <string name="setting_show_direction_arrows">Show direction arrows</string>
+    <string name="setting_show_direction_arrows_description">Write consonants</string>
+    <string name="setting_slow">Slow pronunciation</string>
+    <string name="setting_language_data">Language data</string>
+    <string name="setting_language_data_description">Install offline-German or change the voice</string>
+    <string name="setting_ignore_progress">Ignore progress</string>
+    <string name="setting_ignore_progress_description">Practice with all letters</string>
+    <string name="setting_reset_all">Reset all exercises</string>
+    <string name="setting_reset_all_description">Can\'t be undone</string>
+    <string name="setting_external_browser">Use external browser</string>
+    <string name="setting_external_browser_description">To display guideline</string>
+
+    <string name="license_author_google" translatable="false">Google</string>
+    <string name="license_material_icons" translatable="false">Material Design Icons</string>
+    <string name="license_material_components" translatable="false">Material Components Android</string>
+    <string name="license_roboto" translatable="false">Roboto Typeface</string>
+
+    <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
+    <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
+    <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
+    <string name="url_roboto" translatable="false">https://github.com/google/roboto</string>
+
+</resources>
