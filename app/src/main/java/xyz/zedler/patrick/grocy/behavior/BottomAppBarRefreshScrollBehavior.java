@@ -4,25 +4,19 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.animation.AnimationUtils;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import xyz.zedler.patrick.grocy.R;
@@ -168,7 +162,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private void onScrollDown() {
 		isTopScroll = false; // second top scroll is unrealistic before down scroll
 		currentState = STATE_SCROLLED_DOWN;
-		nestedScrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS); // TODO
+		nestedScrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
 		if(bottomAppBar != null) {
 			if(hideOnScroll) {
 				bottomAppBar.hide();

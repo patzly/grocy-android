@@ -1,70 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_stock_item_overview_item_container"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:minHeight="64dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/bg_list_item"
+    android:padding="16dp"
+    android:gravity="center_vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background"/>
-
-    <LinearLayout
-        android:id="@+id/linear_stock_item_background"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center">
-
-        <xyz.zedler.patrick.grocy.view.ActionButton
-            android:id="@+id/button_stock_item_consume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_round_consume_product"
-            app:tint="@color/on_secondary"/>
-
-        <xyz.zedler.patrick.grocy.view.ActionButton
-            android:id="@+id/button_stock_item_open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:icon="@drawable/ic_round_open_product"
-            app:tint="@color/on_secondary"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_stock_item_overview_item_container"
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/text_stock_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="64dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/bg_list_item"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
-        <TextView
-            android:id="@+id/text_stock_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+    <TextView
+        android:id="@+id/text_stock_item_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
-        <TextView
-            android:id="@+id/text_stock_item_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="20dp"
-            android:layout_gravity="center_vertical"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

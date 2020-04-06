@@ -32,8 +32,6 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.helper.ItemTouchHelperExtension;
-import xyz.zedler.patrick.grocy.helper.StockItemTouchHelperCallback;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -62,7 +60,6 @@ public class StockOverviewFragment extends Fragment implements StockItemAdapter.
     private LinearLayout linearLayoutChipContainer;
     private CustomChip chipExpiring, chipExpired, chipMissing;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ItemTouchHelperExtension itemTouchHelperExtension;
 
     @Override
     public View onCreateView(
@@ -133,8 +130,6 @@ public class StockOverviewFragment extends Fragment implements StockItemAdapter.
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        itemTouchHelperExtension = new ItemTouchHelperExtension(new StockItemTouchHelperCallback());
-        itemTouchHelperExtension.attachToRecyclerView(recyclerView);
 
         /*new ItemTouchHelper(
                 new StockItemTouchHelper(
@@ -353,7 +348,6 @@ public class StockOverviewFragment extends Fragment implements StockItemAdapter.
             stockItems = gson.fromJson(json, listType);
 
             stockItemAdapter = new StockItemAdapter(activity, stockItems, quantityUnits, this);
-            stockItemAdapter.setItemTouchHelperExtension(itemTouchHelperExtension);
 
             recyclerView.setAdapter(stockItemAdapter);
 
