@@ -347,6 +347,20 @@ public class StockFragment extends Fragment implements StockItemAdapter.PageItem
             Type listType = new TypeToken<List<StockItem>>(){}.getType();
             stockItems = gson.fromJson(json, listType);
 
+            for(StockItem stockItem : missingItems) {
+                if(stockItem.getIsPartlyInStock() == 0) {
+                    /*new JsonDownloadTask(grocyApi.getStock(), json -> {
+                        Type listType = new TypeToken<List<StockItem>>(){}.getType();
+                        stockItems = gson.fromJson(json, listType);
+
+
+                    }, () -> {
+                        // TODO
+                    }).execute();
+                    grocyApi.getStockProduct(stockItem.getId())*/
+                }
+            }
+
             stockItemAdapter = new StockItemAdapter(activity, stockItems, quantityUnits, this);
 
             recyclerView.setAdapter(stockItemAdapter);

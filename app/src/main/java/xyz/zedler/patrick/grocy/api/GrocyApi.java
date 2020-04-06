@@ -3,9 +3,7 @@ package xyz.zedler.patrick.grocy.api;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
-import android.util.Log;
 
-import androidx.annotation.IdRes;
 import androidx.preference.PreferenceManager;
 
 import java.nio.charset.StandardCharsets;
@@ -92,6 +90,16 @@ public class GrocyApi {
         return getUrl("/stock");
     }
 
+    /**
+     * Returns details of the given product
+     */
+    public String getStockProduct(int productId) {
+        return getUrl("/stock/products/" + productId);
+    }
+
+    /**
+     * Returns all products which are currently in stock incl. the next expiring date per product
+     */
     public String getStockVolatile() {
         return getUrl(
                 "/stock/volatile", "expiring_days="

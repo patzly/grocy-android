@@ -44,6 +44,38 @@ public class StockItem {
 
     // GETTERS
 
+    public int getAmountAggregated() {
+        return amountAggregated;
+    }
+
+    public String getBestBeforeDate() {
+        return bestBeforeDate;
+    }
+
+    public int getAmountOpenedAggregated() {
+        return amountOpenedAggregated;
+    }
+
+    public int getIsAggregatedAmount() {
+        return isAggregatedAmount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAmountMissing() {
+        return amountMissing;
+    }
+
+    public int getIsPartlyInStock() {
+        return isPartlyInStock;
+    }
+
     public int getProductId() {
         return productId;
     }
