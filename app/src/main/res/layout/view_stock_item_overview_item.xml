@@ -44,13 +44,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:icon="@drawable/ic_round_consume_product"/>
+        app:icon="@drawable/ic_round_consume_product"
+        app:tint="@color/icon"/>
 
     <xyz.zedler.patrick.grocy.view.ActionButton
         android:id="@+id/button_stock_item_overview_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:icon="@drawable/ic_round_open_product"/>
+        app:icon="@drawable/ic_round_open_product"
+        app:tint="@color/icon"/>
 
 </LinearLayout>
