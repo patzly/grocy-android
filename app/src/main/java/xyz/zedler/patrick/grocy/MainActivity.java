@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setHideOnScroll(true);
 
         // FEED FRAGMENT
-        fragmentCurrent = new StockOverviewFragment();
+        fragmentCurrent = new StockFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.linear_container_main, fragmentCurrent)
                 .commit();
