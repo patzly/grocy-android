@@ -20,6 +20,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.ItemTouchHelperExtension;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
@@ -28,19 +29,23 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     private Context context;
     private List<StockItem> stockItems;
+    private StockItem stockItem;
     private List<QuantityUnit> quantityUnits;
     private PageItemAdapterListener listener;
     private ItemTouchHelperExtension itemTouchHelperExtension;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public LinearLayout linearLayoutItemContainer, linearLayoutItemBackground;
-        TextView textViewName, textViewAmount;
+        public ActionButton actionButtonConsume, actionButtonOpen;
+        private TextView textViewName, textViewAmount;
 
         public ViewHolder(View view) {
             super(view);
 
             linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_overview_item_container);
             linearLayoutItemBackground = view.findViewById(R.id.linear_stock_item_background);
+            actionButtonConsume = view.findViewById(R.id.button_stock_item_consume);
+            actionButtonOpen = view.findViewById(R.id.button_stock_item_open);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
 
@@ -71,15 +76,11 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.itemTouchHelperExtension = itemTouchHelperExtension;
     }
 
-    public class ItemSwipeWithActionWidthViewHolder extends ViewHolder implements ItemTouchHelperExtension.Extension {
-
-        View mActionViewDelete;
-        View mActionViewRefresh;
+    public class ItemSwipeWithActionWidthViewHolder extends ViewHolder
+            implements ItemTouchHelperExtension.Extension {
 
         public ItemSwipeWithActionWidthViewHolder(View itemView) {
             super(itemView);
-            /*mActionViewDelete = itemView.findViewById(R.id.view_list_repo_action_delete);
-            mActionViewRefresh = itemView.findViewById(R.id.view_list_repo_action_update);*/
         }
 
         @Override
@@ -90,7 +91,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemSwipeWithActionWidthViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemSwipeWithActionWidthViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.view_stock_item, parent, false
@@ -101,7 +102,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        StockItem stockItem = stockItems.get(position);
+        stockItem = stockItems.get(position);
 
         QuantityUnit quantityUnit = new QuantityUnit();
         for(int i = 0; i < quantityUnits.size(); i++) {
@@ -149,6 +150,24 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             return false;
         });
 
+        // Actions
+        holder.actionButtonConsume.setVisibility(View.VISIBLE);
+        holder.actionButtonConsume.setState(stockItem.getAmount() > 0);
+        holder.actionButtonConsume.setOnClickListener(v -> {
+            removeConsumed();
+            refreshActionStates(holder.actionButtonConsume, holder.actionButtonOpen);
+            itemTouchHelperExtension.closeOpened();
+        });
+        holder.actionButtonOpen.setVisibility(View.VISIBLE);
+        holder.actionButtonOpen.setState(
+                stockItem.getAmount() > stockItem.getAmountOpened()
+        );
+        holder.actionButtonOpen.setOnClickListener(v -> {
+            addOpened();
+            refreshActionStates(holder.actionButtonConsume, holder.actionButtonOpen);
+            itemTouchHelperExtension.closeOpened();
+        });
+
         applyClickEvents(holder, position);
     }
 
@@ -162,12 +181,29 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         return stockItems.size();
     }
 
+    private void removeConsumed() {
+        if(stockItem.getAmount() > 0) {
+            if(stockItem.getAmountOpened() > 0) stockItem.removeOpened();
+            stockItem.removeConsumed();
+        }
+    }
+
+    private void addOpened() {
+        if(stockItem.getAmount() > 0) {
+            stockItem.addOpened();
+        }
+    }
+
+    private void refreshActionStates(ActionButton actionConsume, ActionButton actionOpen) {
+        actionConsume.refreshState(stockItem.getAmount() > 0);
+        actionOpen.refreshState(stockItem.getAmount() > stockItem.getAmountOpened());
+    }
+
     /*public void refreshProducts(List<Product> products) {
         this.products = products;
     }*/
 
     private void applyClickEvents(ViewHolder holder, final int position) {
-
         holder.linearLayoutItemContainer.setOnClickListener(
                 view -> listener.onItemRowClicked(position)
         );

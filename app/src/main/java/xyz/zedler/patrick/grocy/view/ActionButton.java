@@ -1,28 +1,20 @@
 package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import xyz.zedler.patrick.grocy.R;
 
@@ -52,6 +44,9 @@ public class ActionButton extends LinearLayout {
                 imageViewIcon.setImageResource(
                         typedArray.getResourceId(R.styleable.ActionButton_icon, -1)
                 );
+                setIconTint(
+                        typedArray.getColor(R.styleable.ActionButton_tint, -1)
+                );
             } finally {
                 typedArray.recycle();
             }
@@ -60,6 +55,15 @@ public class ActionButton extends LinearLayout {
 
     public void setIcon(@DrawableRes int iconRes) {
         imageViewIcon.setImageResource(iconRes);
+    }
+
+    public void setIconTint(int color) {
+        imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
+                new int[] { android.R.attr.state_enabled},
+                new int[] {-android.R.attr.state_enabled}
+        }, new int[]{
+                color, color
+        }));
     }
 
     public void setState(boolean enabled) {

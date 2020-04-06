@@ -48,8 +48,6 @@ public class StockItemTouchHelperCallback extends ItemTouchHelperExtension.Callb
             }
             holder.linearLayoutItemContainer.setTranslationX(dX);
         }
-        if (viewHolder instanceof StockItemAdapter.ViewHolder)
-            holder.linearLayoutItemContainer.setTranslationX(dX);
 
         /*if (dY != 0 && dX == 0) super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         StockItemAdapter.ViewHolder holder = (StockItemAdapter.ViewHolder) viewHolder;
