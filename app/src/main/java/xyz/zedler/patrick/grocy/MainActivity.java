@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         );
         scrollBehavior.setUpBottomAppBar(bottomAppBar);
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
-        scrollBehavior.setHideOnScroll(false);
+        scrollBehavior.setHideOnScroll(true);
 
         // FEED FRAGMENT
         fragmentCurrent = new StockOverviewFragment();
