@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="Grocy.app" target="1.8" />
+      <module name="Grocy_Android.app" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
