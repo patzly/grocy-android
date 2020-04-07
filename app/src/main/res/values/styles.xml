@@ -229,7 +229,7 @@
 
     <style name="Theme.Grocy.ListItem.Clickable" parent="Theme.Grocy.ListItem">
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_list_item_ripple</item>
+        <item name="android:background">@drawable/bg_list_item</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.SingleLine" parent="Theme.Grocy.ListItem">
@@ -238,7 +238,7 @@
 
     <style name="Theme.Grocy.ListItem.SingleLine.Clickable" parent="Theme.Grocy.ListItem.SingleLine">
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_list_item_ripple</item>
+        <item name="android:background">@drawable/bg_list_item</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.TwoLine" parent="Theme.Grocy.ListItem">
@@ -247,7 +247,7 @@
 
     <style name="Theme.Grocy.ListItem.TwoLine.Clickable" parent="Theme.Grocy.ListItem.TwoLine">
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_list_item_ripple</item>
+        <item name="android:background">@drawable/bg_list_item</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.ThreeLine" parent="Theme.Grocy.ListItem">
@@ -256,7 +256,7 @@
 
     <style name="Theme.Grocy.ListItem.ThreeLine.Clickable" parent="Theme.Grocy.ListItem.ThreeLine">
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/bg_list_item_ripple</item>
+        <item name="android:background">@drawable/bg_list_item</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.TextBox" parent="">
