@@ -33,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.net.URI;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
@@ -73,36 +74,36 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.button_login_key).setOnClickListener(v -> {
-            startActivity(
-                    new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(editTextServer.getText().toString() + "/manageapikeys")
-                    )
-            );
+            if(editTextServer.getText().toString().equals("")) {
+                textInputLayoutServer.setError(getString(R.string.msg_error_empty));
+            } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
+                textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
+            } else {
+                textInputLayoutServer.setErrorEnabled(false);
+                Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(editTextServer.getText().toString() + "/manageapikeys");
+                browserManageKeys.setData(uri);
+                startActivity(browserManageKeys);
+            }
         });
 
         findViewById(R.id.button_login_login).setOnClickListener(v -> {
             if(editTextServer.getText().toString().equals("")) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_empty));
-            } else if(!editTextServer.getText().toString().startsWith("https://")
-                    && !editTextServer.getText().toString().startsWith("http://")
-            ) {
-                if(URLUtil.isValidUrl("https://" + editTextServer.getText().toString())
-                        || URLUtil.isValidUrl("http://" + editTextServer.getText().toString())
-                ) {
-                    editTextServer.setText("https://" + editTextServer.getText().toString());
-                    requestLogin(editTextServer.getText().toString(), editTextKey.getText().toString());
-                } else {
-                    textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
-                }
             } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
             } else {
+                textInputLayoutServer.setErrorEnabled(false);
                 requestLogin(editTextServer.getText().toString(), editTextKey.getText().toString());
             }
         });
 
         findViewById(R.id.button_login_demo).setOnClickListener(v -> {
-            sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, "https://de.demo.grocy.info").apply();
+            // TODO: "https://de.demo.grocy.info" should be placed in xml strings
+            sharedPrefs.edit()
+                    .putString(Constants.PREF.SERVER_URL,"https://de.demo.grocy.info")
+                    .putString(Constants.PREF.API_KEY, "")
+                    .apply();
             finish();
         });
     }
@@ -120,9 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                             .apply();
                     finish();
                 },
-                error -> {
-                    showSnackbar("That didn't work!" + error);
-                }) {
+                error -> showSnackbar("That didn't work!" + error)) {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 int statusCode = response.statusCode;
