@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +25,10 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     private Context context;
     private List<StockItem> stockItems;
-    private StockItem stockItem;
     private List<QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout linearLayoutItemContainer;
         private TextView textViewName, textViewAmount;
 
@@ -40,15 +38,6 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_overview_item_container);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
-
-            view.setOnLongClickListener(this);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            listener.onRowLongClicked(getAdapterPosition());
-            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            return true;
         }
     }
 
@@ -69,7 +58,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.view_stock_item, parent, false
+                        R.layout.view_stock_item,
+                        parent,
+                        false
                 )
         );
     }
@@ -77,7 +68,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        stockItem = stockItems.get(position);
+        StockItem stockItem = stockItems.get(position);
 
         QuantityUnit quantityUnit = new QuantityUnit();
         for(int i = 0; i < quantityUnits.size(); i++) {
@@ -118,7 +109,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 )
         );
 
-        applyClickEvents(holder, position);
+        holder.linearLayoutItemContainer.setOnClickListener(
+                view -> listener.onItemRowClicked(position)
+        );
     }
 
     @Override
@@ -135,25 +128,11 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.products = products;
     }*/
 
-    private void applyClickEvents(ViewHolder holder, final int position) {
-        holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
-        );
-
-        holder.linearLayoutItemContainer.setOnLongClickListener(view -> {
-            listener.onRowLongClicked(position);
-            return true;
-        });
-    }
-
     public void removeData(int position) {
         stockItems.remove(position);
     }
 
     public interface StockItemAdapterListener {
-
         void onItemRowClicked(int position);
-
-        void onRowLongClicked(int position);
     }
 }

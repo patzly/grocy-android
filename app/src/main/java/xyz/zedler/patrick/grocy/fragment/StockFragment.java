@@ -377,7 +377,4 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         bottomSheet.setData(stockItems.get(position), quantityUnits, locations);
         activity.showBottomSheet(bottomSheet);
     }
-
-    @Override
-    public void onRowLongClicked(int position) { }
 }
