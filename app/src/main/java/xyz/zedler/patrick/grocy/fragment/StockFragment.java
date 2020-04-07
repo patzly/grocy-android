@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,10 +34,12 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.task.JsonDownloadTask;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomChip;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
@@ -48,6 +51,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private SharedPreferences sharedPrefs;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
+    private AppBarBehavior appBarBehavior;
 
     private List<StockItem> stockItems = new ArrayList<>();
     private List<StockItem> expiringItems = new ArrayList<>();
@@ -87,6 +91,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         linearLayoutChipContainer = activity.findViewById(R.id.linear_stock_overview_chip_container);
         recyclerView = activity.findViewById(R.id.recycler_stock_overview);
+
+        // APP BAR BEHAVIOR
+
+        appBarBehavior = new AppBarBehavior(activity, R.id.linear_app_bar_stock_default);
 
         // SWIPE REFRESH
 
@@ -131,16 +139,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new StockPlaceholderAdapter());
-
-        /*new ItemTouchHelper(
-                new StockItemTouchHelper(
-                        0,
-                        ItemTouchHelper.RIGHT,
-                        (viewHolder, direction, position) -> {
-
-                        }
-                )
-        ).attachToRecyclerView(recyclerView);*/
 
         load();
 
@@ -234,6 +232,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         //pageItemTextAdapter.notifyDataSetChanged();
 
         // UPDATE UI
+
+        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
 
         /*activity.updateUI(mode, "PageFragment: onActivityCreated");
 
@@ -376,5 +376,46 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         StockItemBottomSheetDialogFragment bottomSheet = new StockItemBottomSheetDialogFragment();
         bottomSheet.setData(stockItems.get(position), quantityUnits, locations);
         activity.showBottomSheet(bottomSheet);
+    }
+
+    public void setUpSearch() {
+        // SEARCH APP BAR LAYOUT
+        appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
+
+        TextInputLayout textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
+        textInputLayoutSearch.requestFocus();
+        activity.showKeyboard(textInputLayoutSearch.getEditText());
+
+        activity.findViewById(R.id.frame_close_stock_search).setOnClickListener(
+                v -> activity.onBackPressed()
+        );
+
+        // UPDATE UI
+
+        activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);
+
+        /*activity.updateUI(
+                mode.equals(MainActivity.UI_SAVED_DEFAULT)
+                        ? MainActivity.UI_SAVED_SEARCH
+                        : MainActivity.UI_CHANNEL_SEARCH,
+                "PageFragment: setUpSearch"
+        );*/
+    }
+
+    public void dismissSearch() {
+        // DEFAULT APP BAR LAYOUT
+        appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_default, true);
+
+        activity.hideKeyboard();
+
+        /*frameLayoutBack.setTooltipText(activity.getString(R.string.action_back));
+        imageViewBack.setImageResource(R.drawable.ic_round_close_to_arrow_back_anim);
+        activity.startAnimatedIcon(imageViewBack);
+        activity.hideKeyboard();
+        activity.updateUI(mode, "PageFragment: removeSelection");*/
+
+        // UPDATE UI
+
+        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }
 }

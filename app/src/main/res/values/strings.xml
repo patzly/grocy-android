@@ -11,6 +11,7 @@
     <string name="action_open_one_description">Open 1 product</string>
 
     <string name="action_back">Back</string>
+    <string name="action_search">Search</string>
     <string name="action_check">Check</string>
     <string name="action_next">Next</string>
     <string name="action_next_level">Next</string>

@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,7 @@
         android:background="@color/primary">
 
         <LinearLayout
+            android:id="@+id/linear_app_bar_stock_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -24,6 +26,60 @@
                 android:text="Stock overview"
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_app_bar_stock_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:id="@+id/frame_close_stock_search"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_close"
+                android:tooltipText="@string/action_close"
+                android:focusable="true"
+                tools:targetApi="o">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_close" />
+
+            </FrameLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_stock_search"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="72dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+                    android:singleLine="true"
+                    android:textColor="@color/on_background" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

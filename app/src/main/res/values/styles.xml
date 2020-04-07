@@ -161,6 +161,23 @@
         <item name="errorTextColor">@color/error</item>
     </style>
 
+    <style name="Widget.Grocy.TextInputLayout.FilledBox.Mini" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundColor">@color/on_background_tertiary</item>
+        <item name="boxStrokeColor">@color/secondary</item>
+        <item name="android:textColorHint">@color/on_background_secondary</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="hintTextColor">@color/transparent</item>
+        <item name="boxCollapsedPaddingTop">0dp</item>
+        <item name="boxCornerRadiusTopStart">5dp</item>
+        <item name="boxCornerRadiusTopEnd">5dp</item>
+    </style>
+
+    <style name="Widget.Grocy.TextInputEditText.FilledBox.Mini" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="android:padding">8dp</item>
+    </style>
+
     <!-- Divider -->
     <style name="Theme.Grocy.Divider">
         <item name="android:layout_width">match_parent</item>
