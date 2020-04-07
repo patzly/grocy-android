@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="64dp"
+    android:background="@color/background"
+    android:padding="16dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:text="Product name"
+        android:textColor="@color/transparent"
+        android:background="@drawable/bg_placeholder_text"
+        android:backgroundTint="@color/on_background_secondary"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:text="20 Pieces"
+        android:textColor="@color/transparent"
+        android:background="@drawable/bg_placeholder_text"
+        android:backgroundTint="@color/on_background_tertiary"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+</LinearLayout>
