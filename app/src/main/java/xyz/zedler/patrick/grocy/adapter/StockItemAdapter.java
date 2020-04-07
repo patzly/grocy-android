@@ -28,7 +28,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private List<StockItem> stockItems;
     private StockItem stockItem;
     private List<QuantityUnit> quantityUnits;
-    private PageItemAdapterListener listener;
+    private StockItemAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         public LinearLayout linearLayoutItemContainer;
@@ -56,7 +56,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             Context context,
             List<StockItem> stockItems,
             List<QuantityUnit> quantityUnits,
-            PageItemAdapterListener listener
+            StockItemAdapterListener listener
     ) {
         this.context = context;
         this.stockItems = stockItems;
@@ -150,7 +150,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         stockItems.remove(position);
     }
 
-    public interface PageItemAdapterListener {
+    public interface StockItemAdapterListener {
 
         void onItemRowClicked(int position);
 

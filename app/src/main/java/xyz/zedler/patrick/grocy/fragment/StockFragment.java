@@ -31,6 +31,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -117,7 +118,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.PageItem
                 activity.getString(R.string.msg_missing_products, 0),
                 4, 0
         );
-        linearLayoutChipContainer.setVisibility(View.INVISIBLE);
         linearLayoutChipContainer.addView(chipExpiring);
         linearLayoutChipContainer.addView(chipExpired);
         linearLayoutChipContainer.addView(chipMissing);
@@ -130,6 +130,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.PageItem
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(new StockPlaceholderAdapter());
 
         /*new ItemTouchHelper(
                 new StockItemTouchHelper(
@@ -246,7 +247,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.PageItem
             swipeRefreshLayout.setRefreshing(true);
             runnableQuantityUnits().run();
         } else {
-
+            // TODO
         }
     }
 
@@ -334,7 +335,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.PageItem
                             missingItems.size()
                     )
             );
-            linearLayoutChipContainer.setVisibility(View.VISIBLE);
 
             runnableStockItems().run();
         }, () -> {
