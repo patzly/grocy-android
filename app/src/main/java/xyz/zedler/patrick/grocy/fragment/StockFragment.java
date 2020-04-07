@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.task.JsonDownloadTask;
 import xyz.zedler.patrick.grocy.view.CustomChip;
 
-public class StockFragment extends Fragment implements StockItemAdapter.PageItemAdapterListener {
+public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
     private final static String TAG = "StockFragment";
     private final static boolean DEBUG = true;
