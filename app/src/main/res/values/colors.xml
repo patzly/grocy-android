@@ -6,8 +6,10 @@
     <color name="transparent">#00000000</color>
 
     <color name="retro_red">#e06a4e</color>
+    <color name="retro_red_light">#e47d64</color>
     <color name="retro_red_translucent">#12e06a4e</color>
     <color name="retro_yellow">#deb853</color>
+    <color name="retro_yellow_light">#e5c778</color>
     <color name="retro_dirt">#e2d9a2</color>
     <color name="retro_dirt_dark">#938950</color>
     <color name="retro_green">#789f8a</color>

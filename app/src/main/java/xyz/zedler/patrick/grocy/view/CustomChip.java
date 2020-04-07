@@ -16,42 +16,46 @@ public class CustomChip extends Chip {
 
     private Context context;
 
-    public CustomChip(Context context, @ColorRes int colorId, String text, int marginStart, int marginEnd) {
+    public CustomChip(Context context) {
         super(context);
 
         this.context = context;
+        init(R.color.on_background_secondary, null);
+    }
 
+    public CustomChip(Context context, @ColorRes int colorId, String text) {
+        super(context);
+
+        this.context = context;
+        init(colorId, text);
+    }
+
+    private void init(int colorId, String text) {
         setCheckable(true);
         setCheckedIconVisible(true);
         setCloseIconVisible(false);
 
         setTextAppearance(context, R.style.TextAppearance_Grocy_Chip);
-        setTextColor(ContextCompat.getColor(context, R.color.on_retro));
         setChipIconVisible(false);
         setRippleColor(null);
         setStateListAnimator(null);
 
         setChipBackgroundColorResource(colorId);
         setText(text);
-        setMargins(marginStart, marginEnd);
-    }
+        setTextColor(ContextCompat.getColor(context, R.color.on_retro));
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 
-    public void setMargins(int start, int end) {
-        setLayoutParams(getLayoutParams(start, end));
-    }
-
-    private LinearLayout.LayoutParams getLayoutParams(int left, int right) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        layoutParams.setMargins(dp(left), 0, dp(right), 0);
-        return layoutParams;
+        layoutParams.setMargins(getMargin(), 0, getMargin(), 0);
+        setLayoutParams(layoutParams);
     }
 
-    private int dp(float dp){
+    private int getMargin(){
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
-                dp,
+                4,
                 context.getResources().getDisplayMetrics()
         );
     }

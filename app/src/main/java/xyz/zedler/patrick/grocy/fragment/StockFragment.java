@@ -110,21 +110,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         chipExpiring = new CustomChip(
                 activity,
-                R.color.retro_yellow,
-                activity.getString(R.string.msg_expiring_products, 0),
-                0, 4
+                R.color.retro_yellow_light,
+                activity.getString(R.string.msg_expiring_products, 0)
         );
         chipExpired = new CustomChip(
                 activity,
-                R.color.retro_red,
-                activity.getString(R.string.msg_expired_products, 0),
-                4, 4
+                R.color.retro_red_light,
+                activity.getString(R.string.msg_expired_products, 0)
         );
         chipMissing = new CustomChip(
                 activity,
                 R.color.retro_dirt,
-                activity.getString(R.string.msg_missing_products, 0),
-                4, 0
+                activity.getString(R.string.msg_missing_products, 0)
         );
         linearLayoutChipContainer.addView(chipExpiring);
         linearLayoutChipContainer.addView(chipExpired);

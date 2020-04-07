@@ -118,8 +118,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
                         android:animateLayoutChanges="true"/>
 
                 </HorizontalScrollView>
