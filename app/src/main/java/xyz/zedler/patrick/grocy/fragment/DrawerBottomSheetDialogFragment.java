@@ -1,12 +1,9 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,5 +112,11 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         } catch (ClassCastException cla) {
             Log.e(TAG, "startAnimatedIcon(ImageView) requires AVD!");
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return TAG;
     }
 }

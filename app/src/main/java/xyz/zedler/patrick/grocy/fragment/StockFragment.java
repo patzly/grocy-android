@@ -371,6 +371,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }).execute();
     }
 
+    // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
         StockItemBottomSheetDialogFragment bottomSheet = new StockItemBottomSheetDialogFragment();

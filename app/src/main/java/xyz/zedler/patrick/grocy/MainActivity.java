@@ -17,6 +17,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private final static boolean DEBUG = false;
 
     private SharedPreferences sharedPrefs;
+    private FragmentManager fragmentManager;
     private long lastClick = 0;
     private Fragment fragmentCurrent;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
@@ -82,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
 
+        fragmentManager = getSupportFragmentManager();
+
         // STOCK FRAGMENT
         fragmentCurrent = new StockFragment();
-        getSupportFragmentManager().beginTransaction()
+        fragmentManager.beginTransaction()
                 .replace(R.id.linear_container_main, fragmentCurrent)
                 .commit();
         bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
@@ -195,8 +199,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
-        getSupportFragmentManager().beginTransaction().add(bottomSheet, "bottomSheet").commit();
-        Log.i(TAG, "bottomSheetDialogFragment showed");
+        String tag = bottomSheet.toString();
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        if (fragment == null || !fragment.isVisible()) {
+            fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
+        } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     public void showKeyboard(EditText editText) {
