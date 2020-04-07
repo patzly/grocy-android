@@ -70,6 +70,12 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         StockItem stockItem = stockItems.get(position);
 
+        // NAME
+
+        holder.textViewName.setText(stockItem.getProduct().getName());
+
+        // AMOUNT
+
         QuantityUnit quantityUnit = new QuantityUnit();
         for(int i = 0; i < quantityUnits.size(); i++) {
             if(quantityUnits.get(i).getId() == stockItem.getProduct().getQuIdStock()) {
@@ -77,8 +83,6 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 break;
             }
         }
-
-        holder.textViewName.setText(stockItem.getProduct().getName());
 
         StringBuilder stringBuilder = new StringBuilder(
                 context.getString(
@@ -98,16 +102,17 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                     )
             );
         }
-
         holder.textViewAmount.setText(stringBuilder);
+
+        boolean isBelowMin = stockItem.getAmount() > stockItem.getProduct().getMinStockAmount();
         holder.textViewAmount.setTextColor(
                 ContextCompat.getColor(
                         context,
-                        stockItem.getAmount() > stockItem.getProduct().getMinStockAmount()
-                                ? R.color.on_background_secondary
-                                : R.color.retro_dirt_dark
+                        isBelowMin ? R.color.on_background_secondary : R.color.retro_dirt_dark
                 )
         );
+
+        // CONTAINER
 
         holder.linearLayoutItemContainer.setOnClickListener(
                 view -> listener.onItemRowClicked(position)
