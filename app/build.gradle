@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0-alpha03'
+    implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01'
     implementation 'com.google.android.material:material:1.2.0-alpha05'
