@@ -49,9 +49,6 @@ public class ProductDetails {
     @SerializedName("is_aggregated_amount")
     int isAggregatedAmount;
 
-    // GETTERS
-
-
     public Product getProduct() {
         return product;
     }

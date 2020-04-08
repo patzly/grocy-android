@@ -2,7 +2,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MissingProduct {
+public class MissingItem {
 
     @SerializedName("id")
     int id;

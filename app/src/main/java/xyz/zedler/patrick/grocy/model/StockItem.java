@@ -48,9 +48,6 @@ public class StockItem {
     @SerializedName("product")
     Product product;
 
-
-    // GETTERS
-
     public int getAmountAggregated() {
         return amountAggregated;
     }

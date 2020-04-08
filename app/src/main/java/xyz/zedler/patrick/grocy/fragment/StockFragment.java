@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.MissingProduct;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -60,7 +59,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<StockItem> stockItems = new ArrayList<>();
     private List<StockItem> expiringItems = new ArrayList<>();
     private List<StockItem> expiredItems = new ArrayList<>();
-    private List<MissingProduct> missingItems = new ArrayList<>();
+    private List<MissingItem> missingItems = new ArrayList<>();
     private List<StockItem> filteredItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
@@ -349,7 +348,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                         missingItems = gson.fromJson(
                                 jsonObject.getJSONArray("missing_products").toString(),
-                                new TypeToken<List<MissingProduct>>(){}.getType()
+                                new TypeToken<List<MissingItem>>(){}.getType()
                         );
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -372,14 +371,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void downloadMissingProductDetails() {
-        List<MissingProduct> notPartlyInStock = new ArrayList<>();
-        for(MissingProduct missingItem : missingItems) {
+        List<MissingItem> notPartlyInStock = new ArrayList<>();
+        for(MissingItem missingItem : missingItems) {
             // TODO: Check if product is already in stock overview
             if (missingItem.getIsPartlyInStock() == 0) {
                 notPartlyInStock.add(missingItem);
             }
         }
-
         for(int i = 0; i < notPartlyInStock.size(); i++) {
             int finalI = i;
             request.get(
@@ -387,20 +385,21 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     resp -> {
                         Type type = new TypeToken<ProductDetails>(){}.getType();
                         ProductDetails productDetails = gson.fromJson(resp, type);
-                        StockItem stockItem = new StockItem(
-                                productDetails.getStockAmount(),
-                                productDetails.getStockAmountAggregated(),
-                                productDetails.getNextBestBeforeDate(),
-                                productDetails.getStockAmountOpened(),
-                                productDetails.getStockAmountOpenedAggregated(),
-                                productDetails.getIsAggregatedAmount(),
-                                productDetails.getProduct().getId(),
-                                productDetails.getProduct()
+                        stockItems.add(
+                                new StockItem(
+                                        productDetails.getStockAmount(),
+                                        productDetails.getStockAmountAggregated(),
+                                        productDetails.getNextBestBeforeDate(),
+                                        productDetails.getStockAmountOpened(),
+                                        productDetails.getStockAmountOpenedAggregated(),
+                                        productDetails.getIsAggregatedAmount(),
+                                        productDetails.getProduct().getId(),
+                                        productDetails.getProduct()
+                                )
                         );
-                        stockItems.add(stockItem);
                         if (finalI == notPartlyInStock.size() - 1) {
-                            filterItems(itemsToDisplay);
                             swipeRefreshLayout.setRefreshing(false);
+                            filterItems(itemsToDisplay);
                         }
                     },
                     msg -> {}
