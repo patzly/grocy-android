@@ -47,6 +47,17 @@
     <string name="property_amount">Amount</string>
     <string name="property_default_location">Default location</string>
 
+    <string name="date_ago">%1$s ago</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_today">Today</string>
+    <string name="date_tomorrow">Tomorrow</string>
+    <string name="date_from_now">%1$s from now</string>
+    <string name="date_days">%1$d days</string>
+    <string name="date_month">A month</string>
+    <string name="date_months">%1$d months</string>
+    <string name="date_year">A year</string>
+    <string name="date_years">%1$d years</string>
+
     <string name="msg_error_empty">Required</string>
     <string name="msg_error_invalid_url">Invalid URL</string>
     <string name="msg_exercise_wrong_answer">\"%1$s\" would have been correct %2$s</string>

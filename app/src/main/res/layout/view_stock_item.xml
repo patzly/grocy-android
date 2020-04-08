@@ -18,15 +18,40 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:singleLine="true"
+        android:fontFamily="@font/roboto_mono_medium"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
-    <TextView
-        android:id="@+id/text_stock_item_amount"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:minHeight="20dp"
-        android:layout_gravity="center_vertical"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/text_stock_item_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_stock_item_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="20dp"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/text_stock_item_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+    </LinearLayout>
 
 </LinearLayout>

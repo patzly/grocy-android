@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
@@ -30,15 +32,17 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private StockItemAdapterListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout linearLayoutItemContainer;
-        private TextView textViewName, textViewAmount;
+        public LinearLayout linearLayoutItemContainer, linearLayoutDays;
+        private TextView textViewName, textViewAmount, textViewDays;
 
         public ViewHolder(View view) {
             super(view);
 
             linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_details_item_container);
+            linearLayoutDays = view.findViewById(R.id.linear_stock_item_days);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
+            textViewDays = view.findViewById(R.id.text_stock_item_days);
         }
     }
 
@@ -106,14 +110,33 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             );
         }
         holder.textViewAmount.setText(stringBuilder);
+        if(stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()) {
+            /*holder.textViewAmount.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
+            );*/
+            holder.textViewAmount.setTextColor(
+                    ContextCompat.getColor(context, R.color.retro_dirt_dark)
+            );
+        }
 
-        boolean isBelowMin = stockItem.getAmount() > stockItem.getProduct().getMinStockAmount();
-        holder.textViewAmount.setTextColor(
-                ContextCompat.getColor(
-                        context,
-                        isBelowMin ? R.color.on_background_secondary : R.color.retro_dirt_dark
-                )
-        );
+        // BEST BEFORE
+
+        int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
+        if(days <= 5) {
+            holder.textViewDays.setText(
+                    new DateUtil(context).getHumanFromDays(days)
+            );
+            holder.textViewDays.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
+            );
+            holder.textViewDays.setTextColor(
+                    ContextCompat.getColor(
+                            context, days < 0 ? R.color.retro_red : R.color.retro_yellow_dark
+                    )
+            );
+        } else {
+            holder.linearLayoutDays.setVisibility(View.GONE);
+        }
 
         // CONTAINER
 
