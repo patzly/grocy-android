@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private long lastClick = 0;
     private Fragment fragmentCurrent;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
+    private CustomBottomAppBar bottomAppBar;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
 
     @Override
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         // BOTTOM APP BAR
 
-        CustomBottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
+        bottomAppBar = findViewById(R.id.bottom_app_bar);
         bottomAppBar.setNavigationOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
             lastClick = SystemClock.elapsedRealtime();
@@ -95,16 +97,32 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
+            startActivityForResult(
+                    new Intent(this, LoginActivity.class),
+                    Constants.REQUEST.LOGIN
+            );
+        } else {
+            setUp();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == Constants.REQUEST.LOGIN && resultCode == Constants.RESULT.SUCCESS) {
+            setUp();
+        }
+    }
+
+    private void setUp() {
         // STOCK FRAGMENT
         fragmentCurrent = new StockFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.linear_container_main, fragmentCurrent)
                 .commit();
         bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
-
-        if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
     }
 
     public void updateUI(String uiMode, String origin) {

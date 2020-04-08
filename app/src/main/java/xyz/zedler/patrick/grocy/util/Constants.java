@@ -45,11 +45,15 @@ public final class Constants {
         public final static String PAGER_POSITION = "position";
     }
 
-    public final static class REQUEST_CODE {
-        public final static int FEATURES = 1;
-    }
-
     public final static class TEXT_TO_SPEECH {
         public final static String UTTERANCE_ID = "word";
+    }
+
+    public final static class REQUEST {
+        public final static int LOGIN = 1;
+    }
+
+    public final static class RESULT {
+        public final static int SUCCESS = 1;
     }
 }

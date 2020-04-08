@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     .putString(Constants.PREF.SERVER_URL,"https://de.demo.grocy.info")
                     .putString(Constants.PREF.API_KEY, "")
                     .apply();
+            setResult(Constants.RESULT.SUCCESS);
             finish();
         });
     }
