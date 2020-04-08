@@ -275,6 +275,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        requestQueue.start();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         requestQueue.stop();
