@@ -30,8 +30,17 @@ public final class Constants {
     }
 
     public final static class UI {
-        public final static String STOCK_DEFAULT			= "stock_default";
-        public final static String STOCK_SEARCH			= "stock_search";
+        public final static String STOCK_DEFAULT = "stock_default";
+        public final static String STOCK_SEARCH	= "stock_search";
+    }
+
+    public final static class STOCK {
+        public final static String ALL = "all";
+        public final static class VOLATILE {
+            public final static String EXPIRING = "expiring";
+            public final static String EXPIRED = "expired";
+            public final static String MISSING = "missing";
+        }
     }
 
     public final static class ACTION {

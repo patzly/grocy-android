@@ -39,17 +39,23 @@ public class FilterChip extends LinearLayout {
         super(context);
 
         this.context = context;
-        init(R.color.on_background_secondary, null, null);
+        init(R.color.on_background_secondary, null, null, null);
     }
 
-    public FilterChip(Context context, @ColorRes int colorId, String text, Runnable onClick) {
+    public FilterChip(
+            Context context,
+            @ColorRes int colorId,
+            String text,
+            Runnable onClick,
+            Runnable onClickAgain
+    ) {
         super(context);
 
         this.context = context;
-        init(colorId, text, onClick);
+        init(colorId, text, onClick, onClickAgain);
     }
 
-    private void init(@ColorRes int colorId, String text, Runnable onClick) {
+    private void init(@ColorRes int colorId, String text, Runnable onClick, Runnable onClickAgain) {
         inflate(context, R.layout.view_filter_chip, this);
 
         cardView = findViewById(R.id.card_filter_chip);
@@ -70,7 +76,8 @@ public class FilterChip extends LinearLayout {
 
         setOnClickListener(v -> {
             invertState();
-            if(onClick != null) onClick.run();
+            if(onClick != null && isActive) onClick.run();
+            if(onClickAgain != null && !isActive) onClickAgain.run();
         });
 
         setActive(isActive);

@@ -58,8 +58,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<StockItem> expiringItems = new ArrayList<>();
     private List<StockItem> expiredItems = new ArrayList<>();
     private List<StockItem> missingItems = new ArrayList<>();
+    private List<StockItem> filteredItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
+
+    private String itemsToDisplay = Constants.STOCK.ALL;
 
     private RecyclerView recyclerView;
     private StockItemAdapter stockItemAdapter;
@@ -116,7 +119,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpired.setActive(false);
                     chipMissing.setActive(false);
-                }
+                    filterItems(Constants.STOCK.VOLATILE.EXPIRING);
+                },
+                () -> filterItems(Constants.STOCK.ALL)
         );
         chipExpired = new FilterChip(
                 activity,
@@ -125,7 +130,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpiring.setActive(false);
                     chipMissing.setActive(false);
-                }
+                    filterItems(Constants.STOCK.VOLATILE.EXPIRED);
+                },
+                () -> filterItems(Constants.STOCK.ALL)
         );
         chipMissing = new FilterChip(
                 activity,
@@ -134,7 +141,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpiring.setActive(false);
                     chipExpired.setActive(false);
-                }
+                },
+                () -> filterItems(Constants.STOCK.ALL)
         );
         LinearLayout chipContainer = activity.findViewById(
                 R.id.linear_stock_chip_container
@@ -356,9 +364,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         }
                     }
 
-                    stockItemAdapter = new StockItemAdapter(activity, stockItems, quantityUnits, this);
-
-                    recyclerView.setAdapter(stockItemAdapter);
+                    filterItems(itemsToDisplay);
 
                     swipeRefreshLayout.setRefreshing(false);
                 },
@@ -366,11 +372,36 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
+    private void filterItems(String itemsToDisplay) { ;
+        switch (itemsToDisplay) {
+            case Constants.STOCK.VOLATILE.EXPIRING:
+                filteredItems = this.expiringItems;
+                break;
+            case Constants.STOCK.VOLATILE.EXPIRED:
+                filteredItems = this.expiredItems;
+                break;
+            case Constants.STOCK.VOLATILE.MISSING:
+                filteredItems = this.stockItems;
+                break;
+            default:
+                filteredItems = this.stockItems;
+                break;
+        }
+
+        stockItemAdapter = new StockItemAdapter(
+                activity, filteredItems, quantityUnits, this
+        );
+        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            recyclerView.setAdapter(stockItemAdapter);
+            recyclerView.animate().alpha(1).setDuration(150).start();
+        }).start();
+    }
+
     // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
         StockItemBottomSheetDialogFragment bottomSheet = new StockItemBottomSheetDialogFragment();
-        bottomSheet.setData(stockItems.get(position), quantityUnits, locations);
+        bottomSheet.setData(filteredItems.get(position), quantityUnits, locations);
         activity.showBottomSheet(bottomSheet);
     }
 
