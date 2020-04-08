@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <color name="retro_yellow_dark">#e5c778</color>
-    <color name="retro_dirt_dark">#e2d9a2</color>
+    <color name="retro_yellow_dark">@color/retro_yellow_light</color>
+    <color name="retro_dirt_dark">@color/retro_dirt</color>
+    <color name="retro_blue_dark">@color/retro_blue_light</color>
 
     <!-- PRIMARY -->
 

@@ -91,7 +91,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
 
-        StringBuilder stringBuilder = new StringBuilder(
+        StringBuilder stringBuilderAmount = new StringBuilder(
                 context.getString(
                         R.string.subtitle_amount,
                         stockItem.getAmount(),
@@ -101,21 +101,34 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 )
         );
         if(stockItem.getAmountOpened() > 0) {
-            stringBuilder.append(" ");
-            stringBuilder.append(
+            stringBuilderAmount.append(" ");
+            stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount_opened,
                             stockItem.getAmountOpened()
                     )
             );
         }
-        holder.textViewAmount.setText(stringBuilder);
+        // aggregated amount
+        if(stockItem.getIsAggregatedAmount() == 1) {
+            stringBuilderAmount.append("  ∑ ");
+            stringBuilderAmount.append(
+                    context.getString(
+                            R.string.subtitle_amount,
+                            stockItem.getAmountAggregated(),
+                            stockItem.getAmountAggregated() == 1
+                                    ? quantityUnit.getName()
+                                    : quantityUnit.getNamePlural()
+                    )
+            );
+        }
+        holder.textViewAmount.setText(stringBuilderAmount);
         if(stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()) {
-            /*holder.textViewAmount.setTypeface(
+            holder.textViewAmount.setTypeface(
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
-            );*/
+            );
             holder.textViewAmount.setTextColor(
-                    ContextCompat.getColor(context, R.color.retro_dirt_dark)
+                    ContextCompat.getColor(context, R.color.retro_blue_dark)
             );
         }
 

@@ -139,7 +139,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         chipMissing = new FilterChip(
                 activity,
-                R.color.retro_dirt,
+                R.color.retro_blue_light,
                 activity.getString(R.string.msg_missing_products, 0),
                 () -> {
                     chipExpiring.changeState(false);
@@ -387,9 +387,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         break;
                     }
                 }
-                if(!isInStock) {
-                    notPartlyInStock.add(missingItem);
-                }
+                if(!isInStock) notPartlyInStock.add(missingItem);
             }
         }
         for(int i = 0; i < notPartlyInStock.size(); i++) {

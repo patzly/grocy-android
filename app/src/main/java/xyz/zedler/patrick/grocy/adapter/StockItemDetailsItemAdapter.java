@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,8 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
     private static final float ICON_ALPHA_DISABLED = 0.5f;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewProperty, textViewValue;
+        TextView textViewProperty, textViewValue, textViewExtra;
+        LinearLayout linearLayoutExtra;
         ActionButton actionButtonConsume, actionButtonOpen;
 
         ViewHolder(View view) {
@@ -39,6 +41,8 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
 
             textViewProperty = view.findViewById(R.id.text_stock_item_details_item_property);
             textViewValue = view.findViewById(R.id.text_stock_item_details_item_value);
+            textViewExtra = view.findViewById(R.id.text_stock_item_details_item_extra);
+            linearLayoutExtra = view.findViewById(R.id.linear_stock_item_details_item_extra);
             actionButtonConsume = view.findViewById(R.id.button_stock_item_details_consume);
             actionButtonOpen = view.findViewById(R.id.button_stock_item_details_open);
         }
@@ -70,19 +74,23 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         switch (position) {
-            case 0:
-                // AMOUNT
-                // QuantityUnits only when needed
+            case 0: // AMOUNT
+                // get QuantityUnit only when needed
                 for(int i = 0; i < quantityUnits.size(); i++) {
                     if(quantityUnits.get(i).getId() == stockItem.getProduct().getQuIdStock()) {
                         quantityUnit = quantityUnits.get(i);
                         break;
                     }
                 }
-                // Text
+                // text
                 holder.textViewProperty.setText(context.getString(R.string.property_amount));
                 holder.textViewValue.setText(getAmountText());
-                // Actions
+                // aggregated amount
+                if(stockItem.getIsAggregatedAmount() == 1) {
+                    holder.textViewExtra.setText(getAggregatedAmount());
+                    holder.linearLayoutExtra.setVisibility(View.VISIBLE);
+                }
+                // actions
                 holder.actionButtonConsume.setVisibility(View.VISIBLE);
                 holder.actionButtonConsume.setState(stockItem.getAmount() > 0);
                 holder.actionButtonConsume.setOnClickListener(v -> {
@@ -99,7 +107,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     refreshActionStates(holder.actionButtonConsume, holder.actionButtonOpen);
                     holder.textViewValue.setText(getAmountText());
                 });
-                // Tooltips
+                // tooltips
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     holder.actionButtonConsume.setTooltipText(
                             context.getString(
@@ -118,7 +126,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     // TODO: tooltip colors
                 }
                 break;
-            case 1:
+            case 1: // LOCATION
                 holder.textViewProperty.setText(context.getString(R.string.property_default_location));
                 Location location = new Location();
                 for(int i = 0; i < locations.size(); i++) {
@@ -152,6 +160,16 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             );
         }
         return stringBuilderAmount.toString();
+    }
+
+    private String getAggregatedAmount() {
+        return "∑ " + context.getString(
+                R.string.subtitle_amount,
+                stockItem.getAmountAggregated(),
+                stockItem.getAmountAggregated() == 1
+                        ? quantityUnit.getName()
+                        : quantityUnit.getNamePlural()
+        );
     }
 
     private void removeConsumed() {
