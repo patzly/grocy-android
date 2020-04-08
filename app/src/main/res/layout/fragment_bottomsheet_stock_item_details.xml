@@ -100,6 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:maxLines="3"
                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
             </com.google.android.material.card.MaterialCardView>

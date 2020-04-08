@@ -73,14 +73,23 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 				)
 		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
 
+		MaterialCardView cardViewDescription = view.findViewById(
+				R.id.card_stock_item_details_description
+		);
 		if(stockItem.getProduct().getDescription() != null
 				&& !stockItem.getProduct().getDescription().trim().equals("")
 		) {
-			((TextView) view.findViewById(R.id.text_stock_item_overview_description)).setText(
+			TextView textViewDescription = view.findViewById(
+					R.id.text_stock_item_details_description
+			);
+			textViewDescription.setText(
 					Html.fromHtml(stockItem.getProduct().getDescription()).toString().trim()
 			);
+			cardViewDescription.setOnClickListener(v -> {
+				textViewDescription.setMaxLines(textViewDescription.getMaxLines() == 3 ? 50 : 3);
+			});
 		} else {
-			view.findViewById(R.id.card_stock_item_overview_description).setVisibility(View.GONE);
+			cardViewDescription.setVisibility(View.GONE);
 		}
 
 		RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_item_details);
