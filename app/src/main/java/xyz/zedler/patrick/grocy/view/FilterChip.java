@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -130,7 +131,7 @@ public class FilterChip extends LinearLayout {
                         ? R.drawable.ic_round_filter_list_in_anim
                         : R.drawable.ic_round_filter_list_out_anim
                 );
-        startIconAnimation();
+        new Handler().postDelayed(this::startIconAnimation, active ? 100 : 0);
     }
 
     @Override

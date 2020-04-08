@@ -43,10 +43,10 @@
                     android:id="@+id/image_filter_chip_icon"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:tint="@color/on_retro"
                     android:layout_gravity="bottom|center_horizontal"
                     android:src="@drawable/ic_round_filter_list_in_anim"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    android:tint="@color/on_retro" />
 
             </FrameLayout>
 
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="@color/on_background"
+                android:textColor="@color/on_retro"
                 android:textSize="14sp"
                 android:fontFamily="@font/roboto_mono_medium"/>
 
