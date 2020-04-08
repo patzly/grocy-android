@@ -101,6 +101,9 @@ public class GrocyApi {
      * Returns all products which are currently in stock incl. the next expiring date per product
      */
     public String getStockVolatile() {
+        // TODO: https://de.demo.grocy.info/api/user/settings/stock_expring_soon_days PUT {"value":"5"}
+        // We have to make value changeable in the App, but also update it with the request above
+        // on the server; and get the value on the first App start from server
         return getUrl(
                 "/stock/volatile", "expiring_days="
                         + sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5)
