@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
@@ -16,27 +14,17 @@ import android.widget.ImageView;
 
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.net.URI;
-import java.util.Objects;
-
-import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class LoginActivity extends AppCompatActivity {
@@ -91,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             if(editTextServer.getText().toString().equals("")) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_empty));
             } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
+                // TODO: better method for validating URL
                 textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
             } else {
                 textInputLayoutServer.setErrorEnabled(false);
