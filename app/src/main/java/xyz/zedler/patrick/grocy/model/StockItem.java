@@ -4,6 +4,26 @@ import com.google.gson.annotations.SerializedName;
 
 public class StockItem {
 
+    public StockItem(
+            int amount,
+            int amount_aggregated,
+            String best_before_date,
+            int amount_opened,
+            int amount_opened_aggregated,
+            int is_aggregated_amount,
+            int product_id,
+            Product product
+    ) {
+        this.amount = amount;
+        this.amountAggregated = amount_aggregated;
+        this.bestBeforeDate = best_before_date;
+        this.amountOpened = amount_opened;
+        this.amountOpenedAggregated = amount_opened_aggregated;
+        this.isAggregatedAmount = is_aggregated_amount;
+        this.productId = product_id;
+        this.product = product;
+    }
+
     @SerializedName("amount")
     int amount;
 
@@ -28,19 +48,6 @@ public class StockItem {
     @SerializedName("product")
     Product product;
 
-    // ONLY VOLATILE
-
-    @SerializedName("id")
-    int id;
-
-    @SerializedName("name")
-    String name;
-
-    @SerializedName("amount_missing")
-    int amountMissing;
-
-    @SerializedName("is_partly_in_stock")
-    int isPartlyInStock;
 
     // GETTERS
 
@@ -58,22 +65,6 @@ public class StockItem {
 
     public int getIsAggregatedAmount() {
         return isAggregatedAmount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAmountMissing() {
-        return amountMissing;
-    }
-
-    public int getIsPartlyInStock() {
-        return isPartlyInStock;
     }
 
     public int getProductId() {

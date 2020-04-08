@@ -2,6 +2,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MissingProduct;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -57,7 +60,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<StockItem> stockItems = new ArrayList<>();
     private List<StockItem> expiringItems = new ArrayList<>();
     private List<StockItem> expiredItems = new ArrayList<>();
-    private List<StockItem> missingItems = new ArrayList<>();
+    private List<MissingProduct> missingItems = new ArrayList<>();
     private List<StockItem> filteredItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
@@ -294,6 +297,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void downloadData() {
+        stockItems.clear();
+
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 response -> {
@@ -326,7 +331,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                         missingItems = gson.fromJson(
                                 jsonObject.getJSONArray("missing_products").toString(),
-                                listType
+                                new TypeToken<List<MissingProduct>>(){}.getType()
                         );
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -341,6 +346,34 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     chipMissing.setText(
                             activity.getString(R.string.msg_missing_products, missingItems.size())
                     );
+
+
+                    Log.i(TAG, "downloadData: " + missingItems);
+
+                    for(MissingProduct missingProduct : missingItems) {
+                        // TODO: Check if product is already in stock overview
+                        if (missingProduct.getIsPartlyInStock() == 0) {
+                            request.get(
+                                    grocyApi.getStockProduct(missingProduct.getId()),
+                                    resp -> {
+                                        Type type = new TypeToken<ProductDetails>(){}.getType();
+                                        ProductDetails productDetails = gson.fromJson(resp, type);
+                                        StockItem stockItem = new StockItem(
+                                                productDetails.getStockAmount(),
+                                                productDetails.getStockAmountAggregated(),
+                                                productDetails.getNextBestBeforeDate(),
+                                                productDetails.getStockAmountOpened(),
+                                                productDetails.getStockAmountOpenedAggregated(),
+                                                productDetails.getIsAggregatedAmount(),
+                                                productDetails.getProduct().getId(),
+                                                productDetails.getProduct()
+                                        );
+                                        stockItems.add(stockItem);
+                                    },
+                                    msg -> {}
+                            );
+                        }
+                    }
                 },
                 msg -> { }
         );
@@ -349,21 +382,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {},
                 response -> {
                     Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                    stockItems = gson.fromJson(response, listType);
-
-                    for(StockItem stockItem : missingItems) {
-                        if(stockItem.getIsPartlyInStock() == 0) {
-                    /*new JsonDownloadTask(grocyApi.getStock(), json -> {
-                        Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                        stockItems = gson.fromJson(json, listType);
-
-
-                    }, () -> {
-                        // TODO
-                    }).execute();
-                    grocyApi.getStockProduct(stockItem.getId())*/
-                        }
-                    }
+                    stockItems.addAll(gson.fromJson(response, listType));
 
                     filterItems(itemsToDisplay);
                 },
