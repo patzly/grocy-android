@@ -117,8 +117,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 R.color.retro_yellow_light,
                 activity.getString(R.string.msg_expiring_products, 0),
                 () -> {
-                    chipExpired.setActive(false);
-                    chipMissing.setActive(false);
+                    chipExpired.changeState(false);
+                    chipMissing.changeState(false);
                     filterItems(Constants.STOCK.VOLATILE.EXPIRING);
                 },
                 () -> filterItems(Constants.STOCK.ALL)
@@ -128,8 +128,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 R.color.retro_red_light,
                 activity.getString(R.string.msg_expired_products, 0),
                 () -> {
-                    chipExpiring.setActive(false);
-                    chipMissing.setActive(false);
+                    chipExpiring.changeState(false);
+                    chipMissing.changeState(false);
                     filterItems(Constants.STOCK.VOLATILE.EXPIRED);
                 },
                 () -> filterItems(Constants.STOCK.ALL)
@@ -139,8 +139,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 R.color.retro_dirt,
                 activity.getString(R.string.msg_missing_products, 0),
                 () -> {
-                    chipExpiring.setActive(false);
-                    chipExpired.setActive(false);
+                    chipExpiring.changeState(false);
+                    chipExpired.changeState(false);
                 },
                 () -> filterItems(Constants.STOCK.ALL)
         );
@@ -346,6 +346,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         request.get(
                 grocyApi.getStock(),
+                () -> {},
                 response -> {
                     Type listType = new TypeToken<List<StockItem>>(){}.getType();
                     stockItems = gson.fromJson(response, listType);
@@ -365,14 +366,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     }
 
                     filterItems(itemsToDisplay);
-
-                    swipeRefreshLayout.setRefreshing(false);
                 },
-                msg -> { }
+                msg -> { },
+                () -> swipeRefreshLayout.setRefreshing(false)
         );
     }
 
-    private void filterItems(String itemsToDisplay) { ;
+    private void filterItems(String itemsToDisplay) {
+        this.itemsToDisplay = itemsToDisplay;
         switch (itemsToDisplay) {
             case Constants.STOCK.VOLATILE.EXPIRING:
                 filteredItems = this.expiringItems;
@@ -387,7 +388,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 filteredItems = this.stockItems;
                 break;
         }
-
         stockItemAdapter = new StockItemAdapter(
                 activity, filteredItems, quantityUnits, this
         );
