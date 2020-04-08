@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.view.CustomChip;
+import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
@@ -63,8 +63,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private RecyclerView recyclerView;
     private StockItemAdapter stockItemAdapter;
-    private LinearLayout linearLayoutChipContainer;
-    private CustomChip chipExpiring, chipExpired, chipMissing;
+    private FilterChip chipExpiring, chipExpired, chipMissing;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -92,7 +91,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // VIEWS
 
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
-        linearLayoutChipContainer = activity.findViewById(R.id.linear_stock_overview_chip_container);
         recyclerView = activity.findViewById(R.id.recycler_stock_overview);
 
         // APP BAR BEHAVIOR
@@ -111,24 +109,39 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // CHIPS
 
-        chipExpiring = new CustomChip(
+        chipExpiring = new FilterChip(
                 activity,
                 R.color.retro_yellow_light,
-                activity.getString(R.string.msg_expiring_products, 0)
+                activity.getString(R.string.msg_expiring_products, 0),
+                () -> {
+                    chipExpired.setActive(false);
+                    chipMissing.setActive(false);
+                }
         );
-        chipExpired = new CustomChip(
+        chipExpired = new FilterChip(
                 activity,
                 R.color.retro_red_light,
-                activity.getString(R.string.msg_expired_products, 0)
+                activity.getString(R.string.msg_expired_products, 0),
+                () -> {
+                    chipExpiring.setActive(false);
+                    chipMissing.setActive(false);
+                }
         );
-        chipMissing = new CustomChip(
+        chipMissing = new FilterChip(
                 activity,
                 R.color.retro_dirt,
-                activity.getString(R.string.msg_missing_products, 0)
+                activity.getString(R.string.msg_missing_products, 0),
+                () -> {
+                    chipExpiring.setActive(false);
+                    chipExpired.setActive(false);
+                }
         );
-        linearLayoutChipContainer.addView(chipExpiring);
-        linearLayoutChipContainer.addView(chipExpired);
-        linearLayoutChipContainer.addView(chipMissing);
+        LinearLayout chipContainer = activity.findViewById(
+                R.id.linear_stock_overview_chip_container
+        );
+        chipContainer.addView(chipExpiring);
+        chipContainer.addView(chipExpired);
+        chipContainer.addView(chipMissing);
 
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
