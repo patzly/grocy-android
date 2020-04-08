@@ -60,6 +60,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<StockItem> expiringItems = new ArrayList<>();
     private List<StockItem> expiredItems = new ArrayList<>();
     private List<MissingItem> missingItems = new ArrayList<>();
+    private List<StockItem> missingStockItems;
     private List<StockItem> filteredItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
@@ -143,6 +144,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpiring.changeState(false);
                     chipExpired.changeState(false);
+                    filterItems(Constants.STOCK.VOLATILE.MISSING);
                 },
                 () -> filterItems(Constants.STOCK.ALL)
         );
@@ -267,17 +269,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void load() {
         if(activity.isOnline()) {
-            swipeRefreshLayout.setRefreshing(true);
-            downloadQuantityUnits();
+            download();
         } else {
             // TODO
         }
     }
 
     private void refresh() {
-        swipeRefreshLayout.setRefreshing(true);
         if(activity.isOnline()) {
-            downloadQuantityUnits();
+            download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
             activity.showSnackbar(
@@ -293,6 +293,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     )
             );
         }
+    }
+
+    private void download() {
+        swipeRefreshLayout.setRefreshing(true);
+        downloadQuantityUnits();
     }
 
     private void downloadQuantityUnits() {
@@ -398,6 +403,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 )
                         );
                         if (finalI == notPartlyInStock.size() - 1) {
+                            // fill missingStockItems with all missing
+                            missingStockItems = new ArrayList<>();
+                            for(MissingItem missingItem : missingItems) {
+                                for(StockItem stockItem : stockItems) {
+                                    if(stockItem.getProduct().getId() == missingItem.getId()) {
+                                        missingStockItems.add(stockItem);
+                                    }
+                                }
+                            }
                             swipeRefreshLayout.setRefreshing(false);
                             filterItems(itemsToDisplay);
                         }
@@ -417,7 +431,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 filteredItems = this.expiredItems;
                 break;
             case Constants.STOCK.VOLATILE.MISSING:
-                filteredItems = this.stockItems;
+                filteredItems = this.missingStockItems;
                 break;
             default:
                 filteredItems = this.stockItems;
