@@ -38,9 +38,9 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.task.JsonDownloadTask;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
@@ -52,7 +52,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
 
     private List<StockItem> stockItems = new ArrayList<>();
     private List<StockItem> expiringItems = new ArrayList<>();
@@ -84,8 +83,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         assert activity != null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-        request = new WebRequest(activity.getRequestQueue());
 
         grocyApi = new GrocyApi(activity);
 
@@ -245,7 +242,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void load() {
         if(activity.isOnline()) {
             swipeRefreshLayout.setRefreshing(true);
-            downloadData();
+            runnableQuantityUnits().run();
         } else {
             // TODO
         }
@@ -254,7 +251,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         if(activity.isOnline()) {
-            downloadData();
+            runnableQuantityUnits().run();
         } else {
             swipeRefreshLayout.setRefreshing(false);
             activity.showSnackbar(
@@ -272,65 +269,83 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void downloadData() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
-                response -> {
-                    Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
-                    quantityUnits = gson.fromJson(response, listType);
-                },
-                msg -> { }
-        );
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
-                response -> {
-                    Type listType = new TypeToken<List<Location>>(){}.getType();
-                    locations = gson.fromJson(response, listType);
-                },
-                msg -> { }
-        );
-        request.get(
-                grocyApi.getStockVolatile(),
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                        expiringItems = gson.fromJson(
-                                jsonObject.getJSONArray("expiring_products").toString(),
-                                listType
-                        );
-                        expiredItems = gson.fromJson(
-                                jsonObject.getJSONArray("expired_products").toString(),
-                                listType
-                        );
-                        missingItems = gson.fromJson(
-                                jsonObject.getJSONArray("missing_products").toString(),
-                                listType
-                        );
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+    private Runnable runnableQuantityUnits() {
+        return () -> {
+            new JsonDownloadTask(grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS), json -> {
+                Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
+                quantityUnits = gson.fromJson(json, listType);
+                runnableLocations().run();
+            }, () -> {
+                // TODO
+            }).execute();
+        };
+    }
 
-                    chipExpiring.setText(
-                            activity.getString(R.string.msg_expiring_products, expiringItems.size())
-                    );
-                    chipExpired.setText(
-                            activity.getString(R.string.msg_expired_products, expiredItems.size())
-                    );
-                    chipMissing.setText(
-                            activity.getString(R.string.msg_missing_products, missingItems.size())
-                    );
-                },
-                msg -> { }
-        );
-        request.get(
-                grocyApi.getStock(),
-                response -> {
-                    Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                    stockItems = gson.fromJson(response, listType);
+    private Runnable runnableLocations() {
+        return () -> {
+            new JsonDownloadTask(grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS), json -> {
+                Type listType = new TypeToken<List<Location>>(){}.getType();
+                locations = gson.fromJson(json, listType);
+                runnableVolatiles().run();
+            }, () -> {
+                // TODO
+            }).execute();
+        };
+    }
 
-                    for(StockItem stockItem : missingItems) {
-                        if(stockItem.getIsPartlyInStock() == 0) {
+    private Runnable runnableVolatiles() {
+        return () -> new JsonDownloadTask(grocyApi.getStockVolatile(), json -> {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                Type listType = new TypeToken<List<StockItem>>(){}.getType();
+                expiringItems = gson.fromJson(
+                        jsonObject.getJSONArray("expiring_products").toString(),
+                        listType
+                );
+                expiredItems = gson.fromJson(
+                        jsonObject.getJSONArray("expired_products").toString(),
+                        listType
+                );
+                missingItems = gson.fromJson(
+                        jsonObject.getJSONArray("missing_products").toString(),
+                        listType
+                );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            chipExpiring.setText(
+                    activity.getString(
+                            R.string.msg_expiring_products,
+                            expiringItems.size()
+                    )
+            );
+            chipExpired.setText(
+                    activity.getString(
+                            R.string.msg_expired_products,
+                            expiredItems.size()
+                    )
+            );
+            chipMissing.setText(
+                    activity.getString(
+                            R.string.msg_missing_products,
+                            missingItems.size()
+                    )
+            );
+
+            runnableStockItems().run();
+        }, () -> {
+            // TODO
+        }).execute();
+    }
+
+    private Runnable runnableStockItems() {
+        return () -> new JsonDownloadTask(grocyApi.getStock(), json -> {
+            Type listType = new TypeToken<List<StockItem>>(){}.getType();
+            stockItems = gson.fromJson(json, listType);
+
+            for(StockItem stockItem : missingItems) {
+                if(stockItem.getIsPartlyInStock() == 0) {
                     /*new JsonDownloadTask(grocyApi.getStock(), json -> {
                         Type listType = new TypeToken<List<StockItem>>(){}.getType();
                         stockItems = gson.fromJson(json, listType);
@@ -340,17 +355,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         // TODO
                     }).execute();
                     grocyApi.getStockProduct(stockItem.getId())*/
-                        }
-                    }
+                }
+            }
 
-                    stockItemAdapter = new StockItemAdapter(activity, stockItems, quantityUnits, this);
+            stockItemAdapter = new StockItemAdapter(activity, stockItems, quantityUnits, this);
 
-                    recyclerView.setAdapter(stockItemAdapter);
+            recyclerView.setAdapter(stockItemAdapter);
 
-                    swipeRefreshLayout.setRefreshing(false);
-                },
-                msg -> { }
-        );
+            swipeRefreshLayout.setRefreshing(false);
+        }, () -> {
+            // TODO
+        }).execute();
     }
 
     // STOCK ITEM CLICK
