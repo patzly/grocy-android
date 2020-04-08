@@ -379,8 +379,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         List<MissingItem> notPartlyInStock = new ArrayList<>();
         for(MissingItem missingItem : missingItems) {
             // TODO: Check if product is already in stock overview
-            if (missingItem.getIsPartlyInStock() == 0) {
-                notPartlyInStock.add(missingItem);
+            if(missingItem.getIsPartlyInStock() == 0) {
+                boolean isInStock = false;
+                for(StockItem stockItem : stockItems) {
+                    if (stockItem.getProductId() == missingItem.getId()) {
+                        isInStock = true;
+                        break;
+                    }
+                }
+                if(!isInStock) {
+                    notPartlyInStock.add(missingItem);
+                }
             }
         }
         for(int i = 0; i < notPartlyInStock.size(); i++) {
