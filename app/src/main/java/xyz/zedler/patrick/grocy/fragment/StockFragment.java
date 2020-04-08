@@ -269,7 +269,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void load() {
         if(activity.isOnline()) {
             swipeRefreshLayout.setRefreshing(true);
-            downloadData();
+            downloadQuantityUnits();
         } else {
             // TODO
         }
@@ -278,7 +278,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         if(activity.isOnline()) {
-            downloadData();
+            downloadQuantityUnits();
         } else {
             swipeRefreshLayout.setRefreshing(false);
             activity.showSnackbar(
@@ -296,25 +296,43 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void downloadData() {
-        stockItems.clear();
-
+    private void downloadQuantityUnits() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 response -> {
                     Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
                     quantityUnits = gson.fromJson(response, listType);
+                    downloadLocations();
                 },
                 msg -> { }
         );
+    }
+
+    private void downloadLocations() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                 response -> {
                     Type listType = new TypeToken<List<Location>>(){}.getType();
                     locations = gson.fromJson(response, listType);
+                    downloadStock();
                 },
                 msg -> { }
         );
+    }
+
+    private void downloadStock() {
+        request.get(
+                grocyApi.getStock(),
+                response -> {
+                    Type listType = new TypeToken<List<StockItem>>(){}.getType();
+                    stockItems = gson.fromJson(response, listType);
+                    downloadVolatile();
+                },
+                msg -> { }
+        );
+    }
+
+    private void downloadVolatile() {
         request.get(
                 grocyApi.getStockVolatile(),
                 response -> {
@@ -347,48 +365,47 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             activity.getString(R.string.msg_missing_products, missingItems.size())
                     );
 
-
-                    Log.i(TAG, "downloadData: " + missingItems);
-
-                    for(MissingProduct missingProduct : missingItems) {
-                        // TODO: Check if product is already in stock overview
-                        if (missingProduct.getIsPartlyInStock() == 0) {
-                            request.get(
-                                    grocyApi.getStockProduct(missingProduct.getId()),
-                                    resp -> {
-                                        Type type = new TypeToken<ProductDetails>(){}.getType();
-                                        ProductDetails productDetails = gson.fromJson(resp, type);
-                                        StockItem stockItem = new StockItem(
-                                                productDetails.getStockAmount(),
-                                                productDetails.getStockAmountAggregated(),
-                                                productDetails.getNextBestBeforeDate(),
-                                                productDetails.getStockAmountOpened(),
-                                                productDetails.getStockAmountOpenedAggregated(),
-                                                productDetails.getIsAggregatedAmount(),
-                                                productDetails.getProduct().getId(),
-                                                productDetails.getProduct()
-                                        );
-                                        stockItems.add(stockItem);
-                                    },
-                                    msg -> {}
-                            );
-                        }
-                    }
+                    downloadMissingProductDetails();
                 },
                 msg -> { }
         );
-        request.get(
-                grocyApi.getStock(),
-                () -> {},
-                response -> {
-                    Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                    stockItems.addAll(gson.fromJson(response, listType));
+    }
 
-                    filterItems(itemsToDisplay);
-                },
-                msg -> { },
-                () -> swipeRefreshLayout.setRefreshing(false)
-        );
+    private void downloadMissingProductDetails() {
+        List<MissingProduct> notPartlyInStock = new ArrayList<>();
+        for(MissingProduct missingItem : missingItems) {
+            // TODO: Check if product is already in stock overview
+            if (missingItem.getIsPartlyInStock() == 0) {
+                notPartlyInStock.add(missingItem);
+            }
+        }
+
+        for(int i = 0; i < notPartlyInStock.size(); i++) {
+            int finalI = i;
+            request.get(
+                    grocyApi.getStockProduct(notPartlyInStock.get(i).getId()),
+                    resp -> {
+                        Type type = new TypeToken<ProductDetails>(){}.getType();
+                        ProductDetails productDetails = gson.fromJson(resp, type);
+                        StockItem stockItem = new StockItem(
+                                productDetails.getStockAmount(),
+                                productDetails.getStockAmountAggregated(),
+                                productDetails.getNextBestBeforeDate(),
+                                productDetails.getStockAmountOpened(),
+                                productDetails.getStockAmountOpenedAggregated(),
+                                productDetails.getIsAggregatedAmount(),
+                                productDetails.getProduct().getId(),
+                                productDetails.getProduct()
+                        );
+                        stockItems.add(stockItem);
+                        if (finalI == notPartlyInStock.size() - 1) {
+                            filterItems(itemsToDisplay);
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    },
+                    msg -> {}
+            );
+        }
     }
 
     private void filterItems(String itemsToDisplay) {
