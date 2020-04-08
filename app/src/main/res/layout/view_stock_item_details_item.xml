@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linear_stock_item_overview_item_container"
+    android:id="@+id/linear_stock_item_details_item_container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/text_stock_item_overview_item_property"
+            android:id="@+id/text_stock_item_details_item_property"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -29,7 +29,7 @@
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
         <TextView
-            android:id="@+id/text_stock_item_overview_item_value"
+            android:id="@+id/text_stock_item_details_item_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <xyz.zedler.patrick.grocy.view.ActionButton
-        android:id="@+id/button_stock_item_overview_consume"
+        android:id="@+id/button_stock_item_details_consume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -47,7 +47,7 @@
         app:tint="@color/icon"/>
 
     <xyz.zedler.patrick.grocy.view.ActionButton
-        android:id="@+id/button_stock_item_overview_open"
+        android:id="@+id/button_stock_item_details_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

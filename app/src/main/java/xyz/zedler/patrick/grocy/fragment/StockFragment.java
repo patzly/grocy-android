@@ -91,7 +91,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // VIEWS
 
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
-        recyclerView = activity.findViewById(R.id.recycler_stock_overview);
+        recyclerView = activity.findViewById(R.id.recycler_stock);
 
         // APP BAR BEHAVIOR
 
@@ -137,7 +137,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 }
         );
         LinearLayout chipContainer = activity.findViewById(
-                R.id.linear_stock_overview_chip_container
+                R.id.linear_stock_chip_container
         );
         chipContainer.addView(chipExpiring);
         chipContainer.addView(chipExpired);

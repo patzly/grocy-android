@@ -113,7 +113,7 @@
                     android:fillViewport="true">
 
                     <LinearLayout
-                        android:id="@+id/linear_stock_overview_chip_container"
+                        android:id="@+id/linear_stock_chip_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -124,7 +124,7 @@
                 </HorizontalScrollView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_stock_overview"
+                    android:id="@+id/recycler_stock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"

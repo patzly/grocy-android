@@ -18,9 +18,9 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class StockItemOverviewAdapter extends RecyclerView.Adapter<StockItemOverviewAdapter.ViewHolder> {
+public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemDetailsItemAdapter.ViewHolder> {
 
-    private final static String TAG = "StockItemAdapter";
+    private final static String TAG = "StockItemDetailsItemAdapter";
     private final static boolean DEBUG = true;
 
     private Context context;
@@ -37,14 +37,14 @@ public class StockItemOverviewAdapter extends RecyclerView.Adapter<StockItemOver
         ViewHolder(View view) {
             super(view);
 
-            textViewProperty = view.findViewById(R.id.text_stock_item_overview_item_property);
-            textViewValue = view.findViewById(R.id.text_stock_item_overview_item_value);
-            actionButtonConsume = view.findViewById(R.id.button_stock_item_overview_consume);
-            actionButtonOpen = view.findViewById(R.id.button_stock_item_overview_open);
+            textViewProperty = view.findViewById(R.id.text_stock_item_details_item_property);
+            textViewValue = view.findViewById(R.id.text_stock_item_details_item_value);
+            actionButtonConsume = view.findViewById(R.id.button_stock_item_details_consume);
+            actionButtonOpen = view.findViewById(R.id.button_stock_item_details_open);
         }
     }
 
-    public StockItemOverviewAdapter(
+    public StockItemDetailsItemAdapter(
             Context context,
             StockItem stockItem,
             List<QuantityUnit> quantityUnits,
@@ -61,7 +61,7 @@ public class StockItemOverviewAdapter extends RecyclerView.Adapter<StockItemOver
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.view_stock_item_overview_item, parent, false
+                        R.layout.view_stock_item_details_item, parent, false
                 )
         );
     }

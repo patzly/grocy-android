@@ -2,6 +2,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
     private final static String TAG = "StockItemAdapter";
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private Context context;
     private List<StockItem> stockItems;
@@ -35,7 +36,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_overview_item_container);
+            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_details_item_container);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
         }
@@ -83,6 +84,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 break;
             }
         }
+
+        if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
 
         StringBuilder stringBuilder = new StringBuilder(
                 context.getString(

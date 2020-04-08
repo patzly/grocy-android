@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linear_stock_overview"
+                android:id="@+id/linear_stock"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
