@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,12 +29,14 @@ import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
+import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
     private final static boolean DEBUG = false;
 
+    private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private long lastClick = 0;
@@ -53,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
         setContentView(R.layout.activity_main);
+
+        // WEB REQUESTS
+
+        requestQueue = RequestQueueSingleton.getInstance(
+                getApplicationContext()
+        ).getRequestQueue();
 
         // BOTTOM APP BAR
 
@@ -207,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
         } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
+    public RequestQueue getRequestQueue() {
+        return requestQueue;
+    }
+
     public void showKeyboard(EditText editText) {
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                 .showSoftInput(
@@ -241,5 +254,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.e(TAG, "startAnimatedIcon(MenuItem): Icon missing!");
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        requestQueue.stop();
     }
 }
