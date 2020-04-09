@@ -1,12 +1,15 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +47,8 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 	private StockItem stockItem;
 	private List<QuantityUnit> quantityUnits;
 	private List<Location> locations;
+	private MaterialCardView cardViewDescription;
+	private int descriptionHeight;
 
 	@NonNull
 	@Override
@@ -78,7 +83,7 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 				)
 		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
 
-		MaterialCardView cardViewDescription = view.findViewById(
+		cardViewDescription = view.findViewById(
 				R.id.card_stock_item_details_description
 		);
 		if(stockItem.getProduct().getDescription() != null
@@ -91,7 +96,14 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 					Html.fromHtml(stockItem.getProduct().getDescription()).toString().trim()
 			);
 			cardViewDescription.setOnClickListener(v -> {
+				cardViewDescription.measure(
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT
+				);
+				/*descriptionHeight = cardViewDescription.getMeasuredHeight();
+				Log.i(TAG, "animateDescription: " + cardViewDescription.getLayoutParams().height);*/
 				textViewDescription.setMaxLines(textViewDescription.getMaxLines() == 3 ? 50 : 3);
+				//animateDescriptionCard();
 			});
 		} else {
 			cardViewDescription.setVisibility(View.GONE);
@@ -116,19 +128,48 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 
 		// LOAD DETAILS
 
-		new WebRequest(activity.getRequestQueue()).get(
-				activity.getGrocy().getStockProduct(stockItem.getProduct().getId()),
-				response -> {
-					Type listType = new TypeToken<ProductDetails>(){}.getType();
-					ProductDetails productDetails = new Gson().fromJson(response, listType);
-					recyclerView.setAdapter(
-							new StockItemDetailsItemAdapter(context, productDetails)
-					);
-				},
-				msg -> { }
-		);
+		if(activity.isOnline()) {
+			new WebRequest(activity.getRequestQueue()).get(
+					activity.getGrocy().getStockProduct(stockItem.getProduct().getId()),
+					response -> {
+						Type listType = new TypeToken<ProductDetails>(){}.getType();
+						ProductDetails productDetails = new Gson().fromJson(response, listType);
+						recyclerView.setAdapter(
+								new StockItemDetailsItemAdapter(context, productDetails)
+						);
+					},
+					msg -> { }
+			);
+		}
 
 		return view;
+	}
+
+	private void animateDescriptionCard() {
+		cardViewDescription.measure(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT
+		);
+		final int targetHeight = cardViewDescription.getMeasuredHeight();
+
+		Log.i(TAG, "animateDescription: hh " + cardViewDescription.getMeasuredHeight());
+
+		ValueAnimator anim = ValueAnimator.ofInt(descriptionHeight, targetHeight);
+		anim.setInterpolator(new AccelerateInterpolator());
+		anim.setDuration(1000);
+		anim.addUpdateListener(animation -> {
+			ViewGroup.LayoutParams layoutParams = cardViewDescription.getLayoutParams();
+			layoutParams.height = (int) (animation.getAnimatedValue());
+			cardViewDescription.setLayoutParams(layoutParams);
+		});
+		/*anim.addListener(new AnimatorListenerAdapter() {
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				ViewGroup.LayoutParams layoutParams = cardViewDescription.getLayoutParams();
+				layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+			}
+		});*/
+		anim.start();
 	}
 
 	public void setData(

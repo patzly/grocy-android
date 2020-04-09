@@ -111,6 +111,6 @@ public class ProductDetails {
 
     public int getPropertyCount() {
         // amount + product
-        return 1 + getProduct().getDisplayedPropertiesCount();
+        return 2 + getProduct().getDisplayedPropertiesCount();
     }
 }
