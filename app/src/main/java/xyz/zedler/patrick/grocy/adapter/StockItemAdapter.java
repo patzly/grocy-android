@@ -169,7 +169,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @Override
     public int getItemCount() {
-        return stockItems.size();
+        return stockItems != null ? stockItems.size() : 0;
     }
 
     /*public void refreshProducts(List<Product> products) {
