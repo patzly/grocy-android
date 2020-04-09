@@ -51,7 +51,7 @@
     <color name="on_background">#dd000000</color>
     <color name="on_background_variant">#212121</color>
     <color name="on_background_secondary">@color/grey600</color>
-    <color name="on_background_tertiary">@color/grey100</color>
+    <color name="on_background_tertiary">@color/grey200</color>
 
     <!-- SURFACE -->
 

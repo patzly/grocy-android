@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,31 +8,46 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.MenuRes;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.RequestQueue;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
+import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,14 +55,17 @@ public class MainActivity extends AppCompatActivity {
     private final static boolean DEBUG = false;
 
     private RequestQueue requestQueue;
+    private WebRequest request;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private GrocyApi grocyApi;
     private long lastClick = 0;
-    private Fragment fragmentCurrent;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
-    private CustomBottomAppBar bottomAppBar;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
+
+    private CustomBottomAppBar bottomAppBar;
+    private Fragment fragmentCurrent;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +86,19 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext()
         ).getRequestQueue();
 
+        request = new WebRequest(requestQueue);
+
         // API
 
         grocyApi = new GrocyApi(this);
 
-        // BOTTOM APP BAR
+        // VIEWS
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
+        fab = findViewById(R.id.fab_main);
+
+        // BOTTOM APP BAR
+
         bottomAppBar.setNavigationOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
             lastClick = SystemClock.elapsedRealtime();
@@ -138,13 +163,15 @@ public class MainActivity extends AppCompatActivity {
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_stock);
+                updateBottomAppBar(Constants.FAB_POSITION.CENTER, R.menu.menu_stock, true);
+
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
                     fabPosition = FAB_POSITION_CENTER;
                 } else {
                     fabPosition = FAB_POSITION_GONE;
                 }
-                updateBottomAppBar(fabPosition, R.menu.menu_feed_default, animated);
+
                 updateFab(
                         R.drawable.ic_round_add_anim,
                         R.string.action_add_channel,
@@ -162,47 +189,77 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*private void updateBottomAppBar(String newFabPosition,
-                                    @MenuRes int newMenuId,
-                                    boolean animated
+    private void updateBottomAppBar(
+            int newFabPosition,
+            @MenuRes int newMenuId,
+            boolean animated
     ) {
         switch (newFabPosition) {
-            case FAB_POSITION_CENTER:
+            case Constants.FAB_POSITION.CENTER:
                 if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(newMenuId, MENU_END, animated);
+                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_END, animated);
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
                 bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
-            case FAB_POSITION_END:
+            case Constants.FAB_POSITION.END:
                 if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(newMenuId, MENU_START, animated);
+                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_START, animated);
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
                 bottomAppBar.hideNavigationIcon();
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
-            case FAB_POSITION_GONE:
+            case Constants.FAB_POSITION.GONE:
                 if(fab.isOrWillBeShown()) fab.hide();
-                bottomAppBar.changeMenu(newMenuId, MENU_END, animated);
+                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_END, animated);
                 bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
-    }*/
+    }
 
-    /*private void updateFab(@DrawableRes int iconResId,
-                           @StringRes int tooltipStringId,
-                           String tag,
-                           boolean animated,
-                           Runnable onClick
+    public void setLocations(List<Location> locations) {
+        Menu menu = bottomAppBar.getMenu();
+        SubMenu menuLocations = menu.findItem(R.id.action_filter_location).getSubMenu();
+        menuLocations.clear();
+        for(Location location : locations) {
+            menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
+                if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                ((StockFragment) fragmentCurrent).filterLocation(location);
+                return true;
+            });
+        }
+    }
+
+    public void setProductGroups(List<ProductGroup> productGroups) {
+        Menu menu = bottomAppBar.getMenu();
+        SubMenu menuProductGroups = menu.findItem(R.id.action_filter_product_group).getSubMenu();
+        menuProductGroups.clear();
+        for(ProductGroup productGroup : productGroups) {
+            menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
+                if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                ((StockFragment) fragmentCurrent).filterProductGroup(productGroup);
+                return true;
+            });
+        }
+    }
+
+    private void updateFab(
+            @DrawableRes int iconResId,
+            @StringRes int tooltipStringId,
+            String tag,
+            boolean animated,
+            Runnable onClick
     ) {
         replaceFabIcon(iconResId, tag, animated);
         fab.setOnClickListener(v -> {
-            startAnimatedIcon(fab);
+            startAnimatedIcon(fab.getDrawable());
             onClick.run();
         });
-        fab.setTooltipText(getString(tooltipStringId));
-    }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            fab.setTooltipText(getString(tooltipStringId));
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -228,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showSnackbar(Snackbar snackbar) {
-        snackbar.setAnchorView(findViewById(R.id.fab_add)).show();
+        snackbar.setAnchorView(findViewById(R.id.fab_main)).show();
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
@@ -262,6 +319,38 @@ public class MainActivity extends AppCompatActivity {
 
     public GrocyApi getGrocy() {
         return grocyApi;
+    }
+
+    private void replaceFabIcon(@DrawableRes int icon, String tag, boolean animated) {
+        if(!tag.equals(fab.getTag())) {
+            if(animated) {
+                int duration = 400;
+                ValueAnimator animOut = ValueAnimator.ofInt(fab.getImageAlpha(), 0);
+                animOut.addUpdateListener(
+                        animation -> fab.setImageAlpha((int) animation.getAnimatedValue())
+                );
+                animOut.setDuration(duration / 2);
+                animOut.setInterpolator(new FastOutSlowInInterpolator());
+                animOut.start();
+
+                new Handler().postDelayed(() -> {
+                    fab.setImageResource(icon);
+                    ValueAnimator animIn = ValueAnimator.ofInt(0, 255);
+                    animIn.addUpdateListener(
+                            animation -> fab.setImageAlpha((int) (animation.getAnimatedValue()))
+                    );
+                    animIn.setDuration(duration / 2);
+                    animIn.setInterpolator(new FastOutSlowInInterpolator());
+                    animIn.start();
+                }, duration / 2);
+            } else {
+                fab.setImageResource(icon);
+            }
+            fab.setTag(tag);
+            Log.i(TAG, "replaceFabIcon: replaced successfully, animated = " + animated);
+        } else {
+            Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
+        }
     }
 
     private void startAnimatedIcon(Drawable drawable) {

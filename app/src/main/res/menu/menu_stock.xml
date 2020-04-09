@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -7,6 +8,67 @@
         android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@drawable/ic_round_search_anim"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_round_filter_list_out_anim"
+        android:title="Filter"
+        app:showAsAction="never">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_filter_location"
+                android:title="Standort">
+
+                <menu/>
+
+            </item>
+
+            <item
+                android:id="@+id/action_filter_product_group"
+                android:title="Produktgruppe">
+
+                <menu/>
+
+            </item>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_round_filter_list_out_anim"
+        android:title="Sort"
+        app:showAsAction="never">
+
+        <menu>
+
+            <group
+                android:id="@+id/group_sort"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/action_sort_name"
+                    android:title="Name"/>
+
+                <item
+                    android:id="@+id/action_sort_best_before"
+                    android:title="Best before"/>
+
+            </group>
+
+            <item
+                android:id="@+id/action_sort_ascending"
+                android:title="Ascending"
+                android:checkable="true"
+                android:checked="true"/>
+
+        </menu>
+
+    </item>
 
 </menu>

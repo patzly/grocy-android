@@ -22,6 +22,7 @@ public class DateUtil {
     }
 
     public static int getDaysFromNow(String dateString) {
+        if(dateString == null) return 0;
         Date current = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = null;
@@ -32,6 +33,20 @@ public class DateUtil {
         }
         if(date == null) return 0;
         return ((int)(date.getTime() / 86400000) - (int)(current.getTime() / 86400000)) + 1;
+    }
+
+    public String getLocalizedDate(String dateString) {
+        if(dateString == null) return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            Log.e(TAG, "getLocalizedDate: ");
+        }
+        if(date == null) return "";
+        java.text.DateFormat localized = android.text.format.DateFormat.getLongDateFormat(context);
+        return localized.format(date);
     }
 
     public String getHumanFromDays(int days) {

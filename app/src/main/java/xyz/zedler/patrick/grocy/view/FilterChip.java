@@ -7,7 +7,6 @@ import android.graphics.drawable.Animatable;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,14 +64,8 @@ public class FilterChip extends LinearLayout {
         textView = findViewById(R.id.text_filter_chip);
 
         setText(text);
-
+        setIconTint(ContextCompat.getColor(context, R.color.on_retro));
         setBackgroundColor(ContextCompat.getColor(context, colorId));
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setMargins(dp(4), 0, dp(4), 0);
-        setLayoutParams(layoutParams);
 
         setOnClickListener(v -> {
             invertState();

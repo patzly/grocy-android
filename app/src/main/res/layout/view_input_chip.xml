@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_input_chip_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:gravity="center">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:cardCornerRadius="16dp"
+        app:strokeWidth="0dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/on_background_tertiary">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:animateLayoutChanges="true">
+
+            <FrameLayout
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/filter_chip_icon_background"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/image_input_chip_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    tools:ignore="ContentDescription"
+                    android:tint="@color/icon" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/text_input_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_mono_medium" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_round_cancel"
+                tools:ignore="ContentDescription"
+                android:tint="@color/on_background_secondary" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:id="@+id/view_input_chip_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end|center_vertical"
+        android:clickable="true"
+        android:focusable="true" />
+
+</FrameLayout>

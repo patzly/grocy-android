@@ -23,6 +23,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemDetailsItemAdapter.ViewHolder> {
@@ -173,11 +174,23 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                 holder.textViewValue.setText(location != null ? location.getName() : "");
                 break;
             case 2: // LAST PURCHASED
-                holder.linearLayoutContainer.setVisibility(View.GONE);
-                if(hasDetails()) {
-                    holder.textViewProperty.setText(context.getString(R.string.property_last_purchased));
-                    holder.textViewValue.setText(productDetails.getLastPurchased());
-                    expandContainer(holder.linearLayoutContainer);
+                if(hasDetails() && productDetails.getLastPurchased() != null) {
+                    holder.textViewProperty.setText(
+                            context.getString(R.string.property_last_purchased)
+                    );
+                    DateUtil dateUtil = new DateUtil(context);
+                    holder.textViewValue.setText(
+                            dateUtil.getLocalizedDate(productDetails.getLastPurchased())
+                    );
+                    holder.textViewExtra.setText(
+                            dateUtil.getHumanFromDays(
+                                    DateUtil.getDaysFromNow(productDetails.getLastPurchased())
+                            )
+                    );
+                    holder.linearLayoutExtra.setVisibility(View.VISIBLE);
+                    //expandContainer(holder.linearLayoutContainer);
+                } else {
+                    holder.linearLayoutContainer.setVisibility(View.GONE);
                 }
                 break;
         }
@@ -256,6 +269,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
         container.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         final int targetHeight = container.getMeasuredHeight();
 
+        // Set initial height to 0 and show the view
         container.getLayoutParams().height = 0;
         container.setVisibility(View.VISIBLE);
 
@@ -270,6 +284,8 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                // At the end of animation, set the height to wrap content
+                // This fix is for long views that are not shown on screen
                 ViewGroup.LayoutParams layoutParams = container.getLayoutParams();
                 layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             }

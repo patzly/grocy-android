@@ -42,10 +42,12 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.FilterChip;
+import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
@@ -69,9 +71,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<StockItem> displayedItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
+    private List<ProductGroup> productGroups = new ArrayList<>();
 
     private String itemsToDisplay = Constants.STOCK.ALL;
     private String search = "";
+    private int filterLocationId = -1;
+    private String filterProductGroupId = null;
 
     private RecyclerView recyclerView;
     private StockItemAdapter stockItemAdapter;
@@ -79,6 +84,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
+    private LinearLayout linearLayoutFilterContainer;
+    private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
 
     @Override
     public View onCreateView(
@@ -104,6 +111,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // VIEWS
 
+        linearLayoutFilterContainer = activity.findViewById(
+                R.id.linear_stock_filter_container_bottom
+        );
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         recyclerView = activity.findViewById(R.id.recycler_stock);
         textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
@@ -167,7 +177,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> filterItems(Constants.STOCK.ALL)
         );
         LinearLayout chipContainer = activity.findViewById(
-                R.id.linear_stock_chip_container
+                R.id.linear_stock_filter_container_top
         );
         chipContainer.addView(chipExpiring);
         chipContainer.addView(chipExpired);
@@ -336,6 +346,20 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 response -> {
                     Type listType = new TypeToken<List<Location>>(){}.getType();
                     locations = gson.fromJson(response, listType);
+                    activity.setLocations(locations);
+                    downloadProductGroups();
+                },
+                msg -> { }
+        );
+    }
+
+    private void downloadProductGroups() {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+                response -> {
+                    Type listType = new TypeToken<List<ProductGroup>>(){}.getType();
+                    productGroups = gson.fromJson(response, listType);
+                    activity.setProductGroups(productGroups);
                     downloadStock();
                 },
                 msg -> { }
@@ -462,6 +486,27 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 filteredItems = this.stockItems;
                 break;
         }
+        // LOCATION
+        if(filterLocationId != -1) {
+            List<StockItem> tempItems = new ArrayList<>();
+            for(StockItem stockItem : filteredItems) {
+                if(filterLocationId == stockItem.getProduct().getLocationId()) {
+                    tempItems.add(stockItem);
+                }
+            }
+            filteredItems = tempItems;
+        }
+        // PRODUCT GROUP
+        if(filterProductGroupId != null) {
+            List<StockItem> tempItems = new ArrayList<>();
+            for(StockItem stockItem : filteredItems) {
+                if(filterProductGroupId.equals(stockItem.getProduct().getProductGroupId())) {
+                    tempItems.add(stockItem);
+                }
+            }
+            filteredItems = tempItems;
+        }
+        // SEARCH
         if(!search.equals("")) { // active search
             searchItems(search);
         } else {
@@ -503,6 +548,49 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 recyclerView.animate().alpha(1).setDuration(150).start();
             }).start();
         }
+    }
+
+    public void filterLocation(Location location) {
+        if(filterLocationId != location.getId()) { // only if necessary
+            filterLocationId = location.getId();
+            if(inputChipFilterLocation != null) {
+                inputChipFilterLocation.change(location.getName());
+            } else {
+                inputChipFilterLocation = new InputChip(
+                        activity,
+                        location.getName(),
+                        R.drawable.ic_round_place,
+                        true,
+                        () -> {
+                            filterLocationId = -1;
+                            inputChipFilterLocation = null;
+                            filterItems(itemsToDisplay);
+                        });
+                linearLayoutFilterContainer.addView(inputChipFilterLocation);
+            }
+            filterItems(itemsToDisplay);
+        }
+    }
+
+    public void filterProductGroup(ProductGroup productGroup) {
+        filterProductGroupId = String.valueOf(productGroup.getId());
+        // TODO: only if necessary
+        if(inputChipFilterProductGroup != null) {
+            inputChipFilterProductGroup.change(productGroup.getName());
+        } else {
+            inputChipFilterProductGroup = new InputChip(
+                    activity,
+                    productGroup.getName(),
+                    R.drawable.ic_round_category,
+                    true,
+                    () -> {
+                        filterProductGroupId = null;
+                        inputChipFilterProductGroup = null;
+                        filterItems(itemsToDisplay);
+                    });
+            linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
+        }
+        filterItems(itemsToDisplay);
     }
 
     // STOCK ITEM CLICK

@@ -76,7 +76,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +105,7 @@
                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
             </com.google.android.material.card.MaterialCardView>
-            
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_stock_item_details"
                 android:layout_width="match_parent"

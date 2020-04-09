@@ -109,12 +109,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:scrollbars="none"
-                    android:fillViewport="true">
+                    android:overScrollMode="ifContentScrolls">
 
                     <LinearLayout
-                        android:id="@+id/linear_stock_chip_container"
+                        android:id="@+id/linear_stock_filter_container_top"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -124,10 +123,29 @@
 
                 </HorizontalScrollView>
 
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:overScrollMode="ifContentScrolls">
+
+                    <LinearLayout
+                        android:id="@+id/linear_stock_filter_container_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:animateLayoutChanges="true"/>
+
+                </HorizontalScrollView>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_stock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:overScrollMode="never"
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false"/>

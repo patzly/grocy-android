@@ -43,19 +43,15 @@ public final class Constants {
         }
     }
 
-    public final static class ACTION {
-        public final static String CONS_WRITE = "xyz.zedler.patrick.stiefo.action.consonants.write";
-        public final static String VOWELS_READ = "xyz.zedler.patrick.stiefo.action.vowels.read";
-        public final static String PRACTICE = "xyz.zedler.patrick.stiefo.action.practice";
-    }
-
     public final static class EXTRA {
         public final static String FLASH_VIEW_ID = "flash_view_id";
         public final static String PAGER_POSITION = "position";
     }
 
-    public final static class TEXT_TO_SPEECH {
-        public final static String UTTERANCE_ID = "word";
+    public final static class FAB_POSITION {
+        public final static int GONE = 0;
+        public final static int CENTER = 1;
+        public final static int END = 2;
     }
 
     public final static class REQUEST {
