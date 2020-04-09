@@ -2,10 +2,14 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,15 +66,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<MissingItem> missingItems = new ArrayList<>();
     private List<StockItem> missingStockItems;
     private List<StockItem> filteredItems = new ArrayList<>();
+    private List<StockItem> displayedItems = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<Location> locations = new ArrayList<>();
 
     private String itemsToDisplay = Constants.STOCK.ALL;
+    private String search = "";
 
     private RecyclerView recyclerView;
     private StockItemAdapter stockItemAdapter;
     private FilterChip chipExpiring, chipExpired, chipMissing;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextInputLayout textInputLayoutSearch;
+    private EditText editTextSearch;
 
     @Override
     public View onCreateView(
@@ -98,6 +106,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         recyclerView = activity.findViewById(R.id.recycler_stock);
+        textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
+        editTextSearch = textInputLayoutSearch.getEditText();
+        assert editTextSearch != null;
+        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchItems(editTextSearch.getText().toString());
+                activity.hideKeyboard();
+                return true;
+            } return false;
+        });
 
         // APP BAR BEHAVIOR
 
@@ -428,8 +446,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void filterItems(String itemsToDisplay) {
-        this.itemsToDisplay = itemsToDisplay;
+    private void filterItems(String filter) {
+        itemsToDisplay = filter.equals("") ? Constants.STOCK.ALL : filter;
         switch (itemsToDisplay) {
             case Constants.STOCK.VOLATILE.EXPIRING:
                 filteredItems = this.expiringItems;
@@ -444,30 +462,63 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 filteredItems = this.stockItems;
                 break;
         }
-        stockItemAdapter = new StockItemAdapter(
-                activity, filteredItems, quantityUnits, this
-        );
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(stockItemAdapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
-        }).start();
+        if(!search.equals("")) { // active search
+            searchItems(search);
+        } else {
+            if(displayedItems != filteredItems) {
+                displayedItems = filteredItems;
+                stockItemAdapter = new StockItemAdapter(
+                        activity, filteredItems, quantityUnits, this
+                );
+                recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+                    recyclerView.setAdapter(stockItemAdapter);
+                    recyclerView.animate().alpha(1).setDuration(150).start();
+                }).start();
+            }
+        }
+    }
+
+    private void searchItems(String search) {
+        search = search.toLowerCase();
+        this.search = search;
+        if(search.equals("")) {
+            filterItems(itemsToDisplay);
+        } else {
+            List<StockItem> searchedItems = new ArrayList<>();
+            for(StockItem stockItem : filteredItems) {
+                String name = stockItem.getProduct().getName();
+                String description = stockItem.getProduct().getDescription();
+                name = name != null ? name.toLowerCase() : "";
+                description = description != null ? description.toLowerCase() : "";
+                if(name.contains(search) || description.contains(search)) {
+                    searchedItems.add(stockItem);
+                }
+            }
+            displayedItems = searchedItems;
+            stockItemAdapter = new StockItemAdapter(
+                    activity, searchedItems, quantityUnits, this
+            );
+            recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+                recyclerView.setAdapter(stockItemAdapter);
+                recyclerView.animate().alpha(1).setDuration(150).start();
+            }).start();
+        }
     }
 
     // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
         StockItemBottomSheetDialogFragment bottomSheet = new StockItemBottomSheetDialogFragment();
-        bottomSheet.setData(filteredItems.get(position), quantityUnits, locations);
+        bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
         activity.showBottomSheet(bottomSheet);
     }
 
     public void setUpSearch() {
-        // SEARCH APP BAR LAYOUT
         appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
-
-        TextInputLayout textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
         textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(textInputLayoutSearch.getEditText());
+        search = "";
+        editTextSearch.setText("");
+        activity.showKeyboard(editTextSearch);
 
         activity.findViewById(R.id.frame_close_stock_search).setOnClickListener(
                 v -> activity.onBackPressed()
@@ -486,10 +537,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     public void dismissSearch() {
-        // DEFAULT APP BAR LAYOUT
         appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_default, true);
-
         activity.hideKeyboard();
+        search = "";
+        filterItems(itemsToDisplay); // TODO: buggy animation
 
         /*frameLayoutBack.setTooltipText(activity.getString(R.string.action_back));
         imageViewBack.setImageResource(R.drawable.ic_round_close_to_arrow_back_anim);
