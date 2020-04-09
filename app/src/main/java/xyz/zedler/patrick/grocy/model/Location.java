@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Location {
 
-    public Location() {}
-
     @SerializedName("id")
     int id;
 

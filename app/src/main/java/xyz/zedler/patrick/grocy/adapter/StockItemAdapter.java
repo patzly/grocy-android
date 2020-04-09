@@ -31,21 +31,6 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private List<QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout linearLayoutItemContainer, linearLayoutDays;
-        private TextView textViewName, textViewAmount, textViewDays;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_details_item_container);
-            linearLayoutDays = view.findViewById(R.id.linear_stock_item_days);
-            textViewName = view.findViewById(R.id.text_stock_item_name);
-            textViewAmount = view.findViewById(R.id.text_stock_item_amount);
-            textViewDays = view.findViewById(R.id.text_stock_item_days);
-        }
-    }
-
     public StockItemAdapter(
             Context context,
             List<StockItem> stockItems,
@@ -56,6 +41,21 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.stockItems = stockItems;
         this.quantityUnits = quantityUnits;
         this.listener = listener;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public LinearLayout linearLayoutItemContainer, linearLayoutDays;
+        private TextView textViewName, textViewAmount, textViewDays;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_container);
+            linearLayoutDays = view.findViewById(R.id.linear_stock_item_days);
+            textViewName = view.findViewById(R.id.text_stock_item_name);
+            textViewAmount = view.findViewById(R.id.text_stock_item_amount);
+            textViewDays = view.findViewById(R.id.text_stock_item_days);
+        }
     }
 
     @NonNull

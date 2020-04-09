@@ -46,6 +46,7 @@
 
     <string name="property_amount">Amount</string>
     <string name="property_default_location">Default location</string>
+    <string name="property_last_purchased">Last purchased</string>
 
     <string name="date_ago">%1$s ago</string>
     <string name="date_yesterday">Yesterday</string>

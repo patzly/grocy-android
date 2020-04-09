@@ -108,4 +108,9 @@ public class ProductDetails {
     public int getIsAggregatedAmount() {
         return isAggregatedAmount;
     }
+
+    public int getPropertyCount() {
+        // amount + product
+        return 1 + getProduct().getDisplayedPropertiesCount();
+    }
 }

@@ -18,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
@@ -27,8 +30,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockItemDetailsItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -108,6 +113,20 @@ public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragmen
 			layoutParams.setMargins(0, 0, 0, 0);
 			recyclerView.setLayoutParams(layoutParams);
 		}
+
+		// LOAD DETAILS
+
+		new WebRequest(activity.getRequestQueue()).get(
+				activity.getGrocy().getStockProduct(stockItem.getProduct().getId()),
+				response -> {
+					Type listType = new TypeToken<ProductDetails>(){}.getType();
+					ProductDetails productDetails = new Gson().fromJson(response, listType);
+					recyclerView.setAdapter(
+							new StockItemDetailsItemAdapter(context, productDetails)
+					);
+				},
+				msg -> { }
+		);
 
 		return view;
 	}

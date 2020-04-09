@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
+    private GrocyApi grocyApi;
     private long lastClick = 0;
     private Fragment fragmentCurrent;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
@@ -64,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = RequestQueueSingleton.getInstance(
                 getApplicationContext()
         ).getRequestQueue();
+
+        // API
+
+        grocyApi = new GrocyApi(this);
 
         // BOTTOM APP BAR
 
@@ -252,6 +258,10 @@ public class MainActivity extends AppCompatActivity {
                         findViewById(android.R.id.content).getWindowToken(),
                         0
                 );
+    }
+
+    public GrocyApi getGrocy() {
+        return grocyApi;
     }
 
     private void startAnimatedIcon(Drawable drawable) {

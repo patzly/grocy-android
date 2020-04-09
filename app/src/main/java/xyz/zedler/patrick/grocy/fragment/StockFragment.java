@@ -92,7 +92,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         request = new WebRequest(activity.getRequestQueue());
 
-        grocyApi = new GrocyApi(activity);
+        grocyApi = activity.getGrocy();
 
         // VIEWS
 
