@@ -19,6 +19,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
@@ -30,16 +31,22 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private List<StockItem> stockItems;
     private List<QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
+    private int daysExpiringSoon;
+    private String sortMode;
 
     public StockItemAdapter(
             Context context,
             List<StockItem> stockItems,
             List<QuantityUnit> quantityUnits,
+            int daysExpiringSoon,
+            String sortMode,
             StockItemAdapterListener listener
     ) {
         this.context = context;
         this.stockItems = stockItems;
         this.quantityUnits = quantityUnits;
+        this.daysExpiringSoon = daysExpiringSoon;
+        this.sortMode = sortMode;
         this.listener = listener;
     }
 
@@ -136,18 +143,22 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         if(stockItem.getBestBeforeDate() != null) {
             int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
-            if(days <= 5) {
+            if(sortMode.equals(Constants.STOCK.SORT.DATE) || days <= daysExpiringSoon) {
                 holder.textViewDays.setText(
-                        new DateUtil(context).getHumanFromDays(days)
+                        new DateUtil(context).getHumanForDaysFromNow(stockItem.getBestBeforeDate())
                 );
-                holder.textViewDays.setTypeface(
-                        ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
-                );
-                holder.textViewDays.setTextColor(
-                        ContextCompat.getColor(
-                                context, days < 0 ? R.color.retro_red : R.color.retro_yellow_dark
-                        )
-                );
+                if(days <= 5) {
+                    holder.textViewDays.setTypeface(
+                            ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
+                    );
+                    holder.textViewDays.setTextColor(
+                            ContextCompat.getColor(
+                                    context, days < 0
+                                            ? R.color.retro_red
+                                            : R.color.retro_yellow_dark
+                            )
+                    );
+                }
             } else {
                 holder.linearLayoutDays.setVisibility(View.GONE);
             }

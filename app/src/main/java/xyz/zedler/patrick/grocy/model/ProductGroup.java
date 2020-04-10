@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class ProductGroup {
@@ -26,5 +28,11 @@ public class ProductGroup {
 
     public String getDescription() {
         return description;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ProductGroup(" + name + ')';
     }
 }

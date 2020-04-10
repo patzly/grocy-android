@@ -14,20 +14,32 @@ import xyz.zedler.patrick.grocy.R;
 public class DateUtil {
 
     private static final String TAG = "DateUtil";
-
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+            "yyyy-MM-dd", Locale.ENGLISH
+    );
     private Context context;
 
     public DateUtil(Context context) {
         this.context = context;
     }
 
+    public static Date getDate(String dateString) {
+        if(dateString == null) return null;
+        Date date = null;
+        try {
+            date = DATE_FORMAT.parse(dateString);
+        } catch (ParseException e) {
+            Log.e(TAG, "getDate: ");
+        }
+        return date;
+    }
+
     public static int getDaysFromNow(String dateString) {
         if(dateString == null) return 0;
         Date current = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = null;
         try {
-            date = dateFormat.parse(dateString);
+            date = DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
             Log.e(TAG, "getDaysAway: ");
         }
@@ -37,16 +49,25 @@ public class DateUtil {
 
     public String getLocalizedDate(String dateString) {
         if(dateString == null) return "";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = null;
         try {
-            date = dateFormat.parse(dateString);
+            date = DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
             Log.e(TAG, "getLocalizedDate: ");
         }
         if(date == null) return "";
         java.text.DateFormat localized = android.text.format.DateFormat.getLongDateFormat(context);
         return localized.format(date);
+    }
+
+    public String getHumanForDaysFromNow(String dateString) {
+        if(dateString == null) {
+            return context.getString(R.string.date_unknown);
+        } else if(dateString.equals("2999-12-31")) {
+            return context.getString(R.string.date_never);
+        } else {
+            return getHumanFromDays(getDaysFromNow(dateString));
+        }
     }
 
     public String getHumanFromDays(int days) {

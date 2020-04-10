@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Location {
@@ -33,5 +35,11 @@ public class Location {
 
     public int getIsFreezer() {
         return isFreezer;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Location(" + name + ')';
     }
 }

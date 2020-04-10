@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class StockItem {
@@ -95,5 +97,11 @@ public class StockItem {
 
     public void removeOpened() {
         if(amountOpened > 0) amountOpened--;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "StockItem(" + product + ")";
     }
 }

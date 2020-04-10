@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class QuantityUnit {
@@ -38,5 +40,11 @@ public class QuantityUnit {
 
     public String getNamePlural() {
         return namePlural;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "QuantityUnit(" + name + ')';
     }
 }

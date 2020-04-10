@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class ProductDetails {
@@ -114,5 +116,11 @@ public class ProductDetails {
         int count = 1 + getProduct().getDisplayedPropertiesCount();
         if(lastPurchased != null) count++;
         return count;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ProductDetails(" + product + ')';
     }
 }

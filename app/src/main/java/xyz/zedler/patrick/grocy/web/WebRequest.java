@@ -26,9 +26,10 @@ public class WebRequest {
                         response -> {
                             onSuccess.onResponse(response);
                             onLeave.run();
-                        }, error -> {
-                    onError.onError(error.getMessage());
-                })
+                        },
+                        error -> {
+                            onError.onError(error.getMessage());
+                        })
         );
         onQueued.run();
     }

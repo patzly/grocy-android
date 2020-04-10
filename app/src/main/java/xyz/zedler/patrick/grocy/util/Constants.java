@@ -5,8 +5,10 @@ public final class Constants {
     public final static class PREF {
         public final static String SERVER_URL = "server_url";
         public final static String API_KEY = "api_key";
-        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expiring_soon_days";
 
+        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expiring_soon_days";
+        public final static String STOCK_SORT_MODE = "stock_sort_mode";
+        public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 
         public final static String DARK_MODE = "force_dark_mode";
 
@@ -35,11 +37,17 @@ public final class Constants {
     }
 
     public final static class STOCK {
-        public final static String ALL = "all";
-        public final static class VOLATILE {
-            public final static String EXPIRING = "expiring";
-            public final static String EXPIRED = "expired";
-            public final static String MISSING = "missing";
+        public final static class FILTER {
+            public final static String ALL = "all";
+            public final static class VOLATILE {
+                public final static String EXPIRING = "expiring";
+                public final static String EXPIRED = "expired";
+                public final static String MISSING = "missing";
+            }
+        }
+        public final static class SORT {
+            public final static String NAME = "name";
+            public final static String DATE = "best_before";
         }
     }
 

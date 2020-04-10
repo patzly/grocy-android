@@ -2,6 +2,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -73,19 +75,24 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private List<Location> locations = new ArrayList<>();
     private List<ProductGroup> productGroups = new ArrayList<>();
 
-    private String itemsToDisplay = Constants.STOCK.ALL;
+    private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
     private String search = "";
     private int filterLocationId = -1;
-    private String filterProductGroupId = null;
+    private String filterProductGroupId = "";
+    private String sortMode;
+    private int daysExpiringSoon;
+    private boolean sortAscending;
 
     private RecyclerView recyclerView;
-    private StockItemAdapter stockItemAdapter;
     private FilterChip chipExpiring, chipExpired, chipMissing;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
     private LinearLayout linearLayoutFilterContainer;
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
+
+    private int numberOfRequestsToMake = 0;
+    private boolean hasRequestFailed = false;
 
     @Override
     public View onCreateView(
@@ -103,13 +110,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        // GET PREFERENCES
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        loadPreferences();
+
+        // WEB REQUESTS
 
         request = new WebRequest(activity.getRequestQueue());
-
         grocyApi = activity.getGrocy();
 
-        // VIEWS
+        // INITIALIZE VIEWS
 
         linearLayoutFilterContainer = activity.findViewById(
                 R.id.linear_stock_filter_container_bottom
@@ -150,9 +161,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpired.changeState(false);
                     chipMissing.changeState(false);
-                    filterItems(Constants.STOCK.VOLATILE.EXPIRING);
+                    filterItems(Constants.STOCK.FILTER.VOLATILE.EXPIRING);
                 },
-                () -> filterItems(Constants.STOCK.ALL)
+                () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
         chipExpired = new FilterChip(
                 activity,
@@ -161,9 +172,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpiring.changeState(false);
                     chipMissing.changeState(false);
-                    filterItems(Constants.STOCK.VOLATILE.EXPIRED);
+                    filterItems(Constants.STOCK.FILTER.VOLATILE.EXPIRED);
                 },
-                () -> filterItems(Constants.STOCK.ALL)
+                () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
         chipMissing = new FilterChip(
                 activity,
@@ -172,9 +183,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> {
                     chipExpiring.changeState(false);
                     chipExpired.changeState(false);
-                    filterItems(Constants.STOCK.VOLATILE.MISSING);
+                    filterItems(Constants.STOCK.FILTER.VOLATILE.MISSING);
                 },
-                () -> filterItems(Constants.STOCK.ALL)
+                () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
         LinearLayout chipContainer = activity.findViewById(
                 R.id.linear_stock_filter_container_top
@@ -299,7 +310,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(activity.isOnline()) {
             download();
         } else {
-            // TODO
+            // TODO: offline on startup
         }
     }
 
@@ -334,6 +345,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 response -> {
                     Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
                     quantityUnits = gson.fromJson(response, listType);
+                    if(DEBUG) Log.i(
+                            TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
+                    );
                     downloadLocations();
                 },
                 msg -> { }
@@ -346,7 +360,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 response -> {
                     Type listType = new TypeToken<List<Location>>(){}.getType();
                     locations = gson.fromJson(response, listType);
-                    activity.setLocations(locations);
+                    if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
+                    activity.setLocationFilters(locations);
                     downloadProductGroups();
                 },
                 msg -> { }
@@ -359,7 +374,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 response -> {
                     Type listType = new TypeToken<List<ProductGroup>>(){}.getType();
                     productGroups = gson.fromJson(response, listType);
-                    activity.setProductGroups(productGroups);
+                    if(DEBUG) Log.i(
+                            TAG, "downloadProductGroups: productGroups = " + productGroups
+                    );
+                    activity.setProductGroupFilters(productGroups);
                     downloadStock();
                 },
                 msg -> { }
@@ -372,6 +390,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 response -> {
                     Type listType = new TypeToken<List<StockItem>>(){}.getType();
                     stockItems = gson.fromJson(response, listType);
+                    if(DEBUG) Log.i(TAG, "downloadStock: stockItems = " + stockItems);
                     downloadVolatile();
                 },
                 msg -> { }
@@ -382,6 +401,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         request.get(
                 grocyApi.getStockVolatile(),
                 response -> {
+                    if(DEBUG) Log.i(TAG, "downloadVolatile: success");
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         Type listType = new TypeToken<List<StockItem>>(){}.getType();
@@ -389,14 +409,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 jsonObject.getJSONArray("expiring_products").toString(),
                                 listType
                         );
+                        if(DEBUG) Log.i(TAG, "downloadVolatile: expiring = " + expiringItems);
                         expiredItems = gson.fromJson(
                                 jsonObject.getJSONArray("expired_products").toString(),
                                 listType
                         );
+                        if(DEBUG) Log.i(TAG, "downloadVolatile: expired = " + expiredItems);
                         missingItems = gson.fromJson(
                                 jsonObject.getJSONArray("missing_products").toString(),
                                 new TypeToken<List<MissingItem>>(){}.getType()
                         );
+                        if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -436,9 +459,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             int finalI = i;
             request.get(
                     grocyApi.getStockProduct(notPartlyInStock.get(i).getId()),
-                    resp -> {
+                    response -> {
                         Type type = new TypeToken<ProductDetails>(){}.getType();
-                        ProductDetails productDetails = gson.fromJson(resp, type);
+                        ProductDetails productDetails = gson.fromJson(response, type);
+                        if(DEBUG) Log.i(
+                                TAG,
+                                "downloadMissingProductDetails: size = "
+                                        + (notPartlyInStock.size() - 1) + ", i = " + finalI
+                                        + ", name = " + productDetails.getProduct().getName()
+                        );
                         stockItems.add(
                                 new StockItem(
                                         productDetails.getStockAmount(),
@@ -471,21 +500,25 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void filterItems(String filter) {
-        itemsToDisplay = filter.equals("") ? Constants.STOCK.ALL : filter;
+        itemsToDisplay = filter.equals("") ? Constants.STOCK.FILTER.ALL : filter;
+        if(DEBUG) Log.i(
+                TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
+        );
         switch (itemsToDisplay) {
-            case Constants.STOCK.VOLATILE.EXPIRING:
+            case Constants.STOCK.FILTER.VOLATILE.EXPIRING:
                 filteredItems = this.expiringItems;
                 break;
-            case Constants.STOCK.VOLATILE.EXPIRED:
+            case Constants.STOCK.FILTER.VOLATILE.EXPIRED:
                 filteredItems = this.expiredItems;
                 break;
-            case Constants.STOCK.VOLATILE.MISSING:
+            case Constants.STOCK.FILTER.VOLATILE.MISSING:
                 filteredItems = this.missingStockItems;
                 break;
             default:
                 filteredItems = this.stockItems;
                 break;
         }
+        if(DEBUG) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
         // LOCATION
         if(filterLocationId != -1) {
             List<StockItem> tempItems = new ArrayList<>();
@@ -497,7 +530,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             filteredItems = tempItems;
         }
         // PRODUCT GROUP
-        if(filterProductGroupId != null) {
+        if(!filterProductGroupId.equals("")) {
             List<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 if(filterProductGroupId.equals(stockItem.getProduct().getProductGroupId())) {
@@ -512,13 +545,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } else {
             if(displayedItems != filteredItems) {
                 displayedItems = filteredItems;
-                stockItemAdapter = new StockItemAdapter(
-                        activity, filteredItems, quantityUnits, this
-                );
-                recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    recyclerView.setAdapter(stockItemAdapter);
-                    recyclerView.animate().alpha(1).setDuration(150).start();
-                }).start();
+                sortItems();
             }
         }
     }
@@ -539,19 +566,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     searchedItems.add(stockItem);
                 }
             }
-            displayedItems = searchedItems;
-            stockItemAdapter = new StockItemAdapter(
-                    activity, searchedItems, quantityUnits, this
-            );
-            recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                recyclerView.setAdapter(stockItemAdapter);
-                recyclerView.animate().alpha(1).setDuration(150).start();
-            }).start();
+            if(displayedItems != searchedItems) {
+                displayedItems = searchedItems;
+                sortItems();
+            }
         }
     }
 
     public void filterLocation(Location location) {
-        if(filterLocationId != location.getId()) { // only if necessary
+        if(filterLocationId != location.getId()) { // only if not already selected
             filterLocationId = location.getId();
             if(inputChipFilterLocation != null) {
                 inputChipFilterLocation.change(location.getName());
@@ -573,30 +596,63 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     public void filterProductGroup(ProductGroup productGroup) {
-        filterProductGroupId = String.valueOf(productGroup.getId());
-        // TODO: only if necessary
-        if(inputChipFilterProductGroup != null) {
-            inputChipFilterProductGroup.change(productGroup.getName());
-        } else {
-            inputChipFilterProductGroup = new InputChip(
-                    activity,
-                    productGroup.getName(),
-                    R.drawable.ic_round_category,
-                    true,
-                    () -> {
-                        filterProductGroupId = null;
-                        inputChipFilterProductGroup = null;
-                        filterItems(itemsToDisplay);
-                    });
-            linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
+        if(!filterProductGroupId.equals(String.valueOf(productGroup.getId()))) {
+            filterProductGroupId = String.valueOf(productGroup.getId());
+            if(inputChipFilterProductGroup != null) {
+                inputChipFilterProductGroup.change(productGroup.getName());
+            } else {
+                inputChipFilterProductGroup = new InputChip(
+                        activity,
+                        productGroup.getName(),
+                        R.drawable.ic_round_category,
+                        true,
+                        () -> {
+                            filterProductGroupId = "";
+                            inputChipFilterProductGroup = null;
+                            filterItems(itemsToDisplay);
+                        });
+                linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
+            }
+            filterItems(itemsToDisplay);
         }
-        filterItems(itemsToDisplay);
+    }
+
+    public void sortItems() {
+        if(sortMode.equals(Constants.STOCK.SORT.NAME)) {
+            SortUtil.sortStockItemsByName(displayedItems, sortAscending);
+        } else if(sortMode.equals(Constants.STOCK.SORT.DATE)) {
+            SortUtil.sortStockItemsByBBD(displayedItems, sortAscending);
+        }
+
+        refreshAdapter(
+                new StockItemAdapter(
+                        activity,
+                        displayedItems,
+                        quantityUnits,
+                        daysExpiringSoon,
+                        sortMode,
+                        this
+                )
+        );
+    }
+
+    private void refreshAdapter(StockItemAdapter adapter) {
+        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            recyclerView.setAdapter(adapter);
+            recyclerView.animate().alpha(1).setDuration(150).start();
+        }).start();
+    }
+
+    public void loadPreferences() {
+        daysExpiringSoon = sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5);
+        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
+        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
     }
 
     // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
-        StockItemBottomSheetDialogFragment bottomSheet = new StockItemBottomSheetDialogFragment();
+        StockItemDetailsBottomSheetDialogFragment bottomSheet = new StockItemDetailsBottomSheetDialogFragment();
         bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
         activity.showBottomSheet(bottomSheet);
     }
@@ -609,19 +665,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.showKeyboard(editTextSearch);
 
         activity.findViewById(R.id.frame_close_stock_search).setOnClickListener(
-                v -> activity.onBackPressed()
+                v -> dismissSearch()
         );
-
-        // UPDATE UI
-
-        activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);
-
-        /*activity.updateUI(
-                mode.equals(MainActivity.UI_SAVED_DEFAULT)
-                        ? MainActivity.UI_SAVED_SEARCH
-                        : MainActivity.UI_CHANNEL_SEARCH,
-                "PageFragment: setUpSearch"
-        );*/
     }
 
     public void dismissSearch() {
@@ -629,15 +674,5 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay); // TODO: buggy animation
-
-        /*frameLayoutBack.setTooltipText(activity.getString(R.string.action_back));
-        imageViewBack.setImageResource(R.drawable.ic_round_close_to_arrow_back_anim);
-        activity.startAnimatedIcon(imageViewBack);
-        activity.hideKeyboard();
-        activity.updateUI(mode, "PageFragment: removeSelection");*/
-
-        // UPDATE UI
-
-        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }
 }

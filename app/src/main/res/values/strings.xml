@@ -58,6 +58,8 @@
     <string name="date_months">%1$d months</string>
     <string name="date_year">A year</string>
     <string name="date_years">%1$d years</string>
+    <string name="date_unknown">Unknown</string>
+    <string name="date_never">Never</string>
 
     <string name="msg_error_empty">Required</string>
     <string name="msg_error_invalid_url">Invalid URL</string>

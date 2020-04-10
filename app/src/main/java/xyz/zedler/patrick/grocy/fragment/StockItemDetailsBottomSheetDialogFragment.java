@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class StockItemBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
 	private final static boolean DEBUG = false;
 	private final static String TAG = "ProductBottomSheet";

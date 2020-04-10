@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class MissingItem {
@@ -30,5 +32,11 @@ public class MissingItem {
 
     public int getIsPartlyInStock() {
         return isPartlyInStock;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "MissingItem(" + name + ')';
     }
 }

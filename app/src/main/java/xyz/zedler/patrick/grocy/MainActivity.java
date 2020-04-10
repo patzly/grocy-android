@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
@@ -165,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setUpScroll(R.id.scroll_stock);
                 updateBottomAppBar(Constants.FAB_POSITION.CENTER, R.menu.menu_stock, true);
 
+                updateSorting();
+
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
                     fabPosition = FAB_POSITION_CENTER;
@@ -218,9 +219,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setLocations(List<Location> locations) {
-        Menu menu = bottomAppBar.getMenu();
-        SubMenu menuLocations = menu.findItem(R.id.action_filter_location).getSubMenu();
+    public void setLocationFilters(List<Location> locations) {
+        SubMenu menuLocations = bottomAppBar.getMenu().findItem(
+                R.id.action_filter_location
+        ).getSubMenu();
         menuLocations.clear();
         for(Location location : locations) {
             menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
@@ -231,9 +233,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setProductGroups(List<ProductGroup> productGroups) {
-        Menu menu = bottomAppBar.getMenu();
-        SubMenu menuProductGroups = menu.findItem(R.id.action_filter_product_group).getSubMenu();
+    public void setProductGroupFilters(List<ProductGroup> productGroups) {
+        SubMenu menuProductGroups = bottomAppBar.getMenu().findItem(
+                R.id.action_filter_product_group
+        ).getSubMenu();
         menuProductGroups.clear();
         for(ProductGroup productGroup : productGroups) {
             menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
@@ -242,6 +245,29 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             });
         }
+    }
+
+    private void updateSorting() {
+        String sortMode = sharedPrefs.getString(
+                Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
+        );
+        assert sortMode != null;
+        boolean ascending = sharedPrefs.getBoolean(
+                Constants.PREF.STOCK_SORT_ASCENDING, true
+        );
+        /*SubMenu menuSort = bottomAppBar.getMenu().findItem(R.id.action_sort).getSubMenu();
+        Menu menu = bottomAppBar.getMenu();
+        //menuSort.clear();
+        menu.addSubMenu("heööö");*/
+        /*.setCheckable(true).setChecked(
+                sortMode.equals(Constants.STOCK.SORT.NAME)
+        );*/
+
+
+        //menuSort.setGroupCheckable(1, true, true);
+        /*menuSort.getItem(0).setChecked(
+                true
+        );*/
     }
 
     private void updateFab(
@@ -371,17 +397,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.e(TAG, "startAnimatedIcon(MenuItem): Icon missing!");
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        requestQueue.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        requestQueue.stop();
     }
 }

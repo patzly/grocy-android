@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Product {
@@ -170,5 +172,11 @@ public class Product {
         count++; // location
 
         return count;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }
