@@ -167,6 +167,13 @@
                 android:padding="16dp"
                 android:visibility="gone">
 
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/illustration_broccoli"
+                    android:layout_marginBottom="16dp"
+                    tools:ignore="ContentDescription" />
+
                 <TextView
                     android:id="@+id/text_stock_error_title"
                     android:layout_width="match_parent"
