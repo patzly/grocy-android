@@ -3,7 +3,10 @@ package xyz.zedler.patrick.grocy.web;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONObject;
 
 public class WebRequest {
 
@@ -71,8 +74,18 @@ public class WebRequest {
         requestQueue.cancelAll(tag);
     }
 
-    public void post(String url, String json) {
+    public void post(String url, JSONObject json, OnResponseListener onSuccess, OnErrorListener onError) {
+        requestQueue.add(
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        url,
+                        json,
+                        response -> {
 
+                        }, error -> {
+
+                })
+        );
     }
 
     public void put(String url, String json) {
@@ -88,6 +101,10 @@ public class WebRequest {
 
     public interface OnResponseListener {
         void onResponse(String response);
+    }
+
+    public interface OnJsonResponseListener {
+        void onResponse(JSONObject response);
     }
 
     public interface OnErrorListener {

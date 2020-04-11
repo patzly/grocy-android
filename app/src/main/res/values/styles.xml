@@ -51,6 +51,7 @@
 
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
+        <item name="popupTheme">@style/Theme.Grocy</item>
 
         <item name="android:colorControlNormal">@color/on_background</item>
         <item name="android:colorControlActivated">@color/secondary</item>
