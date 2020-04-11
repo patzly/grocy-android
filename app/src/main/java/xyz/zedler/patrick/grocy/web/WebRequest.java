@@ -2,11 +2,13 @@ package xyz.zedler.patrick.grocy.web;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 public class WebRequest {
 
     private RequestQueue requestQueue;
+    private int queueSize = 0;
 
     public WebRequest(RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
@@ -14,10 +16,10 @@ public class WebRequest {
 
     public void get(
             String url,
-            Runnable onQueued,
+            String tag,
             OnResponseListener onSuccess,
             OnErrorListener onError,
-            Runnable onLeave
+            OnEmptyQueueListener onEmptyQueue
     ) {
         requestQueue.add(
                 new StringRequest(
@@ -25,13 +27,21 @@ public class WebRequest {
                         url,
                         response -> {
                             onSuccess.onResponse(response);
-                            onLeave.run();
+                            queueSize--;
+                            if(queueSize == 0) {
+                                onEmptyQueue.onEmptyQueue();
+                            }
                         },
                         error -> {
-                            onError.onError(error.getMessage());
-                        })
+                            onError.onError(error);
+                            queueSize--;
+                            if(queueSize == 0) {
+                                onEmptyQueue.onEmptyQueue();
+                            }
+                        }
+                ).setTag(tag)
         );
-        onQueued.run();
+        queueSize++;
     }
 
     public void get(String url, OnResponseListener onSuccess, OnErrorListener onError) {
@@ -39,12 +49,26 @@ public class WebRequest {
                 new StringRequest(
                         Request.Method.GET,
                         url,
-                        response -> {
-                            onSuccess.onResponse(response);
-                        }, error -> {
-                    onError.onError(error.getMessage());
-                })
+                        onSuccess::onResponse,
+                        onError::onError
+                )
         );
+    }
+
+    public void get(String url, String tag, OnResponseListener onSuccess, OnErrorListener onError) {
+        requestQueue.add(
+                new StringRequest(
+                        Request.Method.GET,
+                        url,
+                        onSuccess::onResponse,
+                        onError::onError
+                ).setTag(tag)
+        );
+    }
+
+    public void cancelAll(String tag) {
+        this.queueSize = 0; // TODO: Unclear with tag
+        requestQueue.cancelAll(tag);
     }
 
     public void post(String url, String json) {
@@ -58,12 +82,19 @@ public class WebRequest {
 
     }
 
+    public int getQueueSize() {
+        return this.queueSize;
+    }
+
     public interface OnResponseListener {
         void onResponse(String response);
     }
 
     public interface OnErrorListener {
-        void onError(String msg);
-        // json format
+        void onError(VolleyError error);
+    }
+
+    public interface OnEmptyQueueListener {
+        void onEmptyQueue();
     }
 }

@@ -90,10 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         // WEB REQUESTS
 
-        requestQueue = RequestQueueSingleton.getInstance(
-                getApplicationContext()
-        ).getRequestQueue();
-
+        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
         request = new WebRequest(requestQueue);
 
         // API
@@ -153,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.REQUEST.LOGIN && resultCode == Constants.RESULT.SUCCESS) {
+            grocyApi.loadCredentials();
             setUp();
         }
     }

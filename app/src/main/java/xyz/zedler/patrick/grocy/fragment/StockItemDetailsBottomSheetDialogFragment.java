@@ -138,7 +138,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 								new StockItemDetailsItemAdapter(context, productDetails)
 						);
 					},
-					msg -> { }
+					error -> { }
 			);
 		}
 

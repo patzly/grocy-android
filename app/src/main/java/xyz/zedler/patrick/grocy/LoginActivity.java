@@ -7,6 +7,7 @@ import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.EditText;
@@ -16,16 +17,14 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
+import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,7 +33,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
     private long lastClick = 0;
-    private RequestQueue queue;
+    private RequestQueue requestQueue;
+    private WebRequest request;
+
+    private TextInputLayout textInputLayoutKey;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -45,7 +47,12 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        queue = Volley.newRequestQueue(this);
+        // WEB REQUESTS
+
+        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+        request = new WebRequest(requestQueue);
+
+        // INITIALIZE VIEWS
 
         TextInputLayout textInputLayoutServer = findViewById(R.id.text_input_login_server);
         EditText editTextServer = textInputLayoutServer.getEditText();
@@ -54,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             if(hasFocus) startAnimatedIcon(R.id.image_login_logo);
         });
 
-        TextInputLayout textInputLayoutKey = findViewById(R.id.text_input_login_key);
+        textInputLayoutKey = findViewById(R.id.text_input_login_key);
         EditText editTextKey = textInputLayoutKey.getEditText();
         assert editTextKey != null;
         editTextKey.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -76,14 +83,20 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.button_login_login).setOnClickListener(v -> {
-            if(editTextServer.getText().toString().equals("")) {
+            // remove old errors
+            textInputLayoutServer.setErrorEnabled(false);
+            textInputLayoutKey.setErrorEnabled(false);
+
+            String server = editTextServer.getText().toString();
+            String key = editTextKey.getText().toString();
+            if(server.equals("")) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_empty));
-            } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
-                // TODO: better method for validating URL
+            } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
+            } else if(key.length() > 0 && key.length() != 50) {
+                textInputLayoutKey.setError("API key too short");
             } else {
-                textInputLayoutServer.setErrorEnabled(false);
-                requestLogin(editTextServer.getText().toString(), editTextKey.getText().toString());
+                requestLogin(server, key);
             }
         });
 
@@ -99,34 +112,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void requestLogin(String server, String key) {
-        String url = server + "/api/system/info?GROCY-API-KEY=" + key;
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                url,
+        request.get(
+                server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     showSnackbar("Response is: "+ response.substring(0, 100));
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
                             .apply();
+                    setResult(Constants.RESULT.SUCCESS);
                     finish();
                 },
-                error -> showSnackbar("That didn't work!" + error)) {
-            @Override
-            protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                int statusCode = response.statusCode;
-                Log.i(TAG, "parseNetworkResponse: " + statusCode);
-                return super.parseNetworkResponse(response);
-            }
-        };
-
-        queue.add(stringRequest);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        queue.getCache().clear();
+                error -> {
+                    if(error instanceof AuthFailureError) {
+                        textInputLayoutKey.setError("API key not working");
+                    } else {
+                        showSnackbar("That didn't work!" + error);
+                    }
+                }
+        );
     }
 
     @Override

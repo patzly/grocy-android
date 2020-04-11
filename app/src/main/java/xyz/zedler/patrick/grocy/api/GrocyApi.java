@@ -35,6 +35,10 @@ public class GrocyApi {
 
     public GrocyApi(Context context) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        loadCredentials();
+    }
+
+    public void loadCredentials() {
         baseUrl = sharedPrefs.getString(
                 Constants.PREF.SERVER_URL,
                 "https://de.demo.grocy.info"

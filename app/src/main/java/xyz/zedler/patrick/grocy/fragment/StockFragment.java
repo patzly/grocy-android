@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -96,9 +97,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
     private NestedScrollView scrollView;
     private MaterialButton buttonRetry;
-
-    private int numberOfRequestsToMake = 0;
-    private boolean hasRequestFailed = false;
 
     @Override
     public View onCreateView(
@@ -374,40 +372,47 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
         downloadQuantityUnits();
+        downloadLocations();
+        downloadProductGroups();
+        missingStockItems = new ArrayList<>();
+        downloadStock();
     }
 
     private void downloadQuantityUnits() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
+                TAG,
                 response -> {
                     Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
                     quantityUnits = gson.fromJson(response, listType);
                     if(DEBUG) Log.i(
                             TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
                     );
-                    downloadLocations();
                 },
-                msg -> { }
+                this::onDownloadError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadLocations() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+                TAG,
                 response -> {
                     Type listType = new TypeToken<List<Location>>(){}.getType();
                     locations = gson.fromJson(response, listType);
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
                     activity.setLocationFilters(locations);
-                    downloadProductGroups();
                 },
-                msg -> { }
+                this::onDownloadError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadProductGroups() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+                TAG,
                 response -> {
                     Type listType = new TypeToken<List<ProductGroup>>(){}.getType();
                     productGroups = gson.fromJson(response, listType);
@@ -415,48 +420,58 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
                     activity.setProductGroupFilters(productGroups);
-                    downloadStock();
                 },
-                msg -> { }
+                this::onDownloadError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadStock() {
         request.get(
                 grocyApi.getStock(),
+                TAG,
                 response -> {
                     Type listType = new TypeToken<List<StockItem>>(){}.getType();
                     stockItems = gson.fromJson(response, listType);
                     if(DEBUG) Log.i(TAG, "downloadStock: stockItems = " + stockItems);
                     downloadVolatile();
                 },
-                msg -> { }
+                this::onDownloadError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadVolatile() {
         request.get(
                 grocyApi.getStockVolatile(),
+                TAG,
                 response -> {
                     if(DEBUG) Log.i(TAG, "downloadVolatile: success");
                     try {
                         JSONObject jsonObject = new JSONObject(response);
+
+                        // Parse first part of volatile array: expiring products
                         Type listType = new TypeToken<List<StockItem>>(){}.getType();
                         expiringItems = gson.fromJson(
                                 jsonObject.getJSONArray("expiring_products").toString(),
                                 listType
                         );
                         if(DEBUG) Log.i(TAG, "downloadVolatile: expiring = " + expiringItems);
+
+                        // Parse second part of volatile array: expired products
                         expiredItems = gson.fromJson(
                                 jsonObject.getJSONArray("expired_products").toString(),
                                 listType
                         );
                         if(DEBUG) Log.i(TAG, "downloadVolatile: expired = " + expiredItems);
+
+                        // Parse third part of volatile array: missing products
                         missingItems = gson.fromJson(
                                 jsonObject.getJSONArray("missing_products").toString(),
                                 new TypeToken<List<MissingItem>>(){}.getType()
                         );
                         if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -473,67 +488,63 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                     downloadMissingProductDetails();
                 },
-                msg -> { }
+                this::onDownloadError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadMissingProductDetails() {
-        List<MissingItem> notPartlyInStock = new ArrayList<>();
         for(MissingItem missingItem : missingItems) {
-            // TODO: Check if product is already in stock overview
-            if(missingItem.getIsPartlyInStock() == 0) {
-                boolean isInStock = false;
-                for(StockItem stockItem : stockItems) {
-                    if (stockItem.getProductId() == missingItem.getId()) {
-                        isInStock = true;
-                        break;
-                    }
+            // Filter missing item if it is partly in stock or already in stock overview
+            if(missingItem.getIsPartlyInStock() == 1) continue;
+            boolean isInStock = false;
+            for(StockItem stockItem : stockItems) {
+                if (stockItem.getProductId() == missingItem.getId()) {
+                    isInStock = true;
+                    break;
                 }
-                if(!isInStock) notPartlyInStock.add(missingItem);
             }
-        }
-        for(int i = 0; i < notPartlyInStock.size(); i++) {
-            int finalI = i;
+            if(isInStock) continue;
+
             request.get(
-                    grocyApi.getStockProduct(notPartlyInStock.get(i).getId()),
+                    grocyApi.getStockProduct(missingItem.getId()),
+                    TAG,
                     response -> {
                         Type type = new TypeToken<ProductDetails>(){}.getType();
                         ProductDetails productDetails = gson.fromJson(response, type);
                         if(DEBUG) Log.i(
                                 TAG,
-                                "downloadMissingProductDetails: size = "
-                                        + (notPartlyInStock.size() - 1) + ", i = " + finalI
-                                        + ", name = " + productDetails.getProduct().getName()
+                                "downloadMissingProductDetails: "
+                                        + "name = " + productDetails.getProduct().getName()
                         );
-                        stockItems.add(
-                                new StockItem(
-                                        productDetails.getStockAmount(),
-                                        productDetails.getStockAmountAggregated(),
-                                        productDetails.getNextBestBeforeDate(),
-                                        productDetails.getStockAmountOpened(),
-                                        productDetails.getStockAmountOpenedAggregated(),
-                                        productDetails.getIsAggregatedAmount(),
-                                        productDetails.getProduct().getId(),
-                                        productDetails.getProduct()
-                                )
+                        StockItem stockItem = new StockItem(
+                                productDetails.getStockAmount(),
+                                productDetails.getStockAmountAggregated(),
+                                productDetails.getNextBestBeforeDate(),
+                                productDetails.getStockAmountOpened(),
+                                productDetails.getStockAmountOpenedAggregated(),
+                                productDetails.getIsAggregatedAmount(),
+                                productDetails.getProduct().getId(),
+                                productDetails.getProduct()
                         );
-                        if (finalI == notPartlyInStock.size() - 1) {
-                            // fill missingStockItems with all missing
-                            missingStockItems = new ArrayList<>();
-                            for(MissingItem missingItem : missingItems) {
-                                for(StockItem stockItem : stockItems) {
-                                    if(stockItem.getProduct().getId() == missingItem.getId()) {
-                                        missingStockItems.add(stockItem);
-                                    }
-                                }
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                            filterItems(itemsToDisplay);
-                        }
+                        stockItems.add(stockItem);
+                        missingStockItems.add(stockItem);
                     },
-                    msg -> {}
+                    this::onDownloadError,
+                    this::onQueueEmpty
             );
         }
+    }
+
+    private void onQueueEmpty() {
+        swipeRefreshLayout.setRefreshing(false);
+        filterItems(itemsToDisplay);
+    }
+
+    private void onDownloadError(VolleyError error) {
+        request.cancelAll(TAG);
+        swipeRefreshLayout.setRefreshing(false);
+        setError(true, true);
     }
 
     private void filterItems(String filter) {
@@ -662,7 +673,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void sortItems(String sortMode, boolean ascending) {
+    private void sortItems(String sortMode, boolean ascending) {
         if(DEBUG) Log.i(TAG, "sortItems: sort by " + sortMode + ", ascending = " + ascending);
         this.sortMode = sortMode;
         sortAscending = ascending;
