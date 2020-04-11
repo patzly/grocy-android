@@ -33,6 +33,7 @@ public final class Constants {
     }
 
     public final static class UI {
+        public final static String STOCK = "stock";
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
     }
@@ -56,6 +57,11 @@ public final class Constants {
     public final static class EXTRA {
         public final static String FLASH_VIEW_ID = "flash_view_id";
         public final static String PAGER_POSITION = "position";
+    }
+
+    public final static class ACTION {
+        public final static String CONSUME = "action_consume";
+        public final static String OPEN = "action_open";
     }
 
     public final static class ARGUMENT {

@@ -388,6 +388,10 @@ public class MainActivity extends AppCompatActivity {
         return grocyApi;
     }
 
+    public Fragment getCurrentFragment() {
+        return fragmentCurrent;
+    }
+
     private void replaceFabIcon(@DrawableRes int icon, String tag, boolean animated) {
         if(!tag.equals(fab.getTag())) {
             if(animated) {

@@ -3,7 +3,6 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,13 +15,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
@@ -31,33 +35,43 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
     private final static String TAG = "ItemDetailsItemAdapter";
     private final static boolean DEBUG = true;
 
-    private Context context;
+    private MainActivity activity;
+    private BottomSheetDialog bottomSheet;
     private StockItem stockItem;
     private ProductDetails productDetails;
     private QuantityUnit quantityUnit;
     private List<QuantityUnit> quantityUnits;
     private List<Location> locations;
     private DateUtil dateUtil;
+    private int positionClick;
 
     public StockItemDetailsItemAdapter(
-            Context context,
+            MainActivity activity,
+            BottomSheetDialog bottomSheet,
             StockItem stockItem,
             List<QuantityUnit> quantityUnits,
-            List<Location> locations
+            List<Location> locations,
+            int positionClick
     ) {
-        this.context = context;
+        this.activity = activity;
+        this.bottomSheet = bottomSheet;
         this.stockItem = stockItem;
         this.quantityUnits = quantityUnits;
         this.locations = locations;
+        this.positionClick = positionClick;
     }
 
     public StockItemDetailsItemAdapter(
-            Context context,
-            ProductDetails productDetails
+            MainActivity activity,
+            BottomSheetDialog bottomSheet,
+            ProductDetails productDetails,
+            int positionClick
     ) {
-        this.context = context;
+        this.activity = activity;
+        this.bottomSheet = bottomSheet;
         this.productDetails = productDetails;
-        dateUtil = new DateUtil(context);
+        this.positionClick = positionClick;
+        dateUtil = new DateUtil(activity);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -103,7 +117,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     }
                 }
                 // text
-                holder.textViewProperty.setText(context.getString(R.string.property_amount));
+                holder.textViewProperty.setText(activity.getString(R.string.property_amount));
                 holder.textViewValue.setText(getAmountText());
                 // aggregated amount
                 int isAggregatedAmount = hasDetails()
@@ -121,9 +135,15 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                                 : stockItem.getAmount() > 0
                 );
                 holder.actionButtonConsume.setOnClickListener(v -> {
-                    removeConsumed();
-                    refreshActionStates(holder.actionButtonConsume, holder.actionButtonOpen);
-                    holder.textViewValue.setText(getAmountText());
+                    disableActions(holder.actionButtonConsume, holder.actionButtonOpen);
+                    ((StockFragment) activity.getCurrentFragment()).performAction(
+                            Constants.ACTION.CONSUME,
+                            positionClick,
+                            hasDetails()
+                                    ? productDetails.getProduct().getId()
+                                    : stockItem.getProduct().getId()
+                    );
+                    bottomSheet.dismiss();
                 });
                 holder.actionButtonOpen.setVisibility(View.VISIBLE);
                 holder.actionButtonOpen.setState(
@@ -133,14 +153,20 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                                 : stockItem.getAmount() > stockItem.getAmountOpened()
                 );
                 holder.actionButtonOpen.setOnClickListener(v -> {
-                    addOpened();
-                    refreshActionStates(holder.actionButtonConsume, holder.actionButtonOpen);
-                    holder.textViewValue.setText(getAmountText());
+                    disableActions(holder.actionButtonConsume, holder.actionButtonOpen);
+                    ((StockFragment) activity.getCurrentFragment()).performAction(
+                            Constants.ACTION.OPEN,
+                            positionClick,
+                            hasDetails()
+                                    ? productDetails.getProduct().getId()
+                                    : stockItem.getProduct().getId()
+                    );
+                    bottomSheet.dismiss();
                 });
                 // tooltips
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     holder.actionButtonConsume.setTooltipText(
-                            context.getString(
+                            activity.getString(
                                     R.string.action_consume_one,
                                     quantityUnit.getName(),
                                     hasDetails()
@@ -149,7 +175,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                             )
                     );
                     holder.actionButtonOpen.setTooltipText(
-                            context.getString(
+                            activity.getString(
                                     R.string.action_open_one,
                                     quantityUnit.getName(),
                                     hasDetails()
@@ -161,7 +187,9 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                 }
                 break;
             case 1: // LOCATION
-                holder.textViewProperty.setText(context.getString(R.string.property_default_location));
+                holder.textViewProperty.setText(
+                        activity.getString(R.string.property_default_location)
+                );
                 Location location = null;
                 if(hasDetails()) {
                     location = productDetails.getLocation();
@@ -178,7 +206,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             case 2: // LAST PURCHASED
                 if(hasDetails() && productDetails.getLastPurchased() != null) {
                     holder.textViewProperty.setText(
-                            context.getString(R.string.property_last_purchased)
+                            activity.getString(R.string.property_last_purchased)
                     );
                     holder.textViewValue.setText(
                             dateUtil.getLocalizedDate(productDetails.getLastPurchased())
@@ -197,13 +225,13 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             case 3: // LAST USED
                 if(hasDetails()) {
                     holder.textViewProperty.setText(
-                            context.getString(R.string.property_last_used)
+                            activity.getString(R.string.property_last_used)
                     );
                     String lastUsed = productDetails.getLastUsed();
                     holder.textViewValue.setText(
                             lastUsed != null
                                     ? dateUtil.getLocalizedDate(lastUsed)
-                                    : context.getString(R.string.date_never)
+                                    : activity.getString(R.string.date_never)
                     );
                     if(lastUsed != null) {
                         holder.textViewExtra.setText(dateUtil.getHumanForDaysFromNow(lastUsed));
@@ -217,7 +245,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             case 4: // LAST PRICE
                 if(hasDetails() && productDetails.getLastPrice() != null) {
                     holder.textViewProperty.setText(
-                            context.getString(R.string.property_last_price)
+                            activity.getString(R.string.property_last_price)
                     );
                     holder.textViewValue.setText(productDetails.getLastPrice());
                     //expandContainer(holder.linearLayoutContainer);
@@ -228,7 +256,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             case 5: // AVERAGE SHELF LIFE
                 if(hasDetails() && productDetails.getAverageShelfLifeDays() != 0) {
                     holder.textViewProperty.setText(
-                            context.getString(R.string.property_average_shelf_life)
+                            activity.getString(R.string.property_average_shelf_life)
                     );
                     holder.textViewValue.setText(
                             dateUtil.getHumanFromDays(productDetails.getAverageShelfLifeDays())
@@ -241,7 +269,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
             case 6: // SPOIL RATE
                 if(hasDetails()) {
                     holder.textViewProperty.setText(
-                            context.getString(R.string.property_spoil_rate)
+                            activity.getString(R.string.property_spoil_rate)
                     );
                     holder.textViewValue.setText(
                             productDetails.getSpoilRatePercent() + "%"
@@ -260,7 +288,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                 ? productDetails.getStockAmountOpened()
                 : stockItem.getAmountOpened();
         StringBuilder stringBuilderAmount = new StringBuilder(
-                context.getString(
+                activity.getString(
                         R.string.subtitle_amount,
                         amount,
                         amount == 1 ? quantityUnit.getName() : quantityUnit.getNamePlural()
@@ -268,7 +296,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
         );
         if(opened > 0) {
             stringBuilderAmount.append(" ");
-            stringBuilderAmount.append(context.getString(R.string.subtitle_amount_opened, opened));
+            stringBuilderAmount.append(activity.getString(R.string.subtitle_amount_opened, opened));
         }
         return stringBuilderAmount.toString();
     }
@@ -277,7 +305,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
         int amountAggregated = hasDetails()
                 ? productDetails.getStockAmountAggregated()
                 : stockItem.getAmountAggregated();
-        return "∑ " + context.getString(
+        return "∑ " + activity.getString(
                 R.string.subtitle_amount,
                 amountAggregated,
                 amountAggregated == 1
@@ -286,26 +314,10 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
         );
     }
 
-    private void removeConsumed() {
-        /*if(stockItem.getAmount() > 0) {
-            if(stockItem.getAmountOpened() > 0) stockItem.removeOpened();
-            stockItem.removeConsumed();
-        }*/
-    }
-
-    private void addOpened() {
-        /*if(stockItem.getAmount() > 0) {
-            stockItem.addOpened();
-        }*/
-    }
-
-    private void refreshActionStates(ActionButton actionConsume, ActionButton actionOpen) {
-        int amount = hasDetails() ? productDetails.getStockAmount() : stockItem.getAmount();
-        int opened = hasDetails()
-                ? productDetails.getStockAmountOpened()
-                : stockItem.getAmountOpened();
-        actionConsume.refreshState(amount > 0);
-        actionOpen.refreshState(amount > opened);
+    private void disableActions(ActionButton... actionButtons) {
+        for(ActionButton actionButton : actionButtons) {
+            actionButton.refreshState(false);
+        }
     }
 
     @Override

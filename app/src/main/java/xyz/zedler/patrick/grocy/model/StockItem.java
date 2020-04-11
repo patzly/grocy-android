@@ -87,16 +87,8 @@ public class StockItem {
         return 1 + getProduct().getDisplayedPropertiesCount();
     }
 
-    public void removeConsumed() {
-        if(amount > 0) amount--;
-    }
-
-    public void addOpened() {
-        if(amount > amountOpened) amountOpened++;
-    }
-
-    public void removeOpened() {
-        if(amountOpened > 0) amountOpened--;
+    public void setAmount(int difference) {
+        this.amount = amount + difference;
     }
 
     @NonNull

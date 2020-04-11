@@ -68,6 +68,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
+    private StockItemAdapter stockItemAdapter;
 
     private List<StockItem> stockItems = new ArrayList<>();
     private List<StockItem> expiringItems = new ArrayList<>();
@@ -710,10 +711,62 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void refreshAdapter(StockItemAdapter adapter) {
+        stockItemAdapter = adapter;
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
             recyclerView.setAdapter(adapter);
             recyclerView.animate().alpha(1).setDuration(150).start();
         }).start();
+    }
+
+    public void performAction(String action, int position, int productId) {
+        switch (action) {
+            case Constants.ACTION.CONSUME:
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("amount", 1);
+                    body.put("transaction_type", "consume");
+                    body.put("spoiled", false);
+                } catch (JSONException e) {
+                    if(DEBUG) Log.e(TAG, "performAction: " + e);
+                }
+                request.post(
+                        grocyApi.consumeProduct(productId),
+                        body,
+                        response -> {
+                            for(StockItem stockItem : displayedItems) {
+                                if(stockItem.getProduct().getId() == productId) {
+                                    try {
+                                        int difference = response.getInt("amount");
+                                        stockItem.setAmount(difference);
+                                        stockItemAdapter.notifyItemChanged(position);
+                                        if(DEBUG) Log.i(
+                                                TAG, "performAction: consume 1" + difference
+                                        );
+                                    } catch (JSONException e) {
+                                        if(DEBUG) Log.i(TAG, "performAction: " + e);
+                                    }
+                                }
+                            }
+                            activity.showSnackbar(
+                                    Snackbar.make(
+                                            activity.findViewById(R.id.linear_container_main),
+                                            "Consumed one",
+                                            Snackbar.LENGTH_SHORT
+                                    )
+                            );
+                        },
+                        error -> activity.showSnackbar(
+                                Snackbar.make(
+                                        activity.findViewById(R.id.linear_container_main),
+                                        "Error: " + error.getMessage(),
+                                        Snackbar.LENGTH_SHORT
+                                )
+                        )
+                );
+                break;
+            case Constants.ACTION.OPEN:
+                break;
+        }
     }
 
     // STOCK ITEM CLICK
@@ -722,7 +775,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         StockItemDetailsBottomSheetDialogFragment bottomSheet
                 = new StockItemDetailsBottomSheetDialogFragment();
         bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
-        activity.showBottomSheet(bottomSheet, null);
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        activity.showBottomSheet(bottomSheet, bundle);
     }
 
     public void setUpSearch() {

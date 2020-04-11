@@ -74,17 +74,20 @@ public class WebRequest {
         requestQueue.cancelAll(tag);
     }
 
-    public void post(String url, JSONObject json, OnResponseListener onSuccess, OnErrorListener onError) {
+    public void post(
+            String url,
+            JSONObject json,
+            OnJsonResponseListener onResponse,
+            OnErrorListener onError
+    ) {
         requestQueue.add(
                 new JsonObjectRequest(
                         Request.Method.POST,
                         url,
                         json,
-                        response -> {
-
-                        }, error -> {
-
-                })
+                        onResponse::onResponse,
+                        onError::onError
+                )
         );
     }
 

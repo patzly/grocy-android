@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.animation.ValueAnimator;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -43,6 +42,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private final static boolean DEBUG = false;
 	private final static String TAG = "ProductBottomSheet";
 
+	private BottomSheetDialog bottomSheet;
 	private MainActivity activity;
 	private StockItem stockItem;
 	private List<QuantityUnit> quantityUnits;
@@ -53,7 +53,11 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+		bottomSheet = new BottomSheetDialog(
+				requireContext(),
+				R.style.Theme_Grocy_BottomSheetDialog
+		);
+		return bottomSheet;
 	}
 
 	@Override
@@ -68,16 +72,18 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 				false
 		);
 
-		Context context = getContext();
+		Bundle bundle = getArguments();
 		activity = (MainActivity) getActivity();
-		assert context != null && activity != null;
+		assert activity != null && bundle != null;
+
+		int position = bundle.getInt("position");
 
 		((TextView) view.findViewById(R.id.text_stock_item_details_name)).setText(
 				stockItem.getProduct().getName()
 		);
 
 		Picasso.get().load(
-				new GrocyApi(context).getPicture(
+				new GrocyApi(activity).getPicture(
 						stockItem.getProduct().getPictureFileName(),
 						300
 				)
@@ -111,10 +117,12 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_item_details);
 		recyclerView.setLayoutManager(
-				new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+				new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 		);
 		recyclerView.setAdapter(
-				new StockItemDetailsItemAdapter(context, stockItem, quantityUnits, locations)
+				new StockItemDetailsItemAdapter(
+						activity, bottomSheet, stockItem, quantityUnits, locations, position
+				)
 		);
 		if(stockItem.getProduct().getDescription() != null
 				&& !stockItem.getProduct().getDescription().trim().equals("")
@@ -135,7 +143,9 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
 						ProductDetails productDetails = new Gson().fromJson(response, listType);
 						recyclerView.setAdapter(
-								new StockItemDetailsItemAdapter(context, productDetails)
+								new StockItemDetailsItemAdapter(
+										activity, bottomSheet, productDetails, position
+								)
 						);
 					},
 					error -> { }

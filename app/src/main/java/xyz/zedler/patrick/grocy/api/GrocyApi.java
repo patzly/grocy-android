@@ -113,6 +113,13 @@ public class GrocyApi {
                 );
     }
 
+    /**
+     * Removes the given amount of the given product from stock
+     */
+    public String consumeProduct(int productId) {
+        return getUrl("/stock/products/" + productId + "/consume");
+    }
+
     // PICTURE
 
     /**
