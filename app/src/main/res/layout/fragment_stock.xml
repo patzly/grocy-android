@@ -90,69 +90,116 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never"
-        app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/surface">
+        android:overScrollMode="never">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_stock"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_stock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="100dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:scrollbars="none"
+                        android:overScrollMode="ifContentScrolls">
+
+                        <LinearLayout
+                            android:id="@+id/linear_stock_filter_container_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"/>
+
+                    </HorizontalScrollView>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="ifContentScrolls">
+
+                        <LinearLayout
+                            android:id="@+id/linear_stock_filter_container_bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:animateLayoutChanges="true"/>
+
+                    </HorizontalScrollView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:overScrollMode="never"
+                        android:nestedScrollingEnabled="false"
+                        android:clipToPadding="false"/>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
+                android:id="@+id/linear_stock_error"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?android:actionBarSize"
                 android:orientation="vertical"
-                android:paddingBottom="100dp">
+                android:gravity="center"
+                android:padding="16dp"
+                android:visibility="gone">
 
-                <HorizontalScrollView
+                <TextView
+                    android:id="@+id/text_stock_error_title"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/roboto_mono_medium"
+                    android:text="Offline"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+                <TextView
+                    android:id="@+id/text_stock_error_subtitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:scrollbars="none"
-                    android:overScrollMode="ifContentScrolls">
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:text="Check your Internet connection"
+                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
-                    <LinearLayout
-                        android:id="@+id/linear_stock_filter_container_top"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"/>
-
-                </HorizontalScrollView>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_stock_error_retry"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:overScrollMode="ifContentScrolls">
+                    android:layout_marginTop="16dp"
+                    android:text="Retry"/>
 
-                    <LinearLayout
-                        android:id="@+id/linear_stock_filter_container_bottom"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:animateLayoutChanges="true"/>
-
-                </HorizontalScrollView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_stock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
-                    android:clipToPadding="false"/>
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

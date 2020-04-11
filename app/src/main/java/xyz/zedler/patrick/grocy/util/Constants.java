@@ -11,6 +11,7 @@ public final class Constants {
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 
         public final static String DARK_MODE = "force_dark_mode";
+        public final static String ANIM_UI_UPDATE = "animated_ui_update";
 
 
 
@@ -47,13 +48,18 @@ public final class Constants {
         }
         public final static class SORT {
             public final static String NAME = "name";
-            public final static String DATE = "best_before";
+            public final static String BBD = "best_before";
+            public final static String LAST_PURCHASED = "last_purchased";
         }
     }
 
     public final static class EXTRA {
         public final static String FLASH_VIEW_ID = "flash_view_id";
         public final static String PAGER_POSITION = "position";
+    }
+
+    public final static class ARGUMENT {
+        public final static String UI_MODE = "ui_mode";
     }
 
     public final static class FAB_POSITION {

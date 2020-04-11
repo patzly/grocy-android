@@ -29,6 +29,9 @@
     <string name="action_tap_to_view">Tap to view</string>
     <string name="action_help">Help</string>
     <string name="action_get_started">Get started</string>
+    <string name="action_ascending">Ascending</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_sort">Sort</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
@@ -44,9 +47,13 @@
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
 
+    <string name="property_name">Name</string>
     <string name="property_amount">Amount</string>
+    <string name="property_bbd">Best before</string>
+    <string name="property_location">Location</string>
     <string name="property_default_location">Default location</string>
     <string name="property_last_purchased">Last purchased</string>
+    <string name="property_product_group">Product group</string>
 
     <string name="date_ago">%1$s ago</string>
     <string name="date_yesterday">Yesterday</string>

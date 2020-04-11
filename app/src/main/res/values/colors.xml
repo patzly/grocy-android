@@ -6,15 +6,14 @@
     <color name="transparent">#00000000</color>
 
     <color name="retro_red">#e06a4e</color>
-    <color name="retro_red_light">#e47d64</color>
-    <color name="retro_red_translucent">#12e06a4e</color>
+    <color name="retro_red_light">#e8917c</color>
+    <color name="retro_red_dark">#dd5a3b</color>
     <color name="retro_yellow">#deb853</color>
     <color name="retro_yellow_light">#e5c778</color>
     <color name="retro_yellow_dark">#c69926</color>
     <color name="retro_dirt">#e2d9a2</color>
     <color name="retro_dirt_dark">#938950</color>
     <color name="retro_green">#789f8a</color>
-    <color name="retro_green_translucent">#12789f8a</color>
     <color name="retro_dark">#0a373a</color>
     <color name="retro_blue">#5a97aa</color>
     <color name="retro_blue_light">#96bdc9</color>

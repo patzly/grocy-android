@@ -143,7 +143,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         if(stockItem.getBestBeforeDate() != null) {
             int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
-            if(sortMode.equals(Constants.STOCK.SORT.DATE) || days <= daysExpiringSoon) {
+            if(sortMode.equals(Constants.STOCK.SORT.BBD) || days <= daysExpiringSoon) {
                 holder.textViewDays.setText(
                         new DateUtil(context).getHumanForDaysFromNow(stockItem.getBestBeforeDate())
                 );
@@ -154,7 +154,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                     holder.textViewDays.setTextColor(
                             ContextCompat.getColor(
                                     context, days < 0
-                                            ? R.color.retro_red
+                                            ? R.color.retro_red_dark
                                             : R.color.retro_yellow_dark
                             )
                     );

@@ -14,14 +14,14 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@drawable/ic_round_filter_list_out_anim"
-        android:title="Filter"
+        android:title="@string/action_filter"
         app:showAsAction="never">
 
         <menu>
 
             <item
                 android:id="@+id/action_filter_location"
-                android:title="Standort">
+                android:title="@string/property_location">
 
                 <menu/>
 
@@ -29,7 +29,7 @@
 
             <item
                 android:id="@+id/action_filter_product_group"
-                android:title="Produktgruppe">
+                android:title="@string/property_product_group">
 
                 <menu/>
 
@@ -42,28 +42,26 @@
     <item
         android:id="@+id/action_sort"
         android:icon="@drawable/ic_round_filter_list_out_anim"
-        android:title="Sort"
+        android:title="@string/action_sort"
         app:showAsAction="never">
 
         <menu>
 
-            <group
-                android:id="@+id/group_sort"
-                android:checkableBehavior="single">
+            <group android:checkableBehavior="single">
 
                 <item
                     android:id="@+id/action_sort_name"
-                    android:title="Name"/>
+                    android:title="@string/property_name"/>
 
                 <item
-                    android:id="@+id/action_sort_best_before"
-                    android:title="Best before"/>
+                    android:id="@+id/action_sort_bbd"
+                    android:title="@string/property_bbd"/>
 
             </group>
 
             <item
                 android:id="@+id/action_sort_ascending"
-                android:title="Ascending"
+                android:title="@string/action_ascending"
                 android:checkable="true"
                 android:checked="true"/>
 

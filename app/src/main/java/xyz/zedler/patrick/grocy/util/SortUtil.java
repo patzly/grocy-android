@@ -8,6 +8,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 public class SortUtil {
 
     public static void sortStockItemsByName(List<StockItem> stockItems, boolean ascending) {
+        if(stockItems == null) return;
         Collections.sort(
                 stockItems,
                 (item1, item2) -> (ascending ? item1 : item2).getProduct().getName().compareTo(
@@ -17,6 +18,7 @@ public class SortUtil {
     }
 
     public static void sortStockItemsByBBD(List<StockItem> stockItems, boolean ascending) {
+        if(stockItems == null) return;
         Collections.sort(
                 stockItems,
                 (item1, item2) -> {

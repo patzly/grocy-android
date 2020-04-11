@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linear_stock"
+                android:id="@+id/linear_drawer_stock"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
@@ -27,7 +27,7 @@
                     android:src="@drawable/ic_round_help_outline_anim" />
 
                 <TextView
-                    android:id="@+id/text_saved"
+                    android:id="@+id/text_drawer_stock"
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Stock overview" />
 

@@ -2,6 +2,8 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -88,8 +92,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
-    private LinearLayout linearLayoutFilterContainer;
+    private LinearLayout linearLayoutFilterContainer, linearLayoutError;
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
+    private NestedScrollView scrollView;
+    private MaterialButton buttonRetry;
 
     private int numberOfRequestsToMake = 0;
     private boolean hasRequestFailed = false;
@@ -113,7 +119,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        loadPreferences();
+        daysExpiringSoon = sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5);
+        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
+        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
 
         // WEB REQUESTS
 
@@ -125,11 +133,22 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         linearLayoutFilterContainer = activity.findViewById(
                 R.id.linear_stock_filter_container_bottom
         );
+        linearLayoutError = activity.findViewById(R.id.linear_stock_error);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
+        scrollView = activity.findViewById(R.id.scroll_stock);
+        buttonRetry = activity.findViewById(R.id.button_stock_error_retry);
+        buttonRetry.setOnClickListener(v -> refresh());
         recyclerView = activity.findViewById(R.id.recycler_stock);
         textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
         editTextSearch = textInputLayoutSearch.getEditText();
         assert editTextSearch != null;
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable s) {
+                search = s.toString();
+            }
+        });
         editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 searchItems(editTextSearch.getText().toString());
@@ -299,11 +318,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
 
-        /*activity.updateUI(mode, "PageFragment: onActivityCreated");
-
-        if(!sharedPrefs.getBoolean(PREF_ANIM_UI_UPDATE, false)) {
-            sharedPrefs.edit().putBoolean(PREF_ANIM_UI_UPDATE, true).apply();
-        }*/
+        if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
+            sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();
+        }
     }
 
     private void load() {
@@ -311,11 +328,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             download();
         } else {
             // TODO: offline on startup
+            setError(true, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
+            setError(false, true);
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
@@ -331,6 +350,24 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             v1 -> refresh()
                     )
             );
+        }
+    }
+
+    private void setError(boolean isError, boolean animated) {
+        if(animated) {
+            View viewOut = isError ? scrollView : linearLayoutError;
+            View viewIn = isError ? linearLayoutError : scrollView;
+            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
+                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
+                    viewIn.setAlpha(0);
+                    viewOut.setVisibility(View.GONE);
+                    viewIn.setVisibility(View.VISIBLE);
+                    viewIn.animate().alpha(1).setDuration(150).start();
+                }).start();
+            }
+        } else {
+            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
+            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -504,6 +541,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(DEBUG) Log.i(
                 TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
         );
+        // VOLATILE
         switch (itemsToDisplay) {
             case Constants.STOCK.FILTER.VOLATILE.EXPIRING:
                 filteredItems = this.expiringItems;
@@ -545,17 +583,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } else {
             if(displayedItems != filteredItems) {
                 displayedItems = filteredItems;
-                sortItems();
+                sortItems(sortMode, sortAscending);
             }
         }
     }
 
     private void searchItems(String search) {
         search = search.toLowerCase();
+        if(DEBUG) Log.i(TAG, "searchItems: search = " + search);
         this.search = search;
         if(search.equals("")) {
             filterItems(itemsToDisplay);
-        } else {
+        } else { // only if search contains something
             List<StockItem> searchedItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 String name = stockItem.getProduct().getName();
@@ -568,13 +607,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             }
             if(displayedItems != searchedItems) {
                 displayedItems = searchedItems;
-                sortItems();
+                sortItems(sortMode, sortAscending);
             }
         }
     }
 
     public void filterLocation(Location location) {
         if(filterLocationId != location.getId()) { // only if not already selected
+            if(DEBUG) Log.i(TAG, "filterLocation: " + location);
             filterLocationId = location.getId();
             if(inputChipFilterLocation != null) {
                 inputChipFilterLocation.change(location.getName());
@@ -592,11 +632,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 linearLayoutFilterContainer.addView(inputChipFilterLocation);
             }
             filterItems(itemsToDisplay);
+        } else {
+            if(DEBUG) Log.i(TAG, "filterLocation: " + location + " already filtered");
         }
     }
 
     public void filterProductGroup(ProductGroup productGroup) {
         if(!filterProductGroupId.equals(String.valueOf(productGroup.getId()))) {
+            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = String.valueOf(productGroup.getId());
             if(inputChipFilterProductGroup != null) {
                 inputChipFilterProductGroup.change(productGroup.getName());
@@ -614,16 +657,27 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
             }
             filterItems(itemsToDisplay);
+        } else {
+            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
         }
     }
 
-    public void sortItems() {
-        if(sortMode.equals(Constants.STOCK.SORT.NAME)) {
-            SortUtil.sortStockItemsByName(displayedItems, sortAscending);
-        } else if(sortMode.equals(Constants.STOCK.SORT.DATE)) {
-            SortUtil.sortStockItemsByBBD(displayedItems, sortAscending);
+    public void sortItems(String sortMode, boolean ascending) {
+        if(DEBUG) Log.i(TAG, "sortItems: sort by " + sortMode + ", ascending = " + ascending);
+        this.sortMode = sortMode;
+        sortAscending = ascending;
+        sharedPrefs.edit()
+                .putString(Constants.PREF.STOCK_SORT_MODE, sortMode)
+                .putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, ascending)
+                .apply();
+        switch (sortMode) {
+            case Constants.STOCK.SORT.NAME:
+                SortUtil.sortStockItemsByName(displayedItems, ascending);
+                break;
+            case Constants.STOCK.SORT.BBD:
+                SortUtil.sortStockItemsByBBD(displayedItems, ascending);
+                break;
         }
-
         refreshAdapter(
                 new StockItemAdapter(
                         activity,
@@ -636,6 +690,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
+    public void sortItems(String sortMode) {
+        sortItems(sortMode, sortAscending);
+    }
+
+    public void sortItems(boolean ascending) {
+        sortItems(sortMode, ascending);
+    }
+
     private void refreshAdapter(StockItemAdapter adapter) {
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
             recyclerView.setAdapter(adapter);
@@ -643,30 +705,28 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }).start();
     }
 
-    public void loadPreferences() {
-        daysExpiringSoon = sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5);
-        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
-        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
-    }
-
     // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
-        StockItemDetailsBottomSheetDialogFragment bottomSheet = new StockItemDetailsBottomSheetDialogFragment();
+        StockItemDetailsBottomSheetDialogFragment bottomSheet
+                = new StockItemDetailsBottomSheetDialogFragment();
         bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
-        activity.showBottomSheet(bottomSheet);
+        activity.showBottomSheet(bottomSheet, null);
     }
 
     public void setUpSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
+        if(search.equals("")) { // only if no search is active
+            appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
+            editTextSearch.setText("");
+        }
         textInputLayoutSearch.requestFocus();
-        search = "";
-        editTextSearch.setText("");
         activity.showKeyboard(editTextSearch);
 
         activity.findViewById(R.id.frame_close_stock_search).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);
     }
 
     public void dismissSearch() {
@@ -674,5 +734,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay); // TODO: buggy animation
+
+        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }
 }

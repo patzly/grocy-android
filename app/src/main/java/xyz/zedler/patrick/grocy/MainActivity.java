@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -62,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
 
+    private List<Location> locations = new ArrayList<>();;
+    List<ProductGroup> productGroups = new ArrayList<>();;
+
     private CustomBottomAppBar bottomAppBar;
     private Fragment fragmentCurrent;
     private FloatingActionButton fab;
@@ -70,7 +74,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // PREFERENCES
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, false).apply();
+
+        // DARK MODE
 
         AppCompatDelegate.setDefaultNightMode(
                 sharedPrefs.getBoolean("night_mode", false)
@@ -102,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
             if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
             lastClick = SystemClock.elapsedRealtime();
             startAnimatedIcon(bottomAppBar.getNavigationIcon());
-            showBottomSheet(new DrawerBottomSheetDialogFragment());
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
+            showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
         });
         bottomAppBar.setOnMenuItemClickListener((MenuItem item) -> {
             if (SystemClock.elapsedRealtime() - lastClick < 500) return false;
@@ -157,14 +168,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUI(String uiMode, String origin) {
         Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
+        boolean animated = sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false);
         this.uiMode = uiMode;
 
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_stock);
-                updateBottomAppBar(Constants.FAB_POSITION.CENTER, R.menu.menu_stock, true);
-
-                updateSorting();
+                updateBottomAppBar(
+                        Constants.FAB_POSITION.CENTER, R.menu.menu_stock, animated, () -> {
+                            setLocationFilters(locations);
+                            setProductGroupFilters(productGroups);
+                            updateSorting();
+                        }
+                );
 
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
@@ -186,33 +202,40 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );*/
                 break;
-            default: Log.e(TAG, "updateUI: wrong uiMode argument: " + uiMode);
+            default: Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
 
     private void updateBottomAppBar(
             int newFabPosition,
             @MenuRes int newMenuId,
-            boolean animated
+            boolean animated,
+            Runnable onMenuChanged
     ) {
         switch (newFabPosition) {
             case Constants.FAB_POSITION.CENTER:
                 if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_END, animated);
+                bottomAppBar.changeMenu(
+                        newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
+                );
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
                 bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB_POSITION.END:
                 if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_START, animated);
+                bottomAppBar.changeMenu(
+                        newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
+                );
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
                 bottomAppBar.hideNavigationIcon();
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB_POSITION.GONE:
                 if(fab.isOrWillBeShown()) fab.hide();
-                bottomAppBar.changeMenu(newMenuId, CustomBottomAppBar.MENU_END, animated);
+                bottomAppBar.changeMenu(
+                        newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
+                );
                 bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
@@ -220,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setLocationFilters(List<Location> locations) {
+        this.locations = locations;
         SubMenu menuLocations = bottomAppBar.getMenu().findItem(
                 R.id.action_filter_location
         ).getSubMenu();
@@ -234,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setProductGroupFilters(List<ProductGroup> productGroups) {
+        this.productGroups = productGroups;
         SubMenu menuProductGroups = bottomAppBar.getMenu().findItem(
                 R.id.action_filter_product_group
         ).getSubMenu();
@@ -252,22 +277,41 @@ public class MainActivity extends AppCompatActivity {
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );
         assert sortMode != null;
-        boolean ascending = sharedPrefs.getBoolean(
-                Constants.PREF.STOCK_SORT_ASCENDING, true
+        SubMenu menuSort = bottomAppBar.getMenu().findItem(R.id.action_sort).getSubMenu();
+        MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
+        MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
+        MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
+        switch (sortMode) {
+            case Constants.STOCK.SORT.NAME:
+                sortName.setChecked(true);
+                break;
+            case Constants.STOCK.SORT.BBD:
+                sortBBD.setChecked(true);
+                break;
+        }
+        sortAscending.setChecked(
+                sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true)
         );
-        /*SubMenu menuSort = bottomAppBar.getMenu().findItem(R.id.action_sort).getSubMenu();
-        Menu menu = bottomAppBar.getMenu();
-        //menuSort.clear();
-        menu.addSubMenu("heööö");*/
-        /*.setCheckable(true).setChecked(
-                sortMode.equals(Constants.STOCK.SORT.NAME)
-        );*/
-
-
-        //menuSort.setGroupCheckable(1, true, true);
-        /*menuSort.getItem(0).setChecked(
-                true
-        );*/
+        // ON MENU ITEM CLICK
+        sortName.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                ((StockFragment) fragmentCurrent).sortItems(Constants.STOCK.SORT.NAME);
+            }
+            return true;
+        });
+        sortBBD.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                ((StockFragment) fragmentCurrent).sortItems(Constants.STOCK.SORT.BBD);
+            }
+            return true;
+        });
+        sortAscending.setOnMenuItemClickListener(item -> {
+            item.setChecked(!item.isChecked());
+            ((StockFragment) fragmentCurrent).sortItems(item.isChecked());
+            return true;
+        });
     }
 
     private void updateFab(
@@ -289,7 +333,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 super.onBackPressed();
@@ -297,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.STOCK_SEARCH:
                 ((StockFragment) fragmentCurrent).dismissSearch();
                 break;
-
             default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
     }
@@ -314,10 +356,11 @@ public class MainActivity extends AppCompatActivity {
         snackbar.setAnchorView(findViewById(R.id.fab_main)).show();
     }
 
-    public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
+    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
         String tag = bottomSheet.toString();
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
+            if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
             if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
         } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");

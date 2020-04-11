@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
@@ -18,14 +19,14 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private final static String TAG = "DrawerBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private View view;
     private String uiMode;
     private long lastClick = 0;
@@ -37,22 +38,33 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_bottomsheet_bottomdrawer, container, false);
-        activity = (MainActivity) getActivity();
-        /*uiMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(
-                MainActivity.PREF_UI_MODE, MainActivity.DEFAULT_UI_MODE
-        );*/
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+        view = inflater.inflate(
+                R.layout.fragment_bottomsheet_bottomdrawer, container, false
+        );
+
+        activity = getActivity();
+        Bundle bundle = getArguments();
+        assert activity != null && bundle != null;
+
+        uiMode = getArguments().getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
+
         setOnClickListeners(
                 R.id.linear_settings,
                 R.id.linear_feedback,
                 R.id.linear_help
         );
-        /*if(uiMode.startsWith("saved")) {
-            select(R.id.linear_memory, R.id.text_saved);
+
+        if(uiMode.startsWith("stock")) {
+            select(R.id.linear_drawer_stock, R.id.text_drawer_stock);
         } else if(uiMode.startsWith("channels")) {
-            select(R.id.linear_channels, R.id.text_channels);
-        }*/
+            //select(R.id.linear_channels, R.id.text_channels);
+        }
+
         return view;
     }
 
@@ -100,7 +112,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     }
 
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId) {
-        view.findViewById( linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
+        view.findViewById(linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.secondary)
         );

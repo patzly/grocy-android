@@ -20,6 +20,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
@@ -157,12 +158,28 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	}
 
 	/**
+	 * Animatedly changes the menu and runs an action after it has changed
+	 */
+	public void changeMenu(
+			@MenuRes int menuNew,
+			int position,
+			boolean animated,
+			Runnable onChanged
+	) {
+		changeMenu(menuNew, position, animated);
+		new Handler().postDelayed(() -> {
+			if(onChanged != null) onChanged.run();
+		}, ICON_ANIM_DURATION + 50); // wait for menu being changed
+	}
+
+	/**
 	 * Animatedly shows the navigation icon
+	 * @param navigationResId necessary because nav icon has to be null for being gone
 	 */
 	public void showNavigationIcon(@DrawableRes int navigationResId) {
 		if(getNavigationIcon() == null) {
 			new Handler().postDelayed(() -> {
-				Drawable navigationIcon = getContext().getDrawable(navigationResId);
+				Drawable navigationIcon = ContextCompat.getDrawable(getContext(), navigationResId);
 				assert navigationIcon != null;
 				setNavigationIcon(navigationIcon);
 				valueAnimatorNavigationIcon = ValueAnimator
