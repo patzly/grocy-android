@@ -53,6 +53,10 @@
     <string name="property_location">Location</string>
     <string name="property_default_location">Default location</string>
     <string name="property_last_purchased">Last purchased</string>
+    <string name="property_last_used">Last used</string>
+    <string name="property_last_price">Last price</string>
+    <string name="property_average_shelf_life">Average shelf life</string>
+    <string name="property_spoil_rate">Spoil rate</string>
     <string name="property_product_group">Product group</string>
 
     <string name="date_ago">%1$s ago</string>
@@ -67,6 +71,9 @@
     <string name="date_years">%1$d years</string>
     <string name="date_unknown">Unknown</string>
     <string name="date_never">Never</string>
+    <string name="date_day_one">1 day</string>
+    <string name="date_month_one">1 month</string>
+    <string name="date_year_one">1 year</string>
 
     <string name="msg_error_empty">Required</string>
     <string name="msg_error_invalid_url">Invalid URL</string>

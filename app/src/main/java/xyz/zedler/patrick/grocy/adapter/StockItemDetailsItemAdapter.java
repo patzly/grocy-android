@@ -37,6 +37,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
     private QuantityUnit quantityUnit;
     private List<QuantityUnit> quantityUnits;
     private List<Location> locations;
+    private DateUtil dateUtil;
 
     public StockItemDetailsItemAdapter(
             Context context,
@@ -56,6 +57,7 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
     ) {
         this.context = context;
         this.productDetails = productDetails;
+        dateUtil = new DateUtil(context);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -178,16 +180,72 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     holder.textViewProperty.setText(
                             context.getString(R.string.property_last_purchased)
                     );
-                    DateUtil dateUtil = new DateUtil(context);
                     holder.textViewValue.setText(
                             dateUtil.getLocalizedDate(productDetails.getLastPurchased())
                     );
                     holder.textViewExtra.setText(
-                            dateUtil.getHumanFromDays(
+                            dateUtil.getHumanFromToday(
                                     DateUtil.getDaysFromNow(productDetails.getLastPurchased())
                             )
                     );
                     holder.linearLayoutExtra.setVisibility(View.VISIBLE);
+                    //expandContainer(holder.linearLayoutContainer);
+                } else {
+                    holder.linearLayoutContainer.setVisibility(View.GONE);
+                }
+                break;
+            case 3: // LAST USED
+                if(hasDetails()) {
+                    holder.textViewProperty.setText(
+                            context.getString(R.string.property_last_used)
+                    );
+                    String lastUsed = productDetails.getLastUsed();
+                    holder.textViewValue.setText(
+                            lastUsed != null
+                                    ? dateUtil.getLocalizedDate(lastUsed)
+                                    : context.getString(R.string.date_never)
+                    );
+                    if(lastUsed != null) {
+                        holder.textViewExtra.setText(dateUtil.getHumanForDaysFromNow(lastUsed));
+                        holder.linearLayoutExtra.setVisibility(View.VISIBLE);
+                    }
+                    //expandContainer(holder.linearLayoutContainer);
+                } else {
+                    holder.linearLayoutContainer.setVisibility(View.GONE);
+                }
+                break;
+            case 4: // LAST PRICE
+                if(hasDetails() && productDetails.getLastPrice() != null) {
+                    holder.textViewProperty.setText(
+                            context.getString(R.string.property_last_price)
+                    );
+                    holder.textViewValue.setText(productDetails.getLastPrice());
+                    //expandContainer(holder.linearLayoutContainer);
+                } else {
+                    holder.linearLayoutContainer.setVisibility(View.GONE);
+                }
+                break;
+            case 5: // AVERAGE SHELF LIFE
+                if(hasDetails() && productDetails.getAverageShelfLifeDays() != 0) {
+                    holder.textViewProperty.setText(
+                            context.getString(R.string.property_average_shelf_life)
+                    );
+                    holder.textViewValue.setText(
+                            dateUtil.getHumanFromDays(productDetails.getAverageShelfLifeDays())
+                    );
+                    //expandContainer(holder.linearLayoutContainer);
+                } else {
+                    holder.linearLayoutContainer.setVisibility(View.GONE);
+                }
+                break;
+            case 6: // SPOIL RATE
+                if(hasDetails()) {
+                    holder.textViewProperty.setText(
+                            context.getString(R.string.property_spoil_rate)
+                    );
+                    holder.textViewValue.setText(
+                            productDetails.getSpoilRatePercent() + "%"
+                    );
                     //expandContainer(holder.linearLayoutContainer);
                 } else {
                     holder.linearLayoutContainer.setVisibility(View.GONE);

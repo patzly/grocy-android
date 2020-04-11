@@ -66,11 +66,11 @@ public class DateUtil {
         } else if(dateString.equals("2999-12-31")) {
             return context.getString(R.string.date_never);
         } else {
-            return getHumanFromDays(getDaysFromNow(dateString));
+            return getHumanFromToday(getDaysFromNow(dateString));
         }
     }
 
-    public String getHumanFromDays(int days) {
+    public String getHumanFromToday(int days) {
         if(days == 0) {
             return context.getString(R.string.date_today);
         } else if(days > 0) {
@@ -160,5 +160,35 @@ public class DateUtil {
                 }
             }
         }
+    }
+
+    public String getHumanFromDays(int days) {
+        if(days == 0) {
+            return context.getString(R.string.date_never);
+        } else if(days > 0) {
+            if(days == 1) {
+                return context.getString(R.string.date_day_one);
+            } else {
+                if(days < 30) {
+                    return context.getString(R.string.date_days, days);
+                } else {
+                    if(days < 60) {
+                        return context.getString(R.string.date_month_one);
+                    } else {
+                        if(days < 365) {
+                            return context.getString(R.string.date_months, days / 30);
+                        } else {
+                            if(days < 700) { // how many days do you understand as two years?
+                                return context.getString(R.string.date_year_one);
+                            } else {
+                                return context.getString(
+                                        R.string.date_years, days / 365
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        } else return "";
     }
 }

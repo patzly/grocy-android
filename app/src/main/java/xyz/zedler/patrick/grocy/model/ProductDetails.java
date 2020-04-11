@@ -112,9 +112,11 @@ public class ProductDetails {
     }
 
     public int getPropertyCount() {
-        // amount + product
-        int count = 1 + getProduct().getDisplayedPropertiesCount();
+        // amount + location + last used + spoil rate
+        int count = 4;
         if(lastPurchased != null) count++;
+        if(lastPrice != null) count++;
+        if(averageShelfLifeDays != 0) count++;
         return count;
     }
 
