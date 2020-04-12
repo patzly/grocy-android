@@ -153,7 +153,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		// ACTIONS
 
-		actionButtonConsume.setState(stockItem.getAmount() > 0);
+		refreshButtonStates(false);
 		actionButtonConsume.setOnClickListener(v -> {
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
@@ -162,7 +162,6 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			);
 			bottomSheet.dismiss();
 		});
-		actionButtonOpen.setState(stockItem.getAmount() > stockItem.getAmountOpened());
 		actionButtonOpen.setOnClickListener(v -> {
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
@@ -208,7 +207,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
 						productDetails = new Gson().fromJson(response, listType);
-						refreshButtonStates();
+						refreshButtonStates(true);
 						refreshItems();
 					},
 					error -> { }
@@ -318,18 +317,26 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		}
 	}
 
-	private void refreshButtonStates() {
-		actionButtonConsume.refreshState(
-				hasDetails()
-						? productDetails.getStockAmount() > 0
-						: stockItem.getAmount() > 0
-		);
-		actionButtonOpen.refreshState(
-				hasDetails()
-						? productDetails.getStockAmount()
-						> productDetails.getStockAmountOpened()
-						: stockItem.getAmount() > stockItem.getAmountOpened()
-		);
+	private void refreshButtonStates(boolean animated) {
+		boolean consume = hasDetails()
+				? productDetails.getStockAmount() > 0
+				&& productDetails.getProduct().getEnableTareWeightHandling() == 0
+				: stockItem.getAmount() > 0
+				&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
+		boolean open = hasDetails()
+				? productDetails.getStockAmount()
+				> productDetails.getStockAmountOpened()
+				&& productDetails.getProduct().getEnableTareWeightHandling() == 0
+				: stockItem.getAmount()
+				> stockItem.getAmountOpened()
+				&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
+		if(animated) {
+			actionButtonConsume.refreshState(consume);
+			actionButtonOpen.refreshState(open);
+		} else {
+			actionButtonConsume.setState(consume);
+			actionButtonOpen.setState(open);
+		}
 	}
 
 	private void disableActions() {

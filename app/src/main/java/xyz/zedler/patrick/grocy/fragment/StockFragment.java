@@ -734,7 +734,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             case Constants.ACTION.CONSUME_ALL:
                 StockItem stockItem = getStockItem(productId);
                 if(stockItem != null) {
-                    consumeProduct(productId, stockItem.getAmount(), true);
+                    consumeProduct(
+                            productId,
+                            stockItem.getProduct().getEnableTareWeightHandling() == 0
+                                    ? stockItem.getAmount()
+                                    : (int) stockItem.getProduct().getTareWeight(),
+                            true
+                    );
                 }
                 break;
             case Constants.ACTION.CONSUME_SPOILED:
