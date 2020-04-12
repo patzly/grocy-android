@@ -167,13 +167,6 @@ public class Product {
         return cumulateMinStockAmountOfSubProducts;
     }
 
-    public int getDisplayedPropertiesCount() {
-        int count = 0;
-        count++; // location
-
-        return count;
-    }
-
     @NonNull
     @Override
     public String toString() {

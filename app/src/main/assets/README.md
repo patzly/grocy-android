@@ -11,8 +11,6 @@ stock_item_details_item_value: stockItemBottomSheet property item textView value
 
 TODO:
 - app icon redesign
-- animation of description card height on tap
-- animation of loaded information in StockItemDetailsBottomSheet
 - bottom drawer navigation
 - barcode scanning
 - product details: show NEXT BBD .. necessary?

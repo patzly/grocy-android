@@ -114,15 +114,6 @@ public class ProductDetails {
         return isAggregatedAmount;
     }
 
-    public int getPropertyCount() {
-        // amount + location + last used + spoil rate
-        int count = 4;
-        if(lastPurchased != null) count++;
-        if(lastPrice != null) count++;
-        if(averageShelfLifeDays != 0) count++;
-        return count;
-    }
-
     private static double round(double value) {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
