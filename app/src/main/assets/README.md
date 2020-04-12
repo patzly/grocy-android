@@ -10,14 +10,11 @@ stock_item_details_item_property: stockItemBottomSheet property item textView pr
 stock_item_details_item_value: stockItemBottomSheet property item textView value
 
 TODO:
-- error handling with requests in downloading queue
-- app icon redesign with gradient
-- post requests on actions in StockItemDetailsBottomSheet
-- sorting (alphabet + date) in stock
+- app icon redesign
 - animation of description card height on tap
 - animation of loaded information in StockItemDetailsBottomSheet
-- save locations and product groups in MainActivity for reuse ?
 - bottom drawer navigation
 - barcode scanning
-- sorting after last purchased
-- product details: show NEXT BBD
+- product details: show NEXT BBD .. necessary?
+- currency in product details
+- Mehl

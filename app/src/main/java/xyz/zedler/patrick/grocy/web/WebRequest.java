@@ -20,7 +20,7 @@ public class WebRequest {
     public void get(
             String url,
             String tag,
-            OnResponseListener onSuccess,
+            OnResponseListener onResponse,
             OnErrorListener onError,
             OnEmptyQueueListener onEmptyQueue
     ) {
@@ -29,7 +29,7 @@ public class WebRequest {
                         Request.Method.GET,
                         url,
                         response -> {
-                            onSuccess.onResponse(response);
+                            onResponse.onResponse(response);
                             queueSize--;
                             if(queueSize == 0) {
                                 onEmptyQueue.onEmptyQueue();
@@ -47,23 +47,23 @@ public class WebRequest {
         queueSize++;
     }
 
-    public void get(String url, OnResponseListener onSuccess, OnErrorListener onError) {
+    public void get(String url, OnResponseListener onResponse, OnErrorListener onError) {
         requestQueue.add(
                 new StringRequest(
                         Request.Method.GET,
                         url,
-                        onSuccess::onResponse,
+                        onResponse::onResponse,
                         onError::onError
                 )
         );
     }
 
-    public void get(String url, String tag, OnResponseListener onSuccess, OnErrorListener onError) {
+    public void get(String url, String tag, OnResponseListener onResponse, OnErrorListener onError) {
         requestQueue.add(
                 new StringRequest(
                         Request.Method.GET,
                         url,
-                        onSuccess::onResponse,
+                        onResponse::onResponse,
                         onError::onError
                 ).setTag(tag)
         );
@@ -85,6 +85,17 @@ public class WebRequest {
                         Request.Method.POST,
                         url,
                         json,
+                        onResponse::onResponse,
+                        onError::onError
+                )
+        );
+    }
+
+    public void post(String url, OnResponseListener onResponse, OnErrorListener onError) {
+        requestQueue.add(
+                new StringRequest(
+                        Request.Method.POST,
+                        url,
                         onResponse::onResponse,
                         onError::onError
                 )

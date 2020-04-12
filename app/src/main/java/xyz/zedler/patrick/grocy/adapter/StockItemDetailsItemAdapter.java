@@ -138,10 +138,10 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     disableActions(holder.actionButtonConsume, holder.actionButtonOpen);
                     ((StockFragment) activity.getCurrentFragment()).performAction(
                             Constants.ACTION.CONSUME,
-                            positionClick,
                             hasDetails()
                                     ? productDetails.getProduct().getId()
-                                    : stockItem.getProduct().getId()
+                                    : stockItem.getProduct().getId(),
+                            positionClick
                     );
                     bottomSheet.dismiss();
                 });
@@ -156,10 +156,10 @@ public class StockItemDetailsItemAdapter extends RecyclerView.Adapter<StockItemD
                     disableActions(holder.actionButtonConsume, holder.actionButtonOpen);
                     ((StockFragment) activity.getCurrentFragment()).performAction(
                             Constants.ACTION.OPEN,
-                            positionClick,
                             hasDetails()
                                     ? productDetails.getProduct().getId()
-                                    : stockItem.getProduct().getId()
+                                    : stockItem.getProduct().getId(),
+                            positionClick
                     );
                     bottomSheet.dismiss();
                 });

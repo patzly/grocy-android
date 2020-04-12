@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -42,7 +43,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="8dp"
             android:gravity="end">
 
             <com.google.android.material.card.MaterialCardView
@@ -64,15 +64,16 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_stock_item_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:contentInsetStart="12dp"
-                app:menu="@menu/menu_product_details"/>
-
         </LinearLayout>
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_stock_item_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:visibility="visible"
+            app:contentInsetStart="12dp"
+            app:menu="@menu/menu_product_details"/>
 
     </LinearLayout>
 

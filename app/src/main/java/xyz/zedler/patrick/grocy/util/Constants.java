@@ -62,6 +62,7 @@ public final class Constants {
     public final static class ACTION {
         public final static String CONSUME = "action_consume";
         public final static String OPEN = "action_open";
+        public final static String CONSUME_SPOILED = "action_consume_spoiled";
     }
 
     public final static class ARGUMENT {

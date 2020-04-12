@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.card.MaterialCardView;
@@ -35,6 +36,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -88,6 +90,26 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 						300
 				)
 		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
+
+		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_stock_item_details);
+		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
+				stockItem.getAmount() > 0
+		);
+		toolbar.setOnMenuItemClickListener(item -> {
+			switch (item.getItemId()) {
+				case R.id.action_consume_all:
+					return true;
+				case R.id.action_consume_spoiled:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_SPOILED,
+							stockItem.getProduct().getId(),
+							position
+					);
+					bottomSheet.dismiss();
+					return true;
+			}
+			return false;
+		});
 
 		cardViewDescription = view.findViewById(
 				R.id.card_stock_item_details_description

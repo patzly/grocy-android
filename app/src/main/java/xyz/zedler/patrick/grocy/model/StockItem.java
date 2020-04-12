@@ -87,8 +87,19 @@ public class StockItem {
         return 1 + getProduct().getDisplayedPropertiesCount();
     }
 
-    public void setAmount(int difference) {
-        this.amount = amount + difference;
+    public void changeAmount(int difference) {
+        if(difference > 0 || amount > 0) {
+            amount = amount + difference;
+            if(difference == -1 && amountOpened > 0) {
+                amountOpened--;
+            }
+        }
+    }
+
+    public void changeAmountOpened(int difference) {
+        if(amount > 0 && amountOpened + difference <= amount) {
+            amountOpened = amountOpened + difference;
+        }
     }
 
     @NonNull

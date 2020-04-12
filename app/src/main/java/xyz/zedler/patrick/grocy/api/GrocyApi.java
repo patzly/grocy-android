@@ -120,6 +120,20 @@ public class GrocyApi {
         return getUrl("/stock/products/" + productId + "/consume");
     }
 
+    /**
+     * Marks the given amount of the given product as opened
+     */
+    public String openProduct(int productId) {
+        return getUrl("/stock/products/" + productId + "/open");
+    }
+
+    /**
+     * Undoes a transaction
+     */
+    public String undoStockTransaction(String transactionId) {
+        return getUrl("/stock/transactions/" + transactionId + "/undo");
+    }
+
     // PICTURE
 
     /**

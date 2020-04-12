@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -718,55 +719,173 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }).start();
     }
 
-    public void performAction(String action, int position, int productId) {
+    /**
+     * Called from product details BottomSheet when button was pressed
+     * @param action Constants.ACTION
+     * @param position clicked item index
+     */
+    public void performAction(String action, int productId, int position) {
         switch (action) {
             case Constants.ACTION.CONSUME:
-                JSONObject body = new JSONObject();
-                try {
-                    body.put("amount", 1);
-                    body.put("transaction_type", "consume");
-                    body.put("spoiled", false);
-                } catch (JSONException e) {
-                    if(DEBUG) Log.e(TAG, "performAction: " + e);
+                consumeProduct(productId, position, false);
+                break;
+            case Constants.ACTION.OPEN:
+                openProduct(productId, position);
+                break;
+            case Constants.ACTION.CONSUME_SPOILED:
+                consumeProduct(productId, position, true);
+                break;
+        }
+    }
+
+    private void consumeProduct(int productId, int position, boolean spoiled) {
+        Product product = getProduct(productId);
+        double amount = 1;
+        if(product != null && product.getTareWeight() > 0) {
+            amount = product.getTareWeight();
+        }
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", amount);
+            body.put("transaction_type", "consume");
+            body.put("spoiled", spoiled);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+        }
+        int finalAmount = (int) amount;
+        request.post(
+                grocyApi.consumeProduct(productId),
+                body,
+                response -> {
+                    String transactionId = null;
+                    try {
+                        transactionId = response.getString("transaction_id");
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                    }
+                    for(StockItem stockItem : displayedItems) {
+                        if(stockItem.getProduct().getId() == productId) {
+                            try {
+                                stockItem.changeAmount(response.getInt("amount"));
+                                stockItemAdapter.notifyItemChanged(position);
+                                if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
+                            } catch (JSONException e) {
+                                if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                            }
+                            Snackbar snackbar = Snackbar.make(
+                                    activity.findViewById(
+                                            R.id.linear_container_main
+                                    ), activity.getString(
+                                            spoiled
+                                                    ? R.string.msg_consumed_spoiled
+                                                    : R.string.msg_consumed,
+                                            getQuantityUnit(
+                                                    stockItem.getProduct().getQuIdStock()
+                                            ), stockItem.getProduct().getName()
+                                    ), Snackbar.LENGTH_LONG
+                            );
+                            if(transactionId != null) {
+                                String transId = transactionId;
+                                snackbar.setActionTextColor(
+                                        ContextCompat.getColor(activity, R.color.secondary)
+                                ).setAction(
+                                        activity.getString(R.string.action_undo),
+                                        v -> request.post(
+                                                grocyApi.undoStockTransaction(transId),
+                                                success -> {
+                                                    stockItem.changeAmount(finalAmount);
+                                                    stockItemAdapter.notifyItemChanged(position);
+                                                    if(DEBUG) Log.i(
+                                                            TAG, "consumeProduct: undone"
+                                                    );
+                                                },
+                                                this::showErrorMessage
+                                        )
+                                );
+                            }
+                            activity.showSnackbar(snackbar);
+                        }
+                    }
+                },
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
                 }
-                request.post(
-                        grocyApi.consumeProduct(productId),
-                        body,
-                        response -> {
-                            for(StockItem stockItem : displayedItems) {
-                                if(stockItem.getProduct().getId() == productId) {
-                                    try {
-                                        int difference = response.getInt("amount");
-                                        stockItem.setAmount(difference);
-                                        stockItemAdapter.notifyItemChanged(position);
-                                        if(DEBUG) Log.i(
-                                                TAG, "performAction: consume 1" + difference
-                                        );
-                                    } catch (JSONException e) {
-                                        if(DEBUG) Log.i(TAG, "performAction: " + e);
-                                    }
-                                }
+        );
+    }
+
+    private void openProduct(int productId, int position) {
+        JSONObject body = new JSONObject();
+        try {
+            Product product = getProduct(productId);
+            double amount = 1;
+            if(product != null && product.getTareWeight() > 0) {
+                amount = product.getTareWeight();
+            }
+            body.put("amount", amount);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+        }
+        request.post(
+                grocyApi.openProduct(productId),
+                body,
+                response -> {
+                    for(StockItem stockItem : displayedItems) {
+                        if(stockItem.getProduct().getId() == productId) {
+                            try {
+                                int difference = response.getInt("amount");
+                                stockItem.changeAmountOpened(difference);
+                                stockItemAdapter.notifyItemChanged(position);
+                                if(DEBUG) Log.i(TAG, "openProduct: opened 1");
+                            } catch (JSONException e) {
+                                if(DEBUG) Log.e(TAG, "openProduct: " + e);
                             }
                             activity.showSnackbar(
                                     Snackbar.make(
-                                            activity.findViewById(R.id.linear_container_main),
-                                            "Consumed one",
-                                            Snackbar.LENGTH_SHORT
+                                            activity.findViewById(
+                                                    R.id.linear_container_main
+                                            ), activity.getString(
+                                                    R.string.msg_opened,
+                                                    getQuantityUnit(
+                                                            stockItem.getProduct().getQuIdStock()
+                                                    ), stockItem.getProduct().getName()
+                                            ), Snackbar.LENGTH_LONG
                                     )
                             );
-                        },
-                        error -> activity.showSnackbar(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
-                                        "Error: " + error.getMessage(),
-                                        Snackbar.LENGTH_SHORT
-                                )
-                        )
-                );
-                break;
-            case Constants.ACTION.OPEN:
-                break;
-        }
+                        }
+                    }
+                },
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
+                }
+        );
+    }
+
+    private Product getProduct(int id) {
+        for(StockItem stockItem : displayedItems) {
+            if(stockItem.getProduct().getId() == id) {
+                return stockItem.getProduct();
+            }
+        } return null;
+    }
+
+    private String getQuantityUnit(int id) {
+        for(QuantityUnit quantityUnit : quantityUnits) {
+            if(quantityUnit.getId() == id) {
+                return quantityUnit.getName();
+            }
+        } return "";
+    }
+
+    private void showErrorMessage(VolleyError error) {
+        activity.showSnackbar(
+                Snackbar.make(
+                        activity.findViewById(R.id.linear_container_main),
+                        "An error occurred",
+                        Snackbar.LENGTH_SHORT
+                )
+        );
     }
 
     // STOCK ITEM CLICK
