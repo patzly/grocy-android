@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ProductDetails {
 
     @SerializedName("product")
@@ -46,7 +49,7 @@ public class ProductDetails {
     int averageShelfLifeDays;
 
     @SerializedName("spoil_rate_percent")
-    int spoilRatePercent;
+    double spoilRatePercent;
 
     @SerializedName("is_aggregated_amount")
     int isAggregatedAmount;
@@ -103,8 +106,8 @@ public class ProductDetails {
         return averageShelfLifeDays;
     }
 
-    public int getSpoilRatePercent() {
-        return spoilRatePercent;
+    public double getSpoilRatePercent() {
+        return round(spoilRatePercent);
     }
 
     public int getIsAggregatedAmount() {
@@ -118,6 +121,12 @@ public class ProductDetails {
         if(lastPrice != null) count++;
         if(averageShelfLifeDays != 0) count++;
         return count;
+    }
+
+    private static double round(double value) {
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     @NonNull

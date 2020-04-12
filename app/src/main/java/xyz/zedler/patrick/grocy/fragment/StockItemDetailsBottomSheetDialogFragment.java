@@ -1,26 +1,21 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -30,13 +25,16 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.StockItemDetailsItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.view.ExpandableCard;
+import xyz.zedler.patrick.grocy.view.StockItemDetailsItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -47,10 +45,19 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private BottomSheetDialog bottomSheet;
 	private MainActivity activity;
 	private StockItem stockItem;
+	private ProductDetails productDetails;
 	private List<QuantityUnit> quantityUnits;
+	private QuantityUnit quantityUnit;
 	private List<Location> locations;
-	private MaterialCardView cardViewDescription;
-	private int descriptionHeight;
+	private ActionButton actionButtonConsume, actionButtonOpen;
+	private StockItemDetailsItem
+			itemAmount,
+			itemLocation,
+			itemLastPurchased,
+			itemLastUsed,
+			itemLastPrice,
+			itemShelfLife,
+			itemSpoilRate;
 
 	@NonNull
 	@Override
@@ -76,9 +83,21 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		Bundle bundle = getArguments();
 		activity = (MainActivity) getActivity();
-		assert activity != null && bundle != null;
+		assert activity != null/* && bundle != null*/;
 
-		int position = bundle.getInt("position");
+		// VIEWS
+
+		actionButtonConsume = view.findViewById(R.id.button_stock_item_details_consume);
+		actionButtonOpen = view.findViewById(R.id.button_stock_item_details_open);
+		itemAmount = view.findViewById(R.id.stock_item_details_item_amount);
+		itemLocation = view.findViewById(R.id.stock_item_details_item_location);
+		itemLastPurchased = view.findViewById(R.id.stock_item_details_item_last_purchased);
+		itemLastUsed = view.findViewById(R.id.stock_item_details_item_last_used);
+		itemLastPrice = view.findViewById(R.id.stock_item_details_item_last_price);
+		itemShelfLife = view.findViewById(R.id.stock_item_details_item_shelf_life);
+		itemSpoilRate = view.findViewById(R.id.stock_item_details_item_spoil_rate);
+
+		refreshItems();
 
 		((TextView) view.findViewById(R.id.text_stock_item_details_name)).setText(
 				stockItem.getProduct().getName()
@@ -91,6 +110,8 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 				)
 		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
 
+		// TOOLBAR
+
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_stock_item_details);
 		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
 				stockItem.getAmount() > 0
@@ -102,8 +123,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 				case R.id.action_consume_spoiled:
 					((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_SPOILED,
-							stockItem.getProduct().getId(),
-							position
+							stockItem.getProduct().getId()
 					);
 					bottomSheet.dismiss();
 					return true;
@@ -111,41 +131,60 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			return false;
 		});
 
-		cardViewDescription = view.findViewById(
+		// DESCRIPTION
+
+		ExpandableCard cardDescription = view.findViewById(
 				R.id.card_stock_item_details_description
 		);
 		if(stockItem.getProduct().getDescription() != null
 				&& !stockItem.getProduct().getDescription().trim().equals("")
 		) {
-			TextView textViewDescription = view.findViewById(
-					R.id.text_stock_item_details_description
-			);
-			textViewDescription.setText(
+			cardDescription.setText(
 					Html.fromHtml(stockItem.getProduct().getDescription()).toString().trim()
 			);
-			cardViewDescription.setOnClickListener(v -> {
-				cardViewDescription.measure(
-						LinearLayout.LayoutParams.MATCH_PARENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT
-				);
-				/*descriptionHeight = cardViewDescription.getMeasuredHeight();
-				Log.i(TAG, "animateDescription: " + cardViewDescription.getLayoutParams().height);*/
-				textViewDescription.setMaxLines(textViewDescription.getMaxLines() == 3 ? 50 : 3);
-				//animateDescriptionCard();
-			});
 		} else {
-			cardViewDescription.setVisibility(View.GONE);
+			cardDescription.setVisibility(View.GONE);
 		}
 
-		RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_item_details);
-		recyclerView.setLayoutManager(
-				new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-		);
-		recyclerView.setAdapter(
-				new StockItemDetailsItemAdapter(
-						activity, bottomSheet, stockItem, quantityUnits, locations, position
-				)
-		);
+		// ACTIONS
+
+		actionButtonConsume.setState(stockItem.getAmount() > 0);
+		actionButtonConsume.setOnClickListener(v -> {
+			disableActions();
+			((StockFragment) activity.getCurrentFragment()).performAction(
+					Constants.ACTION.CONSUME,
+					stockItem.getProduct().getId()
+			);
+			bottomSheet.dismiss();
+		});
+		actionButtonOpen.setState(stockItem.getAmount() > stockItem.getAmountOpened());
+		actionButtonOpen.setOnClickListener(v -> {
+			disableActions();
+			((StockFragment) activity.getCurrentFragment()).performAction(
+					Constants.ACTION.OPEN,
+					stockItem.getProduct().getId()
+			);
+			bottomSheet.dismiss();
+		});
+		// tooltips
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			actionButtonConsume.setTooltipText(
+					activity.getString(
+							R.string.action_consume_one,
+							quantityUnit.getName(),
+							stockItem.getProduct().getName()
+					)
+			);
+			actionButtonOpen.setTooltipText(
+					activity.getString(
+							R.string.action_open_one,
+							quantityUnit.getName(),
+							stockItem.getProduct().getName()
+					)
+			);
+			// TODO: tooltip colors
+		}
+		// no margin if description is != null
 		if(stockItem.getProduct().getDescription() != null
 				&& !stockItem.getProduct().getDescription().trim().equals("")
 		) {
@@ -153,7 +192,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 					ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
 			);
 			layoutParams.setMargins(0, 0, 0, 0);
-			recyclerView.setLayoutParams(layoutParams);
+			view.findViewById(R.id.linear_stock_item_details_amount).setLayoutParams(layoutParams);
 		}
 
 		// LOAD DETAILS
@@ -163,12 +202,9 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 					activity.getGrocy().getStockProduct(stockItem.getProduct().getId()),
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
-						ProductDetails productDetails = new Gson().fromJson(response, listType);
-						recyclerView.setAdapter(
-								new StockItemDetailsItemAdapter(
-										activity, bottomSheet, productDetails, position
-								)
-						);
+						productDetails = new Gson().fromJson(response, listType);
+						refreshButtonStates();
+						refreshItems();
 					},
 					error -> { }
 			);
@@ -177,31 +213,123 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		return view;
 	}
 
-	private void animateDescriptionCard() {
-		cardViewDescription.measure(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT
-		);
-		final int targetHeight = cardViewDescription.getMeasuredHeight();
-
-		Log.i(TAG, "animateDescription: hh " + cardViewDescription.getMeasuredHeight());
-
-		ValueAnimator anim = ValueAnimator.ofInt(descriptionHeight, targetHeight);
-		anim.setInterpolator(new AccelerateInterpolator());
-		anim.setDuration(1000);
-		anim.addUpdateListener(animation -> {
-			ViewGroup.LayoutParams layoutParams = cardViewDescription.getLayoutParams();
-			layoutParams.height = (int) (animation.getAnimatedValue());
-			cardViewDescription.setLayoutParams(layoutParams);
-		});
-		/*anim.addListener(new AnimatorListenerAdapter() {
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				ViewGroup.LayoutParams layoutParams = cardViewDescription.getLayoutParams();
-				layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+	private void refreshItems() {
+		// quantity unit
+		if(hasDetails()) {
+			quantityUnit = productDetails.getQuantityUnitStock();
+		} else {
+			for(int i = 0; i < quantityUnits.size(); i++) {
+				if(quantityUnits.get(i).getId() == stockItem.getProduct().getQuIdStock()) {
+					quantityUnit = quantityUnits.get(i);
+					break;
+				}
 			}
-		});*/
-		anim.start();
+		}
+		// aggregated amount
+		int isAggregatedAmount = hasDetails()
+				? productDetails.getIsAggregatedAmount()
+				: stockItem.getIsAggregatedAmount();
+		// location
+		Location location = null;
+		if(hasDetails()) {
+			location = productDetails.getLocation();
+		} else {
+			for(int i = 0; i < locations.size(); i++) {
+				if(locations.get(i).getId() == stockItem.getProduct().getLocationId()) {
+					location = locations.get(i);
+					break;
+				}
+			}
+		}
+
+		// AMOUNT
+		itemAmount.setText(
+				activity.getString(R.string.property_amount),
+				getAmountText(),
+				isAggregatedAmount == 1 ? getAggregatedAmount() : null
+		);
+
+		// LOCATION
+		itemLocation.setText(
+				activity.getString(R.string.property_default_location),
+				location != null ? location.getName() : "",
+				null
+		);
+
+		if(hasDetails()) {
+			DateUtil dateUtil = new DateUtil(activity);
+
+			// LAST PURCHASED
+			String lastPurchased = productDetails.getLastPurchased();
+			itemLastPurchased.setText(
+					activity.getString(R.string.property_last_purchased),
+					lastPurchased != null
+							? dateUtil.getLocalizedDate(lastPurchased)
+							: activity.getString(R.string.date_never),
+					lastPurchased != null
+							? dateUtil.getHumanFromToday(
+									DateUtil.getDaysFromNow(productDetails.getLastPurchased()))
+							: null
+			);
+
+			// LAST USED
+			String lastUsed = productDetails.getLastUsed();
+			itemLastUsed.setText(
+					activity.getString(R.string.property_last_used),
+					lastUsed != null
+							? dateUtil.getLocalizedDate(lastUsed)
+							: activity.getString(R.string.date_never),
+					lastUsed != null
+							? dateUtil.getHumanForDaysFromNow(lastUsed)
+							: null
+			);
+
+			// LAST PRICE
+			String lastPrice = productDetails.getLastPrice();
+			if(lastPrice != null) {
+				itemLastPrice.setText(
+						activity.getString(R.string.property_last_price),
+						lastPrice,
+						null
+				);
+			}
+
+			// SHELF LIFE
+			int shelfLife = productDetails.getAverageShelfLifeDays();
+			if(shelfLife != 0 && shelfLife != -1) {
+				itemShelfLife.setText(
+						activity.getString(R.string.property_average_shelf_life),
+						dateUtil.getHumanFromDays(shelfLife),
+						null
+				);
+			}
+
+			// SPOIL RATE
+			itemSpoilRate.setText(
+					activity.getString(R.string.property_spoil_rate),
+					productDetails.getSpoilRatePercent() + "%",
+					null
+			);
+		}
+	}
+
+	private void refreshButtonStates() {
+		actionButtonConsume.refreshState(
+				hasDetails()
+						? productDetails.getStockAmount() > 0
+						: stockItem.getAmount() > 0
+		);
+		actionButtonOpen.refreshState(
+				hasDetails()
+						? productDetails.getStockAmount()
+						> productDetails.getStockAmountOpened()
+						: stockItem.getAmount() > stockItem.getAmountOpened()
+		);
+	}
+
+	private void disableActions() {
+		actionButtonConsume.refreshState(false);
+		actionButtonOpen.refreshState(false);
 	}
 
 	public void setData(
@@ -212,6 +340,42 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		this.stockItem = stockItem;
 		this.quantityUnits = quantityUnits;
 		this.locations = locations;
+	}
+
+	private boolean hasDetails() {
+		return productDetails != null;
+	}
+
+	private String getAmountText() {
+		int amount = hasDetails() ? productDetails.getStockAmount() : stockItem.getAmount();
+		int opened = hasDetails()
+				? productDetails.getStockAmountOpened()
+				: stockItem.getAmountOpened();
+		StringBuilder stringBuilderAmount = new StringBuilder(
+				activity.getString(
+						R.string.subtitle_amount,
+						amount,
+						amount == 1 ? quantityUnit.getName() : quantityUnit.getNamePlural()
+				)
+		);
+		if(opened > 0) {
+			stringBuilderAmount.append(" ");
+			stringBuilderAmount.append(activity.getString(R.string.subtitle_amount_opened, opened));
+		}
+		return stringBuilderAmount.toString();
+	}
+
+	private String getAggregatedAmount() {
+		int amountAggregated = hasDetails()
+				? productDetails.getStockAmountAggregated()
+				: stockItem.getAmountAggregated();
+		return "∑ " + activity.getString(
+				R.string.subtitle_amount,
+				amountAggregated,
+				amountAggregated == 1
+						? quantityUnit.getName()
+						: quantityUnit.getNamePlural()
+		);
 	}
 
 	@NonNull

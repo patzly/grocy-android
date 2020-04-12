@@ -722,37 +722,30 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     /**
      * Called from product details BottomSheet when button was pressed
      * @param action Constants.ACTION
-     * @param position clicked item index
      */
-    public void performAction(String action, int productId, int position) {
+    public void performAction(String action, int productId) {
         switch (action) {
             case Constants.ACTION.CONSUME:
-                consumeProduct(productId, position, false);
+                consumeProduct(productId, false);
                 break;
             case Constants.ACTION.OPEN:
-                openProduct(productId, position);
+                openProduct(productId);
                 break;
             case Constants.ACTION.CONSUME_SPOILED:
-                consumeProduct(productId, position, true);
+                consumeProduct(productId, true);
                 break;
         }
     }
 
-    private void consumeProduct(int productId, int position, boolean spoiled) {
-        Product product = getProduct(productId);
-        double amount = 1;
-        if(product != null && product.getTareWeight() > 0) {
-            amount = product.getTareWeight();
-        }
+    private void consumeProduct(int productId, boolean spoiled) {
         JSONObject body = new JSONObject();
         try {
-            body.put("amount", amount);
+            body.put("amount", 1);
             body.put("transaction_type", "consume");
             body.put("spoiled", spoiled);
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
-        int finalAmount = (int) amount;
         request.post(
                 grocyApi.consumeProduct(productId),
                 body,
@@ -767,7 +760,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         if(stockItem.getProduct().getId() == productId) {
                             try {
                                 stockItem.changeAmount(response.getInt("amount"));
-                                stockItemAdapter.notifyItemChanged(position);
+                                stockItemAdapter.notifyItemChanged(getProductPosition(productId));
                                 if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
                             } catch (JSONException e) {
                                 if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
@@ -793,8 +786,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                         v -> request.post(
                                                 grocyApi.undoStockTransaction(transId),
                                                 success -> {
-                                                    stockItem.changeAmount(finalAmount);
-                                                    stockItemAdapter.notifyItemChanged(position);
+                                                    stockItem.changeAmount(1);
+                                                    stockItemAdapter.notifyItemChanged(
+                                                            getProductPosition(productId)
+                                                    );
                                                     if(DEBUG) Log.i(
                                                             TAG, "consumeProduct: undone"
                                                     );
@@ -814,7 +809,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    private void openProduct(int productId, int position) {
+    private void openProduct(int productId) {
         JSONObject body = new JSONObject();
         try {
             Product product = getProduct(productId);
@@ -835,7 +830,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             try {
                                 int difference = response.getInt("amount");
                                 stockItem.changeAmountOpened(difference);
-                                stockItemAdapter.notifyItemChanged(position);
+                                stockItemAdapter.notifyItemChanged(getProductPosition(productId));
                                 if(DEBUG) Log.i(TAG, "openProduct: opened 1");
                             } catch (JSONException e) {
                                 if(DEBUG) Log.e(TAG, "openProduct: " + e);
@@ -870,6 +865,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } return null;
     }
 
+    private int getProductPosition(int productId) {
+        for(int i = 0; i < displayedItems.size(); i++) {
+            if(displayedItems.get(i).getProduct().getId() == productId) {
+                return i;
+            }
+        }
+        return 0; // TODO: -1?
+    }
+
     private String getQuantityUnit(int id) {
         for(QuantityUnit quantityUnit : quantityUnits) {
             if(quantityUnit.getId() == id) {
@@ -895,7 +899,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 = new StockItemDetailsBottomSheetDialogFragment();
         bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
         Bundle bundle = new Bundle();
-        bundle.putInt("position", position);
+        /*bundle.putInt("position", position);*/
         activity.showBottomSheet(bottomSheet, bundle);
     }
 

@@ -50,7 +50,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:minHeight="20dp"
-            android:visibility="gone"
             android:gravity="bottom">
 
             <TextView
@@ -63,21 +62,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <xyz.zedler.patrick.grocy.view.ActionButton
-        android:id="@+id/button_stock_item_details_consume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:icon="@drawable/ic_round_consume_product"
-        app:tint="@color/icon"/>
-
-    <xyz.zedler.patrick.grocy.view.ActionButton
-        android:id="@+id/button_stock_item_details_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:icon="@drawable/ic_round_open_product"
-        app:tint="@color/icon"/>
 
 </LinearLayout>

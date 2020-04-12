@@ -44,7 +44,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
             Bundle savedInstanceState
     ) {
         view = inflater.inflate(
-                R.layout.fragment_bottomsheet_bottomdrawer, container, false
+                R.layout.fragment_bottomsheet_drawer, container, false
         );
 
         activity = getActivity();
