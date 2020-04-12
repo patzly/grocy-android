@@ -180,6 +180,20 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
+                updateFab(
+                        R.drawable.ic_round_barcode_scan,
+                        R.string.action_back,
+                        "Scan",
+                        animated,
+                        () -> {
+                            startActivity(new Intent(this, ScanActivity.class));
+                            /*showBottomSheet(new ChannelAddBottomSheetDialogFragment());
+                            setUnreadCount(
+                                    sharedPrefs.getInt(PREF_UNREAD_COUNT, 0) + 1
+                            );*/
+                        }
+                );
+
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
                     fabPosition = FAB_POSITION_CENTER;
