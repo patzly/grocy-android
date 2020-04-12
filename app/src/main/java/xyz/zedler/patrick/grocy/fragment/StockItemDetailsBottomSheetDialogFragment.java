@@ -119,6 +119,11 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
 				case R.id.action_consume_all:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_ALL,
+							stockItem.getProduct().getId()
+					);
+					bottomSheet.dismiss();
 					return true;
 				case R.id.action_consume_spoiled:
 					((StockFragment) activity.getCurrentFragment()).performAction(

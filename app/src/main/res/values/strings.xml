@@ -38,8 +38,8 @@
     <string name="msg_expired_products">%1$d expired</string>
     <string name="msg_missing_products">%1$d below min. stock amount</string>
     <string name="msg_consumed">Consumed 1 %1$s of %2$s</string>
-    <string name="msg_consumed_spoiled">Consumed 1 %1$s of %2$s as spoiled</string>
-    <string name="msg_opened">Mark 1 %1$s of %2$s as opened</string>
+    <string name="msg_consumed_spoiled">Consumed %1$d %2$s of %3$s as spoiled</string>
+    <string name="msg_opened">Mark %1$d %2$s of %3$s as opened</string>
 
     <string name="subtitle_amount">%1$d %2$s</string>
     <string name="subtitle_amount_opened">(%1$d opened)</string>

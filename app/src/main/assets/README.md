@@ -15,4 +15,4 @@ TODO:
 - barcode scanning
 - product details: show NEXT BBD .. necessary?
 - currency in product details
-- Mehl
+- tare weight handling

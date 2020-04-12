@@ -726,21 +726,27 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     public void performAction(String action, int productId) {
         switch (action) {
             case Constants.ACTION.CONSUME:
-                consumeProduct(productId, false);
+                consumeProduct(productId, 1, false);
                 break;
             case Constants.ACTION.OPEN:
                 openProduct(productId);
                 break;
+            case Constants.ACTION.CONSUME_ALL:
+                StockItem stockItem = getStockItem(productId);
+                if(stockItem != null) {
+                    consumeProduct(productId, stockItem.getAmount(), true);
+                }
+                break;
             case Constants.ACTION.CONSUME_SPOILED:
-                consumeProduct(productId, true);
+                consumeProduct(productId, 1, true);
                 break;
         }
     }
 
-    private void consumeProduct(int productId, boolean spoiled) {
+    private void consumeProduct(int productId, int amount, boolean spoiled) {
         JSONObject body = new JSONObject();
         try {
-            body.put("amount", 1);
+            body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", spoiled);
         } catch (JSONException e) {
@@ -758,13 +764,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     }
                     for(StockItem stockItem : displayedItems) {
                         if(stockItem.getProduct().getId() == productId) {
-                            try {
-                                stockItem.changeAmount(response.getInt("amount"));
-                                stockItemAdapter.notifyItemChanged(getProductPosition(productId));
-                                if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
-                            } catch (JSONException e) {
-                                if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
-                            }
+                            stockItem.changeAmount(-1 * amount);
+                            stockItemAdapter.notifyItemChanged(getProductPosition(productId));
+                            if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
+
                             Snackbar snackbar = Snackbar.make(
                                     activity.findViewById(
                                             R.id.linear_container_main
@@ -772,6 +775,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                             spoiled
                                                     ? R.string.msg_consumed_spoiled
                                                     : R.string.msg_consumed,
+                                            amount,
                                             getQuantityUnit(
                                                     stockItem.getProduct().getQuIdStock()
                                             ), stockItem.getProduct().getName()
@@ -786,7 +790,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                         v -> request.post(
                                                 grocyApi.undoStockTransaction(transId),
                                                 success -> {
-                                                    stockItem.changeAmount(1);
+                                                    stockItem.changeAmount(amount);
                                                     stockItemAdapter.notifyItemChanged(
                                                             getProductPosition(productId)
                                                     );
@@ -812,11 +816,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void openProduct(int productId) {
         JSONObject body = new JSONObject();
         try {
-            Product product = getProduct(productId);
+            //Product product = getProduct(productId);
             double amount = 1;
-            if(product != null && product.getTareWeight() > 0) {
+            /*if(product != null && product.getTareWeight() > 0) {
                 amount = product.getTareWeight();
-            }
+            }*/
             body.put("amount", amount);
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "openProduct: " + e);
@@ -841,6 +845,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                                     R.id.linear_container_main
                                             ), activity.getString(
                                                     R.string.msg_opened,
+                                                    1,
                                                     getQuantityUnit(
                                                             stockItem.getProduct().getQuIdStock()
                                                     ), stockItem.getProduct().getName()
@@ -861,6 +866,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         for(StockItem stockItem : displayedItems) {
             if(stockItem.getProduct().getId() == id) {
                 return stockItem.getProduct();
+            }
+        } return null;
+    }
+
+    private StockItem getStockItem(int productId) {
+        for(StockItem stockItem : displayedItems) {
+            if(stockItem.getProduct().getId() == productId) {
+                return stockItem;
             }
         } return null;
     }
