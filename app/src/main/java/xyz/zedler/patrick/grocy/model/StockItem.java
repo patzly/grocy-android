@@ -10,19 +10,19 @@ import com.google.gson.annotations.SerializedName;
 public class StockItem implements Parcelable {
 
     @SerializedName("amount")
-    int amount;
+    double amount;
 
     @SerializedName("amount_aggregated")
-    int amountAggregated;
+    double amountAggregated;
 
     @SerializedName("best_before_date")
     String bestBeforeDate;
 
     @SerializedName("amount_opened")
-    int amountOpened;
+    double amountOpened;
 
     @SerializedName("amount_opened_aggregated")
-    int amountOpenedAggregated;
+    double amountOpenedAggregated;
 
     @SerializedName("is_aggregated_amount")
     int isAggregatedAmount;
@@ -34,11 +34,11 @@ public class StockItem implements Parcelable {
     Product product;
 
     public StockItem(
-            int amount,
-            int amountAggregated,
+            double amount,
+            double amountAggregated,
             String bestBeforeDate,
-            int amountOpened,
-            int amountOpenedAggregated,
+            double amountOpened,
+            double amountOpenedAggregated,
             int isAggregatedAmount,
             int productId,
             Product product
@@ -54,11 +54,11 @@ public class StockItem implements Parcelable {
     }
 
     public StockItem(Parcel parcel) {
-        amount = parcel.readInt();
-        amountAggregated = parcel.readInt();
+        amount = parcel.readDouble();
+        amountAggregated = parcel.readDouble();
         bestBeforeDate = parcel.readString();
-        amountOpened = parcel.readInt();
-        amountOpenedAggregated = parcel.readInt();
+        amountOpened = parcel.readDouble();
+        amountOpenedAggregated = parcel.readDouble();
         isAggregatedAmount = parcel.readInt();
         productId = parcel.readInt();
         product = parcel.readParcelable(Product.class.getClassLoader());
@@ -66,11 +66,11 @@ public class StockItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(amount);
-        dest.writeInt(amountAggregated);
+        dest.writeDouble(amount);
+        dest.writeDouble(amountAggregated);
         dest.writeString(bestBeforeDate);
-        dest.writeInt(amountOpened);
-        dest.writeInt(amountOpenedAggregated);
+        dest.writeDouble(amountOpened);
+        dest.writeDouble(amountOpenedAggregated);
         dest.writeInt(isAggregatedAmount);
         dest.writeInt(productId);
         dest.writeParcelable(product, 0);
@@ -89,7 +89,7 @@ public class StockItem implements Parcelable {
         }
     };
 
-    public int getAmountAggregated() {
+    public double getAmountAggregated() {
         return amountAggregated;
     }
 
@@ -97,7 +97,7 @@ public class StockItem implements Parcelable {
         return bestBeforeDate;
     }
 
-    public int getAmountOpenedAggregated() {
+    public double getAmountOpenedAggregated() {
         return amountOpenedAggregated;
     }
 
@@ -113,15 +113,15 @@ public class StockItem implements Parcelable {
         return product;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public int getAmountOpened() {
+    public double getAmountOpened() {
         return amountOpened;
     }
 
-    public void changeAmount(int difference) {
+    public void changeAmount(double difference) {
         if(difference > 0 || amount > 0) {
             amount = amount + difference;
             if(difference == -1 && amountOpened > 0) {

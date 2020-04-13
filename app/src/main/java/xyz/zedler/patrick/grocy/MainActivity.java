@@ -35,6 +35,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +99,44 @@ public class MainActivity extends AppCompatActivity {
         // API
 
         grocyApi = new GrocyApi(this);
+
+        // LOAD CONFIG
+
+        request.get(
+                grocyApi.getSystemConfig(),
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        sharedPrefs.edit()
+                                .putString(
+                                        Constants.PREF.CURRENCY,
+                                        jsonObject.get("CURRENCY").toString()
+                                ).apply();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if(DEBUG) Log.i(
+                            TAG, "downloadConfig: config = " + response
+                    );
+                }, error -> {}
+        );
+
+        request.get(
+                grocyApi.getSystemInfo(),
+                response -> {
+                    try {
+                        sharedPrefs.edit()
+                                .putString(
+                                        Constants.PREF.GROCY_VERSION,
+                                        new JSONObject(response).getJSONObject(
+                                                "grocy_version"
+                                        ).getString("Version")
+                                ).apply();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {}
+        ); // TODO: info if version is not supported
 
         // VIEWS
 

@@ -40,7 +40,7 @@ public class Product implements Parcelable {
     String barcode;
 
     @SerializedName("min_stock_amount")
-    int minStockAmount;
+    double minStockAmount;
 
     @SerializedName("default_best_before_days")
     int defaultBestBeforeDays;
@@ -73,7 +73,7 @@ public class Product implements Parcelable {
     String parentProductId; /// STRING: null for empty
 
     @SerializedName("calories")
-    int calories;
+    double calories;
 
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
     int cumulateMinStockAmountOfSubProducts;
@@ -89,7 +89,7 @@ public class Product implements Parcelable {
         enableTareWeightHandling = parcel.readInt();
         pictureFileName = parcel.readString();
         barcode = parcel.readString();
-        minStockAmount = parcel.readInt();
+        minStockAmount = parcel.readDouble();
         defaultBestBeforeDays = parcel.readInt();
         defaultBestBeforeDaysAfterOpen = parcel.readInt();
         defaultBestBeforeDaysAfterFreezing = parcel.readInt();
@@ -116,7 +116,7 @@ public class Product implements Parcelable {
         dest.writeInt(enableTareWeightHandling);
         dest.writeString(pictureFileName);
         dest.writeString(barcode);
-        dest.writeInt(minStockAmount);
+        dest.writeDouble(minStockAmount);
         dest.writeInt(defaultBestBeforeDays);
         dest.writeInt(defaultBestBeforeDaysAfterOpen);
         dest.writeInt(defaultBestBeforeDaysAfterFreezing);
@@ -127,7 +127,7 @@ public class Product implements Parcelable {
         dest.writeDouble(tareWeight);
         dest.writeInt(notCheckStockFulfillmentForRecipes);
         dest.writeString(parentProductId);
-        dest.writeInt(calories);
+        dest.writeDouble(calories);
         dest.writeInt(cumulateMinStockAmountOfSubProducts);
     }
 
@@ -184,7 +184,7 @@ public class Product implements Parcelable {
         return barcode;
     }
 
-    public int getMinStockAmount() {
+    public double getMinStockAmount() {
         return minStockAmount;
     }
 
@@ -228,7 +228,7 @@ public class Product implements Parcelable {
         return parentProductId;
     }
 
-    public int getCalories() {
+    public double getCalories() {
         return calories;
     }
 

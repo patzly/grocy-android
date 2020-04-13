@@ -13,7 +13,3 @@ TODO:
 - app icon redesign
 - bottom drawer navigation
 - barcode scanning
-- product details: show NEXT BBD .. necessary?
-- currency in product details
-- tare weight handling
-- double in amount

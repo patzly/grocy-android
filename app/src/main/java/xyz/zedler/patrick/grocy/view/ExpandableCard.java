@@ -13,14 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
-import com.google.android.material.card.MaterialCardView;
-
 import xyz.zedler.patrick.grocy.R;
 
 public class ExpandableCard extends LinearLayout {
 
     private Context context;
-    private MaterialCardView cardView;
     private TextView textViewCollapsed, textViewExpanded;
     private boolean isOrWillBeExpanded = false;
     private ValueAnimator heightAnimator;
@@ -44,7 +41,6 @@ public class ExpandableCard extends LinearLayout {
     private void init() {
         inflate(context, R.layout.view_expandable_card, this);
 
-        cardView = findViewById(R.id.card_expandable_card);
         textViewCollapsed = findViewById(R.id.text_expandable_card_collapsed);
         textViewExpanded = findViewById(R.id.text_expandable_card_expanded);
 
@@ -64,7 +60,7 @@ public class ExpandableCard extends LinearLayout {
                     }
                 });
 
-        cardView.setOnClickListener(v -> changeState());
+        findViewById(R.id.card_expandable_card).setOnClickListener(v -> changeState());
     }
 
     public void setText(String text) {

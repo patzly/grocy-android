@@ -5,6 +5,8 @@ public final class Constants {
     public final static class PREF {
         public final static String SERVER_URL = "server_url";
         public final static String API_KEY = "api_key";
+        public final static String CURRENCY = "currency";
+        public final static String GROCY_VERSION = "grocy_version";
 
         public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expiring_soon_days";
         public final static String STOCK_SORT_MODE = "stock_sort_mode";

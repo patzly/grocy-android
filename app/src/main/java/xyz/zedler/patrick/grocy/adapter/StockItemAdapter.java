@@ -21,6 +21,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
@@ -101,7 +102,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         StringBuilder stringBuilderAmount = new StringBuilder(
                 context.getString(
                         R.string.subtitle_amount,
-                        stockItem.getAmount(),
+                        NumUtil.trim(stockItem.getAmount()),
                         stockItem.getAmount() == 1
                                 ? quantityUnit.getName()
                                 : quantityUnit.getNamePlural()
@@ -112,7 +113,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount_opened,
-                            stockItem.getAmountOpened()
+                            NumUtil.trim(stockItem.getAmountOpened())
                     )
             );
         }
@@ -122,7 +123,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount,
-                            stockItem.getAmountAggregated(),
+                            NumUtil.trim(stockItem.getAmountAggregated()),
                             stockItem.getAmountAggregated() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()

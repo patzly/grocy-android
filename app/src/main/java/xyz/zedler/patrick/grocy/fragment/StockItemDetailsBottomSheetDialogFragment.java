@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -31,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.StockItemDetailsItem;
@@ -40,6 +43,8 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 	private final static boolean DEBUG = false;
 	private final static String TAG = "ProductBottomSheet";
+
+	private SharedPreferences sharedPrefs;
 
 	private BottomSheetDialog bottomSheet;
 	private MainActivity activity;
@@ -51,6 +56,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private StockItemDetailsItem
 			itemAmount,
 			itemLocation,
+			itemBestBefore,
 			itemLastPurchased,
 			itemLastUsed,
 			itemLastPrice,
@@ -82,6 +88,8 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		activity = (MainActivity) getActivity();
 		assert activity != null;
 
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
 		Bundle bundle = getArguments();
 		if(bundle != null) {
 			stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
@@ -95,6 +103,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		actionButtonOpen = view.findViewById(R.id.button_stock_item_details_open);
 		itemAmount = view.findViewById(R.id.stock_item_details_item_amount);
 		itemLocation = view.findViewById(R.id.stock_item_details_item_location);
+		itemBestBefore = view.findViewById(R.id.stock_item_details_item_bbd);
 		itemLastPurchased = view.findViewById(R.id.stock_item_details_item_last_purchased);
 		itemLastUsed = view.findViewById(R.id.stock_item_details_item_last_used);
 		itemLastPrice = view.findViewById(R.id.stock_item_details_item_last_price);
@@ -117,6 +126,9 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		// TOOLBAR
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_stock_item_details);
+		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(
+				stockItem.getAmount() > 0
+		);
 		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
 				stockItem.getAmount() > 0
 		);
@@ -222,6 +234,8 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	}
 
 	private void refreshItems() {
+		DateUtil dateUtil = new DateUtil(activity);
+
 		// quantity unit refresh for an up-to-date value (productDetails has it in it)
 		if(hasDetails()) {
 			quantityUnit = productDetails.getQuantityUnitStock();
@@ -234,6 +248,11 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		if(hasDetails()) {
 			location = productDetails.getLocation();
 		}
+		// best before
+		String bestBefore = hasDetails()
+				? productDetails.getNextBestBeforeDate()
+				: stockItem.getBestBeforeDate();
+		if(bestBefore == null) bestBefore = ""; // for "never" from dateUtil
 
 		// AMOUNT
 		itemAmount.setText(
@@ -249,9 +268,18 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 				null
 		);
 
-		if(hasDetails()) {
-			DateUtil dateUtil = new DateUtil(activity);
+		// BEST BEFORE
+		itemBestBefore.setText(
+				activity.getString(R.string.property_bbd_next),
+				!bestBefore.equals("2999-12-31")
+						? dateUtil.getLocalizedDate(bestBefore)
+						: activity.getString(R.string.date_never),
+				!bestBefore.equals("2999-12-31") && !bestBefore.equals("")
+						? dateUtil.getHumanForDaysFromNow(bestBefore)
+						: null
+		);
 
+		if(hasDetails()) {
 			// LAST PURCHASED
 			String lastPurchased = productDetails.getLastPurchased();
 			itemLastPurchased.setText(
@@ -282,8 +310,10 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			if(lastPrice != null) {
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
-						lastPrice,
-						null
+						lastPrice + " " + sharedPrefs.getString(
+								Constants.PREF.CURRENCY,
+								activity.getString(R.string.setting_currency_default)
+						), null
 				);
 			}
 
@@ -300,7 +330,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			// SPOIL RATE
 			itemSpoilRate.setText(
 					activity.getString(R.string.property_spoil_rate),
-					productDetails.getSpoilRatePercent() + "%",
+					NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",
 					null
 			);
 		}
@@ -309,16 +339,16 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private void refreshButtonStates(boolean animated) {
 		boolean consume = hasDetails()
 				? productDetails.getStockAmount() > 0
-				&& productDetails.getProduct().getEnableTareWeightHandling() == 0
+					&& productDetails.getProduct().getEnableTareWeightHandling() == 0
 				: stockItem.getAmount() > 0
-				&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
+					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
 		boolean open = hasDetails()
 				? productDetails.getStockAmount()
-				> productDetails.getStockAmountOpened()
-				&& productDetails.getProduct().getEnableTareWeightHandling() == 0
+					> productDetails.getStockAmountOpened()
+					&& productDetails.getProduct().getEnableTareWeightHandling() == 0
 				: stockItem.getAmount()
-				> stockItem.getAmountOpened()
-				&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
+					> stockItem.getAmountOpened()
+					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
 		if(animated) {
 			actionButtonConsume.refreshState(consume);
 			actionButtonOpen.refreshState(open);
@@ -338,31 +368,36 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	}
 
 	private String getAmountText() {
-		int amount = hasDetails() ? productDetails.getStockAmount() : stockItem.getAmount();
-		int opened = hasDetails()
+		double amount = hasDetails() ? productDetails.getStockAmount() : stockItem.getAmount();
+		double opened = hasDetails()
 				? productDetails.getStockAmountOpened()
 				: stockItem.getAmountOpened();
 		StringBuilder stringBuilderAmount = new StringBuilder(
 				activity.getString(
 						R.string.subtitle_amount,
-						amount,
+						NumUtil.trim(amount),
 						amount == 1 ? quantityUnit.getName() : quantityUnit.getNamePlural()
 				)
 		);
 		if(opened > 0) {
 			stringBuilderAmount.append(" ");
-			stringBuilderAmount.append(activity.getString(R.string.subtitle_amount_opened, opened));
+			stringBuilderAmount.append(
+					activity.getString(
+							R.string.subtitle_amount_opened,
+							NumUtil.trim(opened)
+					)
+			);
 		}
 		return stringBuilderAmount.toString();
 	}
 
 	private String getAggregatedAmount() {
-		int amountAggregated = hasDetails()
+		double amountAggregated = hasDetails()
 				? productDetails.getStockAmountAggregated()
 				: stockItem.getAmountAggregated();
 		return "∑ " + activity.getString(
 				R.string.subtitle_amount,
-				amountAggregated,
+				NumUtil.trim(amountAggregated),
 				amountAggregated == 1
 						? quantityUnit.getName()
 						: quantityUnit.getNamePlural()

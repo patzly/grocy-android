@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 
 import java.nio.charset.StandardCharsets;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class GrocyApi {
@@ -16,7 +17,9 @@ public class GrocyApi {
     private final static boolean DEBUG = true;
 
     private SharedPreferences sharedPrefs;
+    private Context context;
 
+    public final static String DEMO_SERVER = "https://de.demo-prerelease.grocy.info";
     public final static class ENTITY {
         public final static String PRODUCTS = "products";
         public final static String LOCATIONS = "locations";
@@ -35,13 +38,14 @@ public class GrocyApi {
 
     public GrocyApi(Context context) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        this.context = context;
         loadCredentials();
     }
 
     public void loadCredentials() {
         baseUrl = sharedPrefs.getString(
                 Constants.PREF.SERVER_URL,
-                "https://de.demo.grocy.info"
+                context.getString(R.string.url_grocy_demo)
         );
         apiKey = "?GROCY-API-KEY=" + sharedPrefs.getString(Constants.PREF.API_KEY, "");
     }
@@ -49,10 +53,6 @@ public class GrocyApi {
     private String getUrl(String command) {
         return baseUrl + "/api" + command + apiKey;
     }
-
-    /*private String getUrl(String command, String param) {
-        return getUrl(command) + "&" + param;
-    }*/
 
     private String getUrl(String command, String... params) {
         StringBuilder url = new StringBuilder(getUrl(command));
@@ -82,6 +82,13 @@ public class GrocyApi {
      */
     public String getSystemInfo() {
         return getUrl("/system/info");
+    }
+
+    /**
+     * Returns all config settings
+     */
+    public String getSystemConfig() {
+        return getUrl("/system/config");
     }
 
     // STOCK

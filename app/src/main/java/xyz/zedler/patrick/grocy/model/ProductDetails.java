@@ -4,9 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class ProductDetails {
 
     @SerializedName("product")
@@ -19,16 +16,16 @@ public class ProductDetails {
     String lastUsed;
 
     @SerializedName("stock_amount")
-    int stockAmount;
+    double stockAmount;
 
     @SerializedName("stock_amount_opened")
-    int stockAmountOpened;
+    double stockAmountOpened;
 
     @SerializedName("stock_amount_aggregated")
-    int stockAmountAggregated;
+    double stockAmountAggregated;
 
     @SerializedName("stock_amount_opened_aggregated")
-    int stockAmountOpenedAggregated;
+    double stockAmountOpenedAggregated;
 
     @SerializedName("quantity_unit_purchase")
     QuantityUnit quantityUnitPurchase;
@@ -66,19 +63,19 @@ public class ProductDetails {
         return lastUsed;
     }
 
-    public int getStockAmount() {
+    public double getStockAmount() {
         return stockAmount;
     }
 
-    public int getStockAmountOpened() {
+    public double getStockAmountOpened() {
         return stockAmountOpened;
     }
 
-    public int getStockAmountAggregated() {
+    public double getStockAmountAggregated() {
         return stockAmountAggregated;
     }
 
-    public int getStockAmountOpenedAggregated() {
+    public double getStockAmountOpenedAggregated() {
         return stockAmountOpenedAggregated;
     }
 
@@ -107,17 +104,11 @@ public class ProductDetails {
     }
 
     public double getSpoilRatePercent() {
-        return round(spoilRatePercent);
+        return spoilRatePercent;
     }
 
     public int getIsAggregatedAmount() {
         return isAggregatedAmount;
-    }
-
-    private static double round(double value) {
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 
     @NonNull

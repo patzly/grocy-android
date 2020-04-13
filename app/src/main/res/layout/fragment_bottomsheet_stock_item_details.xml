@@ -137,6 +137,11 @@
                 android:layout_height="wrap_content"/>
 
             <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
+                android:id="@+id/stock_item_details_item_bbd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
                 android:id="@+id/stock_item_details_item_last_purchased"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

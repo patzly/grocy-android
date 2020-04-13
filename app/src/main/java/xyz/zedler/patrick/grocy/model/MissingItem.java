@@ -13,7 +13,7 @@ public class MissingItem {
     String name;
 
     @SerializedName("amount_missing")
-    int amountMissing;
+    double amountMissing;
 
     @SerializedName("is_partly_in_stock")
     int isPartlyInStock;
@@ -26,7 +26,7 @@ public class MissingItem {
         return name;
     }
 
-    public int getAmountMissing() {
+    public double getAmountMissing() {
         return amountMissing;
     }
 

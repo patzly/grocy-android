@@ -94,16 +94,15 @@ public class LoginActivity extends AppCompatActivity {
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
             } else if(key.length() > 0 && key.length() != 50) {
-                textInputLayoutKey.setError("API key too short");
+                textInputLayoutKey.setError("API key too short"); // TODO: XML String
             } else {
                 requestLogin(server, key);
             }
         });
 
         findViewById(R.id.button_login_demo).setOnClickListener(v -> {
-            // TODO: "https://de.demo.grocy.info" should be placed in xml strings
             sharedPrefs.edit()
-                    .putString(Constants.PREF.SERVER_URL,"https://de.demo.grocy.info")
+                    .putString(Constants.PREF.SERVER_URL, getString(R.string.url_grocy_demo))
                     .putString(Constants.PREF.API_KEY, "")
                     .apply();
             setResult(Constants.RESULT.SUCCESS);
@@ -115,7 +114,6 @@ public class LoginActivity extends AppCompatActivity {
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
-                    showSnackbar("Response is: "+ response.substring(0, 100));
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
@@ -125,9 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> {
                     if(error instanceof AuthFailureError) {
-                        textInputLayoutKey.setError("API key not working");
+                        textInputLayoutKey.setError("API key not working"); // TODO: XML String
                     } else {
-                        showSnackbar("That didn't work!" + error);
+                        showSnackbar("That didn't work!" + error); // TODO: XML String
                     }
                 }
         );
