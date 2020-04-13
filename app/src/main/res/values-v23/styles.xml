@@ -9,4 +9,10 @@
         <item name="android:navigationBarColor">@color/black</item>
     </style>
 
+    <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
 </resources>

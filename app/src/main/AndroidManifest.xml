@@ -39,7 +39,8 @@
             android:name=".ScanActivity"
             android:screenOrientation="user"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:theme="@style/Theme.Grocy.Camera"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
     </application>
 

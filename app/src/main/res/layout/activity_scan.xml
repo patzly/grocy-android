@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,30 @@
         android:id="@+id/barcode_scan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:zxing_scanner_layout="@layout/partial_scanner"
-        app:zxing_use_texture_view="true"/>
+        app:zxing_scanner_layout="@layout/partial_scanner"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="@drawable/action_bar_scrim">
+
+        <xyz.zedler.patrick.grocy.view.ActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_alignParentStart="true"
+            app:tint="@color/white"
+            app:icon="@drawable/ic_round_close" />
+
+        <xyz.zedler.patrick.grocy.view.ActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_alignParentEnd="true"
+            app:tint="@color/white"
+            app:icon="@drawable/ic_round_filter_list_out_anim"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,3 +16,4 @@ TODO:
 - product details: show NEXT BBD .. necessary?
 - currency in product details
 - tare weight handling
+- double in amount
