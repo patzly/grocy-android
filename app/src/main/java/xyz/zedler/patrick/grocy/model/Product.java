@@ -1,10 +1,13 @@
 package xyz.zedler.patrick.grocy.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("id")
     int id;
@@ -74,6 +77,72 @@ public class Product {
 
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
     int cumulateMinStockAmountOfSubProducts;
+
+    public Product(Parcel parcel) {
+        id = parcel.readInt();
+        name = parcel.readString();
+        description = parcel.readString();
+        locationId = parcel.readInt();
+        quIdPurchase = parcel.readInt();
+        quIdStock = parcel.readInt();
+        quFactorPurchaseToStock = parcel.readDouble();
+        enableTareWeightHandling = parcel.readInt();
+        pictureFileName = parcel.readString();
+        barcode = parcel.readString();
+        minStockAmount = parcel.readInt();
+        defaultBestBeforeDays = parcel.readInt();
+        defaultBestBeforeDaysAfterOpen = parcel.readInt();
+        defaultBestBeforeDaysAfterFreezing = parcel.readInt();
+        defaultBestBeforeDaysAfterThawing = parcel.readInt();
+        rowCreatedTimestamp = parcel.readString();
+        productGroupId = parcel.readString();
+        allowPartialUnitsInStock = parcel.readInt();
+        tareWeight = parcel.readDouble();
+        notCheckStockFulfillmentForRecipes = parcel.readInt();
+        parentProductId = parcel.readString();
+        calories = parcel.readInt();
+        cumulateMinStockAmountOfSubProducts = parcel.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeInt(locationId);
+        dest.writeInt(quIdPurchase);
+        dest.writeInt(quIdStock);
+        dest.writeDouble(quFactorPurchaseToStock);
+        dest.writeInt(enableTareWeightHandling);
+        dest.writeString(pictureFileName);
+        dest.writeString(barcode);
+        dest.writeInt(minStockAmount);
+        dest.writeInt(defaultBestBeforeDays);
+        dest.writeInt(defaultBestBeforeDaysAfterOpen);
+        dest.writeInt(defaultBestBeforeDaysAfterFreezing);
+        dest.writeInt(defaultBestBeforeDaysAfterThawing);
+        dest.writeString(rowCreatedTimestamp);
+        dest.writeString(productGroupId);
+        dest.writeInt(allowPartialUnitsInStock);
+        dest.writeDouble(tareWeight);
+        dest.writeInt(notCheckStockFulfillmentForRecipes);
+        dest.writeString(parentProductId);
+        dest.writeInt(calories);
+        dest.writeInt(cumulateMinStockAmountOfSubProducts);
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -165,6 +234,11 @@ public class Product {
 
     public int getCumulateMinStockAmountOfSubProducts() {
         return cumulateMinStockAmountOfSubProducts;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @NonNull

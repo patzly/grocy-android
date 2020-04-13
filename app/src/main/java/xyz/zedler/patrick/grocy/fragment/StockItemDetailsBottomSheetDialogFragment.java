@@ -21,7 +21,6 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
@@ -46,9 +45,8 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private MainActivity activity;
 	private StockItem stockItem;
 	private ProductDetails productDetails;
-	private List<QuantityUnit> quantityUnits;
 	private QuantityUnit quantityUnit;
-	private List<Location> locations;
+	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
 	private StockItemDetailsItem
 			itemAmount,
@@ -81,9 +79,15 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 				false
 		);
 
-		Bundle bundle = getArguments();
 		activity = (MainActivity) getActivity();
-		assert activity != null/* && bundle != null*/;
+		assert activity != null;
+
+		Bundle bundle = getArguments();
+		if(bundle != null) {
+			stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
+			quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+			location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
+		}
 
 		// VIEWS
 
@@ -218,32 +222,17 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	}
 
 	private void refreshItems() {
-		// quantity unit
+		// quantity unit refresh for an up-to-date value (productDetails has it in it)
 		if(hasDetails()) {
 			quantityUnit = productDetails.getQuantityUnitStock();
-		} else {
-			for(int i = 0; i < quantityUnits.size(); i++) {
-				if(quantityUnits.get(i).getId() == stockItem.getProduct().getQuIdStock()) {
-					quantityUnit = quantityUnits.get(i);
-					break;
-				}
-			}
 		}
 		// aggregated amount
 		int isAggregatedAmount = hasDetails()
 				? productDetails.getIsAggregatedAmount()
 				: stockItem.getIsAggregatedAmount();
-		// location
-		Location location = null;
+		// location refresh for an up-to-date value (productDetails has it in it)
 		if(hasDetails()) {
 			location = productDetails.getLocation();
-		} else {
-			for(int i = 0; i < locations.size(); i++) {
-				if(locations.get(i).getId() == stockItem.getProduct().getLocationId()) {
-					location = locations.get(i);
-					break;
-				}
-			}
 		}
 
 		// AMOUNT
@@ -342,16 +331,6 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private void disableActions() {
 		actionButtonConsume.refreshState(false);
 		actionButtonOpen.refreshState(false);
-	}
-
-	public void setData(
-			StockItem stockItem,
-			List<QuantityUnit> quantityUnits,
-			List<Location> locations
-	) {
-		this.stockItem = stockItem;
-		this.quantityUnits = quantityUnits;
-		this.locations = locations;
 	}
 
 	private boolean hasDetails() {

@@ -773,7 +773,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             stockItem.changeAmount(-1 * amount);
                             stockItemAdapter.notifyItemChanged(getProductPosition(productId));
                             if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
-
+                            QuantityUnit quantityUnit = getQuantityUnit(
+                                    stockItem.getProduct().getQuIdStock()
+                            );
                             Snackbar snackbar = Snackbar.make(
                                     activity.findViewById(
                                             R.id.linear_container_main
@@ -782,9 +784,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                                     ? R.string.msg_consumed_spoiled
                                                     : R.string.msg_consumed,
                                             amount,
-                                            getQuantityUnit(
-                                                    stockItem.getProduct().getQuIdStock()
-                                            ), stockItem.getProduct().getName()
+                                            quantityUnit != null
+                                                    ? quantityUnit.getName()
+                                                    : "",
+                                            stockItem.getProduct().getName()
                                     ), Snackbar.LENGTH_LONG
                             );
                             if(transactionId != null) {
@@ -845,6 +848,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             } catch (JSONException e) {
                                 if(DEBUG) Log.e(TAG, "openProduct: " + e);
                             }
+                            QuantityUnit quantityUnit = getQuantityUnit(
+                                    stockItem.getProduct().getQuIdStock()
+                            );
                             activity.showSnackbar(
                                     Snackbar.make(
                                             activity.findViewById(
@@ -852,9 +858,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                             ), activity.getString(
                                                     R.string.msg_opened,
                                                     1,
-                                                    getQuantityUnit(
-                                                            stockItem.getProduct().getQuIdStock()
-                                                    ), stockItem.getProduct().getName()
+                                                    quantityUnit != null
+                                                            ? quantityUnit.getName()
+                                                            : "",
+                                                    stockItem.getProduct().getName()
                                             ), Snackbar.LENGTH_LONG
                                     )
                             );
@@ -884,28 +891,41 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } return null;
     }
 
+    /**
+     * Returns index in the displayed items.
+     * Used for providing a safe and up-to-date value
+     * e.g. when the items are filtered/sorted before server responds
+     */
     private int getProductPosition(int productId) {
         for(int i = 0; i < displayedItems.size(); i++) {
             if(displayedItems.get(i).getProduct().getId() == productId) {
                 return i;
             }
         }
-        return 0; // TODO: -1?
+        return 0; // TODO: -1 when not found?
     }
 
-    private String getQuantityUnit(int id) {
+    private QuantityUnit getQuantityUnit(int id) {
         for(QuantityUnit quantityUnit : quantityUnits) {
             if(quantityUnit.getId() == id) {
-                return quantityUnit.getName();
+                return quantityUnit;
             }
-        } return "";
+        } return null;
+    }
+
+    private Location getLocation(int id) {
+        for(Location location : locations) {
+            if(location.getId() == id) {
+                return location;
+            }
+        } return null;
     }
 
     private void showErrorMessage(VolleyError error) {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        "An error occurred",
+                        "An error occurred", // TODO: resource
                         Snackbar.LENGTH_SHORT
                 )
         );
@@ -914,12 +934,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     // STOCK ITEM CLICK
     @Override
     public void onItemRowClicked(int position) {
-        StockItemDetailsBottomSheetDialogFragment bottomSheet
-                = new StockItemDetailsBottomSheetDialogFragment();
-        bottomSheet.setData(displayedItems.get(position), quantityUnits, locations);
+        StockItem stockItem = displayedItems.get(position);
+        QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
+        Location location = getLocation(stockItem.getProduct().getLocationId());
         Bundle bundle = new Bundle();
-        /*bundle.putInt("position", position);*/
-        activity.showBottomSheet(bottomSheet, bundle);
+        bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, displayedItems.get(position));
+        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
+        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
+        activity.showBottomSheet(new StockItemDetailsBottomSheetDialogFragment(), bundle);
     }
 
     public void setUpSearch() {

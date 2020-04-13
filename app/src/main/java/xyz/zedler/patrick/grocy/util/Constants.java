@@ -68,6 +68,9 @@ public final class Constants {
 
     public final static class ARGUMENT {
         public final static String UI_MODE = "ui_mode";
+        public final static String STOCK_ITEM = "stock_item";
+        public final static String QUANTITY_UNIT = "quantity_unit";
+        public final static String LOCATION = "location";
     }
 
     public final static class FAB_POSITION {
