@@ -13,3 +13,4 @@ TODO:
 - app icon redesign
 - bottom drawer navigation
 - barcode scanning
+- swipe actions: https://github.com/FanFataL/swipe-controller-demo

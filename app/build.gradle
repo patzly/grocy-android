@@ -33,5 +33,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
 }
