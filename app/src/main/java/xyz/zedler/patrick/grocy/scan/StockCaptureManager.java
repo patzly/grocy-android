@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.core.app.ActivityCompat;
@@ -118,37 +117,6 @@ public class StockCaptureManager {
     }
 
     /**
-     * Perform initialization, according to preferences set in the intent.
-     *
-     * @param intent the intent containing the scanning preferences
-     */
-    public void initializeFromIntent(Intent intent) {
-        Window window = activity.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        if (intent != null) {
-            if (Intents.Scan.ACTION.equals(intent.getAction())) {
-                barcodeView.initializeFromIntent(intent);
-            }
-
-            if (intent.hasExtra(Intents.Scan.SHOW_MISSING_CAMERA_PERMISSION_DIALOG)) {
-                setShowMissingCameraPermissionDialog(
-                        intent.getBooleanExtra(Intents.Scan.SHOW_MISSING_CAMERA_PERMISSION_DIALOG, true),
-                        intent.getStringExtra(Intents.Scan.MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE)
-                );
-            }
-
-            if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
-                handler.postDelayed(this::returnResultTimeout, intent.getLongExtra(Intents.Scan.TIMEOUT, 0L));
-            }
-
-            if (intent.getBooleanExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, false)) {
-                returnBarcodeImagePath = true;
-            }
-        }
-    }
-
-    /**
      * Start decoding.
      */
     public void decode() {
@@ -164,6 +132,7 @@ public class StockCaptureManager {
         } else {
             barcodeView.resume();
         }
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inactivityTimer.start();
     }
 
@@ -211,6 +180,7 @@ public class StockCaptureManager {
      * Call from Activity#onPause().
      */
     public void onPause() {
+        activity.getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inactivityTimer.cancel();
         barcodeView.pauseAndWait();
     }
