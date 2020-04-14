@@ -7,7 +7,6 @@ import android.graphics.drawable.Animatable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +19,7 @@ import xyz.zedler.patrick.grocy.R;
 
 public class ActionButton extends LinearLayout {
 
-    private final static String TAG = "ActionButton";
+    private final static String TAG = ActionButton.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private final static float ICON_ALPHA_DISABLED = 0.5f;
@@ -102,13 +101,5 @@ public class ActionButton extends LinearLayout {
         } catch (ClassCastException cla) {
             if(DEBUG) Log.e(TAG, "startIconAnimation() requires AVD!");
         }
-    }
-
-    private int dp(float dp){
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                context.getResources().getDisplayMetrics()
-        );
     }
 }

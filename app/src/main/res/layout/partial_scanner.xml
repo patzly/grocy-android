@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         app:zxing_possible_result_points="@color/transparent"
         app:zxing_result_view="@color/transparent"
-        app:zxing_viewfinder_mask="#70000000"
+        app:zxing_viewfinder_mask="#80000000"
         app:zxing_viewfinder_laser_visibility="false"/>
 
     <com.google.android.material.card.MaterialCardView
@@ -29,29 +29,11 @@
         app:cardElevation="0dp"
         app:cardBackgroundColor="@color/transparent"
         app:strokeWidth="4dp"
-        app:strokeColor="@color/grey300"/>
-    
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:layout_gravity="bottom|center_horizontal"
-        app:cardBackgroundColor="#99000000"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
-        app:contentPadding="12dp">
+        app:strokeColor="@color/grey800"/>
 
-        <TextView
-            android:id="@+id/zxing_status_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:background="@color/transparent"
-            android:text="Point your camera at a barcode"
-            android:textSize="15.5sp"
-            android:textColor="@color/white"/>
-
-    </com.google.android.material.card.MaterialCardView>
+    <xyz.zedler.patrick.grocy.view.BarcodeRipple
+        android:id="@+id/ripple_scan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

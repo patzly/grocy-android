@@ -25,7 +25,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
-    private final static String TAG = "StockItemAdapter";
+    private final static String TAG = StockItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private Context context;

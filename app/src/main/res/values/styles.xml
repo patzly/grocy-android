@@ -32,8 +32,8 @@
     </style>
 
     <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
-        <item name="android:statusBarColor">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.Grocy.NavBarDivider" parent="Theme.Grocy"/>

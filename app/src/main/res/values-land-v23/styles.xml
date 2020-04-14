@@ -8,4 +8,10 @@
         <item name="android:navigationBarColor">@color/black</item>
     </style>
 
+    <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
 </resources>

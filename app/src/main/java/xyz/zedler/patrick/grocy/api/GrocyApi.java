@@ -13,7 +13,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class GrocyApi {
 
-    private final static String TAG = "GrocyApi";
+    private final static String TAG = GrocyApi.class.getSimpleName();
     private final static boolean DEBUG = true;
 
     private SharedPreferences sharedPrefs;

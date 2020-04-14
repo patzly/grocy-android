@@ -37,7 +37,7 @@
 
         <activity
             android:name=".ScanActivity"
-            android:screenOrientation="user"
+            android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />

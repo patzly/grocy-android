@@ -14,25 +14,90 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@drawable/action_bar_scrim">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-        <xyz.zedler.patrick.grocy.view.ActionButton
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_alignParentStart="true"
-            app:tint="@color/white"
-            app:icon="@drawable/ic_round_close" />
+            android:layout_marginTop="4dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
-        <xyz.zedler.patrick.grocy.view.ActionButton
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_circle_button"
+                app:tint="#50000000"/>
+
+            <xyz.zedler.patrick.grocy.view.ActionButton
+                android:id="@+id/button_scan_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:tint="@color/white"
+                app:icon="@drawable/ic_round_close" />
+
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            app:tint="@color/white"
-            app:icon="@drawable/ic_round_filter_list_out_anim"
-            tools:ignore="RelativeOverlap" />
+            tools:ignore="RelativeOverlap">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_circle_button"
+                app:tint="#50000000"/>
+
+            <xyz.zedler.patrick.grocy.view.ActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:tint="@color/white"
+                app:icon="@drawable/ic_round_filter_list_out_anim" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                app:cardBackgroundColor="#99000000"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:contentPadding="12dp">
+
+                <TextView
+                    android:id="@+id/zxing_statu_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:background="@color/transparent"
+                    android:text="Point your camera at a barcode"
+                    android:textSize="15.5sp"
+                    android:textColor="@color/white"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

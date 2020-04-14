@@ -8,7 +8,7 @@ import androidx.annotation.IdRes;
 
 public class AppBarBehavior {
 
-	private final static String TAG = "AppBarBehavior";
+	private final static String TAG = AppBarBehavior.class.getSimpleName();
 	private final static boolean DEBUG = false;
 
 	private Activity activity;
