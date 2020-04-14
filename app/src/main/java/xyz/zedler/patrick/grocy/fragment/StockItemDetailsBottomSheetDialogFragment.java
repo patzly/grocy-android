@@ -131,6 +131,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		);
 		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
 				stockItem.getAmount() > 0
+						&& stockItem.getProduct().getEnableTareWeightHandling() == 0
 		);
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
