@@ -60,7 +60,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = "StockFragment";
+    private final static String TAG = StockFragment.class.getSimpleName();
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -437,6 +437,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     stockItems = gson.fromJson(response, listType);
                     if(DEBUG) Log.i(TAG, "downloadStock: stockItems = " + stockItems);
                     downloadVolatile();
+                    for(StockItem stockItem : stockItems) {
+                        double minStockAmount = stockItem.getProduct().getMinStockAmount();
+                        if(minStockAmount > 0 && stockItem.getAmount() < minStockAmount) {
+                            missingStockItems.add(stockItem);
+                        }
+                    }
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
