@@ -38,6 +38,12 @@ public final class Constants {
         public final static String STOCK = "stock";
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
+        public final static String CONSUME = "consume";
+    }
+
+    public final static class FRAGMENT {
+        public final static String STOCK = "stock";
+        public final static String CONSUME = "consume";
     }
 
     public final static class STOCK {
@@ -57,8 +63,7 @@ public final class Constants {
     }
 
     public final static class EXTRA {
-        public final static String FLASH_VIEW_ID = "flash_view_id";
-        public final static String PAGER_POSITION = "position";
+        public final static String SCAN_RESULT = "scan_result";
     }
 
     public final static class ACTION {
@@ -83,9 +88,6 @@ public final class Constants {
 
     public final static class REQUEST {
         public final static int LOGIN = 1;
-    }
-
-    public final static class RESULT {
-        public final static int SUCCESS = 1;
+        public final static int SCAN = 2;
     }
 }

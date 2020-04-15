@@ -34,7 +34,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_shopping_list"
+                android:id="@+id/linear_drawer_shopping_list"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
@@ -43,14 +43,14 @@
                     android:src="@drawable/ic_round_copyright_anim" />
 
                 <TextView
-                    android:id="@+id/text_channels"
+                    android:id="@+id/text_drawer_shopping_list"
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Shopping list" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_recipes"
+                android:id="@+id/linear_drawer_recipes"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
@@ -59,13 +59,14 @@
                     android:src="@drawable/ic_round_copyright_anim" />
 
                 <TextView
+                    android:id="@+id/text_drawer_recipes"
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Recipes" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_meal_plan"
+                android:id="@+id/linear_drawer_meal_plan"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
@@ -74,8 +75,43 @@
                     android:src="@drawable/ic_round_copyright_anim" />
 
                 <TextView
+                    android:id="@+id/text_drawer_meal_plan"
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Meal plan" />
+
+            </LinearLayout>
+
+            <View style="@style/Theme.Grocy.Divider" />
+
+            <LinearLayout
+                android:id="@+id/linear_drawer_consume"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_consume_product" />
+
+                <TextView
+                    android:id="@+id/text_drawer_consume"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Consume" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_drawer_purchase"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_add_shopping_cart" />
+
+                <TextView
+                    android:id="@+id/text_drawer_purchase"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Purchase" />
 
             </LinearLayout>
 

@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +44,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -190,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.REQUEST.LOGIN && resultCode == Constants.RESULT.SUCCESS) {
+        if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
             setUp();
         }
@@ -234,6 +236,12 @@ public class MainActivity extends AppCompatActivity {
                             );*/
                         }
                 );
+                break;
+            case Constants.UI.CONSUME:
+                updateBottomAppBar(
+                        Constants.FAB_POSITION.GONE, R.menu.menu_stock, animated, () -> { }
+                );
+                break;
 
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
@@ -254,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
                             );
                         }
                 );*/
-                break;
+
             default: Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
@@ -393,8 +401,53 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.STOCK_SEARCH:
                 ((StockFragment) fragmentCurrent).dismissSearch();
                 break;
+            case Constants.UI.CONSUME:
+                dismissFragments();
+                break;
             default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
+    }
+
+    public void replaceFragment(String newFragment, Bundle bundle, boolean animated) {
+        switch (newFragment) {
+            case Constants.FRAGMENT.STOCK:
+                fragmentCurrent = new StockFragment();
+                break;
+            case Constants.FRAGMENT.CONSUME:
+                fragmentCurrent = new ConsumeFragment();
+                break;
+            default:
+                Log.e(TAG, "replaceFragment: invalid argument");
+                return;
+        }
+        if(bundle != null) {
+            fragmentCurrent.setArguments(bundle);
+        }
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        (animated) ? R.anim.slide_in_up : R.anim.slide_no,
+                        (animated) ? R.anim.fade_out : R.anim.slide_no,
+                        R.anim.fade_in,
+                        R.anim.slide_out_down)
+                .replace(R.id.linear_container_main, fragmentCurrent)
+                .addToBackStack(newFragment)
+                .commit();
+        //bottomAppBar.show(fab.isOrWillBeShown());
+
+        Log.i(TAG, "replaceFragment: replaced with " + newFragment + ", animated = " + animated);
+    }
+
+    private void dismissFragments() {
+        if(fragmentManager.getBackStackEntryCount() >= 1) {
+            for(int i = 0; i < fragmentManager.getBackStackEntryCount() ; i++) {
+                fragmentManager.popBackStack();
+            }
+            fragmentCurrent = new StockFragment();
+            Log.i(TAG, "dismissFragments: dismissed all fragments except feed");
+        } else {
+            Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + fragmentManager.getBackStackEntryCount());
+        }
+        bottomAppBar.show();
     }
 
     public boolean isOnline() {

@@ -53,6 +53,7 @@
 
     <string name="property_name">Name</string>
     <string name="property_amount">Amount</string>
+    <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_bbd">Best before</string>
     <string name="property_bbd_next">Next best before date</string>
     <string name="property_location">Location</string>

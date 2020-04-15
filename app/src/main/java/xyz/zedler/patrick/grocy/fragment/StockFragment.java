@@ -515,7 +515,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             if(isInStock) continue;
 
             request.get(
-                    grocyApi.getStockProduct(missingItem.getId()),
+                    grocyApi.getStockProductDetails(missingItem.getId()),
                     TAG,
                     response -> {
                         Type type = new TypeToken<ProductDetails>(){}.getType();

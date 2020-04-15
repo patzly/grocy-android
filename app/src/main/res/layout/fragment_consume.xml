@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_consume"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize">
+
+        <LinearLayout
+            android:id="@+id/linear_app_bar_consume"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/background">
+
+            <FrameLayout
+                android:id="@+id/frame_back_consume"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_back"
+                android:tooltipText="@string/action_back"
+                android:focusable="true"
+                tools:targetApi="o">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_arrow_back" />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="Consume"
+                android:fontFamily="@font/roboto_mono_regular"
+                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_consonants_read"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:menu="@menu/menu_product_details"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_consume"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="12dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                    android:id="@+id/image_consume_product"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_insert_comment_anim"
+                    android:layout_marginBottom="4dp"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_consume_product"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_round_barcode_scan"
+                    app:endIconTint="@color/icon"
+                    app:endIconContentDescription="Scan barcode"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxBackgroundColor="@color/on_surface_secondary"
+                    android:hint="Product"
+                    app:helperTextEnabled="true"
+                    app:helperText=" ">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/on_background"
+                        android:inputType="text|textCapSentences"
+                        android:popupBackground="@color/surface"
+                        android:completionThreshold="1"
+                        android:popupTheme="@style/Theme.Grocy.Popup"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                    android:id="@+id/image_consume_amount"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_insert_comment_anim"
+                    android:layout_marginBottom="4dp"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_consume_amount"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxBackgroundColor="@color/on_surface_secondary"
+                    android:hint="Amount"
+                    app:helperTextEnabled="true"
+                    app:helperText=" ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal"
+                        android:textColor="@color/on_background"
+                        android:text=""/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                    android:id="@+id/image_consume_location"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_place"
+                    android:layout_marginBottom="4dp"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_consume_location"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxBackgroundColor="@color/on_surface_secondary"
+                    android:hint="Location"
+                    app:helperTextEnabled="true"
+                    app:helperText=" ">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/on_background"
+                        android:inputType="text|textCapSentences"
+                        android:popupBackground="@color/surface"
+                        android:completionThreshold="1"
+                        android:popupTheme="@style/Theme.Grocy.Popup"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_consume_specific"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_consume_specific"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_offline_pin"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="Use a specific stock item" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="None" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_consume_spoiled"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
+                android:paddingEnd="0dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:minHeight="0dp">
+
+                <ImageView
+                    android:id="@+id/image_consume_spoiled"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_place"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Spoiled" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkbox_consume_spoiled"
+                    style="@style/Widget.Grocy.CheckBox"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="72dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_consume_consume"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Consume"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_consume_open"
+                    style="@style/Widget.Grocy.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="Mark as opened"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

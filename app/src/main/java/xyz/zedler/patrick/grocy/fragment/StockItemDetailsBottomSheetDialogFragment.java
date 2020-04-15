@@ -220,7 +220,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		if(activity.isOnline()) {
 			new WebRequest(activity.getRequestQueue()).get(
-					activity.getGrocy().getStockProduct(stockItem.getProduct().getId()),
+					activity.getGrocy().getStockProductDetails(stockItem.getProduct().getId()),
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
 						productDetails = new Gson().fromJson(response, listType);

@@ -103,8 +103,15 @@ public class GrocyApi {
     /**
      * Returns details of the given product
      */
-    public String getStockProduct(int productId) {
+    public String getStockProductDetails(int productId) {
         return getUrl("/stock/products/" + productId);
+    }
+
+    /**
+     * Returns all locations where the given product currently has stock
+     */
+    public String getStockLocationsFromProduct(int productId) {
+        return getUrl("/stock/products/" + productId + "/locations");
     }
 
     /**
@@ -139,6 +146,15 @@ public class GrocyApi {
      */
     public String undoStockTransaction(String transactionId) {
         return getUrl("/stock/transactions/" + transactionId + "/undo");
+    }
+
+    // STOCK BY BARCODE
+
+    /**
+     * Returns details of the given product by its barcode
+     */
+    public String getStockProductByBarcode(String barcode) {
+        return getUrl("/stock/products/by-barcode/" + barcode);
     }
 
     // PICTURE

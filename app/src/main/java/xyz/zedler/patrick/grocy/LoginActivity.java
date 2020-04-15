@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
@@ -105,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                     .putString(Constants.PREF.SERVER_URL, getString(R.string.url_grocy_demo))
                     .putString(Constants.PREF.API_KEY, "")
                     .apply();
-            setResult(Constants.RESULT.SUCCESS);
+            setResult(Activity.RESULT_OK);
             finish();
         });
     }
@@ -118,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
                             .apply();
-                    setResult(Constants.RESULT.SUCCESS);
+                    setResult(Activity.RESULT_OK);
                     finish();
                 },
                 error -> {

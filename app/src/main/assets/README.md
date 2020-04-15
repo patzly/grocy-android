@@ -14,3 +14,5 @@ TODO:
 - bottom drawer navigation
 - barcode scanning
 - swipe actions: https://github.com/FanFataL/swipe-controller-demo
+- swipe to refresh in consume fragment with server requests
+- api classes for categories

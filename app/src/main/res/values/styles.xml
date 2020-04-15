@@ -148,6 +148,11 @@
         <item name="android:adjustViewBounds">true</item>
     </style>
 
+    <style name="Theme.Grocy.Popup">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+        <item name="popupMenuBackground">@drawable/popup_menu_background</item>
+    </style>
+
     <!-- Text Input -->
     <style name="Widget.Grocy.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
@@ -160,6 +165,16 @@
     </style>
 
     <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundColor">@color/on_background_tertiary</item>
+        <item name="boxStrokeColor">@color/secondary</item>
+        <item name="hintTextColor">@color/secondary</item>
+        <item name="android:textColorHint">@color/on_background_secondary</item>
+        <item name="errorTextColor">@color/error</item>
+    </style>
+
+    <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="boxBackgroundColor">@color/on_background_tertiary</item>
