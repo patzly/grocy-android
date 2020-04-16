@@ -25,7 +25,7 @@ public class StockPlaceholderAdapter extends RecyclerView.Adapter<StockPlacehold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.view_stock_placeholder,
+                        R.layout.row_stock_placeholder,
                         parent,
                         false
                 )

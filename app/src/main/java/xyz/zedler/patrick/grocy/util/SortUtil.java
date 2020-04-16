@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 
 public class SortUtil {
 
@@ -33,6 +34,14 @@ public class SortUtil {
                     }
                     return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
                 }
+        );
+    }
+
+    public static void sortStockLocationItemsByName(List<StockLocation> stockLocations) {
+        if(stockLocations == null) return;
+        Collections.sort(
+                stockLocations,
+                (item1, item2) -> item1.getLocationName().compareTo(item2.getLocationName())
         );
     }
 }

@@ -35,7 +35,6 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -385,8 +384,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 TAG,
                 response -> {
-                    Type listType = new TypeToken<List<QuantityUnit>>(){}.getType();
-                    quantityUnits = gson.fromJson(response, listType);
+                    quantityUnits = gson.fromJson(
+                            response,
+                            new TypeToken<List<QuantityUnit>>(){}.getType()
+                    );
                     if(DEBUG) Log.i(
                             TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
                     );
@@ -401,8 +402,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                 TAG,
                 response -> {
-                    Type listType = new TypeToken<List<Location>>(){}.getType();
-                    locations = gson.fromJson(response, listType);
+                    locations = gson.fromJson(
+                            response,
+                            new TypeToken<List<Location>>(){}.getType()
+                    );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
                     activity.setLocationFilters(locations);
                 },
@@ -416,8 +419,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                 TAG,
                 response -> {
-                    Type listType = new TypeToken<List<ProductGroup>>(){}.getType();
-                    productGroups = gson.fromJson(response, listType);
+                    productGroups = gson.fromJson(
+                            response,
+                            new TypeToken<List<ProductGroup>>(){}.getType()
+                    );
                     if(DEBUG) Log.i(
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
@@ -433,8 +438,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getStock(),
                 TAG,
                 response -> {
-                    Type listType = new TypeToken<List<StockItem>>(){}.getType();
-                    stockItems = gson.fromJson(response, listType);
+                    stockItems = gson.fromJson(
+                            response,
+                            new TypeToken<List<StockItem>>(){}.getType()
+                    );
                     if(DEBUG) Log.i(TAG, "downloadStock: stockItems = " + stockItems);
                     downloadVolatile();
                     for(StockItem stockItem : stockItems) {
@@ -459,17 +466,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         JSONObject jsonObject = new JSONObject(response);
 
                         // Parse first part of volatile array: expiring products
-                        Type listType = new TypeToken<List<StockItem>>(){}.getType();
                         expiringItems = gson.fromJson(
                                 jsonObject.getJSONArray("expiring_products").toString(),
-                                listType
+                                new TypeToken<List<StockItem>>(){}.getType()
                         );
                         if(DEBUG) Log.i(TAG, "downloadVolatile: expiring = " + expiringItems);
 
                         // Parse second part of volatile array: expired products
                         expiredItems = gson.fromJson(
                                 jsonObject.getJSONArray("expired_products").toString(),
-                                listType
+                                new TypeToken<List<StockItem>>(){}.getType()
                         );
                         if(DEBUG) Log.i(TAG, "downloadVolatile: expired = " + expiredItems);
 
@@ -518,8 +524,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     grocyApi.getStockProductDetails(missingItem.getId()),
                     TAG,
                     response -> {
-                        Type type = new TypeToken<ProductDetails>(){}.getType();
-                        ProductDetails productDetails = gson.fromJson(response, type);
+                        ProductDetails productDetails = gson.fromJson(
+                                response,
+                                new TypeToken<ProductDetails>(){}.getType()
+                        );
                         if(DEBUG) Log.i(
                                 TAG,
                                 "downloadMissingProductDetails: "

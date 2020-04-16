@@ -24,10 +24,7 @@
         style="@style/Widget.Grocy.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
         android:layout_marginBottom="4dp"
-        app:boxBackgroundColor="@color/on_background_tertiary"
         android:hint="@string/hint_server"
         app:helperTextEnabled="true"
         app:helperText=" ">
@@ -45,9 +42,6 @@
         style="@style/Widget.Grocy.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxBackgroundColor="@color/on_background_tertiary"
         android:hint="@string/hint_key"
         app:helperTextEnabled="true"
         app:helperText=" ">

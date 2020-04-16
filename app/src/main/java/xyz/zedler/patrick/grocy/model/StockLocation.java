@@ -1,10 +1,13 @@
 package xyz.zedler.patrick.grocy.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class StockLocation {
+public class StockLocation implements Parcelable {
 
     @SerializedName("id")
     int id;
@@ -15,8 +18,41 @@ public class StockLocation {
     @SerializedName("location_id")
     int locationId;
 
-    @SerializedName("name")
-    String name;
+    @SerializedName("location_name")
+    String locationName;
+
+    @SerializedName("location_is_freezer")
+    int isFreezer;
+
+    public StockLocation(Parcel parcel) {
+        id = parcel.readInt();
+        productId = parcel.readInt();
+        locationId = parcel.readInt();
+        locationName = parcel.readString();
+        isFreezer = parcel.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(productId);
+        dest.writeInt(locationId);
+        dest.writeString(locationName);
+        dest.writeInt(isFreezer);
+    }
+
+    public static final Creator<StockLocation> CREATOR = new Creator<StockLocation>() {
+
+        @Override
+        public StockLocation createFromParcel(Parcel in) {
+            return new StockLocation(in);
+        }
+
+        @Override
+        public StockLocation[] newArray(int size) {
+            return new StockLocation[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -30,13 +66,22 @@ public class StockLocation {
         return locationId;
     }
 
-    public String getName() {
-        return name;
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public int getIsFreezer() {
+        return isFreezer;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "StockLocation(" + name + ')';
+        return "StockLocation(" + locationName + ')';
     }
 }

@@ -52,7 +52,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout linearLayoutItemContainer, linearLayoutDays;
+        private LinearLayout linearLayoutItemContainer, linearLayoutDays;
         private TextView textViewName, textViewAmount, textViewDays;
 
         public ViewHolder(View view) {
@@ -71,7 +71,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.view_stock_item,
+                        R.layout.row_stock_item,
                         parent,
                         false
                 )

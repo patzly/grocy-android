@@ -114,20 +114,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_stock_item_details_consume"
+                <LinearLayout
+                    android:id="@+id/linear_stock_item_details_action_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_consume_product"
-                    app:tint="@color/icon"/>
+                    android:orientation="horizontal">
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_stock_item_details_open"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    app:icon="@drawable/ic_round_open_product"
-                    app:tint="@color/icon"/>
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_stock_item_details_consume"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_consume_product"
+                        app:tint="@color/icon"/>
+
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_stock_item_details_open"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        app:icon="@drawable/ic_round_open_product"
+                        app:tint="@color/icon"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

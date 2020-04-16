@@ -1,65 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linear_stock_item_details_item_container"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="64dp"
     android:padding="16dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:baselineAligned="false">
+
+    <TextView
+        android:id="@+id/text_stock_item_details_item_property"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.OverLine" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:gravity="center_vertical">
+        android:orientation="horizontal"
+        android:minHeight="20dp"
+        android:gravity="bottom">
 
         <TextView
-            android:id="@+id/text_stock_item_details_item_property"
+            android:id="@+id/text_stock_item_details_item_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:singleLine="true"
-            android:textAllCaps="true"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_stock_item_details_item_extra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="20dp"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/text_stock_item_details_item_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="20dp"
-            android:gravity="bottom">
-
-            <TextView
-                android:id="@+id/text_stock_item_details_item_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_stock_item_details_item_extra"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="20dp"
-            android:gravity="bottom">
-
-            <TextView
-                android:id="@+id/text_stock_item_details_item_extra"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

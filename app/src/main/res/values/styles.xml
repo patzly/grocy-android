@@ -148,11 +148,6 @@
         <item name="android:adjustViewBounds">true</item>
     </style>
 
-    <style name="Theme.Grocy.Popup">
-        <item name="android:popupBackground">@drawable/popup_menu_background</item>
-        <item name="popupMenuBackground">@drawable/popup_menu_background</item>
-    </style>
-
     <!-- Text Input -->
     <style name="Widget.Grocy.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
@@ -167,6 +162,8 @@
     <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxBackgroundColor">@color/on_background_tertiary</item>
         <item name="boxStrokeColor">@color/secondary</item>
         <item name="hintTextColor">@color/secondary</item>
@@ -177,6 +174,8 @@
     <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxBackgroundColor">@color/on_background_tertiary</item>
         <item name="boxStrokeColor">@color/secondary</item>
         <item name="hintTextColor">@color/secondary</item>
@@ -273,6 +272,10 @@
     </style>
 
     <style name="Theme.Grocy.ListItem.SingleLine" parent="Theme.Grocy.ListItem">
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.SingleLine.Icon" parent="Theme.Grocy.ListItem.SingleLine">
         <item name="android:minHeight">56dp</item>
     </style>
 
@@ -281,11 +284,25 @@
         <item name="android:background">@drawable/bg_list_item</item>
     </style>
 
+    <style name="Theme.Grocy.ListItem.SingleLine.Icon.Clickable" parent="Theme.Grocy.ListItem.SingleLine.Icon">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item</item>
+    </style>
+
     <style name="Theme.Grocy.ListItem.TwoLine" parent="Theme.Grocy.ListItem">
+        <item name="android:minHeight">64dp</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TwoLine.Icon" parent="Theme.Grocy.ListItem.TwoLine">
         <item name="android:minHeight">72dp</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.TwoLine.Clickable" parent="Theme.Grocy.ListItem.TwoLine">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_list_item</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.TwoLine.Icon.Clickable" parent="Theme.Grocy.ListItem.TwoLine.Icon">
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/bg_list_item</item>
     </style>
@@ -308,6 +325,14 @@
     <style name="Theme.Grocy.ListItem.TextBox.Stretch" parent="Theme.Grocy.ListItem.TextBox">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Theme.Grocy.ListItem.OverLine" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.ListItem.OverLine</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="Theme.Grocy.ListItem.Title" parent="">
@@ -387,7 +412,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingStart">16dp</item>
-        <item name="android:minHeight">38dp</item>
+        <item name="android:minHeight">32dp</item>
         <item name="android:textColor">@color/on_surface</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
@@ -448,6 +473,14 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/on_primary</item>
         <item name="fontFamily">@font/roboto_mono_medium</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.ListItem.OverLine" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/on_background_secondary</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="TextAppearance.Grocy.ListItem.Title" parent="TextAppearance.MaterialComponents.Body1">

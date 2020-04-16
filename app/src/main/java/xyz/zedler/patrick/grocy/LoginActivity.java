@@ -71,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
 
         findViewById(R.id.button_login_key).setOnClickListener(v -> {
             if(editTextServer.getText().toString().equals("")) {
-                textInputLayoutServer.setError(getString(R.string.msg_error_empty));
+                textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
-                textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
+                textInputLayoutServer.setError(getString(R.string.error_invalid_url));
             } else {
                 textInputLayoutServer.setErrorEnabled(false);
                 Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
@@ -91,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
             String server = editTextServer.getText().toString();
             String key = editTextKey.getText().toString();
             if(server.equals("")) {
-                textInputLayoutServer.setError(getString(R.string.msg_error_empty));
+                textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
-                textInputLayoutServer.setError(getString(R.string.msg_error_invalid_url));
+                textInputLayoutServer.setError(getString(R.string.error_invalid_url));
             } else if(key.length() > 0 && key.length() != 50) {
                 textInputLayoutKey.setError("API key too short"); // TODO: XML String
             } else {

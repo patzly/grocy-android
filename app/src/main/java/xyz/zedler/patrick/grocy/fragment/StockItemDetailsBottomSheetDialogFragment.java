@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -50,9 +51,11 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 	private MainActivity activity;
 	private StockItem stockItem;
 	private ProductDetails productDetails;
+	private Product product;
 	private QuantityUnit quantityUnit;
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
+	private boolean setUpWithProductDetails = false;
 	private StockItemDetailsItem
 			itemAmount,
 			itemLocation,
@@ -92,9 +95,23 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		Bundle bundle = getArguments();
 		if(bundle != null) {
-			stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
-			quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-			location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
+			setUpWithProductDetails = bundle.getBoolean(
+					Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS,
+					false
+			);
+
+			// setup in CONSUME is with ProductDetails, in STOCK with StockItem
+
+			if(setUpWithProductDetails) {
+				productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
+				assert productDetails != null;
+				product = productDetails.getProduct();
+			} else {
+				stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
+				quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+				location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
+				product = stockItem.getProduct();
+			}
 		}
 
 		// VIEWS
@@ -113,39 +130,36 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		refreshItems();
 
 		((TextView) view.findViewById(R.id.text_stock_item_details_name)).setText(
-				stockItem.getProduct().getName()
+				product.getName()
 		);
 
 		Picasso.get().load(
-				new GrocyApi(activity).getPicture(
-						stockItem.getProduct().getPictureFileName(),
-						300
-				)
+				new GrocyApi(activity).getPicture(product.getPictureFileName(), 300)
 		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
 
 		// TOOLBAR
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_stock_item_details);
-		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(
-				stockItem.getAmount() > 0
-		);
+		boolean isInStock = setUpWithProductDetails
+				? productDetails.getStockAmount() > 0
+				: stockItem.getAmount() > 0;
+		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
 		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
-				stockItem.getAmount() > 0
-						&& stockItem.getProduct().getEnableTareWeightHandling() == 0
+				isInStock && product.getEnableTareWeightHandling() == 0
 		);
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
 				case R.id.action_consume_all:
 					((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_ALL,
-							stockItem.getProduct().getId()
+							product.getId()
 					);
 					bottomSheet.dismiss();
 					return true;
 				case R.id.action_consume_spoiled:
 					((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_SPOILED,
-							stockItem.getProduct().getId()
+							product.getId()
 					);
 					bottomSheet.dismiss();
 					return true;
@@ -158,11 +172,11 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 		ExpandableCard cardDescription = view.findViewById(
 				R.id.card_stock_item_details_description
 		);
-		if(stockItem.getProduct().getDescription() != null
-				&& !stockItem.getProduct().getDescription().trim().equals("")
+		if(product.getDescription() != null
+				&& !product.getDescription().trim().equals("")
 		) {
 			cardDescription.setText(
-					Html.fromHtml(stockItem.getProduct().getDescription()).toString().trim()
+					Html.fromHtml(product.getDescription()).toString().trim()
 			);
 		} else {
 			cardDescription.setVisibility(View.GONE);
@@ -170,12 +184,20 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		// ACTIONS
 
+		if(setUpWithProductDetails) {
+			// hide actions when set up from CONSUME with productDetails
+			view.findViewById(
+					R.id.linear_stock_item_details_action_container
+			).setVisibility(View.GONE);
+			toolbar.setVisibility(View.GONE);
+		}
+
 		refreshButtonStates(false);
 		actionButtonConsume.setOnClickListener(v -> {
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
 					Constants.ACTION.CONSUME,
-					stockItem.getProduct().getId()
+					product.getId()
 			);
 			bottomSheet.dismiss();
 		});
@@ -183,7 +205,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
 					Constants.ACTION.OPEN,
-					stockItem.getProduct().getId()
+					product.getId()
 			);
 			bottomSheet.dismiss();
 		});
@@ -193,21 +215,21 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 					activity.getString(
 							R.string.action_consume_one,
 							quantityUnit.getName(),
-							stockItem.getProduct().getName()
+							product.getName()
 					)
 			);
 			actionButtonOpen.setTooltipText(
 					activity.getString(
 							R.string.action_open_one,
 							quantityUnit.getName(),
-							stockItem.getProduct().getName()
+							product.getName()
 					)
 			);
 			// TODO: tooltip colors
 		}
 		// no margin if description is != null
-		if(stockItem.getProduct().getDescription() != null
-				&& !stockItem.getProduct().getDescription().trim().equals("")
+		if(product.getDescription() != null
+				&& !product.getDescription().trim().equals("")
 		) {
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 					ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
@@ -218,9 +240,9 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		// LOAD DETAILS
 
-		if(activity.isOnline()) {
+		if(activity.isOnline() && !hasDetails()) {
 			new WebRequest(activity.getRequestQueue()).get(
-					activity.getGrocy().getStockProductDetails(stockItem.getProduct().getId()),
+					activity.getGrocy().getStockProductDetails(product.getId()),
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
 						productDetails = new Gson().fromJson(response, listType);
@@ -282,6 +304,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 
 		if(hasDetails()) {
 			// LAST PURCHASED
+			if(setUpWithProductDetails) itemLastPurchased.setVisibility(View.VISIBLE);
 			String lastPurchased = productDetails.getLastPurchased();
 			itemLastPurchased.setText(
 					activity.getString(R.string.property_last_purchased),
@@ -295,6 +318,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			);
 
 			// LAST USED
+			if(setUpWithProductDetails) itemLastUsed.setVisibility(View.VISIBLE);
 			String lastUsed = productDetails.getLastUsed();
 			itemLastUsed.setText(
 					activity.getString(R.string.property_last_used),
@@ -309,6 +333,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
 			if(lastPrice != null) {
+				if(setUpWithProductDetails) itemLastPrice.setVisibility(View.VISIBLE);
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
 						lastPrice + " " + sharedPrefs.getString(
@@ -321,6 +346,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			// SHELF LIFE
 			int shelfLife = productDetails.getAverageShelfLifeDays();
 			if(shelfLife != 0 && shelfLife != -1) {
+				if(setUpWithProductDetails) itemShelfLife.setVisibility(View.VISIBLE);
 				itemShelfLife.setText(
 						activity.getString(R.string.property_average_shelf_life),
 						dateUtil.getHumanFromDays(shelfLife),
@@ -329,6 +355,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			}
 
 			// SPOIL RATE
+			if(setUpWithProductDetails) itemSpoilRate.setVisibility(View.VISIBLE);
 			itemSpoilRate.setText(
 					activity.getString(R.string.property_spoil_rate),
 					NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",

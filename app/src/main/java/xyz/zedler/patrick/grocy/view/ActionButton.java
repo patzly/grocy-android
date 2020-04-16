@@ -72,11 +72,11 @@ public class ActionButton extends LinearLayout {
 
     public void refreshState(boolean enabled) {
         if(enabled) {
-            if(!isEnabled()) {
+            if(!frameLayoutButton.isEnabled()) {
                 frameLayoutButton.animate().alpha(1).setDuration(300).start();
             }
         } else {
-            if(isEnabled()) {
+            if(frameLayoutButton.isEnabled()) {
                 frameLayoutButton.animate().alpha(ICON_ALPHA_DISABLED).setDuration(300).start();
             }
         }

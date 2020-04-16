@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showSnackbar(Snackbar snackbar) {
-        snackbar.setAnchorView(findViewById(R.id.fab_main)).show();
+        snackbar.setAnchorView(fab.isOrWillBeShown() ? fab : bottomAppBar).show();
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {

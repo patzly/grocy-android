@@ -78,6 +78,11 @@ public final class Constants {
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";
         public final static String LOCATION = "location";
+        public final static String STOCK_LOCATIONS = "stock_locations";
+        public final static String PRODUCT_ENTRIES = "product_entries";
+        public final static String PRODUCT_DETAILS = "product_details";
+        public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
+        public final static String SELECTED_ID = "selected_id";
     }
 
     public final static class FAB_POSITION {
