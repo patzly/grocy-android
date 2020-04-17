@@ -531,18 +531,16 @@ public class ConsumeFragment extends Fragment {
                     new ConsumeBarcodeBottomSheetDialogFragment(), null
             );
             return true;
-        } else {
-            if(productDetails == null || !isAmountValid()) {
-                if(productDetails == null) {
-                    textInputProduct.setError(activity.getString(R.string.error_select_product));
-                }
-                if(!isAmountValid()) {
-                    textInputAmount.setError("Invalid amount");
-                }
-                return true;
-            } else {
-                return false;
+        } else if(productDetails == null || !isAmountValid()) {
+            if(productDetails == null) {
+                textInputProduct.setError(activity.getString(R.string.error_select_product));
             }
+            if(!isAmountValid()) {
+                textInputAmount.setError("Invalid amount"); // TODO: XML String
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 
