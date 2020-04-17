@@ -262,9 +262,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        String tag = fragmentCurrent.toString();
-        fragmentManager.putFragment(outState, tag, fragmentCurrent);
-        outState.putString(Constants.ARGUMENT.CURRENT_FRAGMENT, tag);
+        String tag = fragmentCurrent != null ? fragmentCurrent.toString() : null;
+        if(tag != null) {
+            fragmentManager.putFragment(outState, tag, fragmentCurrent);
+            outState.putString(Constants.ARGUMENT.CURRENT_FRAGMENT, tag);
+        }
     }
 
     public void updateUI(String uiMode, String origin) {
