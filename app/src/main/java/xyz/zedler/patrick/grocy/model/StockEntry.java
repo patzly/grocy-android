@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ProductEntry implements Parcelable {
+public class StockEntry implements Parcelable {
 
     @SerializedName("id")
     int id;
@@ -21,11 +21,11 @@ public class ProductEntry implements Parcelable {
     @SerializedName("best_before_date")
     String bestBeforeDate;
 
-    @SerializedName("purchased_before_date")
+    @SerializedName("purchased_date")
     String purchasedDate;
 
     @SerializedName("stock_id")
-    int stockId;
+    String stockId;
 
     @SerializedName("price")
     String price;
@@ -42,13 +42,17 @@ public class ProductEntry implements Parcelable {
     @SerializedName("location_id")
     int locationId;
 
-    public ProductEntry(Parcel parcel) {
+    public StockEntry() {
+        stockId = null;
+    }
+
+    public StockEntry(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();
         amount = parcel.readDouble();
         bestBeforeDate = parcel.readString();
         purchasedDate = parcel.readString();
-        stockId = parcel.readInt();
+        stockId = parcel.readString();
         price = parcel.readString();
         open = parcel.readInt();
         openedDate = parcel.readString();
@@ -63,7 +67,7 @@ public class ProductEntry implements Parcelable {
         dest.writeDouble(amount);
         dest.writeString(bestBeforeDate);
         dest.writeString(purchasedDate);
-        dest.writeInt(stockId);
+        dest.writeString(stockId);
         dest.writeString(price);
         dest.writeInt(open);
         dest.writeString(openedDate);
@@ -71,16 +75,16 @@ public class ProductEntry implements Parcelable {
         dest.writeInt(locationId);
     }
 
-    public static final Creator<ProductEntry> CREATOR = new Creator<ProductEntry>() {
+    public static final Creator<StockEntry> CREATOR = new Creator<StockEntry>() {
 
         @Override
-        public ProductEntry createFromParcel(Parcel in) {
-            return new ProductEntry(in);
+        public StockEntry createFromParcel(Parcel in) {
+            return new StockEntry(in);
         }
 
         @Override
-        public ProductEntry[] newArray(int size) {
-            return new ProductEntry[size];
+        public StockEntry[] newArray(int size) {
+            return new StockEntry[size];
         }
     };
 
@@ -104,7 +108,7 @@ public class ProductEntry implements Parcelable {
         return purchasedDate;
     }
 
-    public int getStockId() {
+    public String getStockId() {
         return stockId;
     }
 
@@ -136,6 +140,6 @@ public class ProductEntry implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "ProductEntry(" + productId + ")";
+        return "StockEntry(" + productId + ")";
     }
 }

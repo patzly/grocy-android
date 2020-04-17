@@ -1,9 +1,12 @@
 package xyz.zedler.patrick.grocy.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +24,7 @@ public class InputChip extends LinearLayout {
     private final static boolean DEBUG = false;
 
     private Context context;
+    private LinearLayout linearLayoutThis;
     private ImageView imageViewIcon;
     private FrameLayout frameLayoutContainer;
     private View viewClose;
@@ -32,6 +36,13 @@ public class InputChip extends LinearLayout {
 
         this.context = context;
         init(null, -1, false, null);
+    }
+
+    public InputChip(Context context, String text, @DrawableRes int iconRes, boolean animate) {
+        super(context);
+
+        this.context = context;
+        init(text, iconRes, animate, null);
     }
 
     public InputChip(
@@ -50,6 +61,7 @@ public class InputChip extends LinearLayout {
     private void init(String text, int iconRes, boolean animate, Runnable onClose) {
         inflate(context, R.layout.view_input_chip, this);
 
+        linearLayoutThis = this;
         frameLayoutContainer = findViewById(R.id.frame_input_chip_container);
         imageViewIcon = findViewById(R.id.image_input_chip_icon);
         textView = findViewById(R.id.text_input_chip);
@@ -74,6 +86,15 @@ public class InputChip extends LinearLayout {
             width = frameLayoutContainer.getWidth();
             // animate height
             ValueAnimator animatorHeight = ValueAnimator.ofInt(frameLayoutContainer.getHeight(), 0);
+            animatorHeight.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    removeAllViews();
+                    if(getParent() != null) {
+                        ((ViewGroup) getParent()).removeView(linearLayoutThis);
+                    }
+                }
+            });
             animatorHeight.addUpdateListener(
                     animation -> {
                         frameLayoutContainer.setLayoutParams(
@@ -102,6 +123,15 @@ public class InputChip extends LinearLayout {
 
     public void setText(String text) {
         textView.setText(text);
+    }
+
+    public String getText() {
+        return textView.getText().toString();
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        frameLayoutContainer.setPadding(left, top, right, bottom);
     }
 
     public void change(String text) {

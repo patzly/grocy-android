@@ -49,14 +49,6 @@
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-                android:id="@+id/button_consume_product_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                app:icon="@drawable/ic_round_info_outline_anim"
-                app:tint="@color/icon"/>
-
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -82,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
-                    android:paddingBottom="12dp"
+                    android:paddingBottom="90dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -93,7 +85,7 @@
                         <ImageView
                             android:id="@+id/image_consume_product"
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_insert_comment_anim"
+                            android:src="@drawable/ic_round_widgets"
                             android:layout_marginBottom="4dp"
                             tools:ignore="ContentDescription" />
 
@@ -105,6 +97,7 @@
                             app:endIconTint="@color/icon"
                             app:endIconContentDescription="Scan barcode"
                             android:hint="Product"
+                            app:boxStrokeErrorColor="@color/retro_red"
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 
@@ -112,7 +105,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:inputType="text|textCapSentences"
+                                android:inputType="text|textCapSentences|textNoSuggestions"
                                 android:imeOptions="actionNext"
                                 android:completionThreshold="1"
                                 android:popupBackground="@drawable/auto_complete_background"/>
@@ -120,6 +113,24 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="ifContentScrolls">
+
+                        <LinearLayout
+                            android:id="@+id/linear_consume_barcode_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="68dp"
+                            android:paddingEnd="16dp"
+                            android:animateLayoutChanges="true"/>
+
+                    </HorizontalScrollView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -139,7 +150,7 @@
                             <ImageView
                                 android:id="@+id/image_consume_amount"
                                 style="@style/Theme.Grocy.ListItem.Icon"
-                                android:src="@drawable/ic_round_insert_comment_anim"
+                                android:src="@drawable/ic_round_scatter_plot"
                                 android:layout_marginBottom="4dp"
                                 tools:ignore="ContentDescription" />
 
@@ -147,6 +158,7 @@
                                 android:id="@+id/text_input_consume_amount"
                                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                                 android:hint="Amount"
+                                app:errorIconTint="@color/retro_red"
                                 app:helperTextEnabled="true"
                                 app:helperText=" ">
 
@@ -213,7 +225,7 @@
                         <ImageView
                             android:id="@+id/image_consume_specific"
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_offline_pin"
+                            android:src="@drawable/ic_round_gps_fixed"
                             tools:ignore="ContentDescription" />
 
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">

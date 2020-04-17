@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.StockItemDetailsItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
 	private final static boolean DEBUG = false;
 	private final static String TAG = "ProductBottomSheet";
@@ -83,7 +83,7 @@ public class StockItemDetailsBottomSheetDialogFragment extends BottomSheetDialog
 			Bundle savedInstanceState
 	) {
 		View view = inflater.inflate(
-				R.layout.fragment_bottomsheet_stock_item_details,
+				R.layout.fragment_bottomsheet_product_overview,
 				container,
 				false
 		);

@@ -23,6 +23,8 @@
     <string name="action_open">Open</string>
     <string name="action_send">Send</string>
     <string name="action_close">Close</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_add">Add</string>
     <string name="action_clear">Clear</string>
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
@@ -49,19 +51,24 @@
     <string name="error_invalid_url">Invalid URL</string>
 
     <string name="title_product_overview">Product overview</string>
-    <string name="title_product_entries">Product entries</string>
+    <string name="title_stock_entries">Stock entries</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Settings</string>
     <string name="title_about">About</string>
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
 
+    <string name="title_stock_entry_no_specific">No specific</string>
+
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
-    <string name="subtitle_selection_default">%1$s (default)</string>
     <string name="subtitle_none">None</string>
+    <string name="subtitle_selected">Selected</string>
+    <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
+    <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
+    <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
 
     <string name="property_name">Name</string>
     <string name="property_amount">Amount</string>
@@ -72,11 +79,14 @@
     <string name="property_locations">Locations</string>
     <string name="property_default_location">Default location</string>
     <string name="property_last_purchased">Last purchased</string>
+    <string name="property_purchased">Purchased</string>
     <string name="property_last_used">Last used</string>
     <string name="property_last_price">Last price</string>
     <string name="property_average_shelf_life">Average shelf life</string>
     <string name="property_spoil_rate">Spoil rate</string>
     <string name="property_product_group">Product group</string>
+    <string name="property_opened">opened</string>
+    <string name="property_not_opened">not opened</string>
 
     <string name="date_ago">%1$s ago</string>
     <string name="date_yesterday">Yesterday</string>
@@ -89,6 +99,7 @@
     <string name="date_year">A year</string>
     <string name="date_years">%1$d years</string>
     <string name="date_unknown">Unknown</string>
+    <string name="date_unlimited">Unlimited</string>
     <string name="date_never">Never</string>
     <string name="date_day_one">1 day</string>
     <string name="date_month_one">1 month</string>

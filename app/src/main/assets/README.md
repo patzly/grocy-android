@@ -16,5 +16,4 @@ TODO:
 - swipe actions: https://github.com/FanFataL/swipe-controller-demo
 - swipe to refresh in consume fragment with server requests
 - api classes for categories
-
-The first item in this list would be picked by the default rule which is "First expiring first, then first in first out"
+- display if selected product is not available in CONSUME

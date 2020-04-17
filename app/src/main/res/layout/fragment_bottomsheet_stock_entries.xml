@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="@string/title_product_entries"
+            android:text="@string/title_stock_entries"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -40,7 +40,7 @@
             android:paddingBottom="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_product_entries"
+                android:id="@+id/recycler_stock_entries"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"/>

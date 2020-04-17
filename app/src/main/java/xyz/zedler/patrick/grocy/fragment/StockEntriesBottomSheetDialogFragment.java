@@ -17,19 +17,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.ProductEntryAdapter;
-import xyz.zedler.patrick.grocy.model.ProductEntries;
+import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
+import xyz.zedler.patrick.grocy.model.StockEntries;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ProductEntriesBottomSheetDialogFragment
+public class StockEntriesBottomSheetDialogFragment
         extends BottomSheetDialogFragment
-        implements ProductEntryAdapter.ProductEntryAdapterListener {
+        implements StockEntryAdapter.StockEntryAdapterListener {
 
     private final static boolean DEBUG = false;
     private final static String TAG = "ProductEntriesBottomSheet";
 
     private MainActivity activity;
-    private ProductEntries productEntries;
+    private StockEntries stockEntries;
 
     @NonNull
     @Override
@@ -44,17 +44,17 @@ public class ProductEntriesBottomSheetDialogFragment
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_product_entries, container, false
+                R.layout.fragment_bottomsheet_stock_entries, container, false
         );
 
         activity = (MainActivity) getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        productEntries = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_ENTRIES);
-        int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, 0);
+        stockEntries = bundle.getParcelable(Constants.ARGUMENT.STOCK_ENTRIES);
+        String selectedStockId = bundle.getString(Constants.ARGUMENT.SELECTED_ID);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_product_entries);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
@@ -64,8 +64,8 @@ public class ProductEntriesBottomSheetDialogFragment
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(
-                new ProductEntryAdapter(
-                        productEntries, selected, this
+                new StockEntryAdapter(
+                        activity, stockEntries, selectedStockId, this
                 )
         );
 
@@ -76,8 +76,8 @@ public class ProductEntriesBottomSheetDialogFragment
     public void onItemRowClicked(int position) {
         Fragment currentFragment = activity.getCurrentFragment();
         if(currentFragment.getClass() == ConsumeFragment.class) {
-            ((ConsumeFragment) currentFragment).selectProductEntry(
-                    productEntries.get(position).getId() // TODO: what id
+            ((ConsumeFragment) currentFragment).selectStockEntry(
+                    stockEntries.get(position).getStockId()
             );
         }
         dismiss();

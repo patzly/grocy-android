@@ -1,13 +1,19 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -15,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
@@ -22,13 +29,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.VolleyError;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +52,19 @@ import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
-import xyz.zedler.patrick.grocy.model.ProductEntries;
-import xyz.zedler.patrick.grocy.model.ProductEntry;
+import xyz.zedler.patrick.grocy.model.StockEntries;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.StockLocations;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ConsumeFragment extends Fragment {
 
-    private final static String TAG = StockFragment.class.getSimpleName();
+    private final static String TAG = ConsumeFragment.class.getSimpleName();
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -59,22 +72,24 @@ public class ConsumeFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
-    private ArrayAdapter<String> adapterProducts, adapterLocations;
+    private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
 
     private List<Product> products = new ArrayList<>();
     private List<StockLocation> stockLocations = new ArrayList<>();
-    private List<ProductEntry> productEntries = new ArrayList<>();
+    private List<StockEntry> stockEntries = new ArrayList<>();
     private List<String> productNames = new ArrayList<>();
 
-    private ActionButton buttonProductDetails;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AutoCompleteTextView autoCompleteTextViewProduct;
+    private LinearLayout linearLayoutBarcodesContainer;
     private TextInputLayout textInputProduct, textInputAmount;
     private EditText editTextAmount;
     private TextView textViewLocation, textViewSpecific;
     private MaterialCheckBox checkBoxSpoiled;
-    private int selectedLocationId, selectedProductEntryId;
+    private int selectedLocationId;
+    private String selectedStockEntryId;
+    private double amount, maxAmount, minAmount;
 
     @Override
     public View onCreateView(
@@ -92,6 +107,10 @@ public class ConsumeFragment extends Fragment {
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        // GET PREFERENCES
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
         // WEB REQUESTS
 
         request = new WebRequest(activity.getRequestQueue());
@@ -101,18 +120,6 @@ public class ConsumeFragment extends Fragment {
 
         activity.findViewById(R.id.frame_back_consume).setOnClickListener(v -> {
             activity.onBackPressed();
-        });
-
-        buttonProductDetails = activity.findViewById(R.id.button_consume_product_details);
-        buttonProductDetails.setState(false);
-        buttonProductDetails.setOnClickListener(v -> {
-            buttonProductDetails.startIconAnimation();
-            if(productDetails != null) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
-                activity.showBottomSheet(new StockItemDetailsBottomSheetDialogFragment(), bundle);
-            }
         });
 
         // swipe refresh
@@ -137,12 +144,23 @@ public class ConsumeFragment extends Fragment {
         autoCompleteTextViewProduct = (AutoCompleteTextView) textInputProduct.getEditText();
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(R.id.image_consume_product);
+            if(hasFocus) {
+                startAnimatedIcon(R.id.image_consume_product);
+                // try again to download products
+                if(productNames.isEmpty()) downloadProductNames();
+            } else {
+                String input = autoCompleteTextViewProduct.getText().toString();
+                if(!productNames.isEmpty() && !productNames.contains(input)) {
+                    activity.showBottomSheet(
+                            new ConsumeBarcodeBottomSheetDialogFragment(), null
+                    );
+                }
+            }
         });
         autoCompleteTextViewProduct.setOnItemClickListener((parent, view, position, id) -> {
             loadProductDetails(
                     products.get(
-                            productNames.indexOf((String) parent.getItemAtPosition(position))
+                            productNames.indexOf(String.valueOf(parent.getItemAtPosition(position)))
                     ).getId()
             );
         });
@@ -154,11 +172,30 @@ public class ConsumeFragment extends Fragment {
                     } return false;
         });
 
+        // barcodes
+
+        linearLayoutBarcodesContainer = activity.findViewById(
+                R.id.linear_consume_barcode_container
+        );
+
         // amount
 
         textInputAmount = activity.findViewById(R.id.text_input_consume_amount);
         editTextAmount = textInputAmount.getEditText();
         assert editTextAmount != null;
+        editTextAmount.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable s) {
+                String input = s.toString();
+                if(!input.equals("")) {
+                    amount = Double.parseDouble(input);
+                } else {
+                    amount = 0;
+                }
+                isAmountValid();
+            }
+        });
         editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 startAnimatedIcon(R.id.image_consume_amount);
@@ -177,21 +214,19 @@ public class ConsumeFragment extends Fragment {
             if(editTextAmount.getText().toString().equals("")) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
-                String amountNew = NumUtil.trim(
-                        Double.parseDouble(editTextAmount.getText().toString()) + 1
-                );
-                editTextAmount.setText(amountNew);
+                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
+                if(amountNew <= maxAmount) {
+                    editTextAmount.setText(NumUtil.trim(amountNew));
+                }
             }
         });
 
         activity.findViewById(R.id.button_consume_amount_less).setOnClickListener(v -> {
             if(!editTextAmount.getText().toString().equals("")) {
                 startAnimatedIcon(R.id.image_consume_amount);
-                double amount = Double.parseDouble(editTextAmount.getText().toString()) - 1;
-                if(amount > 0) {
-                    editTextAmount.setText(NumUtil.trim(amount));
-                } else {
-                    editTextAmount.setText(null);
+                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
+                if(amountNew >= minAmount) {
+                    editTextAmount.setText(NumUtil.trim(amountNew));
                 }
             }
         });
@@ -223,11 +258,11 @@ public class ConsumeFragment extends Fragment {
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(
-                        Constants.ARGUMENT.PRODUCT_ENTRIES,
-                        new ProductEntries(productEntries)
+                        Constants.ARGUMENT.STOCK_ENTRIES,
+                        new StockEntries(stockEntries)
                 );
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedProductEntryId);
-                activity.showBottomSheet(new ProductEntriesBottomSheetDialogFragment(), bundle);
+                bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
+                activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
                 textInputProduct.setError(activity.getString(R.string.error_select_product));
@@ -245,6 +280,15 @@ public class ConsumeFragment extends Fragment {
             startAnimatedIcon(R.id.image_consume_spoiled);
             checkBoxSpoiled.setChecked(!checkBoxSpoiled.isChecked());
         });
+
+        // consume
+        activity.findViewById(R.id.button_consume_consume).setOnClickListener(
+                v -> consumeProduct()
+        );
+        // open
+        activity.findViewById(R.id.button_consume_open).setOnClickListener(
+                v -> openProduct()
+        );
 
         // START
 
@@ -354,17 +398,26 @@ public class ConsumeFragment extends Fragment {
                         productDetails.getQuantityUnitStock().getNamePlural()
                 )
         );
-        editTextAmount.setText("1");
+        setAmountLimits();
+        editTextAmount.setText(
+                NumUtil.trim(
+                        sharedPrefs.getFloat(
+                                Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT, 1
+                        )
+                )
+        );
         // LOCATION
         selectDefaultLocation();
-        // load other locations for bottomSheet and then for displaying the selected
+        selectStockEntry(null);
+        // load other info for bottomSheet and then for displaying the selected
         loadStockLocations();
+        loadStockEntries();
         // SPECIFIC
         textViewSpecific.setText(activity.getString(R.string.subtitle_none));
         // SPOILED
         checkBoxSpoiled.setChecked(false);
         // DETAILS
-        buttonProductDetails.refreshState(true);
+        refreshProductOverviewIcon();
     }
 
     private void clearInputFocus() {
@@ -399,6 +452,20 @@ public class ConsumeFragment extends Fragment {
         );
     }
 
+    private void loadStockEntries() {
+        request.get(
+                grocyApi.getStockEntriesFromProduct(productDetails.getProduct().getId()),
+                response -> {
+                    stockEntries = gson.fromJson(
+                            response,
+                            new TypeToken<List<StockEntry>>(){}.getType()
+                    );
+                    stockEntries.add(0, new StockEntry());
+                    //SortUtil.sortStockLocationItemsByName(stockLocations);
+                }, error -> {}
+        );
+    }
+
     private void loadProductDetailsByBarcode(String barcode) {
         swipeRefreshLayout.setRefreshing(true);
         request.get(
@@ -411,15 +478,174 @@ public class ConsumeFragment extends Fragment {
                     );
                     fillWithProductDetails();
                 }, error -> {
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.statusCode == 400) {
+                        autoCompleteTextViewProduct.setText(barcode);
+                        activity.showBottomSheet(
+                                new ConsumeBarcodeBottomSheetDialogFragment(), null
+                        );
+                    } else {
+                        activity.showSnackbar(
+                                Snackbar.make(
+                                        activity.findViewById(R.id.linear_container_main),
+                                        "An error occurred",
+                                        Snackbar.LENGTH_SHORT
+                                )
+                        );
+                    }
                     swipeRefreshLayout.setRefreshing(false);
+                }
+        );
+    }
+
+    private boolean isFormIncomplete() {
+        if(productDetails != null && isAmountValid()) {
+            return false;
+        } else {
+            if(productDetails == null) {
+                textInputProduct.setError(activity.getString(R.string.error_select_product));
+            }
+            if(!isAmountValid()) {
+                textInputAmount.setError("Invalid amount");
+            }
+            return true;
+        }
+    }
+
+    private void consumeProduct() {
+        if(isFormIncomplete()) return;
+        boolean isSpoiled = checkBoxSpoiled.isChecked();
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", amount);
+            body.put("transaction_type", "consume");
+            body.put("spoiled", isSpoiled);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+        }
+        request.post(
+                grocyApi.consumeProduct(productDetails.getProduct().getId()),
+                body,
+                response -> {
+                    String transactionId = null;
+                    try {
+                        transactionId = response.getString("transaction_id");
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                    }
+                    if(DEBUG) Log.i(TAG, "consumeProduct: consumed " + amount);
+                    Snackbar snackbar = Snackbar.make(
+                            activity.findViewById(R.id.linear_container_main),
+                            activity.getString(
+                                    isSpoiled
+                                            ? R.string.msg_consumed_spoiled
+                                            : R.string.msg_consumed,
+                                    NumUtil.trim(
+                                            productDetails.getProduct()
+                                                    .getEnableTareWeightHandling() == 0
+                                                    ? amount
+                                                    : amount // TODO: tare weight calc
+                                    ), amount == 1
+                                            ? productDetails.getQuantityUnitStock().getName()
+                                            : productDetails.getQuantityUnitStock().getNamePlural(),
+                                    productDetails.getProduct().getName()
+                            ), Snackbar.LENGTH_LONG
+                    );
+                    if(transactionId != null) {
+                        String transId = transactionId;
+                        snackbar.setActionTextColor(
+                                ContextCompat.getColor(activity, R.color.secondary)
+                        ).setAction(
+                                activity.getString(R.string.action_undo),
+                                v -> undoConsumeTransaction(transId)
+                        );
+                    }
+                    activity.showSnackbar(snackbar);
+                },
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                }
+        );
+    }
+
+    private void undoConsumeTransaction(String transactionId) {
+        request.post(
+                grocyApi.undoStockTransaction(transactionId),
+                success -> {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "An error occurred",
+                                    "Undone transaction", // TODO: resource
                                     Snackbar.LENGTH_SHORT
                             )
                     );
+                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
+                },
+                this::showErrorMessage
+        );
+    }
+
+    private void openProduct() {
+        if(isFormIncomplete()) return;
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", amount);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+        }
+        request.post(
+                grocyApi.openProduct(productDetails.getProduct().getId()),
+                body,
+                response -> {
+                    String transactionId = null;
+                    try {
+                        transactionId = response.getString("transaction_id");
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "openProduct: " + e);
+                    }
+                    if(DEBUG) Log.i(TAG, "openProduct: opened " + amount);
+                    Snackbar snackbar = Snackbar.make(
+                            activity.findViewById(R.id.linear_container_main),
+                            activity.getString(
+                                    R.string.msg_opened,
+                                    NumUtil.trim(amount), // TODO: handle tare weight
+                                    productDetails.getQuantityUnitStock().getName(),
+                                    productDetails.getProduct().getName()
+                            ), Snackbar.LENGTH_LONG
+                    );
+                    if(transactionId != null) {
+                        final String transId = transactionId;
+                        snackbar.setActionTextColor(
+                                ContextCompat.getColor(activity, R.color.secondary)
+                        ).setAction(
+                                activity.getString(R.string.action_undo),
+                                v -> undoOpenTransaction(transId)
+                        );
+                    }
+                    activity.showSnackbar(snackbar);
+                },
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
                 }
+        );
+    }
+
+    private void undoOpenTransaction(String transactionId) {
+        request.post(
+                grocyApi.undoStockTransaction(transactionId),
+                success -> {
+                    activity.showSnackbar(
+                            Snackbar.make(
+                                    activity.findViewById(R.id.linear_container_main),
+                                    "Undone transaction", // TODO: resource
+                                    Snackbar.LENGTH_SHORT
+                            )
+                    );
+                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
+                },
+                this::showErrorMessage
         );
     }
 
@@ -436,12 +662,7 @@ public class ConsumeFragment extends Fragment {
     private void selectDefaultLocation() {
         if(productDetails != null) {
             selectedLocationId = productDetails.getLocation().getId();
-            textViewLocation.setText(
-                    activity.getString(
-                            R.string.subtitle_selection_default,
-                            productDetails.getLocation().getName()
-                    )
-            );
+            textViewLocation.setText(productDetails.getLocation().getName());
         }
     }
 
@@ -456,33 +677,66 @@ public class ConsumeFragment extends Fragment {
                 location = stockLocation.getLocationName();
             }
         }
-
-        if(productDetails.getLocation().getId() == selectedId && location != null) {
-            // selected is the default location
-            location = activity.getString(R.string.subtitle_selection_default, location);
-        }
-
         textViewLocation.setText(location);
     }
 
-    public void selectProductEntry(int selectedId) {
-        this.selectedProductEntryId = selectedId;
-        /*String location = null;
-        if(stockLocations.isEmpty()) {
-            location = productDetails.getLocation().getName();
+    public void selectStockEntry(String selectedId) {
+        // stockId is a String
+        this.selectedStockEntryId = selectedId;
+        textViewSpecific.setText(
+                activity.getString(
+                        selectedId == null
+                                ? R.string.subtitle_none
+                                : R.string.subtitle_selected
+                )
+        );
+        setAmountLimits();
+    }
+
+    private void setAmountLimits() {
+        if(selectedStockEntryId == null) {
+            // called from fillWithProductDetails
+            maxAmount = productDetails.getStockAmount();
         } else {
-            StockLocation stockLocation = getStockLocation(selectedId);
-            if(stockLocation != null) {
-                location = stockLocation.getLocationName();
+            StockEntry stockEntry = getStockEntry(selectedStockEntryId);
+            if(stockEntry != null) {
+                maxAmount = stockEntry.getAmount();
             }
         }
+        if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
+            minAmount = 1;
+            if(selectedStockEntryId == null) {
+                // called from fillWithProductDetails
+                maxAmount = productDetails.getStockAmount();
+            } else {
+                StockEntry stockEntry = getStockEntry(selectedStockEntryId);
+                if(stockEntry != null) {
+                    maxAmount = stockEntry.getAmount();
+                }
+            }
+        } else {
+            minAmount = productDetails.getProduct().getTareWeight();
+            maxAmount = productDetails.getProduct().getTareWeight()
+                    + productDetails.getStockAmount();
+        }
+    }
 
-        if(productDetails.getLocation().getId() == selectedId && location != null) {
-            // selected is the default location
-            location = activity.getString(R.string.subtitle_selection_default, location);
-        }*/
-
-        //textViewLocation.setText(location);
+    private boolean isAmountValid() {
+        if(!editTextAmount.getText().toString().equals("")) {
+            if(amount >= minAmount && amount <= maxAmount) {
+                textInputAmount.setErrorEnabled(false);
+                return true;
+            } else {
+                textInputAmount.setError(
+                        "Between " + NumUtil.trim(minAmount)
+                                + " and " + NumUtil.trim(maxAmount)
+                );
+                return false;
+            }
+        } else {
+            textInputAmount.setErrorEnabled(false);
+            return false;
+        }
     }
 
     private StockLocation getStockLocation(int locationId) {
@@ -493,11 +747,85 @@ public class ConsumeFragment extends Fragment {
         } return null;
     }
 
+    private StockEntry getStockEntry(String stockId) {
+        for(StockEntry stockEntry : stockEntries) {
+            if(stockEntry.getStockId() != null && stockEntry.getStockId().equals(stockId)) {
+                return stockEntry;
+            }
+        } return null;
+    }
+
+    public void refreshProductOverviewIcon() {
+        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_product_overview);
+        Log.i(TAG, "refreshProductOverviewIcon: " + menuItem);
+        if(menuItem != null) {
+            menuItem.setEnabled(productDetails != null);
+
+            Drawable icon = menuItem.getIcon();
+            ValueAnimator alphaAnimator = ValueAnimator.ofInt(
+                    icon.getAlpha(), (productDetails != null) ? 255 : 100
+            );
+            alphaAnimator.addUpdateListener(
+                    animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
+            );
+            alphaAnimator.setDuration(200).start();
+
+            menuItem.setOnMenuItemClickListener(item -> {
+                ((Animatable) icon).start();
+                if(productDetails != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+                    bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
+                    activity.showBottomSheet(
+                            new ProductOverviewBottomSheetDialogFragment(),
+                            bundle
+                    );
+                }
+                return true;
+            });
+        }
+    }
+
+    public void addInputAsBarcode() {
+        String input = autoCompleteTextViewProduct.getText().toString();
+        if(input.equals("")) return;
+        InputChip inputChipBarcode = new InputChip(
+                activity, input, R.drawable.ic_round_barcode_scan, true
+        );
+        inputChipBarcode.setPadding(0, 0, 0, dp(8));
+        linearLayoutBarcodesContainer.addView(inputChipBarcode);
+        autoCompleteTextViewProduct.setText(null);
+        textInputProduct.clearFocus();
+    }
+
+    public void clearProduct() {
+        autoCompleteTextViewProduct.setText(null);
+        textInputProduct.clearFocus();
+    }
+
+    private void showErrorMessage(VolleyError error) {
+        activity.showSnackbar(
+                Snackbar.make(
+                        activity.findViewById(R.id.linear_container_main),
+                        "An error occurred", // TODO: resource
+                        Snackbar.LENGTH_SHORT
+                )
+        );
+    }
+
     private void startAnimatedIcon(@IdRes int viewId) {
         try {
             ((Animatable) ((ImageView) activity.findViewById(viewId)).getDrawable()).start();
         } catch (ClassCastException cla) {
             Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
+    }
+
+    private int dp(float dp){
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                getResources().getDisplayMetrics()
+        );
     }
 }

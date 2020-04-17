@@ -13,7 +13,12 @@ import xyz.zedler.patrick.grocy.R;
 
 public class DateUtil {
 
-    private static final String TAG = "DateUtil";
+    private static final String TAG = DateUtil.class.getSimpleName();
+
+    public static final int FORMAT_LONG = 2;
+    public static final int FORMAT_MEDIUM = 1;
+    public static final int FORMAT_SHORT = 0;
+
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.ENGLISH
     );
@@ -47,7 +52,7 @@ public class DateUtil {
         return ((int)(date.getTime() / 86400000) - (int)(current.getTime() / 86400000)) + 1;
     }
 
-    public String getLocalizedDate(String dateString) {
+    public String getLocalizedDate(String dateString, int format) {
         if(dateString == null || dateString.equals("")) {
             return context.getString(R.string.date_unknown);
         }
@@ -58,8 +63,19 @@ public class DateUtil {
             Log.e(TAG, "getLocalizedDate: ");
         }
         if(date == null) return "";
-        java.text.DateFormat localized = android.text.format.DateFormat.getLongDateFormat(context);
-        return localized.format(date);
+        String localized;
+        if(format == FORMAT_LONG) {
+            localized = android.text.format.DateFormat.getLongDateFormat(context).format(date);
+        } else if(format == FORMAT_MEDIUM) {
+            localized = android.text.format.DateFormat.getMediumDateFormat(context).format(date);
+        } else {
+            localized = android.text.format.DateFormat.getDateFormat(context).format(date);
+        }
+        return localized;
+    }
+
+    public String getLocalizedDate(String dateString) {
+        return getLocalizedDate(dateString, 2);
     }
 
     public String getHumanForDaysFromNow(String dateString) {

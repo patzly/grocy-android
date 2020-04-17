@@ -2,19 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear_product_entry_container"
+    android:id="@+id/linear_stock_entry_container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="56dp"
+    android:minHeight="48dp"
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/bg_list_item_surface"
-    android:padding="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="20dp"
     android:gravity="center_vertical">
 
     <ImageView
-        android:id="@+id/image_product_entry_selected"
+        android:id="@+id/image_stock_entry_selected"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="32dp"
@@ -29,28 +32,24 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/text_product_entry_name"
+            android:id="@+id/text_stock_entry_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
         <LinearLayout
-            android:id="@+id/linear_product_entry_none_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:minHeight="20dp"
-            android:gravity="bottom"
-            android:visibility="gone">
+            android:gravity="bottom">
 
             <TextView
-                android:id="@+id/text_product_entry_none_subtitle"
+                android:id="@+id/text_stock_entry_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/subtitle_default"
+                android:maxLines="2"
                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
         </LinearLayout>

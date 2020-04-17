@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
@@ -110,15 +111,57 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         sharedPrefs.edit()
+                                // GET ALL NEEDED CONFIGS
                                 .putString(
                                         Constants.PREF.CURRENCY,
-                                        jsonObject.get("CURRENCY").toString()
+                                        jsonObject.getString("CURRENCY")
                                 ).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     if(DEBUG) Log.i(
                             TAG, "downloadConfig: config = " + response
+                    );
+                }, error -> {}
+        );
+
+        request.get(
+                grocyApi.getUserSettings(),
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        sharedPrefs.edit()
+                                // GET SETTINGS
+                                .putInt(
+                                        Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
+                                        jsonObject.getInt("product_presets_location_id")
+                                ).putInt(
+                                        Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
+                                        jsonObject.getInt("product_presets_product_group_id")
+                                ).putInt(
+                                        Constants.PREF.PRODUCT_PRESETS_QU_ID,
+                                        jsonObject.getInt("product_presets_qu_id")
+                                ).putInt(
+                                        Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                                        jsonObject.getInt("stock_expring_soon_days")
+                                ).putFloat(
+                                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+                                        (float) jsonObject.getDouble("stock_default_purchase_amount")
+                                ).putFloat(
+                                        Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+                                        (float) jsonObject.getDouble("stock_default_consume_amount")
+                                ).putBoolean(
+                                        Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+                                        jsonObject.getBoolean("show_icon_on_stock_overview_page_when_product_is_on_shopping_list")
+                                ).putBoolean(
+                                        Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
+                                        jsonObject.getBoolean("recipe_ingredients_group_by_product_group")
+                                ).apply();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if(DEBUG) Log.i(
+                            TAG, "downloadUserSettings: settings = " + response
                     );
                 }, error -> {}
         );
@@ -239,7 +282,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.CONSUME:
                 updateBottomAppBar(
-                        Constants.FAB_POSITION.GONE, R.menu.menu_stock, animated, () -> { }
+                        Constants.FAB_POSITION.GONE, R.menu.menu_consume, animated,
+                        () -> new Handler().postDelayed(
+                                () -> {
+                                    if(fragmentCurrent.getClass() == ConsumeFragment.class) {
+                                        ((ConsumeFragment) fragmentCurrent)
+                                                .refreshProductOverviewIcon();
+                                    }
+                                },
+                                50
+                        )
                 );
                 break;
 
@@ -305,31 +357,33 @@ public class MainActivity extends AppCompatActivity {
 
     public void setLocationFilters(List<Location> locations) {
         this.locations = locations;
-        SubMenu menuLocations = bottomAppBar.getMenu().findItem(
-                R.id.action_filter_location
-        ).getSubMenu();
-        menuLocations.clear();
-        for(Location location : locations) {
-            menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
-                if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                ((StockFragment) fragmentCurrent).filterLocation(location);
-                return true;
-            });
+        MenuItem menuItem = bottomAppBar.getMenu().findItem(R.id.action_filter_location);
+        if(menuItem != null) {
+            SubMenu menuLocations = menuItem.getSubMenu();
+            menuLocations.clear();
+            for(Location location : locations) {
+                menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
+                    if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                    ((StockFragment) fragmentCurrent).filterLocation(location);
+                    return true;
+                });
+            }
         }
     }
 
     public void setProductGroupFilters(List<ProductGroup> productGroups) {
         this.productGroups = productGroups;
-        SubMenu menuProductGroups = bottomAppBar.getMenu().findItem(
-                R.id.action_filter_product_group
-        ).getSubMenu();
-        menuProductGroups.clear();
-        for(ProductGroup productGroup : productGroups) {
-            menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
-                if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                ((StockFragment) fragmentCurrent).filterProductGroup(productGroup);
-                return true;
-            });
+        MenuItem menuItem = bottomAppBar.getMenu().findItem(R.id.action_filter_product_group);
+        if(menuItem != null) {
+            SubMenu menuProductGroups = menuItem.getSubMenu();
+            menuProductGroups.clear();
+            for(ProductGroup productGroup : productGroups) {
+                menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
+                    if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                    ((StockFragment) fragmentCurrent).filterProductGroup(productGroup);
+                    return true;
+                });
+            }
         }
     }
 
@@ -494,6 +548,10 @@ public class MainActivity extends AppCompatActivity {
 
     public GrocyApi getGrocy() {
         return grocyApi;
+    }
+
+    public Menu getBottomMenu() {
+        return bottomAppBar.getMenu();
     }
 
     public Fragment getCurrentFragment() {

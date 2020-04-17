@@ -91,6 +91,22 @@ public class GrocyApi {
         return getUrl("/system/config");
     }
 
+    // USER
+
+    /**
+     * Returns all settings of the currently logged in user
+     */
+    public String getUserSettings() {
+        return getUrl("/user/settings");
+    }
+
+    /**
+     * Sets the given setting of the currently logged in user
+     */
+    public String setUserSetting(String key) {
+        return getUrl("/user/settings/" + key);
+    }
+
     // STOCK
 
     /**
@@ -112,6 +128,14 @@ public class GrocyApi {
      */
     public String getStockLocationsFromProduct(int productId) {
         return getUrl("/stock/products/" + productId + "/locations");
+    }
+
+    /**
+     * Returns all stock entries of the given product in order of next use
+     * (first expiring first, then first in first out)
+     */
+    public String getStockEntriesFromProduct(int productId) {
+        return getUrl("/stock/products/" + productId + "/entries");
     }
 
     /**

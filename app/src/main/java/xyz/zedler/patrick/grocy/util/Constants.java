@@ -8,9 +8,17 @@ public final class Constants {
         public final static String CURRENCY = "currency";
         public final static String GROCY_VERSION = "grocy_version";
 
-        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expiring_soon_days";
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
+
+        public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
+        public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
+        public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
+        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expring_soon_days";
+        public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
+        public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
+        public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
+        public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
 
         public final static String DARK_MODE = "force_dark_mode";
         public final static String ANIM_UI_UPDATE = "animated_ui_update";
@@ -79,7 +87,7 @@ public final class Constants {
         public final static String QUANTITY_UNIT = "quantity_unit";
         public final static String LOCATION = "location";
         public final static String STOCK_LOCATIONS = "stock_locations";
-        public final static String PRODUCT_ENTRIES = "product_entries";
+        public final static String STOCK_ENTRIES = "product_entries";
         public final static String PRODUCT_DETAILS = "product_details";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SELECTED_ID = "selected_id";

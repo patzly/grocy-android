@@ -829,35 +829,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                         ContextCompat.getColor(activity, R.color.secondary)
                                 ).setAction(
                                         activity.getString(R.string.action_undo),
-                                        v -> request.post(
-                                                grocyApi.undoStockTransaction(transId),
-                                                success -> {
-
-                                                    if(stockItem.getAmount() == 0
-                                                            && stockItem.getProduct()
-                                                            .getMinStockAmount() == 0
-                                                    ) {
-                                                        // only insert if it was removed
-                                                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
-                                                            stockItem.changeAmount(amount);
-                                                        } else {
-                                                            stockItem.changeAmount(savedAmountForUndo);
-                                                        }
-                                                        displayedItems.add(index, stockItem);
-                                                        stockItemAdapter.notifyItemInserted(index);
-                                                    } else {
-                                                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
-                                                            stockItem.changeAmount(amount);
-                                                        } else {
-                                                            stockItem.changeAmount(savedAmountForUndo);
-                                                        }
-                                                        stockItemAdapter.notifyItemChanged(index);
-                                                    }
-                                                    if(DEBUG) Log.i(
-                                                            TAG, "consumeProduct: undone"
-                                                    );
-                                                },
-                                                this::showErrorMessage
+                                        v -> undoConsumeTransaction(
+                                                transId,
+                                                stockItem,
+                                                amount,
+                                                savedAmountForUndo,
+                                                index
                                         )
                                 );
                             }
@@ -870,6 +847,51 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     showErrorMessage(error);
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
                 }
+        );
+    }
+
+    private void undoConsumeTransaction(
+            String transactionId,
+            StockItem stockItem,
+            double amount,
+            double savedAmountForUndo,
+            int index
+    ) {
+        request.post(
+                grocyApi.undoStockTransaction(transactionId),
+                success -> {
+                    if(stockItem.getAmount() == 0
+                            && stockItem.getProduct()
+                            .getMinStockAmount() == 0
+                    ) {
+                        // only insert if it was removed
+                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
+                            stockItem.changeAmount(amount);
+                        } else {
+                            stockItem.changeAmount(savedAmountForUndo);
+                        }
+                        displayedItems.add(index, stockItem);
+                        stockItemAdapter.notifyItemInserted(index);
+                    } else {
+                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
+                            stockItem.changeAmount(amount);
+                        } else {
+                            stockItem.changeAmount(savedAmountForUndo);
+                        }
+                        stockItemAdapter.notifyItemChanged(index);
+                    }
+                    activity.showSnackbar(
+                            Snackbar.make(
+                                    activity.findViewById(R.id.linear_container_main),
+                                    "Undone transaction", // TODO: resource
+                                    Snackbar.LENGTH_SHORT
+                            )
+                    );
+                    if(DEBUG) Log.i(
+                            TAG, "consumeProduct: undone"
+                    );
+                },
+                this::showErrorMessage
         );
     }
 
@@ -911,27 +933,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                     ), Snackbar.LENGTH_LONG
                             );
                             if(transactionId != null) {
-                                String transId = transactionId;
+                                final String transId = transactionId;
                                 snackbar.setActionTextColor(
                                         ContextCompat.getColor(activity, R.color.secondary)
                                 ).setAction(
                                         activity.getString(R.string.action_undo),
-                                        v -> request.post(
-                                                grocyApi.undoStockTransaction(transId),
-                                                success -> {
-                                                    stockItem.changeAmountOpened(-1);
-                                                    stockItemAdapter.notifyItemChanged(
-                                                            getProductPosition(productId)
-                                                    );
-                                                    if(DEBUG) Log.i(
-                                                            TAG, "consumeProduct: undone"
-                                                    );
-                                                },
-                                                this::showErrorMessage
-                                        )
+                                        v -> undoOpenTransaction(transId, stockItem)
                                 );
                             }
                             activity.showSnackbar(snackbar);
+                            break;
                         }
                     }
                 },
@@ -939,6 +950,27 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     showErrorMessage(error);
                     if(DEBUG) Log.i(TAG, "openProduct: " + error);
                 }
+        );
+    }
+
+    private void undoOpenTransaction(String transactionId, StockItem stockItem) {
+        request.post(
+                grocyApi.undoStockTransaction(transactionId),
+                success -> {
+                    stockItem.changeAmountOpened(-1);
+                    stockItemAdapter.notifyItemChanged(
+                            getProductPosition(stockItem.getProduct().getId())
+                    );
+                    activity.showSnackbar(
+                            Snackbar.make(
+                                    activity.findViewById(R.id.linear_container_main),
+                                    "Undone transaction", // TODO: resource
+                                    Snackbar.LENGTH_SHORT
+                            )
+                    );
+                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
+                },
+                this::showErrorMessage
         );
     }
 
@@ -1000,7 +1032,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, displayedItems.get(position));
         bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        activity.showBottomSheet(new StockItemDetailsBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
     }
 
     public void setUpSearch() {

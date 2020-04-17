@@ -55,17 +55,16 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         uiMode = getArguments().getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
 
         setOnClickListeners(
-                R.id.linear_drawer_stock,
                 R.id.linear_drawer_consume,
                 R.id.linear_settings,
                 R.id.linear_feedback,
                 R.id.linear_help
         );
 
-        if(uiMode.startsWith(Constants.UI.STOCK)) {
-            select(R.id.linear_drawer_stock, R.id.text_drawer_stock);
-        } else if(uiMode.equals(Constants.UI.CONSUME)) {
-            select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
+        switch (uiMode) {
+            case Constants.UI.CONSUME:
+                select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
+                break;
         }
 
         return view;
@@ -82,11 +81,6 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         lastClick = SystemClock.elapsedRealtime();
 
         switch(v.getId()) {
-            case R.id.linear_drawer_stock:
-                if(!uiMode.startsWith(Constants.UI.STOCK)) {
-                    replaceFragment(Constants.FRAGMENT.STOCK, Constants.UI.STOCK_DEFAULT);
-                }
-                break;
             case R.id.linear_drawer_consume:
                 if(!uiMode.startsWith(Constants.UI.CONSUME)) {
                     replaceFragment(Constants.FRAGMENT.CONSUME, Constants.UI.CONSUME);
