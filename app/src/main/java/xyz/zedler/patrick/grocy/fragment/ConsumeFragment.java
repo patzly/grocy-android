@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialAutoCompleteTextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -81,12 +81,13 @@ public class ConsumeFragment extends Fragment {
     private List<String> productNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private AutoCompleteTextView autoCompleteTextViewProduct;
+    private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
     private LinearLayout linearLayoutBarcodesContainer;
     private TextInputLayout textInputProduct, textInputAmount;
     private EditText editTextAmount;
     private TextView textViewLocation, textViewSpecific;
     private MaterialCheckBox checkBoxSpoiled;
+    private ImageView imageViewAmount;
     private int selectedLocationId;
     private String selectedStockEntryId;
     private double amount, maxAmount, minAmount;
@@ -141,20 +142,13 @@ public class ConsumeFragment extends Fragment {
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
-        autoCompleteTextViewProduct = (AutoCompleteTextView) textInputProduct.getEditText();
+        autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 startAnimatedIcon(R.id.image_consume_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
-            } else {
-                String input = autoCompleteTextViewProduct.getText().toString();
-                if(!productNames.isEmpty() && !productNames.contains(input)) {
-                    activity.showBottomSheet(
-                            new ConsumeBarcodeBottomSheetDialogFragment(), null
-                    );
-                }
             }
         });
         autoCompleteTextViewProduct.setOnItemClickListener((parent, view, position, id) -> {
@@ -181,6 +175,7 @@ public class ConsumeFragment extends Fragment {
         // amount
 
         textInputAmount = activity.findViewById(R.id.text_input_consume_amount);
+        imageViewAmount = activity.findViewById(R.id.image_consume_amount);
         editTextAmount = textInputAmount.getEditText();
         assert editTextAmount != null;
         editTextAmount.addTextChangedListener(new TextWatcher() {
@@ -198,7 +193,7 @@ public class ConsumeFragment extends Fragment {
         });
         editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(R.id.image_consume_amount);
+                startAnimatedIcon(imageViewAmount);
                 // editTextAmount.selectAll();
             }
         });
@@ -324,19 +319,13 @@ public class ConsumeFragment extends Fragment {
             );
         }
 
-        if(productDetails != null) {
+        clearAll();
+
+        /*if(productDetails != null) {
             fillWithProductDetails();
         } else {
-            // clear all fields
-            textInputProduct.setErrorEnabled(false);
-            autoCompleteTextViewProduct.setText(null);
-            textInputAmount.setErrorEnabled(false);
-            editTextAmount.setText(null);
-            textViewLocation.setText(activity.getString(R.string.subtitle_none));
-            textViewSpecific.setText(activity.getString(R.string.subtitle_none));
-            if(checkBoxSpoiled.isChecked()) checkBoxSpoiled.setChecked(false);
-            clearInputFocus();
-        }
+            clearAll();
+        }*/
     }
 
     private void download() {
@@ -388,6 +377,28 @@ public class ConsumeFragment extends Fragment {
 
     private void fillWithProductDetails() {
         clearInputFocus();
+
+        boolean isTareWeightHandlingEnabled = productDetails
+                .getProduct()
+                .getEnableTareWeightHandling() == 1;
+
+        if(productDetails.getStockAmount() == 0) {
+            // check if stock is empty
+            clearAll();
+            activity.showSnackbar(
+                    Snackbar.make(
+                            activity.findViewById(R.id.linear_container_main),
+                            activity.getString(
+                                    R.string.msg_not_in_stock,
+                                    productDetails.getProduct().getName()
+                            ),
+                            Snackbar.LENGTH_LONG
+                    )
+            );
+            productDetails = null;
+            return;
+        }
+
         // PRODUCT
         autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
         textInputProduct.setErrorEnabled(false);
@@ -399,12 +410,27 @@ public class ConsumeFragment extends Fragment {
                 )
         );
         setAmountLimits();
+        // leave amount empty if tare weight handling enabled
         editTextAmount.setText(
-                NumUtil.trim(
-                        sharedPrefs.getFloat(
-                                Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT, 1
-                        )
+                isTareWeightHandlingEnabled
+                        ? null
+                        : NumUtil.trim(
+                                sharedPrefs.getFloat(
+                                        Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+                                        1
+                                )
                 )
+        );
+        // focus amount field if tare weight handling enabled
+        if(isTareWeightHandlingEnabled) {
+            editTextAmount.requestFocus();
+            activity.showKeyboard(editTextAmount);
+        }
+        // set icon for tare weight, else for normal amount
+        imageViewAmount.setImageResource(
+                isTareWeightHandlingEnabled
+                        ? R.drawable.ic_round_scale_anim
+                        : R.drawable.ic_round_scatter_plot
         );
         // LOCATION
         selectDefaultLocation();
@@ -499,16 +525,24 @@ public class ConsumeFragment extends Fragment {
     }
 
     private boolean isFormIncomplete() {
-        if(productDetails != null && isAmountValid()) {
-            return false;
-        } else {
-            if(productDetails == null) {
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
-            }
-            if(!isAmountValid()) {
-                textInputAmount.setError("Invalid amount");
-            }
+        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
+            activity.showBottomSheet(
+                    new ConsumeBarcodeBottomSheetDialogFragment(), null
+            );
             return true;
+        } else {
+            if(productDetails == null || !isAmountValid()) {
+                if(productDetails == null) {
+                    textInputProduct.setError(activity.getString(R.string.error_select_product));
+                }
+                if(!isAmountValid()) {
+                    textInputAmount.setError("Invalid amount");
+                }
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -727,10 +761,12 @@ public class ConsumeFragment extends Fragment {
                 textInputAmount.setErrorEnabled(false);
                 return true;
             } else {
-                textInputAmount.setError(
-                        "Between " + NumUtil.trim(minAmount)
-                                + " and " + NumUtil.trim(maxAmount)
-                );
+                if(productDetails != null) {
+                    textInputAmount.setError(
+                            "Between " + NumUtil.trim(minAmount)
+                                    + " and " + NumUtil.trim(maxAmount)
+                    );
+                }
                 return false;
             }
         } else {
@@ -789,18 +825,41 @@ public class ConsumeFragment extends Fragment {
     public void addInputAsBarcode() {
         String input = autoCompleteTextViewProduct.getText().toString();
         if(input.equals("")) return;
+        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+            if(inputChip.getText().equals(input)) {
+                activity.showSnackbar(
+                        Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                "Barcode already exists", // TODO: resource
+                                Snackbar.LENGTH_SHORT
+                        )
+                );
+                autoCompleteTextViewProduct.setText(null);
+                autoCompleteTextViewProduct.requestFocus();
+                return;
+            }
+        }
         InputChip inputChipBarcode = new InputChip(
                 activity, input, R.drawable.ic_round_barcode_scan, true
         );
         inputChipBarcode.setPadding(0, 0, 0, dp(8));
         linearLayoutBarcodesContainer.addView(inputChipBarcode);
         autoCompleteTextViewProduct.setText(null);
-        textInputProduct.clearFocus();
+        autoCompleteTextViewProduct.requestFocus();
     }
 
-    public void clearProduct() {
+    public void clearAll() {
+        textInputProduct.setErrorEnabled(false);
         autoCompleteTextViewProduct.setText(null);
-        textInputProduct.clearFocus();
+        textInputAmount.setErrorEnabled(false);
+        textInputAmount.setHint(activity.getString(R.string.property_amount));
+        editTextAmount.setText(null);
+        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot);
+        textViewLocation.setText(activity.getString(R.string.subtitle_none));
+        textViewSpecific.setText(activity.getString(R.string.subtitle_none));
+        if(checkBoxSpoiled.isChecked()) checkBoxSpoiled.setChecked(false);
+        clearInputFocus();
     }
 
     private void showErrorMessage(VolleyError error) {
@@ -814,8 +873,12 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void startAnimatedIcon(@IdRes int viewId) {
+        startAnimatedIcon(activity.findViewById(viewId));
+    }
+
+    private void startAnimatedIcon(View view) {
         try {
-            ((Animatable) ((ImageView) activity.findViewById(viewId)).getDrawable()).start();
+            ((Animatable) ((ImageView) view).getDrawable()).start();
         } catch (ClassCastException cla) {
             Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }

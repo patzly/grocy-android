@@ -42,6 +42,7 @@
     <string name="msg_consumed">Consumed %1$s %2$s of %3$s</string>
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+    <string name="msg_not_in_stock">%1$s is not in stock</string>
 
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">A great app requires a lot of time and lives from the feedback of its users.\n\nDo you have any wishes, comments or questions? Contact me!\nOtherwise I would be very happy about a nice review in the Play Store.</string>

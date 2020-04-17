@@ -41,6 +41,8 @@ public class ConsumeBarcodeBottomSheetDialogFragment extends BottomSheetDialogFr
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        setCancelable(false);
+
         view.findViewById(R.id.button_consume_barcode_add).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == ConsumeFragment.class) {
@@ -52,7 +54,7 @@ public class ConsumeBarcodeBottomSheetDialogFragment extends BottomSheetDialogFr
         view.findViewById(R.id.button_consume_barcode_cancel).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == ConsumeFragment.class) {
-                ((ConsumeFragment) current).clearProduct();
+                ((ConsumeFragment) current).clearAll();
             }
             dismiss();
         });

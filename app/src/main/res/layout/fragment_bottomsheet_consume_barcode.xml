@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="viewStart"
-                android:text="The input cannot be linked to a product. Add barcode to existing product?"
+                android:text="The input cannot be linked to a product. Use input as barcode and select an existing product?"
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
