@@ -29,7 +29,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/shape_circle_button"
+                android:src="@drawable/bg_shape_circle_button"
                 app:tint="#50000000"/>
 
             <xyz.zedler.patrick.grocy.view.ActionButton
@@ -56,7 +56,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/shape_circle_button"
+                android:src="@drawable/bg_shape_circle_button"
                 app:tint="#50000000"/>
 
             <xyz.zedler.patrick.grocy.view.ActionButton

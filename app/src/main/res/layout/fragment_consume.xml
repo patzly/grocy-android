@@ -101,14 +101,14 @@
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 
-                            <AutoCompleteTextView
+                            <com.google.android.material.textview.MaterialAutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
                                 android:inputType="text|textCapSentences|textNoSuggestions"
                                 android:imeOptions="actionNext"
                                 android:completionThreshold="1"
-                                android:popupBackground="@drawable/auto_complete_background"/>
+                                android:popupBackground="@drawable/bg_auto_complete"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,6 +159,7 @@
                                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                                 android:hint="Amount"
                                 app:errorIconTint="@color/retro_red"
+                                app:boxStrokeErrorColor="@color/retro_red"
                                 app:helperTextEnabled="true"
                                 app:helperText=" ">
 
@@ -272,6 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="start"
                         android:layout_marginStart="72dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginTop="8dp">
@@ -286,10 +288,9 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/button_consume_open"
                             style="@style/Widget.Grocy.Button.TextButton"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:layout_weight="1"
                             android:text="Mark as opened"/>
 
                     </LinearLayout>

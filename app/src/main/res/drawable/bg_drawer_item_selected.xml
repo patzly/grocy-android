@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:autoMirrored="true">
 
-    <item android:left="4dp" android:right="4dp">
+    <item android:left="4dp" android:bottom="1dp" android:top="1dp">
         <shape android:shape="rectangle">
-            <corners android:radius="32dp"/>
+
+            <corners
+                android:topLeftRadius="32dp"
+                android:bottomLeftRadius="32dp"/>
 
             <solid android:color="@color/secondary_translucent"/>
         </shape>

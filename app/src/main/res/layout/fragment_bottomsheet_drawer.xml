@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="8dp"
+    android:paddingTop="14dp"
     tools:ignore="UseCompoundDrawables">
 
     <androidx.core.widget.NestedScrollView
@@ -33,7 +33,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/linear_drawer_recipes"
                 style="@style/Theme.Grocy.DrawerItem">
 
@@ -47,9 +47,9 @@
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Recipes" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/linear_drawer_meal_plan"
                 style="@style/Theme.Grocy.DrawerItem">
 
@@ -63,7 +63,7 @@
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Meal plan" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
             <View style="@style/Theme.Grocy.Divider" />
 

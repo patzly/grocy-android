@@ -37,7 +37,7 @@
                     android:id="@+id/image_filter_chip_icon_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/filter_chip_icon_background"
+                    android:src="@drawable/bg_chip_icon"
                     tools:ignore="ContentDescription" />
 
                 <ImageView

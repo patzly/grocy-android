@@ -224,95 +224,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         load();
 
-        /*frameLayoutBack.setOnClickListener(v -> activity.onBackPressed());
-
-        if (getArguments() != null) {
-            mode = getArguments().getString("mode");
-            if(mode != null) {
-                switch (mode) {
-                    case MainActivity.UI_SAVED_DEFAULT:
-                        title = getString(R.string.title_saved);
-                        break;
-                    case MainActivity.UI_CHANNELS_DEFAULT:
-                        title = getString(R.string.title_channels);
-                        break;
-                    case MainActivity.UI_CHANNEL_DEFAULT:
-                        title = getArguments().getString("title");
-                        break;
-                }
-            }
-            ((TextView) activity.findViewById(R.id.text_app_bar_title_page_default)).setText(title);
-        }
-
-        // DEFAULT TOOLBAR
-        Menu menuDefault = toolbarDefault.getMenu();
-        if(mode.equals(MainActivity.UI_CHANNELS_DEFAULT)) {
-            // sort mode not useful for CHANNELS
-            menuDefault.findItem(R.id.action_page_default_sort_mode).setVisible(false);
-        } else {
-            if(sharedPrefs.getBoolean(PREF_DEFAULT_DEFAULT_SORT_MODE, true)) {
-                menuDefault.findItem(R.id.action_page_default_sort_mode_descending).setChecked(true);
-            } else {
-                menuDefault.findItem(R.id.action_page_default_sort_mode_ascending).setChecked(true);
-            }
-        }
-        toolbarDefault.setOnMenuItemClickListener((MenuItem item) -> {
-            switch (item.getItemId()) {
-                case R.id.action_page_default_select_all:
-                    setUpSelection();
-                    selectAll();
-                    break;
-                case R.id.action_page_default_sort_mode_descending:
-                    menuDefault.findItem(R.id.action_page_default_sort_mode_descending).setChecked(true);
-                    sharedPrefs.edit().putBoolean(PREF_DEFAULT_DEFAULT_SORT_MODE, true).apply();
-                    break;
-                case R.id.action_page_default_sort_mode_ascending:
-                    menuDefault.findItem(R.id.action_page_default_sort_mode_ascending).setChecked(true);
-                    sharedPrefs.edit().putBoolean(PREF_DEFAULT_DEFAULT_SORT_MODE, false).apply();
-                    break;
-            }
-            return true;
-        });
-
-        // SELECTION TOOLBAR
-        ((Toolbar) activity.findViewById(R.id.toolbar_page_selection)).setOnMenuItemClickListener((MenuItem item) -> {
-            if(item.getItemId() == R.id.action_page_selection_select_all) {
-                activity.startAnimatedIcon(item);
-                selectAll();
-            }
-            return true;
-        });
-
-        // SEARCH TOOLBAR
-        Menu menuSearch = toolbarSearch.getMenu();
-        if(sharedPrefs.getBoolean(PREF_SEARCH_DEFAULT_SORT_MODE, true)) {
-            menuSearch.findItem(R.id.action_page_search_sort_mode_descending).setChecked(true);
-        } else {
-            menuSearch.findItem(R.id.action_page_search_sort_mode_ascending).setChecked(true);
-        }
-        toolbarSearch.setOnMenuItemClickListener((MenuItem item) -> {
-            switch (item.getItemId()) {
-                case R.id.action_page_search_select_all:
-                    activity.startAnimatedIcon(item);
-                    setUpSelection();
-                    break;
-                case R.id.action_page_search_sort_mode_descending:
-                    menuSearch.findItem(R.id.action_page_search_sort_mode_descending).setChecked(true);
-                    sharedPrefs.edit().putBoolean(PREF_SEARCH_DEFAULT_SORT_MODE, true).apply();
-                    break;
-                case R.id.action_page_search_sort_mode_ascending:
-                    menuSearch.findItem(R.id.action_page_search_sort_mode_ascending).setChecked(true);
-                    sharedPrefs.edit().putBoolean(PREF_SEARCH_DEFAULT_SORT_MODE, false).apply();
-                    break;
-            }
-            return true;
-        });*/
-
-
-
-
-        //pageItemTextAdapter.notifyDataSetChanged();
-
         // UPDATE UI
 
         activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
@@ -773,6 +684,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
+        Log.i(TAG, "consumeProduct: " + activity);
         request.post(
                 grocyApi.consumeProduct(productId),
                 body,

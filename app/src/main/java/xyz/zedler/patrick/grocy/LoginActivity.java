@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             textInputLayoutKey.setErrorEnabled(false);
 
             String server = editTextServer.getText().toString();
-            String key = editTextKey.getText().toString();
+            String key = editTextKey.getText().toString().trim();
             if(server.equals("")) {
                 textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {

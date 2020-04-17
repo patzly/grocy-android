@@ -420,7 +420,7 @@
     <!-- SHAPES -->
 
     <style name="Shape.Grocy.BottomSheet" parent="">
-        <item name="android:background">@drawable/shape_bottom_sheet_background</item>
+        <item name="android:background">@drawable/bg_shape_bottom_sheet</item>
     </style>
 
     <!-- TEXT APPEARANCES -->
