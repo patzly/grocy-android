@@ -35,6 +35,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_sort">Sort</string>
     <string name="action_undo">Undo</string>
+    <string name="action_retry">Retry</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
@@ -43,6 +44,10 @@
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
     <string name="msg_not_in_stock">%1$s is not in stock</string>
+    <string name="msg_no_connection">No connection</string>
+    <string name="msg_error">An error occurred</string>
+    <string name="msg_undone_transaction">Undone transaction</string>
+    <string name="msg_barcode_duplicate">Barcode already exists</string>
 
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">A great app requires a lot of time and lives from the feedback of its users.\n\nDo you have any wishes, comments or questions? Contact me!\nOtherwise I would be very happy about a nice review in the Play Store.</string>
@@ -50,6 +55,8 @@
     <string name="error_select_product">Select a product</string>
     <string name="error_empty">Required</string>
     <string name="error_invalid_url">Invalid URL</string>
+    <string name="error_invalid_amount">Invalid amount</string>
+    <string name="error_bounds">Between %1$s and %2$s</string>
 
     <string name="title_product_overview">Product overview</string>
     <string name="title_stock_entries">Stock entries</string>

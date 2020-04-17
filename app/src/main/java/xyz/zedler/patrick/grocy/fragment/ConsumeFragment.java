@@ -8,9 +8,9 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -44,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
@@ -119,9 +120,9 @@ public class ConsumeFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_back_consume).setOnClickListener(v -> {
-            activity.onBackPressed();
-        });
+        activity.findViewById(R.id.frame_back_consume).setOnClickListener(
+                v -> activity.onBackPressed()
+        );
 
         // swipe refresh
 
@@ -151,13 +152,15 @@ public class ConsumeFragment extends Fragment {
                 if(productNames.isEmpty()) downloadProductNames();
             }
         });
-        autoCompleteTextViewProduct.setOnItemClickListener((parent, view, position, id) -> {
-            loadProductDetails(
-                    products.get(
-                            productNames.indexOf(String.valueOf(parent.getItemAtPosition(position)))
-                    ).getId()
-            );
-        });
+        autoCompleteTextViewProduct.setOnItemClickListener(
+                (parent, view, position, id) -> loadProductDetails(
+                        products.get(
+                                productNames.indexOf(
+                                        String.valueOf(parent.getItemAtPosition(position))
+                                )
+                        ).getId()
+                )
+        );
         autoCompleteTextViewProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -308,24 +311,18 @@ public class ConsumeFragment extends Fragment {
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
-                            "No connection", // TODO: XML string
+                            activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
                             ContextCompat.getColor(activity, R.color.secondary)
                     ).setAction(
-                            "Retry", // TODO: XML string
+                            activity.getString(R.string.action_retry),
                             v1 -> refresh()
                     )
             );
         }
 
         clearAll();
-
-        /*if(productDetails != null) {
-            fillWithProductDetails();
-        } else {
-            clearAll();
-        }*/
     }
 
     private void download() {
@@ -353,12 +350,12 @@ public class ConsumeFragment extends Fragment {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "An error occurred", // TODO: XML string
+                                    activity.getString(R.string.msg_error),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
                                     ContextCompat.getColor(activity, R.color.secondary)
                             ).setAction(
-                                    "Retry", // TODO: XML string
+                                    activity.getString(R.string.action_retry),
                                     v1 -> download()
                             )
                     );
@@ -382,9 +379,7 @@ public class ConsumeFragment extends Fragment {
                 .getProduct()
                 .getEnableTareWeightHandling() == 1;
 
-        if(productDetails.getStockAmount() == 0) {
-            // check if stock is empty
-            clearAll();
+        if(productDetails.getStockAmount() == 0) { // check if stock is empty
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
@@ -395,13 +390,14 @@ public class ConsumeFragment extends Fragment {
                             Snackbar.LENGTH_LONG
                     )
             );
-            productDetails = null;
+            clearAll();
             return;
         }
 
         // PRODUCT
         autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
         textInputProduct.setErrorEnabled(false);
+
         // AMOUNT
         textInputAmount.setHint(
                 activity.getString(
@@ -409,7 +405,7 @@ public class ConsumeFragment extends Fragment {
                         productDetails.getQuantityUnitStock().getNamePlural()
                 )
         );
-        setAmountLimits();
+        setAmountBounds();
         // leave amount empty if tare weight handling enabled
         editTextAmount.setText(
                 isTareWeightHandlingEnabled
@@ -432,16 +428,20 @@ public class ConsumeFragment extends Fragment {
                         ? R.drawable.ic_round_scale_anim
                         : R.drawable.ic_round_scatter_plot
         );
+
         // LOCATION
         selectDefaultLocation();
         selectStockEntry(null);
         // load other info for bottomSheet and then for displaying the selected
         loadStockLocations();
         loadStockEntries();
+
         // SPECIFIC
         textViewSpecific.setText(activity.getString(R.string.subtitle_none));
+
         // SPOILED
         checkBoxSpoiled.setChecked(false);
+
         // DETAILS
         refreshProductOverviewIcon();
     }
@@ -514,7 +514,7 @@ public class ConsumeFragment extends Fragment {
                         activity.showSnackbar(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
-                                        "An error occurred", // TODO: XML string
+                                        activity.getString(R.string.msg_error),
                                         Snackbar.LENGTH_SHORT
                                 )
                         );
@@ -536,7 +536,7 @@ public class ConsumeFragment extends Fragment {
                 textInputProduct.setError(activity.getString(R.string.error_select_product));
             }
             if(!isAmountValid()) {
-                textInputAmount.setError("Invalid amount"); // TODO: XML String
+                textInputAmount.setError(activity.getString(R.string.error_invalid_amount));
             }
             return true;
         } else {
@@ -559,6 +559,10 @@ public class ConsumeFragment extends Fragment {
                 grocyApi.consumeProduct(productDetails.getProduct().getId()),
                 body,
                 response -> {
+                    // ADD BARCODES TO PRODUCT
+                    editProductBarcodes();
+
+                    // UNDO OPTION
                     String transactionId = null;
                     try {
                         transactionId = response.getString("transaction_id");
@@ -600,6 +604,9 @@ public class ConsumeFragment extends Fragment {
                         );
                     }
                     activity.showSnackbar(snackbar);
+
+                    // CLEAR USER INPUT
+                    clearAll();
                 },
                 error -> {
                     showErrorMessage(error);
@@ -620,6 +627,10 @@ public class ConsumeFragment extends Fragment {
                 grocyApi.openProduct(productDetails.getProduct().getId()),
                 body,
                 response -> {
+                    // ADD BARCODES TO PRODUCT
+                    editProductBarcodes();
+
+                    // UNDO OPTION
                     String transactionId = null;
                     try {
                         transactionId = response.getString("transaction_id");
@@ -657,6 +668,9 @@ public class ConsumeFragment extends Fragment {
                         );
                     }
                     activity.showSnackbar(snackbar);
+
+                    // CLEAR USER INPUT
+                    clearAll();
                 },
                 error -> {
                     showErrorMessage(error);
@@ -672,13 +686,42 @@ public class ConsumeFragment extends Fragment {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: resource
+                                    activity.getString(R.string.msg_undone_transaction),
                                     Snackbar.LENGTH_SHORT
                             )
                     );
-                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
+                    if(DEBUG) Log.i(TAG, "undoTransaction: undone");
                 },
                 this::showErrorMessage
+        );
+    }
+
+    private void editProductBarcodes() {
+        List<String> barcodes = new ArrayList<>(
+                Arrays.asList(
+                        productDetails.getProduct().getBarcode().split(",")
+                )
+        );
+        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+            if(!barcodes.contains(inputChip.getText())) {
+                barcodes.add(inputChip.getText());
+            }
+        }
+        if(DEBUG) Log.i(TAG, "editProductBarcodes: " + barcodes);
+        JSONObject body = new JSONObject();
+        try {
+            body.put("barcode", TextUtils.join(",", barcodes));
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "editProductBarcodes: " + e);
+        }
+        request.put(
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),
+                body,
+                response -> { },
+                error -> {
+                    if(DEBUG) Log.i(TAG, "editProductBarcodes: " + error);
+                }
         );
     }
 
@@ -723,10 +766,10 @@ public class ConsumeFragment extends Fragment {
                                 : R.string.subtitle_selected
                 )
         );
-        setAmountLimits();
+        setAmountBounds();
     }
 
-    private void setAmountLimits() {
+    private void setAmountBounds() {
         if(selectedStockEntryId == null) {
             // called from fillWithProductDetails
             maxAmount = productDetails.getStockAmount();
@@ -761,9 +804,12 @@ public class ConsumeFragment extends Fragment {
                 return true;
             } else {
                 if(productDetails != null) {
-                    textInputAmount.setError( // TODO: XML string
-                            "Between " + NumUtil.trim(minAmount)
-                                    + " and " + NumUtil.trim(maxAmount)
+                    textInputAmount.setError(
+                            activity.getString(
+                                    R.string.error_bounds,
+                                    NumUtil.trim(minAmount),
+                                    NumUtil.trim(maxAmount)
+                            )
                     );
                 }
                 return false;
@@ -792,7 +838,6 @@ public class ConsumeFragment extends Fragment {
 
     public void refreshProductOverviewIcon() {
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        Log.i(TAG, "refreshProductOverviewIcon: " + menuItem);
         if(menuItem != null) {
             menuItem.setEnabled(productDetails != null);
 
@@ -822,7 +867,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void addInputAsBarcode() {
-        String input = autoCompleteTextViewProduct.getText().toString();
+        String input = autoCompleteTextViewProduct.getText().toString().trim();
         if(input.equals("")) return;
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
@@ -830,7 +875,7 @@ public class ConsumeFragment extends Fragment {
                 activity.showSnackbar(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
-                                "Barcode already exists", // TODO: XML string
+                                activity.getString(R.string.msg_barcode_duplicate),
                                 Snackbar.LENGTH_SHORT
                         )
                 );
@@ -842,7 +887,7 @@ public class ConsumeFragment extends Fragment {
         InputChip inputChipBarcode = new InputChip(
                 activity, input, R.drawable.ic_round_barcode_scan, true
         );
-        inputChipBarcode.setPadding(0, 0, 0, dp(8));
+        inputChipBarcode.setPadding(0, 0, 0, 8);
         linearLayoutBarcodesContainer.addView(inputChipBarcode);
         autoCompleteTextViewProduct.setText(null);
         autoCompleteTextViewProduct.requestFocus();
@@ -859,13 +904,17 @@ public class ConsumeFragment extends Fragment {
         textViewSpecific.setText(activity.getString(R.string.subtitle_none));
         if(checkBoxSpoiled.isChecked()) checkBoxSpoiled.setChecked(false);
         clearInputFocus();
+        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
+            ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
+        }
+        productDetails = null;
     }
 
     private void showErrorMessage(VolleyError error) {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        "An error occurred", // TODO: XML string
+                        activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
         );
@@ -881,13 +930,5 @@ public class ConsumeFragment extends Fragment {
         } catch (ClassCastException cla) {
             Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
-    }
-
-    private int dp(float dp){
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                getResources().getDisplayMetrics()
-        );
     }
 }

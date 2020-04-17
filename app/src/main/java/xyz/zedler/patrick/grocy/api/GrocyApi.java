@@ -71,8 +71,11 @@ public class GrocyApi {
         return getUrl("/objects/" + entity);
     }
 
-    public String addObject(String entity) {
-        return getUrl("/objects/" + entity);
+    /**
+     * Returns a single object of the given entity
+     */
+    public String getObject(String entity, int id) {
+        return getUrl("/objects/" + entity + "/" + id);
     }
 
     // SYSTEM
