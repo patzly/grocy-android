@@ -308,12 +308,12 @@ public class ConsumeFragment extends Fragment {
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
-                            "No connection",
+                            "No connection", // TODO: XML string
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
                             ContextCompat.getColor(activity, R.color.secondary)
                     ).setAction(
-                            "Retry",
+                            "Retry", // TODO: XML string
                             v1 -> refresh()
                     )
             );
@@ -353,12 +353,12 @@ public class ConsumeFragment extends Fragment {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "An error occurred",
+                                    "An error occurred", // TODO: XML string
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
                                     ContextCompat.getColor(activity, R.color.secondary)
                             ).setAction(
-                                    "Retry",
+                                    "Retry", // TODO: XML string
                                     v1 -> download()
                             )
                     );
@@ -514,7 +514,7 @@ public class ConsumeFragment extends Fragment {
                         activity.showSnackbar(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
-                                        "An error occurred",
+                                        "An error occurred", // TODO: XML string
                                         Snackbar.LENGTH_SHORT
                                 )
                         );
@@ -761,7 +761,7 @@ public class ConsumeFragment extends Fragment {
                 return true;
             } else {
                 if(productDetails != null) {
-                    textInputAmount.setError(
+                    textInputAmount.setError( // TODO: XML string
                             "Between " + NumUtil.trim(minAmount)
                                     + " and " + NumUtil.trim(maxAmount)
                     );
@@ -830,7 +830,7 @@ public class ConsumeFragment extends Fragment {
                 activity.showSnackbar(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
-                                "Barcode already exists", // TODO: resource
+                                "Barcode already exists", // TODO: XML string
                                 Snackbar.LENGTH_SHORT
                         )
                 );
@@ -865,7 +865,7 @@ public class ConsumeFragment extends Fragment {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        "An error occurred", // TODO: resource
+                        "An error occurred", // TODO: XML string
                         Snackbar.LENGTH_SHORT
                 )
         );
