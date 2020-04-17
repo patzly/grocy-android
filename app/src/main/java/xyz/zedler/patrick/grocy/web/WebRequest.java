@@ -102,9 +102,23 @@ public class WebRequest {
         );
     }
 
-    public void put(String url, String json) {
-
+    public void put(
+            String url,
+            JSONObject json,
+            OnJsonResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        requestQueue.add(
+                new CustomJsonObjectRequest(
+                        Request.Method.PUT,
+                        url,
+                        json,
+                        onResponse::onResponse,
+                        onError::onError
+                )
+        );
     }
+
     public void delete(String url, Runnable onQueued) {
 
     }
