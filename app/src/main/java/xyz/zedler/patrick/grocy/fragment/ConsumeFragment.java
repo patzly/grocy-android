@@ -566,30 +566,37 @@ public class ConsumeFragment extends Fragment {
                         if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: consumed " + amount);
+
+                    double amountConsumed;
+                    if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
+                        amountConsumed = amount;
+                    } else {
+                        // calculate difference of amount if tare weight handling enabled
+                        amountConsumed = productDetails.getStockAmount() - amount
+                                + productDetails.getProduct().getTareWeight();
+                    }
+
                     Snackbar snackbar = Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(
                                     isSpoiled
                                             ? R.string.msg_consumed_spoiled
                                             : R.string.msg_consumed,
-                                    NumUtil.trim(
-                                            productDetails.getProduct()
-                                                    .getEnableTareWeightHandling() == 0
-                                                    ? amount
-                                                    : amount // TODO: tare weight calc
-                                    ), amount == 1
+                                    NumUtil.trim(amountConsumed),
+                                    amount == 1
                                             ? productDetails.getQuantityUnitStock().getName()
                                             : productDetails.getQuantityUnitStock().getNamePlural(),
                                     productDetails.getProduct().getName()
                             ), Snackbar.LENGTH_LONG
                     );
+
                     if(transactionId != null) {
                         String transId = transactionId;
                         snackbar.setActionTextColor(
                                 ContextCompat.getColor(activity, R.color.secondary)
                         ).setAction(
                                 activity.getString(R.string.action_undo),
-                                v -> undoConsumeTransaction(transId)
+                                v -> undoTransaction(transId)
                         );
                     }
                     activity.showSnackbar(snackbar);
@@ -598,23 +605,6 @@ public class ConsumeFragment extends Fragment {
                     showErrorMessage(error);
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
                 }
-        );
-    }
-
-    private void undoConsumeTransaction(String transactionId) {
-        request.post(
-                grocyApi.undoStockTransaction(transactionId),
-                success -> {
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: resource
-                                    Snackbar.LENGTH_SHORT
-                            )
-                    );
-                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
-                },
-                this::showErrorMessage
         );
     }
 
@@ -637,22 +627,33 @@ public class ConsumeFragment extends Fragment {
                         if(DEBUG) Log.e(TAG, "openProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "openProduct: opened " + amount);
+
+                    double amountConsumed;
+                    if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
+                        amountConsumed = amount;
+                    } else {
+                        // calculate difference of amount if tare weight handling enabled
+                        amountConsumed = productDetails.getStockAmount() - amount
+                                + productDetails.getProduct().getTareWeight();
+                    }
+
                     Snackbar snackbar = Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(
                                     R.string.msg_opened,
-                                    NumUtil.trim(amount), // TODO: handle tare weight
+                                    NumUtil.trim(amountConsumed),
                                     productDetails.getQuantityUnitStock().getName(),
                                     productDetails.getProduct().getName()
                             ), Snackbar.LENGTH_LONG
                     );
+
                     if(transactionId != null) {
                         final String transId = transactionId;
                         snackbar.setActionTextColor(
                                 ContextCompat.getColor(activity, R.color.secondary)
                         ).setAction(
                                 activity.getString(R.string.action_undo),
-                                v -> undoOpenTransaction(transId)
+                                v -> undoTransaction(transId)
                         );
                     }
                     activity.showSnackbar(snackbar);
@@ -664,7 +665,7 @@ public class ConsumeFragment extends Fragment {
         );
     }
 
-    private void undoOpenTransaction(String transactionId) {
+    private void undoTransaction(String transactionId) {
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
