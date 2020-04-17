@@ -22,6 +22,7 @@ import android.widget.EditText;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     Constants.REQUEST.LOGIN
             );
         } else {
-            setUp();
+            setUp(savedInstanceState);
         }
     }
 
@@ -237,17 +238,33 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
-            setUp();
+            setUp(null);
         }
     }
 
-    private void setUp() {
-        // STOCK FRAGMENT
-        fragmentCurrent = new StockFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.linear_container_main, fragmentCurrent)
-                .commit();
-        bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
+    private void setUp(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
+            if(tag != null) {
+                fragmentCurrent = fragmentManager.getFragment(savedInstanceState, tag);
+            }
+        } else {
+            // STOCK FRAGMENT
+            fragmentCurrent = new StockFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.linear_container_main, fragmentCurrent)
+                    .commit();
+            bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        String tag = fragmentCurrent.toString();
+        fragmentManager.putFragment(outState, tag, fragmentCurrent);
+        outState.putString(Constants.ARGUMENT.CURRENT_FRAGMENT, tag);
     }
 
     public void updateUI(String uiMode, String origin) {
