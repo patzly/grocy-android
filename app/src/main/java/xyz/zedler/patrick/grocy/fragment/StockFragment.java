@@ -251,12 +251,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
-                            "No connection",
+                            "No connection", // TODO: XML string
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
                             ContextCompat.getColor(activity, R.color.secondary)
                     ).setAction(
-                            "Retry",
+                            "Retry", // TODO: XML string
                             v1 -> refresh()
                     )
             );
@@ -795,7 +795,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: resource
+                                    "Undone transaction", // TODO: XML string
                                     Snackbar.LENGTH_SHORT
                             )
                     );
@@ -842,7 +842,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                                     ? quantityUnit.getName()
                                                     : "",
                                             stockItem.getProduct().getName()
-                                    ), Snackbar.LENGTH_LONG
+                                    ),
+                                    Snackbar.LENGTH_LONG
                             );
                             if(transactionId != null) {
                                 final String transId = transactionId;
@@ -876,7 +877,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: resource
+                                    "Undone transaction", // TODO: XML string
                                     Snackbar.LENGTH_SHORT
                             )
                     );
@@ -928,7 +929,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        "An error occurred", // TODO: resource
+                        "An error occurred", // TODO: XML string
                         Snackbar.LENGTH_SHORT
                 )
         );
