@@ -29,7 +29,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -101,7 +100,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private LinearLayout linearLayoutFilterContainer, linearLayoutError;
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
     private NestedScrollView scrollView;
-    private MaterialButton buttonRetry;
 
     @Override
     public View onCreateView(

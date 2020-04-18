@@ -886,7 +886,7 @@ public class ConsumeFragment extends Fragment {
             }
         }
         InputChip inputChipBarcode = new InputChip(
-                activity, input, R.drawable.ic_round_barcode_scan, true
+                activity, input, R.drawable.ic_round_barcode, true
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
         linearLayoutBarcodesContainer.addView(inputChipBarcode);
