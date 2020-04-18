@@ -56,6 +56,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
         setOnClickListeners(
                 R.id.linear_drawer_consume,
+                R.id.linear_drawer_master_data,
                 R.id.linear_settings,
                 R.id.linear_feedback,
                 R.id.linear_help
@@ -85,6 +86,10 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 if(!uiMode.startsWith(Constants.UI.CONSUME)) {
                     replaceFragment(Constants.FRAGMENT.CONSUME, Constants.UI.CONSUME);
                 }
+                break;
+            case R.id.linear_drawer_master_data:
+                dismiss();
+                activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), null);
                 break;
             case R.id.linear_settings:
                 startAnimatedIcon(R.id.image_settings);

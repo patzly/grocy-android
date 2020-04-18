@@ -15,7 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
 
             <LinearLayout
                 android:id="@+id/linear_drawer_shopping_list"
@@ -102,6 +103,24 @@
             <View style="@style/Theme.Grocy.Divider" />
 
             <LinearLayout
+                android:id="@+id/linear_drawer_master_data"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_view_list" />
+
+                <TextView
+                    android:id="@+id/text_drawer_master_data"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="Master data" />
+
+            </LinearLayout>
+
+            <View style="@style/Theme.Grocy.Divider" />
+
+            <LinearLayout
                 android:id="@+id/linear_settings"
                 style="@style/Theme.Grocy.DrawerItem">
 
@@ -136,7 +155,7 @@
             <LinearLayout
                 android:id="@+id/linear_help"
                 style="@style/Theme.Grocy.DrawerItem"
-                android:layout_marginBottom="8dp">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/image_help"
