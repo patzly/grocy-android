@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:padding="16dp"
+        android:text="@string/title_feedback"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="12dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="viewStart"
+                android:text="@string/msg_feedback"
+                android:textSize="15sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+
+            <LinearLayout
+                android:id="@+id/linear_rate"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
+                android:background="@drawable/bg_list_item_surface">
+
+                <ImageView
+                    android:id="@+id/image_feedback_rate"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_star_anim"
+                    app:tint="@color/retro_yellow"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/action_rate" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/action_rate_description" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                    android:id="@+id/image_feedback_box"
+                    style="@style/Theme.Grocy.ListItem.Icon.Top"
+                    android:layout_marginTop="20sp"
+                    android:src="@drawable/ic_round_insert_comment_anim"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_feedback"
+                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxBackgroundColor="@color/on_surface_secondary"
+                    android:hint="@string/hint_message"
+                    app:helperTextEnabled="true"
+                    app:helperText=" ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textLongMessage|textAutoCorrect|textMultiLine|text|textCapSentences|textAutoComplete"
+                        android:textColor="@color/on_background" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine"
+                android:minHeight="0dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                    android:id="@+id/image_feedback_send"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_send_anim"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_feedback_send"
+                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="@string/action_send" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
