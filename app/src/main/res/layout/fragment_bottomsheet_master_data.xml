@@ -37,89 +37,85 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            tools:ignore="UseCompoundDrawables">
 
             <LinearLayout
                 android:id="@+id/linear_master_data_products"
-                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                android:background="@drawable/bg_list_item_surface"
-                tools:ignore="UseCompoundDrawables">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_widgets"
-                    tools:ignore="ContentDescription" />
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_widgets" />
 
                 <TextView
-                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:id="@+id/text_master_data_products"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Products" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_master_data_locations"
-                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                android:background="@drawable/bg_list_item_surface"
-                tools:ignore="UseCompoundDrawables">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_location_on"
-                    tools:ignore="ContentDescription" />
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_location_on" />
 
                 <TextView
-                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:id="@+id/text_master_data_locations"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Locations" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_master_data_stores"
-                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                android:background="@drawable/bg_list_item_surface"
-                tools:ignore="UseCompoundDrawables">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_store"
-                    tools:ignore="ContentDescription" />
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_store" />
 
                 <TextView
-                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:id="@+id/text_master_data_stores"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Stores" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_master_data_quantity_units"
-                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                android:background="@drawable/bg_list_item_surface"
-                tools:ignore="UseCompoundDrawables">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_scale_anim"
-                    tools:ignore="ContentDescription" />
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_scale_anim" />
 
                 <TextView
-                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:id="@+id/text_master_data_quantity_units"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Quantity units" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_master_data_product_groups"
-                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                android:background="@drawable/bg_list_item_surface"
-                tools:ignore="UseCompoundDrawables">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_category"
-                    tools:ignore="ContentDescription" />
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_category" />
 
                 <TextView
-                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:id="@+id/text_master_data_product_groups"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Product groups" />
 
             </LinearLayout>
