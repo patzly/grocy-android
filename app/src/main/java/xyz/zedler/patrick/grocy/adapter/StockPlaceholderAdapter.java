@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import xyz.zedler.patrick.grocy.R;
 
-public class StockPlaceholderAdapter extends RecyclerView.Adapter<StockPlaceholderAdapter.ViewHolder> {
-
-    private final static String TAG = StockPlaceholderAdapter.class.getSimpleName();
+public class StockPlaceholderAdapter
+        extends RecyclerView.Adapter<StockPlaceholderAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

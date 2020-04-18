@@ -314,6 +314,26 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
                 break;
+            case Constants.UI.MASTER_PRODUCTS_DEFAULT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_products);
+                updateBottomAppBar(
+                        Constants.FAB_POSITION.CENTER, R.menu.menu_stock, animated, () -> {
+                            /*setProductGroupFilters(productGroups);
+                            updateSorting();*/
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_add_anim,
+                        R.string.action_add,
+                        "Add",
+                        animated,
+                        () -> {
+                            /*if(fragmentCurrent.getClass() == StockFragment.class) {
+                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
+                            }*/
+                        }
+                );
+                break;
 
                 /*String fabPosition;
                 if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
@@ -473,7 +493,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
                 break;
             case Constants.UI.STOCK_SEARCH:
-                ((StockFragment) fragmentCurrent).dismissSearch();
+                if(fragmentCurrent.getClass() == StockFragment.class) {
+                    ((StockFragment) fragmentCurrent).dismissSearch();
+                }
                 break;
             case Constants.UI.CONSUME:
                 dismissFragments();
@@ -514,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
                         (animated) ? R.anim.fade_out : R.anim.slide_no,
                         R.anim.fade_in,
                         R.anim.slide_out_down)
-                .replace(R.id.linear_container_main, fragmentCurrent)
+                .replace(R.id.linear_container_main, fragmentCurrent, fragmentCurrent.toString())
                 .addToBackStack(newFragment)
                 .commit();
         //bottomAppBar.show(fab.isOrWillBeShown());
@@ -527,8 +549,9 @@ public class MainActivity extends AppCompatActivity {
             for(int i = 0; i < fragmentManager.getBackStackEntryCount() ; i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentCurrent = new StockFragment();
-            Log.i(TAG, "dismissFragments: dismissed all fragments except feed");
+            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.FRAGMENT.STOCK);
+
+            Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
             Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + fragmentManager.getBackStackEntryCount());
         }

@@ -46,6 +46,8 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="Consume"
+                android:textAlignment="viewStart"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 

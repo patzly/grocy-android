@@ -63,7 +63,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = StockFragment.class.getSimpleName();
+    private final static String TAG = Constants.FRAGMENT.STOCK;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -139,8 +139,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         linearLayoutError = activity.findViewById(R.id.linear_stock_error);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         scrollView = activity.findViewById(R.id.scroll_stock);
-        buttonRetry = activity.findViewById(R.id.button_stock_error_retry);
-        buttonRetry.setOnClickListener(v -> refresh());
+        // retry button on offline error page
+        activity.findViewById(R.id.button_stock_error_retry).setOnClickListener(v -> refresh());
         recyclerView = activity.findViewById(R.id.recycler_stock);
         textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
         editTextSearch = textInputLayoutSearch.getEditText();
@@ -267,6 +267,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setError(boolean isError, boolean animated) {
+        // TODO: different errors
         if(animated) {
             View viewOut = isError ? scrollView : linearLayoutError;
             View viewIn = isError ? linearLayoutError : scrollView;
@@ -1040,5 +1041,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterItems(itemsToDisplay); // TODO: buggy animation
 
         activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return TAG;
     }
 }

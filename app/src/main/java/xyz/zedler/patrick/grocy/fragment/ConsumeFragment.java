@@ -932,4 +932,10 @@ public class ConsumeFragment extends Fragment {
             Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return TAG;
+    }
 }

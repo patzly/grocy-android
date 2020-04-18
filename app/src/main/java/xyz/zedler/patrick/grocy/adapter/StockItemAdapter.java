@@ -184,14 +184,6 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         return stockItems != null ? stockItems.size() : 0;
     }
 
-    /*public void refreshProducts(List<Product> products) {
-        this.products = products;
-    }*/
-
-    public void removeData(int position) {
-        stockItems.remove(position);
-    }
-
     public interface StockItemAdapterListener {
         void onItemRowClicked(int position);
     }
