@@ -426,7 +426,7 @@ public class ConsumeFragment extends Fragment {
         imageViewAmount.setImageResource(
                 isTareWeightHandlingEnabled
                         ? R.drawable.ic_round_scale_anim
-                        : R.drawable.ic_round_scatter_plot
+                        : R.drawable.ic_round_scatter_plot_anim
         );
 
         // LOCATION
@@ -899,7 +899,7 @@ public class ConsumeFragment extends Fragment {
         textInputAmount.setErrorEnabled(false);
         textInputAmount.setHint(activity.getString(R.string.property_amount));
         editTextAmount.setText(null);
-        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot);
+        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
         textViewLocation.setText(activity.getString(R.string.subtitle_none));
         textViewSpecific.setText(activity.getString(R.string.subtitle_none));
         if(checkBoxSpoiled.isChecked()) checkBoxSpoiled.setChecked(false);
