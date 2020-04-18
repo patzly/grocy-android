@@ -54,7 +54,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        uiMode = getArguments().getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
+        uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
 
         setOnClickListeners(
                 R.id.linear_drawer_consume,
@@ -80,7 +80,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     }
 
     public void onClick(View v) {
-        if(SystemClock.elapsedRealtime() - lastClick < 5000) return;
+        if(SystemClock.elapsedRealtime() - lastClick < 2000) return;
         lastClick = SystemClock.elapsedRealtime();
 
         switch(v.getId()) {
@@ -91,7 +91,9 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 break;
             case R.id.linear_drawer_master_data:
                 dismiss();
-                activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), null);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
+                activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), bundle);
                 break;
             case R.id.linear_settings:
                 startAnimatedIcon(R.id.image_settings);
@@ -111,9 +113,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     }
 
     private void replaceFragment(String fragmentNew, String uiModeNew) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.UI_MODE, uiModeNew);
-        activity.replaceFragment(fragmentNew, bundle, true);
+        activity.replaceFragment(fragmentNew, null, true);
         dismiss();
     }
 

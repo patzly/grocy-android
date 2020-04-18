@@ -34,7 +34,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/linear_drawer_recipes"
                 style="@style/Theme.Grocy.DrawerItem">
 
@@ -48,7 +48,7 @@
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Recipes" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
             <!--<LinearLayout
                 android:id="@+id/linear_drawer_meal_plan"

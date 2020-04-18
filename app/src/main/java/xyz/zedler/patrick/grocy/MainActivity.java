@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -252,8 +253,11 @@ public class MainActivity extends AppCompatActivity {
             // STOCK FRAGMENT
             fragmentCurrent = new StockFragment();
             fragmentManager.beginTransaction()
-                    .replace(R.id.linear_container_main, fragmentCurrent)
-                    .commit();
+                    .replace(
+                            R.id.linear_container_main,
+                            fragmentCurrent,
+                            Constants.FRAGMENT.STOCK
+                    ).commit();
             bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
         }
     }
@@ -474,6 +478,14 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.CONSUME:
                 dismissFragments();
                 break;
+            case Constants.UI.MASTER_PRODUCTS_DEFAULT:
+                dismissFragments();
+                break;
+            case Constants.UI.MASTER_PRODUCTS_SEARCH:
+                if(fragmentCurrent.getClass() == MasterProductsFragment.class) {
+                    ((MasterProductsFragment) fragmentCurrent).dismissSearch();
+                }
+                break;
             default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
     }
@@ -485,6 +497,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.FRAGMENT.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
+                break;
+            case Constants.FRAGMENT.MASTER_PRODUCTS:
+                fragmentCurrent = new MasterProductsFragment();
                 break;
             default:
                 Log.e(TAG, "replaceFragment: invalid argument");

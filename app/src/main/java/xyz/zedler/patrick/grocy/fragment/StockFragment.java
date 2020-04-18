@@ -241,7 +241,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(activity.isOnline()) {
             download();
         } else {
-            // TODO: offline on startup
             setError(true, false);
         }
     }

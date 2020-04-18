@@ -47,11 +47,15 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String CONSUME = "consume";
+        public final static String MASTER_PRODUCTS = "products";
+        public final static String MASTER_PRODUCTS_DEFAULT = "products_default";
+        public final static String MASTER_PRODUCTS_SEARCH = "products_search";
     }
 
     public final static class FRAGMENT {
         public final static String STOCK = "stock";
         public final static String CONSUME = "consume";
+        public final static String MASTER_PRODUCTS = "master_products";
     }
 
     public final static class STOCK {

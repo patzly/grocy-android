@@ -3,6 +3,7 @@ package xyz.zedler.patrick.grocy.util;
 import java.util.Collections;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 
@@ -34,6 +35,16 @@ public class SortUtil {
                     }
                     return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
                 }
+        );
+    }
+
+    public static void sortProductsByName(List<Product> products, boolean ascending) {
+        if(products == null) return;
+        Collections.sort(
+                products,
+                (item1, item2) -> (ascending ? item1 : item2).getName().compareTo(
+                        (ascending ? item2 : item1).getName()
+                )
         );
     }
 
