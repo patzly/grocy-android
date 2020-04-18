@@ -91,6 +91,7 @@ public final class Constants {
         public final static String STOCK_ENTRIES = "product_entries";
         public final static String PRODUCT_DETAILS = "product_details";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
+        public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
         public final static String CURRENT_FRAGMENT = "current_fragment";
     }

@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,6 +43,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -644,6 +648,38 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }).start();
     }
 
+    private void loadProductDetailsByBarcode(String barcode) {
+        swipeRefreshLayout.setRefreshing(true);
+        request.get(
+                grocyApi.getStockProductByBarcode(barcode),
+                response -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    ProductDetails productDetails = gson.fromJson(
+                            response,
+                            new TypeToken<ProductDetails>(){}.getType()
+                    );
+                    showProductOverview(productDetails);
+                }, error -> {
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.statusCode == 400) {
+                        //autoCompleteTextViewProduct.setText(barcode);
+                        activity.showBottomSheet(
+                                new ConsumeBarcodeBottomSheetDialogFragment(), null
+                        );
+                    } else {
+                        activity.showSnackbar(
+                                Snackbar.make(
+                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.getString(R.string.msg_error),
+                                        Snackbar.LENGTH_SHORT
+                                )
+                        );
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+        );
+    }
+
     /**
      * Called from product details BottomSheet when button was pressed
      * @param action Constants.ACTION
@@ -935,17 +971,52 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    // STOCK ITEM CLICK
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {
+            if(data != null) {
+                loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
+            }
+        }
+    }
+
     @Override
     public void onItemRowClicked(int position) {
-        StockItem stockItem = displayedItems.get(position);
-        QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
-        Location location = getLocation(stockItem.getProduct().getLocationId());
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, displayedItems.get(position));
-        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
+        // STOCK ITEM CLICK
+        showProductOverview(displayedItems.get(position));
+    }
+
+    private void showProductOverview(StockItem stockItem) {
+        if(stockItem != null) {
+            QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
+            Location location = getLocation(stockItem.getProduct().getLocationId());
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
+            bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, stockItem);
+            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
+            bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
+            activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
+        }
+    }
+
+    private void showProductOverview(ProductDetails productDetails) {
+        if(productDetails != null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+            bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
+            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
+            activity.showBottomSheet(
+                    new ProductOverviewBottomSheetDialogFragment(),
+                    bundle
+            );
+        }
+    }
+
+    public void openBarcodeScanner() {
+        startActivityForResult(
+                new Intent(activity, ScanInputActivity.class),
+                Constants.REQUEST.SCAN
+        );
     }
 
     public void setUpSearch() {

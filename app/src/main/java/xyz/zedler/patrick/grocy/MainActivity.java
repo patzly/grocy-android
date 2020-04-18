@@ -284,18 +284,15 @@ public class MainActivity extends AppCompatActivity {
                             updateSorting();
                         }
                 );
-
                 updateFab(
                         R.drawable.ic_round_barcode_scan,
                         R.string.action_back,
                         "Scan",
                         animated,
                         () -> {
-                            startActivity(new Intent(this, ScanActivity.class));
-                            /*showBottomSheet(new ChannelAddBottomSheetDialogFragment());
-                            setUnreadCount(
-                                    sharedPrefs.getInt(PREF_UNREAD_COUNT, 0) + 1
-                            );*/
+                            if(fragmentCurrent.getClass() == StockFragment.class) {
+                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
+                            }
                         }
                 );
                 break;

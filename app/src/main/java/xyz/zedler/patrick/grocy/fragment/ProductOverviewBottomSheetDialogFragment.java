@@ -55,7 +55,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	private QuantityUnit quantityUnit;
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
-	private boolean setUpWithProductDetails = false;
+	private boolean setUpWithProductDetails = false, showActions = false;
 	private StockItemDetailsItem
 			itemAmount,
 			itemLocation,
@@ -97,6 +97,10 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		if(bundle != null) {
 			setUpWithProductDetails = bundle.getBoolean(
 					Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS,
+					false
+			);
+			showActions = bundle.getBoolean(
+					Constants.ARGUMENT.SHOW_ACTIONS,
 					false
 			);
 
@@ -184,7 +188,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		// ACTIONS
 
-		if(setUpWithProductDetails) {
+		if(!showActions) {
 			// hide actions when set up from CONSUME with productDetails
 			view.findViewById(
 					R.id.linear_stock_item_details_action_container
