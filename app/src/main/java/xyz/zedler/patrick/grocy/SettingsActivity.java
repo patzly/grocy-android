@@ -46,11 +46,6 @@ public class SettingsActivity extends AppCompatActivity
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		AppCompatDelegate.setDefaultNightMode(
-				sharedPrefs.getBoolean(Constants.PREF.DARK_MODE,false)
-						? AppCompatDelegate.MODE_NIGHT_YES
-						: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-		);
 		setContentView(R.layout.activity_settings);
 
 		findViewById(R.id.frame_back_settings).setOnClickListener(v -> {

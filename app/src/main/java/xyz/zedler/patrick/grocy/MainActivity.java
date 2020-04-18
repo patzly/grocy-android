@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         // DARK MODE
 
         AppCompatDelegate.setDefaultNightMode(
-                sharedPrefs.getBoolean("night_mode", false)
+                sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false)
                         ? AppCompatDelegate.MODE_NIGHT_YES
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
