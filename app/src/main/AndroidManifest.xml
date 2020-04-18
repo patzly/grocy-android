@@ -35,6 +35,8 @@
 
         <activity android:name=".LoginActivity"/>
 
+        <activity android:name=".SettingsActivity"/>
+
         <activity
             android:name=".ScanActivity"
             android:screenOrientation="portrait"

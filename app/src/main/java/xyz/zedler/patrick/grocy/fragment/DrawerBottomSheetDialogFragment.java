@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.SettingsActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -93,7 +95,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 break;
             case R.id.linear_settings:
                 startAnimatedIcon(R.id.image_settings);
-                //startActivity(new Intent(activity, SettingsActivity.class));
+                startActivity(new Intent(activity, SettingsActivity.class));
                 new Handler().postDelayed(this::dismiss, 500);
                 break;
             case R.id.linear_feedback:
