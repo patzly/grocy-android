@@ -252,12 +252,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
-                            "No connection", // TODO: XML string
+                            activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
                             ContextCompat.getColor(activity, R.color.secondary)
                     ).setAction(
-                            "Retry", // TODO: XML string
+                            activity.getString(R.string.action_retry),
                             v1 -> refresh()
                     )
             );
@@ -829,7 +829,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: XML string
+                                    activity.getString(R.string.msg_undone_transaction),
                                     Snackbar.LENGTH_SHORT
                             )
                     );
@@ -911,7 +911,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
-                                    "Undone transaction", // TODO: XML string
+                                    activity.getString(R.string.msg_undone_transaction),
                                     Snackbar.LENGTH_SHORT
                             )
                     );
@@ -963,7 +963,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        "An error occurred", // TODO: XML string
+                        activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
         );
