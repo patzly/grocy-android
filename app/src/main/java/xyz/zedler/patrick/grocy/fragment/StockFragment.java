@@ -682,7 +682,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
      * Called from product details BottomSheet when button was pressed
      * @param action Constants.ACTION
      */
-    public void performAction(String action, int productId) {
+    void performAction(String action, int productId) {
         switch (action) {
             case Constants.ACTION.CONSUME:
                 consumeProduct(productId, 1, false);
