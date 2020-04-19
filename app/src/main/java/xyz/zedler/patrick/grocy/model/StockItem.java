@@ -121,21 +121,6 @@ public class StockItem implements Parcelable {
         return amountOpened;
     }
 
-    public void changeAmount(double difference) {
-        if(difference > 0 || amount > 0) {
-            amount = amount + difference;
-            if(difference == -1 && amountOpened > 0) {
-                amountOpened--;
-            }
-        }
-    }
-
-    public void changeAmountOpened(int difference) {
-        if(amount > 0 && amountOpened + difference <= amount) {
-            amountOpened = amountOpened + difference;
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;

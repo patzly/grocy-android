@@ -446,16 +446,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 "downloadMissingProductDetails: "
                                         + "name = " + productDetails.getProduct().getName()
                         );
-                        StockItem stockItem = new StockItem(
-                                productDetails.getStockAmount(),
-                                productDetails.getStockAmountAggregated(),
-                                productDetails.getNextBestBeforeDate(),
-                                productDetails.getStockAmountOpened(),
-                                productDetails.getStockAmountOpenedAggregated(),
-                                productDetails.getIsAggregatedAmount(),
-                                productDetails.getProduct().getId(),
-                                productDetails.getProduct()
-                        );
+                        StockItem stockItem = createStockItem(productDetails);
                         stockItems.add(stockItem);
                         missingStockItems.add(stockItem);
                     },
@@ -709,7 +700,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void consumeProduct(int productId, double amount, boolean spoiled) {
-        int index = getProductPosition(productId);
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amount);
@@ -729,65 +719,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     } catch (JSONException e) {
                         if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
                     }
-                    for(StockItem stockItem : displayedItems) {
-                        if(stockItem.getProduct().getId() == productId) {
-                            final double savedAmountForUndo = stockItem.getAmount();
-                            if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
-                                stockItem.changeAmount(-amount);
-                            } else {
-                                stockItem.changeAmount(-savedAmountForUndo);
-                            }
-                            if(stockItem.getAmount() == 0
-                                    && stockItem.getProduct().getMinStockAmount() == 0
-                            ) {
-                                // only delete item if min stock amount is zero
-                                displayedItems.remove(index);
-                                stockItemAdapter.notifyItemRemoved(index);
-                            } else {
-                                stockItemAdapter.notifyItemChanged(index);
-                            }
-                            if(DEBUG) Log.i(TAG, "consumeProduct: consumed " + amount);
-                            QuantityUnit quantityUnit = getQuantityUnit(
-                                    stockItem.getProduct().getQuIdStock()
-                            );
-                            Snackbar snackbar = Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    activity.getString(
-                                            spoiled
-                                                    ? R.string.msg_consumed_spoiled
-                                                    : R.string.msg_consumed,
-                                            NumUtil.trim(
-                                                    stockItem.getProduct()
-                                                            .getEnableTareWeightHandling() == 0
-                                                            ? amount
-                                                            : savedAmountForUndo
-                                            ), quantityUnit != null
-                                                    ? amount == 1
-                                                            ? quantityUnit.getName()
-                                                            : quantityUnit.getNamePlural()
-                                                    : "",
-                                            stockItem.getProduct().getName()
-                                    ), Snackbar.LENGTH_LONG
-                            );
-                            if(transactionId != null) {
-                                String transId = transactionId;
-                                snackbar.setActionTextColor(
-                                        ContextCompat.getColor(activity, R.color.secondary)
-                                ).setAction(
-                                        activity.getString(R.string.action_undo),
-                                        v -> undoConsumeTransaction(
-                                                transId,
-                                                stockItem,
-                                                amount,
-                                                savedAmountForUndo,
-                                                index
-                                        )
-                                );
-                            }
-                            activity.showSnackbar(snackbar);
-                            break;
-                        }
-                    }
+
+                    int index = getProductPosition(productId);
+                    StockItem stockItem = displayedItems.get(index);
+
+                    updateConsumedStockItem(
+                            index,
+                            stockItem,
+                            spoiled,
+                            transactionId,
+                            false
+                    );
                 },
                 error -> {
                     showErrorMessage(error);
@@ -796,48 +738,101 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    private void undoConsumeTransaction(
+    private void updateConsumedStockItem(
+            int index,
+            StockItem stockItemOld,
+            boolean spoiled,
             String transactionId,
-            StockItem stockItem,
-            double amount,
-            double savedAmountForUndo,
-            int index
+            boolean undo
     ) {
-        request.post(
-                grocyApi.undoStockTransaction(transactionId),
-                success -> {
-                    if(stockItem.getAmount() == 0
-                            && stockItem.getProduct()
-                            .getMinStockAmount() == 0
-                    ) {
-                        // only insert if it was removed
-                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
-                            stockItem.changeAmount(amount);
-                        } else {
-                            stockItem.changeAmount(savedAmountForUndo);
-                        }
-                        displayedItems.add(index, stockItem);
+        request.get(
+                grocyApi.getStockProductDetails(stockItemOld.getProductId()),
+                response -> {
+
+                    // get up-to-date server amount from response
+                    ProductDetails productDetails = gson.fromJson(
+                            response,
+                            new TypeToken<ProductDetails>(){}.getType()
+                    );
+                    // create updated stockItem object
+                    StockItem stockItemNew = createStockItem(productDetails);
+
+                    if(!undo && stockItemNew.getAmount() == 0
+                            && stockItemNew.getProduct().getMinStockAmount() == 0) {
+                        displayedItems.remove(index);
+                        stockItemAdapter.notifyItemRemoved(index);
+                    } else if(undo && stockItemOld.getAmount() == 0
+                            && stockItemOld.getProduct().getMinStockAmount() == 0) {
+                        displayedItems.add(index, stockItemNew);
                         stockItemAdapter.notifyItemInserted(index);
                     } else {
-                        if(stockItem.getProduct().getEnableTareWeightHandling() == 0) {
-                            stockItem.changeAmount(amount);
-                        } else {
-                            stockItem.changeAmount(savedAmountForUndo);
-                        }
+                        // replace stockItem with updated stockItem
+                        displayedItems.set(index, stockItemNew);
                         stockItemAdapter.notifyItemChanged(index);
                     }
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    activity.getString(R.string.msg_undone_transaction),
-                                    Snackbar.LENGTH_SHORT
-                            )
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "consumeProduct: undone"
-                    );
+
+                    // create snackBar with info for undo or with info after undo
+                    Snackbar snackbar;
+                    if(!undo) {
+
+                        // calculate consumed amount for info
+                        double amountConsumed = stockItemOld.getAmount() - stockItemNew.getAmount();
+
+                        QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
+
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(
+                                        spoiled
+                                                ? R.string.msg_consumed_spoiled
+                                                : R.string.msg_consumed,
+                                        NumUtil.trim(amountConsumed),
+                                        quantityUnit != null
+                                                ? amountConsumed == 1
+                                                ? quantityUnit.getName()
+                                                : quantityUnit.getNamePlural()
+                                                : "",
+                                        stockItemNew.getProduct().getName()
+                                ), Snackbar.LENGTH_LONG
+                        );
+
+                        // set undo button on snackBar
+                        if(transactionId != null) {
+                            snackbar.setActionTextColor(
+                                    ContextCompat.getColor(activity, R.color.secondary)
+                            ).setAction(
+                                    activity.getString(R.string.action_undo),
+                                    // on success, this method will be executed again to update
+                                    v -> request.post(
+                                            grocyApi.undoStockTransaction(transactionId),
+                                            response1 -> updateConsumedStockItem(
+                                                    index,
+                                                    stockItemNew,
+                                                    spoiled,
+                                                    null,
+                                                    true
+                                            ),
+                                            this::showErrorMessage
+                                    )
+                            );
+                        }
+                        if(DEBUG) Log.i(
+                                TAG, "updateConsumedStockItem: consumed " + amountConsumed
+                        );
+                    } else {
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(R.string.msg_undone_transaction),
+                                Snackbar.LENGTH_SHORT
+                        );
+                        if(DEBUG) Log.i(TAG, "updateConsumedStockItem: undone");
+                    }
+                    activity.showSnackbar(snackbar);
                 },
-                this::showErrorMessage
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "updateConsumedStockItem: " + error);
+                }
         );
     }
 
@@ -859,39 +854,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     } catch (JSONException e) {
                         if(DEBUG) Log.e(TAG, "openProduct: " + e);
                     }
-                    for(StockItem stockItem : displayedItems) {
-                        if(stockItem.getProduct().getId() == productId) {
-                            stockItem.changeAmountOpened(1);
-                            stockItemAdapter.notifyItemChanged(getProductPosition(productId));
-                            if(DEBUG) Log.i(TAG, "openProduct: opened 1");
-                            QuantityUnit quantityUnit = getQuantityUnit(
-                                    stockItem.getProduct().getQuIdStock()
-                            );
-                            Snackbar snackbar = Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    activity.getString(
-                                            R.string.msg_opened,
-                                            NumUtil.trim(1),
-                                            quantityUnit != null
-                                                    ? quantityUnit.getName()
-                                                    : "",
-                                            stockItem.getProduct().getName()
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            );
-                            if(transactionId != null) {
-                                final String transId = transactionId;
-                                snackbar.setActionTextColor(
-                                        ContextCompat.getColor(activity, R.color.secondary)
-                                ).setAction(
-                                        activity.getString(R.string.action_undo),
-                                        v -> undoOpenTransaction(transId, stockItem)
-                                );
-                            }
-                            activity.showSnackbar(snackbar);
-                            break;
-                        }
-                    }
+
+                    int index = getProductPosition(productId);
+                    updateOpenedStockItem(index, productId, transactionId, false);
                 },
                 error -> {
                     showErrorMessage(error);
@@ -900,24 +865,79 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    private void undoOpenTransaction(String transactionId, StockItem stockItem) {
-        request.post(
-                grocyApi.undoStockTransaction(transactionId),
-                success -> {
-                    stockItem.changeAmountOpened(-1);
-                    stockItemAdapter.notifyItemChanged(
-                            getProductPosition(stockItem.getProduct().getId())
+    private void updateOpenedStockItem(
+            int index,
+            int productId,
+            String transactionId,
+            boolean undo
+    ) {
+        request.get(
+                grocyApi.getStockProductDetails(productId),
+                response -> {
+
+                    // get up-to-date server amount from response
+                    ProductDetails productDetails = gson.fromJson(
+                            response,
+                            new TypeToken<ProductDetails>() {
+                            }.getType()
                     );
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    activity.getString(R.string.msg_undone_transaction),
-                                    Snackbar.LENGTH_SHORT
-                            )
-                    );
-                    if(DEBUG) Log.i(TAG, "consumeProduct: undone");
+                    // create updated stockItem object
+                    StockItem stockItem = createStockItem(productDetails);
+
+                    displayedItems.set(index, stockItem);
+                    stockItemAdapter.notifyItemChanged(index);
+
+                    // create snackBar with info for undo or with info after undo
+                    Snackbar snackbar;
+                    if(!undo) {
+
+                        QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(
+                                        R.string.msg_opened,
+                                        NumUtil.trim(1),
+                                        quantityUnit != null
+                                                ? quantityUnit.getName()
+                                                : "",
+                                        stockItem.getProduct().getName()
+                                ),
+                                Snackbar.LENGTH_LONG
+                        );
+
+                        // set undo button on snackBar
+                        if (transactionId != null) {
+                            snackbar.setActionTextColor(
+                                    ContextCompat.getColor(activity, R.color.secondary)
+                            ).setAction(
+                                    activity.getString(R.string.action_undo),
+                                    v -> request.post(
+                                            grocyApi.undoStockTransaction(transactionId),
+                                            response1 -> updateOpenedStockItem(
+                                                    index,
+                                                    productId,
+                                                    transactionId,
+                                                    true
+                                            ),
+                                            this::showErrorMessage
+                                    )
+                            );
+                        }
+                        if(DEBUG) Log.i(TAG, "updateOpenedStockItem: opened 1");
+                    } else {
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(R.string.msg_undone_transaction),
+                                Snackbar.LENGTH_SHORT
+                        );
+                        if(DEBUG) Log.i(TAG, "updateOpenedStockItem: undone");
+                    }
+                    activity.showSnackbar(snackbar);
                 },
-                this::showErrorMessage
+                error -> {
+                    showErrorMessage(error);
+                    if(DEBUG) Log.i(TAG, "updateOpenedStockItem: " + error);
+                }
         );
     }
 
@@ -927,6 +947,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 return stockItem;
             }
         } return null;
+    }
+
+    private StockItem createStockItem(ProductDetails productDetails) {
+        return new StockItem(
+                productDetails.getStockAmount(),
+                productDetails.getStockAmountAggregated(),
+                productDetails.getNextBestBeforeDate(),
+                productDetails.getStockAmountOpened(),
+                productDetails.getStockAmountOpenedAggregated(),
+                productDetails.getIsAggregatedAmount(),
+                productDetails.getProduct().getId(),
+                productDetails.getProduct()
+        );
     }
 
     /**
