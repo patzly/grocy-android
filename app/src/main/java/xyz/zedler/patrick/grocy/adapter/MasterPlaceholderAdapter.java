@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import xyz.zedler.patrick.grocy.R;
 
-public class MasterProductsPlaceholderAdapter
-        extends RecyclerView.Adapter<MasterProductsPlaceholderAdapter.ViewHolder> {
+public class MasterPlaceholderAdapter
+        extends RecyclerView.Adapter<MasterPlaceholderAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

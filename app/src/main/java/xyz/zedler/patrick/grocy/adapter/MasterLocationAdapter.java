@@ -14,24 +14,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Location;
 
-public class MasterProductsAdapter extends RecyclerView.Adapter<MasterProductsAdapter.ViewHolder> {
+public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAdapter.ViewHolder> {
 
-    private final static String TAG = MasterProductsAdapter.class.getSimpleName();
+    private final static String TAG = MasterLocationAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<Product> products;
-    private MasterProductAdapterListener listener;
+    private List<Location> locations;
+    private MasterLocationAdapterListener listener;
 
-    public MasterProductsAdapter(
+    public MasterLocationAdapter(
             Context context,
-            List<Product> products,
-            MasterProductAdapterListener listener
+            List<Location> locations,
+            MasterLocationAdapterListener listener
     ) {
         this.context = context;
-        this.products = products;
+        this.locations = locations;
         this.listener = listener;
     }
 
@@ -63,7 +63,7 @@ public class MasterProductsAdapter extends RecyclerView.Adapter<MasterProductsAd
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // NAME
-        holder.textViewName.setText(products.get(position).getName());
+        holder.textViewName.setText(locations.get(position).getName());
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
@@ -73,15 +73,15 @@ public class MasterProductsAdapter extends RecyclerView.Adapter<MasterProductsAd
 
     @Override
     public long getItemId(int position) {
-        return products.get(position).getId();
+        return locations.get(position).getId();
     }
 
     @Override
     public int getItemCount() {
-        return products != null ? products.size() : 0;
+        return locations != null ? locations.size() : 0;
     }
 
-    public interface MasterProductAdapterListener {
+    public interface MasterLocationAdapterListener {
         void onItemRowClicked(int position);
     }
 }
