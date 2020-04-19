@@ -33,6 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -88,6 +89,7 @@ public class ConsumeFragment extends Fragment {
     private EditText editTextAmount;
     private TextView textViewLocation, textViewSpecific;
     private MaterialCheckBox checkBoxSpoiled;
+    private MaterialButton buttonOpen;
     private ImageView imageViewAmount;
     private int selectedLocationId;
     private String selectedStockEntryId;
@@ -284,7 +286,8 @@ public class ConsumeFragment extends Fragment {
                 v -> consumeProduct()
         );
         // open
-        activity.findViewById(R.id.button_consume_open).setOnClickListener(
+        buttonOpen = activity.findViewById(R.id.button_consume_open);
+        buttonOpen.setOnClickListener(
                 v -> openProduct()
         );
 
@@ -422,6 +425,9 @@ public class ConsumeFragment extends Fragment {
             editTextAmount.requestFocus();
             activity.showKeyboard(editTextAmount);
         }
+
+        buttonOpen.setEnabled(!isTareWeightHandlingEnabled);
+
         // set icon for tare weight, else for normal amount
         imageViewAmount.setImageResource(
                 isTareWeightHandlingEnabled
