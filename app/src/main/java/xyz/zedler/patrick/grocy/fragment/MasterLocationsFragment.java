@@ -36,7 +36,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
+import xyz.zedler.patrick.grocy.adapter.MasterLocationAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
@@ -50,8 +50,8 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class MasterProductsFragment extends Fragment
-        implements MasterProductAdapter.MasterProductAdapterListener {
+public class MasterLocationsFragment extends Fragment
+        implements MasterLocationAdapter.MasterLocationAdapterListener {
 
     private final static String TAG = Constants.FRAGMENT.MASTER_PRODUCTS;
     private final static boolean DEBUG = true;
@@ -62,7 +62,7 @@ public class MasterProductsFragment extends Fragment
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
-    private MasterProductAdapter masterProductAdapter;
+    private MasterLocationAdapter masterLocationAdapter;
 
     private List<Product> products = new ArrayList<>();
     private List<Product> filteredProducts = new ArrayList<>();
@@ -382,11 +382,11 @@ public class MasterProductsFragment extends Fragment
         if(DEBUG) Log.i(TAG, "sortItems: sort by name, ascending = " + ascending);
         sortAscending = ascending;
         SortUtil.sortProductsByName(displayedProducts, ascending);
-        refreshAdapter(new MasterProductAdapter(activity, displayedProducts, this));
+        //refreshAdapter(new MasterLocationAdapter(activity, displayedProducts, this));
     }
 
-    private void refreshAdapter(MasterProductAdapter adapter) {
-        masterProductAdapter = adapter;
+    private void refreshAdapter(MasterLocationAdapter adapter) {
+        masterLocationAdapter = adapter;
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
             recyclerView.setAdapter(adapter);
             recyclerView.animate().alpha(1).setDuration(150).start();

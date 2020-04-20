@@ -6,9 +6,11 @@ import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -53,6 +55,12 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
                 R.id.linear_master_data_products
         );
 
+        if(uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
+            select(R.id.linear_master_data_products, R.id.text_master_data_products);
+        }/* else if(uiMode.startsWith(Constants.UI.MASTER)) {
+            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
+        }*/
+
         return view;
     }
 
@@ -76,6 +84,13 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
                 }
                 break;
         }
+    }
+
+    private void select(@IdRes int linearLayoutId, @IdRes int textViewId) {
+        view.findViewById(linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
+        ((TextView) view.findViewById(textViewId)).setTextColor(
+                ContextCompat.getColor(activity, R.color.secondary)
+        );
     }
 
     private void replaceFragment(String fragmentNew, String uiModeNew) {

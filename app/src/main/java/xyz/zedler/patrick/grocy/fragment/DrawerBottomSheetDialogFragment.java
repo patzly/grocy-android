@@ -64,10 +64,10 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 R.id.linear_help
         );
 
-        switch (uiMode) {
-            case Constants.UI.CONSUME:
-                select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
-                break;
+        if(uiMode.equals(Constants.UI.CONSUME)) {
+            select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
+        } else if(uiMode.startsWith(Constants.UI.MASTER)) {
+            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
         }
 
         return view;
