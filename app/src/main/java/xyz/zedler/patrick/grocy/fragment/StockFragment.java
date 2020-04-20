@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -97,7 +98,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
-    private LinearLayout linearLayoutFilterContainer, linearLayoutError;
+    private LinearLayout linearLayoutFilterContainer;
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
     private NestedScrollView scrollView;
 
@@ -134,7 +135,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         linearLayoutFilterContainer = activity.findViewById(
                 R.id.linear_stock_filter_container_bottom
         );
-        linearLayoutError = activity.findViewById(R.id.linear_stock_error);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         scrollView = activity.findViewById(R.id.scroll_stock);
         // retry button on offline error page
@@ -239,13 +239,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(true, true, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(false, false, true);
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
@@ -264,8 +264,26 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
-        // TODO: different errors
+    private void setError(boolean isError, boolean isOffline, boolean animated) {
+        LinearLayout linearLayoutError = activity.findViewById(R.id.linear_error);
+        ImageView imageViewError = activity.findViewById(R.id.image_error);
+        TextView textViewTitle = activity.findViewById(R.id.text_error_title);
+        TextView textViewSubtitle = activity.findViewById(R.id.text_error_subtitle);
+
+        if(isError) {
+            imageViewError.setImageResource(
+                    isOffline
+                            ? R.drawable.illustration_broccoli
+                            : R.drawable.illustration_popsicle
+            );
+            textViewTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
+            textViewSubtitle.setText(
+                    isOffline
+                            ? R.string.error_offline_subtitle
+                            : R.string.error_unknown_subtitle
+            );
+        }
+
         if(animated) {
             View viewOut = isError ? scrollView : linearLayoutError;
             View viewIn = isError ? linearLayoutError : scrollView;
@@ -464,7 +482,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void onDownloadError(VolleyError error) {
         request.cancelAll(TAG);
         swipeRefreshLayout.setRefreshing(false);
-        setError(true, true);
+        setError(true, false, true);
     }
 
     private void filterItems(String filter) {

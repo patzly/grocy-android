@@ -57,6 +57,10 @@
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_invalid_amount">Invalid amount</string>
     <string name="error_bounds">Between %1$s and %2$s</string>
+    <string name="error_offline">Offline</string>
+    <string name="error_offline_subtitle">Check your connection and try again</string>
+    <string name="error_unknown">Uups!</string>
+    <string name="error_unknown_subtitle">An error occurred</string>
 
     <string name="title_product_overview">Product overview</string>
     <string name="title_stock_entries">Stock entries</string>
