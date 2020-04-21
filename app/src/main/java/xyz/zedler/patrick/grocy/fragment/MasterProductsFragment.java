@@ -109,6 +109,9 @@ public class MasterProductsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
+        activity.findViewById(R.id.frame_back_master_products).setOnClickListener(
+                v -> activity.onBackPressed()
+        );
         linearLayoutError = activity.findViewById(R.id.linear_master_products_error);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_master_products);
         scrollView = activity.findViewById(R.id.scroll_master_products);
