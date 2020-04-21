@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
@@ -176,12 +176,9 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		ExpandableCard cardDescription = view.findViewById(
 				R.id.card_product_overview_description
 		);
-		if(product.getDescription() != null
-				&& !product.getDescription().trim().equals("")
-		) {
-			cardDescription.setText(
-					Html.fromHtml(product.getDescription()).toString().trim()
-			);
+		String description = TextUtil.getFromHtml(product.getDescription());
+		if(description != null) {
+			cardDescription.setText(description);
 		} else {
 			cardDescription.setVisibility(View.GONE);
 		}
@@ -232,9 +229,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 			// TODO: tooltip colors
 		}
 		// no margin if description is != null
-		if(product.getDescription() != null
-				&& !product.getDescription().trim().equals("")
-		) {
+		if(description != null) {
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 					ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
 			);

@@ -24,6 +24,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -38,6 +39,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 	private ProductGroup productGroup;
 	private ListItem
 			itemName,
+			itemDescription,
 			itemLocation,
 			itemMinStockAmount,
 			itemQuPurchase,
@@ -82,6 +84,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		// VIEWS
 
 		itemName = view.findViewById(R.id.item_master_product_name);
+		itemDescription = view.findViewById(R.id.item_master_product_description);
 		itemLocation = view.findViewById(R.id.item_master_product_location);
 		itemMinStockAmount = view.findViewById(R.id.item_master_product_min_stock_amount);
 		itemQuPurchase = view.findViewById(R.id.item_master_product_qu_purchase);
@@ -112,7 +115,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 					);*/
 					dismiss();
 					return true;
-				case R.id.action_consume_spoiled:
+				case R.id.action_delete:
 					/*((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_SPOILED,
 							product.getId()
@@ -129,12 +132,23 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 	}
 
 	private void setData() {
-
 		// NAME
 		itemName.setText(
 				activity.getString(R.string.property_name),
 				product.getName()
 		);
+
+		// DESCRIPTION
+		String description = TextUtil.getFromHtml(product.getDescription());
+		if(description != null) {
+			itemDescription.setSingleLine(false);
+			itemDescription.setText(
+					activity.getString(R.string.property_description),
+					description
+			);
+		} else {
+			itemDescription.setVisibility(View.GONE);
+		}
 
 		// LOCATION
 		itemLocation.setText(
@@ -178,6 +192,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 
 		// BARCODES
 		if(product.getBarcode() != null && !product.getBarcode().trim().equals("")) {
+			itemBarcodes.setSingleLine(false);
 			itemBarcodes.setText(
 					activity.getString(R.string.property_barcodes),
 					TextUtils.join(", ", product.getBarcode().split(","))

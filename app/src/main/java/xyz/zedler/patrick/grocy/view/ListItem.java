@@ -96,6 +96,10 @@ public class ListItem extends LinearLayout {
         }
     }
 
+    public void setSingleLine(boolean singleLine) {
+        textViewValue.setSingleLine(singleLine);
+    }
+
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
         linearLayoutContainer.setOnClickListener(l);

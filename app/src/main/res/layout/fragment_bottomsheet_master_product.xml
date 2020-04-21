@@ -87,6 +87,11 @@
                 android:layout_height="wrap_content"/>
 
             <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_master_product_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <xyz.zedler.patrick.grocy.view.ListItem
                 android:id="@+id/item_master_product_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
