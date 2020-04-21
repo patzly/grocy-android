@@ -15,9 +15,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
-import java.util.List;
-
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -181,13 +178,9 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 
 		// BARCODES
 		if(product.getBarcode() != null && !product.getBarcode().trim().equals("")) {
-			List<String> barcodes = Arrays.asList(product.getBarcode().split(","));
 			itemBarcodes.setText(
-					activity.getString(
-							barcodes.size() > 1
-									? R.string.property_barcodes
-									: R.string.property_barcode
-					), TextUtils.join(", ", barcodes)
+					activity.getString(R.string.property_barcodes),
+					TextUtils.join(", ", product.getBarcode().split(","))
 			);
 		} else {
 			itemBarcodes.setVisibility(View.GONE);

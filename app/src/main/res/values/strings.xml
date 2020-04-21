@@ -92,7 +92,6 @@
     <string name="property_qu_purchase">Quantity unit purchase</string>
     <string name="property_qu_stock">Quantity unit stock</string>
     <string name="property_qu_factor">Quantity unit factor</string>
-    <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_bbd">Best before</string>
     <string name="property_bbd_next">Next best before date</string>
