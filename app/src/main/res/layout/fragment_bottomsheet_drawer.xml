@@ -18,7 +18,7 @@
             android:orientation="vertical"
             android:paddingBottom="8dp">
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/linear_drawer_shopping_list"
                 style="@style/Theme.Grocy.DrawerItem">
 
@@ -32,7 +32,7 @@
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="Shopping list" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
             <!--<LinearLayout
                 android:id="@+id/linear_drawer_recipes"
@@ -66,7 +66,7 @@
 
             </LinearLayout>-->
 
-            <View style="@style/Theme.Grocy.Divider" />
+            <!--<View style="@style/Theme.Grocy.Divider" />-->
 
             <LinearLayout
                 android:id="@+id/linear_drawer_consume"

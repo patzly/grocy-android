@@ -57,7 +57,6 @@
             android:id="@+id/toolbar_master_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:visibility="visible"
             app:contentInsetStart="12dp"
             app:menu="@menu/menu_actions_master_item" />
