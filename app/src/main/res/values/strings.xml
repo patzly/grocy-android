@@ -36,6 +36,8 @@
     <string name="action_sort">Sort</string>
     <string name="action_undo">Undo</string>
     <string name="action_retry">Retry</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
@@ -63,6 +65,7 @@
     <string name="error_unknown_subtitle">An error occurred</string>
 
     <string name="title_product_overview">Product overview</string>
+    <string name="title_product">Product</string>
     <string name="title_stock_entries">Stock entries</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Settings</string>
@@ -84,7 +87,13 @@
 
     <string name="property_name">Name</string>
     <string name="property_amount">Amount</string>
+    <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
+    <string name="property_qu_purchase">Quantity unit purchase</string>
+    <string name="property_qu_stock">Quantity unit stock</string>
+    <string name="property_qu_factor">Quantity unit factor</string>
+    <string name="property_barcode">Barcode</string>
+    <string name="property_barcodes">Barcodes</string>
     <string name="property_bbd">Best before</string>
     <string name="property_bbd_next">Next best before date</string>
     <string name="property_location">Location</string>

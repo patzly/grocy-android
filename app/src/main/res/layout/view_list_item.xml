@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_stock_item_details_item_container"
+    android:id="@+id/linear_list_item_container"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +11,7 @@
     android:baselineAligned="false">
 
     <TextView
-        android:id="@+id/text_stock_item_details_item_property"
+        android:id="@+id/text_list_item_property"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -25,7 +25,7 @@
         android:gravity="bottom">
 
         <TextView
-            android:id="@+id/text_stock_item_details_item_value"
+            android:id="@+id/text_list_item_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -34,7 +34,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linear_stock_item_details_item_extra"
+        android:id="@+id/linear_list_item_extra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,7 +42,7 @@
         android:gravity="bottom">
 
         <TextView
-            android:id="@+id/text_stock_item_details_item_extra"
+            android:id="@+id/text_list_item_extra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"

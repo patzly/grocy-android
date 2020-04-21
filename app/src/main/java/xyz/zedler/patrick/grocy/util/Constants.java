@@ -91,10 +91,14 @@ public final class Constants {
         public final static String UI_MODE = "ui_mode";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";
+        public final static String QUANTITY_UNIT_PURCHASE = "quantity_unit_purchase";
+        public final static String QUANTITY_UNIT_STOCK = "quantity_unit_stock";
         public final static String LOCATION = "location";
+        public final static String PRODUCT_GROUP = "product_group";
         public final static String STOCK_LOCATIONS = "stock_locations";
         public final static String STOCK_ENTRIES = "product_entries";
         public final static String PRODUCT_DETAILS = "product_details";
+        public final static String PRODUCT = "product";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";

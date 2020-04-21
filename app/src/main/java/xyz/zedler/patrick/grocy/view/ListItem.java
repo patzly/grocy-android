@@ -12,14 +12,14 @@ import androidx.annotation.Nullable;
 
 import xyz.zedler.patrick.grocy.R;
 
-public class StockItemDetailsItem extends LinearLayout {
+public class ListItem extends LinearLayout {
 
     private Context context;
     private TextView textViewProperty, textViewValue, textViewExtra;
     private LinearLayout linearLayoutContainer, linearLayoutExtra;
     private int height = 0;
 
-    public StockItemDetailsItem(Context context) {
+    public ListItem(Context context) {
         super(context);
 
         this.context = context;
@@ -27,9 +27,9 @@ public class StockItemDetailsItem extends LinearLayout {
     }
 
     /**
-     * In layout XML set visibility to GONE if the container should expand when text is set.
+     * In layout XML set visibility to GONE if the container should expand when setText() is called.
      */
-    public StockItemDetailsItem(Context context, @Nullable AttributeSet attrs) {
+    public ListItem(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         this.context = context;
@@ -37,24 +37,36 @@ public class StockItemDetailsItem extends LinearLayout {
     }
 
     private void init() {
-        inflate(context, R.layout.view_stock_item_details_item, this);
+        inflate(context, R.layout.view_list_item, this);
 
-        linearLayoutContainer = findViewById(R.id.linear_stock_item_details_item_container);
-        textViewProperty = findViewById(R.id.text_stock_item_details_item_property);
-        textViewValue = findViewById(R.id.text_stock_item_details_item_value);
-        textViewExtra = findViewById(R.id.text_stock_item_details_item_extra);
-        linearLayoutExtra = findViewById(R.id.linear_stock_item_details_item_extra);
+        linearLayoutContainer = findViewById(R.id.linear_list_item_container);
+        textViewProperty = findViewById(R.id.text_list_item_property);
+        textViewValue = findViewById(R.id.text_list_item_value);
+        textViewExtra = findViewById(R.id.text_list_item_extra);
+        linearLayoutExtra = findViewById(R.id.linear_list_item_extra);
+    }
+
+    public void setText(String property, String value) {
+        setText(property, value, null);
     }
 
     public void setText(String property, String value, String extra) {
-        textViewProperty.setText(property);
+        // property
+        if(property != null) {
+            textViewProperty.setText(property);
+        } else {
+            textViewProperty.setVisibility(GONE);
+        }
+        // value
         textViewValue.setText(value);
+        // extra
         if(extra != null) {
             textViewExtra.setText(extra);
         } else {
             linearLayoutExtra.setVisibility(GONE);
         }
         if(getVisibility() == GONE) {
+            // expand
             measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
             height = getMeasuredHeight();
             getLayoutParams().height = 0;
@@ -82,5 +94,10 @@ public class StockItemDetailsItem extends LinearLayout {
                         }
                     });
         }
+    }
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        linearLayoutContainer.setOnClickListener(l);
     }
 }

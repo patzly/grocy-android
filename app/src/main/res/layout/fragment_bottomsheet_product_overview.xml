@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/text_stock_item_details_name"
+                android:id="@+id/text_product_overview_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -38,6 +39,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_product_overview_picture_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -54,7 +56,7 @@
                 app:cardElevation="0dp">
 
                 <ImageView
-                    android:id="@+id/image_stock_item_details"
+                    android:id="@+id/image_product_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:maxWidth="70dp"
@@ -67,13 +69,13 @@
         </LinearLayout>
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_stock_item_details"
+            android:id="@+id/toolbar_product_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:visibility="visible"
             app:contentInsetStart="12dp"
-            app:menu="@menu/menu_product_details" />
+            app:menu="@menu/menu_actions_product_overview" />
 
     </LinearLayout>
 
@@ -95,40 +97,40 @@
             android:paddingBottom="8dp">
 
             <xyz.zedler.patrick.grocy.view.ExpandableCard
-                android:id="@+id/card_stock_item_details_description"
+                android:id="@+id/card_product_overview_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"/>
 
             <LinearLayout
-                android:id="@+id/linear_stock_item_details_amount"
+                android:id="@+id/linear_product_overview_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical">
 
-                <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                    android:id="@+id/stock_item_details_item_amount"
+                <xyz.zedler.patrick.grocy.view.ListItem
+                    android:id="@+id/item_product_overview_amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
                 <LinearLayout
-                    android:id="@+id/linear_stock_item_details_action_container"
+                    android:id="@+id/linear_product_overview_action_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <xyz.zedler.patrick.grocy.view.ActionButton
-                        android:id="@+id/button_stock_item_details_consume"
+                        android:id="@+id/button_product_overview_consume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:icon="@drawable/ic_round_consume_product"
                         app:tint="@color/icon"/>
 
                     <xyz.zedler.patrick.grocy.view.ActionButton
-                        android:id="@+id/button_stock_item_details_open"
+                        android:id="@+id/button_product_overview_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -139,42 +141,42 @@
 
             </LinearLayout>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_location"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_bbd"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_bbd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_last_purchased"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_last_purchased"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_last_used"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_last_used"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_last_price"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_last_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_shelf_life"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_shelf_life"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
-            <xyz.zedler.patrick.grocy.view.StockItemDetailsItem
-                android:id="@+id/stock_item_details_item_spoil_rate"
+            <xyz.zedler.patrick.grocy.view.ListItem
+                android:id="@+id/item_product_overview_spoil_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>

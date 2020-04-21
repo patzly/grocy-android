@@ -48,6 +48,8 @@ import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -691,7 +693,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
      * Called from product details BottomSheet when button was pressed
      * @param action Constants.ACTION
      */
-    void performAction(String action, int productId) {
+    public void performAction(String action, int productId) {
         switch (action) {
             case Constants.ACTION.CONSUME:
                 consumeProduct(productId, 1, false);

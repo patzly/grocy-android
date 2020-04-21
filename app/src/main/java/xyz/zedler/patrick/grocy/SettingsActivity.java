@@ -25,7 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.FeedbackBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class SettingsActivity extends AppCompatActivity

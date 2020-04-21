@@ -47,7 +47,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.DrawerBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -408,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 });
             }
+            menuItem.setVisible(!locations.isEmpty());
         }
     }
 
@@ -424,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 });
             }
+            menuItem.setVisible(!productGroups.isEmpty());
         }
     }
 

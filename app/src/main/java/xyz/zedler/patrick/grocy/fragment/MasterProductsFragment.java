@@ -36,16 +36,15 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -431,6 +430,14 @@ public class MasterProductsFragment extends Fragment
         } return null;
     }
 
+    private ProductGroup getProductGroup(String id) {
+        for(ProductGroup productGroup : productGroups) {
+            if(productGroup.getId().equals(id)) {
+                return productGroup;
+            }
+        } return null;
+    }
+
     private void showErrorMessage(VolleyError error) {
         activity.showSnackbar(
                 Snackbar.make(
@@ -443,33 +450,25 @@ public class MasterProductsFragment extends Fragment
 
     @Override
     public void onItemRowClicked(int position) {
-        // STOCK ITEM CLICK
-        //showProductOverview(displayedProducts.get(position));
+        // MASTER PRODUCT CLICK
+        showProductSheet(displayedProducts.get(position));
     }
 
-    private void showProductOverview(StockItem stockItem) {
-        if(stockItem != null) {
-            QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
-            Location location = getLocation(stockItem.getProduct().getLocationId());
+    private void showProductSheet(Product product) {
+        if(product != null) {
+            Location location = getLocation(product.getLocationId());
+            QuantityUnit quantityUnitPurchase = getQuantityUnit(product.getQuIdPurchase());
+            QuantityUnit quantityUnitStock = getQuantityUnit(product.getQuIdPurchase());
+            ProductGroup productGroup = getProductGroup(product.getProductGroupId());
+
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, stockItem);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
+            bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
             bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
-        }
-    }
+            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE, quantityUnitPurchase);
+            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_STOCK, quantityUnitStock);
+            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
 
-    private void showProductOverview(ProductDetails productDetails) {
-        if(productDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-            bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            activity.showBottomSheet(
-                    new ProductOverviewBottomSheetDialogFragment(),
-                    bundle
-            );
+            activity.showBottomSheet(new MasterProductBottomSheetDialogFragment(), bundle);
         }
     }
 

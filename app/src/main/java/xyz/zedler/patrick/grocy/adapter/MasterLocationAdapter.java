@@ -42,8 +42,8 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutItemContainer = view.findViewById(R.id.linear_master_product_container);
-            textViewName = view.findViewById(R.id.text_master_product_name);
+            linearLayoutItemContainer = view.findViewById(R.id.linear_master_item_container);
+            textViewName = view.findViewById(R.id.text_master_item_name);
         }
     }
 
@@ -52,7 +52,7 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_product,
+                        R.layout.row_master_item,
                         parent,
                         false
                 )
