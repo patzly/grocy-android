@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.fragment;
+package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -37,7 +38,7 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
-import xyz.zedler.patrick.grocy.view.StockItemDetailsItem;
+import xyz.zedler.patrick.grocy.view.ListItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -47,7 +48,6 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 	private SharedPreferences sharedPrefs;
 
-	private BottomSheetDialog bottomSheet;
 	private MainActivity activity;
 	private StockItem stockItem;
 	private ProductDetails productDetails;
@@ -56,7 +56,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
 	private boolean setUpWithProductDetails = false, showActions = false;
-	private StockItemDetailsItem
+	private ListItem
 			itemAmount,
 			itemLocation,
 			itemBestBefore,
@@ -69,11 +69,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		bottomSheet = new BottomSheetDialog(
-				requireContext(),
-				R.style.Theme_Grocy_BottomSheetDialog
-		);
-		return bottomSheet;
+		return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
 	}
 
 	@Override
@@ -120,30 +116,34 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		// VIEWS
 
-		actionButtonConsume = view.findViewById(R.id.button_stock_item_details_consume);
-		actionButtonOpen = view.findViewById(R.id.button_stock_item_details_open);
-		itemAmount = view.findViewById(R.id.stock_item_details_item_amount);
-		itemLocation = view.findViewById(R.id.stock_item_details_item_location);
-		itemBestBefore = view.findViewById(R.id.stock_item_details_item_bbd);
-		itemLastPurchased = view.findViewById(R.id.stock_item_details_item_last_purchased);
-		itemLastUsed = view.findViewById(R.id.stock_item_details_item_last_used);
-		itemLastPrice = view.findViewById(R.id.stock_item_details_item_last_price);
-		itemShelfLife = view.findViewById(R.id.stock_item_details_item_shelf_life);
-		itemSpoilRate = view.findViewById(R.id.stock_item_details_item_spoil_rate);
+		actionButtonConsume = view.findViewById(R.id.button_product_overview_consume);
+		actionButtonOpen = view.findViewById(R.id.button_product_overview_open);
+		itemAmount = view.findViewById(R.id.item_product_overview_amount);
+		itemLocation = view.findViewById(R.id.item_product_overview_location);
+		itemBestBefore = view.findViewById(R.id.item_product_overview_bbd);
+		itemLastPurchased = view.findViewById(R.id.item_product_overview_last_purchased);
+		itemLastUsed = view.findViewById(R.id.item_product_overview_last_used);
+		itemLastPrice = view.findViewById(R.id.item_product_overview_last_price);
+		itemShelfLife = view.findViewById(R.id.item_product_overview_shelf_life);
+		itemSpoilRate = view.findViewById(R.id.item_product_overview_spoil_rate);
 
 		refreshItems();
 
-		((TextView) view.findViewById(R.id.text_stock_item_details_name)).setText(
-				product.getName()
-		);
+		((TextView) view.findViewById(R.id.text_product_overview_name)).setText(product.getName());
 
-		Picasso.get().load(
-				new GrocyApi(activity).getPicture(product.getPictureFileName(), 300)
-		).into((ImageView) view.findViewById(R.id.image_stock_item_details));
+		if(product.getPictureFileName() != null) {
+			Picasso.get().load(
+					new GrocyApi(activity).getPicture(product.getPictureFileName(), 300)
+			).into((ImageView) view.findViewById(R.id.image_product_overview));
+		} else {
+			view.findViewById(
+					R.id.linear_product_overview_picture_container
+			).setVisibility(View.GONE);
+		}
 
 		// TOOLBAR
 
-		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_stock_item_details);
+		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
 		boolean isInStock = setUpWithProductDetails
 				? productDetails.getStockAmount() > 0
 				: stockItem.getAmount() > 0;
@@ -158,14 +158,14 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 							Constants.ACTION.CONSUME_ALL,
 							product.getId()
 					);
-					bottomSheet.dismiss();
+					dismiss();
 					return true;
 				case R.id.action_consume_spoiled:
 					((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_SPOILED,
 							product.getId()
 					);
-					bottomSheet.dismiss();
+					dismiss();
 					return true;
 			}
 			return false;
@@ -174,7 +174,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		// DESCRIPTION
 
 		ExpandableCard cardDescription = view.findViewById(
-				R.id.card_stock_item_details_description
+				R.id.card_product_overview_description
 		);
 		if(product.getDescription() != null
 				&& !product.getDescription().trim().equals("")
@@ -191,7 +191,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		if(!showActions) {
 			// hide actions when set up from CONSUME with productDetails
 			view.findViewById(
-					R.id.linear_stock_item_details_action_container
+					R.id.linear_product_overview_action_container
 			).setVisibility(View.GONE);
 			toolbar.setVisibility(View.GONE);
 		}
@@ -203,7 +203,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					Constants.ACTION.CONSUME,
 					product.getId()
 			);
-			bottomSheet.dismiss();
+			dismiss();
 		});
 		actionButtonOpen.setOnClickListener(v -> {
 			disableActions();
@@ -211,7 +211,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					Constants.ACTION.OPEN,
 					product.getId()
 			);
-			bottomSheet.dismiss();
+			dismiss();
 		});
 		// tooltips
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -239,7 +239,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
 			);
 			layoutParams.setMargins(0, 0, 0, 0);
-			view.findViewById(R.id.linear_stock_item_details_amount).setLayoutParams(layoutParams);
+			view.findViewById(R.id.linear_product_overview_amount).setLayoutParams(layoutParams);
 		}
 
 		// LOAD DETAILS

@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.fragment;
+package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Activity;
 import android.app.Dialog;
