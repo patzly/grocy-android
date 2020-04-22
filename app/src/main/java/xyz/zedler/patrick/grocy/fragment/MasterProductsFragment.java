@@ -253,7 +253,7 @@ public class MasterProductsFragment extends Fragment
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
-                    activity.setLocationFilters(locations);
+                    //activity.setLocationFilters(locations);
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
@@ -272,7 +272,7 @@ public class MasterProductsFragment extends Fragment
                     if(DEBUG) Log.i(
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
-                    activity.setProductGroupFilters(productGroups);
+                    //activity.setProductGroupFilters(productGroups);
                 },
                 this::onDownloadError,
                 this::onQueueEmpty

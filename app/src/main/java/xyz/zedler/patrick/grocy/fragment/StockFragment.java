@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -340,7 +342,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
-                    activity.setLocationFilters(locations);
+                    setMenuLocationFilters();
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
@@ -359,7 +361,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     if(DEBUG) Log.i(
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
-                    activity.setProductGroupFilters(productGroups);
+                    setMenuProductGroupFilters();
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
@@ -1020,6 +1022,80 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    public void setMenuLocationFilters() {
+        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
+        if(menuItem != null) {
+            SubMenu menuLocations = menuItem.getSubMenu();
+            menuLocations.clear();
+            for(Location location : locations) {
+                menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
+                    //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                    filterLocation(location);
+                    return true;
+                });
+            }
+            menuItem.setVisible(!locations.isEmpty());
+        }
+    }
+
+    public void setMenuProductGroupFilters() {
+        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_product_group);
+        if(menuItem != null) {
+            SubMenu menuProductGroups = menuItem.getSubMenu();
+            menuProductGroups.clear();
+            for(ProductGroup productGroup : productGroups) {
+                menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
+                    //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                    filterProductGroup(productGroup);
+                    return true;
+                });
+            }
+            menuItem.setVisible(!productGroups.isEmpty());
+        }
+    }
+
+    public void setMenuSorting() {
+        String sortMode = sharedPrefs.getString(
+                Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
+        );
+        assert sortMode != null;
+        SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
+        MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
+        MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
+        MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
+        switch (sortMode) {
+            case Constants.STOCK.SORT.NAME:
+                sortName.setChecked(true);
+                break;
+            case Constants.STOCK.SORT.BBD:
+                sortBBD.setChecked(true);
+                break;
+        }
+        sortAscending.setChecked(
+                sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true)
+        );
+        // ON MENU ITEM CLICK
+        sortName.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                sortItems(Constants.STOCK.SORT.NAME);
+            }
+            return true;
+        });
+        sortBBD.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                sortItems(Constants.STOCK.SORT.BBD);
+            }
+            return true;
+        });
+        sortAscending.setOnMenuItemClickListener(item -> {
+            item.setChecked(!item.isChecked());
+            sortItems(item.isChecked());
+            return true;
+        });
     }
 
     @Override

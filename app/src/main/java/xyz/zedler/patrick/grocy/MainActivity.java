@@ -18,7 +18,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -50,9 +49,9 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -287,9 +286,11 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
-                            setLocationFilters(locations);
-                            setProductGroupFilters(productGroups);
-                            updateSorting();
+                            if(fragmentCurrent.getClass() == StockFragment.class) {
+                                ((StockFragment) fragmentCurrent).setMenuLocationFilters();
+                                ((StockFragment) fragmentCurrent).setMenuProductGroupFilters();
+                                ((StockFragment) fragmentCurrent).setMenuSorting();
+                            }
                         }
                 );
                 updateFab(
@@ -399,82 +400,6 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
-    }
-
-    public void setLocationFilters(List<Location> locations) {
-        this.locations = locations;
-        MenuItem menuItem = bottomAppBar.getMenu().findItem(R.id.action_filter_location);
-        if(menuItem != null) {
-            SubMenu menuLocations = menuItem.getSubMenu();
-            menuLocations.clear();
-            for(Location location : locations) {
-                menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
-                    if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                    ((StockFragment) fragmentCurrent).filterLocation(location);
-                    return true;
-                });
-            }
-            menuItem.setVisible(!locations.isEmpty());
-        }
-    }
-
-    public void setProductGroupFilters(List<ProductGroup> productGroups) {
-        this.productGroups = productGroups;
-        MenuItem menuItem = bottomAppBar.getMenu().findItem(R.id.action_filter_product_group);
-        if(menuItem != null) {
-            SubMenu menuProductGroups = menuItem.getSubMenu();
-            menuProductGroups.clear();
-            for(ProductGroup productGroup : productGroups) {
-                menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
-                    if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                    ((StockFragment) fragmentCurrent).filterProductGroup(productGroup);
-                    return true;
-                });
-            }
-            menuItem.setVisible(!productGroups.isEmpty());
-        }
-    }
-
-    private void updateSorting() {
-        String sortMode = sharedPrefs.getString(
-                Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
-        );
-        assert sortMode != null;
-        SubMenu menuSort = bottomAppBar.getMenu().findItem(R.id.action_sort).getSubMenu();
-        MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
-        MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
-        MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
-        switch (sortMode) {
-            case Constants.STOCK.SORT.NAME:
-                sortName.setChecked(true);
-                break;
-            case Constants.STOCK.SORT.BBD:
-                sortBBD.setChecked(true);
-                break;
-        }
-        sortAscending.setChecked(
-                sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true)
-        );
-        // ON MENU ITEM CLICK
-        sortName.setOnMenuItemClickListener(item -> {
-            if(!item.isChecked()) {
-                item.setChecked(true);
-                ((StockFragment) fragmentCurrent).sortItems(Constants.STOCK.SORT.NAME);
-            }
-            return true;
-        });
-        sortBBD.setOnMenuItemClickListener(item -> {
-            if(!item.isChecked()) {
-                item.setChecked(true);
-                ((StockFragment) fragmentCurrent).sortItems(Constants.STOCK.SORT.BBD);
-            }
-            return true;
-        });
-        sortAscending.setOnMenuItemClickListener(item -> {
-            item.setChecked(!item.isChecked());
-            ((StockFragment) fragmentCurrent).sortItems(item.isChecked());
-            return true;
-        });
     }
 
     private void updateFab(
