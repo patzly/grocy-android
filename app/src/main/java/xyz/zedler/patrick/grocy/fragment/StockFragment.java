@@ -1098,6 +1098,20 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         });
     }
 
+    public void setUpBottomMenu() {
+        setMenuLocationFilters();
+        setMenuProductGroupFilters();
+        setMenuSorting();
+        MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
+        if(search != null) {
+            search.setOnMenuItemClickListener(item -> {
+                activity.startAnimatedIcon(item);
+                setUpSearch();
+                return true;
+            });
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {

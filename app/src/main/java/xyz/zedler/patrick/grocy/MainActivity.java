@@ -202,19 +202,6 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
             showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
         });
-        bottomAppBar.setOnMenuItemClickListener((MenuItem item) -> {
-            if (SystemClock.elapsedRealtime() - lastClick < 500) return false;
-            lastClick = SystemClock.elapsedRealtime();
-            startAnimatedIcon(item);
-            switch (item.getItemId()) {
-                // STOCK DEFAULT
-                case R.id.action_search:
-                    if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                    ((StockFragment) fragmentCurrent).setUpSearch();
-                    break;
-            }
-            return true;
-        });
 
         scrollBehavior = new BottomAppBarRefreshScrollBehavior(
                 this
@@ -287,9 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
                             if(fragmentCurrent.getClass() == StockFragment.class) {
-                                ((StockFragment) fragmentCurrent).setMenuLocationFilters();
-                                ((StockFragment) fragmentCurrent).setMenuProductGroupFilters();
-                                ((StockFragment) fragmentCurrent).setMenuSorting();
+                                ((StockFragment) fragmentCurrent).setUpBottomMenu();
                             }
                         }
                 );
