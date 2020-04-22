@@ -51,12 +51,10 @@ public final class Constants {
         public final static String MASTER_PRODUCTS = "master_products";
         public final static String MASTER_PRODUCTS_DEFAULT = "master_products_default";
         public final static String MASTER_PRODUCTS_SEARCH = "master_products_search";
-    }
-
-    public final static class FRAGMENT {
-        public final static String STOCK = "stock";
-        public final static String CONSUME = "consume";
-        public final static String MASTER_PRODUCTS = "master_products";
+        public final static String MASTER_LOCATIONS = "master_locations";
+        public final static String MASTER_LOCATIONS_DEFAULT = "master_locations_default";
+        public final static String MASTER_LOCATIONS_SEARCH = "master_locations_search";
+        public final static String MASTER_PRODUCT_EDIT = "master_product_edit";
     }
 
     public final static class STOCK {
@@ -105,10 +103,17 @@ public final class Constants {
         public final static String CURRENT_FRAGMENT = "current_fragment";
     }
 
-    public final static class FAB_POSITION {
-        public final static int GONE = 0;
-        public final static int CENTER = 1;
-        public final static int END = 2;
+    public final static class FAB {
+        public final static class POSITION {
+            public final static int GONE = 0;
+            public final static int CENTER = 1;
+            public final static int END = 2;
+        }
+        public final static class TAG {
+            public final static String ADD = "add";
+            public final static String SCAN = "scan";
+            public final static String SAVE = "save";
+        }
     }
 
     public final static class REQUEST {

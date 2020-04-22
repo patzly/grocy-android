@@ -78,7 +78,7 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
             case R.id.linear_master_data_products:
                 if(!uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
                     replaceFragment(
-                            Constants.FRAGMENT.MASTER_PRODUCTS,
+                            Constants.UI.MASTER_PRODUCTS,
                             Constants.UI.MASTER_PRODUCTS_DEFAULT
                     );
                 }

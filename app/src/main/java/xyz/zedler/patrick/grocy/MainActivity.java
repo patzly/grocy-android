@@ -1,5 +1,7 @@
 package xyz.zedler.patrick.grocy;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -47,6 +49,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductEditFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
@@ -256,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(
                             R.id.linear_container_main,
                             fragmentCurrent,
-                            Constants.FRAGMENT.STOCK
+                            Constants.UI.STOCK
                     ).commit();
             bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
         }
@@ -281,8 +284,9 @@ public class MainActivity extends AppCompatActivity {
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_stock);
+                scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB_POSITION.CENTER, R.menu.menu_stock, animated, () -> {
+                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
                             setLocationFilters(locations);
                             setProductGroupFilters(productGroups);
                             updateSorting();
@@ -291,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 updateFab(
                         R.drawable.ic_round_barcode_scan,
                         R.string.action_back,
-                        "Scan",
+                        Constants.FAB.TAG.SCAN,
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == StockFragment.class) {
@@ -301,8 +305,9 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.CONSUME:
+                scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
-                        Constants.FAB_POSITION.GONE, R.menu.menu_consume, animated,
+                        Constants.FAB.POSITION.GONE, R.menu.menu_consume, animated,
                         () -> new Handler().postDelayed(
                                 () -> {
                                     if(fragmentCurrent.getClass() == ConsumeFragment.class) {
@@ -316,8 +321,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_master_products);
+                scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB_POSITION.CENTER, R.menu.menu_stock, animated, () -> {
+                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
                             /*setProductGroupFilters(productGroups);
                             updateSorting();*/
                         }
@@ -325,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                 updateFab(
                         R.drawable.ic_round_add_anim,
                         R.string.action_add,
-                        "Add",
+                        Constants.FAB.TAG.ADD,
                         animated,
                         () -> {
                             /*if(fragmentCurrent.getClass() == StockFragment.class) {
@@ -334,27 +340,27 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-
-                /*String fabPosition;
-                if(sharedPrefs.getBoolean(PREF_FAB_IN_FEED, DEFAULT_FAB_IN_FEED)) {
-                    fabPosition = FAB_POSITION_CENTER;
-                } else {
-                    fabPosition = FAB_POSITION_GONE;
-                }
-
+            case Constants.UI.MASTER_PRODUCT_EDIT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_product_edit);
+                scrollBehavior.setHideOnScroll(false);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.END, R.menu.menu_stock, animated, () -> {
+                            /*setProductGroupFilters(productGroups);
+                            updateSorting();*/
+                        }
+                );
                 updateFab(
-                        R.drawable.ic_round_add_anim,
-                        R.string.action_add_channel,
-                        FAB_TAG_ADD,
+                        R.drawable.ic_round_save_alt_anim,
+                        R.string.action_save,
+                        Constants.FAB.TAG.SAVE,
                         animated,
                         () -> {
-                            showBottomSheet(new ChannelAddBottomSheetDialogFragment());
-                            setUnreadCount(
-                                    sharedPrefs.getInt(PREF_UNREAD_COUNT, 0) + 1
-                            );
+                            /*if(fragmentCurrent.getClass() == StockFragment.class) {
+                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
+                            }*/
                         }
-                );*/
-
+                );
+                break;
             default: Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
@@ -366,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
             Runnable onMenuChanged
     ) {
         switch (newFabPosition) {
-            case Constants.FAB_POSITION.CENTER:
+            case Constants.FAB.POSITION.CENTER:
                 if(fab.isOrWillBeHidden()) fab.show();
                 bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
@@ -375,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
-            case Constants.FAB_POSITION.END:
+            case Constants.FAB.POSITION.END:
                 if(fab.isOrWillBeHidden()) fab.show();
                 bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
@@ -384,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomAppBar.hideNavigationIcon();
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
-            case Constants.FAB_POSITION.GONE:
+            case Constants.FAB.POSITION.GONE:
                 if(fab.isOrWillBeShown()) fab.hide();
                 bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
@@ -510,20 +516,26 @@ public class MainActivity extends AppCompatActivity {
                     ((MasterProductsFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
+            case Constants.UI.MASTER_PRODUCT_EDIT:
+                dismissFragment();
+                break;
             default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
     }
 
     public void replaceFragment(String newFragment, Bundle bundle, boolean animated) {
         switch (newFragment) {
-            case Constants.FRAGMENT.STOCK:
+            case Constants.UI.STOCK:
                 fragmentCurrent = new StockFragment();
                 break;
-            case Constants.FRAGMENT.CONSUME:
+            case Constants.UI.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
                 break;
-            case Constants.FRAGMENT.MASTER_PRODUCTS:
+            case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();
+                break;
+            case Constants.UI.MASTER_PRODUCT_EDIT:
+                fragmentCurrent = new MasterProductEditFragment();
                 break;
             default:
                 Log.e(TAG, "replaceFragment: invalid argument");
@@ -547,15 +559,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dismissFragments() {
-        if(fragmentManager.getBackStackEntryCount() >= 1) {
-            for(int i = 0; i < fragmentManager.getBackStackEntryCount() ; i++) {
+        int count = fragmentManager.getBackStackEntryCount();
+        if(count >= 1) {
+            for(int i = 0; i < count ; i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.FRAGMENT.STOCK);
+            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
 
             Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
-            Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + fragmentManager.getBackStackEntryCount());
+            Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
+        }
+        bottomAppBar.show();
+    }
+
+    private void dismissFragment() {
+        int count = fragmentManager.getBackStackEntryCount();
+        if(count >= 1) {
+            fragmentManager.popBackStack();
+            Log.i(
+                    TAG,
+                    "dismissFragment: fragment dismissed, current = "
+                            + fragmentManager.getBackStackEntryAt(0).getName()
+            );
+        } else {
+            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
         }
         bottomAppBar.show();
     }
@@ -624,23 +652,25 @@ public class MainActivity extends AppCompatActivity {
                 );
                 animOut.setDuration(duration / 2);
                 animOut.setInterpolator(new FastOutSlowInInterpolator());
+                animOut.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fab.setImageResource(icon);
+                        ValueAnimator animIn = ValueAnimator.ofInt(0, 255);
+                        animIn.addUpdateListener(
+                                anim -> fab.setImageAlpha((int) (anim.getAnimatedValue()))
+                        );
+                        animIn.setDuration(duration / 2);
+                        animIn.setInterpolator(new FastOutSlowInInterpolator());
+                        animIn.start();
+                    }
+                });
                 animOut.start();
-
-                new Handler().postDelayed(() -> {
-                    fab.setImageResource(icon);
-                    ValueAnimator animIn = ValueAnimator.ofInt(0, 255);
-                    animIn.addUpdateListener(
-                            animation -> fab.setImageAlpha((int) (animation.getAnimatedValue()))
-                    );
-                    animIn.setDuration(duration / 2);
-                    animIn.setInterpolator(new FastOutSlowInInterpolator());
-                    animIn.start();
-                }, duration / 2);
             } else {
                 fab.setImageResource(icon);
             }
             fab.setTag(tag);
-            Log.i(TAG, "replaceFabIcon: replaced successfully, animated = " + animated);
+            Log.i(TAG, "replaceFabIcon: replaced, animated = " + animated);
         } else {
             Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
         }

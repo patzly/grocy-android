@@ -109,10 +109,13 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
 				case R.id.action_edit:
-					/*((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_ALL,
-							product.getId()
-					);*/
+					//Bundle bundleProduct = new Bundle();
+					//bundleProduct.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+					activity.replaceFragment(
+							Constants.UI.MASTER_PRODUCT_EDIT,
+							null,
+							true
+					);
 					dismiss();
 					return true;
 				case R.id.action_delete:

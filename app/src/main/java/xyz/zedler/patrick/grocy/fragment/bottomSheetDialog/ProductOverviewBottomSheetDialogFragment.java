@@ -285,7 +285,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		// LOCATION
 		itemLocation.setText(
-				activity.getString(R.string.property_default_location),
+				activity.getString(R.string.property_location_default),
 				location != null ? location.getName() : "",
 				null
 		);

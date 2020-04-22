@@ -54,7 +54,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class MasterLocationsFragment extends Fragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
-    private final static String TAG = Constants.FRAGMENT.MASTER_PRODUCTS;
+    private final static String TAG = Constants.UI.MASTER_LOCATIONS;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;

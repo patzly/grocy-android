@@ -159,7 +159,7 @@
         <item name="errorTextColor">@color/error</item>
     </style>
 
-    <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
@@ -169,9 +169,11 @@
         <item name="hintTextColor">@color/secondary</item>
         <item name="android:textColorHint">@color/on_background_secondary</item>
         <item name="errorTextColor">@color/error</item>
+        <item name="errorIconTint">@color/error</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
     </style>
 
-    <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+    <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
@@ -181,6 +183,8 @@
         <item name="hintTextColor">@color/secondary</item>
         <item name="android:textColorHint">@color/on_background_secondary</item>
         <item name="errorTextColor">@color/error</item>
+        <item name="errorIconTint">@color/error</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
     </style>
 
     <style name="Widget.Grocy.TextInputLayout.FilledBox.Mini" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">

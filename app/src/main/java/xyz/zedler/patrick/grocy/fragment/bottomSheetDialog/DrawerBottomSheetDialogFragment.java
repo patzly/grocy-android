@@ -86,7 +86,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         switch(v.getId()) {
             case R.id.linear_drawer_consume:
                 if(!uiMode.startsWith(Constants.UI.CONSUME)) {
-                    replaceFragment(Constants.FRAGMENT.CONSUME, Constants.UI.CONSUME);
+                    replaceFragment(Constants.UI.CONSUME, Constants.UI.CONSUME);
                 }
                 break;
             case R.id.linear_drawer_master_data:

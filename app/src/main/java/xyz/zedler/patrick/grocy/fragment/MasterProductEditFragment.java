@@ -1,29 +1,18 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -31,46 +20,28 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.VolleyError;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialAutoCompleteTextView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
-import xyz.zedler.patrick.grocy.model.StockEntries;
-import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.model.StockLocations;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ConsumeFragment extends Fragment {
+public class MasterProductEditFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.CONSUME;
+    private final static String TAG = Constants.UI.MASTER_PRODUCT_EDIT;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -78,16 +49,23 @@ public class ConsumeFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
-    private ArrayAdapter<String> adapterProducts;
-    private ProductDetails productDetails;
+    private ArrayAdapter<String>
+            adapterProducts,
+            adapterLocations,
+            adapterProductGroups,
+            adapterQuantityUnits;
 
     private List<Product> products = new ArrayList<>();
-    private List<StockLocation> stockLocations = new ArrayList<>();
-    private List<StockEntry> stockEntries = new ArrayList<>();
+    private List<Location> locations = new ArrayList<>();
+    private List<ProductGroup> productGroups = new ArrayList<>();
+    private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<String> productNames = new ArrayList<>();
+    private List<String> locationNames = new ArrayList<>();
+    private List<String> productGroupNames = new ArrayList<>();
+    private List<String> quantityUnitNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
+    private MaterialAutoCompleteTextView autoCompleteTextViewParentProduct;
     private LinearLayout linearLayoutBarcodesContainer;
     private TextInputLayout textInputProduct, textInputAmount;
     private EditText editTextAmount;
@@ -105,7 +83,11 @@ public class ConsumeFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_consume, container, false);
+        return inflater.inflate(
+                R.layout.fragment_master_product_edit,
+                container,
+                false
+        );
     }
 
     @Override
@@ -126,39 +108,39 @@ public class ConsumeFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_back_consume).setOnClickListener(
+        activity.findViewById(R.id.frame_back_master_product_edit).setOnClickListener(
                 v -> activity.onBackPressed()
         );
 
         // swipe refresh
 
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_consume);
+        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_product_edit);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
         swipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        //swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         // product
 
-        textInputProduct = activity.findViewById(R.id.text_input_consume_product);
+        /*textInputProduct = activity.findViewById(R.id.text_input_consume_product);
         textInputProduct.setErrorIconDrawable(null);
         textInputProduct.setEndIconOnClickListener(v -> startActivityForResult(
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
-        autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
-        assert autoCompleteTextViewProduct != null;
-        autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        autoCompleteTextViewParentProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
+        assert autoCompleteTextViewParentProduct != null;
+        autoCompleteTextViewParentProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 startAnimatedIcon(R.id.image_consume_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             }
         });
-        autoCompleteTextViewProduct.setOnItemClickListener(
+        autoCompleteTextViewParentProduct.setOnItemClickListener(
                 (parent, view, position, id) -> loadProductDetails(
                         products.get(
                                 productNames.indexOf(
@@ -167,7 +149,7 @@ public class ConsumeFragment extends Fragment {
                         ).getId()
                 )
         );
-        autoCompleteTextViewProduct.setOnEditorActionListener(
+        autoCompleteTextViewParentProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         editTextAmount.requestFocus();
@@ -297,14 +279,14 @@ public class ConsumeFragment extends Fragment {
 
         // START
 
-        load();
+        load();*/
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.CONSUME, TAG);
+        activity.updateUI(Constants.UI.MASTER_PRODUCT_EDIT, TAG);
     }
 
-    private void load() {
+    /*private void load() {
         if(activity.isOnline()) {
             download();
         }
@@ -329,16 +311,16 @@ public class ConsumeFragment extends Fragment {
             );
         }
 
-        clearAll();
+        //clearAll();
     }
 
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
         downloadProductNames();
-    }
+    }*/
 
     private void downloadProductNames() {
-        request.get(
+        /*request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
                     products = gson.fromJson(
@@ -349,7 +331,7 @@ public class ConsumeFragment extends Fragment {
                     adapterProducts = new ArrayAdapter<>(
                             activity, android.R.layout.simple_list_item_1, productNames
                     );
-                    autoCompleteTextViewProduct.setAdapter(adapterProducts);
+                    autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
                     // download finished
                     swipeRefreshLayout.setRefreshing(false);
                 }, error -> {
@@ -367,19 +349,19 @@ public class ConsumeFragment extends Fragment {
                             )
                     );
                 }
-        );
+        );*/
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {
             if(data != null) {
-                loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
+                //loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
             }
         }
-    }
+    }*/
 
-    private void fillWithProductDetails() {
+    /*private void fillWithProductDetails() {
         clearInputFocus();
 
         boolean isTareWeightHandlingEnabled = productDetails
@@ -402,7 +384,7 @@ public class ConsumeFragment extends Fragment {
         }
 
         // PRODUCT
-        autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
+        autoCompleteTextViewParentProduct.setText(productDetails.getProduct().getName());
         textInputProduct.setErrorEnabled(false);
 
         // AMOUNT
@@ -516,7 +498,7 @@ public class ConsumeFragment extends Fragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        autoCompleteTextViewProduct.setText(barcode);
+                        autoCompleteTextViewParentProduct.setText(barcode);
                         activity.showBottomSheet(
                                 new ConsumeBarcodeBottomSheetDialogFragment(), null
                         );
@@ -535,7 +517,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private boolean isFormIncomplete() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = autoCompleteTextViewParentProduct.getText().toString().trim();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
             activity.showBottomSheet(
                     new ConsumeBarcodeBottomSheetDialogFragment(), null
@@ -878,7 +860,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void addInputAsBarcode() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = autoCompleteTextViewParentProduct.getText().toString().trim();
         if(input.equals("")) return;
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
@@ -890,8 +872,8 @@ public class ConsumeFragment extends Fragment {
                                 Snackbar.LENGTH_SHORT
                         )
                 );
-                autoCompleteTextViewProduct.setText(null);
-                autoCompleteTextViewProduct.requestFocus();
+                autoCompleteTextViewParentProduct.setText(null);
+                autoCompleteTextViewParentProduct.requestFocus();
                 return;
             }
         }
@@ -900,13 +882,13 @@ public class ConsumeFragment extends Fragment {
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
         linearLayoutBarcodesContainer.addView(inputChipBarcode);
-        autoCompleteTextViewProduct.setText(null);
-        autoCompleteTextViewProduct.requestFocus();
+        autoCompleteTextViewParentProduct.setText(null);
+        autoCompleteTextViewParentProduct.requestFocus();
     }
 
     public void clearAll() {
         textInputProduct.setErrorEnabled(false);
-        autoCompleteTextViewProduct.setText(null);
+        autoCompleteTextViewParentProduct.setText(null);
         textInputAmount.setErrorEnabled(false);
         textInputAmount.setHint(activity.getString(R.string.property_amount));
         editTextAmount.setText(null);
@@ -933,7 +915,7 @@ public class ConsumeFragment extends Fragment {
 
     private void startAnimatedIcon(@IdRes int viewId) {
         startAnimatedIcon(activity.findViewById(viewId));
-    }
+    }*/
 
     private void startAnimatedIcon(View view) {
         try {

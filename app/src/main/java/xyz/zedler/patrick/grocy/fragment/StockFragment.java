@@ -65,7 +65,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = Constants.FRAGMENT.STOCK;
+    private final static String TAG = Constants.UI.STOCK;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
