@@ -9,6 +9,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.Store;
 
 public class SortUtil {
 
@@ -67,6 +68,16 @@ public class SortUtil {
         if(locations == null) return;
         Collections.sort(
                 locations,
+                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
+                        (ascending ? item2 : item1).getName().toLowerCase()
+                )
+        );
+    }
+
+    public static void sortStoresByName(List<Store> stores, boolean ascending) {
+        if(stores == null) return;
+        Collections.sort(
+                stores,
                 (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
                         (ascending ? item2 : item1).getName().toLowerCase()
                 )

@@ -11,14 +11,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -34,15 +32,15 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class MasterLocationFragment extends Fragment {
+public class MasterStoreFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.MASTER_LOCATION_EDIT;
+    private final static String TAG = Constants.UI.MASTER_STORE_EDIT;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -50,16 +48,15 @@ public class MasterLocationFragment extends Fragment {
     private GrocyApi grocyApi;
     private WebRequest request;
 
-    private Location editLocation;
-    private List<Location> locations = new ArrayList<>();
+    private Store editStore;
+    private List<Store> stores = new ArrayList<>();
     private List<Product> products = new ArrayList<>();
-    private List<String> locationNames = new ArrayList<>();
+    private List<String> storeNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputName, textInputDescription;
     private EditText editTextName, editTextDescription;
     private ImageView imageViewName, imageViewDescription;
-    private MaterialCheckBox checkBoxIsFreezer;
     private boolean isRefresh = false;
 
     @Override
@@ -68,7 +65,7 @@ public class MasterLocationFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_master_location, container, false);
+        return inflater.inflate(R.layout.fragment_master_store, container, false);
     }
 
     @Override
@@ -85,12 +82,12 @@ public class MasterLocationFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_location_cancel).setOnClickListener(
+        activity.findViewById(R.id.frame_master_store_cancel).setOnClickListener(
                 v -> activity.onBackPressed()
         );
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_location);
+        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_store);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
@@ -100,8 +97,8 @@ public class MasterLocationFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_location_name);
-        imageViewName = activity.findViewById(R.id.image_master_location_name);
+        textInputName = activity.findViewById(R.id.text_input_master_store_name);
+        imageViewName = activity.findViewById(R.id.image_master_store_name);
         editTextName = textInputName.getEditText();
         assert editTextName != null;
         editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -109,31 +106,21 @@ public class MasterLocationFragment extends Fragment {
         });
 
         // description
-        textInputDescription = activity.findViewById(R.id.text_input_master_location_description);
-        imageViewDescription = activity.findViewById(R.id.image_master_location_description);
+        textInputDescription = activity.findViewById(R.id.text_input_master_store_description);
+        imageViewDescription = activity.findViewById(R.id.image_master_store_description);
         editTextDescription = textInputDescription.getEditText();
         assert editTextDescription != null;
         editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) startAnimatedIcon(imageViewDescription);
         });
 
-        // is freezer
-        checkBoxIsFreezer = activity.findViewById(R.id.checkbox_master_location_freezer);
-        checkBoxIsFreezer.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> startAnimatedIcon(R.id.image_master_location_freezer)
-        );
-        activity.findViewById(R.id.linear_master_location_freezer).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_master_location_freezer);
-            checkBoxIsFreezer.setChecked(!checkBoxIsFreezer.isChecked());
-        });
-
         // BUNDLE WHEN EDIT
 
         Bundle bundle = getArguments();
         if(bundle != null) {
-            editLocation = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
+            editStore = bundle.getParcelable(Constants.ARGUMENT.STORE);
             // FILL
-            if(editLocation != null) {
+            if(editStore != null) {
                 fillWithEditReferences();
             } else {
                 resetAll();
@@ -182,26 +169,26 @@ public class MasterLocationFragment extends Fragment {
 
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
-        downloadLocations();
+        downloadStores();
         downloadProducts();
     }
 
-    private void downloadLocations() {
+    private void downloadStores() {
         request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+                grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                 response -> {
-                    locations = gson.fromJson(
+                    stores = gson.fromJson(
                             response,
-                            new TypeToken<List<Location>>(){}.getType()
+                            new TypeToken<List<Store>>(){}.getType()
                     );
-                    SortUtil.sortLocationsByName(locations, true);
-                    locationNames = getLocationNames();
+                    SortUtil.sortStoresByName(stores, true);
+                    storeNames = getStoreNames();
 
                     swipeRefreshLayout.setRefreshing(false);
 
                     updateEditReferences();
 
-                    if(isRefresh && editLocation != null) {
+                    if(isRefresh && editStore != null) {
                         fillWithEditReferences();
                     } else {
                         resetAll();
@@ -236,45 +223,43 @@ public class MasterLocationFragment extends Fragment {
     }
 
     private void updateEditReferences() {
-        if(editLocation != null) {
-            Location editLocation = getLocation(this.editLocation.getId());
-            if(editLocation != null) this.editLocation = editLocation;
+        if(editStore != null) {
+            Store editStore = getStore(this.editStore.getId());
+            if(editStore != null) this.editStore = editStore;
         }
     }
 
-    private List<String> getLocationNames() {
+    private List<String> getStoreNames() {
         List<String> names = new ArrayList<>();
-        if(locations != null) {
-            for(Location location : locations) {
-                if(editLocation != null) {
-                    if(location.getId() != editLocation.getId()) {
-                        names.add(location.getName().trim());
+        if(stores != null) {
+            for(Store store : stores) {
+                if(editStore != null) {
+                    if(store.getId() != editStore.getId()) {
+                        names.add(store.getName().trim());
                     }
                 } else {
-                    names.add(location.getName().trim());
+                    names.add(store.getName().trim());
                 }
             }
         }
         return names;
     }
 
-    private Location getLocation(int locationId) {
-        for(Location location : locations) {
-            if(location.getId() == locationId) {
-                return location;
+    private Store getStore(int storeId) {
+        for(Store store : stores) {
+            if(store.getId() == storeId) {
+                return store;
             }
         } return null;
     }
 
     private void fillWithEditReferences() {
         clearInputFocusAndErrors();
-        if(editLocation != null) {
+        if(editStore != null) {
             // name
-            editTextName.setText(editLocation.getName());
+            editTextName.setText(editStore.getName());
             // description
-            editTextDescription.setText(editLocation.getDescription());
-            // is freezer
-            checkBoxIsFreezer.setChecked(editLocation.getIsFreezer() == 1);
+            editTextDescription.setText(editStore.getDescription());
         }
     }
 
@@ -286,35 +271,34 @@ public class MasterLocationFragment extends Fragment {
         textInputDescription.setErrorEnabled(false);
     }
 
-    public void saveLocation() {
+    public void saveStore() {
         if(isFormInvalid()) return;
 
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("name", editTextName.getText().toString().trim());
             jsonObject.put("description", editTextDescription.getText().toString().trim());
-            jsonObject.put("is_freezer", checkBoxIsFreezer.isChecked());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveLocation: " + e);;
+            if(DEBUG) Log.e(TAG, "saveStore: " + e);;
         }
-        if(editLocation != null) {
+        if(editStore != null) {
             request.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
+                    grocyApi.getObject(GrocyApi.ENTITY.STORES, editStore.getId()),
                     jsonObject,
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveLocation: " + error);
+                        Log.e(TAG, "saveStore: " + error);
                     }
             );
         } else {
             request.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+                    grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                     jsonObject,
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveLocation: " + error);
+                        Log.e(TAG, "saveStore: " + error);
                     }
             );
         }
@@ -328,7 +312,7 @@ public class MasterLocationFragment extends Fragment {
         if(name.equals("")) {
             textInputName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
-        } else if(!locationNames.isEmpty() && locationNames.contains(name)) {
+        } else if(!storeNames.isEmpty() && storeNames.contains(name)) {
             textInputName.setError(activity.getString(R.string.error_duplicate));
             isInvalid = true;
         }
@@ -337,23 +321,23 @@ public class MasterLocationFragment extends Fragment {
     }
 
     private void resetAll() {
-        if(editLocation != null) return;
+        if(editStore != null) return;
         clearInputFocusAndErrors();
         editTextName.setText(null);
         editTextDescription.setText(null);
-        checkBoxIsFreezer.setChecked(false);
     }
 
-    public void checkForUsage(Location location) {
+    public void checkForUsage(Store store) {
         if(!products.isEmpty()) {
             for(Product product : products) {
-                if(product.getLocationId() == location.getId()) {
+                if(product.getStoreId() == null) continue;
+                if(product.getStoreId().equals(String.valueOf(store.getId()))) {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.type_location)
+                                            activity.getString(R.string.type_store)
                                     ),
                                     Snackbar.LENGTH_LONG
                             )
@@ -363,14 +347,14 @@ public class MasterLocationFragment extends Fragment {
             }
         }
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
+        bundle.putParcelable(Constants.ARGUMENT.STORE, store);
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.STORE);
         activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
     }
 
-    public void deleteLocation(Location location) {
+    public void deleteStore(Store store) {
         request.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, location.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.STORES, store.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );
@@ -391,15 +375,11 @@ public class MasterLocationFragment extends Fragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 activity.startAnimatedIcon(item);
-                checkForUsage(editLocation);
+                checkForUsage(editStore);
                 return true;
             });
-            delete.setVisible(editLocation != null);
+            delete.setVisible(editStore != null);
         }
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        startAnimatedIcon(activity.findViewById(viewId));
     }
 
     @SuppressLint("LongLogTag")

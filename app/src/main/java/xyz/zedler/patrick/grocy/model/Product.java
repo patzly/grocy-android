@@ -78,6 +78,9 @@ public class Product implements Parcelable {
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
     int cumulateMinStockAmountOfSubProducts;
 
+    @SerializedName("shopping_location_id")
+    String storeId;
+
     public Product(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
@@ -102,6 +105,7 @@ public class Product implements Parcelable {
         parentProductId = parcel.readString();
         calories = parcel.readInt();
         cumulateMinStockAmountOfSubProducts = parcel.readInt();
+        storeId = parcel.readString();
     }
 
     @Override
@@ -129,6 +133,7 @@ public class Product implements Parcelable {
         dest.writeString(parentProductId);
         dest.writeDouble(calories);
         dest.writeInt(cumulateMinStockAmountOfSubProducts);
+        dest.writeString(storeId);
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -234,6 +239,10 @@ public class Product implements Parcelable {
 
     public int getCumulateMinStockAmountOfSubProducts() {
         return cumulateMinStockAmountOfSubProducts;
+    }
+
+    public String getStoreId() {
+        return storeId;
     }
 
     @Override

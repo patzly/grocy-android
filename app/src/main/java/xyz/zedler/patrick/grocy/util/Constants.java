@@ -52,12 +52,16 @@ public final class Constants {
         public final static String MASTER_PRODUCTS = "master_products";
         public final static String MASTER_PRODUCTS_DEFAULT = "master_products_default";
         public final static String MASTER_PRODUCTS_SEARCH = "master_products_search";
+        public final static String MASTER_PRODUCT_EDIT_EXTENDED = "master_product_edit_extended";
+        public final static String MASTER_PRODUCT_EDIT_SIMPLE = "master_product_edit_simple";
         public final static String MASTER_LOCATIONS = "master_locations";
         public final static String MASTER_LOCATIONS_DEFAULT = "master_locations_default";
         public final static String MASTER_LOCATIONS_SEARCH = "master_locations_search";
-        public final static String MASTER_PRODUCT_EDIT_EXTENDED = "master_product_edit_extended";
-        public final static String MASTER_PRODUCT_EDIT_SIMPLE = "master_product_edit_simple";
         public final static String MASTER_LOCATION_EDIT = "master_location";
+        public final static String MASTER_STORES = "master_stores";
+        public final static String MASTER_STORES_DEFAULT = "master_stores_default";
+        public final static String MASTER_STORES_SEARCH = "master_stores_search";
+        public final static String MASTER_STORE_EDIT = "master_store";
     }
 
     public final static class STOCK {
@@ -97,6 +101,7 @@ public final class Constants {
         public final static String QUANTITY_UNIT_STOCK = "quantity_unit_stock";
         public final static String LOCATION = "location";
         public final static String LOCATIONS = "locations";
+        public final static String STORE = "store";
         public final static String PRODUCT_GROUP = "product_group";
         public final static String PRODUCT_GROUPS = "product_groups";
         public final static String STOCK_LOCATIONS = "stock_locations";

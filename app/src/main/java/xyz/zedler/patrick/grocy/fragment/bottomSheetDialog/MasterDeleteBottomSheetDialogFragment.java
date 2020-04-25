@@ -19,10 +19,13 @@ import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -34,7 +37,7 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
 
     private Product product;
     private Location location;
-    // TODO: private Store store;
+    private Store store;
     private QuantityUnit quantityUnit;
     private ProductGroup productGroup;
 
@@ -69,6 +72,13 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                     if(location != null) {
                         textType = activity.getString(R.string.type_location);
                         textName = location.getName();
+                    }
+                    break;
+                case Constants.ARGUMENT.STORE:
+                    store = bundle.getParcelable(Constants.ARGUMENT.STORE);
+                    if(store != null) {
+                        textType = activity.getString(R.string.type_store);
+                        textName = store.getName();
                     }
                     break;
                 case Constants.ARGUMENT.QUANTITY_UNIT:
@@ -106,6 +116,10 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                 ((MasterLocationsFragment) current).deleteLocation(location);
             } else if(current.getClass() == MasterLocationFragment.class) {
                 ((MasterLocationFragment) current).deleteLocation(location);
+            } else if(current.getClass() == MasterStoresFragment.class) {
+                ((MasterStoresFragment) current).deleteStore(store);
+            } else if(current.getClass() == MasterStoreFragment.class) {
+                ((MasterStoreFragment) current).deleteStore(store);
             }
             dismiss();
         });

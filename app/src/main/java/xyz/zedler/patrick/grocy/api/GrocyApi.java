@@ -23,6 +23,7 @@ public class GrocyApi {
     public final static class ENTITY {
         public final static String PRODUCTS = "products";
         public final static String LOCATIONS = "locations";
+        public final static String STORES = "shopping_locations";
         public final static String QUANTITY_UNITS = "quantity_units";
         public final static String QUANTITY_UNIT_CONVERSIONS = "quantity_unit_conversions";
         public final static String SHOPPING_LIST = "shopping_list";
