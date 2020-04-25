@@ -57,6 +57,7 @@ public final class Constants {
         public final static String MASTER_LOCATIONS_SEARCH = "master_locations_search";
         public final static String MASTER_PRODUCT_EDIT_EXTENDED = "master_product_edit_extended";
         public final static String MASTER_PRODUCT_EDIT_SIMPLE = "master_product_edit_simple";
+        public final static String MASTER_LOCATION = "master_location";
     }
 
     public final static class STOCK {

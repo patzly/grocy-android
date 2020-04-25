@@ -489,7 +489,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                             response,
                             new TypeToken<List<Location>>(){}.getType()
                     );
-                    SortUtil.sortLocationsByName(locations);
+                    SortUtil.sortLocationsByName(locations, true);
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
@@ -505,7 +505,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                             response,
                             new TypeToken<List<ProductGroup>>(){}.getType()
                     );
-                    SortUtil.sortProductGroupsByName(productGroups);
+                    SortUtil.sortProductGroupsByName(productGroups, true);
                     // Insert NONE as first element
                     productGroups.add(
                             0,
@@ -526,7 +526,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                             response,
                             new TypeToken<List<QuantityUnit>>(){}.getType()
                     );
-                    SortUtil.sortQuantityUnitsByName(quantityUnits);
+                    SortUtil.sortQuantityUnitsByName(quantityUnits, true);
                 },
                 this::onDownloadError,
                 this::onQueueEmpty

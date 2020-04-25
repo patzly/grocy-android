@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
@@ -338,6 +339,31 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
                 break;
+            case Constants.UI.MASTER_LOCATIONS_DEFAULT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_locations);
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.CENTER,
+                        R.menu.menu_master_items,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterLocationsFragment.class) {
+                                ((MasterLocationsFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_add_anim,
+                        R.string.action_add,
+                        Constants.FAB.TAG.ADD,
+                        animated,
+                        () -> replaceFragment(
+                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                null,
+                                true
+                        )
+                );
+                break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 scrollBehavior.setUpScroll(R.id.scroll_master_product_edit_simple);
                 scrollBehavior.setHideOnScroll(false);
@@ -432,17 +458,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.CONSUME:
-                dismissFragments();
-                break;
             case Constants.UI.PURCHASE:
-                dismissFragments();
-                break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
+            case Constants.UI.MASTER_LOCATIONS_DEFAULT:
                 dismissFragments();
                 break;
             case Constants.UI.MASTER_PRODUCTS_SEARCH:
                 if(fragmentCurrent.getClass() == MasterProductsFragment.class) {
                     ((MasterProductsFragment) fragmentCurrent).dismissSearch();
+                }
+                break;
+            case Constants.UI.MASTER_LOCATIONS_SEARCH:
+                if(fragmentCurrent.getClass() == MasterLocationsFragment.class) {
+                    ((MasterLocationsFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
@@ -465,6 +493,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();
+                break;
+            case Constants.UI.MASTER_LOCATIONS:
+                fragmentCurrent = new MasterLocationsFragment();
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 fragmentCurrent = new MasterProductEditSimpleFragment();

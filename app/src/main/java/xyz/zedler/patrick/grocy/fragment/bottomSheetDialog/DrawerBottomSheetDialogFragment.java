@@ -89,12 +89,12 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         switch(v.getId()) {
             case R.id.linear_drawer_consume:
                 if(!uiMode.startsWith(Constants.UI.CONSUME)) {
-                    replaceFragment(Constants.UI.CONSUME, Constants.UI.CONSUME);
+                    replaceFragment(Constants.UI.CONSUME);
                 }
                 break;
             case R.id.linear_drawer_purchase:
                 if(!uiMode.startsWith(Constants.UI.PURCHASE)) {
-                    replaceFragment(Constants.UI.PURCHASE, Constants.UI.PURCHASE);
+                    replaceFragment(Constants.UI.PURCHASE);
                 }
                 break;
             case R.id.linear_drawer_master_data:
@@ -121,7 +121,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         }
     }
 
-    private void replaceFragment(String fragmentNew, String uiModeNew) {
+    private void replaceFragment(String fragmentNew) {
         activity.replaceFragment(fragmentNew, null, true);
         dismiss();
     }

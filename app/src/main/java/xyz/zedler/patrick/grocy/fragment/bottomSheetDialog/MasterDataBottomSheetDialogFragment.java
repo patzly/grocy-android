@@ -52,14 +52,15 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
 
         setOnClickListeners(
-                R.id.linear_master_data_products
+                R.id.linear_master_data_products,
+                R.id.linear_master_data_locations
         );
 
         if(uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
             select(R.id.linear_master_data_products, R.id.text_master_data_products);
-        }/* else if(uiMode.startsWith(Constants.UI.MASTER)) {
-            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
-        }*/
+        } else if(uiMode.startsWith(Constants.UI.MASTER_LOCATIONS)) {
+            select(R.id.linear_master_data_locations, R.id.text_master_data_locations);
+        }
 
         return view;
     }
@@ -77,10 +78,12 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
         switch(v.getId()) {
             case R.id.linear_master_data_products:
                 if(!uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
-                    replaceFragment(
-                            Constants.UI.MASTER_PRODUCTS,
-                            Constants.UI.MASTER_PRODUCTS_DEFAULT
-                    );
+                    replaceFragment(Constants.UI.MASTER_PRODUCTS);
+                }
+                break;
+            case R.id.linear_master_data_locations:
+                if(!uiMode.startsWith(Constants.UI.MASTER_LOCATIONS)) {
+                    replaceFragment(Constants.UI.MASTER_LOCATIONS);
                 }
                 break;
         }
@@ -93,7 +96,7 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
         );
     }
 
-    private void replaceFragment(String fragmentNew, String uiModeNew) {
+    private void replaceFragment(String fragmentNew) {
         activity.replaceFragment(fragmentNew, null, true);
         dismiss();
     }
