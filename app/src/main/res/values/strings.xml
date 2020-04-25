@@ -130,6 +130,7 @@
     <string name="property_product_groups">Product groups</string>
     <string name="property_opened">opened</string>
     <string name="property_not_opened">not opened</string>
+    <string name="property_is_freezer">Is freezer</string>
 
     <string name="date_ago">%1$s ago</string>
     <string name="date_yesterday">Yesterday</string>

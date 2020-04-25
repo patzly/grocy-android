@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterLocationAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -350,7 +351,7 @@ public class MasterLocationsFragment extends Fragment
         showLocationSheet(displayedLocations.get(position));
     }
 
-    public void editProduct(Location location) {
+    public void editLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
         activity.replaceFragment(Constants.UI.MASTER_LOCATION, bundle, true);
@@ -360,7 +361,7 @@ public class MasterLocationsFragment extends Fragment
         if(location != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            //activity.showBottomSheet(new MasterProductBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new MasterLocationBottomSheetDialogFragment(), bundle);
         }
     }
 
