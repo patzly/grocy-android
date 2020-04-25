@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -18,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -107,22 +109,15 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_master_product);
 		toolbar.setOnMenuItemClickListener(item -> {
+			Fragment fragmentCurrent = activity.getCurrentFragment();
+			if(fragmentCurrent.getClass() != MasterProductsFragment.class) return false;
 			switch (item.getItemId()) {
 				case R.id.action_edit:
-					//Bundle bundleProduct = new Bundle();
-					//bundleProduct.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					activity.replaceFragment(
-							Constants.UI.MASTER_PRODUCT_EDIT,
-							null,
-							true
-					);
+					((MasterProductsFragment) fragmentCurrent).editProduct(product);
 					dismiss();
 					return true;
 				case R.id.action_delete:
-					/*((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_SPOILED,
-							product.getId()
-					);*/
+					((MasterProductsFragment) fragmentCurrent).checkForStock(product);
 					dismiss();
 					return true;
 			}

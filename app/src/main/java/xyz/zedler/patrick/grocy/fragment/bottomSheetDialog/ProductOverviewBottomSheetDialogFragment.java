@@ -240,6 +240,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		// LOAD DETAILS
 
 		if(activity.isOnline() && !hasDetails()) {
+			// TODO: global queue
 			new WebRequest(activity.getRequestQueue()).get(
 					activity.getGrocy().getStockProductDetails(product.getId()),
 					response -> {

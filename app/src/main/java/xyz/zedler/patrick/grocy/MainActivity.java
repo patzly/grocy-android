@@ -42,18 +42,14 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -62,7 +58,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
 
     private RequestQueue requestQueue;
     private WebRequest request;
@@ -72,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private long lastClick = 0;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
-
-    private List<Location> locations = new ArrayList<>();;
-    List<ProductGroup> productGroups = new ArrayList<>();;
 
     private CustomBottomAppBar bottomAppBar;
     private Fragment fragmentCurrent;
@@ -139,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
                                 .putInt(
                                         Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
                                         jsonObject.getInt("product_presets_location_id")
-                                ).putInt(
+                                ).putString(
                                         Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                                        jsonObject.getInt("product_presets_product_group_id")
+                                        jsonObject.getString("product_presets_product_group_id")
                                 ).putInt(
                                         Constants.PREF.PRODUCT_PRESETS_QU_ID,
                                         jsonObject.getInt("product_presets_qu_id")
@@ -263,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(String uiMode, String origin) {
-        Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
+        if(DEBUG) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
         boolean animated = sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false);
         this.uiMode = uiMode;
 
@@ -305,13 +298,32 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
                 break;
+            case Constants.UI.PURCHASE:
+                scrollBehavior.setHideOnScroll(false);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.GONE, R.menu.menu_consume, animated,
+                        () -> new Handler().postDelayed(
+                                () -> {
+                                    if(fragmentCurrent.getClass() == PurchaseFragment.class) {
+                                        /*((PurchaseFragment) fragmentCurrent)
+                                                .refreshProductOverviewIcon();*/
+                                    }
+                                },
+                                50
+                        )
+                );
+                break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_master_products);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
-                            /*setProductGroupFilters(productGroups);
-                            updateSorting();*/
+                        Constants.FAB.POSITION.CENTER,
+                        R.menu.menu_master_products,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterProductsFragment.class) {
+                                ((MasterProductsFragment) fragmentCurrent).setUpBottomMenu();
+                            }
                         }
                 );
                 updateFab(
@@ -319,35 +331,39 @@ public class MainActivity extends AppCompatActivity {
                         R.string.action_add,
                         Constants.FAB.TAG.ADD,
                         animated,
-                        () -> {
-                            /*if(fragmentCurrent.getClass() == StockFragment.class) {
-                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
-                            }*/
-                        }
+                        () -> replaceFragment(
+                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                null,
+                                true
+                        )
                 );
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT:
-                scrollBehavior.setUpScroll(R.id.scroll_master_product_edit);
+            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+                scrollBehavior.setUpScroll(R.id.scroll_master_product_edit_simple);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.END, R.menu.menu_stock, animated, () -> {
-                            /*setProductGroupFilters(productGroups);
-                            updateSorting();*/
+                        Constants.FAB.POSITION.END,
+                        R.menu.menu_master_product_edit,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterProductEditSimpleFragment.class) {
+                                ((MasterProductEditSimpleFragment) fragmentCurrent).setUpBottomMenu();
+                            }
                         }
                 );
                 updateFab(
-                        R.drawable.ic_round_save_alt_anim,
+                        R.drawable.ic_round_backup,
                         R.string.action_save,
                         Constants.FAB.TAG.SAVE,
                         animated,
                         () -> {
-                            /*if(fragmentCurrent.getClass() == StockFragment.class) {
-                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
-                            }*/
+                            if(fragmentCurrent.getClass() == MasterProductEditSimpleFragment.class) {
+                                ((MasterProductEditSimpleFragment) fragmentCurrent).saveProduct();
+                            }
                         }
                 );
-                break;
-            default: Log.e(TAG, "updateUI: no action for " + uiMode);
+            break;
+            default: if(DEBUG) Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
 
@@ -418,6 +434,9 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.CONSUME:
                 dismissFragments();
                 break;
+            case Constants.UI.PURCHASE:
+                dismissFragments();
+                break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
                 dismissFragments();
                 break;
@@ -426,10 +445,10 @@ public class MainActivity extends AppCompatActivity {
                     ((MasterProductsFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT:
+            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 dismissFragment();
                 break;
-            default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
+            default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
     }
 
@@ -441,14 +460,17 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
                 break;
+            case Constants.UI.PURCHASE:
+                fragmentCurrent = new PurchaseFragment();
+                break;
             case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT:
-                fragmentCurrent = new MasterProductEditFragment();
+            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+                fragmentCurrent = new MasterProductEditSimpleFragment();
                 break;
             default:
-                Log.e(TAG, "replaceFragment: invalid argument");
+                if(DEBUG) Log.e(TAG, "replaceFragment: invalid argument");
                 return;
         }
         if(bundle != null) {
@@ -461,11 +483,14 @@ public class MainActivity extends AppCompatActivity {
                         R.anim.fade_in,
                         R.anim.slide_out_down)
                 .replace(R.id.linear_container_main, fragmentCurrent, fragmentCurrent.toString())
-                .addToBackStack(newFragment)
+                .addToBackStack(fragmentCurrent.toString())
                 .commit();
         //bottomAppBar.show(fab.isOrWillBeShown());
 
-        Log.i(TAG, "replaceFragment: replaced with " + newFragment + ", animated = " + animated);
+        if(DEBUG) Log.i(
+                TAG,
+                "replaceFragment: replaced with " + newFragment + ", animated = " + animated
+        );
     }
 
     private void dismissFragments() {
@@ -476,24 +501,31 @@ public class MainActivity extends AppCompatActivity {
             }
             fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
 
-            Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
+            if(DEBUG) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
-            Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
+            if(DEBUG) Log.e(
+                    TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count
+            );
         }
         bottomAppBar.show();
     }
 
-    private void dismissFragment() {
+    public void dismissFragment() {
         int count = fragmentManager.getBackStackEntryCount();
-        if(count >= 1) {
+        if(count > 1) {
             fragmentManager.popBackStack();
-            Log.i(
-                    TAG,
-                    "dismissFragment: fragment dismissed, current = "
-                            + fragmentManager.getBackStackEntryAt(0).getName()
-            );
+            String tag = fragmentManager.getBackStackEntryAt(0).getName();
+            fragmentCurrent = fragmentManager.findFragmentByTag(tag);
+            if(fragmentCurrent != null) {
+                if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
+            } else {
+                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
+                if(DEBUG) Log.e(TAG, "dismissFragment: " + tag + " not found");
+            }
         } else {
-            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
+            if(DEBUG) Log.e(
+                    TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count
+            );
         }
         bottomAppBar.show();
     }
@@ -580,9 +612,9 @@ public class MainActivity extends AppCompatActivity {
                 fab.setImageResource(icon);
             }
             fab.setTag(tag);
-            Log.i(TAG, "replaceFabIcon: replaced, animated = " + animated);
+            if(DEBUG) Log.i(TAG, "replaceFabIcon: replaced, animated = " + animated);
         } else {
-            Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
+            if(DEBUG) Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
         }
     }
 
@@ -590,7 +622,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             ((Animatable) drawable).start();
         } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
+            if(DEBUG) Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
     }
 
@@ -599,10 +631,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 ((Animatable) item.getIcon()).start();
             } catch (ClassCastException e) {
-                Log.e(TAG, "startAnimatedIcon(MenuItem) requires AVD!");
+                if(DEBUG) Log.e(TAG, "startAnimatedIcon(MenuItem) requires AVD!");
             }
         } catch (NullPointerException e) {
-            Log.e(TAG, "startAnimatedIcon(MenuItem): Icon missing!");
+            if(DEBUG) Log.e(TAG, "startAnimatedIcon(MenuItem): Icon missing!");
         }
     }
 }

@@ -32,24 +32,35 @@ public class ActionButton extends LinearLayout {
         super(context, attrs);
 
         this.context = context;
-        inflate(context, R.layout.view_action_button, this);
 
-        imageViewIcon = findViewById(R.id.image_action_button);
-        frameLayoutButton = findViewById(R.id.frame_action_button);
+        int iconResId = -1;
+        int colorIconTint = -1;
+        boolean isDense = false;
 
         if(attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ActionButton);
             try {
-                imageViewIcon.setImageResource(
-                        typedArray.getResourceId(R.styleable.ActionButton_icon, -1)
-                );
-                setIconTint(
-                        typedArray.getColor(R.styleable.ActionButton_tint, -1)
-                );
+                iconResId = typedArray.getResourceId(R.styleable.ActionButton_icon, -1);
+                colorIconTint = typedArray.getColor(R.styleable.ActionButton_tint, -1);
+                isDense = typedArray.getBoolean(R.styleable.ActionButton_dense, false);
             } finally {
                 typedArray.recycle();
             }
         }
+
+        inflate(
+                context,
+                isDense
+                        ? R.layout.view_action_button_dense
+                        : R.layout.view_action_button,
+                this
+        );
+
+        imageViewIcon = findViewById(R.id.image_action_button);
+        frameLayoutButton = findViewById(R.id.frame_action_button);
+
+        imageViewIcon.setImageResource(iconResId);
+        setIconTint(colorIconTint);
     }
 
     public void setIcon(@DrawableRes int iconRes) {

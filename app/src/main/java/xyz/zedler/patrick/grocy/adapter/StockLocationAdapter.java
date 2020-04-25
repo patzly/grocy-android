@@ -19,7 +19,7 @@ import xyz.zedler.patrick.grocy.model.StockLocations;
 public class StockLocationAdapter
         extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
 
-    private final static String TAG = StockItemAdapter.class.getSimpleName();
+    private final static String TAG = StockLocationAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private StockLocations stockLocations;
@@ -47,9 +47,7 @@ public class StockLocationAdapter
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutContainer = view.findViewById(
-                    R.id.linear_stock_location_container
-            );
+            linearLayoutContainer = view.findViewById(R.id.linear_stock_location_container);
             linearLayoutDefault = view.findViewById(R.id.linear_stock_location_default);
             textViewName = view.findViewById(R.id.text_stock_location_name);
             imageViewSelected = view.findViewById(R.id.image_stock_location_selected);

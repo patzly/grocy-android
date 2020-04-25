@@ -23,15 +23,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingStart="4dp"
+            android:paddingEnd="0dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:animateLayoutChanges="true">
 
             <FrameLayout
+                android:id="@+id/frame_input_chip_icon"
                 android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp">
+                android:layout_height="24dp">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -53,9 +54,10 @@
                 android:id="@+id/text_input_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:textColor="@color/on_background"
-                android:textSize="14sp"
-                android:fontFamily="@font/roboto_mono_medium" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="18dp"

@@ -5,6 +5,13 @@ TODO:
 - barcode scanning
 - swipe actions: https://github.com/FanFataL/swipe-controller-demo
 - api classes for categories
+- <br> in description away
+- server setting
+- sort with letter capital unsensitive
+- locationId in productDetails can be an old deleted location id -> website displays an empty field on stock overview
+- shorter tags & ids for master edit
+- edit product from product overview
+- id naming convention: "frame_back_..." to "frame_..._back"
 
 
 ILLUSTRATIONS

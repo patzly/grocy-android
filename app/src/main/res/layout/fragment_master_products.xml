@@ -133,6 +133,24 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="100dp">
 
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="ifContentScrolls">
+
+                        <LinearLayout
+                            android:id="@+id/linear_master_products_filter_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:animateLayoutChanges="true"/>
+
+                    </HorizontalScrollView>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_master_products"
                         android:layout_width="match_parent"

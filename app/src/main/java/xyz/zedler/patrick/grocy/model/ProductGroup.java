@@ -21,6 +21,14 @@ public class ProductGroup implements Parcelable {
     @SerializedName("row_created_timestamp")
     String rowCreatedTimestamp;
 
+    /**
+     * First element in bottomSheet selection: NONE (id = null)
+     */
+    public ProductGroup(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public ProductGroup(Parcel parcel) {
         id = parcel.readString();
         name = parcel.readString();

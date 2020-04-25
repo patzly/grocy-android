@@ -39,6 +39,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
+    <string name="action_show_extended">Show extended form</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
@@ -51,19 +52,32 @@
     <string name="msg_error">An error occurred</string>
     <string name="msg_undone_transaction">Undone transaction</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
+    <string name="msg_barcode_error">An error occurred</string>
+    <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
+    <string name="msg_master_delete_stock">This product still has stock</string>
 
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, comments or questions? Contact us!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
 
     <string name="error_select_product">Select a product</string>
     <string name="error_empty">Required</string>
+    <string name="error_duplicate">Already exists</string>
+    <string name="error_parent">Can’t be parent of itself</string>
+    <string name="error_invalid_product">Invalid product</string>
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_invalid_amount">Invalid amount</string>
+    <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
     <string name="error_bounds">Between %1$s and %2$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_offline_subtitle">Check your connection and try again</string>
     <string name="error_unknown">Uups!</string>
     <string name="error_unknown_subtitle">An error occurred</string>
+
+    <string name="type_product">product</string>
+    <string name="type_location">location</string>
+    <string name="type_store">store</string>
+    <string name="type_quantity_unit">quantity unit</string>
+    <string name="type_product_group">product group</string>
 
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
@@ -91,6 +105,8 @@
     <string name="property_amount">Amount</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
+    <string name="property_quantity_unit">Quantity unit</string>
+    <string name="property_quantity_units">Quantity units</string>
     <string name="property_qu_purchase">Quantity unit purchase</string>
     <string name="property_qu_stock">Quantity unit stock</string>
     <string name="property_qu_factor">Quantity unit factor</string>
@@ -102,6 +118,7 @@
     <string name="property_location">Location</string>
     <string name="property_location_default">Default location</string>
     <string name="property_locations">Locations</string>
+    <string name="property_store">Store</string>
     <string name="property_store_default">Default store</string>
     <string name="property_last_purchased">Last purchased</string>
     <string name="property_purchased">Purchased</string>
@@ -110,6 +127,7 @@
     <string name="property_average_shelf_life">Average shelf life</string>
     <string name="property_spoil_rate">Spoil rate</string>
     <string name="property_product_group">Product group</string>
+    <string name="property_product_groups">Product groups</string>
     <string name="property_opened">opened</string>
     <string name="property_not_opened">not opened</string>
 

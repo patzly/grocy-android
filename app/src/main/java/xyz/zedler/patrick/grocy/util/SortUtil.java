@@ -3,7 +3,10 @@ package xyz.zedler.patrick.grocy.util;
 import java.util.Collections;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 
@@ -53,6 +56,30 @@ public class SortUtil {
         Collections.sort(
                 stockLocations,
                 (item1, item2) -> item1.getLocationName().compareTo(item2.getLocationName())
+        );
+    }
+
+    public static void sortLocationsByName(List<Location> locations) {
+        if(locations == null) return;
+        Collections.sort(
+                locations,
+                (item1, item2) -> item1.getName().compareTo(item2.getName())
+        );
+    }
+
+    public static void sortProductGroupsByName(List<ProductGroup> productGroups) {
+        if(productGroups == null) return;
+        Collections.sort(
+                productGroups,
+                (item1, item2) -> item1.getName().compareTo(item2.getName())
+        );
+    }
+
+    public static void sortQuantityUnitsByName(List<QuantityUnit> quantityUnits) {
+        if(quantityUnits == null) return;
+        Collections.sort(
+                quantityUnits,
+                (item1, item2) -> item1.getName().compareTo(item2.getName())
         );
     }
 }

@@ -565,12 +565,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void filterLocation(Location location) {
+    private void filterLocation(Location location) {
         if(filterLocationId != location.getId()) { // only if not already selected
             if(DEBUG) Log.i(TAG, "filterLocation: " + location);
             filterLocationId = location.getId();
             if(inputChipFilterLocation != null) {
-                inputChipFilterLocation.change(location.getName());
+                inputChipFilterLocation.changeText(location.getName());
             } else {
                 inputChipFilterLocation = new InputChip(
                         activity,
@@ -590,12 +590,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void filterProductGroup(ProductGroup productGroup) {
-        if(!filterProductGroupId.equals(String.valueOf(productGroup.getId()))) {
+    private void filterProductGroup(ProductGroup productGroup) {
+        if(!filterProductGroupId.equals(productGroup.getId())) {
             if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = String.valueOf(productGroup.getId());
             if(inputChipFilterProductGroup != null) {
-                inputChipFilterProductGroup.change(productGroup.getName());
+                inputChipFilterProductGroup.changeText(productGroup.getName());
             } else {
                 inputChipFilterProductGroup = new InputChip(
                         activity,
@@ -1024,7 +1024,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    public void setMenuLocationFilters() {
+    private void setMenuLocationFilters() {
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
         if(menuItem != null) {
             SubMenu menuLocations = menuItem.getSubMenu();
@@ -1040,7 +1040,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void setMenuProductGroupFilters() {
+    private void setMenuProductGroupFilters() {
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_product_group);
         if(menuItem != null) {
             SubMenu menuProductGroups = menuItem.getSubMenu();
@@ -1056,7 +1056,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void setMenuSorting() {
+    private void setMenuSorting() {
         String sortMode = sharedPrefs.getString(
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );

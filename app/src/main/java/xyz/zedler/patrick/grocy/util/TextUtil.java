@@ -4,6 +4,8 @@ import android.text.Html;
 
 public class TextUtil {
 
+    private static final String TAG = TextUtil.class.getSimpleName();
+
     private static String trim(String text) {
         if(text != null) {
             String trimmed = text.trim();

@@ -119,8 +119,15 @@ public class WebRequest {
         );
     }
 
-    public void delete(String url, Runnable onQueued) {
-
+    public void delete(String url, OnResponseListener onResponse, OnErrorListener onError) {
+        requestQueue.add(
+                new StringRequest(
+                        Request.Method.DELETE,
+                        url,
+                        onResponse::onResponse,
+                        onError::onError
+                )
+        );
     }
 
     public int getQueueSize() {

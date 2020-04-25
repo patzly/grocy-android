@@ -47,6 +47,7 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String CONSUME = "consume";
+        public final static String PURCHASE = "purchase";
         public final static String MASTER = "master";
         public final static String MASTER_PRODUCTS = "master_products";
         public final static String MASTER_PRODUCTS_DEFAULT = "master_products_default";
@@ -54,7 +55,8 @@ public final class Constants {
         public final static String MASTER_LOCATIONS = "master_locations";
         public final static String MASTER_LOCATIONS_DEFAULT = "master_locations_default";
         public final static String MASTER_LOCATIONS_SEARCH = "master_locations_search";
-        public final static String MASTER_PRODUCT_EDIT = "master_product_edit";
+        public final static String MASTER_PRODUCT_EDIT_EXTENDED = "master_product_edit_extended";
+        public final static String MASTER_PRODUCT_EDIT_SIMPLE = "master_product_edit_simple";
     }
 
     public final static class STOCK {
@@ -89,14 +91,19 @@ public final class Constants {
         public final static String UI_MODE = "ui_mode";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";
+        public final static String QUANTITY_UNITS = "quantity_units";
         public final static String QUANTITY_UNIT_PURCHASE = "quantity_unit_purchase";
         public final static String QUANTITY_UNIT_STOCK = "quantity_unit_stock";
         public final static String LOCATION = "location";
+        public final static String LOCATIONS = "locations";
         public final static String PRODUCT_GROUP = "product_group";
+        public final static String PRODUCT_GROUPS = "product_groups";
         public final static String STOCK_LOCATIONS = "stock_locations";
         public final static String STOCK_ENTRIES = "product_entries";
         public final static String PRODUCT_DETAILS = "product_details";
         public final static String PRODUCT = "product";
+        public final static String TYPE = "type";
+        public final static String PARENT_PRODUCT = "parent_product";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
@@ -119,5 +126,6 @@ public final class Constants {
     public final static class REQUEST {
         public final static int LOGIN = 1;
         public final static int SCAN = 2;
+        public final static int SCAN_PARENT_PRODUCT = 3;
     }
 }

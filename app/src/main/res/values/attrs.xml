@@ -4,6 +4,7 @@
     <declare-styleable name="ActionButton">
         <attr name="icon" format="reference" />
         <attr name="tint" format="color" />
+        <attr name="dense" format="boolean" />
     </declare-styleable>
 
 </resources>

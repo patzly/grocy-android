@@ -81,6 +81,7 @@
     <!-- ICONS -->
 
     <color name="icon">@color/grey800</color> <!-- dd0a373a -->
+    <color name="icon_grayed_out">@color/grey400</color>
 
     <color name="mdc_square">#212121</color>
     <color name="mdc_circle">#b2ff59</color>

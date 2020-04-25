@@ -27,7 +27,7 @@ public class InputChip extends LinearLayout {
     private Context context;
     private LinearLayout linearLayoutThis;
     private ImageView imageViewIcon;
-    private FrameLayout frameLayoutContainer;
+    private FrameLayout frameLayoutContainer, frameLayoutIcon;
     private View viewClose;
     private TextView textView;
     private Runnable runnableOnClose;
@@ -60,11 +60,35 @@ public class InputChip extends LinearLayout {
         init(text, iconRes, animate, onClose);
     }
 
+    public InputChip(
+            Context context,
+            String text,
+            boolean animate,
+            Runnable onClose
+    ) {
+        super(context);
+
+        this.context = context;
+        init(text, -1, animate, onClose);
+    }
+
+    public InputChip(
+            Context context,
+            String text,
+            boolean animate
+    ) {
+        super(context);
+
+        this.context = context;
+        init(text, -1, animate, null);
+    }
+
     private void init(String text, int iconRes, boolean animate, Runnable onClose) {
         inflate(context, R.layout.view_input_chip, this);
 
         linearLayoutThis = this;
         frameLayoutContainer = findViewById(R.id.frame_input_chip_container);
+        frameLayoutIcon = findViewById(R.id.frame_input_chip_icon);
         imageViewIcon = findViewById(R.id.image_input_chip_icon);
         textView = findViewById(R.id.text_input_chip);
         viewClose = findViewById(R.id.view_input_chip_close);
@@ -84,7 +108,12 @@ public class InputChip extends LinearLayout {
     }
 
     public void setIcon(@DrawableRes int iconRes) {
-        if(iconRes != -1) imageViewIcon.setImageResource(iconRes);
+        if(iconRes != -1) {
+            imageViewIcon.setImageResource(iconRes);
+            frameLayoutIcon.setVisibility(VISIBLE);
+        } else {
+            frameLayoutIcon.setVisibility(GONE);
+        }
     }
 
     public void setText(String text) {
@@ -143,7 +172,7 @@ public class InputChip extends LinearLayout {
         animatorWidth.setDuration(disappear).start();
     }
 
-    public void change(String text) {
+    public void changeText(String text) {
         textView.setText(text);
         // TODO: animate changes
     }

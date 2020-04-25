@@ -45,6 +45,7 @@
     <!-- ICONS -->
 
     <color name="icon">@color/grey500</color>
+    <color name="icon_grayed_out">@color/grey700</color>
 
     <color name="mdc_square">@color/white</color>
     <color name="mdc_circle">#00e676</color>

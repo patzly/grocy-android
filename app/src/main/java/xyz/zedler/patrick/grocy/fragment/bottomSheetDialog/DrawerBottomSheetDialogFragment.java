@@ -58,6 +58,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
         setOnClickListeners(
                 R.id.linear_drawer_consume,
+                R.id.linear_drawer_purchase,
                 R.id.linear_drawer_master_data,
                 R.id.linear_settings,
                 R.id.linear_feedback,
@@ -66,6 +67,8 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
         if(uiMode.equals(Constants.UI.CONSUME)) {
             select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
+        } else if(uiMode.equals(Constants.UI.PURCHASE)) {
+            select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase);
         } else if(uiMode.startsWith(Constants.UI.MASTER)) {
             select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
         }
@@ -89,9 +92,15 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                     replaceFragment(Constants.UI.CONSUME, Constants.UI.CONSUME);
                 }
                 break;
+            case R.id.linear_drawer_purchase:
+                if(!uiMode.startsWith(Constants.UI.PURCHASE)) {
+                    replaceFragment(Constants.UI.PURCHASE, Constants.UI.PURCHASE);
+                }
+                break;
             case R.id.linear_drawer_master_data:
                 dismiss();
                 Bundle bundle = new Bundle();
+                // selection for master data sheet
                 bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
                 activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), bundle);
                 break;
