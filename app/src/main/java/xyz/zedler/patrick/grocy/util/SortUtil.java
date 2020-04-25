@@ -63,32 +63,38 @@ public class SortUtil {
         );
     }
 
-    public static void sortLocationsByName(List<Location> locations) {
+    public static void sortLocationsByName(List<Location> locations, boolean ascending) {
         if(locations == null) return;
         Collections.sort(
                 locations,
-                (item1, item2) -> item1.getName().toLowerCase().compareTo(
-                        item2.getName().toLowerCase()
+                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
+                        (ascending ? item2 : item1).getName().toLowerCase()
                 )
         );
     }
 
-    public static void sortProductGroupsByName(List<ProductGroup> productGroups) {
+    public static void sortProductGroupsByName(
+            List<ProductGroup> productGroups,
+            boolean ascending
+    ) {
         if(productGroups == null) return;
         Collections.sort(
                 productGroups,
-                (item1, item2) -> item1.getName().toLowerCase().compareTo(
-                        item2.getName().toLowerCase()
+                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
+                        (ascending ? item2 : item1).getName().toLowerCase()
                 )
         );
     }
 
-    public static void sortQuantityUnitsByName(List<QuantityUnit> quantityUnits) {
+    public static void sortQuantityUnitsByName(
+            List<QuantityUnit> quantityUnits,
+            boolean ascending
+    ) {
         if(quantityUnits == null) return;
         Collections.sort(
                 quantityUnits,
-                (item1, item2) -> item1.getName().toLowerCase().compareTo(
-                        item2.getName().toLowerCase()
+                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
+                        (ascending ? item2 : item1).getName().toLowerCase()
                 )
         );
     }

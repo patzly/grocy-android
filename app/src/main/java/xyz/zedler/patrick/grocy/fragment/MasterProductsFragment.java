@@ -1,6 +1,5 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +59,6 @@ public class MasterProductsFragment extends Fragment
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private SharedPreferences sharedPrefs;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
@@ -83,9 +80,8 @@ public class MasterProductsFragment extends Fragment
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
-    private LinearLayout linearLayoutFilterContainer;
     private InputChip inputChipFilterProductGroup;
-    private LinearLayout linearLayoutError;
+    private LinearLayout linearLayoutError, linearLayoutFilterContainer;
     private NestedScrollView scrollView;
 
     @Override
@@ -104,10 +100,6 @@ public class MasterProductsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
-
-        // GET PREFERENCES
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // WEB REQUESTS
 
@@ -196,12 +188,12 @@ public class MasterProductsFragment extends Fragment
             activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
-                            "No connection", // TODO: XML string
+                            activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
                             ContextCompat.getColor(activity, R.color.secondary)
                     ).setAction(
-                            "Retry", // TODO: XML string
+                            activity.getString(R.string.action_retry),
                             v1 -> refresh()
                     )
             );
@@ -263,7 +255,6 @@ public class MasterProductsFragment extends Fragment
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
-                    //activity.setLocationFilters(locations);
                 },
                 this::onDownloadError,
                 this::onQueueEmpty
@@ -415,9 +406,9 @@ public class MasterProductsFragment extends Fragment
     }
 
     /**
-     * Returns index in the displayed items.
+     * Returns index in the displayed products.
      * Used for providing a safe and up-to-date value
-     * e.g. when the items are filtered/sorted before server responds
+     * e.g. when the products are filtered/sorted before server responds
      */
     private int getProductPosition(int productId) {
         for(int i = 0; i < displayedProducts.size(); i++) {
@@ -425,7 +416,7 @@ public class MasterProductsFragment extends Fragment
                 return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     private QuantityUnit getQuantityUnit(int id) {
