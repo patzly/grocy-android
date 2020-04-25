@@ -16,8 +16,10 @@ public class SortUtil {
         if(stockItems == null) return;
         Collections.sort(
                 stockItems,
-                (item1, item2) -> (ascending ? item1 : item2).getProduct().getName().compareTo(
-                        (ascending ? item2 : item1).getProduct().getName()
+                (item1, item2) -> (ascending ? item1 : item2).getProduct()
+                        .getName()
+                        .toLowerCase().compareTo(
+                                (ascending ? item2 : item1).getProduct().getName().toLowerCase()
                 )
         );
     }
@@ -45,8 +47,8 @@ public class SortUtil {
         if(products == null) return;
         Collections.sort(
                 products,
-                (item1, item2) -> (ascending ? item1 : item2).getName().compareTo(
-                        (ascending ? item2 : item1).getName()
+                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
+                        (ascending ? item2 : item1).getName().toLowerCase()
                 )
         );
     }
@@ -55,7 +57,9 @@ public class SortUtil {
         if(stockLocations == null) return;
         Collections.sort(
                 stockLocations,
-                (item1, item2) -> item1.getLocationName().compareTo(item2.getLocationName())
+                (item1, item2) -> item1.getLocationName().toLowerCase().compareTo(
+                        item2.getLocationName().toLowerCase()
+                )
         );
     }
 
@@ -63,7 +67,9 @@ public class SortUtil {
         if(locations == null) return;
         Collections.sort(
                 locations,
-                (item1, item2) -> item1.getName().compareTo(item2.getName())
+                (item1, item2) -> item1.getName().toLowerCase().compareTo(
+                        item2.getName().toLowerCase()
+                )
         );
     }
 
@@ -71,7 +77,9 @@ public class SortUtil {
         if(productGroups == null) return;
         Collections.sort(
                 productGroups,
-                (item1, item2) -> item1.getName().compareTo(item2.getName())
+                (item1, item2) -> item1.getName().toLowerCase().compareTo(
+                        item2.getName().toLowerCase()
+                )
         );
     }
 
@@ -79,7 +87,9 @@ public class SortUtil {
         if(quantityUnits == null) return;
         Collections.sort(
                 quantityUnits,
-                (item1, item2) -> item1.getName().compareTo(item2.getName())
+                (item1, item2) -> item1.getName().toLowerCase().compareTo(
+                        item2.getName().toLowerCase()
+                )
         );
     }
 }
