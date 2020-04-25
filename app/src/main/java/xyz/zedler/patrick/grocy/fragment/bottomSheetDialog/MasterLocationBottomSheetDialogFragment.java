@@ -71,7 +71,7 @@ public class MasterLocationBottomSheetDialogFragment extends BottomSheetDialogFr
 					dismiss();
 					return true;
 				case R.id.action_delete:
-					//((MasterProductsFragment) fragmentCurrent).checkForStock(product);
+					((MasterLocationsFragment) fragmentCurrent).checkForUsage(location);
 					dismiss();
 					return true;
 			}

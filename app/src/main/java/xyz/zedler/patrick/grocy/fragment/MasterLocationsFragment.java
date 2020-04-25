@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -39,8 +38,10 @@ import xyz.zedler.patrick.grocy.adapter.MasterLocationAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -61,6 +62,7 @@ public class MasterLocationsFragment extends Fragment
     private List<Location> locations = new ArrayList<>();
     private List<Location> filteredLocations = new ArrayList<>();
     private List<Location> displayedLocations = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     private String search = "";
     private boolean sortAscending = true;
@@ -207,34 +209,37 @@ public class MasterLocationsFragment extends Fragment
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
         downloadLocations();
+        downloadProducts();
     }
 
     private void downloadLocations() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
-                TAG,
                 response -> {
                     locations = gson.fromJson(
                             response,
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
+                    swipeRefreshLayout.setRefreshing(false);
+                    filterLocations();
                 },
-                this::onDownloadError,
-                this::onQueueEmpty
+                error -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    setError(true, true);
+                    if(DEBUG) Log.e(TAG, "downloadLocations: " + error);
+                }
         );
     }
 
-    private void onQueueEmpty() {
-        swipeRefreshLayout.setRefreshing(false);
-        filterLocations();
-    }
-
-    private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
-        swipeRefreshLayout.setRefreshing(false);
-        setError(true, true);
-        if(DEBUG) Log.i(TAG, "onDownloadError: " + error);
+    private void downloadProducts() {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
+                response -> products = gson.fromJson(
+                        response,
+                        new TypeToken<List<Product>>(){}.getType()
+                ), error -> {}
+        );
     }
 
     private void filterLocations() {
@@ -245,7 +250,7 @@ public class MasterLocationsFragment extends Fragment
         } else {
             if(displayedLocations != filteredLocations) {
                 displayedLocations = filteredLocations;
-                sortLocations(sortAscending);
+                sortLocations();
             }
         }
         if(DEBUG) Log.i(TAG, "filterProducts: filteredLocations = " + filteredLocations);
@@ -270,16 +275,15 @@ public class MasterLocationsFragment extends Fragment
             }
             if(displayedLocations != searchedLocations) {
                 displayedLocations = searchedLocations;
-                sortLocations(sortAscending);
+                sortLocations();
             }
             if(DEBUG) Log.i(TAG, "searchProducts: searchedLocations = " + searchedLocations);
         }
     }
 
-    private void sortLocations(boolean ascending) {
-        if(DEBUG) Log.i(TAG, "sortLocations: sort by name, ascending = " + ascending);
-        sortAscending = ascending;
-        SortUtil.sortLocationsByName(displayedLocations, ascending);
+    private void sortLocations() {
+        if(DEBUG) Log.i(TAG, "sortLocations: sort by name, ascending = " + sortAscending);
+        SortUtil.sortLocationsByName(displayedLocations, sortAscending);
         refreshAdapter(new MasterLocationAdapter(activity, displayedLocations, this));
     }
 
@@ -324,11 +328,19 @@ public class MasterLocationsFragment extends Fragment
     }
 
     private void setMenuSorting() {
-        MenuItem sortAscending = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
-        sortAscending.setChecked(true);
-        sortAscending.setOnMenuItemClickListener(item -> {
-            item.setChecked(!item.isChecked());
-            sortLocations(item.isChecked());
+        MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
+        itemSort.setIcon(R.drawable.ic_round_sort_desc_to_asc_anim);
+        itemSort.getIcon().setAlpha(255);
+        itemSort.setOnMenuItemClickListener(item -> {
+            sortAscending = !sortAscending;
+            itemSort.setIcon(
+                    sortAscending
+                            ? R.drawable.ic_round_sort_asc_to_desc
+                            : R.drawable.ic_round_sort_desc_to_asc_anim
+            );
+            itemSort.getIcon().setAlpha(255);
+            activity.startAnimatedIcon(item);
+            sortLocations();
             return true;
         });
     }
@@ -354,7 +366,7 @@ public class MasterLocationsFragment extends Fragment
     public void editLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        activity.replaceFragment(Constants.UI.MASTER_LOCATION, bundle, true);
+        activity.replaceFragment(Constants.UI.MASTER_LOCATION_EDIT, bundle, true);
     }
 
     private void showLocationSheet(Location location) {
@@ -390,6 +402,27 @@ public class MasterLocationsFragment extends Fragment
         filterLocations(); // TODO: buggy animation
 
         activity.updateUI(Constants.UI.MASTER_LOCATIONS_DEFAULT, TAG);
+    }
+
+    public void checkForUsage(Location location) {
+        if(!products.isEmpty()) {
+            for(Product product : products) {
+                if(product.getLocationId() == location.getId()) {
+                    activity.showSnackbar(
+                            Snackbar.make(
+                                    activity.findViewById(R.id.linear_container_main),
+                                    activity.getString(R.string.msg_master_delete_location),
+                                    Snackbar.LENGTH_LONG
+                            )
+                    );
+                    return;
+                }
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
+        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
     }
 
     public void deleteLocation(Location location) {

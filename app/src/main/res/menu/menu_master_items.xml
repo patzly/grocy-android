@@ -14,8 +14,7 @@
     <item
         android:id="@+id/action_sort_ascending"
         android:title="@string/action_ascending"
-        android:checkable="true"
-        android:checked="true"
-        app:showAsAction="never"/>
+        android:icon="@drawable/ic_round_sort_desc_to_asc_anim"
+        app:showAsAction="always"/>
 
 </menu>

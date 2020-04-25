@@ -15,6 +15,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -100,6 +102,10 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                 ((MasterProductsFragment) current).deleteProduct(product);
             } else if(current.getClass() == MasterProductEditSimpleFragment.class) {
                 ((MasterProductEditSimpleFragment) current).deleteProduct(product);
+            } else if(current.getClass() == MasterLocationsFragment.class) {
+                ((MasterLocationsFragment) current).deleteLocation(location);
+            } else if(current.getClass() == MasterLocationFragment.class) {
+                ((MasterLocationFragment) current).deleteLocation(location);
             }
             dismiss();
         });

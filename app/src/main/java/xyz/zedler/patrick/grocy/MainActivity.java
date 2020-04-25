@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
@@ -358,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                Constants.UI.MASTER_LOCATION_EDIT,
                                 null,
                                 true
                         )
@@ -388,7 +389,32 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
-            break;
+                break;
+            case Constants.UI.MASTER_LOCATION_EDIT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_location);
+                scrollBehavior.setHideOnScroll(false);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.END,
+                        R.menu.menu_master_item_edit,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterLocationFragment.class) {
+                                ((MasterLocationFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_backup,
+                        R.string.action_save,
+                        Constants.FAB.TAG.SAVE,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterLocationFragment.class) {
+                                ((MasterLocationFragment) fragmentCurrent).saveLocation();
+                            }
+                        }
+                );
+                break;
             default: if(DEBUG) Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
@@ -474,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+            case Constants.UI.MASTER_LOCATION_EDIT:
                 dismissFragment();
                 break;
             default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
@@ -499,6 +526,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 fragmentCurrent = new MasterProductEditSimpleFragment();
+                break;
+            case Constants.UI.MASTER_LOCATION_EDIT:
+                fragmentCurrent = new MasterLocationFragment();
                 break;
             default:
                 if(DEBUG) Log.e(TAG, "replaceFragment: invalid argument");
