@@ -602,7 +602,16 @@ public class MasterProductsFragment extends Fragment
     public void deleteProduct(Product product) {
         request.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
-                response -> refresh(),
+                response -> {
+                    int index = getProductPosition(product.getId());
+                    if(index != -1) {
+                        displayedProducts.remove(index);
+                        masterProductAdapter.notifyItemRemoved(index);
+                    } else {
+                        // product not found, fall back to complete refresh
+                        refresh();
+                    }
+                },
                 error -> showErrorMessage()
         );
     }
