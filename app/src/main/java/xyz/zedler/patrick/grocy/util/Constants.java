@@ -47,6 +47,7 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String CONSUME = "consume";
+        public final static String CONSUME_BATCH = "consume_batch";
         public final static String PURCHASE = "purchase";
         public final static String MASTER = "master";
         public final static String MASTER_PRODUCTS = "master_products";

@@ -51,6 +51,28 @@
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
+            <FrameLayout
+                android:id="@+id/frame_consume_batch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="4dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_batch_mode"
+                android:tooltipText="@string/action_batch_mode"
+                android:focusable="true"
+                tools:targetApi="o">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_consume_product" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

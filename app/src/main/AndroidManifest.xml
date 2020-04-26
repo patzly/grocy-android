@@ -51,6 +51,13 @@
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <activity
+            android:name=".ScanBatchActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/Theme.Grocy.Camera"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>

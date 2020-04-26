@@ -40,6 +40,8 @@
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
     <string name="action_show_extended">Show extended form</string>
+    <string name="action_batch_mode">Batch mode</string>
+    <string name="action_create">Batch mode</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
