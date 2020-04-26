@@ -2,6 +2,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -82,8 +85,12 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                     }
                     break;
                 case Constants.ARGUMENT.QUANTITY_UNIT:
-                    // TODO
                     quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+                    Log.i(TAG, "onCreateView: " + quantityUnit.getName());
+                    if(quantityUnit != null) {
+                        textType = activity.getString(R.string.type_quantity_unit);
+                        textName = quantityUnit.getName();
+                    }
                     break;
                 case Constants.ARGUMENT.PRODUCT_GROUP:
                     productGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
@@ -120,6 +127,10 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                 ((MasterStoresFragment) current).deleteStore(store);
             } else if(current.getClass() == MasterStoreFragment.class) {
                 ((MasterStoreFragment) current).deleteStore(store);
+            } else if(current.getClass() == MasterQuantityUnitsFragment.class) {
+                ((MasterQuantityUnitsFragment) current).deleteQuantityUnit(quantityUnit);
+            } else if(current.getClass() == MasterQuantityUnitFragment.class) {
+                ((MasterQuantityUnitFragment) current).deleteQuantityUnit(quantityUnit);
             }
             dismiss();
         });

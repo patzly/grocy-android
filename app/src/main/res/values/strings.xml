@@ -104,6 +104,8 @@
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
 
     <string name="property_name">Name</string>
+    <string name="property_name_singular">Name (singular form)</string>
+    <string name="property_name_plural">Name (plural form)</string>
     <string name="property_description">Description</string>
     <string name="property_amount">Amount</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
