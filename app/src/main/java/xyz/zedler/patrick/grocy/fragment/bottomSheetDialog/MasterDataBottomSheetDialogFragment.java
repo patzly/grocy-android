@@ -55,7 +55,8 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
                 R.id.linear_master_data_products,
                 R.id.linear_master_data_locations,
                 R.id.linear_master_data_stores,
-                R.id.linear_master_data_quantity_units
+                R.id.linear_master_data_quantity_units,
+                R.id.linear_master_data_product_groups
         );
 
         if(uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
@@ -66,6 +67,8 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
             select(R.id.linear_master_data_stores, R.id.text_master_data_stores);
         } else if(uiMode.startsWith(Constants.UI.MASTER_QUANTITY_UNITS)) {
             select(R.id.linear_master_data_quantity_units, R.id.text_master_data_quantity_units);
+        } else if(uiMode.startsWith(Constants.UI.MASTER_PRODUCT_GROUPS)) {
+            select(R.id.linear_master_data_product_groups, R.id.text_master_data_product_groups);
         }
 
         return view;
@@ -100,6 +103,11 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
             case R.id.linear_master_data_quantity_units:
                 if(!uiMode.startsWith(Constants.UI.MASTER_QUANTITY_UNITS)) {
                     replaceFragment(Constants.UI.MASTER_QUANTITY_UNITS);
+                }
+                break;
+            case R.id.linear_master_data_product_groups:
+                if(!uiMode.startsWith(Constants.UI.MASTER_PRODUCT_GROUPS)) {
+                    replaceFragment(Constants.UI.MASTER_PRODUCT_GROUPS);
                 }
                 break;
         }

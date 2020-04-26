@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
@@ -86,7 +87,6 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                     break;
                 case Constants.ARGUMENT.QUANTITY_UNIT:
                     quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-                    Log.i(TAG, "onCreateView: " + quantityUnit.getName());
                     if(quantityUnit != null) {
                         textType = activity.getString(R.string.type_quantity_unit);
                         textName = quantityUnit.getName();
@@ -94,6 +94,10 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                     break;
                 case Constants.ARGUMENT.PRODUCT_GROUP:
                     productGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
+                    if(productGroup != null) {
+                        textType = activity.getString(R.string.type_product_group);
+                        textName = productGroup.getName();
+                    }
                     break;
                 default:
                     product = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
@@ -131,6 +135,10 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                 ((MasterQuantityUnitsFragment) current).deleteQuantityUnit(quantityUnit);
             } else if(current.getClass() == MasterQuantityUnitFragment.class) {
                 ((MasterQuantityUnitFragment) current).deleteQuantityUnit(quantityUnit);
+            } else if(current.getClass() == MasterProductGroupsFragment.class) {
+                ((MasterProductGroupsFragment) current).deleteProductGroup(productGroup);
+            } else if(current.getClass() == MasterProductGroupFragment.class) {
+                ((MasterProductGroupFragment) current).deleteProductGroup(productGroup);
             }
             dismiss();
         });

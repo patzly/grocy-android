@@ -67,6 +67,10 @@ public final class Constants {
         public final static String MASTER_QUANTITY_UNITS_DEFAULT = "master_quantity_units_default";
         public final static String MASTER_QUANTITY_UNITS_SEARCH = "master_quantity_units_search";
         public final static String MASTER_QUANTITY_UNIT_EDIT = "master_quantity_unit";
+        public final static String MASTER_PRODUCT_GROUPS = "master_product_groups";
+        public final static String MASTER_PRODUCT_GROUPS_DEFAULT = "master_product_groups_default";
+        public final static String MASTER_PRODUCT_GROUPS_SEARCH = "master_product_groups_search";
+        public final static String MASTER_PRODUCT_GROUP_EDIT = "master_product_group";
     }
 
     public final static class STOCK {

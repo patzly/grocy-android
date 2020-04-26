@@ -49,6 +49,8 @@ import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
@@ -441,6 +443,31 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
                 break;
+            case Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_product_groups);
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.CENTER,
+                        R.menu.menu_master_items,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterProductGroupsFragment.class) {
+                                ((MasterProductGroupsFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_add_anim,
+                        R.string.action_add,
+                        Constants.FAB.TAG.ADD,
+                        animated,
+                        () -> replaceFragment(
+                                Constants.UI.MASTER_PRODUCT_GROUP_EDIT,
+                                null,
+                                true
+                        )
+                );
+                break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 scrollBehavior.setUpScroll(R.id.scroll_master_product_edit_simple);
                 scrollBehavior.setHideOnScroll(false);
@@ -541,6 +568,31 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
+            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
+                scrollBehavior.setUpScroll(R.id.scroll_master_product_group);
+                scrollBehavior.setHideOnScroll(false);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.END,
+                        R.menu.menu_master_item_edit,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterProductGroupFragment.class) {
+                                ((MasterProductGroupFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_backup,
+                        R.string.action_save,
+                        Constants.FAB.TAG.SAVE,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == MasterProductGroupFragment.class) {
+                                ((MasterProductGroupFragment) fragmentCurrent).saveProductGroup();
+                            }
+                        }
+                );
+                break;
             default: if(DEBUG) Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
@@ -616,6 +668,7 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
             case Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT:
+            case Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT:
                 dismissFragments();
                 break;
             case Constants.UI.MASTER_PRODUCTS_SEARCH:
@@ -638,10 +691,16 @@ public class MainActivity extends AppCompatActivity {
                     ((MasterQuantityUnitsFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
+            case Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH:
+                if(fragmentCurrent.getClass() == MasterProductGroupsFragment.class) {
+                    ((MasterProductGroupsFragment) fragmentCurrent).dismissSearch();
+                }
+                break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
             case Constants.UI.MASTER_LOCATION_EDIT:
             case Constants.UI.MASTER_STORE_EDIT:
             case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
+            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
                 dismissFragment();
                 break;
             default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
@@ -674,6 +733,9 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MASTER_QUANTITY_UNITS:
                 fragmentCurrent = new MasterQuantityUnitsFragment();
                 break;
+            case Constants.UI.MASTER_PRODUCT_GROUPS:
+                fragmentCurrent = new MasterProductGroupsFragment();
+                break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 fragmentCurrent = new MasterProductEditSimpleFragment();
                 break;
@@ -685,6 +747,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
                 fragmentCurrent = new MasterQuantityUnitFragment();
+                break;
+            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
+                fragmentCurrent = new MasterProductGroupFragment();
                 break;
             default:
                 if(DEBUG) Log.e(TAG, "replaceFragment: invalid argument");
