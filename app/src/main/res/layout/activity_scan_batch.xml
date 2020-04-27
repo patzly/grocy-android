@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 app:tint="@color/white"
-                app:icon="@drawable/ic_round_filter_list_out_anim" />
+                app:icon="@drawable/ic_round_flash_off_to_on" />
 
         </FrameLayout>
 
