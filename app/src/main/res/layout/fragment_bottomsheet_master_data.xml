@@ -68,7 +68,7 @@
                 <TextView
                     android:id="@+id/text_master_data_locations"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Locations" />
+                    android:text="@string/property_locations" />
 
             </LinearLayout>
 
@@ -84,7 +84,7 @@
                 <TextView
                     android:id="@+id/text_master_data_stores"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Stores" />
+                    android:text="@string/property_stores" />
 
             </LinearLayout>
 
@@ -95,12 +95,12 @@
                 <ImageView
                     style="@style/Theme.Grocy.DrawerItem.Icon"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_scale_anim" />
+                    android:src="@drawable/ic_round_weights" />
 
                 <TextView
                     android:id="@+id/text_master_data_quantity_units"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Quantity units" />
+                    android:text="@string/property_quantity_units" />
 
             </LinearLayout>
 
@@ -116,7 +116,7 @@
                 <TextView
                     android:id="@+id/text_master_data_product_groups"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Product groups" />
+                    android:text="@string/property_product_groups" />
 
             </LinearLayout>
 

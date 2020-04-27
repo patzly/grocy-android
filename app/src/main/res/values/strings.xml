@@ -126,6 +126,7 @@
     <string name="property_locations">Locations</string>
     <string name="property_store">Store</string>
     <string name="property_store_default">Default store</string>
+    <string name="property_stores">Stores</string>
     <string name="property_last_purchased">Last purchased</string>
     <string name="property_purchased">Purchased</string>
     <string name="property_last_used">Last used</string>
