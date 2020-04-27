@@ -107,7 +107,7 @@
 
                 <LinearLayout
                     style="@style/Theme.Grocy.ListItem"
-                    android:paddingTop="0dp"
+                    android:paddingTop="8dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
