@@ -708,11 +708,14 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
-        List<String> barcodes = new ArrayList<>(
-                Arrays.asList(
-                        productDetails.getProduct().getBarcode().split(",")
-                )
-        );
+        String barcodesString = productDetails.getProduct().getBarcode();
+        List<String> barcodes;
+        if(barcodesString != null && !barcodesString.equals("")) {
+            barcodes = new ArrayList<>(Arrays.asList(barcodesString.split(",")));
+        } else {
+            barcodes = new ArrayList<>();
+        }
+
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(!barcodes.contains(inputChip.getText())) {
