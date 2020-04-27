@@ -90,7 +90,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 						Uri.parse(
 								"mailto:"
 										+ getString(R.string.app_mail)
-										+ "?subject=" + Uri.encode("Feedback@Stiefo")
+										+ "?subject=" + Uri.encode("Feedback@Grocy")
 										+ "&body=" + Uri.encode(editText.getText().toString())
 						)
 				);
