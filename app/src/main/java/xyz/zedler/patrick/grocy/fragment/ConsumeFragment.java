@@ -165,10 +165,8 @@ public class ConsumeFragment extends Fragment {
         });
         autoCompleteTextViewProduct.setOnItemClickListener(
                 (parent, view, position, id) -> loadProductDetails(
-                        products.get(
-                                productNames.indexOf(
-                                        String.valueOf(parent.getItemAtPosition(position))
-                                )
+                        getProductFromName(
+                                String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
                 )
         );
@@ -736,6 +734,17 @@ public class ConsumeFragment extends Fragment {
                     if(DEBUG) Log.i(TAG, "editProductBarcodes: " + error);
                 }
         );
+    }
+
+    private Product getProductFromName(String name) {
+        if(name != null) {
+            for(Product product : products) {
+                if(product.getName().equals(name)) {
+                    return product;
+                }
+            }
+        }
+        return null;
     }
 
     private List<String> getProductNames() {

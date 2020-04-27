@@ -11,14 +11,9 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import xyz.zedler.patrick.grocy.R;
 
 public class MatchArrayAdapter extends ArrayAdapter<String> {
 
@@ -70,24 +65,8 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
                 for (String item : itemsAll) {
                     String match = constraint.toString().toLowerCase();
                     if (item.toLowerCase().contains(match)) {
-                        //Pattern pattern = Pattern.compile("(?i)" + match);
-                        Pattern pattern = Pattern.compile("[a-z]+");
-                        Matcher matcher = pattern.matcher(item);
-                        String color = String.format(
-                                "#%06X",
-                                0xFFFFFF & ContextCompat.getColor(
-                                        getContext(),
-                                        R.color.retro_red_dark
-                                )
-                        );
-                        suggestions.add(
-                                item.replaceAll(
-                                        "(?i)" + match,
-                                        "<font color='" + color + "'>"
-                                                + matcher.group(0) + "</font>"
-                                )
-                        );
-                        Log.i("hallo", "performFiltering: " + matcher.group(0));
+                        suggestions.add(item);
+                        Log.i("hallo", "performFiltering: " + item);
                     }
                 }
                 FilterResults filterResults = new FilterResults();
