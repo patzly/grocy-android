@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class InputChip extends LinearLayout {
 
@@ -126,7 +126,12 @@ public class InputChip extends LinearLayout {
 
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
-        frameLayoutContainer.setPadding(dp(left), dp(top), dp(right), dp(bottom));
+        frameLayoutContainer.setPadding(
+                UnitUtil.getDp(context, left),
+                UnitUtil.getDp(context, top),
+                UnitUtil.getDp(context, right),
+                UnitUtil.getDp(context, bottom)
+        );
     }
 
     public void close() {
@@ -175,13 +180,5 @@ public class InputChip extends LinearLayout {
     public void changeText(String text) {
         textView.setText(text);
         // TODO: animate changes
-    }
-
-    private int dp(float dp){
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                getResources().getDisplayMetrics()
-        );
     }
 }

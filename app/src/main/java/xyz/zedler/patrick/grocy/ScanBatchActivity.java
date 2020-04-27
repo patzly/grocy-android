@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -148,9 +149,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             new TypeToken<List<Product>>(){}.getType()
                     );
                     productNames = getProductNames();
-                    adapterProducts = new ArrayAdapter<>(
-                            this, android.R.layout.simple_list_item_1, productNames
-                    );
+                    adapterProducts = new MatchArrayAdapter(this, productNames);
                     // download finished
                     //swipeRefreshLayout.setRefreshing(false);
                 }, error -> {

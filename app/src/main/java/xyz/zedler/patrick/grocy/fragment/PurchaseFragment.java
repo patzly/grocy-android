@@ -48,6 +48,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
+import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
@@ -334,9 +335,7 @@ public class PurchaseFragment extends Fragment {
                             new TypeToken<List<Product>>(){}.getType()
                     );
                     productNames = getProductNames();
-                    adapterProducts = new ArrayAdapter<>(
-                            activity, android.R.layout.simple_list_item_1, productNames
-                    );
+                    adapterProducts = new MatchArrayAdapter(activity, productNames);
                     autoCompleteTextViewProduct.setAdapter(adapterProducts);
                     // download finished
                     swipeRefreshLayout.setRefreshing(false);
