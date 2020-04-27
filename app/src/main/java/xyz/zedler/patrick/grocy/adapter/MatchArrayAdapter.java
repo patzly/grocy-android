@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE
             );
+            assert inflater != null;
             v = inflater.inflate(android.R.layout.simple_list_item_1, null);
         }
         String item = items.get(position);
@@ -53,7 +53,7 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
         return stringFilter;
     }
 
-    Filter stringFilter = new Filter() {
+    private Filter stringFilter = new Filter() {
         public String convertResultToString(Object resultValue) {
             return (String) resultValue;
         }
@@ -66,7 +66,6 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
                     String match = constraint.toString().toLowerCase();
                     if (item.toLowerCase().contains(match)) {
                         suggestions.add(item);
-                        Log.i("hallo", "performFiltering: " + item);
                     }
                 }
                 FilterResults filterResults = new FilterResults();
