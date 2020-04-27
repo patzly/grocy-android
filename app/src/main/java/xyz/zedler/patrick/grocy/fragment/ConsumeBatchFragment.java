@@ -2,9 +2,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,13 +27,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanActivity;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -260,10 +253,9 @@ public class ConsumeBatchFragment extends Fragment implements StockItemAdapter.S
     public void setUpBottomMenu() {}
 
     public void openBarcodeScanner() {
-        startActivityForResult(
-                new Intent(activity, ScanBatchActivity.class),
-                Constants.REQUEST.SCAN
-        );
+        Intent intent = new Intent(activity, ScanBatchActivity.class);
+        intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+        startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
     }
 
     @NonNull

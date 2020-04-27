@@ -99,6 +99,7 @@ public final class Constants {
         public final static String OPEN = "action_open";
         public final static String CONSUME_ALL = "action_consume_all";
         public final static String CONSUME_SPOILED = "action_consume_spoiled";
+        public final static String PURCHASE = "action_purchase";
     }
 
     public final static class ARGUMENT {
@@ -117,12 +118,15 @@ public final class Constants {
         public final static String STOCK_ENTRIES = "product_entries";
         public final static String PRODUCT_DETAILS = "product_details";
         public final static String PRODUCT = "product";
+        public final static String PRODUCTS = "products";
+        public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
         public final static String PARENT_PRODUCT = "parent_product";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
         public final static String CURRENT_FRAGMENT = "current_fragment";
+        public final static String BARCODE = "barcode";
     }
 
     public final static class FAB {
@@ -141,6 +145,8 @@ public final class Constants {
     public final static class REQUEST {
         public final static int LOGIN = 1;
         public final static int SCAN = 2;
-        public final static int SCAN_PARENT_PRODUCT = 3;
+        public final static int SCAN_CONSUME = 3;
+        public final static int SCAN_PURCHASE = 4;
+        public final static int SCAN_PARENT_PRODUCT = 5;
     }
 }
