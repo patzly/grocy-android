@@ -90,7 +90,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_scan_batch);
 
-        findViewById(R.id.button_scan_batch_close).setOnClickListener(v -> finish());
+        ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
+        buttonClose.setOnClickListener(v -> finish());
+        buttonClose.setTooltipText(getString(R.string.action_close));
         findViewById(R.id.button_scan_batch_flash).setOnClickListener(v -> switchTorch());
 
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);

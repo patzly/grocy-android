@@ -43,6 +43,46 @@
         </FrameLayout>
 
         <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:minWidth="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:minWidth="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:clickable="true"
+                app:cardBackgroundColor="#40000000"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:rippleColor="@color/highlight">
+
+                <TextView
+                    android:id="@+id/text_unread_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/material_digits_round"
+                    android:letterSpacing="0.12"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:text="0"
+                    android:layout_gravity="center"
+                    tools:ignore="SpUsage"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/frame_scan_batch_flash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
