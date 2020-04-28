@@ -2,12 +2,15 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -44,7 +48,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private GrocyApi grocyApi;
     private WebRequest request;
     private Product selectedProduct;
-    private String barcode;
+    private String barcode, batchType, buttonAction;
 
     private ArrayList<Product> products;
 
@@ -72,13 +76,15 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         assert activity != null;
 
         if(getArguments() == null
+                || getArguments().getString(Constants.ARGUMENT.TYPE) == null
+                || getArguments().getString(Constants.ARGUMENT.BARCODE) == null
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES) == null
-                || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCTS) == null
-                || getArguments().getString(Constants.ARGUMENT.BARCODE) == null) {
+                || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCTS) == null) {
             dismissWithErrorMessage();
             return view;
         }
 
+        // set bottom sheet to not cancelable, so buttons have to be pressed
         setCancelable(false);
 
         List<String> productNames = getArguments().getStringArrayList(
@@ -86,6 +92,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         );
         products = getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS);
         barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
+        batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
         // WEB REQUESTS
 
@@ -97,23 +104,43 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         grocyApi = new GrocyApi(activity);
 
-        view.findViewById(R.id.button_batch_link).setOnClickListener(v -> {
-            if(autoCompleteTextViewProduct.getText().toString().equals(selectedProduct.getName())) {
+        Button batchButtonLinkCreate = view.findViewById(R.id.button_batch_name_create);
+        if(batchType.equals(Constants.ACTION.PURCHASE)) {
+            batchButtonLinkCreate.setText(activity.getString(R.string.action_create));
+            buttonAction = Constants.ACTION.CREATE;
+        } else {
+            batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
+            buttonAction = Constants.ACTION.LINK;
+        }
+
+        batchButtonLinkCreate.setOnClickListener(v -> {
+            String inputText = autoCompleteTextViewProduct.getText().toString().trim();
+            if(inputText.equals("")) {
+                textInputProduct.setError(activity.getString(R.string.error_empty));
+            } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
-                addProductBarcode(barcode);
+                activity.batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
+                showSnackbarMessage(activity.getString(R.string.msg_purchased, inputText));
+                dismiss();
+                activity.resume();
             } else {
-                textInputProduct.setError("Product is not from list");
+                assert productNames != null;
+                if(productNames.contains(inputText)) {
+                    selectedProduct = getProductFromName(inputText);
+                    textInputProduct.setErrorEnabled(false);
+                    addProductBarcode(barcode);
+                } else {
+                    textInputProduct.setError(activity.getString(R.string.error_invalid_product));
+                }
             }
         });
 
-        view.findViewById(R.id.button_batch_discard).setOnClickListener(v -> {
+        view.findViewById(R.id.button_batch_name_discard).setOnClickListener(v -> {
             dismiss();
             activity.resume();
         });
 
-        // product
-
-        textInputProduct = view.findViewById(R.id.text_input_batch_choose_product_name);
+        textInputProduct = view.findViewById(R.id.text_input_batch_choose_name);
         autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setAdapter(new MatchArrayAdapter(activity, productNames));
@@ -122,8 +149,29 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                         String.valueOf(parent.getItemAtPosition(position))
                 )
         );
+        autoCompleteTextViewProduct.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                assert productNames != null;
+                String inputText = autoCompleteTextViewProduct.getText().toString().trim();
+                if(productNames.contains(inputText)) {
+                    batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
+                    buttonAction = Constants.ACTION.LINK;
+                } else if(batchType.equals(Constants.ACTION.PURCHASE)) {
+                    batchButtonLinkCreate.setText(activity.getString(R.string.action_create));
+                    buttonAction = Constants.ACTION.CREATE;
+                } else {
+                    batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
+                    buttonAction = Constants.ACTION.LINK;
+                }
+            }
+        });
 
-        // Set Input mode -> keyboard hid autocomplete popup, this solves call solves the issue
+        // Set Input mode -> keyboard hid autocomplete popup, this call solves the issue
         Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow())
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -162,6 +210,16 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                     activity.resume();
                 },
                 error -> dismissWithErrorMessage()
+        );
+    }
+
+    private void showSnackbarMessage(String msg) {
+        activity.showSnackbar(
+                Snackbar.make(
+                        activity.findViewById(R.id.barcode_scan_batch),
+                        msg,
+                        Snackbar.LENGTH_SHORT
+                )
         );
     }
 

@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -28,8 +29,13 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchBarcodeBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.BatchItem;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -58,6 +64,10 @@ public class ScanBatchActivity extends AppCompatActivity
     private RequestQueue requestQueue;
     private WebRequest request;
     private ProductDetails productDetails;
+
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<String> productNames = new ArrayList<>();
+    public ArrayList<BatchItem> batchItems = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +110,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
         capture = new ScanBatchCaptureManager(this, barcodeScannerView, this);
         capture.decode();
+
+        // LOAD PRODUCTS
+        loadProducts(response -> {}, error -> {});
     }
 
     @Override
@@ -121,6 +134,20 @@ public class ScanBatchActivity extends AppCompatActivity
         capture.onDestroy();
     }
 
+    private void loadProducts(OnResponseListener responseListener, OnErrorListener errorListener) {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
+                response -> {
+                    products = gson.fromJson(
+                            response,
+                            new TypeToken<List<Product>>(){}.getType()
+                    );
+                    productNames = getProductNames();
+                    responseListener.onResponse(response);
+                }, errorListener::onError
+        );
+    }
+
     public void loadProductDetailsByBarcode(String barcode) {
         request.get(
                 grocyApi.getStockProductByBarcode(barcode),
@@ -129,21 +156,49 @@ public class ScanBatchActivity extends AppCompatActivity
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
                     );
+                    // TODO
                     consumeProduct(productDetails);
-                    //TextView textView = findViewById(R.id.scan_batch_status_view);
-                    //textView.setText(productDetails.getProduct().getName());
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.TYPE, intent.getStringExtra(Constants.ARGUMENT.TYPE));
-                        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
-                        showBottomSheet(new BatchBarcodeBottomSheetDialogFragment(), bundle);
+                        BatchItem batchItem = getBatchItemFromBarcode(barcode);
+                        if(batchItem != null) {
+                            String actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+                            if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
+                                batchItem.amountOneUp();
+                                showSnackbarMessage(
+                                        getString(R.string.msg_purchased,
+                                                batchItem.getProductName())
+                                );
+                                resume();
+                            } else if(actionType == null) {
+                                showSnackbarMessage(getString(R.string.msg_error));
+                            } else {
+                                // TODO
+                                showSnackbarMessage(getString(R.string.msg_error));
+                            }
+                        }else if(products != null) {
+                            showChooseBottomSheet(barcode);
+                        } else {
+                            loadProducts(
+                                    response1 -> showChooseBottomSheet(barcode),
+                                    error1 -> showSnackbarMessage(getString(R.string.msg_error))
+                            );
+                        }
                     } else {
                         showSnackbarMessage(getString(R.string.msg_error));
                     }
                 }
         );
+    }
+
+    private void showChooseBottomSheet(String barcode) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TYPE, intent.getStringExtra(Constants.ARGUMENT.TYPE));
+        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
+        bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
+        showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
     private void consumeProduct(ProductDetails productDetails) {
@@ -217,6 +272,26 @@ public class ScanBatchActivity extends AppCompatActivity
                     if(DEBUG) Log.i(TAG, "undoTransaction: error: " + error);
                 }
         );
+    }
+
+    private ArrayList<String> getProductNames() {
+        ArrayList<String> names = new ArrayList<>();
+        if(products != null) {
+            for(Product product : products) {
+                names.add(product.getName());
+            }
+        }
+        return names;
+    }
+
+    public BatchItem getBatchItemFromBarcode(String barcode) {
+        for(BatchItem batchItem : batchItems) {
+            // TODO: Multiple barcodes
+            if(batchItem.getBarcodes().equals(barcode)) {
+                return batchItem;
+            }
+        }
+        return null;
     }
 
     private void showSnackbarMessage(String msg) {
@@ -303,5 +378,13 @@ public class ScanBatchActivity extends AppCompatActivity
         actionButtonFlash.setIcon(R.drawable.ic_round_flash_on_to_off);
         actionButtonFlash.startIconAnimation();
         isTorchOn = false;
+    }
+
+    public interface OnResponseListener {
+        void onResponse(String response);
+    }
+
+    public interface OnErrorListener {
+        void onError(VolleyError error);
     }
 }

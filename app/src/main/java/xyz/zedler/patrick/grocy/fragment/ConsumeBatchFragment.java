@@ -254,7 +254,7 @@ public class ConsumeBatchFragment extends Fragment implements StockItemAdapter.S
 
     public void openBarcodeScanner() {
         Intent intent = new Intent(activity, ScanBatchActivity.class);
-        intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+        intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
         startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
     }
 

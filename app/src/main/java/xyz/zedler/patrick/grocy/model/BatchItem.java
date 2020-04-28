@@ -5,69 +5,36 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.annotations.SerializedName;
-
 public class BatchItem implements Parcelable {
 
-    @SerializedName("amount")
-    double amount;
-
-    @SerializedName("best_before_date")
-    String bestBeforeDate;
-
-    @SerializedName("amount_opened")
-    double amountOpened;
-
-    @SerializedName("amount_opened_aggregated")
-    double amountOpenedAggregated;
-
-    @SerializedName("is_aggregated_amount")
-    int isAggregatedAmount;
-
-    @SerializedName("product_id")
-    int productId;
-
-    @SerializedName("product")
-    Product product;
+    private String productName, bestBeforeDate, barcodes;
+    private double amount;
 
     public BatchItem(
-            double amount,
-            double amountAggregated,
+            String productName,
             String bestBeforeDate,
-            double amountOpened,
-            double amountOpenedAggregated,
-            int isAggregatedAmount,
-            int productId,
-            Product product
+            String barcodes,
+            double amount
     ) {
-        this.amount = amount;
+        this.productName = productName;
         this.bestBeforeDate = bestBeforeDate;
-        this.amountOpened = amountOpened;
-        this.amountOpenedAggregated = amountOpenedAggregated;
-        this.isAggregatedAmount = isAggregatedAmount;
-        this.productId = productId;
-        this.product = product;
+        this.barcodes = barcodes;
+        this.amount = amount;
     }
 
     public BatchItem(Parcel parcel) {
-        amount = parcel.readDouble();
+        productName = parcel.readString();
         bestBeforeDate = parcel.readString();
-        amountOpened = parcel.readDouble();
-        amountOpenedAggregated = parcel.readDouble();
-        isAggregatedAmount = parcel.readInt();
-        productId = parcel.readInt();
-        product = parcel.readParcelable(Product.class.getClassLoader());
+        barcodes = parcel.readString();
+        amount = parcel.readDouble();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(amount);
+        dest.writeString(productName);
         dest.writeString(bestBeforeDate);
-        dest.writeDouble(amountOpened);
-        dest.writeDouble(amountOpenedAggregated);
-        dest.writeInt(isAggregatedAmount);
-        dest.writeInt(productId);
-        dest.writeParcelable(product, 0);
+        dest.writeString(barcodes);
+        dest.writeDouble(amount);
     }
 
     public static final Creator<BatchItem> CREATOR = new Creator<BatchItem>() {
@@ -83,28 +50,24 @@ public class BatchItem implements Parcelable {
         }
     };
 
+    public String getProductName() {
+        return productName;
+    }
+
     public String getBestBeforeDate() {
         return bestBeforeDate;
     }
 
-    public double getAmountOpenedAggregated() {
-        return amountOpenedAggregated;
-    }
-
-    public int getIsAggregatedAmount() {
-        return isAggregatedAmount;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public Product getProduct() {
-        return product;
+    public String getBarcodes() {
+        return barcodes;
     }
 
     public double getAmount() {
         return amount;
+    }
+
+    public void amountOneUp() {
+        amount++;
     }
 
     @Override
@@ -115,6 +78,6 @@ public class BatchItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "BatchItem(" + product + ")";
+        return "BatchItem(" + productName + ")";
     }
 }

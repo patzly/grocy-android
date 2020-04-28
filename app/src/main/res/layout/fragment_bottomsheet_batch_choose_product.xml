@@ -61,7 +61,7 @@
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_batch_choose_product_name"
+                    android:id="@+id/text_input_batch_choose_name"
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
                     android:hint="Product"
                     app:endIconMode="clear_text"
@@ -87,19 +87,19 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_discard"
+                    android:id="@+id/button_batch_name_discard"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Discard" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_link"
+                    android:id="@+id/button_batch_name_create"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Link" />
+                    android:text="" />
 
             </LinearLayout>
 

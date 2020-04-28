@@ -100,6 +100,8 @@ public final class Constants {
         public final static String CONSUME_ALL = "action_consume_all";
         public final static String CONSUME_SPOILED = "action_consume_spoiled";
         public final static String PURCHASE = "action_purchase";
+        public final static String CREATE = "action_create";
+        public final static String LINK = "action_link";
     }
 
     public final static class ARGUMENT {
