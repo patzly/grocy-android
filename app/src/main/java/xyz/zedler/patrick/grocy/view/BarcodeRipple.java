@@ -57,14 +57,12 @@ public class BarcodeRipple extends LinearLayout {
                 });
     }
 
-    private void startAnimation() {
+    private void animation() {
         cardView.getLayoutParams().width = width;
         cardView.getLayoutParams().height = height;
         cardView.setStrokeWidth(strokeWidth);
         cardView.requestLayout();
         cardView.setAlpha(0);
-
-        continueAnim = true;
 
         if(animator != null) {
             if(animator.isRunning()) animator.pause();
@@ -95,8 +93,14 @@ public class BarcodeRipple extends LinearLayout {
         }).start();
     }
 
+    private void startAnimation() {
+        continueAnim = true;
+        animation();
+    }
+
     public void resumeAnimation() {
-        new Handler().postDelayed(this::startAnimation, 1500);
+        continueAnim = true;
+        new Handler().postDelayed(this::animation, 1500);
     }
 
     public void pauseAnimation() {
