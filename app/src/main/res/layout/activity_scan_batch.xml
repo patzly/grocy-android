@@ -78,6 +78,7 @@
             android:gravity="center">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_scan_batch_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
@@ -87,7 +88,6 @@
                 app:contentPadding="12dp">
 
                 <TextView
-                    android:id="@+id/scan_batch_status_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

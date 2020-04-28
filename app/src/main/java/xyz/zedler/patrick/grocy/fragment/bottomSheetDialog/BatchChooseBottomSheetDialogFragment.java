@@ -80,7 +80,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 || getArguments().getString(Constants.ARGUMENT.BARCODE) == null
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES) == null
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCTS) == null) {
-            dismissWithErrorMessage();
+            dismissWithMessage(activity.getString(R.string.msg_error));
             return view;
         }
 
@@ -120,9 +120,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
                 activity.batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
-                showSnackbarMessage(activity.getString(R.string.msg_purchased, inputText));
-                dismiss();
-                activity.resume();
+                dismissWithMessage(activity.getString(R.string.msg_purchased, inputText));
             } else {
                 assert productNames != null;
                 if(productNames.contains(inputText)) {
@@ -198,7 +196,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            dismissWithErrorMessage();
+            dismissWithMessage(activity.getString(R.string.msg_error));
             if(DEBUG) Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
@@ -209,25 +207,15 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                     dismiss();
                     activity.resume();
                 },
-                error -> dismissWithErrorMessage()
+                error -> dismissWithMessage(activity.getString(R.string.msg_error))
         );
     }
 
-    private void showSnackbarMessage(String msg) {
+    private void dismissWithMessage(String msg) {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.barcode_scan_batch),
                         msg,
-                        Snackbar.LENGTH_SHORT
-                )
-        );
-    }
-
-    private void dismissWithErrorMessage() {
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.findViewById(R.id.barcode_scan_batch),
-                        activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
         );

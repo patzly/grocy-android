@@ -31,7 +31,7 @@ public class ScanInputActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_scan_input);
 
         findViewById(R.id.button_scan_close).setOnClickListener(v -> {
             finish();
@@ -53,6 +53,8 @@ public class ScanInputActivity extends AppCompatActivity
         if(!hasFlash()) {
             findViewById(R.id.frame_scan_flash).setVisibility(View.GONE);
         }
+
+        hideInfo();
 
         capture = new ScanInputCaptureManager(this, barcodeScannerView, this);
         capture.decode();
@@ -81,6 +83,15 @@ public class ScanInputActivity extends AppCompatActivity
         return getApplicationContext().getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA_FLASH
         );
+    }
+
+    private void hideInfo() {
+        findViewById(R.id.card_scan_info)
+                .animate()
+                .alpha(0)
+                .setDuration(300)
+                .setStartDelay(4000)
+                .start();
     }
 
     @Override

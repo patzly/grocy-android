@@ -111,6 +111,8 @@ public class ScanBatchActivity extends AppCompatActivity
         capture = new ScanBatchCaptureManager(this, barcodeScannerView, this);
         capture.decode();
 
+        hideInfo();
+
         // LOAD PRODUCTS
         loadProducts(response -> {}, error -> {});
     }
@@ -356,6 +358,15 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public void showSnackbar(Snackbar snackbar) {
         snackbar.show();
+    }
+
+    private void hideInfo() {
+        findViewById(R.id.card_scan_batch_info)
+                .animate()
+                .alpha(0)
+                .setDuration(300)
+                .setStartDelay(4000)
+                .start();
     }
 
     private void switchTorch() {
