@@ -214,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
+        String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, "");
+        if(serverUrl == null || serverUrl.equals("")) {
             startActivityForResult(
                     new Intent(this, LoginActivity.class),
                     Constants.REQUEST.LOGIN
