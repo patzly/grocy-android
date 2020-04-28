@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingTop="14dp"
     tools:ignore="UseCompoundDrawables">
@@ -68,37 +68,65 @@
 
             <!--<View style="@style/Theme.Grocy.Divider" />-->
 
-            <LinearLayout
-                android:id="@+id/linear_drawer_consume"
-                style="@style/Theme.Grocy.DrawerItem">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_consume_product" />
+                <LinearLayout
+                    android:id="@+id/linear_drawer_consume"
+                    style="@style/Theme.Grocy.DrawerItem">
 
-                <TextView
-                    android:id="@+id/text_drawer_consume"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Consume" />
+                    <ImageView
+                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_consume_product" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_drawer_consume"
+                        style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:text="Consume" />
 
-            <LinearLayout
-                android:id="@+id/linear_drawer_purchase"
-                style="@style/Theme.Grocy.DrawerItem">
+                </LinearLayout>
 
-                <ImageView
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_add_shopping_cart" />
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_round_batch"
+                    app:tint="@color/icon"/>
 
-                <TextView
-                    android:id="@+id/text_drawer_purchase"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Purchase" />
+            </FrameLayout>
 
-            </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/linear_drawer_purchase"
+                    style="@style/Theme.Grocy.DrawerItem">
+
+                    <ImageView
+                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_add_shopping_cart" />
+
+                    <TextView
+                        android:id="@+id/text_drawer_purchase"
+                        style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:text="Purchase" />
+
+                </LinearLayout>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_round_batch"
+                    app:tint="@color/icon"/>
+
+            </FrameLayout>
 
             <View style="@style/Theme.Grocy.Divider" />
 
