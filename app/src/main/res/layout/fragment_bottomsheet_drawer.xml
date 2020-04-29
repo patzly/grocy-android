@@ -110,7 +110,7 @@
                     <ImageView
                         style="@style/Theme.Grocy.DrawerItem.Icon"
                         android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_add_shopping_cart" />
+                        android:src="@drawable/ic_round_local_grocery_store" />
 
                     <TextView
                         android:id="@+id/text_drawer_purchase"
