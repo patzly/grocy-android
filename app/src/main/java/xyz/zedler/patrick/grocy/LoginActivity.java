@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,16 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout textInputLayoutServer = findViewById(R.id.text_input_login_server);
         EditText editTextServer = textInputLayoutServer.getEditText();
         assert editTextServer != null;
-        editTextServer.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(R.id.image_login_logo);
-        });
 
         textInputLayoutKey = findViewById(R.id.text_input_login_key);
         EditText editTextKey = textInputLayoutKey.getEditText();
         assert editTextKey != null;
-        editTextKey.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(R.id.image_login_logo);
-        });
 
         findViewById(R.id.button_login_key).setOnClickListener(v -> {
             if(editTextServer.getText().toString().equals("")) {

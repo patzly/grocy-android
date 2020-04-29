@@ -11,11 +11,10 @@
     android:padding="32dp">
 
     <ImageView
-        android:id="@+id/image_login_logo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_round_grocy_anim"
+        android:src="@drawable/ic_round_grocy_color"
         tools:ignore="ContentDescription"
         android:layout_marginBottom="24dp"/>
 
