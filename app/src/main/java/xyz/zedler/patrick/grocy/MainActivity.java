@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 && data != null
         ) {
             replaceFragment(
-                    Constants.UI.PURCHASE_BATCH,
+                    Constants.UI.BATCH_PURCHASE,
                     data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
                     true
             );
@@ -334,19 +334,29 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.PURCHASE:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.GONE, R.menu.menu_consume, animated,
+                        Constants.FAB.POSITION.END, R.menu.menu_purchase, animated,
                         () -> new Handler().postDelayed(
                                 () -> {
                                     if(fragmentCurrent.getClass() == PurchaseFragment.class) {
-                                        /*((PurchaseFragment) fragmentCurrent)
-                                                .refreshProductOverviewIcon();*/
+                                        //((PurchaseFragment) fragmentCurrent).setUpBottomMenu();
                                     }
                                 },
                                 50
                         )
                 );
+                updateFab(
+                        R.drawable.ic_round_local_grocery_store,
+                        R.string.action_purchase,
+                        Constants.FAB.TAG.PURCHASE,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == PurchaseFragment.class) {
+                                //((PurchaseFragment) fragmentCurrent).consumeProduct();
+                            }
+                        }
+                );
                 break;
-            case Constants.UI.PURCHASE_BATCH:
+            case Constants.UI.BATCH_PURCHASE:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER, R.menu.menu_consume, animated, () -> {
@@ -687,7 +697,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
-            case Constants.UI.PURCHASE_BATCH: // TODO
+            case Constants.UI.BATCH_PURCHASE: // TODO
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -742,7 +752,7 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.PURCHASE:
                 fragmentCurrent = new PurchaseFragment();
                 break;
-            case Constants.UI.PURCHASE_BATCH:
+            case Constants.UI.BATCH_PURCHASE:
                 fragmentCurrent = new PurchaseBatchFragment();
                 break;
             case Constants.UI.MASTER_PRODUCTS:

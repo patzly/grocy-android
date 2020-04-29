@@ -51,7 +51,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
 
-    private final static String TAG = Constants.UI.SCAN_BATCH;
+    private final static String TAG = Constants.UI.BATCH_SCAN;
     private final static boolean DEBUG = true;
 
     private ScanBatchCaptureManager capture;

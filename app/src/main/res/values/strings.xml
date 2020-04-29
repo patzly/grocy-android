@@ -5,6 +5,7 @@
     <string name="app_developer" translatable="false">Patrick Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
+    <string name="action_purchase">Purchase</string>
     <string name="action_consume">Consume</string>
     <string name="action_consume_one">Consume 1 %1$s of %2$s</string>
     <string name="action_consume_one_description">Consume 1 product</string>
