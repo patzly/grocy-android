@@ -15,6 +15,7 @@
     <color name="retro_dirt_dark">#938950</color>
     <color name="retro_green">#789f8a</color>
     <color name="retro_dark">#0a373a</color>
+    <color name="retro_dark_day_night">@color/retro_dark</color>
     <color name="retro_blue">#5a97aa</color>
     <color name="retro_blue_light">#96bdc9</color>
     <color name="retro_blue_dark">#4f8799</color>
