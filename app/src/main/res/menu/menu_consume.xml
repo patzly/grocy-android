@@ -5,6 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_batch_mode"
+        android:title="@string/action_batch_mode"
+        android:icon="@drawable/ic_round_batch"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
         android:id="@+id/action_product_overview"
         android:title="@string/title_product_overview"
         android:icon="@drawable/ic_round_info_outline_anim"

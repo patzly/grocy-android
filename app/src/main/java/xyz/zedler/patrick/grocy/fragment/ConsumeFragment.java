@@ -49,6 +49,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -847,7 +848,14 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemDetails, menuItemOpen;
+        MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
+        menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
+        menuItemBatch.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(activity, ScanBatchActivity.class);
+            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+            return true;
+        });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) {
             menuItemDetails.setEnabled(productDetails != null);
