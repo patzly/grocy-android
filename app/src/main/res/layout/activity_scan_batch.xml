@@ -66,18 +66,36 @@
                 app:cardElevation="0dp"
                 app:rippleColor="@color/highlight">
 
-                <TextView
-                    android:id="@+id/text_scan_batch_count"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/material_digits_round"
-                    android:letterSpacing="0.12"
-                    android:textColor="@color/white"
-                    android:textSize="13dp"
-                    android:layout_gravity="center"
-                    tools:ignore="SpUsage"/>
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/ic_round_batch"
+                        app:tint="@color/white"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/text_scan_batch_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="14dp"
+                        android:fontFamily="@font/material_digits_round"
+                        android:letterSpacing="0.12"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:layout_gravity="center"
+                        tools:ignore="SpUsage"/>
+
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
