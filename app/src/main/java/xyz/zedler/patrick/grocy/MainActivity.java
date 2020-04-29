@@ -44,7 +44,7 @@ import org.json.JSONObject;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.ConsumeBatchFragment;
+import xyz.zedler.patrick.grocy.fragment.PurchaseBatchFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
@@ -312,27 +312,6 @@ public class MainActivity extends AppCompatActivity {
                         )
                 );
                 break;
-            case Constants.UI.CONSUME_BATCH:
-                scrollBehavior.setHideOnScroll(false);
-                updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER, R.menu.menu_consume, animated, () -> {
-                            if(fragmentCurrent.getClass() == ConsumeBatchFragment.class) {
-                                ((ConsumeBatchFragment) fragmentCurrent).setUpBottomMenu();
-                            }
-                        }
-                );
-                updateFab(
-                        R.drawable.ic_round_barcode_scan,
-                        R.string.action_back,
-                        Constants.FAB.TAG.SCAN,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == ConsumeBatchFragment.class) {
-                                ((ConsumeBatchFragment) fragmentCurrent).openBarcodeScanner();
-                            }
-                        }
-                );
-                break;
             case Constants.UI.PURCHASE:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -346,6 +325,27 @@ public class MainActivity extends AppCompatActivity {
                                 },
                                 50
                         )
+                );
+                break;
+            case Constants.UI.PURCHASE_BATCH:
+                scrollBehavior.setHideOnScroll(false);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.CENTER, R.menu.menu_consume, animated, () -> {
+                            if(fragmentCurrent.getClass() == PurchaseBatchFragment.class) {
+                                ((PurchaseBatchFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_barcode_scan,
+                        R.string.action_back,
+                        Constants.FAB.TAG.SCAN,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == PurchaseBatchFragment.class) {
+                                ((PurchaseBatchFragment) fragmentCurrent).openBarcodeScanner();
+                            }
+                        }
                 );
                 break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
@@ -667,8 +667,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.CONSUME:
-            case Constants.UI.CONSUME_BATCH:
             case Constants.UI.PURCHASE:
+            case Constants.UI.PURCHASE_BATCH: // TODO
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -720,11 +720,11 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
                 break;
-            case Constants.UI.CONSUME_BATCH:
-                fragmentCurrent = new ConsumeBatchFragment();
-                break;
             case Constants.UI.PURCHASE:
                 fragmentCurrent = new PurchaseFragment();
+                break;
+            case Constants.UI.PURCHASE_BATCH:
+                fragmentCurrent = new PurchaseBatchFragment();
                 break;
             case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();

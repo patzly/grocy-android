@@ -47,8 +47,8 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String CONSUME = "consume";
-        public final static String CONSUME_BATCH = "consume_batch";
         public final static String PURCHASE = "purchase";
+        public final static String PURCHASE_BATCH = "purchase_batch";
         public final static String MASTER = "master";
         public final static String MASTER_PRODUCTS = "master_products";
         public final static String MASTER_PRODUCTS_DEFAULT = "master_products_default";
@@ -71,6 +71,7 @@ public final class Constants {
         public final static String MASTER_PRODUCT_GROUPS_DEFAULT = "master_product_groups_default";
         public final static String MASTER_PRODUCT_GROUPS_SEARCH = "master_product_groups_search";
         public final static String MASTER_PRODUCT_GROUP_EDIT = "master_product_group";
+        public final static String SCAN_BATCH = "scan_batch";
     }
 
     public final static class STOCK {
