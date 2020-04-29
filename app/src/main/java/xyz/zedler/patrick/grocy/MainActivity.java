@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 updateFab(
                         R.drawable.ic_round_barcode_scan,
-                        R.string.action_back, // TODO: Correct string
+                        R.string.action_scan, // TODO: Correct string
                         Constants.FAB.TAG.SCAN,
                         animated,
                         () -> {
@@ -309,16 +309,26 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.CONSUME:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.GONE, R.menu.menu_consume, animated,
+                        Constants.FAB.POSITION.END, R.menu.menu_consume, animated,
                         () -> new Handler().postDelayed(
                                 () -> {
                                     if(fragmentCurrent.getClass() == ConsumeFragment.class) {
-                                        ((ConsumeFragment) fragmentCurrent)
-                                                .refreshProductOverviewIcon();
+                                        ((ConsumeFragment) fragmentCurrent).setUpBottomMenu();
                                     }
                                 },
                                 50
                         )
+                );
+                updateFab(
+                        R.drawable.ic_round_consume_product,
+                        R.string.action_consume,
+                        Constants.FAB.TAG.CONSUME,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ConsumeFragment.class) {
+                                ((ConsumeFragment) fragmentCurrent).consumeProduct();
+                            }
+                        }
                 );
                 break;
             case Constants.UI.PURCHASE:

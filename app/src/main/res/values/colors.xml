@@ -71,7 +71,7 @@
 
     <!-- ERROR -->
 
-    <color name="error">@color/retro_red</color>
+    <color name="error">@color/retro_red_dark</color>
 
     <!-- STROKES -->
 

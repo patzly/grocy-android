@@ -266,32 +266,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start"
-                    android:layout_marginStart="72dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_consume_consume"
-                        style="@style/Widget.Grocy.Button.UnelevatedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Consume"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_consume_open"
-                        style="@style/Widget.Grocy.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Mark as opened"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -33,7 +33,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -94,7 +93,6 @@ public class ConsumeFragment extends Fragment {
     private EditText editTextAmount;
     private TextView textViewLocation, textViewSpecific;
     private MaterialCheckBox checkBoxSpoiled;
-    private MaterialButton buttonOpen;
     private ImageView imageViewAmount;
     private int selectedLocationId;
     private String selectedStockEntryId;
@@ -284,16 +282,6 @@ public class ConsumeFragment extends Fragment {
             checkBoxSpoiled.setChecked(!checkBoxSpoiled.isChecked());
         });
 
-        // consume
-        activity.findViewById(R.id.button_consume_consume).setOnClickListener(
-                v -> consumeProduct()
-        );
-        // open
-        buttonOpen = activity.findViewById(R.id.button_consume_open);
-        buttonOpen.setOnClickListener(
-                v -> openProduct()
-        );
-
         // START
 
         load();
@@ -427,7 +415,8 @@ public class ConsumeFragment extends Fragment {
             activity.showKeyboard(editTextAmount);
         }
 
-        buttonOpen.setEnabled(!isTareWeightHandlingEnabled);
+        // disable open action if needed
+        setOpenEnabled(!isTareWeightHandlingEnabled);
 
         // set icon for tare weight, else for normal amount
         imageViewAmount.setImageResource(
@@ -449,8 +438,8 @@ public class ConsumeFragment extends Fragment {
         // SPOILED
         checkBoxSpoiled.setChecked(false);
 
-        // DETAILS
-        refreshProductOverviewIcon();
+        // MENU
+        setUpBottomMenu();
     }
 
     private void clearInputFocus() {
@@ -551,7 +540,7 @@ public class ConsumeFragment extends Fragment {
         }
     }
 
-    private void consumeProduct() {
+    public void consumeProduct() {
         if(isFormIncomplete()) return;
         boolean isSpoiled = checkBoxSpoiled.isChecked();
         JSONObject body = new JSONObject();
@@ -857,12 +846,13 @@ public class ConsumeFragment extends Fragment {
         } return null;
     }
 
-    public void refreshProductOverviewIcon() {
-        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        if(menuItem != null) {
-            menuItem.setEnabled(productDetails != null);
+    public void setUpBottomMenu() {
+        MenuItem menuItemDetails, menuItemOpen;
+        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
+        if(menuItemDetails != null) {
+            menuItemDetails.setEnabled(productDetails != null);
 
-            Drawable icon = menuItem.getIcon();
+            Drawable icon = menuItemDetails.getIcon();
             ValueAnimator alphaAnimator = ValueAnimator.ofInt(
                     icon.getAlpha(), (productDetails != null) ? 255 : 100
             );
@@ -871,7 +861,7 @@ public class ConsumeFragment extends Fragment {
             );
             alphaAnimator.setDuration(200).start();
 
-            menuItem.setOnMenuItemClickListener(item -> {
+            menuItemDetails.setOnMenuItemClickListener(item -> {
                 ((Animatable) icon).start();
                 if(productDetails != null) {
                     Bundle bundle = new Bundle();
@@ -885,6 +875,29 @@ public class ConsumeFragment extends Fragment {
                 }
                 return true;
             });
+        }
+        menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
+        if(menuItemOpen != null) {
+            menuItemOpen.setOnMenuItemClickListener(item -> {
+                openProduct();
+                return true;
+            });
+        }
+    }
+
+    public void setOpenEnabled(boolean enabled) {
+        MenuItem menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
+        if(menuItemOpen != null) {
+            menuItemOpen.setEnabled(enabled);
+
+            Drawable icon = menuItemOpen.getIcon();
+            ValueAnimator alphaAnimator = ValueAnimator.ofInt(
+                    icon.getAlpha(), enabled ? 255 : 100
+            );
+            alphaAnimator.addUpdateListener(
+                    animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
+            );
+            alphaAnimator.setDuration(200).start();
         }
     }
 

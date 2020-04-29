@@ -143,6 +143,7 @@ public final class Constants {
         public final static class TAG {
             public final static String ADD = "add";
             public final static String SCAN = "scan";
+            public final static String CONSUME = "consume";
             public final static String SAVE = "save";
         }
     }

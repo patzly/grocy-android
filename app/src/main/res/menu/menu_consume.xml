@@ -11,4 +11,11 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
+    <item
+        android:id="@+id/action_open"
+        android:title="@string/action_open"
+        android:icon="@drawable/ic_round_open_product"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
 </menu>
