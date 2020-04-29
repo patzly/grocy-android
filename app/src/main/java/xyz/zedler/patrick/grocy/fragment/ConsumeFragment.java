@@ -532,9 +532,7 @@ public class ConsumeFragment extends Fragment {
             if(productDetails == null) {
                 textInputProduct.setError(activity.getString(R.string.error_select_product));
             }
-            if(!isAmountValid()) {
-                textInputAmount.setError(activity.getString(R.string.error_invalid_amount));
-            }
+            isAmountValid();
             return true;
         } else {
             return false;
@@ -826,7 +824,7 @@ public class ConsumeFragment extends Fragment {
                 return false;
             }
         } else {
-            textInputAmount.setErrorEnabled(false);
+            textInputAmount.setError(activity.getString(R.string.error_invalid_amount));
             return false;
         }
     }
@@ -858,19 +856,8 @@ public class ConsumeFragment extends Fragment {
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) {
-            menuItemDetails.setEnabled(productDetails != null);
-
-            Drawable icon = menuItemDetails.getIcon();
-            ValueAnimator alphaAnimator = ValueAnimator.ofInt(
-                    icon.getAlpha(), (productDetails != null) ? 255 : 100
-            );
-            alphaAnimator.addUpdateListener(
-                    animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
-            );
-            alphaAnimator.setDuration(200).start();
-
             menuItemDetails.setOnMenuItemClickListener(item -> {
-                ((Animatable) icon).start();
+                ((Animatable) menuItemDetails.getIcon()).start();
                 if(productDetails != null) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
@@ -880,6 +867,8 @@ public class ConsumeFragment extends Fragment {
                             new ProductOverviewBottomSheetDialogFragment(),
                             bundle
                     );
+                } else {
+                    textInputProduct.setError(activity.getString(R.string.error_select_product));
                 }
                 return true;
             });

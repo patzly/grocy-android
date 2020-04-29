@@ -320,26 +320,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 					animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
 			);
 			alphaAnimator.setDuration(ICON_ANIM_DURATION).start();
-		} else if(item.getActionView() != null) {
-			View actionView = item.getActionView();
-			float targetAlpha;
-			switch (visibility) {
-				case VISIBLE:
-					targetAlpha = 1.0f;
-					actionView.setClickable(true);
-					break;
-				case INVISIBLE:
-					targetAlpha = 0.0f;
-					new Handler().postDelayed(
-							() -> item.getActionView().setVisibility(View.GONE), ICON_ANIM_DURATION
-					);
-					actionView.setClickable(false);
-					break;
-				default:
-					Log.e(TAG, "animateMenuItem(MenuItem): wrong argument: " + visibility);
-					return;
-			}
-			actionView.animate().alpha(targetAlpha).setDuration(ICON_ANIM_DURATION).start();
 		}
 	}
 

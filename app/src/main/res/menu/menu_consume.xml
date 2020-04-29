@@ -7,7 +7,7 @@
     <item
         android:id="@+id/action_batch_mode"
         android:title="@string/action_batch_mode"
-        android:icon="@drawable/ic_round_batch"
+        android:icon="@drawable/ic_round_batch_menu"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
