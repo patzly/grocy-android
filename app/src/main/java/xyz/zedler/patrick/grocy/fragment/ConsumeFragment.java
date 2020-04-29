@@ -131,10 +131,6 @@ public class ConsumeFragment extends Fragment {
                 v -> activity.onBackPressed()
         );
 
-        activity.findViewById(R.id.frame_consume_batch).setOnClickListener(
-                v -> activity.replaceFragment(Constants.UI.CONSUME_BATCH, null, true)
-        );
-
         // swipe refresh
 
         swipeRefreshLayout = activity.findViewById(R.id.swipe_consume);
