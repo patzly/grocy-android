@@ -52,7 +52,6 @@
                     android:id="@+id/image_feedback_rate"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     android:src="@drawable/ic_round_star_anim"
-                    app:tint="@color/retro_yellow"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
@@ -71,13 +70,13 @@
 
             <LinearLayout
                 style="@style/Theme.Grocy.ListItem.TwoLine"
-                android:paddingTop="8dp"
+                android:paddingTop="2dp"
                 android:paddingBottom="0dp">
 
                 <ImageView
                     android:id="@+id/image_feedback_box"
                     style="@style/Theme.Grocy.ListItem.Icon.Top"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginTop="23sp"
                     android:src="@drawable/ic_round_insert_comment_anim"
                     tools:ignore="ContentDescription" />
 
@@ -87,9 +86,7 @@
                     app:boxCornerRadiusTopStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
                     app:boxBackgroundColor="@color/on_surface_secondary"
-                    android:hint="@string/hint_message"
-                    app:helperTextEnabled="true"
-                    app:helperText=" ">
+                    android:hint="@string/hint_message">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -101,27 +98,14 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                style="@style/Theme.Grocy.ListItem.SingleLine"
-                android:minHeight="0dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp">
-
-                <ImageView
-                    android:id="@+id/image_feedback_send"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_send_anim"
-                    tools:ignore="ContentDescription" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_feedback_send"
-                    style="@style/Widget.Grocy.Button.UnelevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/action_send" />
-
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_feedback_send"
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:text="@string/action_send" />
 
         </LinearLayout>
 

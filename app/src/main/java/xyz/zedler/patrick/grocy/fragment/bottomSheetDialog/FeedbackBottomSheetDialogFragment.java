@@ -80,23 +80,17 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		});
 
 		view.findViewById(R.id.button_feedback_send).setOnClickListener(v -> {
-			startAnimatedIcon(view, R.id.image_feedback_send);
-			if(editText.getText().toString().equals("")) {
-				textInputLayoutFeedback.setError(getString(R.string.error_empty));
-			} else {
-				textInputLayoutFeedback.setErrorEnabled(false);
-				Intent intent = new Intent(Intent.ACTION_SENDTO);
-				intent.setData(
-						Uri.parse(
-								"mailto:"
-										+ getString(R.string.app_mail)
-										+ "?subject=" + Uri.encode("Feedback@Grocy")
-										+ "&body=" + Uri.encode(editText.getText().toString())
-						)
-				);
-				startActivity(Intent.createChooser(intent, getString(R.string.action_send_feedback)));
-				dismiss();
-			}
+			Intent intent = new Intent(Intent.ACTION_SENDTO);
+			intent.setData(
+					Uri.parse(
+							"mailto:"
+									+ getString(R.string.app_mail)
+									+ "?subject=" + Uri.encode("Feedback@Grocy")
+									+ "&body=" + Uri.encode(editText.getText().toString())
+					)
+			);
+			startActivity(Intent.createChooser(intent, getString(R.string.action_send_feedback)));
+			dismiss();
 		});
 
 		return view;
