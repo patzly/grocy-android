@@ -23,6 +23,7 @@
     <string name="action_open">Open</string>
     <string name="action_send">Send</string>
     <string name="action_close">Close</string>
+    <string name="action_scan">Scan</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_add">Add</string>
     <string name="action_clear">Clear</string>
@@ -54,6 +55,7 @@
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
     <string name="msg_error">An error occurred</string>
+    <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
     <string name="msg_barcode_error">An error occurred</string>

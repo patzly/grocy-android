@@ -39,7 +39,7 @@
             android:baselineAligned="false">
 
             <FrameLayout
-                android:id="@+id/frame_close_stock_search"
+                android:id="@+id/frame_stock_search_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -66,9 +66,7 @@
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="72dp">
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
@@ -80,6 +78,29 @@
                     android:textColor="@color/on_background" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_stock_search_scan"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="4dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_scan"
+                android:tooltipText="@string/action_scan"
+                android:focusable="true"
+                tools:targetApi="o">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_barcode_scan" />
+
+            </FrameLayout>
 
         </LinearLayout>
 

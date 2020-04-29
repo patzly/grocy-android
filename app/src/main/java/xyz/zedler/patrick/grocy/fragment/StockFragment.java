@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -144,6 +143,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // retry button on offline error page
         activity.findViewById(R.id.button_stock_error_retry).setOnClickListener(v -> refresh());
         recyclerView = activity.findViewById(R.id.recycler_stock);
+
+        // search
+        activity.findViewById(R.id.frame_stock_search_close).setOnClickListener(
+                v -> dismissSearch()
+        );
+        activity.findViewById(R.id.frame_stock_search_scan).setOnClickListener(v -> {
+            startActivityForResult(
+                    new Intent(activity, ScanInputActivity.class),
+                    Constants.REQUEST.SCAN
+            );
+            dismissSearch();
+        });
         textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
         editTextSearch = textInputLayoutSearch.getEditText();
         assert editTextSearch != null;
@@ -660,11 +671,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void loadProductDetailsByBarcode(String barcode) {
-        swipeRefreshLayout.setRefreshing(true);
         request.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
-                    swipeRefreshLayout.setRefreshing(false);
                     ProductDetails productDetails = gson.fromJson(
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
@@ -672,21 +681,21 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     showProductOverview(productDetails);
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
+                    Snackbar snackbar;
                     if(response != null && response.statusCode == 400) {
-                        //autoCompleteTextViewProduct.setText(barcode);
-                        activity.showBottomSheet(
-                                new ConsumeBarcodeBottomSheetDialogFragment(), null
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(R.string.msg_not_found),
+                                Snackbar.LENGTH_SHORT
                         );
                     } else {
-                        activity.showSnackbar(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
-                                        activity.getString(R.string.msg_error),
-                                        Snackbar.LENGTH_SHORT
-                                )
+                        snackbar = Snackbar.make(
+                                activity.findViewById(R.id.linear_container_main),
+                                activity.getString(R.string.msg_error),
+                                Snackbar.LENGTH_SHORT
                         );
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+                    activity.showSnackbar(snackbar);
                 }
         );
     }
@@ -1153,13 +1162,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void openBarcodeScanner() {
-        startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        );
-    }
-
     public void setUpSearch() {
         if(search.equals("")) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
@@ -1168,10 +1170,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         textInputLayoutSearch.requestFocus();
         activity.showKeyboard(editTextSearch);
 
-        activity.findViewById(R.id.frame_close_stock_search).setOnClickListener(
-                v -> dismissSearch()
-        );
-
         activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);
     }
 
@@ -1179,7 +1177,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_default, true);
         activity.hideKeyboard();
         search = "";
-        filterItems(itemsToDisplay); // TODO: buggy animation
+        filterItems(itemsToDisplay);
 
         activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }

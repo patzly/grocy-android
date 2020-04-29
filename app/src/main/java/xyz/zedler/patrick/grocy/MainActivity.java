@@ -288,7 +288,11 @@ public class MainActivity extends AppCompatActivity {
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == StockFragment.class) {
-                                ((StockFragment) fragmentCurrent).openBarcodeScanner();
+                                Intent intent = new Intent(
+                                        this, ScanBatchActivity.class
+                                );
+                                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+                                startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
                             }
                         }
                 );
