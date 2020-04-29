@@ -89,6 +89,7 @@
                 </LinearLayout>
 
                 <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_drawer_batch_consume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
@@ -119,6 +120,7 @@
                 </LinearLayout>
 
                 <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_drawer_batch_purchase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"

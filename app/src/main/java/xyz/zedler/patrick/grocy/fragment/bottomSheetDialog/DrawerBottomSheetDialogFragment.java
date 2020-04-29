@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.SettingsActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -55,6 +56,20 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         assert activity != null && bundle != null;
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
+
+        view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
+            Intent intent = new Intent(activity, ScanBatchActivity.class);
+            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+            new Handler().postDelayed(this::dismiss, 500);
+        });
+
+        view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
+            Intent intent = new Intent(activity, ScanBatchActivity.class);
+            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            new Handler().postDelayed(this::dismiss, 500);
+        });
 
         setOnClickListeners(
                 R.id.linear_drawer_consume,
