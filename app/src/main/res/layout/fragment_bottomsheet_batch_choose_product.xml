@@ -42,43 +42,29 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:textAlignment="viewStart"
-                android:text="Please choose the product to which the barcode will be linked."
+                android:text="Choose the product to which the barcode will be linked or create a new one."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
-            <LinearLayout
-                style="@style/Theme.Grocy.ListItem"
-                android:paddingTop="8dp"
-                android:paddingBottom="0dp">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_batch_choose_name"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                android:hint="Product name"
+                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
+                app:helperText=" ">
 
-                <ImageView
-                    android:id="@+id/image_consume_product"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_widgets"
-                    android:layout_marginBottom="4dp"
-                    tools:ignore="ContentDescription" />
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:inputType="text|textCapSentences|textNoSuggestions"
+                    android:completionThreshold="1"
+                    android:popupBackground="@drawable/bg_auto_complete"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_batch_choose_name"
-                    style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
-                    android:hint="Product"
-                    app:endIconMode="clear_text"
-                    app:helperTextEnabled="true"
-                    app:helperText=" ">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/on_background"
-                        android:inputType="text|textCapSentences|textNoSuggestions"
-                        android:completionThreshold="1"
-                        android:popupBackground="@drawable/bg_auto_complete"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,6 +77,8 @@
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:rippleColor="@color/highlight"
+                    android:textColor="@color/on_background_secondary"
                     android:text="Discard" />
 
                 <com.google.android.material.button.MaterialButton
