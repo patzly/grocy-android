@@ -105,6 +105,15 @@ public class ScanBatchActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cardViewCount.setTooltipText("New products count");
         }
+        String type = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+        if(type == null) finish();
+        assert type != null;
+        cardViewCount.setVisibility(
+                type.equals(Constants.ACTION.PURCHASE)
+                        ? View.VISIBLE
+                        : View.GONE
+        );
+
         cardViewCount.setOnClickListener(v -> {});
 
         findViewById(R.id.button_scan_batch_flash).setOnClickListener(v -> switchTorch());
