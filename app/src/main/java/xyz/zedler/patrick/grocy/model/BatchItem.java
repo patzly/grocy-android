@@ -62,6 +62,10 @@ public class BatchItem implements Parcelable {
         return barcodes;
     }
 
+    public void setBarcodes(String barcodes) {
+        this.barcodes = barcodes;
+    }
+
     public double getAmount() {
         return amount;
     }

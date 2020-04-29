@@ -34,6 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -50,6 +51,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private String barcode, batchType, buttonAction;
 
     private ArrayList<Product> products;
+    private ArrayList<BatchItem> batchItems;
 
     private ScanBatchActivity activity;
     private TextInputLayout textInputProduct;
@@ -78,7 +80,9 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 || getArguments().getString(Constants.ARGUMENT.TYPE) == null
                 || getArguments().getString(Constants.ARGUMENT.BARCODE) == null
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES) == null
-                || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCTS) == null) {
+                || getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS) == null
+                || getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
+        ) {
             dismissWithMessage(activity.getString(R.string.msg_error));
             return view;
         }
@@ -90,6 +94,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 Constants.ARGUMENT.PRODUCT_NAMES
         );
         products = getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS);
+        batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
         batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
@@ -123,9 +128,14 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
             } else {
                 assert productNames != null;
                 if(productNames.contains(inputText)) {
-                    selectedProduct = getProductFromName(inputText);
                     textInputProduct.setErrorEnabled(false);
-                    addProductBarcode(barcode);
+                    selectedProduct = getProductFromName(inputText);
+                    if(selectedProduct != null) {
+                        addProductBarcode(barcode);
+                    } else {
+                        // name from list is name of batchItem product
+                        addBatchItemBarcode(barcode, inputText);
+                    }
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
                 }
@@ -134,7 +144,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         view.findViewById(R.id.button_batch_name_discard).setOnClickListener(v -> {
             dismiss();
-            activity.resume();
+            activity.resumeScan();
         });
 
         textInputProduct = view.findViewById(R.id.text_input_batch_choose_name);
@@ -204,22 +214,50 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 response -> {
                     activity.loadProductDetailsByBarcode(barcode);
                     dismiss();
-                    activity.resume();
+                    activity.resumeScan();
                 },
                 error -> dismissWithMessage(activity.getString(R.string.msg_error))
         );
     }
 
-    private void dismissWithMessage(String msg) {
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.findViewById(R.id.barcode_scan_batch),
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                )
-        );
+    private void addBatchItemBarcode(String barcode, String inputText) {
+        List<String> barcodes;
+        BatchItem selectedBatchItem = null;
+        for(BatchItem batchItem : batchItems) {
+            if(batchItem.getProductName().equals(inputText)) {
+                selectedBatchItem = batchItem;
+                break;
+            }
+        }
+        if(selectedBatchItem == null) {
+            // TODO: Error
+            return;
+        }
+
+        if(selectedBatchItem.getBarcodes() != null && !selectedBatchItem.getBarcodes().equals("")) {
+            barcodes = new ArrayList<>(Arrays.asList(
+                    selectedBatchItem.getBarcodes().split(",")
+            ));
+        } else {
+            barcodes = new ArrayList<>();
+        }
+
+        barcodes.add(barcode);
+        selectedBatchItem.setBarcodes(TextUtils.join(",", barcodes));
+        activity.setBatchItems(batchItems);
+        activity.purchaseBatchItem(selectedBatchItem);
         dismiss();
-        activity.resume();
+        activity.resumeScan();
+    }
+
+    private void dismissWithMessage(String msg) {
+        Snackbar.make(
+                activity.findViewById(R.id.barcode_scan_batch),
+                msg,
+                Snackbar.LENGTH_SHORT
+        ).show();
+        dismiss();
+        activity.resumeScan();
     }
 
     private Product getProductFromName(String name) {

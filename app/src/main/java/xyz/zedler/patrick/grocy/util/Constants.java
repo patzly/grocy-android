@@ -71,6 +71,7 @@ public final class Constants {
         public final static String MASTER_PRODUCT_GROUPS_SEARCH = "master_product_groups_search";
         public final static String MASTER_PRODUCT_GROUP_EDIT = "master_product_group";
         public final static String BATCH_SCAN = "batch_scan";
+        public final static String BATCH_SCAN_BOTTOM_SHEET = "batch_scan_bottom_sheet";
         public final static String BATCH_PURCHASE = "batch_purchase";
     }
 

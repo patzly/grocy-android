@@ -1,6 +1,5 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,15 +25,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.BatchItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -43,7 +42,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
+public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.BatchItemAdapterListener {
 
     private final static String TAG = Constants.UI.BATCH_PURCHASE;
     private final static boolean DEBUG = true;
@@ -53,12 +52,11 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
-    private StockItemAdapter stockItemAdapter;
+    private BatchItemAdapter batchItemAdapter;
     private BroadcastReceiver broadcastReceiver;
     private ActionButton actionButtonFlash;
 
-    private List<StockItem> displayedItems = new ArrayList<>();
-
+    private ArrayList<BatchItem> batchItems;
     private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
     private String search = "";
     private String sortMode;
@@ -73,7 +71,7 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_consume_batch, container, false);
+        return inflater.inflate(R.layout.fragment_purchase_batch, container, false);
     }
 
     @Override
@@ -82,11 +80,6 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
 
         activity = (MainActivity) getActivity();
         assert activity != null;
-
-        if(getArguments() == null ||
-                getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null) {
-            activity.dismissFragment();
-        }
 
         // GET PREFERENCES
 
@@ -102,6 +95,14 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
         scrollView = activity.findViewById(R.id.scroll_batch_consume);
         // retry button on offline error page
         recyclerView = activity.findViewById(R.id.recycler_batch_consume);
+
+        if(getArguments() == null ||
+                getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null) {
+            setError(true, false, false);
+            activity.findViewById(R.id.button_stock_error_retry).setVisibility(View.GONE);
+        }
+
+        batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
 
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -122,12 +123,21 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
         if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
             sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();
         }
+
+        refreshAdapter(
+                new BatchItemAdapter(
+                        activity,
+                        batchItems,
+                        sortMode,
+                        this
+                )
+        );
     }
 
     private void load() {
         if(activity.isOnline()) {
         } else {
-            setError(true, true, false);
+            setError(true, true, true);
         }
     }
 
@@ -168,13 +178,13 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
         }
     }
 
-    private StockItem getStockItem(int productId) {
+    /*private StockItem getStockItem(int productId) {
         for(StockItem stockItem : displayedItems) {
             if(stockItem.getProduct().getId() == productId) {
                 return stockItem;
             }
         } return null;
-    }
+    }*/
 
     private StockItem createStockItem(ProductDetails productDetails) {
         return new StockItem(
@@ -194,14 +204,14 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
      * Used for providing a safe and up-to-date value
      * e.g. when the items are filtered/sorted before server responds
      */
-    private int getProductPosition(int productId) {
+    /*private int getProductPosition(int productId) {
         for(int i = 0; i < displayedItems.size(); i++) {
             if(displayedItems.get(i).getProduct().getId() == productId) {
                 return i;
             }
         }
         return 0;
-    }
+    }*/
 
     private void showErrorMessage(VolleyError error) {
         activity.showSnackbar(
@@ -214,19 +224,9 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {
-            if(data != null) {
-
-                //loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
-            }
-        }
-    }
-
-    @Override
     public void onItemRowClicked(int position) {
         // STOCK ITEM CLICK
-        showProductOverview(displayedItems.get(position));
+        //showProductOverview(batchItems.get(position));
     }
 
     private void showProductOverview(StockItem stockItem) {
@@ -253,6 +253,14 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
                     bundle
             );
         }
+    }
+
+    private void refreshAdapter(BatchItemAdapter adapter) {
+        batchItemAdapter = adapter;
+        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            recyclerView.setAdapter(adapter);
+            recyclerView.animate().alpha(1).setDuration(150).start();
+        }).start();
     }
 
     public void setUpBottomMenu() {}

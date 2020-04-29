@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -71,7 +73,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<String> productNames = new ArrayList<>();
-    public ArrayList<BatchItem> batchItems = new ArrayList<>();
+    private ArrayList<BatchItem> batchItems = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,10 +98,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
         ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
         buttonClose.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
-            setResult(RESULT_OK, new Intent().putExtra(Constants.ARGUMENT.BUNDLE, bundle));
-            finish();
+            onBackPressed();
         });
         buttonClose.setTooltipText(getString(R.string.action_close));
 
@@ -119,7 +118,19 @@ public class ScanBatchActivity extends AppCompatActivity
                         : View.GONE
         );
 
-        cardViewCount.setOnClickListener(v -> {});
+        cardViewCount.setOnClickListener(v -> {
+            if(batchItems.size() > 0) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+                setResult(
+                        Activity.RESULT_OK,
+                        new Intent().putExtra(Constants.ARGUMENT.BUNDLE, bundle)
+                );
+                finish();
+            } else {
+                showSnackbarMessage(getString(R.string.msg_batch_no_products));
+            }
+        });
 
         findViewById(R.id.button_scan_batch_flash).setOnClickListener(v -> switchTorch());
 
@@ -166,6 +177,19 @@ public class ScanBatchActivity extends AppCompatActivity
         capture.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(batchItems.size() > 0) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+            showBottomSheet(new BatchExitBottomSheetDialogFragment(), bundle);
+            pauseScan();
+        } else {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+        }
+    }
+
     private void loadProducts(OnResponseListener responseListener, OnErrorListener errorListener) {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
@@ -188,25 +212,14 @@ public class ScanBatchActivity extends AppCompatActivity
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
                     );
-                    // TODO
+                    // TODO: Purchase
                     consumeProduct(productDetails);
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         BatchItem batchItem = getBatchItemFromBarcode(barcode);
                         if(batchItem != null) {
-                            String actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
-                            if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
-                                batchItem.amountOneUp();
-                                showSnackbarMessage(
-                                        getString(R.string.msg_purchased,
-                                                batchItem.getProductName())
-                                );
-                                resume();
-                            } else {
-                                showSnackbarMessage(getString(R.string.msg_error));
-                                resume();
-                            }
+                            purchaseBatchItem(batchItem);
                         }else if(products != null) {
                             showChooseBottomSheet(barcode);
                         } else {
@@ -214,13 +227,13 @@ public class ScanBatchActivity extends AppCompatActivity
                                     response1 -> showChooseBottomSheet(barcode),
                                     error1 -> {
                                         showSnackbarMessage(getString(R.string.msg_error));
-                                        resume();
+                                        resumeScan();
                                     }
                             );
                         }
                     } else {
                         showSnackbarMessage(getString(R.string.msg_error));
-                        resume();
+                        resumeScan();
                     }
                 }
         );
@@ -232,6 +245,7 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
         bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
         bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
         showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
@@ -276,8 +290,8 @@ public class ScanBatchActivity extends AppCompatActivity
                                 v -> undoTransaction(transId)
                         );
                     }
-                    showSnackbar(snackbar);
-                    resume();
+                    snackbar.show();
+                    resumeScan();
                 },
                 error -> {
                     NetworkResponse networkResponse = error.networkResponse;
@@ -290,7 +304,7 @@ public class ScanBatchActivity extends AppCompatActivity
                         showSnackbarMessage(getString(R.string.msg_error));
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
-                    resume();
+                    resumeScan();
                 }
         );
     }
@@ -318,9 +332,29 @@ public class ScanBatchActivity extends AppCompatActivity
         return names;
     }
 
+    public void setBatchItems(ArrayList<BatchItem> batchItems) {
+        this.batchItems = batchItems;
+    }
+
     public void addBatchItem(String inputText, String barcode) {
         batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
+        productNames.add(inputText);
         textViewCount.setText(String.valueOf(batchItems.size()));
+    }
+
+    public void purchaseBatchItem(BatchItem batchItem) {
+        String actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+        if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
+            batchItem.amountOneUp();
+            showSnackbarMessage(
+                    getString(R.string.msg_purchased,
+                            batchItem.getProductName())
+            );
+            resumeScan();
+        } else {
+            showSnackbarMessage(getString(R.string.msg_error));
+            resumeScan();
+        }
     }
 
     public BatchItem getBatchItemFromBarcode(String barcode) {
@@ -334,16 +368,19 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private void showSnackbarMessage(String msg) {
-        showSnackbar(
-                Snackbar.make(
-                        findViewById(R.id.barcode_scan_batch),
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                )
-        );
+        Snackbar.make(
+                findViewById(R.id.barcode_scan_batch),
+                msg,
+                Snackbar.LENGTH_SHORT
+        ).show();
     }
 
-    public void resume() {
+    public void pauseScan() {
+        barcodeRipple.pauseAnimation();
+        capture.onPause();
+    }
+
+    public void resumeScan() {
         barcodeRipple.resumeAnimation();
         capture.onResume();
     }
@@ -391,10 +428,6 @@ public class ScanBatchActivity extends AppCompatActivity
         assert connectivityManager != null;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
-    public void showSnackbar(Snackbar snackbar) {
-        snackbar.show();
     }
 
     private void hideInfo() {
