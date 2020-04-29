@@ -43,9 +43,9 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ConsumeBatchFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
+public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = Constants.UI.STOCK;
+    private final static String TAG = Constants.UI.PURCHASE_BATCH;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -112,7 +112,7 @@ public class ConsumeBatchFragment extends Fragment implements StockItemAdapter.S
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.CONSUME_BATCH, TAG);
+        activity.updateUI(Constants.UI.PURCHASE_BATCH, TAG);
 
         if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
             sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();

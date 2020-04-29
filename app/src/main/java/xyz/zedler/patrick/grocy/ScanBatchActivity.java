@@ -51,7 +51,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
 
-    private final static String TAG = Constants.UI.CONSUME_BATCH;
+    private final static String TAG = Constants.UI.SCAN_BATCH;
     private final static boolean DEBUG = true;
 
     private ScanBatchCaptureManager capture;
@@ -198,11 +198,7 @@ public class ScanBatchActivity extends AppCompatActivity
                                                 batchItem.getProductName())
                                 );
                                 resume();
-                            } else if(actionType == null) {
-                                showSnackbarMessage(getString(R.string.msg_error));
-                                resume();
                             } else {
-                                // TODO
                                 showSnackbarMessage(getString(R.string.msg_error));
                                 resume();
                             }
