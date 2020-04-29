@@ -83,6 +83,11 @@ public class PurchaseBatchFragment extends Fragment implements StockItemAdapter.
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        if(getArguments() == null ||
+                getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null) {
+            activity.dismissFragment();
+        }
+
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);

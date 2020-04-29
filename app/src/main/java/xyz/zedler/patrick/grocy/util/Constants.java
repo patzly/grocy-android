@@ -130,6 +130,8 @@ public final class Constants {
         public final static String SELECTED_ID = "selected_id";
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
+        public final static String BATCH_ITEMS = "batch_items";
+        public final static String BUNDLE = "bundle";
     }
 
     public final static class FAB {

@@ -232,6 +232,15 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
             setUp(null);
+        } else if(requestCode == Constants.REQUEST.SCAN_PURCHASE
+                && resultCode == Activity.RESULT_OK
+                && data != null
+        ) {
+            replaceFragment(
+                    Constants.UI.PURCHASE_BATCH,
+                    data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
+                    true
+            );
         }
     }
 

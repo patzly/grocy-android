@@ -95,7 +95,12 @@ public class ScanBatchActivity extends AppCompatActivity
         setContentView(R.layout.activity_scan_batch);
 
         ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
-        buttonClose.setOnClickListener(v -> finish());
+        buttonClose.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+            setResult(RESULT_OK, new Intent().putExtra(Constants.ARGUMENT.BUNDLE, bundle));
+            finish();
+        });
         buttonClose.setTooltipText(getString(R.string.action_close));
 
         textViewCount = findViewById(R.id.text_scan_batch_count);
