@@ -34,7 +34,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.model.BatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -119,7 +118,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 textInputProduct.setError(activity.getString(R.string.error_empty));
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
-                activity.batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
+                activity.addBatchItem(inputText, barcode);
                 dismissWithMessage(activity.getString(R.string.msg_purchased, inputText));
             } else {
                 assert productNames != null;

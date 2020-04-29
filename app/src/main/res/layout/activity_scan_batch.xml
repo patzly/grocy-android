@@ -52,6 +52,7 @@
             android:layout_centerHorizontal="true">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_scan_batch_count"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:minWidth="40dp"
@@ -59,13 +60,14 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:clickable="true"
+                android:focusable="true"
                 app:cardBackgroundColor="#40000000"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp"
                 app:rippleColor="@color/highlight">
 
                 <TextView
-                    android:id="@+id/text_unread_counter"
+                    android:id="@+id/text_scan_batch_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -74,7 +76,6 @@
                     android:letterSpacing="0.12"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:text="0"
                     android:layout_gravity="center"
                     tools:ignore="SpUsage"/>
 

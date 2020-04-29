@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -55,6 +58,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private DecoratedBarcodeView barcodeScannerView;
     private BarcodeRipple barcodeRipple;
     private ActionButton actionButtonFlash;
+    private TextView textViewCount;
     private boolean isTorchOn;
 
     private Intent intent;
@@ -93,6 +97,16 @@ public class ScanBatchActivity extends AppCompatActivity
         ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
         buttonClose.setOnClickListener(v -> finish());
         buttonClose.setTooltipText(getString(R.string.action_close));
+
+        textViewCount = findViewById(R.id.text_scan_batch_count);
+        textViewCount.setText(String.valueOf(0));
+
+        MaterialCardView cardViewCount = findViewById(R.id.card_scan_batch_count);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            cardViewCount.setTooltipText("New products count");
+        }
+        cardViewCount.setOnClickListener(v -> {});
+
         findViewById(R.id.button_scan_batch_flash).setOnClickListener(v -> switchTorch());
 
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
@@ -177,20 +191,26 @@ public class ScanBatchActivity extends AppCompatActivity
                                 resume();
                             } else if(actionType == null) {
                                 showSnackbarMessage(getString(R.string.msg_error));
+                                resume();
                             } else {
                                 // TODO
                                 showSnackbarMessage(getString(R.string.msg_error));
+                                resume();
                             }
                         }else if(products != null) {
                             showChooseBottomSheet(barcode);
                         } else {
                             loadProducts(
                                     response1 -> showChooseBottomSheet(barcode),
-                                    error1 -> showSnackbarMessage(getString(R.string.msg_error))
+                                    error1 -> {
+                                        showSnackbarMessage(getString(R.string.msg_error));
+                                        resume();
+                                    }
                             );
                         }
                     } else {
                         showSnackbarMessage(getString(R.string.msg_error));
+                        resume();
                     }
                 }
         );
@@ -286,6 +306,11 @@ public class ScanBatchActivity extends AppCompatActivity
             }
         }
         return names;
+    }
+
+    public void addBatchItem(String inputText, String barcode) {
+        batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
+        textViewCount.setText(String.valueOf(batchItems.size()));
     }
 
     public BatchItem getBatchItemFromBarcode(String barcode) {

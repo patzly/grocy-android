@@ -21,6 +21,13 @@
         app:zxing_viewfinder_mask="#80000000"
         app:zxing_viewfinder_laser_visibility="false"/>
 
+    <View
+        android:layout_width="277dp"
+        android:layout_height="3dp"
+        android:background="@color/retro_red"
+        android:alpha="0.7"
+        android:layout_gravity="center"/>
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="277dp"
         android:layout_height="137dp"
