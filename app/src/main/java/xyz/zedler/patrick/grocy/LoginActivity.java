@@ -33,8 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private final static boolean DEBUG = false;
 
     private SharedPreferences sharedPrefs;
-    private long lastClick = 0;
-    private RequestQueue requestQueue;
     private WebRequest request;
 
     private TextInputLayout textInputLayoutKey;
@@ -50,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // WEB REQUESTS
 
-        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+        RequestQueue requestQueue = RequestQueueSingleton
+                .getInstance(getApplicationContext())
+                .getRequestQueue();
         request = new WebRequest(requestQueue);
 
         // INITIALIZE VIEWS
@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 textInputLayoutServer.setError(getString(R.string.error_invalid_url));
             } else {
                 textInputLayoutServer.setErrorEnabled(false);
+
                 Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
                 Uri uri = Uri.parse(editTextServer.getText().toString() + "/manageapikeys");
                 browserManageKeys.setData(uri);
@@ -94,8 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 textInputLayoutServer.setError(getString(R.string.error_invalid_url));
-            } else if(key.length() > 0 && key.length() != 50) {
-                textInputLayoutKey.setError("API key too short"); // TODO: XML String
             } else {
                 requestLogin(server, key);
             }
