@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class CustomBottomAppBar extends com.google.android.material.bottomappbar.BottomAppBar {
 
@@ -80,8 +81,9 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	public void hide() {
 		MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
 		animateTo(
-				getMeasuredHeight() + params.bottomMargin + dp(10),
-				EXIT_ANIMATION_DURATION,
+				getMeasuredHeight() + params.bottomMargin + UnitUtil.getDp(
+						getContext(), 10
+				), EXIT_ANIMATION_DURATION,
 				AnimationUtils.FAST_OUT_LINEAR_IN_INTERPOLATOR
 		);
 		if(isFabVisibleOrWillBeShown()) setCradleVisibility(false);
@@ -147,7 +149,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 						animateMenu(getMenu().size() - 1);
 						break;
 					default:
-						Log.e(TAG, "changeMenu: wrong argument: " + position);
+						if(DEBUG) Log.e(TAG, "changeMenu: wrong argument: " + position);
 				}
 
 			}, ICON_ANIM_DURATION);
@@ -312,7 +314,10 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 					targetAlpha = 0;
 					break;
 				default:
-					Log.e(TAG, "animateMenuItem(MenuItem): wrong argument: " + visibility);
+					if(DEBUG) Log.e(
+							TAG,
+							"animateMenuItem(MenuItem): wrong argument: " + visibility
+					);
 					return;
 			}
 			ValueAnimator alphaAnimator = ValueAnimator.ofInt(icon.getAlpha(), targetAlpha);
@@ -321,14 +326,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 			);
 			alphaAnimator.setDuration(ICON_ANIM_DURATION).start();
 		}
-	}
-
-	private int dp(float dp){
-		return (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP,
-				dp,
-				getResources().getDisplayMetrics()
-		);
 	}
 
 	@Override
