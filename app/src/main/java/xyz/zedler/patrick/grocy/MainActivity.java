@@ -216,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
             showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
         });
 
-        scrollBehavior = new BottomAppBarRefreshScrollBehavior(
-                this
-        );
+        scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
         scrollBehavior.setUpBottomAppBar(bottomAppBar);
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
