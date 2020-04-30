@@ -143,7 +143,9 @@ public class MainActivity extends AppCompatActivity {
                                         jsonObject.getInt("product_presets_location_id")
                                 ).putString(
                                         Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                                        jsonObject.getString("product_presets_product_group_id")
+                                        jsonObject.getString(
+                                                "product_presets_product_group_id"
+                                        )
                                 ).putInt(
                                         Constants.PREF.PRODUCT_PRESETS_QU_ID,
                                         jsonObject.getInt("product_presets_qu_id")
@@ -152,16 +154,25 @@ public class MainActivity extends AppCompatActivity {
                                         jsonObject.getInt("stock_expring_soon_days")
                                 ).putFloat(
                                         Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                                        (float) jsonObject.getDouble("stock_default_purchase_amount")
+                                        (float) jsonObject.getDouble(
+                                                "stock_default_purchase_amount"
+                                        )
                                 ).putFloat(
                                         Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                                        (float) jsonObject.getDouble("stock_default_consume_amount")
+                                        (float) jsonObject.getDouble(
+                                                "stock_default_consume_amount"
+                                        )
                                 ).putBoolean(
                                         Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                                        jsonObject.getBoolean("show_icon_on_stock_overview_page_when_product_is_on_shopping_list")
+                                        jsonObject.getBoolean(
+                                                "show_icon_on_stock_overview_page_" +
+                                                        "when_product_is_on_shopping_list"
+                                        )
                                 ).putBoolean(
                                         Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
-                                        jsonObject.getBoolean("recipe_ingredients_group_by_product_group")
+                                        jsonObject.getBoolean(
+                                                "recipe_ingredients_group_by_product_group"
+                                        )
                                 ).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
