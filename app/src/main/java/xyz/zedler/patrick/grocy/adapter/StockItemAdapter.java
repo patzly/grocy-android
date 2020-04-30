@@ -143,7 +143,10 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         // BEST BEFORE
 
         if(stockItem.getBestBeforeDate() != null) {
+
+            holder.linearLayoutDays.setVisibility(View.VISIBLE);
             int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
+
             if(sortMode.equals(Constants.STOCK.SORT.BBD) || days <= daysExpiringSoon) {
                 holder.textViewDays.setText(
                         new DateUtil(context).getHumanForDaysFromNow(stockItem.getBestBeforeDate())

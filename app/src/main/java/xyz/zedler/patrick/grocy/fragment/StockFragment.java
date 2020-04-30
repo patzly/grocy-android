@@ -3,6 +3,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,6 +51,7 @@ import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -97,6 +99,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private boolean sortAscending;
 
     private RecyclerView recyclerView;
+    private SwipeBehavior swipeBehavior;
     private FilterChip chipExpiring, chipExpired, chipMissing;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
@@ -238,6 +241,33 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new StockPlaceholderAdapter());
+
+        swipeBehavior = new SwipeBehavior(getContext()) {
+            @Override
+            public void instantiateUnderlayButton(
+                    RecyclerView.ViewHolder viewHolder,
+                    List<UnderlayButton> underlayButtons
+            ) {
+                underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                        "Consume",
+                        Color.parseColor("#FF9502"),
+                        pos -> performAction(
+                                Constants.ACTION.CONSUME,
+                                displayedItems.get(pos).getProduct().getId()
+                        )
+                ));
+                underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                        "Open",
+                        Color.parseColor("#C7C7CB"),
+                        pos -> performAction(
+                                Constants.ACTION.OPEN,
+                                displayedItems.get(pos).getProduct().getId()
+                        )
+                ));
+            }
+        };
+        swipeBehavior.attachToRecyclerView(recyclerView);
+
 
         load();
 
@@ -654,11 +684,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    public void sortItems(String sortMode) {
+    private void sortItems(String sortMode) {
         sortItems(sortMode, sortAscending);
     }
 
-    public void sortItems(boolean ascending) {
+    private void sortItems(boolean ascending) {
         sortItems(sortMode, ascending);
     }
 
@@ -1069,7 +1099,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         String sortMode = sharedPrefs.getString(
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );
-        assert sortMode != null;
         SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
         MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
         MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
@@ -1133,6 +1162,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     @Override
     public void onItemRowClicked(int position) {
         // STOCK ITEM CLICK
+        swipeBehavior.recoverLatestSwipedItem();
         showProductOverview(displayedItems.get(position));
     }
 
@@ -1162,7 +1192,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    public void setUpSearch() {
+    private void setUpSearch() {
         if(search.equals("")) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
             editTextSearch.setText("");
