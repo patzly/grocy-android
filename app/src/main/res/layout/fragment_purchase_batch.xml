@@ -10,7 +10,6 @@
         android:background="@color/primary">
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_batch_consume_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -21,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:singleLine="true"
-                android:text="Newly created products"
+                android:text="Products to create"
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
@@ -35,7 +34,7 @@
         android:layout_marginTop="?actionBarSize">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_batch_consume"
+            android:id="@+id/scroll_purchase_batch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never">
@@ -46,9 +45,8 @@
                 android:orientation="vertical"
                 android:paddingBottom="100dp">
 
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_batch_consume"
+                    android:id="@+id/recycler_purchase_batch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

@@ -25,16 +25,14 @@ public class BatchItemAdapter extends RecyclerView.Adapter<BatchItemAdapter.View
     private Context context;
     private List<BatchItem> batchItems;
     private BatchItemAdapterListener listener;
-    private String sortMode;
 
     public BatchItemAdapter(
             Context context,
             List<BatchItem> batchItems,
-            String sortMode,
             BatchItemAdapterListener listener
     ) {
         this.context = context;
-        this.sortMode = sortMode;
+        this.batchItems = batchItems;
         this.listener = listener;
     }
 

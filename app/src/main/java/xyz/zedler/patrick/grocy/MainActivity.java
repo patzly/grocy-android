@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == PurchaseBatchFragment.class) {
-                                ((PurchaseBatchFragment) fragmentCurrent).openBarcodeScanner();
+                                //((PurchaseBatchFragment) fragmentCurrent).openBarcodeScanner();
                             }
                         }
                 );

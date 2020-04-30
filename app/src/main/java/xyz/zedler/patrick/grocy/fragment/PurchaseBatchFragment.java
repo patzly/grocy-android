@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -28,16 +26,9 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.BatchItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.BatchItem;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -92,17 +83,17 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
 
         // INITIALIZE VIEWS
 
-        scrollView = activity.findViewById(R.id.scroll_batch_consume);
-        // retry button on offline error page
-        recyclerView = activity.findViewById(R.id.recycler_batch_consume);
+        scrollView = activity.findViewById(R.id.scroll_purchase_batch);
+        recyclerView = activity.findViewById(R.id.recycler_purchase_batch);
 
         if(getArguments() == null ||
-                getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null) {
+                getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
+        ) {
             setError(true, false, false);
             activity.findViewById(R.id.button_stock_error_retry).setVisibility(View.GONE);
+        } else {
+            batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         }
-
-        batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
 
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -112,33 +103,25 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new StockPlaceholderAdapter());
+        recyclerView.setAdapter(
+                new BatchItemAdapter(
+                        activity,
+                        batchItems,
+                        this
+                )
+        );
 
-        load();
+        activity.showSnackbar(
+                Snackbar.make(
+                        activity.findViewById(R.id.linear_container_main),
+                        batchItems.toString(),
+                        Snackbar.LENGTH_LONG
+                )
+        );
 
         // UPDATE UI
 
         activity.updateUI(Constants.UI.BATCH_PURCHASE, TAG);
-
-        if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
-            sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();
-        }
-
-        refreshAdapter(
-                new BatchItemAdapter(
-                        activity,
-                        batchItems,
-                        sortMode,
-                        this
-                )
-        );
-    }
-
-    private void load() {
-        if(activity.isOnline()) {
-        } else {
-            setError(true, true, true);
-        }
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {
@@ -186,34 +169,7 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
         } return null;
     }*/
 
-    private StockItem createStockItem(ProductDetails productDetails) {
-        return new StockItem(
-                productDetails.getStockAmount(),
-                productDetails.getStockAmountAggregated(),
-                productDetails.getNextBestBeforeDate(),
-                productDetails.getStockAmountOpened(),
-                productDetails.getStockAmountOpenedAggregated(),
-                productDetails.getIsAggregatedAmount(),
-                productDetails.getProduct().getId(),
-                productDetails.getProduct()
-        );
-    }
-
-    /**
-     * Returns index in the displayed items.
-     * Used for providing a safe and up-to-date value
-     * e.g. when the items are filtered/sorted before server responds
-     */
-    /*private int getProductPosition(int productId) {
-        for(int i = 0; i < displayedItems.size(); i++) {
-            if(displayedItems.get(i).getProduct().getId() == productId) {
-                return i;
-            }
-        }
-        return 0;
-    }*/
-
-    private void showErrorMessage(VolleyError error) {
+    private void showErrorMessage() {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
@@ -229,32 +185,6 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
         //showProductOverview(batchItems.get(position));
     }
 
-    private void showProductOverview(StockItem stockItem) {
-        if(stockItem != null) {
-            QuantityUnit quantityUnit = null;
-            Location location = null;
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, stockItem);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-            bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
-        }
-    }
-
-    private void showProductOverview(ProductDetails productDetails) {
-        if(productDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-            bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            activity.showBottomSheet(
-                    new ProductOverviewBottomSheetDialogFragment(),
-                    bundle
-            );
-        }
-    }
-
     private void refreshAdapter(BatchItemAdapter adapter) {
         batchItemAdapter = adapter;
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
@@ -264,12 +194,6 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
     }
 
     public void setUpBottomMenu() {}
-
-    public void openBarcodeScanner() {
-        Intent intent = new Intent(activity, ScanBatchActivity.class);
-        intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-        startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
-    }
 
     @NonNull
     @Override
