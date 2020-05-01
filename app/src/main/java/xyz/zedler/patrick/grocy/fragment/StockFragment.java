@@ -3,7 +3,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -242,27 +241,31 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new StockPlaceholderAdapter());
 
-        swipeBehavior = new SwipeBehavior(getContext()) {
+        swipeBehavior = new SwipeBehavior(activity) {
             @Override
             public void instantiateUnderlayButton(
                     RecyclerView.ViewHolder viewHolder,
                     List<UnderlayButton> underlayButtons
             ) {
                 underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                        "Consume",
-                        Color.parseColor("#FF9502"),
-                        pos -> performAction(
-                                Constants.ACTION.CONSUME,
-                                displayedItems.get(pos).getProduct().getId()
-                        )
+                        R.drawable.ic_round_consume_product,
+                        position -> {
+                            //stockItemAdapter.notifyItemChanged(position);
+                            performAction(
+                                    Constants.ACTION.CONSUME,
+                                    displayedItems.get(position).getProduct().getId()
+                            );
+                        }
                 ));
                 underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                        "Open",
-                        Color.parseColor("#C7C7CB"),
-                        pos -> performAction(
-                                Constants.ACTION.OPEN,
-                                displayedItems.get(pos).getProduct().getId()
-                        )
+                        R.drawable.ic_round_open_product,
+                        position -> {
+                            //stockItemAdapter.notifyItemChanged(position);
+                            performAction(
+                                    Constants.ACTION.OPEN,
+                                    displayedItems.get(position).getProduct().getId()
+                            );
+                        }
                 ));
             }
         };

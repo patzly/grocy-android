@@ -1,18 +1,26 @@
 package xyz.zedler.patrick.grocy.behavior;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +31,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
+
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
+    private static final String TAG = SwipeBehavior.class.getSimpleName();
+
     private static final int BUTTON_WIDTH = 200;
+    private Context context;
     private RecyclerView recyclerView;
     private List<UnderlayButton> buttons;
     private GestureDetector gestureDetector;
@@ -41,13 +56,17 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             if (swipedPos < 0) return false;
             Point point = new Point((int) e.getRawX(), (int) e.getRawY());
 
-            RecyclerView.ViewHolder swipedViewHolder = recyclerView.findViewHolderForAdapterPosition(swipedPos);
-            assert swipedViewHolder != null;
+            RecyclerView.ViewHolder swipedViewHolder
+                    = recyclerView.findViewHolderForAdapterPosition(swipedPos);
+            if(swipedViewHolder == null) return false;
             View swipedItem = swipedViewHolder.itemView;
             Rect rect = new Rect();
             swipedItem.getGlobalVisibleRect(rect);
 
-            if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_MOVE) {
+            if (e.getAction() == MotionEvent.ACTION_DOWN
+                    || e.getAction() == MotionEvent.ACTION_UP
+                    || e.getAction() == MotionEvent.ACTION_MOVE
+            ) {
                 if (rect.top < point.y && rect.bottom > point.y) {
                     gestureDetector.onTouchEvent(e);
                 } else {
@@ -62,8 +81,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     protected SwipeBehavior(Context context) {
         super(0, ItemTouchHelper.RIGHT);
+        this.context = context;
         this.buttons = new ArrayList<>();
-        GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
+        GestureDetector.SimpleOnGestureListener gestureListener
+                = new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 for (UnderlayButton button : buttons) {
@@ -86,7 +107,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         };
     }
 
-
     @Override
     public boolean onMove(
             @NonNull RecyclerView recyclerView,
@@ -105,10 +125,11 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
         swipedPos = pos;
 
-        if (buttonsBuffer.containsKey(swipedPos))
+        if (buttonsBuffer.containsKey(swipedPos)) {
             buttons = buttonsBuffer.get(swipedPos);
-        else
+        } else {
             buttons.clear();
+        }
 
         buttonsBuffer.clear();
         assert buttons != null;
@@ -150,6 +171,29 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             return;
         }
 
+        // remove elevation
+        itemView.setElevation(0);
+        itemView.setTranslationZ(0);
+
+        StockItemAdapter.ViewHolder stockItemViewHolderTop
+                = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
+                pos + 1
+        );
+        if(stockItemViewHolderTop != null) {
+            int radiusMax = UnitUtil.getDp(context, 8);
+            int radius = dX / 4 <= radiusMax ? (int) (dX / 4) : radiusMax;
+            stockItemViewHolderTop.setTopCornerRadius(radius);
+        }
+        StockItemAdapter.ViewHolder stockItemViewHolderBottom
+                = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
+                pos - 1
+        );
+        if(stockItemViewHolderBottom != null) {
+            int radiusMax = UnitUtil.getDp(context, 8);
+            int radius = dX / 4 <= radiusMax ? (int) (dX / 4) : radiusMax;
+            stockItemViewHolderBottom.setBottomCornerRadius(radius);
+        }
+
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (dX > 0) {
                 List<UnderlayButton> buffer = new ArrayList<>();
@@ -167,14 +211,32 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             }
         }
 
-        super.onChildDraw(c, recyclerView, viewHolder, translationX, dY, actionState, isCurrentlyActive);
+        super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                translationX,
+                dY,
+                actionState,
+                isCurrentlyActive
+        );
     }
 
     private synchronized void recoverSwipedItem() {
         while (!recoverQueue.isEmpty()) {
-            if(recoverQueue != null) {
-                int pos = recoverQueue.poll();
-                if (pos > -1) {
+            int pos = recoverQueue.poll();
+            if (pos > -1) {
+                if(recyclerView.getAdapter() != null) {
+                    StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
+                            recyclerView.findViewHolderForLayoutPosition(pos - 1);
+                    if(viewHolderTop != null) {
+                        viewHolderTop.resetBottomCornerRadius();
+                    }
+                    StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
+                            recyclerView.findViewHolderForLayoutPosition(pos + 1);
+                    if(viewHolderBottom != null) {
+                        viewHolderBottom.resetTopCornerRadius();
+                    }
                     recyclerView.getAdapter().notifyItemChanged(pos);
                 }
             }
@@ -183,32 +245,61 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     }
 
     public void recoverLatestSwipedItem() {
-        if(swipedPos != -1 && recoverQueue.isEmpty()) {
+        if(swipedPos != -1 && recoverQueue.isEmpty() && recyclerView.getAdapter() != null) {
+            /*StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
+                    recyclerView.findViewHolderForLayoutPosition(swipedPos - 1);
+            if(viewHolderTop != null) {
+                viewHolderTop.resetBottomCornerRadius();
+            }
+            StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
+                    recyclerView.findViewHolderForLayoutPosition(swipedPos + 1);
+            if(viewHolderBottom != null) {
+                viewHolderBottom.resetTopCornerRadius();
+            }*/
             recyclerView.getAdapter().notifyItemChanged(swipedPos);
         }
     }
 
-    private void drawButtons(Canvas c, View itemView, List<UnderlayButton> buffer, int pos, float dX) {
+    private void drawButtons(
+            Canvas canvas,
+            View itemView,
+            List<UnderlayButton> buttons,
+            int pos,
+            float dX
+    ) {
         float left = itemView.getLeft();
-        float dButtonWidth = (1) * dX / buffer.size();
+        float dButtonWidth = dX / buttons.size();
 
-        for (UnderlayButton button : buffer) {
+        // draw background
+
+        int radiusMax = UnitUtil.getDp(context, 8);
+        int radius = dX / 2 <= radiusMax ? (int) (dX / 2) : radiusMax;
+
+        float[] corners = new float[]{
+                0, 0,        // Top left radius in px
+                radius, radius,        // Top right radius in px
+                radius, radius,          // Bottom right radius in px
+                0, 0           // Bottom left radius in px
+        };
+        Paint paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context, R.color.secondary));
+        final Path path = new Path();
+        path.addRoundRect(new RectF(left, itemView.getTop(), dX, itemView.getBottom()), corners, Path.Direction.CW);
+        canvas.drawPath(path, paint);
+
+        for (UnderlayButton button : buttons) {
             float right = left + dButtonWidth;
             button.onDraw(
-                    c,
-                    new RectF(
-                            left,
-                            itemView.getTop(),
-                            right,
-                            itemView.getBottom()
-                    ),
+                    recyclerView.getContext(),
+                    canvas,
+                    new RectF(left, itemView.getTop(), right, itemView.getBottom()),
                     pos
             );
-
             left = right;
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void attachToRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         this.recyclerView.setOnTouchListener(onTouchListener);
@@ -216,22 +307,26 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         itemTouchHelper.attachToRecyclerView(this.recyclerView);
     }
 
-    public abstract void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons);
+    public abstract void instantiateUnderlayButton(
+            RecyclerView.ViewHolder viewHolder,
+            List<UnderlayButton> underlayButtons
+    );
 
     public interface UnderlayButtonClickListener {
-        void onClick(int pos);
+        void onClick(int position);
     }
 
     public static class UnderlayButton {
-        private String text;
-        private int color;
+        private int resId;
         private int pos;
         private RectF clickRegion;
         private UnderlayButtonClickListener clickListener;
 
-        public UnderlayButton(String text, int color, UnderlayButtonClickListener clickListener) {
-            this.text = text;
-            this.color = color;
+        public UnderlayButton(
+                @DrawableRes int resId,
+                UnderlayButtonClickListener clickListener
+        ) {
+            this.resId = resId;
             this.clickListener = clickListener;
         }
 
@@ -244,30 +339,60 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             return false;
         }
 
-        void onDraw(Canvas c, RectF rect, int pos) {
-            Paint p = new Paint();
+        void onDraw(Context context, Canvas canvas, RectF rect, int pos) {
+            Paint paint = new Paint();
+            paint.setColorFilter(
+                    new PorterDuffColorFilter(
+                            ContextCompat.getColor(context, R.color.on_secondary),
+                            PorterDuff.Mode.SRC_IN
+                    )
+            );
+            paint.setAlpha((int) (255 * rect.width() / BUTTON_WIDTH));
 
-            // Draw background
-            p.setColor(color);
-            c.drawRect(rect, p);
+            Drawable drawable = ResourcesCompat.getDrawable(
+                    context.getResources(), resId, null
+            );
 
-            // ICON: https://stackoverflow.com/questions/30820806/adding-a-colored-background-with-text-icon-under-swiped-row-when-using-androids
-            // Draw Text
-            p.setColor(Color.WHITE);
-            //p.setTextSize(LayoutHelper.getPx(MyApplication.getAppContext(), 12));
-            p.setTextSize(Resources.getSystem().getDisplayMetrics().density * 12);
+            Bitmap icon = drawableToBitmap(drawable);
+            icon = getScaledBitmap(icon, rect.width() / BUTTON_WIDTH);
 
-            Rect r = new Rect();
-            float cHeight = rect.height();
-            float cWidth = rect.width();
-            p.setTextAlign(Paint.Align.LEFT);
-            p.getTextBounds(text, 0, text.length(), r);
-            float x = cWidth / 2f - r.width() / 2f - r.left;
-            float y = cHeight / 2f + r.height() / 2f - r.bottom;
-            c.drawText(text, rect.left + x, rect.top + y, p);
+            canvas.drawBitmap(
+                    icon,
+                    rect.centerX() - icon.getWidth() / 2f,
+                    rect.top + (rect.bottom - rect.top - icon.getHeight()) / 2,
+                    paint
+            );
 
             clickRegion = rect;
             this.pos = pos;
+        }
+
+        private static Bitmap getScaledBitmap(Bitmap bm, float scale) {
+            if(scale > 1) return bm;
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            int scaleWidth = (int) (width * scale);
+            if(scaleWidth <= 0) scaleWidth = 1;
+            int scaleHeight = (int) (height * scale);
+            if(scaleHeight <= 0) scaleHeight = 1;
+            return Bitmap.createScaledBitmap(
+                    bm, scaleWidth, scaleHeight, false
+            );
+        }
+
+        private static Bitmap drawableToBitmap (Drawable drawable) {
+            if (drawable instanceof BitmapDrawable) {
+                return ((BitmapDrawable)drawable).getBitmap();
+            }
+            Bitmap bitmap = Bitmap.createBitmap(
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(),
+                    Bitmap.Config.ARGB_8888
+            );
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
         }
     }
 }
