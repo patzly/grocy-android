@@ -59,6 +59,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         private LinearLayout linearLayoutItemContainer, linearLayoutDays;
         private TextView textViewName, textViewAmount, textViewDays;
         private View viewItemBgTop, viewItemBgBottom;
+        private boolean topCornerPolicy = true, bottomCornerPolicy = true;
 
         public ViewHolder(View view) {
             super(view);
@@ -72,6 +73,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
             textViewDays = view.findViewById(R.id.text_stock_item_days);
+        }
+
+        public boolean getTopCornerPolicy() {
+            return topCornerPolicy;
+        }
+
+        public void setTopCornerPolicy(boolean status) {
+            this.topCornerPolicy = status;
         }
 
         public void setTopCornerRadius(int radius) {
@@ -106,6 +115,26 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             valueAnimator.setDuration(200).start();
         }
 
+        public void resetTopCornerRadiusNow() {
+            PaintDrawable bg = (PaintDrawable) viewItemBgTop.getBackground();
+            bg.setCornerRadii(
+                    new float [] {
+                            0, 0,
+                            0, 0,
+                            0, 0,
+                            0, 0
+                    });
+            viewItemBgTop.setBackground(bg);
+        }
+
+        public boolean getBottomCornerPolicy() {
+            return bottomCornerPolicy;
+        }
+
+        public void setBottomCornerPolicy(boolean status) {
+            this.bottomCornerPolicy = status;
+        }
+
         public void setBottomCornerRadius(int radius) {
             PaintDrawable bg = (PaintDrawable) viewItemBgBottom.getBackground();
             bg.setCornerRadii(
@@ -136,6 +165,18 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 viewItemBgBottom.setBackground(bg);
             });
             valueAnimator.setDuration(200).start();
+        }
+
+        public void resetBottomCornerRadiusNow() {
+            PaintDrawable bg = (PaintDrawable) viewItemBgBottom.getBackground();
+            bg.setCornerRadii(
+                    new float [] {
+                            0, 0,
+                            0, 0,
+                            0, 0,
+                            0, 0
+                    });
+            viewItemBgBottom.setBackground(bg);
         }
 
         private PaintDrawable getDefaultBg() {

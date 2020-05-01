@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +54,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         @Override
         public boolean onTouch(View view, MotionEvent e) {
             view.performClick();
+
             if (swipedPos < 0) return false;
             Point point = new Point((int) e.getRawX(), (int) e.getRawY());
 
@@ -68,8 +70,35 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                     || e.getAction() == MotionEvent.ACTION_MOVE
             ) {
                 if (rect.top < point.y && rect.bottom > point.y) {
+
                     gestureDetector.onTouchEvent(e);
                 } else {
+
+                    StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
+                            recyclerView.findViewHolderForLayoutPosition(swipedPos - 1);
+                    if(viewHolderTop != null) {
+                        rect = new Rect();
+                        viewHolderTop.itemView.getGlobalVisibleRect(rect);
+                        if (rect.top < point.y && rect.bottom > point.y) {
+                            viewHolderTop.resetBottomCornerRadiusNow();
+                        } else {
+                            viewHolderTop.resetBottomCornerRadius();
+                        }
+                        viewHolderTop.setBottomCornerPolicy(false);
+                    }
+                    StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
+                            recyclerView.findViewHolderForLayoutPosition(swipedPos + 1);
+                    if(viewHolderBottom != null) {
+                        rect = new Rect();
+                        viewHolderBottom.itemView.getGlobalVisibleRect(rect);
+                        if (rect.top < point.y && rect.bottom > point.y) {
+                            viewHolderBottom.resetTopCornerRadiusNow();
+                        } else {
+                            viewHolderBottom.resetTopCornerRadius();
+                        }
+                        viewHolderBottom.setTopCornerPolicy(false);
+                    }
+
                     recoverQueue.add(swipedPos);
                     swipedPos = -1;
                     recoverSwipedItem();
@@ -119,6 +148,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int pos = viewHolder.getAdapterPosition();
+        Log.i(TAG, "onSwiped: " + true);
 
         if (swipedPos != pos)
             recoverQueue.add(swipedPos);
@@ -179,19 +209,27 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
                 pos + 1
         );
-        if(stockItemViewHolderTop != null) {
+        if(stockItemViewHolderTop != null && stockItemViewHolderTop.getTopCornerPolicy()) {
             int radiusMax = UnitUtil.getDp(context, 8);
             int radius = dX / 4 <= radiusMax ? (int) (dX / 4) : radiusMax;
             stockItemViewHolderTop.setTopCornerRadius(radius);
+        }
+        // TODO: Why 1000? Other values are working too - but not all
+        if(stockItemViewHolderTop != null && !stockItemViewHolderTop.getTopCornerPolicy() && dX < 1000) {
+            stockItemViewHolderTop.setTopCornerPolicy(true);
         }
         StockItemAdapter.ViewHolder stockItemViewHolderBottom
                 = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
                 pos - 1
         );
-        if(stockItemViewHolderBottom != null) {
+        if(stockItemViewHolderBottom != null && stockItemViewHolderBottom.getBottomCornerPolicy()) {
             int radiusMax = UnitUtil.getDp(context, 8);
             int radius = dX / 4 <= radiusMax ? (int) (dX / 4) : radiusMax;
             stockItemViewHolderBottom.setBottomCornerRadius(radius);
+        }
+        // TODO: Why 1000? Other values are working too - but not all
+        if(stockItemViewHolderBottom != null && !stockItemViewHolderBottom.getBottomCornerPolicy() && dX < 1000) {
+            stockItemViewHolderBottom.setBottomCornerPolicy(true);
         }
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
@@ -208,6 +246,8 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 assert buffer != null;
                 translationX = dX * buffer.size() * BUTTON_WIDTH / itemView.getWidth();
                 drawButtons(c, itemView, buffer, pos, translationX);
+            } else if(swipedPos == pos && dX == 0) {
+                swipedPos = -1;
             }
         }
 
@@ -227,16 +267,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             int pos = recoverQueue.poll();
             if (pos > -1) {
                 if(recyclerView.getAdapter() != null) {
-                    StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
-                            recyclerView.findViewHolderForLayoutPosition(pos - 1);
-                    if(viewHolderTop != null) {
-                        viewHolderTop.resetBottomCornerRadius();
-                    }
-                    StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
-                            recyclerView.findViewHolderForLayoutPosition(pos + 1);
-                    if(viewHolderBottom != null) {
-                        viewHolderBottom.resetTopCornerRadius();
-                    }
                     recyclerView.getAdapter().notifyItemChanged(pos);
                 }
             }
@@ -244,18 +274,36 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         }
     }
 
+    public void resetCornersAtPosition(int position) {
+        StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
+                recyclerView.findViewHolderForLayoutPosition(position - 1);
+        if(viewHolderTop != null) {
+            viewHolderTop.resetBottomCornerRadius();
+        }
+        StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
+                recyclerView.findViewHolderForLayoutPosition(position + 1);
+        if(viewHolderBottom != null) {
+            viewHolderBottom.resetTopCornerRadius();
+        }
+        if(swipedPos == position) {
+            swipedPos = -1;
+        }
+    }
+
     public void recoverLatestSwipedItem() {
         if(swipedPos != -1 && recoverQueue.isEmpty() && recyclerView.getAdapter() != null) {
-            /*StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
+            StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
                     recyclerView.findViewHolderForLayoutPosition(swipedPos - 1);
             if(viewHolderTop != null) {
                 viewHolderTop.resetBottomCornerRadius();
+                //viewHolderTop.setBottomCornerPolicy(false);
             }
             StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
                     recyclerView.findViewHolderForLayoutPosition(swipedPos + 1);
             if(viewHolderBottom != null) {
                 viewHolderBottom.resetTopCornerRadius();
-            }*/
+                //viewHolderBottom.setTopCornerPolicy(false);
+            }
             recyclerView.getAdapter().notifyItemChanged(swipedPos);
         }
     }

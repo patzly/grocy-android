@@ -249,23 +249,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             ) {
                 underlayButtons.add(new SwipeBehavior.UnderlayButton(
                         R.drawable.ic_round_consume_product,
-                        position -> {
-                            //stockItemAdapter.notifyItemChanged(position);
-                            performAction(
-                                    Constants.ACTION.CONSUME,
-                                    displayedItems.get(position).getProduct().getId()
-                            );
-                        }
+                        position -> performAction(
+                                Constants.ACTION.CONSUME,
+                                displayedItems.get(position).getProduct().getId()
+                        )
                 ));
                 underlayButtons.add(new SwipeBehavior.UnderlayButton(
                         R.drawable.ic_round_open_product,
-                        position -> {
-                            //stockItemAdapter.notifyItemChanged(position);
-                            performAction(
-                                    Constants.ACTION.OPEN,
-                                    displayedItems.get(position).getProduct().getId()
-                            );
-                        }
+                        position -> performAction(
+                                Constants.ACTION.OPEN,
+                                displayedItems.get(position).getProduct().getId()
+                        )
                 ));
             }
         };
@@ -823,16 +817,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                     if(!undo && stockItemNew.getAmount() == 0
                             && stockItemNew.getProduct().getMinStockAmount() == 0) {
+                        swipeBehavior.resetCornersAtPosition(index);
                         displayedItems.remove(index);
                         stockItemAdapter.notifyItemRemoved(index);
                     } else if(undo && stockItemOld.getAmount() == 0
                             && stockItemOld.getProduct().getMinStockAmount() == 0) {
                         displayedItems.add(index, stockItemNew);
                         stockItemAdapter.notifyItemInserted(index);
+                        swipeBehavior.resetCornersAtPosition(index);
                     } else {
-                        // replace stockItem with updated stockItem
-                        displayedItems.set(index, stockItemNew);
+                        swipeBehavior.resetCornersAtPosition(index);
                         stockItemAdapter.notifyItemChanged(index);
+                        displayedItems.set(index, stockItemNew);
                     }
 
                     // create snackBar with info for undo or with info after undo
@@ -949,6 +945,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     StockItem stockItem = createStockItem(productDetails);
 
                     displayedItems.set(index, stockItem);
+                    swipeBehavior.resetCornersAtPosition(index);
                     stockItemAdapter.notifyItemChanged(index);
 
                     // create snackBar with info for undo or with info after undo
