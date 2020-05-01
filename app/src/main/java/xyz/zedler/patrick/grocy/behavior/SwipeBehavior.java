@@ -146,7 +146,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public int getSwipeDirs(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+    public int getSwipeDirs(
+            @NonNull RecyclerView recyclerView,
+            @NonNull RecyclerView.ViewHolder viewHolder
+    ) {
         List<UnderlayButton> buffer = new ArrayList<>();
         instantiateUnderlayButton(viewHolder, buffer);
         if(buffer.isEmpty()) return 0;

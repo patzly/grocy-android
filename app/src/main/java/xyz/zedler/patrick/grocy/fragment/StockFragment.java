@@ -269,6 +269,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             )
                     ));
                 }
+                if(underlayButtons.isEmpty()) {
+                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                            R.drawable.ic_round_close,
+                            position -> swipeBehavior.recoverLatestSwipedItem()
+                    ));
+                }
             }
         };
         swipeBehavior.attachToRecyclerView(recyclerView);
