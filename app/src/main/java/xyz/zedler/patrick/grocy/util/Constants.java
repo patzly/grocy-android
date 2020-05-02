@@ -35,6 +35,10 @@ public final class Constants {
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
+    public final static class DATE {
+        public final static String NEVER_EXPIRES = "2999-12-31";
+    }
+
     public final static class BOTTOM_SHEET_TEXT {
         public final static String TITLE = "title";
         public final static String FILE = "file";
@@ -116,6 +120,7 @@ public final class Constants {
         public final static String LOCATION = "location";
         public final static String LOCATIONS = "locations";
         public final static String STORE = "store";
+        public final static String STORES = "stores";
         public final static String PRODUCT_GROUP = "product_group";
         public final static String PRODUCT_GROUPS = "product_groups";
         public final static String STOCK_LOCATIONS = "stock_locations";
@@ -129,6 +134,7 @@ public final class Constants {
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
+        public final static String SELECTED_DATE = "selected_date";
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
         public final static String BATCH_ITEMS = "batch_items";

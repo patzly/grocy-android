@@ -294,10 +294,10 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		// BEST BEFORE
 		itemBestBefore.setText(
 				activity.getString(R.string.property_bbd_next),
-				!bestBefore.equals("2999-12-31")
+				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES)
 						? dateUtil.getLocalizedDate(bestBefore)
 						: activity.getString(R.string.date_never),
-				!bestBefore.equals("2999-12-31") && !bestBefore.equals("")
+				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.equals("")
 						? dateUtil.getHumanForDaysFromNow(bestBefore)
 						: null
 		);

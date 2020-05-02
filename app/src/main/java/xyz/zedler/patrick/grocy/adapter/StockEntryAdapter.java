@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.StockEntries;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -102,7 +103,7 @@ public class StockEntryAdapter
             );
 
             // SUBTITLE
-            String bbd = stockEntry.getBestBeforeDate().equals("2999-12-31")
+            String bbd = stockEntry.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)
                     ? context.getString(R.string.date_unlimited)
                     : dateUtil.getLocalizedDate(
                             stockEntry.getBestBeforeDate(),

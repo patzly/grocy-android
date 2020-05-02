@@ -20,20 +20,19 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
-import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class LocationsBottomSheetDialogFragment
-        extends BottomSheetDialogFragment implements LocationAdapter.LocationAdapterListener {
+public class StoresBottomSheetDialogFragment
+        extends BottomSheetDialogFragment implements StoreAdapter.StoreAdapterListener {
 
     private final static boolean DEBUG = false;
-    private final static String TAG = "LocationsBottomSheet";
+    private final static String TAG = "StoresBottomSheet";
 
     private MainActivity activity;
-    private ArrayList<Location> locations;
+    private ArrayList<Store> stores;
 
     @NonNull
     @Override
@@ -55,11 +54,11 @@ public class LocationsBottomSheetDialogFragment
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        locations = bundle.getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
+        stores = bundle.getParcelableArrayList(Constants.ARGUMENT.STORES);
         int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);
-        textViewTitle.setText(activity.getString(R.string.property_locations));
+        textViewTitle.setText(activity.getString(R.string.property_stores));
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_master_edit_selection);
         recyclerView.setLayoutManager(
@@ -71,8 +70,8 @@ public class LocationsBottomSheetDialogFragment
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(
-                new LocationAdapter(
-                        locations, selected, this
+                new StoreAdapter(
+                        stores, selected, this
                 )
         );
 
@@ -82,13 +81,9 @@ public class LocationsBottomSheetDialogFragment
     @Override
     public void onItemRowClicked(int position) {
         Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == MasterProductEditSimpleFragment.class) {
-            ((MasterProductEditSimpleFragment) currentFragment).selectLocation(
-                    locations.get(position).getId()
-            );
-        } else if(currentFragment.getClass() == PurchaseFragment.class) {
-            ((PurchaseFragment) currentFragment).selectLocation(
-                    locations.get(position).getId()
+        if(currentFragment.getClass() == PurchaseFragment.class) {
+            ((PurchaseFragment) currentFragment).selectStore(
+                    stores.get(position).getId()
             );
         }
         dismiss();

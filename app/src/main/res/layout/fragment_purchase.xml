@@ -155,29 +155,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_purchase_never_expires"
-                    style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
-                    android:background="@null"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="12dp"
-                    android:paddingEnd="0dp"
-                    android:paddingStart="72dp">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="Never expires" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/checkbox_purchase_never_expires"
-                        style="@style/Widget.Grocy.CheckBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="24dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -302,6 +279,29 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linear_purchase_total_price"
+                    style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
+                    android:background="@null"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="12dp"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="72dp">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="Is total price" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/checkbox_purchase_total_price"
+                        style="@style/Widget.Grocy.CheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/linear_purchase_store"
                     style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
 
@@ -343,54 +343,11 @@
                             android:text="@string/property_location" />
 
                         <TextView
-                            android:id="@+id/text_consume_location"
+                            android:id="@+id/text_purchase_location"
                             style="@style/Theme.Grocy.ListItem.Title"
                             android:text="@string/subtitle_none"/>
 
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear_consume_spoiled"
-                    style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
-                    android:paddingEnd="0dp"
-                    android:paddingStart="16dp">
-
-                    <ImageView
-                        android:id="@+id/image_consume_spoiled"
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:src="@drawable/ic_round_delete_anim"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="Spoiled" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/checkbox_consume_spoiled"
-                        style="@style/Widget.Grocy.CheckBox"
-                        android:layout_width="wrap_content"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start"
-                    android:layout_marginStart="72dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_purchase_purchase"
-                        style="@style/Widget.Grocy.Button.UnelevatedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Purchase"/>
 
                 </LinearLayout>
 

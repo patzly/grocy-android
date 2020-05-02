@@ -81,7 +81,7 @@ public class DateUtil {
     public String getHumanForDaysFromNow(String dateString) {
         if(dateString == null || dateString.equals("")) {
             return context.getString(R.string.date_unknown);
-        } else if(dateString.equals("2999-12-31")) {
+        } else if(dateString.equals(Constants.DATE.NEVER_EXPIRES)) {
             return context.getString(R.string.date_never);
         } else {
             return getHumanFromToday(getDaysFromNow(dateString));
@@ -199,9 +199,13 @@ public class DateUtil {
                             if(days < 700) { // how many days do you understand as two years?
                                 return context.getString(R.string.date_year_one);
                             } else {
-                                return context.getString(
-                                        R.string.date_years, days / 365
-                                );
+                                if(days / 365 > 100) { // TODO: Better handling
+                                    return context.getString(R.string.date_unlimited);
+                                } else {
+                                    return context.getString(
+                                            R.string.date_years, days / 365
+                                    );
+                                }
                             }
                         }
                     }

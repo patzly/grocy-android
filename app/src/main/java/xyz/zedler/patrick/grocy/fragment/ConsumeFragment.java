@@ -399,19 +399,23 @@ public class ConsumeFragment extends Fragment {
                 )
         );
         setAmountBounds();
+
         // leave amount empty if tare weight handling enabled
-        editTextAmount.setText(
-                isTareWeightHandlingEnabled
-                        ? null
-                        : NumUtil.trim(
-                                sharedPrefs.getFloat(
-                                        Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                                        1
-                                )
-                )
-        );
-        // focus amount field if tare weight handling enabled
-        if(isTareWeightHandlingEnabled) {
+        if(!isTareWeightHandlingEnabled) {
+            String defaultAmount = sharedPrefs.getString(
+                    Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+                    "1"
+            );
+            if(defaultAmount.equals("")) {
+                editTextAmount.setText(null);
+            } else {
+                editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
+            }
+        } else {
+            editTextAmount.setText(null);
+        }
+
+        if(editTextAmount.getText().toString().equals("")) {
             editTextAmount.requestFocus();
             activity.showKeyboard(editTextAmount);
         }
@@ -815,7 +819,7 @@ public class ConsumeFragment extends Fragment {
                 if(productDetails != null) {
                     textInputAmount.setError(
                             activity.getString(
-                                    R.string.error_bounds,
+                                    R.string.error_bounds_min_max,
                                     NumUtil.trim(minAmount),
                                     NumUtil.trim(maxAmount)
                             )
@@ -824,7 +828,13 @@ public class ConsumeFragment extends Fragment {
                 return false;
             }
         } else {
-            textInputAmount.setError(activity.getString(R.string.error_invalid_amount));
+            textInputAmount.setError(
+                    activity.getString(
+                            R.string.error_bounds_min_max,
+                            NumUtil.trim(minAmount),
+                            NumUtil.trim(maxAmount)
+                    )
+            );
             return false;
         }
     }

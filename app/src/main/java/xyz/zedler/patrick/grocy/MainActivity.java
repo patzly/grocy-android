@@ -152,14 +152,14 @@ public class MainActivity extends AppCompatActivity {
                                 ).putInt(
                                         Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
                                         jsonObject.getInt("stock_expring_soon_days")
-                                ).putFloat(
+                                ).putString(
                                         Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                                        (float) jsonObject.getDouble(
+                                        jsonObject.getString(
                                                 "stock_default_purchase_amount"
                                         )
-                                ).putFloat(
+                                ).putString(
                                         Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                                        (float) jsonObject.getDouble(
+                                        jsonObject.getString(
                                                 "stock_default_consume_amount"
                                         )
                                 ).putBoolean(

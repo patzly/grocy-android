@@ -56,7 +56,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Locations;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -82,7 +81,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private ArrayAdapter<String> adapterProducts;
 
     private List<Product> products = new ArrayList<>();
-    private List<Location> locations = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private List<ProductGroup> productGroups = new ArrayList<>();
     private List<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<String> productNames = new ArrayList<>();
@@ -229,9 +228,9 @@ public class MasterProductEditSimpleFragment extends Fragment {
             startAnimatedIcon(R.id.image_master_product_edit_simple_location);
             if(!locations.isEmpty()) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(
+                bundle.putParcelableArrayList(
                         Constants.ARGUMENT.LOCATIONS,
-                        new Locations(locations)
+                        locations
                 );
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
                 activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);

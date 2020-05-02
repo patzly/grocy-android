@@ -14,23 +14,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Store;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
+public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> {
 
-    private final static String TAG = LocationAdapter.class.getSimpleName();
+    private final static String TAG = StoreAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private ArrayList<Location> locations;
+    private ArrayList<Store> stores;
     private int selectedId;
-    private LocationAdapterListener listener;
+    private StoreAdapterListener listener;
 
-    public LocationAdapter(
-            ArrayList<Location> locations,
+    public StoreAdapter(
+            ArrayList<Store> stores,
             int selectedId,
-            LocationAdapterListener listener
+            StoreAdapterListener listener
     ) {
-        this.locations = locations;
+        this.stores = stores;
         this.selectedId = selectedId;
         this.listener = listener;
     }
@@ -51,8 +51,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @NonNull
     @Override
-    public LocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LocationAdapter.ViewHolder(
+    public StoreAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new StoreAdapter.ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.row_master_edit_selection_sheet,
                         parent,
@@ -64,18 +64,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(
-            @NonNull final LocationAdapter.ViewHolder holder,
+            @NonNull final StoreAdapter.ViewHolder holder,
             int position
     ) {
-        Location location = locations.get(position);
+        Store store = stores.get(position);
 
         // NAME
 
-        holder.textViewName.setText(location.getName());
+        holder.textViewName.setText(store.getName());
 
         // SELECTED
 
-        if(location.getId() == selectedId) {
+        if(store.getId() == selectedId) {
             holder.imageViewSelected.setVisibility(View.VISIBLE);
         }
 
@@ -88,15 +88,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public long getItemId(int position) {
-        return locations.get(position).getId();
+        return stores.get(position).getId();
     }
 
     @Override
     public int getItemCount() {
-        return locations.size();
+        return stores.size();
     }
 
-    public interface LocationAdapterListener {
+    public interface StoreAdapterListener {
         void onItemRowClicked(int position);
     }
 }
