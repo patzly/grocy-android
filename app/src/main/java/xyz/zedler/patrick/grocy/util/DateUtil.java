@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import xyz.zedler.patrick.grocy.R;
 
@@ -199,7 +200,21 @@ public class DateUtil {
                             if(days < 700) { // how many days do you understand as two years?
                                 return context.getString(R.string.date_year_one);
                             } else {
-                                if(days / 365 > 100) { // TODO: Better handling
+                                // Check if days are about the same as to the never expiring date
+                                Calendar calendarNever = Calendar.getInstance();
+                                try {
+                                    Date dateNever = DATE_FORMAT.parse(
+                                            Constants.DATE.NEVER_EXPIRES
+                                    );
+                                    if(dateNever != null) calendarNever.setTime(dateNever);
+                                } catch (ParseException e) {
+                                    Log.i(TAG, "getHumanFromDays: " + e);
+                                }
+                                long msDiff = calendarNever.getTimeInMillis()
+                                        - Calendar.getInstance().getTimeInMillis();
+                                long daysToNever = TimeUnit.MILLISECONDS.toDays(msDiff);
+                                if(days <= daysToNever + 100 || days >= daysToNever - 100) {
+                                    // deviation in server calculation possible
                                     return context.getString(R.string.date_unlimited);
                                 } else {
                                     return context.getString(
