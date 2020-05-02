@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -32,7 +33,6 @@ import java.util.Map;
 import java.util.Queue;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -69,35 +69,8 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                     || e.getAction() == MotionEvent.ACTION_MOVE
             ) {
                 if (rect.top < point.y && rect.bottom > point.y) {
-
                     gestureDetector.onTouchEvent(e);
                 } else {
-
-                    StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
-                            recyclerView.findViewHolderForLayoutPosition(swipedPos - 1);
-                    if(viewHolderTop != null) {
-                        rect = new Rect();
-                        viewHolderTop.itemView.getGlobalVisibleRect(rect);
-                        if (rect.top < point.y && rect.bottom > point.y) {
-                            viewHolderTop.resetBottomCornerRadiusNow();
-                        } else {
-                            viewHolderTop.resetBottomCornerRadius();
-                        }
-                        viewHolderTop.setBottomCornerPolicy(false);
-                    }
-                    StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
-                            recyclerView.findViewHolderForLayoutPosition(swipedPos + 1);
-                    if(viewHolderBottom != null) {
-                        rect = new Rect();
-                        viewHolderBottom.itemView.getGlobalVisibleRect(rect);
-                        if (rect.top < point.y && rect.bottom > point.y) {
-                            viewHolderBottom.resetTopCornerRadiusNow();
-                        } else {
-                            viewHolderBottom.resetTopCornerRadius();
-                        }
-                        viewHolderBottom.setTopCornerPolicy(false);
-                    }
-
                     recoverQueue.add(swipedPos);
                     swipedPos = -1;
                     recoverSwipedItem();
@@ -214,31 +187,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         itemView.setElevation(0);
         itemView.setTranslationZ(0);
 
-        int radiusMax = UnitUtil.getDp(context, 8);
-        int radius = dX / 4 <= radiusMax ? (int) (dX / 4) : radiusMax;
-        StockItemAdapter.ViewHolder stockItemViewHolderTop
-                = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
-                pos + 1
-        );
-        if(stockItemViewHolderTop != null && stockItemViewHolderTop.getTopCornerPolicy()) {
-            stockItemViewHolderTop.setTopCornerRadius(radius);
-        }
-        // TODO: Why 1000? Other values are working too - but not all
-        if(stockItemViewHolderTop != null && !stockItemViewHolderTop.getTopCornerPolicy() && dX < 1000) {
-            stockItemViewHolderTop.setTopCornerPolicy(true);
-        }
-        StockItemAdapter.ViewHolder stockItemViewHolderBottom
-                = (StockItemAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(
-                pos - 1
-        );
-        if(stockItemViewHolderBottom != null && stockItemViewHolderBottom.getBottomCornerPolicy()) {
-            stockItemViewHolderBottom.setBottomCornerRadius(radius);
-        }
-        // TODO: Why 1000? Other values are working too - but not all
-        if(stockItemViewHolderBottom != null && !stockItemViewHolderBottom.getBottomCornerPolicy() && dX < 1000) {
-            stockItemViewHolderBottom.setBottomCornerPolicy(true);
-        }
-
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (dX > 0) {
                 List<UnderlayButton> buffer = new ArrayList<>();
@@ -281,28 +229,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         }
     }
 
-    public void resetCornersAtPosition(int position) {
-        StockItemAdapter.ViewHolder viewHolderTop = (StockItemAdapter.ViewHolder)
-                recyclerView.findViewHolderForLayoutPosition(position - 1);
-        if(viewHolderTop != null) {
-            viewHolderTop.resetBottomCornerRadius();
-            viewHolderTop.setBottomCornerPolicy(false);
-        }
-        StockItemAdapter.ViewHolder viewHolderBottom = (StockItemAdapter.ViewHolder)
-                recyclerView.findViewHolderForLayoutPosition(position + 1);
-        if(viewHolderBottom != null) {
-            viewHolderBottom.resetTopCornerRadius();
-            viewHolderBottom.setTopCornerPolicy(false);
-        }
-        if(swipedPos == position) {
-            swipedPos = -1;
-        }
-    }
-
     public void recoverLatestSwipedItem() {
         if(swipedPos != -1 && recoverQueue.isEmpty() && recyclerView.getAdapter() != null) {
             recyclerView.getAdapter().notifyItemChanged(swipedPos);
-            resetCornersAtPosition(swipedPos);
+            swipedPos = -1;
         }
     }
 
@@ -314,35 +244,59 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             float dX
     ) {
         float left = itemView.getLeft();
-        float dButtonWidth = dX / buttons.size();
+        float cornerRadius = UnitUtil.getDp(context, 8);
+        float buttonWidth = dX / buttons.size() - cornerRadius / buttons.size();
+        float buttonWidthMax = BUTTON_WIDTH - cornerRadius / buttons.size();
+
+        Paint paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context, R.color.secondary));
 
         // draw background
 
-        int radiusMax = UnitUtil.getDp(context, 8);
-        int radius = dX / 2 <= radiusMax ? (int) (dX / 2) : radiusMax;
+        canvas.drawRect(left, itemView.getTop(), dX, itemView.getBottom(), paint);
 
-        float[] corners = new float[]{
-                0, 0,        // Top left radius in px
-                radius, radius,        // Top right radius in px
-                radius, radius,          // Bottom right radius in px
-                0, 0           // Bottom left radius in px
-        };
-        Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(context, R.color.secondary));
-        final Path path = new Path();
-        path.addRoundRect(new RectF(left, itemView.getTop(), dX, itemView.getBottom()), corners, Path.Direction.CW);
-        canvas.drawPath(path, paint);
+        // draw actions
 
-        for (UnderlayButton button : buttons) {
-            float right = left + dButtonWidth;
-            button.onDraw(
+        float buttonLeft = left;
+        for (int i = 0; i < buttons.size(); i++) {
+            float right = buttonLeft + buttonWidth;
+            buttons.get(i).onDraw(
                     recyclerView.getContext(),
                     canvas,
-                    new RectF(left, itemView.getTop(), right, itemView.getBottom()),
+                    new RectF(buttonLeft, itemView.getTop(), right, itemView.getBottom()),
+                    buttonWidthMax,
+                    i,
+                    buttons.size(),
                     pos
             );
-            left = right;
+            buttonLeft = right;
         }
+
+        // draw right edge (possibly over icons)
+
+        float radius = Math.min(dX, cornerRadius);
+        float[] corners = new float[]{
+                radius, radius, // tl
+                0, 0, // tr
+                0, 0, // br
+                radius, radius, // bl
+        };
+        paint.setColor(ContextCompat.getColor(context, R.color.background));
+        final Path rightEdge = new Path();
+        float leftOfRightEdge = left;
+        if(dX > cornerRadius) {
+            leftOfRightEdge = dX - cornerRadius;
+        }
+        rightEdge.addRoundRect(
+                new RectF(
+                        leftOfRightEdge,
+                        itemView.getTop(),
+                        dX + cornerRadius,
+                        itemView.getBottom()
+                ), corners,
+                Path.Direction.CW
+        );
+        canvas.drawPath(rightEdge, paint);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -381,32 +335,66 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 clickListener.onClick(pos);
                 return true;
             }
-
             return false;
         }
 
-        void onDraw(Context context, Canvas canvas, RectF rect, int pos) {
-            Paint paint = new Paint();
-            paint.setColorFilter(
+        void onDraw(
+                Context context,
+                Canvas canvas,
+                RectF rect,
+                float width,
+                int nr,
+                int count,
+                int pos
+        ) {
+            float animFriction = rect.width() / width;
+
+            // push actions towards each other if there are two
+            float offsetX = count == 2
+                    ? nr == 0 ? UnitUtil.getDp(context, 4) : - UnitUtil.getDp(context, 4)
+                    : 0;
+
+            // DRAW ROUND BACKGROUND
+
+            Paint paintBg = new Paint();
+            paintBg.setColor(Color.parseColor("#000000"));
+            paintBg.setAlpha((int) (20 * (animFriction <= 1 ? animFriction : 1)));
+            paintBg.setAntiAlias(true);
+            float dragEffect = (animFriction > 1 ? (animFriction - 1) : 0) * UnitUtil.getDp(
+                    context, 6
+            );
+            canvas.drawCircle(
+                    rect.centerX() + offsetX,
+                    rect.centerY(),
+                    UnitUtil.getDp(
+                            context, 20 * (animFriction < 1 ? animFriction : 1)
+                    ) + dragEffect,
+                    paintBg
+            );
+
+            // DRAW ICON
+
+            Paint paintIcon = new Paint();
+            paintIcon.setColorFilter(
                     new PorterDuffColorFilter(
                             ContextCompat.getColor(context, R.color.on_secondary),
                             PorterDuff.Mode.SRC_IN
                     )
             );
-            paint.setAlpha((int) (255 * rect.width() / BUTTON_WIDTH));
+            paintIcon.setAlpha((int) (255 * animFriction));
 
             Drawable drawable = ResourcesCompat.getDrawable(
                     context.getResources(), resId, null
             );
 
             Bitmap icon = drawableToBitmap(drawable);
-            icon = getScaledBitmap(icon, rect.width() / BUTTON_WIDTH);
+            icon = getScaledBitmap(icon, animFriction);
 
             canvas.drawBitmap(
                     icon,
-                    rect.centerX() - icon.getWidth() / 2f,
+                    rect.centerX() - icon.getWidth() / 2f + offsetX,
                     rect.top + (rect.bottom - rect.top - icon.getHeight()) / 2,
-                    paint
+                    paintIcon
             );
 
             clickRegion = rect;

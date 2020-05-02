@@ -1,9 +1,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.PaintDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -25,7 +22,6 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
@@ -58,134 +54,15 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayoutItemContainer, linearLayoutDays;
         private TextView textViewName, textViewAmount, textViewDays;
-        private View viewItemBgTop, viewItemBgBottom;
-        private boolean topCornerPolicy = true, bottomCornerPolicy = true;
 
         public ViewHolder(View view) {
             super(view);
 
-            viewItemBgTop = view.findViewById(R.id.view_stock_item_bg_top);
-            viewItemBgTop.setBackground(getDefaultBg());
-            viewItemBgBottom = view.findViewById(R.id.view_stock_item_bg_bottom);
-            viewItemBgBottom.setBackground(getDefaultBg());
             linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_container);
             linearLayoutDays = view.findViewById(R.id.linear_stock_item_days);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
             textViewDays = view.findViewById(R.id.text_stock_item_days);
-        }
-
-        public boolean getTopCornerPolicy() {
-            return topCornerPolicy;
-        }
-
-        public void setTopCornerPolicy(boolean status) {
-            this.topCornerPolicy = status;
-        }
-
-        public void setTopCornerRadius(int radius) {
-            PaintDrawable bg = (PaintDrawable) viewItemBgTop.getBackground();
-            bg.setCornerRadii(
-                    new float [] {
-                            radius, radius,
-                            0, 0,
-                            0, 0,
-                            0, 0
-                    });
-            viewItemBgTop.setBackground(bg);
-        }
-
-        public void resetTopCornerRadius() {
-            PaintDrawable bg = (PaintDrawable) viewItemBgTop.getBackground();
-            ValueAnimator valueAnimator = ValueAnimator.ofInt(
-                    UnitUtil.getDp(viewItemBgTop.getContext(), 8), 0
-            );
-            valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
-            valueAnimator.addUpdateListener(animation -> {
-                bg.setCornerRadii(
-                        new float [] {
-                                (int) animation.getAnimatedValue(),
-                                (int) animation.getAnimatedValue(),
-                                0, 0,
-                                0, 0,
-                                0, 0
-                        });
-                viewItemBgTop.setBackground(bg);
-            });
-            valueAnimator.setDuration(200).start();
-        }
-
-        public void resetTopCornerRadiusNow() {
-            PaintDrawable bg = (PaintDrawable) viewItemBgTop.getBackground();
-            bg.setCornerRadii(
-                    new float [] {
-                            0, 0,
-                            0, 0,
-                            0, 0,
-                            0, 0
-                    });
-            viewItemBgTop.setBackground(bg);
-        }
-
-        public boolean getBottomCornerPolicy() {
-            return bottomCornerPolicy;
-        }
-
-        public void setBottomCornerPolicy(boolean status) {
-            this.bottomCornerPolicy = status;
-        }
-
-        public void setBottomCornerRadius(int radius) {
-            PaintDrawable bg = (PaintDrawable) viewItemBgBottom.getBackground();
-            bg.setCornerRadii(
-                    new float [] {
-                            0, 0,
-                            0, 0,
-                            0, 0,
-                            radius, radius
-                    });
-            viewItemBgBottom.setBackground(bg);
-        }
-
-        public void resetBottomCornerRadius() {
-            PaintDrawable bg = (PaintDrawable) viewItemBgBottom.getBackground();
-            ValueAnimator valueAnimator = ValueAnimator.ofInt(
-                    UnitUtil.getDp(viewItemBgBottom.getContext(), 8), 0
-            );
-            valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
-            valueAnimator.addUpdateListener(animation -> {
-                bg.setCornerRadii(
-                        new float [] {
-                                0, 0,
-                                0, 0,
-                                0, 0,
-                                (int) animation.getAnimatedValue(),
-                                (int) animation.getAnimatedValue()
-                        });
-                viewItemBgBottom.setBackground(bg);
-            });
-            valueAnimator.setDuration(200).start();
-        }
-
-        public void resetBottomCornerRadiusNow() {
-            PaintDrawable bg = (PaintDrawable) viewItemBgBottom.getBackground();
-            bg.setCornerRadii(
-                    new float [] {
-                            0, 0,
-                            0, 0,
-                            0, 0,
-                            0, 0
-                    });
-            viewItemBgBottom.setBackground(bg);
-        }
-
-        private PaintDrawable getDefaultBg() {
-            PaintDrawable bg = new PaintDrawable();
-            bg.setCornerRadius(0);
-            bg.getPaint().setColor(
-                    ContextCompat.getColor(viewItemBgTop.getContext(), R.color.background)
-            );
-            return bg;
         }
     }
 

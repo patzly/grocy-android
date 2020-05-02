@@ -830,17 +830,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     StockItem stockItemNew = createStockItem(productDetails);
 
                     if(!undo && stockItemNew.getAmount() == 0
-                            && stockItemNew.getProduct().getMinStockAmount() == 0) {
-                        swipeBehavior.resetCornersAtPosition(index);
+                            && stockItemNew.getProduct().getMinStockAmount() == 0
+                    ) {
                         displayedItems.remove(index);
                         stockItemAdapter.notifyItemRemoved(index);
                     } else if(undo && stockItemOld.getAmount() == 0
-                            && stockItemOld.getProduct().getMinStockAmount() == 0) {
+                            && stockItemOld.getProduct().getMinStockAmount() == 0
+                    ) {
                         displayedItems.add(index, stockItemNew);
                         stockItemAdapter.notifyItemInserted(index);
-                        swipeBehavior.resetCornersAtPosition(index);
                     } else {
-                        swipeBehavior.resetCornersAtPosition(index);
                         stockItemAdapter.notifyItemChanged(index);
                         displayedItems.set(index, stockItemNew);
                     }
@@ -959,7 +958,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     StockItem stockItem = createStockItem(productDetails);
 
                     displayedItems.set(index, stockItem);
-                    swipeBehavior.resetCornersAtPosition(index);
                     stockItemAdapter.notifyItemChanged(index);
 
                     // create snackBar with info for undo or with info after undo
