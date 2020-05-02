@@ -347,7 +347,7 @@ public class ScanBatchActivity extends AppCompatActivity
         if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
             batchItem.amountOneUp();
             showSnackbarMessage(
-                    getString(R.string.msg_purchased,
+                    getString(R.string.msg_purchased_no_amount,
                             batchItem.getProductName())
             );
             resumeScan();

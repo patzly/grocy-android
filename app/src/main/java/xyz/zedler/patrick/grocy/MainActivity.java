@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                         () -> new Handler().postDelayed(
                                 () -> {
                                     if(fragmentCurrent.getClass() == PurchaseFragment.class) {
-                                        //((PurchaseFragment) fragmentCurrent).setUpBottomMenu();
+                                        ((PurchaseFragment) fragmentCurrent).setUpBottomMenu();
                                     }
                                 },
                                 50
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == PurchaseFragment.class) {
-                                //((PurchaseFragment) fragmentCurrent).consumeProduct();
+                                ((PurchaseFragment) fragmentCurrent).purchaseProduct();
                             }
                         }
                 );

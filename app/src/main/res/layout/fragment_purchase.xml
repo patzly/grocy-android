@@ -142,6 +142,7 @@
                     <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                         <TextView
+                            android:id="@+id/text_purchase_bbd_label"
                             style="@style/Theme.Grocy.ListItem.OverLine"
                             android:text="@string/property_bbd" />
 
@@ -241,7 +242,6 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/text_input_purchase_price"
                             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="Price"
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 
@@ -339,6 +339,7 @@
                     <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                         <TextView
+                            android:id="@+id/text_purchase_location_label"
                             style="@style/Theme.Grocy.ListItem.OverLine"
                             android:text="@string/property_location" />
 

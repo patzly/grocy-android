@@ -55,7 +55,8 @@
     <string name="msg_consumed">Consumed %1$s %2$s of %3$s</string>
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
-    <string name="msg_purchased">Purchased %1$s</string>
+    <string name="msg_purchased_no_amount">Purchased %1$s</string>
+    <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
     <string name="msg_error">An error occurred</string>
@@ -121,6 +122,8 @@
     <string name="property_amount">Amount</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
+    <string name="property_price">Price</string>
+    <string name="property_price_in">Price in %1$s</string>
     <string name="property_quantity_unit">Quantity unit</string>
     <string name="property_quantity_units">Quantity units</string>
     <string name="property_qu_purchase">Quantity unit purchase</string>

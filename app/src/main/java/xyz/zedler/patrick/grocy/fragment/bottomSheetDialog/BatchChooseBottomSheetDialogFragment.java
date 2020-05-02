@@ -124,7 +124,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
                 activity.addBatchItem(inputText, barcode);
-                dismissWithMessage(activity.getString(R.string.msg_purchased, inputText));
+                dismissWithMessage(activity.getString(R.string.msg_purchased_no_amount, inputText));
             } else {
                 assert productNames != null;
                 if(productNames.contains(inputText)) {

@@ -156,6 +156,13 @@ public class GrocyApi {
     }
 
     /**
+     * Adds the given amount of the given product to stock
+     */
+    public String purchaseProduct(int productId) {
+        return getUrl("/stock/products/" + productId + "/add");
+    }
+
+    /**
      * Removes the given amount of the given product from stock
      */
     public String consumeProduct(int productId) {
