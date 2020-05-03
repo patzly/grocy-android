@@ -26,14 +26,14 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.BatchItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.MissingBatchProductAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.model.BatchItem;
+import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.BatchItemAdapterListener {
+public class PurchaseBatchFragment extends Fragment implements MissingBatchProductAdapter.BatchItemAdapterListener {
 
     private final static String TAG = Constants.UI.BATCH_PURCHASE;
     private final static boolean DEBUG = true;
@@ -43,11 +43,11 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
-    private BatchItemAdapter batchItemAdapter;
+    private MissingBatchProductAdapter missingBatchProductAdapter;
     private BroadcastReceiver broadcastReceiver;
     private ActionButton actionButtonFlash;
 
-    private ArrayList<BatchItem> batchItems;
+    private ArrayList<MissingBatchProduct> missingBatchProducts;
     private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
     private String search = "";
     private String sortMode;
@@ -92,7 +92,7 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
             setError(true, false, false);
             activity.findViewById(R.id.button_stock_error_retry).setVisibility(View.GONE);
         } else {
-            batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+            missingBatchProducts = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         }
 
         recyclerView.setLayoutManager(
@@ -104,9 +104,9 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(
-                new BatchItemAdapter(
+                new MissingBatchProductAdapter(
                         activity,
-                        batchItems,
+                        missingBatchProducts,
                         this
                 )
         );
@@ -114,7 +114,7 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        batchItems.toString(),
+                        missingBatchProducts.toString(),
                         Snackbar.LENGTH_LONG
                 )
         );
@@ -182,11 +182,11 @@ public class PurchaseBatchFragment extends Fragment implements BatchItemAdapter.
     @Override
     public void onItemRowClicked(int position) {
         // STOCK ITEM CLICK
-        //showProductOverview(batchItems.get(position));
+        //showProductOverview(missingBatchProducts.get(position));
     }
 
-    private void refreshAdapter(BatchItemAdapter adapter) {
-        batchItemAdapter = adapter;
+    private void refreshAdapter(MissingBatchProductAdapter adapter) {
+        missingBatchProductAdapter = adapter;
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
             recyclerView.setAdapter(adapter);
             recyclerView.animate().alpha(1).setDuration(150).start();

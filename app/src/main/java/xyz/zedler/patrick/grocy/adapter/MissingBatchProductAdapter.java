@@ -14,25 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.BatchItem;
+import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class BatchItemAdapter extends RecyclerView.Adapter<BatchItemAdapter.ViewHolder> {
+public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatchProductAdapter.ViewHolder> {
 
-    private final static String TAG = BatchItemAdapter.class.getSimpleName();
+    private final static String TAG = MissingBatchProductAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<BatchItem> batchItems;
+    private List<MissingBatchProduct> missingBatchProducts;
     private BatchItemAdapterListener listener;
 
-    public BatchItemAdapter(
+    public MissingBatchProductAdapter(
             Context context,
-            List<BatchItem> batchItems,
+            List<MissingBatchProduct> missingBatchProducts,
             BatchItemAdapterListener listener
     ) {
         this.context = context;
-        this.batchItems = batchItems;
+        this.missingBatchProducts = missingBatchProducts;
         this.listener = listener;
     }
 
@@ -64,15 +64,15 @@ public class BatchItemAdapter extends RecyclerView.Adapter<BatchItemAdapter.View
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        BatchItem batchItem = batchItems.get(position);
+        MissingBatchProduct missingBatchProduct = missingBatchProducts.get(position);
 
         // NAME
 
-        holder.textViewName.setText(batchItem.getProductName());
+        holder.textViewName.setText(missingBatchProduct.getProductName());
 
         // AMOUNT
 
-        holder.textViewAmount.setText(NumUtil.trim(batchItem.getAmount()));
+        holder.textViewAmount.setText(NumUtil.trim(missingBatchProduct.getAmount()));
 
         // CONTAINER
 
@@ -83,7 +83,7 @@ public class BatchItemAdapter extends RecyclerView.Adapter<BatchItemAdapter.View
 
     @Override
     public int getItemCount() {
-        return batchItems != null ? batchItems.size() : 0;
+        return missingBatchProducts != null ? missingBatchProducts.size() : 0;
     }
 
     public interface BatchItemAdapterListener {

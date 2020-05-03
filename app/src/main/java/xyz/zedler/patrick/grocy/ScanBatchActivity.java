@@ -39,7 +39,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.model.BatchItem;
+import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
@@ -73,7 +73,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<String> productNames = new ArrayList<>();
-    private ArrayList<BatchItem> batchItems = new ArrayList<>();
+    private ArrayList<MissingBatchProduct> missingBatchProducts = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,9 +119,9 @@ public class ScanBatchActivity extends AppCompatActivity
         );
 
         cardViewCount.setOnClickListener(v -> {
-            if(batchItems.size() > 0) {
+            if(missingBatchProducts.size() > 0) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+                bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchProducts);
                 setResult(
                         Activity.RESULT_OK,
                         new Intent().putExtra(Constants.ARGUMENT.BUNDLE, bundle)
@@ -179,9 +179,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if(batchItems.size() > 0) {
+        if(missingBatchProducts.size() > 0) {
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+            bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchProducts);
             showBottomSheet(new BatchExitBottomSheetDialogFragment(), bundle);
             pauseScan();
         } else {
@@ -217,9 +217,9 @@ public class ScanBatchActivity extends AppCompatActivity
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        BatchItem batchItem = getBatchItemFromBarcode(barcode);
-                        if(batchItem != null) {
-                            purchaseBatchItem(batchItem);
+                        MissingBatchProduct missingBatchProduct = getBatchItemFromBarcode(barcode);
+                        if(missingBatchProduct != null) {
+                            purchaseBatchItem(missingBatchProduct);
                         }else if(products != null) {
                             showChooseBottomSheet(barcode);
                         } else {
@@ -245,7 +245,7 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
         bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
         bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
-        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, batchItems);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchProducts);
         showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
@@ -332,23 +332,23 @@ public class ScanBatchActivity extends AppCompatActivity
         return names;
     }
 
-    public void setBatchItems(ArrayList<BatchItem> batchItems) {
-        this.batchItems = batchItems;
+    public void setMissingBatchProducts(ArrayList<MissingBatchProduct> missingBatchProducts) {
+        this.missingBatchProducts = missingBatchProducts;
     }
 
     public void addBatchItem(String inputText, String barcode) {
-        batchItems.add(new BatchItem(inputText, "abc", barcode, 1));
+        missingBatchProducts.add(new MissingBatchProduct(inputText, "abc", barcode, 1));
         productNames.add(inputText);
-        textViewCount.setText(String.valueOf(batchItems.size()));
+        textViewCount.setText(String.valueOf(missingBatchProducts.size()));
     }
 
-    public void purchaseBatchItem(BatchItem batchItem) {
+    public void purchaseBatchItem(MissingBatchProduct missingBatchProduct) {
         String actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
         if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
-            batchItem.amountOneUp();
+            missingBatchProduct.amountOneUp();
             showSnackbarMessage(
                     getString(R.string.msg_purchased_no_amount,
-                            batchItem.getProductName())
+                            missingBatchProduct.getProductName())
             );
             resumeScan();
         } else {
@@ -357,11 +357,11 @@ public class ScanBatchActivity extends AppCompatActivity
         }
     }
 
-    public BatchItem getBatchItemFromBarcode(String barcode) {
-        for(BatchItem batchItem : batchItems) {
+    public MissingBatchProduct getBatchItemFromBarcode(String barcode) {
+        for(MissingBatchProduct missingBatchProduct : missingBatchProducts) {
             // TODO: Multiple barcodes
-            if(batchItem.getBarcodes().equals(barcode)) {
-                return batchItem;
+            if(missingBatchProduct.getBarcodes().equals(barcode)) {
+                return missingBatchProduct;
             }
         }
         return null;

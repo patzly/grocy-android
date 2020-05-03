@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.model.BatchItem;
+import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -51,7 +51,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private String barcode, batchType, buttonAction;
 
     private ArrayList<Product> products;
-    private ArrayList<BatchItem> batchItems;
+    private ArrayList<MissingBatchProduct> missingBatchProducts;
 
     private ScanBatchActivity activity;
     private TextInputLayout textInputProduct;
@@ -94,7 +94,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 Constants.ARGUMENT.PRODUCT_NAMES
         );
         products = getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS);
-        batchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+        missingBatchProducts = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
         batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
@@ -222,30 +222,30 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
     private void addBatchItemBarcode(String barcode, String inputText) {
         List<String> barcodes;
-        BatchItem selectedBatchItem = null;
-        for(BatchItem batchItem : batchItems) {
-            if(batchItem.getProductName().equals(inputText)) {
-                selectedBatchItem = batchItem;
+        MissingBatchProduct selectedMissingBatchProduct = null;
+        for(MissingBatchProduct missingBatchProduct : missingBatchProducts) {
+            if(missingBatchProduct.getProductName().equals(inputText)) {
+                selectedMissingBatchProduct = missingBatchProduct;
                 break;
             }
         }
-        if(selectedBatchItem == null) {
+        if(selectedMissingBatchProduct == null) {
             // TODO: Error
             return;
         }
 
-        if(selectedBatchItem.getBarcodes() != null && !selectedBatchItem.getBarcodes().equals("")) {
+        if(selectedMissingBatchProduct.getBarcodes() != null && !selectedMissingBatchProduct.getBarcodes().equals("")) {
             barcodes = new ArrayList<>(Arrays.asList(
-                    selectedBatchItem.getBarcodes().split(",")
+                    selectedMissingBatchProduct.getBarcodes().split(",")
             ));
         } else {
             barcodes = new ArrayList<>();
         }
 
         barcodes.add(barcode);
-        selectedBatchItem.setBarcodes(TextUtils.join(",", barcodes));
-        activity.setBatchItems(batchItems);
-        activity.purchaseBatchItem(selectedBatchItem);
+        selectedMissingBatchProduct.setBarcodes(TextUtils.join(",", barcodes));
+        activity.setMissingBatchProducts(missingBatchProducts);
+        activity.purchaseBatchItem(selectedMissingBatchProduct);
         dismiss();
         activity.resumeScan();
     }

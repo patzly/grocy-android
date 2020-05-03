@@ -5,48 +5,48 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class BatchItem implements Parcelable {
+public class MissingBatchProduct implements Parcelable {
 
-    private String productName, bestBeforeDate, barcodes;
-    private double amount;
+    private String productName, barcodes, defaultBestBeforeDate;
+    private int amount;
 
-    public BatchItem(
+    public MissingBatchProduct(
             String productName,
-            String bestBeforeDate,
             String barcodes,
-            double amount
+            String defaultBestBeforeDate,
+            int amount
     ) {
         this.productName = productName;
-        this.bestBeforeDate = bestBeforeDate;
         this.barcodes = barcodes;
+        this.defaultBestBeforeDate = defaultBestBeforeDate;
         this.amount = amount;
     }
 
-    public BatchItem(Parcel parcel) {
+    public MissingBatchProduct(Parcel parcel) {
         productName = parcel.readString();
-        bestBeforeDate = parcel.readString();
         barcodes = parcel.readString();
-        amount = parcel.readDouble();
+        defaultBestBeforeDate = parcel.readString();
+        amount = parcel.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(productName);
-        dest.writeString(bestBeforeDate);
         dest.writeString(barcodes);
-        dest.writeDouble(amount);
+        dest.writeString(defaultBestBeforeDate);
+        dest.writeInt(amount);
     }
 
-    public static final Creator<BatchItem> CREATOR = new Creator<BatchItem>() {
+    public static final Creator<MissingBatchProduct> CREATOR = new Creator<MissingBatchProduct>() {
 
         @Override
-        public BatchItem createFromParcel(Parcel in) {
-            return new BatchItem(in);
+        public MissingBatchProduct createFromParcel(Parcel in) {
+            return new MissingBatchProduct(in);
         }
 
         @Override
-        public BatchItem[] newArray(int size) {
-            return new BatchItem[size];
+        public MissingBatchProduct[] newArray(int size) {
+            return new MissingBatchProduct[size];
         }
     };
 
@@ -54,19 +54,19 @@ public class BatchItem implements Parcelable {
         return productName;
     }
 
-    public String getBestBeforeDate() {
-        return bestBeforeDate;
-    }
-
     public String getBarcodes() {
         return barcodes;
+    }
+
+    public String getDefaultBestBeforeDate() {
+        return defaultBestBeforeDate;
     }
 
     public void setBarcodes(String barcodes) {
         this.barcodes = barcodes;
     }
 
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
 
@@ -82,6 +82,6 @@ public class BatchItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "BatchItem(" + productName + ")";
+        return "MissingBatchProduct(" + productName + ")";
     }
 }
