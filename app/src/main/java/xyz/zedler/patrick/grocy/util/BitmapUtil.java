@@ -1,0 +1,93 @@
+package xyz.zedler.patrick.grocy.util;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+
+import xyz.zedler.patrick.grocy.R;
+
+public class BitmapUtil {
+
+    public static Bitmap scale(@Nullable Bitmap bm, float scale) {
+        if(scale > 1) return bm;
+        if(bm != null) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            int scaleWidth = (int) (width * scale);
+            if(scaleWidth <= 0) scaleWidth = 1;
+            int scaleHeight = (int) (height * scale);
+            if(scaleHeight <= 0) scaleHeight = 1;
+            return Bitmap.createScaledBitmap(
+                    bm, scaleWidth, scaleHeight, false
+            );
+        } return null;
+    }
+
+    public static Bitmap getFromDrawable(Context context, @DrawableRes int resId) {
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
+        if(drawable != null) {
+            if(drawable instanceof BitmapDrawable) {
+                return ((BitmapDrawable) drawable).getBitmap();
+            }
+            Bitmap bitmap = Bitmap.createBitmap(
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(),
+                    Bitmap.Config.ARGB_8888
+            );
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } return null;
+    }
+
+    public static Bitmap getFromDrawableWithNumber(
+            Context context,
+            @DrawableRes int resId,
+            int number,
+            float textSize,
+            float textOffsetX,
+            float textOffsetY
+    ) {
+        Bitmap bitmap = getFromDrawable(context, resId);
+        if(bitmap == null) return null;
+        // make mutable
+        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(UnitUtil.getDp(context, textSize));
+        paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
+        paint.setLetterSpacing(0.1f);
+
+        Rect bounds = new Rect();
+        paint.getTextBounds(
+                String.valueOf(number),
+                0,
+                String.valueOf(number).length(),
+                bounds
+        );
+        int x = (bitmap.getWidth() - bounds.width()) / 2;
+        int y = (bitmap.getHeight() + bounds.height()) / 2;
+
+        canvas.drawText(
+                String.valueOf(number),
+                x + UnitUtil.getDp(context, textOffsetX),
+                y - UnitUtil.getDp(context, textOffsetY),
+                paint
+        );
+
+        return bitmap;
+    }
+}

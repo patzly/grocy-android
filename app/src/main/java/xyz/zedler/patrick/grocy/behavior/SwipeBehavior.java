@@ -12,8 +12,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +19,6 @@ import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +30,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -185,7 +183,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
         // remove elevation
         itemView.setElevation(0);
-        itemView.setTranslationZ(0);
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (dX > 0) {
@@ -356,19 +353,13 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
             // DRAW ROUND BACKGROUND
 
-            Paint paintBg = new Paint();
+            Paint paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
             paintBg.setColor(Color.parseColor("#000000"));
             paintBg.setAlpha((int) (20 * (animFriction <= 1 ? animFriction : 1)));
-            paintBg.setAntiAlias(true);
-            float dragEffect = (animFriction > 1 ? (animFriction - 1) : 0) * UnitUtil.getDp(
-                    context, 6
-            );
             canvas.drawCircle(
                     rect.centerX() + offsetX,
                     rect.centerY(),
-                    UnitUtil.getDp(
-                            context, 20 * (animFriction < 1 ? animFriction : 1)
-                    ) + dragEffect,
+                    UnitUtil.getDp(context, 20 * (animFriction < 1 ? animFriction : 1)),
                     paintBg
             );
 
@@ -382,51 +373,22 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                     )
             );
             paintIcon.setAlpha((int) (255 * animFriction));
-
-            Drawable drawable = ResourcesCompat.getDrawable(
-                    context.getResources(), resId, null
+            Bitmap icon = BitmapUtil.scale(
+                    BitmapUtil.getFromDrawable(context, resId), animFriction
             );
-
-            Bitmap icon = drawableToBitmap(drawable);
-            icon = getScaledBitmap(icon, animFriction);
-
-            canvas.drawBitmap(
-                    icon,
-                    rect.centerX() - icon.getWidth() / 2f + offsetX,
-                    rect.top + (rect.bottom - rect.top - icon.getHeight()) / 2,
-                    paintIcon
-            );
+            if(icon != null) {
+                canvas.drawBitmap(
+                        icon,
+                        rect.centerX() - icon.getWidth() / 2f + offsetX,
+                        rect.top + (rect.bottom - rect.top - icon.getHeight()) / 2,
+                        paintIcon
+                );
+            }
 
             clickRegion = rect;
             this.pos = pos;
         }
 
-        private static Bitmap getScaledBitmap(Bitmap bm, float scale) {
-            if(scale > 1) return bm;
-            int width = bm.getWidth();
-            int height = bm.getHeight();
-            int scaleWidth = (int) (width * scale);
-            if(scaleWidth <= 0) scaleWidth = 1;
-            int scaleHeight = (int) (height * scale);
-            if(scaleHeight <= 0) scaleHeight = 1;
-            return Bitmap.createScaledBitmap(
-                    bm, scaleWidth, scaleHeight, false
-            );
-        }
 
-        private static Bitmap drawableToBitmap (Drawable drawable) {
-            if (drawable instanceof BitmapDrawable) {
-                return ((BitmapDrawable)drawable).getBitmap();
-            }
-            Bitmap bitmap = Bitmap.createBitmap(
-                    drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(),
-                    Bitmap.Config.ARGB_8888
-            );
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            drawable.draw(canvas);
-            return bitmap;
-        }
     }
 }

@@ -44,7 +44,6 @@ import org.json.JSONObject;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.PurchaseBatchFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
@@ -56,6 +55,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.fragment.PurchaseBatchFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
@@ -964,6 +964,19 @@ public class MainActivity extends AppCompatActivity {
                 });
                 animOut.start();
             } else {
+                /*fab.setImageDrawable(
+                        new BitmapDrawable(
+                                getResources(),
+                                BitmapUtil.getFromDrawableWithNumber(
+                                        this,
+                                        R.drawable.ic_round_shopping_cart,
+                                        3,
+                                        7.3f,
+                                        -1.5f,
+                                        8
+                                )
+                        )
+                );*/
                 fab.setImageResource(icon);
             }
             fab.setTag(tag);
