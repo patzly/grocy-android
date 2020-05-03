@@ -109,7 +109,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             textViewQuantityUnitLabel;
     private ImageView imageViewName, imageViewMinAmount, imageViewDays;
     private int selectedLocationId, selectedQuantityUnitId;
-    private String selectedProductGroupId;
+    private String selectedProductGroupId, intendedAction;
     private double minAmount;
     private int bestBeforeDays;
     private boolean isRefresh =false;
@@ -394,23 +394,38 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.text_master_product_edit_simple_quantity_unit_label
         );
 
-        // BUNDLE WHEN EDIT
+        // STARTUP BUNDLE
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if(bundle != null && bundle.getString(Constants.ARGUMENT.ACTION) != null) {
+            intendedAction = bundle.getString(Constants.ARGUMENT.ACTION);
+        }
+
+        if(intendedAction == null) {
+            intendedAction = Constants.ACTION.CREATE;
+        }
+
+        if(bundle == null) {
+            resetAll();
+        } else if(intendedAction.equals(Constants.ACTION.EDIT)) {
             editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
             editParentProduct = bundle.getParcelable(Constants.ARGUMENT.PARENT_PRODUCT);
             editLocation = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
             editProductGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
             editQuantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-            // FILL
-            if(editProduct != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
+            fillWithEditReferences();
+        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+            if(bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
+                editTextName.setText(bundle.getString(Constants.ARGUMENT.PRODUCT_NAME));
             }
-        } else {
-            resetAll();
+            if(bundle.getString(Constants.ARGUMENT.BARCODE) != null) {
+                InputChip inputChipBarcode = new InputChip(
+                        activity,
+                        bundle.getString(Constants.ARGUMENT.BARCODE),
+                        false,
+                        () -> { });
+                linearLayoutBarcodeContainer.addView(inputChipBarcode);
+            }
         }
 
         // START
@@ -867,10 +882,12 @@ public class MasterProductEditSimpleFragment extends Fragment {
     public void saveProduct() {
         if(isFormInvalid()) return;
 
+        String productName = editTextName.getText().toString();
+
         JSONObject jsonObject = new JSONObject();
         try {
             // name
-            jsonObject.put("name", editTextName.getText().toString());
+            jsonObject.put("name", productName);
             // parent product json null shit
             if(productParent != null) {
                 if(String.valueOf(autoCompleteTextViewParentProduct.getText()).trim().equals("")) {
@@ -913,7 +930,16 @@ public class MasterProductEditSimpleFragment extends Fragment {
             request.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> {
+                        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.ARGUMENT.ACTION, intendedAction);
+                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                            activity.dismissFragment(bundle);
+                        } else {
+                            activity.dismissFragment();
+                        }
+                    },
                     error -> {
                         showErrorMessage();
                         Log.e(TAG, "saveProduct: " + error);
@@ -979,16 +1005,22 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private void resetAll() {
         if(editProduct != null) return;
         clearInputFocusAndErrors();
-        editTextName.setText(null);
-        autoCompleteTextViewParentProduct.setText(null);
-        editTextBarcodes.setText(null);
 
-        if(linearLayoutBarcodeContainer.getChildCount() > 0) {
-            for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
-                InputChip inputChip = (InputChip)linearLayoutBarcodeContainer.getChildAt(i);
-                inputChip.close();
+        Bundle bundle = getArguments();
+        if(bundle == null || bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) == null) {
+            editTextName.setText(null);
+        }
+        if(bundle == null || bundle.getString(Constants.ARGUMENT.BARCODE) == null) {
+            if(linearLayoutBarcodeContainer.getChildCount() > 0) {
+                for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
+                    InputChip inputChip = (InputChip)linearLayoutBarcodeContainer.getChildAt(i);
+                    inputChip.close();
+                }
             }
         }
+
+        autoCompleteTextViewParentProduct.setText(null);
+        editTextBarcodes.setText(null);
 
         int locationId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID, -1);
         Location location = getLocation(locationId);
@@ -1073,6 +1105,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    public String getIntendedAction() {
+        return intendedAction;
     }
 
     public void setUpBottomMenu() {

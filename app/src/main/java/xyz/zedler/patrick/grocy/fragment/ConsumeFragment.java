@@ -53,7 +53,7 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
@@ -156,6 +156,8 @@ public class ConsumeFragment extends Fragment {
                 startAnimatedIcon(R.id.image_consume_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
+            } else {
+                textInputProduct.setError(activity.getString(R.string.error_invalid_product));
             }
         });
         autoCompleteTextViewProduct.setOnItemClickListener(
@@ -509,7 +511,7 @@ public class ConsumeFragment extends Fragment {
                     if(response != null && response.statusCode == 400) {
                         autoCompleteTextViewProduct.setText(barcode);
                         activity.showBottomSheet(
-                                new ConsumeBarcodeBottomSheetDialogFragment(), null
+                                new InputBarcodeBottomSheetDialogFragment(), null
                         );
                     } else {
                         activity.showSnackbar(
@@ -528,9 +530,7 @@ public class ConsumeFragment extends Fragment {
     private boolean isFormIncomplete() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
-            activity.showBottomSheet(
-                    new ConsumeBarcodeBottomSheetDialogFragment(), null
-            );
+            textInputProduct.setError(activity.getString(R.string.error_invalid_product));
             return true;
         } else if(productDetails == null || !isAmountValid()) {
             if(productDetails == null) {
@@ -892,7 +892,7 @@ public class ConsumeFragment extends Fragment {
         }
     }
 
-    public void setOpenEnabled(boolean enabled) {
+    private void setOpenEnabled(boolean enabled) {
         MenuItem menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
         if(menuItemOpen != null) {
             menuItemOpen.setEnabled(enabled);

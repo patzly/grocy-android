@@ -740,6 +740,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+                if(((MasterProductEditSimpleFragment) fragmentCurrent)
+                        .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                    dismissFragment(fragmentCurrent.getArguments());
+                } else {
+                    dismissFragment();
+                }
+                break;
             case Constants.UI.MASTER_LOCATION_EDIT:
             case Constants.UI.MASTER_STORE_EDIT:
             case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
@@ -842,6 +849,29 @@ public class MainActivity extends AppCompatActivity {
             String tag = fragmentManager.getBackStackEntryAt(0).getName();
             fragmentCurrent = fragmentManager.findFragmentByTag(tag);
             if(fragmentCurrent != null) {
+                if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
+            } else {
+                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
+                if(DEBUG) Log.e(TAG, "dismissFragment: " + tag + " not found");
+            }
+        } else {
+            if(DEBUG) Log.e(
+                    TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count
+            );
+        }
+        bottomAppBar.show();
+    }
+
+    public void dismissFragment(Bundle bundle) {
+        int count = fragmentManager.getBackStackEntryCount();
+        if(count > 1) {
+            fragmentManager.popBackStack();
+            String tag = fragmentManager.getBackStackEntryAt(0).getName();
+            fragmentCurrent = fragmentManager.findFragmentByTag(tag);
+            if(fragmentCurrent != null) {
+                if(fragmentCurrent.getClass() == PurchaseFragment.class) {
+                    ((PurchaseFragment) fragmentCurrent).giveBundle(bundle);
+                }
                 if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {
                 fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);

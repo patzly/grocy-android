@@ -107,7 +107,9 @@ public final class Constants {
         public final static String CONSUME_SPOILED = "action_consume_spoiled";
         public final static String PURCHASE = "action_purchase";
         public final static String CREATE = "action_create";
+        public final static String EDIT = "action_edit";
         public final static String LINK = "action_link";
+        public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
     }
 
     public final static class ARGUMENT {
@@ -128,6 +130,7 @@ public final class Constants {
         public final static String PRODUCT_DETAILS = "product_details";
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
+        public final static String PRODUCT_NAME = "product_name";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
         public final static String PARENT_PRODUCT = "parent_product";
@@ -138,6 +141,7 @@ public final class Constants {
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
         public final static String BATCH_ITEMS = "batch_items";
+        public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
     }
 

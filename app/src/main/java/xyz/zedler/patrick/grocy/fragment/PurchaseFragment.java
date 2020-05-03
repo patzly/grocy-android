@@ -55,7 +55,8 @@ import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ConsumeBarcodeBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
@@ -81,6 +82,7 @@ public class PurchaseFragment extends Fragment {
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
+    private Bundle startupBundle;
 
     private List<Product> products = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
@@ -99,6 +101,7 @@ public class PurchaseFragment extends Fragment {
     private int selectedLocationId, selectedStoreId;
     private String selectedBestBeforeDate;
     private double amount, minAmount;
+    private boolean nameAutoFilled;
 
     @Override
     public View onCreateView(
@@ -157,6 +160,17 @@ public class PurchaseFragment extends Fragment {
                 startAnimatedIcon(R.id.image_purchase_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
+            } else {
+                String input = autoCompleteTextViewProduct.getText().toString().trim();
+                if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
+                        && !nameAutoFilled) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE);
+                    bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
+                    activity.showBottomSheet(
+                            new InputNameBottomSheetDialogFragment(), bundle
+                    );
+                }
             }
         });
         autoCompleteTextViewProduct.setOnItemClickListener(
@@ -173,6 +187,7 @@ public class PurchaseFragment extends Fragment {
                         return true;
                     } return false;
         });
+        nameAutoFilled = false;
 
         // barcodes
 
@@ -345,6 +360,10 @@ public class PurchaseFragment extends Fragment {
         activity.updateUI(Constants.UI.PURCHASE, TAG);
     }
 
+    public void giveBundle(Bundle bundle) {
+        startupBundle = bundle;
+    }
+
     private void load() {
         if(activity.isOnline()) {
             download();
@@ -392,6 +411,22 @@ public class PurchaseFragment extends Fragment {
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     autoCompleteTextViewProduct.setAdapter(adapterProducts);
                     // download finished
+                    String action = null;
+                    if(startupBundle != null) {
+                        action = startupBundle.getString(Constants.ARGUMENT.ACTION);
+                    }
+                    if(action != null && action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                        Product product = getProductFromName(
+                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                        );
+                        if(product != null) {
+                            loadProductDetails(product.getId());
+                        } else {
+                            autoCompleteTextViewProduct.setText(
+                                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                            );
+                        }
+                    }
                     swipeRefreshLayout.setRefreshing(false);
                 }, error -> {
                     swipeRefreshLayout.setRefreshing(false);
@@ -448,6 +483,8 @@ public class PurchaseFragment extends Fragment {
 
     @SuppressLint("SimpleDateFormat")
     private void fillWithProductDetails() {
+        nameAutoFilled = true;
+
         clearInputFocus();
 
         boolean isTareWeightHandlingEnabled = productDetails
@@ -593,8 +630,11 @@ public class PurchaseFragment extends Fragment {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         autoCompleteTextViewProduct.setText(barcode);
+                        nameAutoFilled = true;
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
                         activity.showBottomSheet(
-                                new ConsumeBarcodeBottomSheetDialogFragment(), null
+                                new InputBarcodeBottomSheetDialogFragment(), bundle
                         );
                     } else {
                         activity.showSnackbar(
@@ -613,9 +653,9 @@ public class PurchaseFragment extends Fragment {
     private boolean isFormIncomplete() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
-            activity.showBottomSheet(
-                    new ConsumeBarcodeBottomSheetDialogFragment(), null
-            );
+            // TODO
+            autoCompleteTextViewProduct.requestFocus();
+            autoCompleteTextViewProduct.clearFocus();
             return true;
         } else if(productDetails == null
                 || !isBestBeforeDateValid()
@@ -702,6 +742,7 @@ public class PurchaseFragment extends Fragment {
                     activity.showSnackbar(snackbar);
 
                     // CLEAR USER INPUT
+                    nameAutoFilled = false;
                     clearAll();
                 },
                 error -> {
