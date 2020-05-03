@@ -49,9 +49,9 @@ public class MasterStoreFragment extends Fragment {
     private WebRequest request;
 
     private Store editStore;
-    private List<Store> stores = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
-    private List<String> storeNames = new ArrayList<>();
+    private ArrayList<Store> stores = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<String> storeNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputName, textInputDescription;
@@ -229,8 +229,8 @@ public class MasterStoreFragment extends Fragment {
         }
     }
 
-    private List<String> getStoreNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getStoreNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(stores != null) {
             for(Store store : stores) {
                 if(editStore != null) {

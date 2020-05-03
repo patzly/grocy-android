@@ -84,10 +84,10 @@ public class PurchaseFragment extends Fragment {
     private ProductDetails productDetails;
     private Bundle startupBundle;
 
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Store> stores = new ArrayList<>();
-    private List<String> productNames = new ArrayList<>();
+    private ArrayList<String> productNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
@@ -770,7 +770,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
-        List<String> barcodes = new ArrayList<>(
+        ArrayList<String> barcodes = new ArrayList<>(
                 Arrays.asList(
                         productDetails.getProduct().getBarcode().split(",")
                 )
@@ -809,8 +809,8 @@ public class PurchaseFragment extends Fragment {
         return null;
     }
 
-    private List<String> getProductNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getProductNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(products != null) {
             for(Product product : products) {
                 names.add(product.getName());

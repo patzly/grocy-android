@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
@@ -23,12 +23,12 @@ public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatc
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<MissingBatchProduct> missingBatchProducts;
+    private ArrayList<MissingBatchProduct> missingBatchProducts;
     private BatchItemAdapterListener listener;
 
     public MissingBatchProductAdapter(
             Context context,
-            List<MissingBatchProduct> missingBatchProducts,
+            ArrayList<MissingBatchProduct> missingBatchProducts,
             BatchItemAdapterListener listener
     ) {
         this.context = context;

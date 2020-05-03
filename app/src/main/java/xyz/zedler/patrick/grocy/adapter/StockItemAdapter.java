@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -29,16 +29,16 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<StockItem> stockItems;
-    private List<QuantityUnit> quantityUnits;
+    private ArrayList<StockItem> stockItems;
+    private ArrayList<QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
     private int daysExpiringSoon;
     private String sortMode;
 
     public StockItemAdapter(
             Context context,
-            List<StockItem> stockItems,
-            List<QuantityUnit> quantityUnits,
+            ArrayList<StockItem> stockItems,
+            ArrayList<QuantityUnit> quantityUnits,
             int daysExpiringSoon,
             String sortMode,
             StockItemAdapterListener listener

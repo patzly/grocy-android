@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -22,12 +22,12 @@ public class MasterProductGroupAdapter extends RecyclerView.Adapter<MasterProduc
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<ProductGroup> productGroups;
+    private ArrayList<ProductGroup> productGroups;
     private MasterProductGroupAdapterListener listener;
 
     public MasterProductGroupAdapter(
             Context context,
-            List<ProductGroup> productGroups,
+            ArrayList<ProductGroup> productGroups,
             MasterProductGroupAdapterListener listener
     ) {
         this.context = context;

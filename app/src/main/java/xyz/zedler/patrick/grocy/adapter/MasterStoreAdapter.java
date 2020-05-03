@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -22,12 +22,12 @@ public class MasterStoreAdapter extends RecyclerView.Adapter<MasterStoreAdapter.
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<Store> stores;
+    private ArrayList<Store> stores;
     private MasterStoreAdapterListener listener;
 
     public MasterStoreAdapter(
             Context context,
-            List<Store> stores,
+            ArrayList<Store> stores,
             MasterStoreAdapterListener listener
     ) {
         this.context = context;

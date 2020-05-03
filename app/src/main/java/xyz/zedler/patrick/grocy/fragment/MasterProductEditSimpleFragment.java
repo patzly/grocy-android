@@ -78,11 +78,11 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
 
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private List<String> productNames = new ArrayList<>();
+    private ArrayList<String> productNames = new ArrayList<>();
 
     private Product editProduct, editParentProduct, productParent;
     private Location editLocation;
@@ -609,8 +609,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
         }
     }
 
-    private List<String> getProductNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getProductNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(products != null) {
             for(Product product : products) {
                 if(editProduct != null) {

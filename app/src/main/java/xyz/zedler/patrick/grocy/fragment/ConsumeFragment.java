@@ -80,10 +80,10 @@ public class ConsumeFragment extends Fragment {
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
 
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<StockLocation> stockLocations = new ArrayList<>();
     private ArrayList<StockEntry> stockEntries = new ArrayList<>();
-    private List<String> productNames = new ArrayList<>();
+    private ArrayList<String> productNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
@@ -688,7 +688,7 @@ public class ConsumeFragment extends Fragment {
 
     private void editProductBarcodes() {
         String barcodesString = productDetails.getProduct().getBarcode();
-        List<String> barcodes;
+        ArrayList<String> barcodes;
         if(barcodesString != null && !barcodesString.equals("")) {
             barcodes = new ArrayList<>(Arrays.asList(barcodesString.split(",")));
         } else {
@@ -729,8 +729,8 @@ public class ConsumeFragment extends Fragment {
         return null;
     }
 
-    private List<String> getProductNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getProductNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(products != null) {
             for(Product product : products) {
                 names.add(product.getName());

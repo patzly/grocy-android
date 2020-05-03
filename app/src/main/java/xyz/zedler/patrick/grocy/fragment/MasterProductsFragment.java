@@ -65,12 +65,12 @@ public class MasterProductsFragment extends Fragment
     private WebRequest request;
     private MasterProductAdapter masterProductAdapter;
 
-    private List<Product> products = new ArrayList<>();
-    private List<Product> filteredProducts = new ArrayList<>();
-    private List<Product> displayedProducts = new ArrayList<>();
-    private List<QuantityUnit> quantityUnits = new ArrayList<>();
-    private List<Location> locations = new ArrayList<>();
-    private List<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Product> filteredProducts = new ArrayList<>();
+    private ArrayList<Product> displayedProducts = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 
     private String search = "";
     private String filterProductGroupId = "";
@@ -312,7 +312,7 @@ public class MasterProductsFragment extends Fragment
         filteredProducts = products;
         // PRODUCT GROUP
         if(!filterProductGroupId.equals("")) {
-            List<Product> tempProducts = new ArrayList<>();
+            ArrayList<Product> tempProducts = new ArrayList<>();
             for(Product product : filteredProducts) {
                 if(filterProductGroupId.equals(product.getProductGroupId())) {
                     tempProducts.add(product);
@@ -339,7 +339,7 @@ public class MasterProductsFragment extends Fragment
         if(search.equals("")) {
             filterProducts();
         } else { // only if search contains something
-            List<Product> searchedProducts = new ArrayList<>();
+            ArrayList<Product> searchedProducts = new ArrayList<>();
             for(Product product : filteredProducts) {
                 String name = product.getName();
                 String description = product.getDescription();

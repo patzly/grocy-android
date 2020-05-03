@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -22,12 +22,12 @@ public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuanti
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<QuantityUnit> quantityUnits;
+    private ArrayList<QuantityUnit> quantityUnits;
     private MasterQuantityUnitAdapterListener listener;
 
     public MasterQuantityUnitAdapter(
             Context context,
-            List<QuantityUnit> quantityUnits,
+            ArrayList<QuantityUnit> quantityUnits,
             MasterQuantityUnitAdapterListener listener
     ) {
         this.context = context;

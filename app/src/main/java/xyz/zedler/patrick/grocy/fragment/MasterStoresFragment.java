@@ -59,10 +59,10 @@ public class MasterStoresFragment extends Fragment
     private WebRequest request;
     private MasterStoreAdapter masterStoreAdapter;
 
-    private List<Store> stores = new ArrayList<>();
-    private List<Store> filteredStores = new ArrayList<>();
-    private List<Store> displayedStores = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Store> stores = new ArrayList<>();
+    private ArrayList<Store> filteredStores = new ArrayList<>();
+    private ArrayList<Store> displayedStores = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
 
     private String search = "";
     private boolean sortAscending = true;
@@ -263,7 +263,7 @@ public class MasterStoresFragment extends Fragment
         if(search.equals("")) {
             filterStores();
         } else { // only if search contains something
-            List<Store> searchedStores = new ArrayList<>();
+            ArrayList<Store> searchedStores = new ArrayList<>();
             for(Store store : filteredStores) {
                 String name = store.getName();
                 String description = store.getDescription();

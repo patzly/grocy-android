@@ -78,16 +78,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private WebRequest request;
     private StockItemAdapter stockItemAdapter;
 
-    private List<StockItem> stockItems = new ArrayList<>();
-    private List<StockItem> expiringItems = new ArrayList<>();
-    private List<StockItem> expiredItems = new ArrayList<>();
-    private List<MissingItem> missingItems = new ArrayList<>();
-    private List<StockItem> missingStockItems;
-    private List<StockItem> filteredItems = new ArrayList<>();
-    private List<StockItem> displayedItems = new ArrayList<>();
-    private List<QuantityUnit> quantityUnits = new ArrayList<>();
-    private List<Location> locations = new ArrayList<>();
-    private List<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<StockItem> stockItems = new ArrayList<>();
+    private ArrayList<StockItem> expiringItems = new ArrayList<>();
+    private ArrayList<StockItem> expiredItems = new ArrayList<>();
+    private ArrayList<MissingItem> missingItems = new ArrayList<>();
+    private ArrayList<StockItem> missingStockItems;
+    private ArrayList<StockItem> filteredItems = new ArrayList<>();
+    private ArrayList<StockItem> displayedItems = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 
     private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
     private String search = "";
@@ -564,7 +564,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(DEBUG) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
         // LOCATION
         if(filterLocationId != -1) {
-            List<StockItem> tempItems = new ArrayList<>();
+            ArrayList<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 if(filterLocationId == stockItem.getProduct().getLocationId()) {
                     tempItems.add(stockItem);
@@ -574,7 +574,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
         // PRODUCT GROUP
         if(!filterProductGroupId.equals("")) {
-            List<StockItem> tempItems = new ArrayList<>();
+            ArrayList<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 if(filterProductGroupId.equals(stockItem.getProduct().getProductGroupId())) {
                     tempItems.add(stockItem);
@@ -600,7 +600,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(search.equals("")) {
             filterItems(itemsToDisplay);
         } else { // only if search contains something
-            List<StockItem> searchedItems = new ArrayList<>();
+            ArrayList<StockItem> searchedItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 String name = stockItem.getProduct().getName();
                 String description = stockItem.getProduct().getDescription();

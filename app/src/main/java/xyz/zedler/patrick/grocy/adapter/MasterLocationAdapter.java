@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -22,12 +22,12 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
     private final static boolean DEBUG = false;
 
     private Context context;
-    private List<Location> locations;
+    private ArrayList<Location> locations;
     private MasterLocationAdapterListener listener;
 
     public MasterLocationAdapter(
             Context context,
-            List<Location> locations,
+            ArrayList<Location> locations,
             MasterLocationAdapterListener listener
     ) {
         this.context = context;
