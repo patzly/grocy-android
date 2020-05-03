@@ -525,17 +525,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
-                updateFab(
-                        R.drawable.ic_round_backup,
-                        R.string.action_save,
-                        Constants.FAB.TAG.SAVE,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == MasterProductEditSimpleFragment.class) {
-                                ((MasterProductEditSimpleFragment) fragmentCurrent).saveProduct();
-                            }
-                        }
-                );
                 break;
             case Constants.UI.MASTER_LOCATION_EDIT:
                 scrollBehavior.setUpScroll(R.id.scroll_master_location);
@@ -677,7 +666,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateFab(
+    public void updateFab(
             @DrawableRes int resId,
             @StringRes int tooltipStringId,
             String tag,
@@ -758,7 +747,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
                 if(((MasterProductEditSimpleFragment) fragmentCurrent)
-                        .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                        .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)
+                ) {
                     dismissFragment(fragmentCurrent.getArguments());
                 } else {
                     dismissFragment();
@@ -986,17 +976,6 @@ public class MainActivity extends AppCompatActivity {
                 });
                 animOut.start();
             } else {
-                /*new BitmapDrawable(
-                                getResources(),
-                                BitmapUtil.getFromDrawableWithNumber(
-                                        this,
-                                        R.drawable.ic_round_shopping_cart,
-                                        3,
-                                        7.3f,
-                                        -1.5f,
-                                        8
-                                )
-                        )*/
                 fab.setImageDrawable(icon);
                 fab.setTag(tag);
             }

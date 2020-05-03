@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -60,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -89,6 +91,9 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private ProductGroup editProductGroup;
     private QuantityUnit editQuantityUnit;
 
+    private String createPurchaseName, createPurchaseBarcodes, createPurchaseBestBeforeDays;
+    private int createPurchaseAmount;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialAutoCompleteTextView autoCompleteTextViewParentProduct;
     private LinearLayout linearLayoutBarcodeContainer;
@@ -110,7 +115,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private String selectedProductGroupId, intendedAction;
     private double minAmount;
     private int bestBeforeDays;
-    private boolean isRefresh =false;
+    private boolean isRefresh = false;
 
     @Override
     public View onCreateView(
@@ -406,18 +411,15 @@ public class MasterProductEditSimpleFragment extends Fragment {
             editProductGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
             editQuantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
             fillWithEditReferences();
-        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
-            if(bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
-                editTextName.setText(bundle.getString(Constants.ARGUMENT.PRODUCT_NAME));
-            }
-            if(bundle.getString(Constants.ARGUMENT.BARCODE) != null) {
-                InputChip inputChipBarcode = new InputChip(
-                        activity,
-                        bundle.getString(Constants.ARGUMENT.BARCODE),
-                        false,
-                        () -> { });
-                linearLayoutBarcodeContainer.addView(inputChipBarcode);
-            }
+        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
+                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
+            createPurchaseName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+            createPurchaseBarcodes = bundle.getString(Constants.ARGUMENT.BARCODES);
+            createPurchaseBestBeforeDays = bundle.getString(
+                    Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS
+            );
+            createPurchaseAmount = bundle.getInt(Constants.ARGUMENT.AMOUNT);
+            fillWithPurchaseReferences();
         }
 
         // START
@@ -427,6 +429,49 @@ public class MasterProductEditSimpleFragment extends Fragment {
         // UPDATE UI
 
         activity.updateUI(toString(), TAG);
+
+        // UPDATE FAB SEPARATELY
+
+        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
+            activity.updateFab(
+                    new BitmapDrawable(
+                            getResources(),
+                            BitmapUtil.getFromDrawableWithNumber(
+                                    activity,
+                                    R.drawable.ic_round_shopping_cart,
+                                    createPurchaseAmount,
+                                    7.3f,
+                                    -1.5f,
+                                    8
+                            )
+                    ),
+                    R.string.action_create_purchase,
+                    Constants.FAB.TAG.CREATE_PURCHASE,
+                    true,
+                    () -> {
+                        if(activity.getCurrentFragment().getClass()
+                                == MasterProductEditSimpleFragment.class
+                        ) {
+                            //((MasterProductEditSimpleFragment) activity.getCurrentFragment()).saveProduct();
+                        }
+                    }
+            );
+        } else {
+            activity.updateFab(
+                    R.drawable.ic_round_backup,
+                    R.string.action_save,
+                    Constants.FAB.TAG.SAVE,
+                    true,
+                    () -> {
+                        if(activity.getCurrentFragment().getClass()
+                                == MasterProductEditSimpleFragment.class
+                        ) {
+                            ((MasterProductEditSimpleFragment) activity.getCurrentFragment())
+                                    .saveProduct();
+                        }
+                    }
+            );
+        }
     }
 
     private void load() {
@@ -561,8 +606,15 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
         updateEditReferences();
 
-        if(isRefresh && editProduct != null) {
-            fillWithEditReferences();
+        if(isRefresh
+                && (editProduct != null
+                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE))
+        ) {
+            if(intendedAction.equals(Constants.ACTION.EDIT)) {
+                fillWithEditReferences();
+            } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                fillWithPurchaseReferences();
+            }
         } else {
             resetAll();
         }
@@ -766,6 +818,29 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 selectedQuantityUnitId = editQuantityUnit.getId();
             }
         }
+    }
+
+    private void fillWithPurchaseReferences() {
+        Bundle bundle = getArguments();
+        if(bundle == null) return;
+
+        clearInputFocusAndErrors();
+
+        editTextName.setText(createPurchaseName);
+
+        if(createPurchaseBarcodes != null) {
+            List<String> barcodes = Arrays.asList(createPurchaseBarcodes.split(","));
+            linearLayoutBarcodeContainer.removeAllViews();
+            for(int i = 0; i < barcodes.size(); i++) {
+                InputChip inputChipBarcode = new InputChip(
+                        activity,
+                        barcodes.get(i).trim(),
+                        false,
+                        () -> { });
+                linearLayoutBarcodeContainer.addView(inputChipBarcode);
+            }
+        }
+        editTextDays.setText(createPurchaseBestBeforeDays);
     }
 
     private void clearInputFocusAndErrors() {
@@ -998,11 +1073,20 @@ public class MasterProductEditSimpleFragment extends Fragment {
         if(editProduct != null) return;
         clearInputFocusAndErrors();
 
-        Bundle bundle = getArguments();
-        if(bundle == null || bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) == null) {
-            editTextName.setText(null);
-        }
-        if(bundle == null || bundle.getString(Constants.ARGUMENT.BARCODE) == null) {
+        editTextName.setText(createPurchaseName);
+
+        if(createPurchaseBarcodes != null) {
+            List<String> barcodes = Arrays.asList(createPurchaseBarcodes.split(","));
+            linearLayoutBarcodeContainer.removeAllViews();
+            for(int i = 0; i < barcodes.size(); i++) {
+                InputChip inputChipBarcode = new InputChip(
+                        activity,
+                        barcodes.get(i).trim(),
+                        false,
+                        () -> { });
+                linearLayoutBarcodeContainer.addView(inputChipBarcode);
+            }
+        } else {
             if(linearLayoutBarcodeContainer.getChildCount() > 0) {
                 for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
                     InputChip inputChip = (InputChip)linearLayoutBarcodeContainer.getChildAt(i);
@@ -1025,7 +1109,12 @@ public class MasterProductEditSimpleFragment extends Fragment {
         }
 
         editTextMinAmount.setText(String.valueOf(0));
-        editTextDays.setText(String.valueOf(0));
+
+        if(createPurchaseBestBeforeDays != null) {
+            editTextDays.setText(createPurchaseBestBeforeDays);
+        } else {
+            editTextDays.setText(String.valueOf(0));
+        }
 
         String productGroupId = sharedPrefs.getString(
                 Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,

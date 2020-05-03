@@ -632,7 +632,7 @@ public class PurchaseFragment extends Fragment {
                         autoCompleteTextViewProduct.setText(barcode);
                         nameAutoFilled = true;
                         Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
+                        bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
                         activity.showBottomSheet(
                                 new InputBarcodeBottomSheetDialogFragment(), bundle
                         );

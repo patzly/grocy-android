@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.adapter.MissingBatchProductAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -111,14 +112,6 @@ public class PurchaseBatchFragment extends Fragment implements MissingBatchProdu
                 )
         );
 
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
-                        missingBatchProducts.toString(),
-                        Snackbar.LENGTH_LONG
-                )
-        );
-
         // UPDATE UI
 
         activity.updateUI(Constants.UI.BATCH_PURCHASE, TAG);
@@ -181,8 +174,15 @@ public class PurchaseBatchFragment extends Fragment implements MissingBatchProdu
 
     @Override
     public void onItemRowClicked(int position) {
-        // STOCK ITEM CLICK
-        //showProductOverview(missingBatchProducts.get(position));
+        MissingBatchProduct batchProduct = missingBatchProducts.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
+        bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, batchProduct.getProductName());
+        bundle.putString(Constants.ARGUMENT.BARCODES, batchProduct.getBarcodes());
+        bundle.putString(Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS, String.valueOf(DateUtil.getDaysFromNow(Constants.DATE.NEVER_EXPIRES)));
+        bundle.putInt(Constants.ARGUMENT.AMOUNT, batchProduct.getAmount());
+
+        activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
     }
 
     private void refreshAdapter(MissingBatchProductAdapter adapter) {

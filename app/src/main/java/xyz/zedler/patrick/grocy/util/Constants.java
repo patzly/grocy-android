@@ -108,6 +108,7 @@ public final class Constants {
         public final static String EDIT = "action_edit";
         public final static String LINK = "action_link";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
+        public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
     }
 
     public final static class ARGUMENT {
@@ -138,9 +139,12 @@ public final class Constants {
         public final static String SELECTED_DATE = "selected_date";
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
+        public final static String BARCODES = "barcodes";
         public final static String BATCH_ITEMS = "batch_items";
         public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
+        public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
+        public final static String AMOUNT = "amount";
     }
 
     public final static class FAB {
@@ -154,7 +158,7 @@ public final class Constants {
             public final static String SCAN = "scan";
             public final static String CONSUME = "consume";
             public final static String PURCHASE = "purchase";
-            public final static String PURCHASE_NEW_BATCH = "purchase_new_batch_product";
+            public final static String CREATE_PURCHASE = "create_and_purchase";
             public final static String SAVE = "save";
         }
     }

@@ -337,7 +337,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void addBatchItem(String inputText, String barcode) {
-        missingBatchProducts.add(new MissingBatchProduct(inputText, "abc", barcode, 1));
+        missingBatchProducts.add(new MissingBatchProduct(inputText, barcode, null, 1)); // TODO: BBD
         productNames.add(inputText);
         textViewCount.setText(String.valueOf(missingBatchProducts.size()));
     }
