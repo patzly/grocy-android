@@ -59,10 +59,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
-import xyz.zedler.patrick.grocy.model.StockEntries;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.model.StockLocations;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -83,8 +81,8 @@ public class ConsumeFragment extends Fragment {
     private ProductDetails productDetails;
 
     private List<Product> products = new ArrayList<>();
-    private List<StockLocation> stockLocations = new ArrayList<>();
-    private List<StockEntry> stockEntries = new ArrayList<>();
+    private ArrayList<StockLocation> stockLocations = new ArrayList<>();
+    private ArrayList<StockEntry> stockEntries = new ArrayList<>();
     private List<String> productNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -241,10 +239,7 @@ public class ConsumeFragment extends Fragment {
             startAnimatedIcon(R.id.image_consume_location);
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(
-                        Constants.ARGUMENT.STOCK_LOCATIONS,
-                        new StockLocations(stockLocations)
-                );
+                bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
                 activity.showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
@@ -261,10 +256,7 @@ public class ConsumeFragment extends Fragment {
             startAnimatedIcon(R.id.image_consume_specific);
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(
-                        Constants.ARGUMENT.STOCK_ENTRIES,
-                        new StockEntries(stockEntries)
-                );
+                bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES, stockEntries);
                 bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
                 activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
             } else {
@@ -474,7 +466,7 @@ public class ConsumeFragment extends Fragment {
                 response -> {
                     stockLocations = gson.fromJson(
                             response,
-                            new TypeToken<List<StockLocation>>(){}.getType()
+                            new TypeToken<ArrayList<StockLocation>>(){}.getType()
                     );
                     SortUtil.sortStockLocationItemsByName(stockLocations);
                 }, error -> {}
@@ -487,10 +479,9 @@ public class ConsumeFragment extends Fragment {
                 response -> {
                     stockEntries = gson.fromJson(
                             response,
-                            new TypeToken<List<StockEntry>>(){}.getType()
+                            new TypeToken<ArrayList<StockEntry>>(){}.getType()
                     );
                     stockEntries.add(0, new StockEntry());
-                    //SortUtil.sortStockLocationItemsByName(stockLocations);
                 }, error -> {}
         );
     }

@@ -59,9 +59,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.ProductGroups;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnits;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -82,8 +80,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
     private List<Product> products = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
-    private List<ProductGroup> productGroups = new ArrayList<>();
-    private List<QuantityUnit> quantityUnits = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
     private List<String> productNames = new ArrayList<>();
 
     private Product editProduct, editParentProduct, productParent;
@@ -360,10 +358,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             startAnimatedIcon(R.id.image_master_product_edit_simple_product_group);
             if(!productGroups.isEmpty()) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(
-                        Constants.ARGUMENT.PRODUCT_GROUPS,
-                        new ProductGroups(productGroups)
-                );
+                bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, productGroups);
                 bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedProductGroupId);
                 activity.showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundle);
             }
@@ -379,10 +374,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             startAnimatedIcon(R.id.image_master_product_edit_simple_quantity_unit);
             if(!quantityUnits.isEmpty()) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(
-                        Constants.ARGUMENT.QUANTITY_UNITS,
-                        new QuantityUnits(quantityUnits)
-                );
+                bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQuantityUnitId);
                 activity.showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundle);
             }
@@ -500,7 +492,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 response -> {
                     locations = gson.fromJson(
                             response,
-                            new TypeToken<List<Location>>(){}.getType()
+                            new TypeToken<ArrayList<Location>>(){}.getType()
                     );
                     SortUtil.sortLocationsByName(locations, true);
                 },
@@ -516,7 +508,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 response -> {
                     productGroups = gson.fromJson(
                             response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
+                            new TypeToken<ArrayList<ProductGroup>>(){}.getType()
                     );
                     SortUtil.sortProductGroupsByName(productGroups, true);
                     // Insert NONE as first element
@@ -537,7 +529,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 response -> {
                     quantityUnits = gson.fromJson(
                             response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
+                            new TypeToken<ArrayList<QuantityUnit>>(){}.getType()
                     );
                     SortUtil.sortQuantityUnitsByName(quantityUnits, true);
                 },

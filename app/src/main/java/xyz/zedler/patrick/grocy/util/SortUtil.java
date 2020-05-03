@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class SortUtil {
         );
     }
 
-    public static void sortStockLocationItemsByName(List<StockLocation> stockLocations) {
+    public static void sortStockLocationItemsByName(ArrayList<StockLocation> stockLocations) {
         if(stockLocations == null) return;
         Collections.sort(
                 stockLocations,
@@ -64,7 +65,7 @@ public class SortUtil {
         );
     }
 
-    public static void sortLocationsByName(List<Location> locations, boolean ascending) {
+    public static void sortLocationsByName(ArrayList<Location> locations, boolean ascending) {
         if(locations == null) return;
         Collections.sort(
                 locations,
@@ -85,7 +86,7 @@ public class SortUtil {
     }
 
     public static void sortProductGroupsByName(
-            List<ProductGroup> productGroups,
+            ArrayList<ProductGroup> productGroups,
             boolean ascending
     ) {
         if(productGroups == null) return;
@@ -98,7 +99,7 @@ public class SortUtil {
     }
 
     public static void sortQuantityUnitsByName(
-            List<QuantityUnit> quantityUnits,
+            ArrayList<QuantityUnit> quantityUnits,
             boolean ascending
     ) {
         if(quantityUnits == null) return;

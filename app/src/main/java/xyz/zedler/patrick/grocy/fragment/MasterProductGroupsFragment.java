@@ -59,10 +59,10 @@ public class MasterProductGroupsFragment extends Fragment
     private WebRequest request;
     private MasterProductGroupAdapter masterProductGroupAdapter;
 
-    private List<ProductGroup> productGroups = new ArrayList<>();
-    private List<ProductGroup> filteredProductGroups = new ArrayList<>();
-    private List<ProductGroup> displayedProductGroups = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<ProductGroup> filteredProductGroups = new ArrayList<>();
+    private ArrayList<ProductGroup> displayedProductGroups = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
 
     private String search = "";
     private boolean sortAscending = true;
@@ -263,7 +263,7 @@ public class MasterProductGroupsFragment extends Fragment
         if(search.equals("")) {
             filterProductGroups();
         } else { // only if search contains something
-            List<ProductGroup> searchedProductGroups = new ArrayList<>();
+            ArrayList<ProductGroup> searchedProductGroups = new ArrayList<>();
             for(ProductGroup productGroup : filteredProductGroups) {
                 String name = productGroup.getName();
                 String description = productGroup.getDescription();

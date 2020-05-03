@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
-import xyz.zedler.patrick.grocy.model.ProductGroups;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ProductGroupsBottomSheetDialogFragment
@@ -31,7 +33,7 @@ public class ProductGroupsBottomSheetDialogFragment
     private final static String TAG = "ProductGroupBottomSheet";
 
     private MainActivity activity;
-    private ProductGroups productGroups;
+    private ArrayList<ProductGroup> productGroups;
 
     @NonNull
     @Override
@@ -53,7 +55,7 @@ public class ProductGroupsBottomSheetDialogFragment
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        productGroups = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUPS);
+        productGroups = bundle.getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
         String selected = bundle.getString(Constants.ARGUMENT.SELECTED_ID, null);
 
         TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);

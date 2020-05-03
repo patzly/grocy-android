@@ -11,21 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.ProductGroups;
 
 public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapter.ViewHolder> {
 
     private final static String TAG = ProductGroupAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private ProductGroups productGroups;
+    private ArrayList<ProductGroup> productGroups;
     private String selectedId;
     private ProductGroupAdapterListener listener;
 
     public ProductGroupAdapter(
-            ProductGroups productGroups,
+            ArrayList<ProductGroup> productGroups,
             String selectedId,
             ProductGroupAdapterListener listener
     ) {

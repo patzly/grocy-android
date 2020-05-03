@@ -49,9 +49,9 @@ public class MasterQuantityUnitFragment extends Fragment {
     private WebRequest request;
 
     private QuantityUnit editQuantityUnit;
-    private List<QuantityUnit> quantityUnits = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
-    private List<String> quantityUnitNames = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<String> quantityUnitNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputName, textInputNamePlural, textInputDescription;
@@ -190,7 +190,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                 response -> {
                     quantityUnits = gson.fromJson(
                             response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
+                            new TypeToken<ArrayList<QuantityUnit>>(){}.getType()
                     );
                     SortUtil.sortQuantityUnitsByName(quantityUnits, true);
                     quantityUnitNames = getQuantityUnitNames();
@@ -240,8 +240,8 @@ public class MasterQuantityUnitFragment extends Fragment {
         }
     }
 
-    private List<String> getQuantityUnitNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getQuantityUnitNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(quantityUnits != null) {
             for(QuantityUnit quantityUnit : quantityUnits) {
                 if(editQuantityUnit != null) {

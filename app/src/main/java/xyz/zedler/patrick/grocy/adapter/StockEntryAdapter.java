@@ -12,8 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.StockEntries;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -26,13 +27,13 @@ public class StockEntryAdapter
     private final static boolean DEBUG = false;
 
     private Context context;
-    private StockEntries stockEntries;
+    private ArrayList<StockEntry> stockEntries;
     private String selectedId;
     private StockEntryAdapterListener listener;
 
     public StockEntryAdapter(
             Context context,
-            StockEntries stockEntries,
+            ArrayList<StockEntry> stockEntries,
             String selectedId,
             StockEntryAdapterListener listener
     ) {

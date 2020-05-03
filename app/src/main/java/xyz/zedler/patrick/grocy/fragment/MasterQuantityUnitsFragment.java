@@ -59,10 +59,10 @@ public class MasterQuantityUnitsFragment extends Fragment
     private WebRequest request;
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
 
-    private List<QuantityUnit> quantityUnits = new ArrayList<>();
-    private List<QuantityUnit> filteredQuantityUnits = new ArrayList<>();
-    private List<QuantityUnit> displayedQuantityUnits = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
+    private ArrayList<QuantityUnit> filteredQuantityUnits = new ArrayList<>();
+    private ArrayList<QuantityUnit> displayedQuantityUnits = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
 
     private String search = "";
     private boolean sortAscending = true;
@@ -237,7 +237,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
-                        new TypeToken<List<Product>>(){}.getType()
+                        new TypeToken<ArrayList<Product>>(){}.getType()
                 ), error -> {}
         );
     }
@@ -263,7 +263,7 @@ public class MasterQuantityUnitsFragment extends Fragment
         if(search.equals("")) {
             filterQuantityUnits();
         } else { // only if search contains something
-            List<QuantityUnit> searchedQuantityUnits = new ArrayList<>();
+            ArrayList<QuantityUnit> searchedQuantityUnits = new ArrayList<>();
             for(QuantityUnit quantityUnit : filteredQuantityUnits) {
                 String name = quantityUnit.getName();
                 String description = quantityUnit.getDescription();

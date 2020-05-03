@@ -11,21 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnits;
 
 public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapter.ViewHolder> {
 
     private final static String TAG = QuantityUnitAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private QuantityUnits quantityUnits;
+    private ArrayList<QuantityUnit> quantityUnits;
     private int selectedId;
     private QuantityUnitAdapterListener listener;
 
     public QuantityUnitAdapter(
-            QuantityUnits quantityUnits,
+            ArrayList<QuantityUnit> quantityUnits,
             int selectedId,
             QuantityUnitAdapterListener listener
     ) {

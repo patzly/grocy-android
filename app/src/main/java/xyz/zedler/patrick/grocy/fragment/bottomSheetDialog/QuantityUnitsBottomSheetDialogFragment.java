@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
-import xyz.zedler.patrick.grocy.model.QuantityUnits;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class QuantityUnitsBottomSheetDialogFragment
@@ -31,7 +33,7 @@ public class QuantityUnitsBottomSheetDialogFragment
     private final static String TAG = "QuantityUnitsBottomSheet";
 
     private MainActivity activity;
-    private QuantityUnits quantityUnits;
+    private ArrayList<QuantityUnit> quantityUnits;
 
     @NonNull
     @Override
@@ -53,7 +55,7 @@ public class QuantityUnitsBottomSheetDialogFragment
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        quantityUnits = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNITS);
+        quantityUnits = bundle.getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
         int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);

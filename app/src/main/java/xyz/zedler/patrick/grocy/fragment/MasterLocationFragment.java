@@ -51,9 +51,9 @@ public class MasterLocationFragment extends Fragment {
     private WebRequest request;
 
     private Location editLocation;
-    private List<Location> locations = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
-    private List<String> locationNames = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<String> locationNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputName, textInputDescription;
@@ -192,7 +192,7 @@ public class MasterLocationFragment extends Fragment {
                 response -> {
                     locations = gson.fromJson(
                             response,
-                            new TypeToken<List<Location>>(){}.getType()
+                            new TypeToken<ArrayList<Location>>(){}.getType()
                     );
                     SortUtil.sortLocationsByName(locations, true);
                     locationNames = getLocationNames();
@@ -242,8 +242,8 @@ public class MasterLocationFragment extends Fragment {
         }
     }
 
-    private List<String> getLocationNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getLocationNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(locations != null) {
             for(Location location : locations) {
                 if(editLocation != null) {
@@ -295,7 +295,7 @@ public class MasterLocationFragment extends Fragment {
             jsonObject.put("description", editTextDescription.getText().toString().trim());
             jsonObject.put("is_freezer", checkBoxIsFreezer.isChecked());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveLocation: " + e);;
+            if(DEBUG) Log.e(TAG, "saveLocation: " + e);
         }
         if(editLocation != null) {
             request.put(

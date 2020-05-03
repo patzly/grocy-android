@@ -49,9 +49,9 @@ public class MasterProductGroupFragment extends Fragment {
     private WebRequest request;
 
     private ProductGroup editProductGroup;
-    private List<ProductGroup> productGroups = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
-    private List<String> productGroupNames = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<String> productGroupNames = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputName, textInputDescription;
@@ -183,7 +183,7 @@ public class MasterProductGroupFragment extends Fragment {
                 response -> {
                     productGroups = gson.fromJson(
                             response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
+                            new TypeToken<ArrayList<ProductGroup>>(){}.getType()
                     );
                     SortUtil.sortProductGroupsByName(productGroups, true);
                     productGroupNames = getProductGroupNames();
@@ -233,8 +233,8 @@ public class MasterProductGroupFragment extends Fragment {
         }
     }
 
-    private List<String> getProductGroupNames() {
-        List<String> names = new ArrayList<>();
+    private ArrayList<String> getProductGroupNames() {
+        ArrayList<String> names = new ArrayList<>();
         if(productGroups != null) {
             for(ProductGroup productGroup : productGroups) {
                 if(editProductGroup != null) {
@@ -283,7 +283,7 @@ public class MasterProductGroupFragment extends Fragment {
             jsonObject.put("name", editTextName.getText().toString().trim());
             jsonObject.put("description", editTextDescription.getText().toString().trim());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveProductGroup: " + e);;
+            if(DEBUG) Log.e(TAG, "saveProductGroup: " + e);
         }
         if(editProductGroup != null) {
             request.put(

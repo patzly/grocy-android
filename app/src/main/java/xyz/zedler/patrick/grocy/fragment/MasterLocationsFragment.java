@@ -59,10 +59,10 @@ public class MasterLocationsFragment extends Fragment
     private WebRequest request;
     private MasterLocationAdapter masterLocationAdapter;
 
-    private List<Location> locations = new ArrayList<>();
-    private List<Location> filteredLocations = new ArrayList<>();
-    private List<Location> displayedLocations = new ArrayList<>();
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Location> filteredLocations = new ArrayList<>();
+    private ArrayList<Location> displayedLocations = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
 
     private String search = "";
     private boolean sortAscending = true;
@@ -263,7 +263,7 @@ public class MasterLocationsFragment extends Fragment
         if(search.equals("")) {
             filterLocations();
         } else { // only if search contains something
-            List<Location> searchedLocations = new ArrayList<>();
+            ArrayList<Location> searchedLocations = new ArrayList<>();
             for(Location location : filteredLocations) {
                 String name = location.getName();
                 String description = location.getDescription();

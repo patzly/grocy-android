@@ -11,10 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.model.StockLocations;
 
 public class StockLocationAdapter
         extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
@@ -22,13 +23,13 @@ public class StockLocationAdapter
     private final static String TAG = StockLocationAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private StockLocations stockLocations;
+    private ArrayList<StockLocation> stockLocations;
     private ProductDetails productDetails;
     private int selectedId;
     private StockLocationAdapterListener listener;
 
     public StockLocationAdapter(
-            StockLocations stockLocations,
+            ArrayList<StockLocation> stockLocations,
             ProductDetails productDetails,
             int selectedId,
             StockLocationAdapterListener listener

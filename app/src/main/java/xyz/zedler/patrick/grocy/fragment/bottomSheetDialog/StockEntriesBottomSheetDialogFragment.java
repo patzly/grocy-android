@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.model.StockEntries;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class StockEntriesBottomSheetDialogFragment
@@ -30,7 +32,7 @@ public class StockEntriesBottomSheetDialogFragment
     private final static String TAG = "ProductEntriesBottomSheet";
 
     private MainActivity activity;
-    private StockEntries stockEntries;
+    private ArrayList<StockEntry> stockEntries;
 
     @NonNull
     @Override
@@ -52,7 +54,7 @@ public class StockEntriesBottomSheetDialogFragment
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        stockEntries = bundle.getParcelable(Constants.ARGUMENT.STOCK_ENTRIES);
+        stockEntries = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES);
         String selectedStockId = bundle.getString(Constants.ARGUMENT.SELECTED_ID);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);
