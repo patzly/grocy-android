@@ -23,8 +23,6 @@ public final class Constants {
         public final static String DARK_MODE = "force_dark_mode";
         public final static String ANIM_UI_UPDATE = "animated_ui_update";
 
-
-
         public final static String WEAR_POP_UP_COUNT = "wear_pop_up_count";
         public final static String SHOW_HELP = "show_help";
         public final static String SHOW_GUIDELINE = "show_guideline";
@@ -156,6 +154,7 @@ public final class Constants {
             public final static String SCAN = "scan";
             public final static String CONSUME = "consume";
             public final static String PURCHASE = "purchase";
+            public final static String PURCHASE_NEW_BATCH = "purchase_new_batch_product";
             public final static String SAVE = "save";
         }
     }

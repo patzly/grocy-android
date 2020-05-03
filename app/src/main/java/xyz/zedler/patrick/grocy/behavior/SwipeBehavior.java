@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -246,7 +245,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         float buttonWidthMax = BUTTON_WIDTH - cornerRadius / buttons.size();
 
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(context, R.color.secondary));
+        paint.setColor(ContextCompat.getColor(context, R.color.on_background_variant));
 
         // draw background
 
@@ -354,12 +353,12 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             // DRAW ROUND BACKGROUND
 
             Paint paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paintBg.setColor(Color.parseColor("#000000"));
-            paintBg.setAlpha((int) (20 * (animFriction <= 1 ? animFriction : 1)));
+            paintBg.setColor(ContextCompat.getColor(context, R.color.on_background));
+            paintBg.setAlpha((int) (12 * (animFriction <= 1 ? animFriction : 1)));
             canvas.drawCircle(
                     rect.centerX() + offsetX,
                     rect.centerY(),
-                    UnitUtil.getDp(context, 20 * (animFriction < 1 ? animFriction : 1)),
+                    UnitUtil.getDp(context, 20 * (animFriction <= 1 ? animFriction : 1)),
                     paintBg
             );
 
@@ -368,7 +367,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             Paint paintIcon = new Paint();
             paintIcon.setColorFilter(
                     new PorterDuffColorFilter(
-                            ContextCompat.getColor(context, R.color.on_secondary),
+                            ContextCompat.getColor(context, R.color.icon),
                             PorterDuff.Mode.SRC_IN
                     )
             );

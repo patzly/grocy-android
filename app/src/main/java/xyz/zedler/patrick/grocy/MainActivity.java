@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -677,18 +678,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateFab(
-            @DrawableRes int iconResId,
+            @DrawableRes int resId,
             @StringRes int tooltipStringId,
             String tag,
             boolean animated,
             Runnable onClick
     ) {
-        replaceFabIcon(iconResId, tag, animated);
+        updateFab(
+                ContextCompat.getDrawable(this, resId),
+                tooltipStringId,
+                tag,
+                animated,
+                onClick
+        );
+    }
+
+    public void updateFab(
+            Drawable icon,
+            @StringRes int tooltipStringId,
+            String tag,
+            boolean animated,
+            Runnable onClick
+    ) {
+        replaceFabIcon(icon, tag, animated);
         fab.setOnClickListener(v -> {
             startAnimatedIcon(fab.getDrawable());
             onClick.run();
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             fab.setTooltipText(getString(tooltipStringId));
         }
     }
@@ -939,7 +956,11 @@ public class MainActivity extends AppCompatActivity {
         return fragmentCurrent;
     }
 
-    private void replaceFabIcon(@DrawableRes int icon, String tag, boolean animated) {
+    private void replaceFabIcon(@DrawableRes int resId, String tag, boolean animated) {
+        replaceFabIcon(ContextCompat.getDrawable(this, resId), tag, animated);
+    }
+
+    private void replaceFabIcon(Drawable icon, String tag, boolean animated) {
         if(!tag.equals(fab.getTag())) {
             if(animated) {
                 int duration = 400;
@@ -952,7 +973,8 @@ public class MainActivity extends AppCompatActivity {
                 animOut.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        fab.setImageResource(icon);
+                        fab.setImageDrawable(icon);
+                        fab.setTag(tag);
                         ValueAnimator animIn = ValueAnimator.ofInt(0, 255);
                         animIn.addUpdateListener(
                                 anim -> fab.setImageAlpha((int) (anim.getAnimatedValue()))
@@ -964,8 +986,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 animOut.start();
             } else {
-                /*fab.setImageDrawable(
-                        new BitmapDrawable(
+                /*new BitmapDrawable(
                                 getResources(),
                                 BitmapUtil.getFromDrawableWithNumber(
                                         this,
@@ -975,12 +996,10 @@ public class MainActivity extends AppCompatActivity {
                                         -1.5f,
                                         8
                                 )
-                        )
-                );*/
-                fab.setImageResource(icon);
+                        )*/
+                fab.setImageDrawable(icon);
+                fab.setTag(tag);
             }
-            fab.setTag(tag);
-            if(DEBUG) Log.i(TAG, "replaceFabIcon: replaced, animated = " + animated);
         } else {
             if(DEBUG) Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
         }
