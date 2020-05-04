@@ -156,6 +156,13 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 neverExpires.setChecked(false);
                 calendar.add(Calendar.DAY_OF_MONTH, defaultBestBeforeDays);
             }
+
+        } else {
+
+            datePicker.setEnabled(false);
+            datePicker.setAlpha(0.5f);
+            neverExpires.setChecked(true);
+
         }
 
         datePicker.updateDate(
