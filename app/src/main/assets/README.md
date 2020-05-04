@@ -13,6 +13,7 @@ TODO:
 - edit product from product overview
 - id naming convention: "frame_back_..." to "frame_..._back" + close + linear_app_bar_..._default to linear_..._app_bar_default
 - consume & purchase: when entering letters of a product name, all product names containing these letters should appear
+- price icon in purchase dialog
 
 
 ILLUSTRATIONS
