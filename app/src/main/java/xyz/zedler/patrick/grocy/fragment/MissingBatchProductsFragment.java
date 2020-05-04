@@ -34,9 +34,9 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class PurchaseBatchFragment extends Fragment implements MissingBatchProductAdapter.BatchItemAdapterListener {
+public class MissingBatchProductsFragment extends Fragment implements MissingBatchProductAdapter.BatchItemAdapterListener {
 
-    private final static String TAG = Constants.UI.BATCH_PURCHASE;
+    private final static String TAG = Constants.UI.MISSING_BATCH_PRODUCTS;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -114,7 +114,7 @@ public class PurchaseBatchFragment extends Fragment implements MissingBatchProdu
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.BATCH_PURCHASE, TAG);
+        activity.updateUI(Constants.UI.MISSING_BATCH_PRODUCTS, TAG);
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {

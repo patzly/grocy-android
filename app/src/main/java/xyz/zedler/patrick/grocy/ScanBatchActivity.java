@@ -124,7 +124,7 @@ public class ScanBatchActivity extends AppCompatActivity
         buttonClose.setTooltipText(getString(R.string.action_close));
 
         textViewCount = findViewById(R.id.text_scan_batch_count);
-        textViewCount.setText(String.valueOf(0));
+        refreshCounter();
 
         MaterialCardView cardViewCount = findViewById(R.id.card_scan_batch_count);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -495,9 +495,22 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void addBatchItem(String inputText, String barcode) {
-        missingBatchProducts.add(new MissingBatchProduct(inputText, barcode, null, 1)); // TODO: BBD
+        // TODO: BBD + why amount 1?
+        missingBatchProducts.add(
+                new MissingBatchProduct(
+                        inputText,
+                        barcode,
+                        null,
+                        1
+                )
+        );
         productNames.add(inputText);
-        textViewCount.setText(String.valueOf(missingBatchProducts.size()));
+        refreshCounter();
+    }
+
+    private void refreshCounter() {
+        String text = missingBatchProducts.size() + " ";
+        textViewCount.setText(text);
     }
 
     public void purchaseBatchItem(MissingBatchProduct missingBatchProduct) {
@@ -507,11 +520,11 @@ public class ScanBatchActivity extends AppCompatActivity
                     getString(R.string.msg_purchased_no_amount,
                             missingBatchProduct.getProductName())
             );
-            resumeScan();
+            // TODO: proper description, no purchase yet
         } else {
             showSnackbarMessage(getString(R.string.msg_error));
-            resumeScan();
         }
+        resumeScan();
     }
 
     public MissingBatchProduct getBatchItemFromBarcode(String barcode) {

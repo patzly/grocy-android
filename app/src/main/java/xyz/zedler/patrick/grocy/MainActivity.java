@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
-import xyz.zedler.patrick.grocy.fragment.PurchaseBatchFragment;
+import xyz.zedler.patrick.grocy.fragment.MissingBatchProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 && data != null
         ) {
             replaceFragment(
-                    Constants.UI.BATCH_PURCHASE,
+                    Constants.UI.MISSING_BATCH_PRODUCTS,
                     data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
                     true
             );
@@ -366,12 +366,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            case Constants.UI.BATCH_PURCHASE:
+            case Constants.UI.MISSING_BATCH_PRODUCTS:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER, R.menu.menu_consume, animated, () -> {
-                            if(fragmentCurrent.getClass() == PurchaseBatchFragment.class) {
-                                ((PurchaseBatchFragment) fragmentCurrent).setUpBottomMenu();
+                            if(fragmentCurrent.getClass() == MissingBatchProductsFragment.class) {
+                                ((MissingBatchProductsFragment) fragmentCurrent).setUpBottomMenu();
                             }
                         }
                 );
@@ -381,8 +381,8 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.SCAN,
                         animated,
                         () -> {
-                            if(fragmentCurrent.getClass() == PurchaseBatchFragment.class) {
-                                //((PurchaseBatchFragment) fragmentCurrent).openBarcodeScanner();
+                            if(fragmentCurrent.getClass() == MissingBatchProductsFragment.class) {
+                                //((MissingBatchProductsFragment) fragmentCurrent).openBarcodeScanner();
                             }
                         }
                 );
@@ -712,7 +712,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
-            case Constants.UI.BATCH_PURCHASE: // TODO
+            case Constants.UI.MISSING_BATCH_PRODUCTS: // TODO
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -775,8 +775,8 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.PURCHASE:
                 fragmentCurrent = new PurchaseFragment();
                 break;
-            case Constants.UI.BATCH_PURCHASE:
-                fragmentCurrent = new PurchaseBatchFragment();
+            case Constants.UI.MISSING_BATCH_PRODUCTS:
+                fragmentCurrent = new MissingBatchProductsFragment();
                 break;
             case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();

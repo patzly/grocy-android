@@ -89,7 +89,8 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="14dp"
                         android:textColor="@color/white"
-                        android:textSize="16dp"
+                        android:textSize="13dp"
+                        android:fontFamily="@font/material_digits_round"
                         android:layout_gravity="center"
                         tools:ignore="SpUsage"/>
 
