@@ -710,9 +710,11 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public MissingBatchItem getBatchItemFromBarcode(String barcode) {
         for(MissingBatchItem missingBatchItem : missingBatchItems) {
-            // TODO: Multiple barcodes
-            if(missingBatchItem.getBarcodes().equals(barcode)) {
-                return missingBatchItem;
+            String barcodesString = missingBatchItem.getBarcodes();
+            if(barcodesString == null || barcodesString.trim().equals("")) return null;
+            String[] barcodes = barcodesString.trim().split(",");
+            for(String tmpBarcode : barcodes) {
+                if(tmpBarcode.trim().equals(barcode)) return missingBatchItem;
             }
         }
         return null;

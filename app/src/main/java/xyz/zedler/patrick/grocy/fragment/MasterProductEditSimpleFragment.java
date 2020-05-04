@@ -782,12 +782,12 @@ public class MasterProductEditSimpleFragment extends Fragment {
             }
             // barcodes
             if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().equals("")) {
-                List<String> barcodes = Arrays.asList(editProduct.getBarcode().split(","));
+                String[] barcodes = editProduct.getBarcode().split(",");
                 linearLayoutBarcodeContainer.removeAllViews();
-                for(int i = 0; i < barcodes.size(); i++) {
+                for(String tmpBarcode : barcodes) {
                     InputChip inputChipBarcode = new InputChip(
                             activity,
-                            barcodes.get(i).trim(),
+                            tmpBarcode.trim(),
                             false,
                             () -> { });
                     linearLayoutBarcodeContainer.addView(inputChipBarcode);
