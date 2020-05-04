@@ -102,7 +102,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private QuestionTime askForPrice = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForStore = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForLocation = QuestionTime.NEVER; // (consume & purchase)
-    private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (consume)
+    private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (only consume)
 
     private String bestBeforeDate;
     private String price;
@@ -699,10 +699,9 @@ public class ScanBatchActivity extends AppCompatActivity
         if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
             missingBatchItem.amountOneUp();
             showSnackbarMessage(
-                    getString(R.string.msg_purchased_no_amount,
+                    getString(R.string.msg_saved_purchase,
                             missingBatchItem.getProductName())
             );
-            // TODO: proper description, no purchase yet
         } else {
             showSnackbarMessage(getString(R.string.msg_error));
         }
