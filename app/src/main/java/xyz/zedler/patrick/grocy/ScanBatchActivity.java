@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,10 +34,15 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
@@ -85,6 +91,10 @@ public class ScanBatchActivity extends AppCompatActivity
     private QuestionTime askForStore = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForLocation = QuestionTime.NEVER; // (consume & purchase)
     private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (consume)
+
+    private String bestBeforeDate;
+
+    private Map<Integer, String> savedBestBeforeDates = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -227,11 +237,7 @@ public class ScanBatchActivity extends AppCompatActivity
                         showSnackbarMessage(getString(R.string.msg_batch_tare_weight));
                         return;
                     }
-                    if(actionType.equals(Constants.ACTION.CONSUME)) {
-                        consumeProduct();
-                    } else {
-                        purchaseProduct();
-                    }
+                    askNecessaryDetails();
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
@@ -255,16 +261,6 @@ public class ScanBatchActivity extends AppCompatActivity
                     }
                 }
         );
-    }
-
-    private void showChooseBottomSheet(String barcode) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TYPE, intent.getStringExtra(Constants.ARGUMENT.TYPE));
-        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
-        bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
-        bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
-        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchProducts);
-        showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
     private void consumeProduct() {
@@ -332,11 +328,11 @@ public class ScanBatchActivity extends AppCompatActivity
         try {
             body.put("amount", 1);
             body.put("transaction_type", "purchase");
+            body.put("best_before_date", bestBeforeDate);
             /*if(!editTextPrice.getText().toString().equals("")) {
                 double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
                 body.put("price", price);
             }*/
-            //body.put("best_before_date", selectedBestBeforeDate);
             /*if(selectedStoreId > -1) {
                 body.put("shopping_location_id", selectedStoreId);
             }*/
@@ -353,9 +349,9 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+                        if (DEBUG) Log.e(TAG, "purchaseProduct: " + e);
                     }
-                    if(DEBUG) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
+                    if (DEBUG) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
@@ -366,7 +362,7 @@ public class ScanBatchActivity extends AppCompatActivity
                                     productDetails.getProduct().getName()
                             ), Snackbar.LENGTH_LONG
                     );
-                    if(transactionId != null) {
+                    if (transactionId != null) {
                         String transId = transactionId;
                         snackbar.setActionTextColor(
                                 ContextCompat.getColor(this, R.color.secondary)
@@ -376,10 +372,17 @@ public class ScanBatchActivity extends AppCompatActivity
                         );
                     }
                     snackbar.show();
+                    resumeScan();
+
+                    // BEST BEFORE DATE
+                    int productId = productDetails.getProduct().getId();
+                    savedBestBeforeDates.put(productId, bestBeforeDate);
+                    bestBeforeDate = null;
                 },
                 error -> {
                     showSnackbarMessage(getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "purchaseProduct: " + error);
+                    resumeScan();
                 }
         );
     }
@@ -395,6 +398,86 @@ public class ScanBatchActivity extends AppCompatActivity
                     if(DEBUG) Log.i(TAG, "undoTransaction: error: " + error);
                 }
         );
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public void askNecessaryDetails() {
+        if(actionType.equals(Constants.ACTION.CONSUME)) {
+
+            // TODO: SPECIFIC
+
+            consumeProduct();
+
+        } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
+
+            // BEST BEFORE DATE
+
+            if(askForBestBeforeDate == QuestionTime.NEVER && bestBeforeDate == null) {
+
+                int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
+                if(defaultBestBeforeDays == 0) {
+                    int productId = productDetails.getProduct().getId();
+                    if(savedBestBeforeDates.containsKey(productId)) {
+                        bestBeforeDate = savedBestBeforeDates.get(productId);
+                    }
+                    showBBDateBottomSheet();
+                } else if(defaultBestBeforeDays == -1) {
+                    bestBeforeDate = Constants.DATE.NEVER_EXPIRES;
+                } else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DAY_OF_MONTH, defaultBestBeforeDays);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    bestBeforeDate = dateFormat.format(calendar.getTime());
+                }
+
+            } else if(askForBestBeforeDate == QuestionTime.FIRST_TIME && bestBeforeDate == null) {
+
+                int productId = productDetails.getProduct().getId();
+                if(savedBestBeforeDates.containsKey(productId)) {
+                    bestBeforeDate = savedBestBeforeDates.get(productId);
+                } else {
+                    showBBDateBottomSheet();
+                }
+
+            } else if(askForBestBeforeDate == QuestionTime.ALWAYS && bestBeforeDate == null) {
+
+                int productId = productDetails.getProduct().getId();
+                if(savedBestBeforeDates.containsKey(productId)) {
+                    bestBeforeDate = savedBestBeforeDates.get(productId);
+                }
+                showBBDateBottomSheet();
+
+            }
+
+            // TODO: PRICE
+
+            // TODO: STORE
+
+            // TODO: LOCATION
+
+            purchaseProduct();
+        }
+    }
+
+    public void discardCurrentProduct() {
+        bestBeforeDate = null;
+    }
+
+    private void showChooseBottomSheet(String barcode) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TYPE, intent.getStringExtra(Constants.ARGUMENT.TYPE));
+        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
+        bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchProducts);
+        showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
+    }
+
+    private void showBBDateBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.SELECTED_DATE, bestBeforeDate);
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+        showBottomSheet(new InputBBDateBottomSheetDialogFragment(), bundle);
     }
 
     private ArrayList<String> getProductNames() {
@@ -493,6 +576,10 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public GrocyApi getGrocy() {
         return grocyApi;
+    }
+
+    public void setBestBeforeDate(String bestBeforeDate) {
+        this.bestBeforeDate = bestBeforeDate;
     }
 
     public boolean isOnline() {

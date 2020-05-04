@@ -49,6 +49,7 @@
     <string name="action_create_purchase">Create and purchase product</string>
     <string name="action_link">Link</string>
     <string name="action_open_forms">Open forms</string>
+    <string name="action_discard">Discard</string>
     <string name="action_discard_products">Discard products</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>

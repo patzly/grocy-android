@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Link barcode to product"
+            android:text="Price"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -38,30 +38,20 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:textAlignment="viewStart"
-                android:text="Choose the product to which the barcode will be linked or create a new one."
-                android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_batch_choose_name"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
-                android:hint="Product name"
-                app:endIconMode="clear_text"
+                android:id="@+id/text_input_price"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                android:hint="@string/property_amount_min_stock"
                 app:helperTextEnabled="true"
                 app:helperText=" ">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number|numberDecimal"
                     android:textColor="@color/on_background"
-                    android:inputType="text|textCapSentences|textNoSuggestions"
-                    android:completionThreshold="1"
-                    android:popupBackground="@drawable/bg_auto_complete"/>
+                    android:imeOptions="actionDone"
+                    android:maxLength="10"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,21 +62,21 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_name_discard"
+                    android:id="@+id/button_input_price_discard"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:rippleColor="@color/highlight"
                     android:textColor="@color/on_background_secondary"
-                    android:text="Discard" />
+                    android:text="@string/action_discard" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_name_create"
+                    android:id="@+id/button_input_price_save"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="" />
+                    android:text="@string/action_save" />
 
             </LinearLayout>
 
