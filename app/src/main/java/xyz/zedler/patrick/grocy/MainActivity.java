@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
-import xyz.zedler.patrick.grocy.fragment.MissingMissingBatchItemsFragment;
+import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
@@ -370,8 +370,8 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER, R.menu.menu_consume, animated, () -> {
-                            if(fragmentCurrent.getClass() == MissingMissingBatchItemsFragment.class) {
-                                ((MissingMissingBatchItemsFragment) fragmentCurrent).setUpBottomMenu();
+                            if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
+                                ((MissingBatchItemsFragment) fragmentCurrent).setUpBottomMenu();
                             }
                         }
                 );
@@ -381,8 +381,8 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.SCAN,
                         animated,
                         () -> {
-                            if(fragmentCurrent.getClass() == MissingMissingBatchItemsFragment.class) {
-                                //((MissingMissingBatchItemsFragment) fragmentCurrent).openBarcodeScanner();
+                            if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
+                                //((MissingBatchItemsFragment) fragmentCurrent).openBarcodeScanner();
                             }
                         }
                 );
@@ -776,7 +776,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentCurrent = new PurchaseFragment();
                 break;
             case Constants.UI.MISSING_BATCH_ITEMS:
-                fragmentCurrent = new MissingMissingBatchItemsFragment();
+                fragmentCurrent = new MissingBatchItemsFragment();
                 break;
             case Constants.UI.MASTER_PRODUCTS:
                 fragmentCurrent = new MasterProductsFragment();
