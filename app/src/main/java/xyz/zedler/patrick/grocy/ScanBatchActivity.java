@@ -673,17 +673,17 @@ public class ScanBatchActivity extends AppCompatActivity
         this.missingBatchItems = missingBatchItems;
     }
 
-    public void addMissingBatchItem(String inputText, String barcode) {
-        missingBatchItems.add(
-                new MissingBatchItem(
-                        inputText,
-                        barcode,
-                        null,
-                        1 // 1 because this is the first missing item of the product type
-                )
+    public MissingBatchItem createMissingBatchItem(String inputText, String barcode) {
+        MissingBatchItem missingBatchItem = new MissingBatchItem(
+                inputText,
+                barcode,
+                null,
+                0
         );
+        missingBatchItems.add(missingBatchItem);
         productNames.add(inputText);
         refreshCounter();
+        return missingBatchItem;
     }
 
     private void refreshCounter() {
