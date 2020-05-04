@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Link barcode to product"
+            android:text="@string/title_link_product"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -39,11 +39,11 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/text_batch_choose_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="viewStart"
-                android:text="Choose the product to which the barcode will be linked or create a new one."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 

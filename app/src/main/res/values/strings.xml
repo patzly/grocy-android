@@ -108,6 +108,7 @@
     <string name="title_about">About</string>
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
+    <string name="title_link_product">Link barcode to product</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
 
@@ -121,6 +122,8 @@
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
     <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
+    <string name="subtitle_choose_product_link">Choose the product to which the barcode will be linked.</string>
+    <string name="subtitle_choose_product_create">Choose the product to which the barcode will be linked or create a new one.</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>

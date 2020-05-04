@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -109,12 +110,15 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         grocyApi = new GrocyApi(activity);
 
         Button batchButtonLinkCreate = view.findViewById(R.id.button_batch_name_create);
+        TextView description = view.findViewById(R.id.text_batch_choose_product);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_create));
             buttonAction = Constants.ACTION.CREATE;
+            description.setText(activity.getString(R.string.subtitle_choose_product_create));
         } else {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
             buttonAction = Constants.ACTION.LINK;
+            description.setText(activity.getString(R.string.subtitle_choose_product_link));
         }
 
         batchButtonLinkCreate.setOnClickListener(v -> {
