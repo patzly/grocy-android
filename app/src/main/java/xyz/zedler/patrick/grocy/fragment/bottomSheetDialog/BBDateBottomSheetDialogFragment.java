@@ -31,10 +31,10 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private final static boolean DEBUG = false;
-    private final static String TAG = "InputBBDateBottomSheetDialogFragment";
+    private final static String TAG = "BBDateBottomSheet";
 
     private Activity activity;
 
@@ -60,9 +60,8 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_input_bbdate, container, false
+                R.layout.fragment_bottomsheet_bbdate, container, false
         );
-
 
         activity =  getActivity();
         Bundle bundle = getArguments();
@@ -71,8 +70,8 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        datePicker = view.findViewById(R.id.date_picker_input_bbd);
-        neverExpires = view.findViewById(R.id.checkbox_input_bbd_never_expires);
+        datePicker = view.findViewById(R.id.date_picker_bbd);
+        neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
 
         neverExpires.setOnCheckedChangeListener(
                 (v, isChecked) -> datePicker.animate()
@@ -82,16 +81,16 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
                         .start()
         );
 
-        view.findViewById(R.id.linear_input_bbd_never_expires).setOnClickListener(
+        view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
                 v -> neverExpires.setChecked(!neverExpires.isChecked())
         );
-        view.findViewById(R.id.button_input_bbd_reset).setOnClickListener(
+        view.findViewById(R.id.button_bbd_reset).setOnClickListener(
                 v -> {
                     calendar = Calendar.getInstance();
                     fillForm(null);
                 }
         );
-        MaterialButton buttonDiscard = view.findViewById(R.id.button_input_bbd_discard);
+        MaterialButton buttonDiscard = view.findViewById(R.id.button_bbd_discard);
         if(activity.getClass() == MainActivity.class) {
             buttonDiscard.setVisibility(View.GONE);
         }
@@ -104,7 +103,7 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
                     }
                 }
         );
-        view.findViewById(R.id.button_input_bbd_save).setOnClickListener(
+        view.findViewById(R.id.button_bbd_save).setOnClickListener(
                 v -> dismiss()
         );
 
@@ -112,6 +111,10 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
         productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 
         fillForm(selectedBestBeforeDate);
+
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+        }
 
         return view;
     }

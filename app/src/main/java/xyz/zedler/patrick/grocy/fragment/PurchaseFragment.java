@@ -52,7 +52,7 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBBDateBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
@@ -207,7 +207,7 @@ public class PurchaseFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
                 bundle.putString(Constants.ARGUMENT.SELECTED_DATE, selectedBestBeforeDate);
-                activity.showBottomSheet(new InputBBDateBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
                 textInputProduct.setError(activity.getString(R.string.error_select_product));

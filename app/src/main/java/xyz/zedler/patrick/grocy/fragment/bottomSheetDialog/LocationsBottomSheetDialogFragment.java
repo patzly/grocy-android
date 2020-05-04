@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
@@ -32,7 +34,7 @@ public class LocationsBottomSheetDialogFragment
     private final static boolean DEBUG = false;
     private final static String TAG = "LocationsBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<Location> locations;
 
     @NonNull
@@ -51,7 +53,7 @@ public class LocationsBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_master_edit_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -81,16 +83,23 @@ public class LocationsBottomSheetDialogFragment
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == MasterProductEditSimpleFragment.class) {
-            ((MasterProductEditSimpleFragment) currentFragment).selectLocation(
-                    locations.get(position).getId()
-            );
-        } else if(currentFragment.getClass() == PurchaseFragment.class) {
-            ((PurchaseFragment) currentFragment).selectLocation(
-                    locations.get(position).getId()
-            );
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == MasterProductEditSimpleFragment.class) {
+                ((MasterProductEditSimpleFragment) currentFragment).selectLocation(
+                        locations.get(position).getId()
+                );
+            } else if(currentFragment.getClass() == PurchaseFragment.class) {
+                ((PurchaseFragment) currentFragment).selectLocation(
+                        locations.get(position).getId()
+                );
+            }
+        } else if(activity.getClass() == ScanBatchActivity.class) {
+            String locationId = String.valueOf(locations.get(position).getId());
+            ((ScanBatchActivity) activity).setLocationId(locationId);
+            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
+
         dismiss();
     }
 

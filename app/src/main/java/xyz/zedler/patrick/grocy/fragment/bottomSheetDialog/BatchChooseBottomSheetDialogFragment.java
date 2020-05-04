@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -109,12 +110,15 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         grocyApi = new GrocyApi(activity);
 
         Button batchButtonLinkCreate = view.findViewById(R.id.button_batch_name_create);
+        TextView description = view.findViewById(R.id.text_batch_choose_product);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_create));
             buttonAction = Constants.ACTION.CREATE;
+            description.setText(activity.getString(R.string.description_batch_choose_create));
         } else {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
             buttonAction = Constants.ACTION.LINK;
+            description.setText(activity.getString(R.string.description_batch_choose_link));
         }
 
         batchButtonLinkCreate.setOnClickListener(v -> {
@@ -123,8 +127,10 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 textInputProduct.setError(activity.getString(R.string.error_empty));
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
-                activity.addMissingBatchItem(inputText, barcode);
-                dismissWithMessage(activity.getString(R.string.msg_purchased_no_amount, inputText));
+                activity.purchaseBatchItem( // create MissingBatchItem and purchase one of it
+                        activity.createMissingBatchItem(inputText, barcode)
+                );
+                dismiss();
             } else {
                 assert productNames != null;
                 if(productNames.contains(inputText)) {

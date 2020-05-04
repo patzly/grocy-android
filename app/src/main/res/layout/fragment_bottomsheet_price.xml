@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Price"
+            android:text="@string/property_price"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -39,9 +39,8 @@
             android:padding="16dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_price"
+                android:id="@+id/text_price"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_amount_min_stock"
                 app:helperTextEnabled="true"
                 app:helperText=" ">
 
@@ -62,7 +61,7 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_input_price_discard"
+                    android:id="@+id/button_price_discard"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +70,7 @@
                     android:text="@string/action_discard" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_input_price_save"
+                    android:id="@+id/button_price_save"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Link barcode to product"
+            android:text="@string/title_link_product"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -39,18 +39,18 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/text_batch_choose_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="viewStart"
-                android:text="Choose the product to which the barcode will be linked or create a new one."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_batch_choose_name"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
-                android:hint="Product name"
+                android:hint="@string/property_product_name"
                 app:endIconMode="clear_text"
                 app:helperTextEnabled="true"
                 app:helperText=" ">
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     app:rippleColor="@color/highlight"
                     android:textColor="@color/on_background_secondary"
-                    android:text="Discard" />
+                    android:text="@string/action_discard" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_batch_name_create"

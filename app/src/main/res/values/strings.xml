@@ -61,6 +61,7 @@
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
     <string name="msg_purchased_no_amount">Purchased %1$s</string>
+    <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
@@ -107,6 +108,8 @@
     <string name="title_about">About</string>
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
+    <string name="title_link_product">Link barcode to product</string>
+    <string name="title_batch_exit">Fill out the product forms?</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
 
@@ -121,9 +124,14 @@
     <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
 
+    <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
+    <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
+    <string name="description_batch_exit">New products have been created, but they have not yet been sent to the server because only their names are known so far. Open the product forms?</string>
+
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
     <string name="property_name_plural">Name (plural form)</string>
+    <string name="property_product_name">Product name</string>
     <string name="property_description">Description</string>
     <string name="property_amount">Amount</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
@@ -137,7 +145,7 @@
     <string name="property_qu_factor">Quantity unit factor</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
-    <string name="property_bbd">Best before</string>
+    <string name="property_bbd">Best before date</string>
     <string name="property_bbd_next">Next best before date</string>
     <string name="property_bb_days_default">Default best before days</string>
     <string name="property_bb_days_default_opened">Default best before days after opened</string>
