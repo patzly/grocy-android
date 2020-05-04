@@ -114,11 +114,11 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_create));
             buttonAction = Constants.ACTION.CREATE;
-            description.setText(activity.getString(R.string.subtitle_choose_product_create));
+            description.setText(activity.getString(R.string.description_batch_choose_create));
         } else {
             batchButtonLinkCreate.setText(activity.getString(R.string.action_link));
             buttonAction = Constants.ACTION.LINK;
-            description.setText(activity.getString(R.string.subtitle_choose_product_link));
+            description.setText(activity.getString(R.string.description_batch_choose_link));
         }
 
         batchButtonLinkCreate.setOnClickListener(v -> {
