@@ -71,18 +71,16 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        datePicker = view.findViewById(R.id.datepicker_input_bbd);
+        datePicker = view.findViewById(R.id.date_picker_input_bbd);
         neverExpires = view.findViewById(R.id.checkbox_input_bbd_never_expires);
 
-        neverExpires.setOnCheckedChangeListener((v, isChecked) -> {
-            if(isChecked) {
-                datePicker.setEnabled(false);
-                datePicker.setAlpha(0.5f);
-            } else {
-                datePicker.setEnabled(true);
-                datePicker.setAlpha(1.0f);
-            }
-        });
+        neverExpires.setOnCheckedChangeListener(
+                (v, isChecked) -> datePicker.animate()
+                        .alpha(isChecked ? 0.5f : 1)
+                        .withEndAction(() -> datePicker.setEnabled(!isChecked))
+                        .setDuration(200)
+                        .start()
+        );
 
         view.findViewById(R.id.linear_input_bbd_never_expires).setOnClickListener(
                 v -> neverExpires.setChecked(!neverExpires.isChecked())

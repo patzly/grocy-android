@@ -410,7 +410,6 @@
         <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
     </style>
 
-    <!-- CHECK BOX -->
     <style name="Widget.Grocy.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

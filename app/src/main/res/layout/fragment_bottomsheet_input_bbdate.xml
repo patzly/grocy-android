@@ -50,13 +50,11 @@
     </LinearLayout>
 
     <DatePicker
-        android:id="@+id/datepicker_input_bbd"
+        android:id="@+id/date_picker_input_bbd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:padding="0dp"
-        android:layout_margin="0dp"/>
+        android:datePickerMode="spinner"/>
 
     <LinearLayout
         android:layout_width="match_parent"

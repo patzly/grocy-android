@@ -167,7 +167,8 @@ public class PurchaseFragment extends Fragment {
             } else {
                 String input = autoCompleteTextViewProduct.getText().toString().trim();
                 if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
-                        && !nameAutoFilled) {
+                        && !nameAutoFilled
+                ) {
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                     bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
