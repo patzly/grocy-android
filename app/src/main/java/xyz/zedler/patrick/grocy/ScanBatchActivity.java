@@ -212,6 +212,11 @@ public class ScanBatchActivity extends AppCompatActivity
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
                     );
+                    if(productDetails.getProduct().getEnableTareWeightHandling() == 1) {
+                        // TODO: Test this
+                        showSnackbarMessage("Batch mode doesn't work for this product, because it has tare weight handling enabled");
+                        return;
+                    }
                     // TODO: Purchase
                     consumeProduct(productDetails);
                 }, error -> {
