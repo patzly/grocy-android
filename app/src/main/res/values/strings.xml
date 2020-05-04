@@ -51,6 +51,8 @@
     <string name="action_open_forms">Open forms</string>
     <string name="action_discard_products">Discard products</string>
 
+    <string name="tooltip_new_products_count">Count of new products</string>
+
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>
     <string name="msg_missing_products">%1$d below min. stock amount</string>
@@ -70,6 +72,7 @@
     <string name="msg_master_delete_stock">This product still has stock</string>
     <string name="msg_master_delete_usage">This %1$s is still in use</string>
     <string name="msg_batch_no_products">No new products have been created</string>
+    <string name="msg_batch_tare_weight">Product doesn\'t support batch mode: tare weight handling enabled</string>
 
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, comments or questions? Contact us!\nOtherwise we would be very happy about a nice review in the Play Store.</string>

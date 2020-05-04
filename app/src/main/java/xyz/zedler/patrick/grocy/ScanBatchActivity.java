@@ -64,6 +64,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private boolean isTorchOn;
 
     private Intent intent;
+    private String actionType;
     private FragmentManager fragmentManager;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
@@ -75,11 +76,23 @@ public class ScanBatchActivity extends AppCompatActivity
     private ArrayList<String> productNames = new ArrayList<>();
     private ArrayList<MissingBatchProduct> missingBatchProducts = new ArrayList<>();
 
+    private enum QuestionTime {
+        NEVER, FIRST_TIME, ALWAYS;
+    }
+
+    private QuestionTime askForBestBeforeDate = QuestionTime.NEVER; // (only purchase)
+    private QuestionTime askForPrice = QuestionTime.NEVER; // (only purchase)
+    private QuestionTime askForStore = QuestionTime.NEVER; // (only purchase)
+    private QuestionTime askForLocation = QuestionTime.NEVER; // (consume & purchase)
+    private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (consume)
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         intent = getIntent();
+        actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+        if(actionType == null) showSnackbarMessage(getString(R.string.msg_error));
 
         isTorchOn = false;
 
@@ -97,9 +110,7 @@ public class ScanBatchActivity extends AppCompatActivity
         setContentView(R.layout.activity_scan_batch);
 
         ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
-        buttonClose.setOnClickListener(v -> {
-            onBackPressed();
-        });
+        buttonClose.setOnClickListener(v -> onBackPressed());
         buttonClose.setTooltipText(getString(R.string.action_close));
 
         textViewCount = findViewById(R.id.text_scan_batch_count);
@@ -107,7 +118,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
         MaterialCardView cardViewCount = findViewById(R.id.card_scan_batch_count);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            cardViewCount.setTooltipText("New products count");
+            cardViewCount.setTooltipText(getString(R.string.tooltip_new_products_count));
         }
         String type = intent.getStringExtra(Constants.ARGUMENT.TYPE);
         if(type == null) finish();
@@ -213,12 +224,14 @@ public class ScanBatchActivity extends AppCompatActivity
                             new TypeToken<ProductDetails>(){}.getType()
                     );
                     if(productDetails.getProduct().getEnableTareWeightHandling() == 1) {
-                        // TODO: Test this
-                        showSnackbarMessage("Batch mode doesn't work for this product, because it has tare weight handling enabled");
+                        showSnackbarMessage(getString(R.string.msg_batch_tare_weight));
                         return;
                     }
-                    // TODO: Purchase
-                    consumeProduct(productDetails);
+                    if(actionType.equals(Constants.ACTION.CONSUME)) {
+                        consumeProduct();
+                    } else {
+                        purchaseProduct();
+                    }
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
@@ -254,7 +267,7 @@ public class ScanBatchActivity extends AppCompatActivity
         showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
-    private void consumeProduct(ProductDetails productDetails) {
+    private void consumeProduct() {
         JSONObject body = new JSONObject();
         try {
             body.put("amount", 1);
@@ -314,6 +327,63 @@ public class ScanBatchActivity extends AppCompatActivity
         );
     }
 
+    public void purchaseProduct() {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", 1);
+            body.put("transaction_type", "purchase");
+            /*if(!editTextPrice.getText().toString().equals("")) {
+                double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
+                body.put("price", price);
+            }*/
+            //body.put("best_before_date", selectedBestBeforeDate);
+            /*if(selectedStoreId > -1) {
+                body.put("shopping_location_id", selectedStoreId);
+            }*/
+            //body.put("location_id", selectedLocationId);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+        }
+        request.post(
+                grocyApi.purchaseProduct(productDetails.getProduct().getId()),
+                body,
+                response -> {
+                    // UNDO OPTION
+                    String transactionId = null;
+                    try {
+                        transactionId = response.getString("transaction_id");
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+                    }
+                    if(DEBUG) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
+
+                    Snackbar snackbar = Snackbar.make(
+                            findViewById(R.id.barcode_scan_batch),
+                            getString(
+                                    R.string.msg_purchased,
+                                    String.valueOf(1),
+                                    productDetails.getQuantityUnitStock().getName(),
+                                    productDetails.getProduct().getName()
+                            ), Snackbar.LENGTH_LONG
+                    );
+                    if(transactionId != null) {
+                        String transId = transactionId;
+                        snackbar.setActionTextColor(
+                                ContextCompat.getColor(this, R.color.secondary)
+                        ).setAction(
+                                getString(R.string.action_undo),
+                                v -> undoTransaction(transId)
+                        );
+                    }
+                    snackbar.show();
+                },
+                error -> {
+                    showSnackbarMessage(getString(R.string.msg_error));
+                    if(DEBUG) Log.i(TAG, "purchaseProduct: " + error);
+                }
+        );
+    }
+
     private void undoTransaction(String transactionId) {
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
@@ -348,7 +418,6 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void purchaseBatchItem(MissingBatchProduct missingBatchProduct) {
-        String actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
         if (actionType != null && actionType.equals(Constants.ACTION.PURCHASE)) {
             missingBatchProduct.amountOneUp();
             showSnackbarMessage(
