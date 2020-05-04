@@ -143,7 +143,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
         scrollView = activity.findViewById(R.id.scroll_stock);
         // retry button on offline error page
-        activity.findViewById(R.id.button_stock_error_retry).setOnClickListener(v -> refresh());
+        activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> refresh());
         recyclerView = activity.findViewById(R.id.recycler_stock);
 
         // search

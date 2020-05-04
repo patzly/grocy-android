@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
+import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -51,7 +51,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private String barcode, batchType, buttonAction;
 
     private ArrayList<Product> products;
-    private ArrayList<MissingBatchProduct> missingBatchProducts;
+    private ArrayList<MissingBatchItem> missingBatchItems;
 
     private ScanBatchActivity activity;
     private TextInputLayout textInputProduct;
@@ -94,7 +94,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 Constants.ARGUMENT.PRODUCT_NAMES
         );
         products = getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS);
-        missingBatchProducts = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+        missingBatchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
         batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
@@ -123,7 +123,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 textInputProduct.setError(activity.getString(R.string.error_empty));
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
-                activity.addBatchItem(inputText, barcode);
+                activity.addMissingBatchItem(inputText, barcode);
                 dismissWithMessage(activity.getString(R.string.msg_purchased_no_amount, inputText));
             } else {
                 assert productNames != null;
@@ -222,30 +222,30 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
     private void addBatchItemBarcode(String barcode, String inputText) {
         List<String> barcodes;
-        MissingBatchProduct selectedMissingBatchProduct = null;
-        for(MissingBatchProduct missingBatchProduct : missingBatchProducts) {
-            if(missingBatchProduct.getProductName().equals(inputText)) {
-                selectedMissingBatchProduct = missingBatchProduct;
+        MissingBatchItem selectedMissingBatchItem = null;
+        for(MissingBatchItem missingBatchItem : missingBatchItems) {
+            if(missingBatchItem.getProductName().equals(inputText)) {
+                selectedMissingBatchItem = missingBatchItem;
                 break;
             }
         }
-        if(selectedMissingBatchProduct == null) {
+        if(selectedMissingBatchItem == null) {
             // TODO: Error
             return;
         }
 
-        if(selectedMissingBatchProduct.getBarcodes() != null && !selectedMissingBatchProduct.getBarcodes().equals("")) {
+        if(selectedMissingBatchItem.getBarcodes() != null && !selectedMissingBatchItem.getBarcodes().equals("")) {
             barcodes = new ArrayList<>(Arrays.asList(
-                    selectedMissingBatchProduct.getBarcodes().split(",")
+                    selectedMissingBatchItem.getBarcodes().split(",")
             ));
         } else {
             barcodes = new ArrayList<>();
         }
 
         barcodes.add(barcode);
-        selectedMissingBatchProduct.setBarcodes(TextUtils.join(",", barcodes));
-        activity.setMissingBatchProducts(missingBatchProducts);
-        activity.purchaseBatchItem(selectedMissingBatchProduct);
+        selectedMissingBatchItem.setBarcodes(TextUtils.join(",", barcodes));
+        activity.setMissingBatchItems(missingBatchItems);
+        activity.purchaseBatchItem(selectedMissingBatchItem);
         dismiss();
         activity.resumeScan();
     }

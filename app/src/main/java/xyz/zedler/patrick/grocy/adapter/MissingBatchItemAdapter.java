@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
+import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatchProductAdapter.ViewHolder> {
+public class MissingBatchItemAdapter
+        extends RecyclerView.Adapter<MissingBatchItemAdapter.ViewHolder> {
 
-    private final static String TAG = MissingBatchProductAdapter.class.getSimpleName();
+    private final static String TAG = MissingBatchItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private Context context;
-    private ArrayList<MissingBatchProduct> missingBatchProducts;
-    private BatchItemAdapterListener listener;
+    private ArrayList<MissingBatchItem> missingBatchItems;
+    private MissingBatchItemAdapterListener listener;
 
-    public MissingBatchProductAdapter(
-            Context context,
-            ArrayList<MissingBatchProduct> missingBatchProducts,
-            BatchItemAdapterListener listener
+    public MissingBatchItemAdapter(
+            ArrayList<MissingBatchItem> missingBatchItems,
+            MissingBatchItemAdapterListener listener
     ) {
-        this.context = context;
-        this.missingBatchProducts = missingBatchProducts;
+        this.missingBatchItems = missingBatchItems;
         this.listener = listener;
     }
 
@@ -43,9 +40,9 @@ public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatc
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_container);
-            textViewName = view.findViewById(R.id.text_stock_item_name);
-            textViewAmount = view.findViewById(R.id.text_stock_item_amount);
+            linearLayoutItemContainer = view.findViewById(R.id.linear_missing_batch_item_container);
+            textViewName = view.findViewById(R.id.text_missing_batch_item_name);
+            textViewAmount = view.findViewById(R.id.text_missing_batch_item_amount);
         }
     }
 
@@ -54,7 +51,7 @@ public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatc
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_stock_item,
+                        R.layout.row_missing_batch_item,
                         parent,
                         false
                 )
@@ -64,15 +61,15 @@ public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatc
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        MissingBatchProduct missingBatchProduct = missingBatchProducts.get(position);
+        MissingBatchItem missingBatchItem = missingBatchItems.get(position);
 
         // NAME
 
-        holder.textViewName.setText(missingBatchProduct.getProductName());
+        holder.textViewName.setText(missingBatchItem.getProductName());
 
         // AMOUNT
 
-        holder.textViewAmount.setText(NumUtil.trim(missingBatchProduct.getAmount()));
+        holder.textViewAmount.setText(NumUtil.trim(missingBatchItem.getAmount()));
 
         // CONTAINER
 
@@ -83,10 +80,10 @@ public class MissingBatchProductAdapter extends RecyclerView.Adapter<MissingBatc
 
     @Override
     public int getItemCount() {
-        return missingBatchProducts != null ? missingBatchProducts.size() : 0;
+        return missingBatchItems != null ? missingBatchItems.size() : 0;
     }
 
-    public interface BatchItemAdapterListener {
+    public interface MissingBatchItemAdapterListener {
         void onItemRowClicked(int position);
     }
 }

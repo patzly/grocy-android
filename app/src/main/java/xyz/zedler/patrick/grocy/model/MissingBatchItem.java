@@ -5,12 +5,12 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class MissingBatchProduct implements Parcelable {
+public class MissingBatchItem implements Parcelable {
 
     private String productName, barcodes, defaultBestBeforeDate;
     private int amount;
 
-    public MissingBatchProduct(
+    public MissingBatchItem(
             String productName,
             String barcodes,
             String defaultBestBeforeDate,
@@ -22,7 +22,7 @@ public class MissingBatchProduct implements Parcelable {
         this.amount = amount;
     }
 
-    public MissingBatchProduct(Parcel parcel) {
+    public MissingBatchItem(Parcel parcel) {
         productName = parcel.readString();
         barcodes = parcel.readString();
         defaultBestBeforeDate = parcel.readString();
@@ -37,16 +37,16 @@ public class MissingBatchProduct implements Parcelable {
         dest.writeInt(amount);
     }
 
-    public static final Creator<MissingBatchProduct> CREATOR = new Creator<MissingBatchProduct>() {
+    public static final Creator<MissingBatchItem> CREATOR = new Creator<MissingBatchItem>() {
 
         @Override
-        public MissingBatchProduct createFromParcel(Parcel in) {
-            return new MissingBatchProduct(in);
+        public MissingBatchItem createFromParcel(Parcel in) {
+            return new MissingBatchItem(in);
         }
 
         @Override
-        public MissingBatchProduct[] newArray(int size) {
-            return new MissingBatchProduct[size];
+        public MissingBatchItem[] newArray(int size) {
+            return new MissingBatchItem[size];
         }
     };
 
@@ -82,6 +82,6 @@ public class MissingBatchProduct implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "MissingBatchProduct(" + productName + ")";
+        return "MissingBatchItem(" + productName + ")";
     }
 }

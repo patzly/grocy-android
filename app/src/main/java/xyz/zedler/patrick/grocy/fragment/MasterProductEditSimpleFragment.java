@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -93,6 +94,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
     private String createPurchaseName, createPurchaseBarcodes, createPurchaseBestBeforeDays;
     private int createPurchaseAmount;
+    // replace with
+    private MissingBatchItem missingBatchItem;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialAutoCompleteTextView autoCompleteTextViewParentProduct;
@@ -452,7 +455,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                         if(activity.getCurrentFragment().getClass()
                                 == MasterProductEditSimpleFragment.class
                         ) {
-                            //((MasterProductEditSimpleFragment) activity.getCurrentFragment()).saveProduct();
+                            saveProduct();
                         }
                     }
             );
@@ -466,8 +469,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                         if(activity.getCurrentFragment().getClass()
                                 == MasterProductEditSimpleFragment.class
                         ) {
-                            ((MasterProductEditSimpleFragment) activity.getCurrentFragment())
-                                    .saveProduct();
+                            saveProduct();
                         }
                     }
             );

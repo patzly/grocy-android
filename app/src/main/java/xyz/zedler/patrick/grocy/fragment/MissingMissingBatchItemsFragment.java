@@ -26,17 +26,17 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.MissingBatchProductAdapter;
+import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.model.MissingBatchProduct;
+import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class MissingBatchProductsFragment extends Fragment implements MissingBatchProductAdapter.BatchItemAdapterListener {
+public class MissingMissingBatchItemsFragment extends Fragment implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
 
-    private final static String TAG = Constants.UI.MISSING_BATCH_PRODUCTS;
+    private final static String TAG = Constants.UI.MISSING_BATCH_ITEMS;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -44,11 +44,11 @@ public class MissingBatchProductsFragment extends Fragment implements MissingBat
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
-    private MissingBatchProductAdapter missingBatchProductAdapter;
+    private MissingBatchItemAdapter missingBatchItemAdapter;
     private BroadcastReceiver broadcastReceiver;
     private ActionButton actionButtonFlash;
 
-    private ArrayList<MissingBatchProduct> missingBatchProducts;
+    private ArrayList<MissingBatchItem> missingBatchItems;
     private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
     private String search = "";
     private String sortMode;
@@ -91,9 +91,9 @@ public class MissingBatchProductsFragment extends Fragment implements MissingBat
                 getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
         ) {
             setError(true, false, false);
-            activity.findViewById(R.id.button_stock_error_retry).setVisibility(View.GONE);
+            activity.findViewById(R.id.button_error_retry).setVisibility(View.GONE);
         } else {
-            missingBatchProducts = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+            missingBatchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         }
 
         recyclerView.setLayoutManager(
@@ -104,17 +104,11 @@ public class MissingBatchProductsFragment extends Fragment implements MissingBat
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                new MissingBatchProductAdapter(
-                        activity,
-                        missingBatchProducts,
-                        this
-                )
-        );
+        recyclerView.setAdapter(new MissingBatchItemAdapter(missingBatchItems, this));
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MISSING_BATCH_PRODUCTS, TAG);
+        activity.updateUI(Constants.UI.MISSING_BATCH_ITEMS, TAG);
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {
@@ -174,7 +168,7 @@ public class MissingBatchProductsFragment extends Fragment implements MissingBat
 
     @Override
     public void onItemRowClicked(int position) {
-        MissingBatchProduct batchProduct = missingBatchProducts.get(position);
+        MissingBatchItem batchProduct = missingBatchItems.get(position);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, batchProduct.getProductName());
@@ -185,8 +179,8 @@ public class MissingBatchProductsFragment extends Fragment implements MissingBat
         activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
     }
 
-    private void refreshAdapter(MissingBatchProductAdapter adapter) {
-        missingBatchProductAdapter = adapter;
+    private void refreshAdapter(MissingBatchItemAdapter adapter) {
+        missingBatchItemAdapter = adapter;
         recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
             recyclerView.setAdapter(adapter);
             recyclerView.animate().alpha(1).setDuration(150).start();
