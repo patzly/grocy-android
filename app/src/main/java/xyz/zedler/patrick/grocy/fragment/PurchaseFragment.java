@@ -42,10 +42,8 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
@@ -65,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -80,6 +79,7 @@ public class PurchaseFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private DateUtil dateUtil;
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
     private Bundle startupBundle;
@@ -127,6 +127,10 @@ public class PurchaseFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // UTILS
+
+        dateUtil = new DateUtil(activity);
 
         // INITIALIZE VIEWS
 
@@ -455,7 +459,12 @@ public class PurchaseFragment extends Fragment {
                             new TypeToken<List<Store>>(){}.getType()
                     );
                     SortUtil.sortStoresByName(stores, true);
-                }, error -> {} // TODO: Make queue, so on error all request can be cancelled
+                    // Insert NONE as first element
+                    stores.add(
+                            0,
+                            new Store(-1, activity.getString(R.string.subtitle_none))
+                    );
+                }, error -> {} // TODO: Make queue, so on error all requests can be cancelled
         );
     }
 
@@ -468,7 +477,7 @@ public class PurchaseFragment extends Fragment {
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     SortUtil.sortLocationsByName(locations, true);
-                }, error -> {} // TODO: Make queue, so on error all request can be cancelled
+                }, error -> {} // TODO: Make queue, so on error all requests can be cancelled
         );
     }
 
@@ -504,11 +513,11 @@ public class PurchaseFragment extends Fragment {
             selectedBestBeforeDate = null;
             textViewBestBeforeDate.setText(getString(R.string.subtitle_none));
         } else {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            calendar.add(Calendar.DAY_OF_MONTH, defaultBestBeforeDays);
-            selectedBestBeforeDate = dateFormat.format(calendar.getTime());
-            textViewBestBeforeDate.setText(selectedBestBeforeDate);
+            // add default best before days to today
+            selectedBestBeforeDate = DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays);
+            textViewBestBeforeDate.setText(
+                    dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
+            );
         }
 
         // AMOUNT
@@ -531,7 +540,7 @@ public class PurchaseFragment extends Fragment {
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                     "1"
             );
-            if(defaultAmount.equals("")) {
+            if(defaultAmount == null || defaultAmount.equals("")) {
                 editTextAmount.setText(null);
             } else {
                 editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
@@ -577,7 +586,7 @@ public class PurchaseFragment extends Fragment {
 
         // STORE
         String storeId = productDetails.getProduct().getStoreId();
-        if(storeId == null || storeId.equals("")) {
+        if(storeId == null || storeId.equals("")) { // TODO: ""-check needed?
             selectedStoreId = -1;
             textViewStore.setText(getString(R.string.subtitle_none));
         } else {
@@ -854,7 +863,9 @@ public class PurchaseFragment extends Fragment {
         if(selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
             textViewBestBeforeDate.setText(getString(R.string.subtitle_never_expires));
         } else {
-            textViewBestBeforeDate.setText(selectedBestBeforeDate);
+            textViewBestBeforeDate.setText(
+                    dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
+            );
         }
         isBestBeforeDateValid();
     }

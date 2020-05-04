@@ -235,7 +235,7 @@
                         <ImageView
                             android:id="@+id/image_purchase_price"
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_scatter_plot_anim"
+                            android:src="@drawable/ic_round_money"
                             android:layout_marginBottom="4dp"
                             tools:ignore="ContentDescription" />
 
@@ -282,7 +282,7 @@
                     android:id="@+id/linear_purchase_total_price"
                     style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
                     android:background="@null"
-                    android:paddingTop="0dp"
+                    android:paddingTop="4dp"
                     android:paddingBottom="12dp"
                     android:paddingEnd="0dp"
                     android:paddingStart="72dp">

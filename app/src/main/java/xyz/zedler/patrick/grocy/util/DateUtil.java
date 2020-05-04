@@ -54,6 +54,12 @@ public class DateUtil {
         return ((int)(date.getTime() / 86400000) - (int)(current.getTime() / 86400000)) + 1;
     }
 
+    public static String getTodayWithDaysAdded(int daysToAdd) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, daysToAdd);
+        return DATE_FORMAT.format(calendar.getTime());
+    }
+
     public String getLocalizedDate(String dateString, int format) {
         if(dateString == null || dateString.equals("")) {
             return context.getString(R.string.date_unknown);
@@ -77,7 +83,7 @@ public class DateUtil {
     }
 
     public String getLocalizedDate(String dateString) {
-        return getLocalizedDate(dateString, 2);
+        return getLocalizedDate(dateString, FORMAT_LONG);
     }
 
     public String getHumanForDaysFromNow(String dateString) {

@@ -21,6 +21,14 @@ public class Store implements Parcelable {
     @SerializedName("row_created_timestamp")
     String rowCreatedTimestamp;
 
+    /**
+     * First element in bottomSheet selection: NONE (id = -1)
+     */
+    public Store(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Store(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
