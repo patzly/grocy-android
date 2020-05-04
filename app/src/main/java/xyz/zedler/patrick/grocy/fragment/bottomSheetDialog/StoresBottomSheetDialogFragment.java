@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -31,7 +33,7 @@ public class StoresBottomSheetDialogFragment
     private final static boolean DEBUG = false;
     private final static String TAG = "StoresBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<Store> stores;
 
     @NonNull
@@ -50,7 +52,7 @@ public class StoresBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_master_edit_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -75,16 +77,26 @@ public class StoresBottomSheetDialogFragment
                 )
         );
 
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+        }
+
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == PurchaseFragment.class) {
-            ((PurchaseFragment) currentFragment).selectStore(
-                    stores.get(position).getId()
-            );
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == PurchaseFragment.class) {
+                ((PurchaseFragment) currentFragment).selectStore(
+                        stores.get(position).getId()
+                );
+            }
+        } else if(activity.getClass() == ScanBatchActivity.class) {
+            String storeId = String.valueOf(stores.get(position).getId());
+            ((ScanBatchActivity) activity).setStoreId(storeId);
+            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
         dismiss();
     }

@@ -49,10 +49,14 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -85,6 +89,8 @@ public class ScanBatchActivity extends AppCompatActivity
     private SharedPreferences sharedPrefs;
 
     private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Store> stores = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<String> productNames = new ArrayList<>();
     private ArrayList<MissingBatchItem> missingBatchItems = new ArrayList<>();
 
@@ -101,10 +107,12 @@ public class ScanBatchActivity extends AppCompatActivity
     private String bestBeforeDate;
     private String price;
     private String storeId;
+    private String locationId;
 
     private Map<Integer, String> savedBestBeforeDates = new HashMap<>();
     private Map<Integer, String> savedPrices = new HashMap<>();
     private Map<Integer, String> savedStoreIds = new HashMap<>();
+    private Map<Integer, String> savedLocationIds = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,8 +197,10 @@ public class ScanBatchActivity extends AppCompatActivity
 
         hideInfo();
 
-        // LOAD PRODUCTS
-        loadProducts(response -> {}, error -> {});
+        // LOAD NECESSARY OBJECTS
+        downloadProducts(response -> {}, error -> {});
+        downloadStores(response -> {}, error -> {});
+        downloadLocations(response -> {}, error -> {});
     }
 
     @Override
@@ -225,7 +235,10 @@ public class ScanBatchActivity extends AppCompatActivity
         }
     }
 
-    private void loadProducts(OnResponseListener responseListener, OnErrorListener errorListener) {
+    private void downloadProducts(
+            OnResponseListener responseListener,
+            OnErrorListener errorListener
+    ) {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
@@ -234,6 +247,38 @@ public class ScanBatchActivity extends AppCompatActivity
                             new TypeToken<List<Product>>(){}.getType()
                     );
                     productNames = getProductNames();
+                    responseListener.onResponse(response);
+                }, errorListener::onError
+        );
+    }
+
+    private void downloadStores(
+            OnResponseListener responseListener,
+            OnErrorListener errorListener
+    ) {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+                response -> {
+                    stores = gson.fromJson(
+                            response,
+                            new TypeToken<List<Store>>(){}.getType()
+                    );
+                    responseListener.onResponse(response);
+                }, errorListener::onError
+        );
+    }
+
+    private void downloadLocations(
+            OnResponseListener responseListener,
+            OnErrorListener errorListener
+    ) {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+                response -> {
+                    locations = gson.fromJson(
+                            response,
+                            new TypeToken<List<Location>>(){}.getType()
+                    );
                     responseListener.onResponse(response);
                 }, errorListener::onError
         );
@@ -258,10 +303,10 @@ public class ScanBatchActivity extends AppCompatActivity
                         MissingBatchItem missingBatchItem = getBatchItemFromBarcode(barcode);
                         if(missingBatchItem != null) {
                             purchaseBatchItem(missingBatchItem);
-                        } else if(products != null) {
+                        } else if(!products.isEmpty()) {
                             showChooseBottomSheet(barcode);
                         } else {
-                            loadProducts(
+                            downloadProducts(
                                     response1 -> showChooseBottomSheet(barcode),
                                     error1 -> {
                                         showSnackbarMessage(getString(R.string.msg_error));
@@ -343,13 +388,12 @@ public class ScanBatchActivity extends AppCompatActivity
             body.put("amount", 1);
             body.put("transaction_type", "purchase");
             body.put("best_before_date", bestBeforeDate);
-            /*if(!editTextPrice.getText().toString().equals("")) {
-                double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
-                body.put("price", price);
-            }*/
-            /*if(selectedStoreId > -1) {
-                body.put("shopping_location_id", selectedStoreId);
-            }*/
+            if(!price.equals("")) {
+                body.put("price", NumUtil.formatPrice(price));
+            }
+            if(!storeId.equals("") && Integer.parseInt(storeId) > -1) {
+                body.put("shopping_location_id", Integer.parseInt(storeId));
+            }
             //body.put("location_id", selectedLocationId);
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
@@ -396,11 +440,14 @@ public class ScanBatchActivity extends AppCompatActivity
                     }
                     bestBeforeDate = null;
                     // PRICE
-                    if(!price.equals("")) savedPrices.put(productId, price);
+                    savedPrices.put(productId, price);
                     price = null;
                     // STORE
-                    if(!storeId.equals("")) savedStoreIds.put(productId, storeId);
+                    savedStoreIds.put(productId, storeId);
                     storeId = null;
+                    // LOCATION
+                    savedLocationIds.put(productId, locationId);
+                    locationId = null;
                 },
                 error -> {
                     showSnackbarMessage(getString(R.string.msg_error));
@@ -437,7 +484,6 @@ public class ScanBatchActivity extends AppCompatActivity
         } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
 
             // BEST BEFORE DATE
-
             if(askForBestBeforeDate == QuestionTime.NEVER && bestBeforeDate == null) {
                 int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
                 if(defaultBestBeforeDays == 0) {
@@ -469,6 +515,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 return;
             }
 
+            // PRICE
             if(askForPrice == QuestionTime.NEVER && price == null) {
                 price = "";  // price is never required
             } else if(askForPrice == QuestionTime.FIRST_TIME && price == null) {
@@ -486,24 +533,53 @@ public class ScanBatchActivity extends AppCompatActivity
                 return;
             }
 
+            // STORE
+            String defaultStoreId = productDetails.getProduct().getStoreId();
             if(askForStore == QuestionTime.NEVER && storeId == null) {
-                storeId = "";  // storeId is never required
+                if(defaultStoreId == null) {
+                    storeId = "";
+                } else {
+                    storeId = defaultStoreId;
+                }
             } else if(askForStore == QuestionTime.FIRST_TIME && storeId == null) {
                 if(savedStoreIds.containsKey(productId)) {
                     storeId = savedStoreIds.get(productId);
                 } else {
-                    showStoreBottomSheet();
+                    if(defaultStoreId != null) storeId = defaultStoreId;
+                    showStoresBottomSheet();
                     return;
                 }
             } else if(askForStore == QuestionTime.ALWAYS && storeId == null) {
                 if(savedStoreIds.containsKey(productId)) {
                     storeId = savedStoreIds.get(productId);
+                } else if(defaultStoreId != null) {
+                    storeId = defaultStoreId;
                 }
-                showStoreBottomSheet();
+                showStoresBottomSheet();
                 return;
             }
 
-            // TODO: LOCATION
+            // LOCATION
+            int defaultLocationId = productDetails.getProduct().getLocationId();
+            if(askForLocation == QuestionTime.NEVER && locationId == null) {
+                locationId = String.valueOf(defaultLocationId);
+            } else if(askForLocation == QuestionTime.FIRST_TIME && locationId == null) {
+                if(savedLocationIds.containsKey(productId)) {
+                    locationId = savedLocationIds.get(productId);
+                } else {
+                    locationId = String.valueOf(defaultLocationId);
+                    showLocationsBottomSheet();
+                    return;
+                }
+            } else if(askForLocation == QuestionTime.ALWAYS && locationId == null) {
+                if(savedLocationIds.containsKey(productId)) {
+                    locationId = savedLocationIds.get(productId);
+                } else {
+                    locationId = String.valueOf(defaultLocationId);
+                }
+                showLocationsBottomSheet();
+                return;
+            }
 
             purchaseProduct();
         }
@@ -541,11 +617,46 @@ public class ScanBatchActivity extends AppCompatActivity
         showBottomSheet(new PriceBottomSheetDialogFragment(), bundle);
     }
 
-    private void showStoreBottomSheet() {
+    private void showStoresBottomSheet() {
+        if(stores.isEmpty()) {
+            downloadStores(
+                    response -> showStoresBottomSheet(),
+                    error -> {
+                        discardCurrentProduct();
+                        showSnackbarMessage(getString(R.string.msg_error));
+                    }
+            );
+            return;
+        }
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.STORE, storeId);
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-        //showBottomSheet(new InputStoreBottomSheetDialogFragment(), bundle);
+        if(storeId != null && !storeId.equals("")) {
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, Integer.parseInt(storeId));
+        } else {
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
+        }
+        bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+        showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
+    }
+
+    private void showLocationsBottomSheet() {
+        if(locations.isEmpty()) {
+            downloadLocations(
+                    response -> showLocationsBottomSheet(),
+                    error -> {
+                        discardCurrentProduct();
+                        showSnackbarMessage(getString(R.string.msg_error));
+                    }
+            );
+            return;
+        }
+        Bundle bundle = new Bundle();
+        if(locationId != null && !locationId.equals("")) {
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, Integer.parseInt(locationId));
+        } else {
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
+        }
+        bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+        showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
     }
 
     private ArrayList<String> getProductNames() {
@@ -668,6 +779,14 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
     public boolean isOnline() {
