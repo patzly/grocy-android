@@ -3,10 +3,13 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -62,6 +65,14 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
         textInputPrice.setHint(getString(R.string.property_price_in, currency));
 
         editTextPrice = textInputPrice.getEditText();
+        assert editTextPrice != null;
+        editTextPrice.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE && !productDiscarded) {
+                        dismiss();
+                        return true;
+                    } return false;
+                });
 
         view.findViewById(R.id.button_price_save).setOnClickListener(
                 v -> dismiss()
