@@ -46,10 +46,10 @@ import java.util.List;
 import java.util.Map;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBBDateBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputPriceBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -93,7 +93,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private QuestionTime askForBestBeforeDate = QuestionTime.NEVER; // (only purchase)
-    private QuestionTime askForPrice = QuestionTime.ALWAYS; // (only purchase)
+    private QuestionTime askForPrice = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForStore = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForLocation = QuestionTime.NEVER; // (consume & purchase)
     private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (consume)
@@ -529,7 +529,7 @@ public class ScanBatchActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.SELECTED_DATE, bestBeforeDate);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-        showBottomSheet(new InputBBDateBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
     }
 
     private void showPriceBottomSheet() {
@@ -538,7 +538,7 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
         bundle.putString(Constants.ARGUMENT.CURRENCY, currency);
-        showBottomSheet(new InputPriceBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new PriceBottomSheetDialogFragment(), bundle);
     }
 
     private void showStoreBottomSheet() {

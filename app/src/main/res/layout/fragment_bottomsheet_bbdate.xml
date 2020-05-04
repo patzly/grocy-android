@@ -12,7 +12,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/text_input_bbd_title"
+            android:id="@+id/text_bbd_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
@@ -28,7 +28,7 @@
         android:layout_marginBottom="0dp" />
 
     <LinearLayout
-        android:id="@+id/linear_input_bbd_never_expires"
+        android:id="@+id/linear_bbd_never_expires"
         style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
         android:background="@null"
         android:paddingTop="16dp"
@@ -40,10 +40,10 @@
             style="@style/Theme.Grocy.ListItem.Title"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="Product never expires" />
+            android:text="@string/subtitle_never_expires" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/checkbox_input_bbd_never_expires"
+            android:id="@+id/checkbox_bbd_never_expires"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <DatePicker
-        android:id="@+id/datepicker_input_bbd"
+        android:id="@+id/datepicker_bbd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
@@ -69,7 +69,7 @@
         android:paddingBottom="16dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_input_bbd_discard"
+            android:id="@+id/button_bbd_discard"
             style="@style/Widget.Grocy.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,14 +78,14 @@
             android:text="@string/action_discard" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_input_bbd_reset"
+            android:id="@+id/button_bbd_reset"
             style="@style/Widget.Grocy.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_reset" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_input_bbd_save"
+            android:id="@+id/button_bbd_save"
             style="@style/Widget.Grocy.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

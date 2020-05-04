@@ -20,10 +20,10 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private final static boolean DEBUG = false;
-    private final static String TAG = "InputBBDateBottomSheetDialogFragment";
+    private final static String TAG = "PriceBottomSheet";
 
     private ScanBatchActivity activity;
 
@@ -47,7 +47,7 @@ public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragme
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_input_price, container, false
+                R.layout.fragment_bottomsheet_price, container, false
         );
 
         activity = (ScanBatchActivity) getActivity();
@@ -58,15 +58,15 @@ public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragme
         String currency = bundle.getString(Constants.ARGUMENT.CURRENCY);
         productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 
-        textInputPrice = view.findViewById(R.id.text_input_price);
+        textInputPrice = view.findViewById(R.id.text_price);
         textInputPrice.setHint(getString(R.string.property_price_in, currency));
 
         editTextPrice = textInputPrice.getEditText();
 
-        view.findViewById(R.id.button_input_price_save).setOnClickListener(
+        view.findViewById(R.id.button_price_save).setOnClickListener(
                 v -> dismiss()
         );
-        view.findViewById(R.id.button_input_price_discard).setOnClickListener(
+        view.findViewById(R.id.button_price_discard).setOnClickListener(
                 v -> {
                     activity.discardCurrentProduct();
                     productDiscarded = true;
