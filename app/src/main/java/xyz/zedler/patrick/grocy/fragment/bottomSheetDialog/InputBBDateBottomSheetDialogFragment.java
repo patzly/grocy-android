@@ -63,7 +63,6 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
                 R.layout.fragment_bottomsheet_input_bbdate, container, false
         );
 
-
         activity =  getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
@@ -114,6 +113,10 @@ public class InputBBDateBottomSheetDialogFragment extends BottomSheetDialogFragm
         productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 
         fillForm(selectedBestBeforeDate);
+
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+        }
 
         return view;
     }

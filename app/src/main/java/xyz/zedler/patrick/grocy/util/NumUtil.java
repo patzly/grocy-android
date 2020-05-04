@@ -16,6 +16,10 @@ public class NumUtil {
         return decimalFormat.format(value);
     }
 
+    public static String formatPrice(String value) {
+        return trimPrice(stringToDouble(value));
+    }
+
     public static double stringToDouble(String input) {
         double num;
         if(!input.equals("")) {

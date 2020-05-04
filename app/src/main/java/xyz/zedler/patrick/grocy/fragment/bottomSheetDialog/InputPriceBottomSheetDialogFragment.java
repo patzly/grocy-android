@@ -1,47 +1,38 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private final static boolean DEBUG = false;
     private final static String TAG = "InputBBDateBottomSheetDialogFragment";
 
-    private Activity activity;
+    private ScanBatchActivity activity;
 
-    private Calendar calendar;
-    private SimpleDateFormat dateFormat;
     private ProductDetails productDetails;
-    private DatePicker datePicker;
-    private MaterialCheckBox neverExpires;
+
+    private TextInputLayout textInputPrice;
+    private EditText editTextPrice;
+
+    private boolean productDiscarded = false;
 
     @NonNull
     @Override
@@ -49,7 +40,6 @@ public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragme
         return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
     }
 
-    @SuppressLint("SimpleDateFormat")
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
@@ -60,122 +50,65 @@ public class InputPriceBottomSheetDialogFragment extends BottomSheetDialogFragme
                 R.layout.fragment_bottomsheet_input_price, container, false
         );
 
-
-        activity =  getActivity();
+        activity = (ScanBatchActivity) getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
-        // TODO: Initialize views & continue work on price
-
-        neverExpires.setOnCheckedChangeListener((v, isChecked) -> {
-            if(isChecked) {
-                datePicker.setEnabled(false);
-                datePicker.setAlpha(0.5f);
-            } else {
-                datePicker.setEnabled(true);
-                datePicker.setAlpha(1.0f);
-            }
-        });
-
-        view.findViewById(R.id.linear_input_bbd_never_expires).setOnClickListener(
-                v -> neverExpires.setChecked(!neverExpires.isChecked())
-        );
-        view.findViewById(R.id.button_input_bbd_reset).setOnClickListener(
-                v -> {
-                    calendar = Calendar.getInstance();
-                    fillForm(null);
-                }
-        );
-        view.findViewById(R.id.button_input_bbd_save).setOnClickListener(
-                v -> dismiss()
-        );
-
-        String selectedBestBeforeDate = bundle.getString(Constants.ARGUMENT.SELECTED_DATE);
+        String price = bundle.getString(Constants.ARGUMENT.PRICE);
+        String currency = bundle.getString(Constants.ARGUMENT.CURRENCY);
         productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 
-        fillForm(selectedBestBeforeDate);
+        textInputPrice = view.findViewById(R.id.text_input_price);
+        textInputPrice.setHint(getString(R.string.property_price_in, currency));
+
+        editTextPrice = textInputPrice.getEditText();
+
+        view.findViewById(R.id.button_input_price_save).setOnClickListener(
+                v -> dismiss()
+        );
+        view.findViewById(R.id.button_input_price_discard).setOnClickListener(
+                v -> {
+                    activity.discardCurrentProduct();
+                    productDiscarded = true;
+                    dismiss();
+                }
+        );
+
+        setCancelable(false);
+
+        fillForm(price);
 
         return view;
     }
 
-    private void fillForm(String selectedBestBeforeDate) {
-        if(selectedBestBeforeDate != null
-                && selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
+    private void fillForm(String price) {
+        if(price != null) {
 
-            datePicker.setEnabled(false);
-            datePicker.setAlpha(0.5f);
-            neverExpires.setChecked(true);
-
-        } else if(selectedBestBeforeDate != null) {
-
-            try {
-                Date date = dateFormat.parse(selectedBestBeforeDate);
-                if(date != null) calendar.setTime(date);
-            } catch (ParseException e) {
-                fillForm(null);
-                showSnackbarMessage(activity.getString(R.string.msg_error));
-                return;
-            }
-            datePicker.setEnabled(true);
-            datePicker.setAlpha(1.0f);
-            neverExpires.setChecked(false);
+            editTextPrice.setText(price);
 
         } else if(productDetails != null) {
 
-            int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
-            if(defaultBestBeforeDays < 0) {
-                datePicker.setEnabled(false);
-                datePicker.setAlpha(0.5f);
-                neverExpires.setChecked(true);
+            String lastPrice = productDetails.getLastPrice();
+            if(lastPrice != null) {
+                lastPrice = NumUtil.formatPrice(lastPrice);
+                editTextPrice.setText(lastPrice);
             } else {
-                datePicker.setEnabled(true);
-                datePicker.setAlpha(1.0f);
-                neverExpires.setChecked(false);
-                calendar.add(Calendar.DAY_OF_MONTH, defaultBestBeforeDays);
+                editTextPrice.requestFocus();
+                activity.showKeyboard(editTextPrice); // TODO: Does not work
             }
         }
-
-        datePicker.updateDate(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
     }
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        String date;
-        if(!neverExpires.isChecked()) {
-            calendar.set(
-                    datePicker.getYear(),
-                    datePicker.getMonth(),
-                    datePicker.getDayOfMonth()
-            );
-            date = dateFormat.format(calendar.getTime());
-        } else {
-            date = Constants.DATE.NEVER_EXPIRES;
-        }
+        if(productDiscarded) return;
 
-        if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).selectBestBeforeDate(date);
-            }
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            ((ScanBatchActivity) activity).setBestBeforeDate(date);
-            ((ScanBatchActivity) activity).askNecessaryDetails();
-        }
-    }
+        String price = editTextPrice.getText().toString();
+        price = NumUtil.formatPrice(price);
 
-    private void showSnackbarMessage(String msg) {
-        View view = null;
-        if(activity.getClass() == MainActivity.class) {
-            view = activity.findViewById(R.id.linear_container_main);
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            view = activity.findViewById(R.id.barcode_scan_batch);
-        }
-        if(view != null) Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
+        activity.setPrice(price);
+        activity.askNecessaryDetails();
     }
 
     @NonNull

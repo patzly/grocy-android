@@ -41,7 +41,6 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_price"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_amount_min_stock"
                 app:helperTextEnabled="true"
                 app:helperText=" ">
 

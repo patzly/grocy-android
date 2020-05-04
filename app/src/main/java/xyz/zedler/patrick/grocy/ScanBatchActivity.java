@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
@@ -42,9 +46,10 @@ import java.util.List;
 import java.util.Map;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBBDateBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputPriceBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -77,6 +82,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private RequestQueue requestQueue;
     private WebRequest request;
     private ProductDetails productDetails;
+    private SharedPreferences sharedPrefs;
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<String> productNames = new ArrayList<>();
@@ -87,14 +93,18 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private QuestionTime askForBestBeforeDate = QuestionTime.NEVER; // (only purchase)
-    private QuestionTime askForPrice = QuestionTime.NEVER; // (only purchase)
+    private QuestionTime askForPrice = QuestionTime.ALWAYS; // (only purchase)
     private QuestionTime askForStore = QuestionTime.NEVER; // (only purchase)
     private QuestionTime askForLocation = QuestionTime.NEVER; // (consume & purchase)
     private QuestionTime askForSpecificItem = QuestionTime.NEVER; // (consume)
 
     private String bestBeforeDate;
+    private String price;
+    private String storeId;
 
     private Map<Integer, String> savedBestBeforeDates = new HashMap<>();
+    private Map<Integer, String> savedPrices = new HashMap<>();
+    private Map<Integer, String> savedStoreIds = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +115,10 @@ public class ScanBatchActivity extends AppCompatActivity
         if(actionType == null) showSnackbarMessage(getString(R.string.msg_error));
 
         isTorchOn = false;
+
+        // PREFERENCES
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // WEB REQUESTS
 
@@ -374,10 +388,19 @@ public class ScanBatchActivity extends AppCompatActivity
                     snackbar.show();
                     resumeScan();
 
-                    // BEST BEFORE DATE
                     int productId = productDetails.getProduct().getId();
-                    savedBestBeforeDates.put(productId, bestBeforeDate);
+
+                    // BEST BEFORE DATE
+                    if(!bestBeforeDate.equals("")) {
+                        savedBestBeforeDates.put(productId, bestBeforeDate);
+                    }
                     bestBeforeDate = null;
+                    // PRICE
+                    if(!price.equals("")) savedPrices.put(productId, price);
+                    price = null;
+                    // STORE
+                    if(!storeId.equals("")) savedStoreIds.put(productId, storeId);
+                    storeId = null;
                 },
                 error -> {
                     showSnackbarMessage(getString(R.string.msg_error));
@@ -402,6 +425,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @SuppressLint("SimpleDateFormat")
     public void askNecessaryDetails() {
+
+        int productId = productDetails.getProduct().getId();
+
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
             // TODO: SPECIFIC
@@ -413,14 +439,13 @@ public class ScanBatchActivity extends AppCompatActivity
             // BEST BEFORE DATE
 
             if(askForBestBeforeDate == QuestionTime.NEVER && bestBeforeDate == null) {
-
                 int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
                 if(defaultBestBeforeDays == 0) {
-                    int productId = productDetails.getProduct().getId();
                     if(savedBestBeforeDates.containsKey(productId)) {
                         bestBeforeDate = savedBestBeforeDates.get(productId);
                     }
                     showBBDateBottomSheet();
+                    return;
                 } else if(defaultBestBeforeDays == -1) {
                     bestBeforeDate = Constants.DATE.NEVER_EXPIRES;
                 } else {
@@ -429,29 +454,54 @@ public class ScanBatchActivity extends AppCompatActivity
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     bestBeforeDate = dateFormat.format(calendar.getTime());
                 }
-
             } else if(askForBestBeforeDate == QuestionTime.FIRST_TIME && bestBeforeDate == null) {
-
-                int productId = productDetails.getProduct().getId();
                 if(savedBestBeforeDates.containsKey(productId)) {
                     bestBeforeDate = savedBestBeforeDates.get(productId);
                 } else {
                     showBBDateBottomSheet();
+                    return;
                 }
-
             } else if(askForBestBeforeDate == QuestionTime.ALWAYS && bestBeforeDate == null) {
-
-                int productId = productDetails.getProduct().getId();
                 if(savedBestBeforeDates.containsKey(productId)) {
                     bestBeforeDate = savedBestBeforeDates.get(productId);
                 }
                 showBBDateBottomSheet();
-
+                return;
             }
 
-            // TODO: PRICE
+            if(askForPrice == QuestionTime.NEVER && price == null) {
+                price = "";  // price is never required
+            } else if(askForPrice == QuestionTime.FIRST_TIME && price == null) {
+                if(savedPrices.containsKey(productId)) {
+                    price = savedPrices.get(productId);
+                } else {
+                    showPriceBottomSheet();
+                    return;
+                }
+            } else if(askForPrice == QuestionTime.ALWAYS && price == null) {
+                if(savedPrices.containsKey(productId)) {
+                    price = savedPrices.get(productId);
+                }
+                showPriceBottomSheet();
+                return;
+            }
 
-            // TODO: STORE
+            if(askForStore == QuestionTime.NEVER && storeId == null) {
+                storeId = "";  // storeId is never required
+            } else if(askForStore == QuestionTime.FIRST_TIME && storeId == null) {
+                if(savedStoreIds.containsKey(productId)) {
+                    storeId = savedStoreIds.get(productId);
+                } else {
+                    showStoreBottomSheet();
+                    return;
+                }
+            } else if(askForStore == QuestionTime.ALWAYS && storeId == null) {
+                if(savedStoreIds.containsKey(productId)) {
+                    storeId = savedStoreIds.get(productId);
+                }
+                showStoreBottomSheet();
+                return;
+            }
 
             // TODO: LOCATION
 
@@ -461,6 +511,8 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public void discardCurrentProduct() {
         bestBeforeDate = null;
+        price = null;
+        resumeScan();
     }
 
     private void showChooseBottomSheet(String barcode) {
@@ -478,6 +530,22 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.SELECTED_DATE, bestBeforeDate);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
         showBottomSheet(new InputBBDateBottomSheetDialogFragment(), bundle);
+    }
+
+    private void showPriceBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.PRICE, price);
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+        String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
+        bundle.putString(Constants.ARGUMENT.CURRENCY, currency);
+        showBottomSheet(new InputPriceBottomSheetDialogFragment(), bundle);
+    }
+
+    private void showStoreBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.STORE, storeId);
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+        //showBottomSheet(new InputStoreBottomSheetDialogFragment(), bundle);
     }
 
     private ArrayList<String> getProductNames() {
@@ -598,6 +666,10 @@ public class ScanBatchActivity extends AppCompatActivity
         this.bestBeforeDate = bestBeforeDate;
     }
 
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                 Context.CONNECTIVITY_SERVICE
@@ -605,6 +677,22 @@ public class ScanBatchActivity extends AppCompatActivity
         assert connectivityManager != null;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public void showKeyboard(EditText editText) {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                .showSoftInput(
+                        editText,
+                        InputMethodManager.SHOW_IMPLICIT
+                );
+    }
+
+    public void hideKeyboard() {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(
+                        findViewById(android.R.id.content).getWindowToken(),
+                        0
+                );
     }
 
     private void hideInfo() {
