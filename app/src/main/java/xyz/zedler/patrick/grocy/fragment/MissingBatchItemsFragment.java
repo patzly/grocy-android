@@ -63,7 +63,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_purchase_batch, container, false);
+        return inflater.inflate(R.layout.fragment_missing_batch_items, container, false);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
         // INITIALIZE VIEWS
 
-        scrollView = activity.findViewById(R.id.scroll_purchase_batch);
-        recyclerView = activity.findViewById(R.id.recycler_purchase_batch);
+        scrollView = activity.findViewById(R.id.scroll_missing_batch_items);
+        recyclerView = activity.findViewById(R.id.recycler_missing_batch_items);
 
         if(getArguments() == null ||
                 getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
