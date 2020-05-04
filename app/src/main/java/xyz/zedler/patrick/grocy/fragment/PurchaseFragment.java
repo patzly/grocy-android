@@ -165,7 +165,7 @@ public class PurchaseFragment extends Fragment {
                 if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
                         && !nameAutoFilled) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE);
+                    bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                     bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
                     activity.showBottomSheet(
                             new InputNameBottomSheetDialogFragment(), bundle
@@ -413,7 +413,7 @@ public class PurchaseFragment extends Fragment {
                     // download finished
                     String action = null;
                     if(startupBundle != null) {
-                        action = startupBundle.getString(Constants.ARGUMENT.ACTION);
+                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
                     }
                     if(action != null && action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
                         Product product = getProductFromName(

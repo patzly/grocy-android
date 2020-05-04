@@ -74,7 +74,7 @@ public class InputBarcodeBottomSheetDialogFragment extends BottomSheetDialogFrag
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == PurchaseFragment.class && getArguments() != null) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                 bundle.putString(
                         Constants.ARGUMENT.BARCODES,
                         getArguments().getString(Constants.ARGUMENT.BARCODES)

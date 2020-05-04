@@ -500,7 +500,7 @@ public class MasterProductsFragment extends Fragment
 
     public void editProduct(Product product) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.EDIT);
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
         if(product.getParentProductId() != null) {
             bundle.putParcelable(

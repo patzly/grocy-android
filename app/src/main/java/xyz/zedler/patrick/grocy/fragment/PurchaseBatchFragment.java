@@ -176,7 +176,7 @@ public class PurchaseBatchFragment extends Fragment implements MissingBatchProdu
     public void onItemRowClicked(int position) {
         MissingBatchProduct batchProduct = missingBatchProducts.get(position);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, batchProduct.getProductName());
         bundle.putString(Constants.ARGUMENT.BARCODES, batchProduct.getBarcodes());
         bundle.putString(Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS, String.valueOf(DateUtil.getDaysFromNow(Constants.DATE.NEVER_EXPIRES)));

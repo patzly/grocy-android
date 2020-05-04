@@ -63,7 +63,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == PurchaseFragment.class) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.ACTION, Constants.ACTION.CREATE_THEN_PURCHASE);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                 bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                 activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
             }

@@ -394,8 +394,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
         // STARTUP BUNDLE
 
         Bundle bundle = getArguments();
-        if(bundle != null && bundle.getString(Constants.ARGUMENT.ACTION) != null) {
-            intendedAction = bundle.getString(Constants.ARGUMENT.ACTION);
+        if(bundle != null && bundle.getString(Constants.ARGUMENT.TYPE) != null) {
+            intendedAction = bundle.getString(Constants.ARGUMENT.TYPE);
         }
 
         if(intendedAction == null) {
@@ -1000,7 +1000,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                     response -> {
                         if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(Constants.ARGUMENT.ACTION, intendedAction);
+                            bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                             activity.dismissFragment(bundle);
                         } else {
