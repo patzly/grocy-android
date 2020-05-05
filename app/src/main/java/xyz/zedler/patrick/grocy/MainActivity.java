@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
@@ -753,13 +754,10 @@ public class MainActivity extends AppCompatActivity {
                     if(((MissingBatchItemsFragment)fragmentCurrent).getMissingProductsSize() == 0) {
                         dismissFragments();
                     } else {
-                        /*Intent intent = new Intent(this, ScanBatchActivity.class);
-                        intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-                        intent.putExtra(Constants.ARGUMENT.BUNDLE, fragmentCurrent.getArguments());
-                        startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
-                        new Handler().postDelayed(this::dismissFragments, 500);*/
-                        dismissFragments();
-                        // TODO: ((MissingBatchItemsFragment) fragmentCurrent).exitWarning();
+                        showBottomSheet(
+                                new ExitMissingBatchBottomSheetDialogFragment(),
+                                fragmentCurrent.getArguments()
+                        );
                     }
                 }
                 break;
@@ -882,7 +880,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void dismissFragments() {
+    public void dismissFragments() {
         int count = fragmentManager.getBackStackEntryCount();
         if(count >= 1) {
             for(int i = 0; i < count ; i++) {

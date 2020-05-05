@@ -11,12 +11,12 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/text_batch_exit_title"
+            android:id="@+id/text_exit_missing_batch_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="@string/title_batch_exit"
+            android:text="Back to batch mode?"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="viewStart"
-                android:text="@string/description_batch_exit"
+                android:text="@string/description_missing_batch_exit"
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
@@ -54,19 +54,19 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_exit_discard"
+                    android:id="@+id/button_exit_missing_batch_discard"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_discard_products" />
+                    android:text="@string/action_discard" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_batch_exit_open"
+                    android:id="@+id/button_exit_missing_batch_open"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/action_open_forms" />
+                    android:text="@string/action_open_scanner" />
 
             </LinearLayout>
 

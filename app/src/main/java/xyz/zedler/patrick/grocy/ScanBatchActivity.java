@@ -48,7 +48,7 @@ import java.util.Map;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchExitBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
@@ -248,7 +248,7 @@ public class ScanBatchActivity extends AppCompatActivity
         if(missingBatchItems.size() > 0) {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchItems);
-            showBottomSheet(new BatchExitBottomSheetDialogFragment(), bundle);
+            showBottomSheet(new ExitScanBatchBottomSheetDialogFragment(), bundle);
             pauseScan();
         } else {
             setResult(Activity.RESULT_CANCELED);

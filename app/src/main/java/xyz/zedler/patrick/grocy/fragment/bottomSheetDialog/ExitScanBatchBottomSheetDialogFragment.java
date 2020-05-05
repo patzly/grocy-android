@@ -19,10 +19,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BatchExitBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class ExitScanBatchBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private final static boolean DEBUG = false;
-    private final static String TAG = "BatchExitBottomSheetDialogFragment";
+    private final static String TAG = "ExitScanBatchBottomSheet";
 
     private ScanBatchActivity activity;
 
@@ -39,7 +39,7 @@ public class BatchExitBottomSheetDialogFragment extends BottomSheetDialogFragmen
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_batch_exit, container, false
+                R.layout.fragment_bottomsheet_exit_scan_batch, container, false
         );
 
         activity = (ScanBatchActivity) getActivity();
@@ -55,7 +55,7 @@ public class BatchExitBottomSheetDialogFragment extends BottomSheetDialogFragmen
             ).show();
         }
 
-        view.findViewById(R.id.button_batch_exit_open).setOnClickListener(v -> {
+        view.findViewById(R.id.button_exit_scan_batch_open).setOnClickListener(v -> {
             dismiss();
             activity.setResult(
                     Activity.RESULT_OK,
@@ -64,7 +64,7 @@ public class BatchExitBottomSheetDialogFragment extends BottomSheetDialogFragmen
             activity.finish();
         });
 
-        view.findViewById(R.id.button_batch_exit_discard).setOnClickListener(v -> {
+        view.findViewById(R.id.button_exit_scan_batch_discard).setOnClickListener(v -> {
             dismiss();
             activity.setResult(Activity.RESULT_CANCELED);
             activity.finish();

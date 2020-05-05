@@ -49,6 +49,7 @@
     <string name="action_create_purchase">Create and purchase product</string>
     <string name="action_link">Link</string>
     <string name="action_open_forms">Open forms</string>
+    <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
     <string name="action_discard_products">Discard products</string>
 
@@ -126,7 +127,8 @@
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
-    <string name="description_batch_exit">New products have been created, but they have not yet been sent to the server because only their names are known so far. Open the product forms?</string>
+    <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>
+    <string name="description_missing_batch_exit">Some new products have not yet been sent to the server. Discard them or go back to the scanner?</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
