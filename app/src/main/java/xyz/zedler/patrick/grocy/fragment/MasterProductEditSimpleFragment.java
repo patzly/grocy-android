@@ -969,10 +969,19 @@ public class MasterProductEditSimpleFragment extends Fragment {
                                 || intendedAction.equals(
                                         Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
                         ) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
-                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                            activity.dismissFragment(bundle);
+                            try {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
+                                bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                                bundle.putInt(
+                                        Constants.ARGUMENT.PRODUCT_ID,
+                                        response.getInt("created_object_id")
+                                );
+                                activity.dismissFragment(bundle);
+                            } catch (JSONException e) {
+                                Log.e(TAG, "saveProduct: " + e.toString());
+                                showErrorMessage();
+                            }
                         } else {
                             activity.dismissFragment();
                         }

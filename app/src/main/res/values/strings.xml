@@ -52,6 +52,7 @@
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
     <string name="action_discard_products">Discard products</string>
+    <string name="action_perform_purchasing_processes">Perform purchasing processes for created products</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_missing_batch_item_container"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="64dp"
@@ -12,21 +13,28 @@
     android:padding="16dp"
     android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/text_missing_batch_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:singleLine="true"
-        android:fontFamily="@font/roboto_mono_medium"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+    <ImageView
+        android:id="@+id/image_missing_batch_item_check"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_round_check_circle"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="20dp"
-        android:gravity="bottom">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_missing_batch_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
         <TextView
             android:id="@+id/text_missing_batch_item_amount"

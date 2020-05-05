@@ -2,7 +2,9 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +21,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,9 +34,12 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
+import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -109,20 +118,134 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         // UPDATE UI
 
         activity.updateUI(Constants.UI.MISSING_BATCH_ITEMS, TAG);
+        updateFab();
     }
 
     public void createdProduct(Bundle bundle) {
         if(bundle != null && bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
-            // TODO
+            MissingBatchItem missingBatchItem = getMissingBatchItemFromName(
+                    bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+            );
+            if(missingBatchItem != null) {
+                missingBatchItem.setIsOnServer(true);
+                missingBatchItem.setProductId(bundle.getInt(Constants.ARGUMENT.PRODUCT_ID));
+            }
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            if(adapter != null) adapter.notifyItemChanged(
+                    missingBatchItems.indexOf(missingBatchItem)
+            );
+            updateFab();
         }
     }
 
-    public int getMissingProductsSize() { // TODO
+    public int getMissingBatchItemsSize() {
         return missingBatchItems.size();
     }
 
-    public void exitWarning() {
-        // TODO
+    private int getReadyPurchaseEntries() {
+        int readyPurchaseEntries = 0;
+        for(MissingBatchItem missingBatchItem : missingBatchItems) {
+            if(missingBatchItem.getIsOnServer()) {
+                readyPurchaseEntries += missingBatchItem.getPurchaseEntriesSize();
+            }
+        }
+        return readyPurchaseEntries;
+    }
+
+    private MissingBatchItem getMissingBatchItemFromName(String productName) {
+        for(MissingBatchItem missingBatchItem : missingBatchItems) {
+            if(missingBatchItem.getProductName().equals(productName)) {
+                return missingBatchItem;
+            }
+        }
+        return null;
+    }
+
+    private void updateFab() {
+        activity.updateFab(
+                new BitmapDrawable(
+                        getResources(),
+                        BitmapUtil.getFromDrawableWithNumber(
+                                activity,
+                                R.drawable.ic_round_shopping_cart,
+                                getReadyPurchaseEntries(),
+                                7.3f,
+                                -1.5f,
+                                8
+                        )
+                ),
+                R.string.action_perform_purchasing_processes,
+                Constants.FAB.TAG.CREATE_PURCHASE,
+                true,
+                this::doOnePurchaseRequest
+        );
+    }
+
+    private void doOnePurchaseRequest() {
+        if(missingBatchItems.isEmpty()) {
+            updateFab();
+            showSnackbarMessage("All purchases complete");
+            return;
+        }
+
+        MissingBatchItem missingBatchItem = missingBatchItems.get(0);
+        ArrayList<BatchPurchaseEntry> batchPurchaseEntries = missingBatchItem.getPurchaseEntries();
+        BatchPurchaseEntry batchPurchaseEntry = batchPurchaseEntries.get(0);
+
+        purchaseProduct(
+                Integer.parseInt(missingBatchItem.getProductId()),
+                batchPurchaseEntry.getLocationId(),
+                batchPurchaseEntry.getStoreId(),
+                batchPurchaseEntry.getPrice(),
+                batchPurchaseEntry.getBestBeforeDate(),
+                response -> {
+                    batchPurchaseEntries.remove(0);
+                    if(batchPurchaseEntries.isEmpty()) {
+                        missingBatchItems.remove(0);
+                        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+                        if(adapter != null) adapter.notifyItemRemoved(0);
+                    }
+                    updateFab();
+                    doOnePurchaseRequest();
+                },
+                error -> showSnackbarMessage(activity.getString(R.string.msg_error))
+        );
+    }
+
+    private void purchaseProduct(
+            int productId,
+            String locationId,
+            String storeId,
+            String price,
+            String bestBeforeDate,
+            OnResponseListener responseListener,
+            OnErrorListener errorListener
+    ) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", 1);
+            body.put("transaction_type", "purchase");
+            if(bestBeforeDate != null && !bestBeforeDate.equals("")) {
+                body.put("best_before_date", bestBeforeDate);
+            }
+            if(price != null && !price.equals("")) {
+                body.put("price", NumUtil.formatPrice(price));
+            }
+            if(storeId != null && !storeId.equals("") && Integer.parseInt(storeId) > -1) {
+                body.put("shopping_location_id", Integer.parseInt(storeId));
+            }
+            if(locationId != null && !locationId.equals("")) {
+                body.put("location_id", locationId);
+            }
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+        }
+        request.post(
+                grocyApi.purchaseProduct(productId),
+                body,
+                responseListener::onResponse,
+                errorListener::onError
+        );
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {
@@ -162,19 +285,11 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         }
     }
 
-    /*private StockItem getStockItem(int productId) {
-        for(StockItem stockItem : displayedItems) {
-            if(stockItem.getProduct().getId() == productId) {
-                return stockItem;
-            }
-        } return null;
-    }*/
-
-    private void showErrorMessage() {
+    private void showSnackbarMessage(String msg) {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
-                        activity.getString(R.string.msg_error),
+                        msg,
                         Snackbar.LENGTH_SHORT
                 )
         );
@@ -210,6 +325,14 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     public void setUpBottomMenu() {}
+
+    public interface OnResponseListener {
+        void onResponse(JSONObject response);
+    }
+
+    public interface OnErrorListener {
+        void onError(VolleyError error);
+    }
 
     @NonNull
     @Override

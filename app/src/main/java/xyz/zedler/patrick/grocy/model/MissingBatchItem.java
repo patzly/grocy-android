@@ -10,8 +10,9 @@ import java.util.ArrayList;
 public class MissingBatchItem implements Parcelable {
 
     private String productName, barcodes;
-    private String  defaultStoreId;
-    private int defaultBestBeforeDays, defaultLocationId = -1;
+    private String defaultStoreId;
+    private String productId;
+    private int defaultBestBeforeDays, defaultLocationId = -1, isOnServer = 0;
     private boolean isDefaultBestBeforeDaysSet = false;
     private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
 
@@ -32,6 +33,8 @@ public class MissingBatchItem implements Parcelable {
         defaultStoreId = parcel.readString();
         batchPurchaseEntries = new ArrayList<>();
         parcel.readList(batchPurchaseEntries, BatchPurchaseEntry.class.getClassLoader());
+        isOnServer = parcel.readInt();
+        productId = parcel.readString();
     }
 
     @Override
@@ -42,6 +45,8 @@ public class MissingBatchItem implements Parcelable {
         dest.writeInt(defaultBestBeforeDays);
         dest.writeString(defaultStoreId);
         dest.writeList(batchPurchaseEntries);
+        dest.writeInt(isOnServer);
+        dest.writeString(productId);
     }
 
     public static final Creator<MissingBatchItem> CREATOR = new Creator<MissingBatchItem>() {
@@ -102,8 +107,28 @@ public class MissingBatchItem implements Parcelable {
         return batchPurchaseEntries.size();
     }
 
+    public ArrayList<BatchPurchaseEntry> getPurchaseEntries() {
+        return batchPurchaseEntries;
+    }
+
     public void addPurchaseEntry(BatchPurchaseEntry batchPurchaseEntry) {
         batchPurchaseEntries.add(batchPurchaseEntry);
+    }
+
+    public boolean getIsOnServer() {
+        return isOnServer == 1;
+    }
+
+    public void setIsOnServer(boolean isOnServer) {
+        this.isOnServer = isOnServer ? 1 : 0;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = String.valueOf(productId);
     }
 
     @Override

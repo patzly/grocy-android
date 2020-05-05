@@ -53,6 +53,18 @@ public class BatchPurchaseEntry implements Parcelable {
         return storeId;
     }
 
+    public String getLocationId() {
+        return locationId;
+    }
+
+    public String getBestBeforeDate() {
+        return bestBeforeDate;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
     @Override
     public int describeContents() {
         return 0;

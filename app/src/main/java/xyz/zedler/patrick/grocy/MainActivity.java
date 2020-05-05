@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -62,7 +61,6 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -378,40 +376,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
-                updateFab(
-                        new BitmapDrawable(
-                                getResources(),
-                                BitmapUtil.getFromDrawableWithNumber(
-                                        this,
-                                        R.drawable.ic_round_shopping_cart,
-                                        2, // TODO: Number
-                                        7.3f,
-                                        -1.5f,
-                                        8
-                                )
-                        ),
-                        R.string.action_create_purchase,
-                        Constants.FAB.TAG.CREATE_PURCHASE,
-                        true,
-                        () -> {
-                            if(getCurrentFragment().getClass()
-                                    == MasterProductEditSimpleFragment.class
-                            ) {
-                                // TODO: Purchase
-                            }
-                        }
-                );
-                /*updateFab(
-                        R.drawable.ic_round_barcode_scan,
-                        R.string.action_back,
-                        Constants.FAB.TAG.SCAN,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                                //((MissingBatchItemsFragment) fragmentCurrent).openBarcodeScanner();
-                            }
-                        }
-                );*/
                 break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_master_products);
@@ -749,9 +713,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
+                dismissFragments();
+                break;
             case Constants.UI.MISSING_BATCH_ITEMS:
                 if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                    if(((MissingBatchItemsFragment)fragmentCurrent).getMissingProductsSize() == 0) {
+                    if(((MissingBatchItemsFragment)fragmentCurrent).getMissingBatchItemsSize() == 0) {
                         dismissFragments();
                     } else {
                         showBottomSheet(

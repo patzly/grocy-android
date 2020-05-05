@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class MissingBatchItemAdapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayoutItemContainer;
         private TextView textViewName, textViewAmount;
+        private ImageView imageViewOnServer;
 
         public ViewHolder(View view) {
             super(view);
@@ -43,6 +45,7 @@ public class MissingBatchItemAdapter
             linearLayoutItemContainer = view.findViewById(R.id.linear_missing_batch_item_container);
             textViewName = view.findViewById(R.id.text_missing_batch_item_name);
             textViewAmount = view.findViewById(R.id.text_missing_batch_item_amount);
+            imageViewOnServer = view.findViewById(R.id.image_missing_batch_item_check);
         }
     }
 
@@ -70,6 +73,16 @@ public class MissingBatchItemAdapter
         // AMOUNT
 
         holder.textViewAmount.setText(NumUtil.trim(missingBatchItem.getPurchaseEntriesSize()));
+
+        // IS ON SERVER
+
+        if(missingBatchItem.getIsOnServer()) {
+            holder.imageViewOnServer.setAlpha(1.0f);
+        } else {
+            // TODO: Other better way to mark it as onServer
+            holder.imageViewOnServer.setAlpha(0.2f);
+        }
+
 
         // CONTAINER
 
