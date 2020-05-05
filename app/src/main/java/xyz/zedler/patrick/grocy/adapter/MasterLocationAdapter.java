@@ -63,11 +63,11 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // NAME
-        holder.textViewName.setText(locations.get(position).getName());
+        holder.textViewName.setText(locations.get(holder.getAdapterPosition()).getName());
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

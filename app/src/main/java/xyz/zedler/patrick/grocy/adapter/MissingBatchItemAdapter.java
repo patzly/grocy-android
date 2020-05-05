@@ -64,7 +64,7 @@ public class MissingBatchItemAdapter
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        MissingBatchItem missingBatchItem = missingBatchItems.get(position);
+        MissingBatchItem missingBatchItem = missingBatchItems.get(holder.getAdapterPosition());
 
         // NAME
 

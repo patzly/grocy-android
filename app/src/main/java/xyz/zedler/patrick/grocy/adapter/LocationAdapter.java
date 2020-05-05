@@ -67,7 +67,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             @NonNull final LocationAdapter.ViewHolder holder,
             int position
     ) {
-        Location location = locations.get(position);
+        Location location = locations.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -82,7 +82,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

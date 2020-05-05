@@ -67,7 +67,7 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
             @NonNull final ProductGroupAdapter.ViewHolder holder,
             int position
     ) {
-        ProductGroup productGroup = productGroups.get(position);
+        ProductGroup productGroup = productGroups.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -86,7 +86,7 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

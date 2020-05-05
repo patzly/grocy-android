@@ -67,7 +67,7 @@ public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapte
             @NonNull final QuantityUnitAdapter.ViewHolder holder,
             int position
     ) {
-        QuantityUnit quantityUnit = quantityUnits.get(position);
+        QuantityUnit quantityUnit = quantityUnits.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -82,7 +82,7 @@ public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapte
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

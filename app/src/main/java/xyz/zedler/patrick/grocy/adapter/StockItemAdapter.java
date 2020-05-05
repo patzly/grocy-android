@@ -81,7 +81,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        StockItem stockItem = stockItems.get(position);
+        StockItem stockItem = stockItems.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -180,7 +180,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         // CONTAINER
 
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

@@ -78,7 +78,7 @@ public class StockEntryAdapter
             @NonNull final StockEntryAdapter.ViewHolder holder,
             int position
     ) {
-        StockEntry stockEntry = stockEntries.get(position);
+        StockEntry stockEntry = stockEntries.get(holder.getAdapterPosition());
 
         if(stockEntry.getStockId() == null) {
             // constructor of NO SPECIFIC/AUTO
@@ -132,7 +132,7 @@ public class StockEntryAdapter
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

@@ -67,7 +67,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
             @NonNull final StoreAdapter.ViewHolder holder,
             int position
     ) {
-        Store store = stores.get(position);
+        Store store = stores.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -82,7 +82,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

@@ -73,7 +73,7 @@ public class StockLocationAdapter
             @NonNull final StockLocationAdapter.ViewHolder holder,
             int position
     ) {
-        StockLocation stockLocation = stockLocations.get(position);
+        StockLocation stockLocation = stockLocations.get(holder.getAdapterPosition());
 
         // NAME
 
@@ -94,7 +94,7 @@ public class StockLocationAdapter
         // CONTAINER
 
         holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

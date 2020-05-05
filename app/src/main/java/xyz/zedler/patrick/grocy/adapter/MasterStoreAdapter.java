@@ -63,11 +63,11 @@ public class MasterStoreAdapter extends RecyclerView.Adapter<MasterStoreAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // NAME
-        holder.textViewName.setText(stores.get(position).getName());
+        holder.textViewName.setText(stores.get(holder.getAdapterPosition()).getName());
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

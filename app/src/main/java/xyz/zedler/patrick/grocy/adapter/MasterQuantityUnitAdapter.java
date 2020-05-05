@@ -63,11 +63,11 @@ public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuanti
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // NAME
-        holder.textViewName.setText(quantityUnits.get(position).getName());
+        holder.textViewName.setText(quantityUnits.get(holder.getAdapterPosition()).getName());
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 

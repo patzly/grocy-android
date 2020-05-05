@@ -63,11 +63,11 @@ public class MasterProductGroupAdapter extends RecyclerView.Adapter<MasterProduc
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // NAME
-        holder.textViewName.setText(productGroups.get(position).getName());
+        holder.textViewName.setText(productGroups.get(holder.getAdapterPosition()).getName());
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(position)
+                view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
     }
 
