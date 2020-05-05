@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -29,8 +28,6 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private final static String TAG = "PriceBottomSheet";
 
     private ScanBatchActivity activity;
-
-    private ProductDetails productDetails;
 
     private TextInputLayout textInputPrice;
     private EditText editTextPrice;
@@ -59,7 +56,6 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         String price = bundle.getString(Constants.ARGUMENT.PRICE);
         String currency = bundle.getString(Constants.ARGUMENT.CURRENCY);
-        productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 
         textInputPrice = view.findViewById(R.id.text_price);
         textInputPrice.setHint(getString(R.string.property_price_in, currency));
@@ -94,19 +90,10 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private void fillForm(String price) {
         if(price != null) {
-
             editTextPrice.setText(price);
-
-        } else if(productDetails != null) {
-
-            String lastPrice = productDetails.getLastPrice();
-            if(lastPrice != null) {
-                lastPrice = NumUtil.formatPrice(lastPrice);
-                editTextPrice.setText(lastPrice);
-            } else {
-                editTextPrice.requestFocus();
-                activity.showKeyboard(editTextPrice); // TODO: Does not work
-            }
+        } else {
+            editTextPrice.requestFocus();
+            activity.showKeyboard(editTextPrice); // TODO: Does not work
         }
     }
 

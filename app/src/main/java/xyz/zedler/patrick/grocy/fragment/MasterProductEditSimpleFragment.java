@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -56,13 +55,12 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetD
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -92,10 +90,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private ProductGroup editProductGroup;
     private QuantityUnit editQuantityUnit;
 
-    private String createPurchaseName, createPurchaseBarcodes, createPurchaseBestBeforeDays;
-    private int createPurchaseAmount;
-    // replace with
-    private MissingBatchItem missingBatchItem;
+    private CreateProduct createProductObj;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialAutoCompleteTextView autoCompleteTextViewParentProduct;
@@ -414,15 +409,22 @@ public class MasterProductEditSimpleFragment extends Fragment {
             editProductGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
             editQuantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
             fillWithEditReferences();
-        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
-                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
-            createPurchaseName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
+            /*createPurchaseName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
             createPurchaseBarcodes = bundle.getString(Constants.ARGUMENT.BARCODES);
             createPurchaseBestBeforeDays = bundle.getString(
                     Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS
-            );
-            createPurchaseAmount = bundle.getInt(Constants.ARGUMENT.AMOUNT);
-            fillWithPurchaseReferences();
+            );*/
+            fillWithCreateProductObject();
+        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
+            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
+            fillWithCreateProductObject();
+            /*MissingBatchItem batchItem = bundle.getParcelable(Constants.ARGUMENT.BATCH_ITEM);
+            assert batchItem != null;
+            createPurchaseName = batchItem.getProductName();
+            createPurchaseBarcodes = batchItem.getBarcodes();
+            createPurchaseBestBeforeDays = String.valueOf(batchItem.getDefaultBestBeforeDays());*/
         }
 
         // START
@@ -432,48 +434,6 @@ public class MasterProductEditSimpleFragment extends Fragment {
         // UPDATE UI
 
         activity.updateUI(toString(), TAG);
-
-        // UPDATE FAB SEPARATELY
-
-        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
-            activity.updateFab(
-                    new BitmapDrawable(
-                            getResources(),
-                            BitmapUtil.getFromDrawableWithNumber(
-                                    activity,
-                                    R.drawable.ic_round_shopping_cart,
-                                    createPurchaseAmount,
-                                    7.3f,
-                                    -1.5f,
-                                    8
-                            )
-                    ),
-                    R.string.action_create_purchase,
-                    Constants.FAB.TAG.CREATE_PURCHASE,
-                    true,
-                    () -> {
-                        if(activity.getCurrentFragment().getClass()
-                                == MasterProductEditSimpleFragment.class
-                        ) {
-                            saveProduct();
-                        }
-                    }
-            );
-        } else {
-            activity.updateFab(
-                    R.drawable.ic_round_backup,
-                    R.string.action_save,
-                    Constants.FAB.TAG.SAVE,
-                    true,
-                    () -> {
-                        if(activity.getCurrentFragment().getClass()
-                                == MasterProductEditSimpleFragment.class
-                        ) {
-                            saveProduct();
-                        }
-                    }
-            );
-        }
     }
 
     private void load() {
@@ -610,12 +570,17 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
         if(isRefresh
                 && (editProduct != null
-                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE))
+                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
+                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH))
         ) {
-            if(intendedAction.equals(Constants.ACTION.EDIT)) {
-                fillWithEditReferences();
-            } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
-                fillWithPurchaseReferences();
+            switch (intendedAction) {
+                case Constants.ACTION.EDIT:
+                    fillWithEditReferences();
+                    break;
+                case Constants.ACTION.CREATE_THEN_PURCHASE:
+                case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
+                    fillWithCreateProductObject();
+                    break;
             }
         } else {
             resetAll();
@@ -822,16 +787,13 @@ public class MasterProductEditSimpleFragment extends Fragment {
         }
     }
 
-    private void fillWithPurchaseReferences() {
-        Bundle bundle = getArguments();
-        if(bundle == null) return;
-
+    private void fillWithCreateProductObject() {
         clearInputFocusAndErrors();
 
-        editTextName.setText(createPurchaseName);
+        editTextName.setText(createProductObj.getProductName());
 
-        if(createPurchaseBarcodes != null) {
-            List<String> barcodes = Arrays.asList(createPurchaseBarcodes.split(","));
+        if(createProductObj.getBarcodes() != null) {
+            List<String> barcodes = Arrays.asList(createProductObj.getBarcodes().split(","));
             linearLayoutBarcodeContainer.removeAllViews();
             for(int i = 0; i < barcodes.size(); i++) {
                 InputChip inputChipBarcode = new InputChip(
@@ -842,7 +804,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 linearLayoutBarcodeContainer.addView(inputChipBarcode);
             }
         }
-        editTextDays.setText(createPurchaseBestBeforeDays);
+        editTextDays.setText(createProductObj.getDefaultBestBeforeDays());
+        if(createProductObj.getDefaultLocationId() != null) {
+            selectLocation(Integer.parseInt(createProductObj.getDefaultLocationId()));
+        }
     }
 
     private void clearInputFocusAndErrors() {
@@ -1000,7 +965,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
                     response -> {
-                        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
+                                || intendedAction.equals(
+                                        Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
+                        ) {
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
@@ -1075,10 +1043,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
         if(editProduct != null) return;
         clearInputFocusAndErrors();
 
-        editTextName.setText(createPurchaseName);
+        if(createProductObj != null) {
+            editTextName.setText(createProductObj.getProductName());
+        } else {
+            editTextName.setText(null);
+        }
 
-        if(createPurchaseBarcodes != null) {
-            List<String> barcodes = Arrays.asList(createPurchaseBarcodes.split(","));
+        if(createProductObj != null && createProductObj.getBarcodes() != null) {
+            List<String> barcodes = Arrays.asList(createProductObj.getBarcodes().split(","));
             linearLayoutBarcodeContainer.removeAllViews();
             for(int i = 0; i < barcodes.size(); i++) {
                 InputChip inputChipBarcode = new InputChip(
@@ -1110,10 +1082,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
             selectedLocationId = -1;
         }
 
+        if(createProductObj != null && createProductObj.getDefaultLocationId() != null) {
+            selectLocation(Integer.parseInt(createProductObj.getDefaultLocationId()));
+        }
+
         editTextMinAmount.setText(String.valueOf(0));
 
-        if(createPurchaseBestBeforeDays != null) {
-            editTextDays.setText(createPurchaseBestBeforeDays);
+        if(createProductObj != null && createProductObj.getDefaultBestBeforeDays() != null) {
+            editTextDays.setText(createProductObj.getDefaultBestBeforeDays());
         } else {
             editTextDays.setText(String.valueOf(0));
         }

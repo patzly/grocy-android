@@ -18,6 +18,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputBarcodeBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -73,12 +74,16 @@ public class InputBarcodeBottomSheetDialogFragment extends BottomSheetDialogFrag
         view.findViewById(R.id.button_input_barcode_new).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == PurchaseFragment.class && getArguments() != null) {
+                CreateProduct createProduct = new CreateProduct(
+                        null,
+                        getArguments().getString(Constants.ARGUMENT.BARCODES),
+                        null,
+                        null,
+                        null
+                );
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                bundle.putString(
-                        Constants.ARGUMENT.BARCODES,
-                        getArguments().getString(Constants.ARGUMENT.BARCODES)
-                );
+                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
                 activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
             }
             dismiss();

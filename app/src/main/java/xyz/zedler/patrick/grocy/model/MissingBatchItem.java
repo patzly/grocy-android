@@ -5,36 +5,43 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 public class MissingBatchItem implements Parcelable {
 
-    private String productName, barcodes, defaultBestBeforeDate;
-    private int amount;
+    private String productName, barcodes;
+    private String  defaultStoreId;
+    private int defaultBestBeforeDays, defaultLocationId = -1;
+    private boolean isDefaultBestBeforeDaysSet = false;
+    private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
 
+    // TODO: purchaseEntries parcelable
     public MissingBatchItem(
             String productName,
-            String barcodes,
-            String defaultBestBeforeDate,
-            int amount
+            String barcodes
     ) {
         this.productName = productName;
         this.barcodes = barcodes;
-        this.defaultBestBeforeDate = defaultBestBeforeDate;
-        this.amount = amount;
     }
 
-    public MissingBatchItem(Parcel parcel) {
+    private MissingBatchItem(Parcel parcel) {
         productName = parcel.readString();
         barcodes = parcel.readString();
-        defaultBestBeforeDate = parcel.readString();
-        amount = parcel.readInt();
+        defaultLocationId = parcel.readInt();
+        defaultBestBeforeDays = parcel.readInt();
+        defaultStoreId = parcel.readString();
+        batchPurchaseEntries = new ArrayList<>();
+        parcel.readList(batchPurchaseEntries, BatchPurchaseEntry.class.getClassLoader());
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(productName);
         dest.writeString(barcodes);
-        dest.writeString(defaultBestBeforeDate);
-        dest.writeInt(amount);
+        dest.writeInt(defaultLocationId);
+        dest.writeInt(defaultBestBeforeDays);
+        dest.writeString(defaultStoreId);
+        dest.writeList(batchPurchaseEntries);
     }
 
     public static final Creator<MissingBatchItem> CREATOR = new Creator<MissingBatchItem>() {
@@ -58,20 +65,45 @@ public class MissingBatchItem implements Parcelable {
         return barcodes;
     }
 
-    public String getDefaultBestBeforeDate() {
-        return defaultBestBeforeDate;
-    }
-
     public void setBarcodes(String barcodes) {
         this.barcodes = barcodes;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getDefaultBestBeforeDays() {
+        return defaultBestBeforeDays;
     }
 
-    public void amountOneUp() {
-        amount++;
+    public boolean getIsDefaultBestBeforeDaysSet() {
+        return isDefaultBestBeforeDaysSet;
+    }
+
+    public void setDefaultBestBeforeDays(int defaultBestBeforeDays) {
+        this.defaultBestBeforeDays = defaultBestBeforeDays;
+        isDefaultBestBeforeDaysSet = true;
+    }
+
+    public int getDefaultLocationId() {
+        return defaultLocationId;
+    }
+
+    public void setDefaultLocationId(int defaultLocationId) {
+        this.defaultLocationId = defaultLocationId;
+    }
+
+    public String getDefaultStoreId() {
+        return defaultStoreId;
+    }
+
+    public void setDefaultStoreId(String defaultStoreId) {
+        this.defaultStoreId = defaultStoreId;
+    }
+
+    public int getPurchaseEntriesSize() {
+        return batchPurchaseEntries.size();
+    }
+
+    public void addPurchaseEntry(BatchPurchaseEntry batchPurchaseEntry) {
+        batchPurchaseEntries.add(batchPurchaseEntry);
     }
 
     @Override

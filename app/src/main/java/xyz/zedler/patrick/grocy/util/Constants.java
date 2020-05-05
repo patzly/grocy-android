@@ -140,6 +140,8 @@ public final class Constants {
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
         public final static String BARCODES = "barcodes";
+        public final static String BATCH_ITEM = "batch_item";
+        public final static String CREATE_PRODUCT_OBJECT = "batch_item";
         public final static String BATCH_ITEMS = "batch_items";
         public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
@@ -147,6 +149,7 @@ public final class Constants {
         public final static String AMOUNT = "amount";
         public final static String PRICE = "price";
         public final static String CURRENCY = "currency";
+        public final static String LAST_PRICE = "last_price";
     }
 
     public final static class FAB {

@@ -205,7 +205,10 @@ public class PurchaseFragment extends Fragment {
         activity.findViewById(R.id.linear_purchase_bbd).setOnClickListener(v -> {
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+                bundle.putString(
+                        Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
+                        String.valueOf(productDetails.getProduct().getDefaultBestBeforeDays())
+                );
                 bundle.putString(Constants.ARGUMENT.SELECTED_DATE, selectedBestBeforeDate);
                 activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
             } else {
@@ -541,7 +544,7 @@ public class PurchaseFragment extends Fragment {
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                     "1"
             );
-            if(defaultAmount == null || defaultAmount.equals("")) {
+            if(defaultAmount.equals("")) {
                 editTextAmount.setText(null);
             } else {
                 editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));

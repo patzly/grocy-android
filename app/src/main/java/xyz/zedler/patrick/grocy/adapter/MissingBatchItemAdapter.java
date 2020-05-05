@@ -69,7 +69,7 @@ public class MissingBatchItemAdapter
 
         // AMOUNT
 
-        holder.textViewAmount.setText(NumUtil.trim(missingBatchItem.getAmount()));
+        holder.textViewAmount.setText(NumUtil.trim(missingBatchItem.getPurchaseEntriesSize()));
 
         // CONTAINER
 

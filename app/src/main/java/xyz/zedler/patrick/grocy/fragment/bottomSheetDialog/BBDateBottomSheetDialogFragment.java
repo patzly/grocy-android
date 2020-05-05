@@ -28,7 +28,6 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -40,7 +39,7 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
-    private ProductDetails productDetails;
+    private String defaultBestBeforeDays;
     private DatePicker datePicker;
     private MaterialCheckBox neverExpires;
 
@@ -108,7 +107,7 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
         );
 
         String selectedBestBeforeDate = bundle.getString(Constants.ARGUMENT.SELECTED_DATE);
-        productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
+        defaultBestBeforeDays = bundle.getString(Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS);
 
         fillForm(selectedBestBeforeDate);
 
@@ -141,10 +140,9 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
             datePicker.setAlpha(1.0f);
             neverExpires.setChecked(false);
 
-        } else if(productDetails != null) {
+        } else if(defaultBestBeforeDays != null) {
 
-            int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
-            if(defaultBestBeforeDays < 0) {
+            if(Integer.parseInt(defaultBestBeforeDays) < 0) {
                 datePicker.setEnabled(false);
                 datePicker.setAlpha(0.5f);
                 neverExpires.setChecked(true);
@@ -152,7 +150,7 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 datePicker.setEnabled(true);
                 datePicker.setAlpha(1.0f);
                 neverExpires.setChecked(false);
-                calendar.add(Calendar.DAY_OF_MONTH, defaultBestBeforeDays);
+                calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultBestBeforeDays));
             }
 
         } else {

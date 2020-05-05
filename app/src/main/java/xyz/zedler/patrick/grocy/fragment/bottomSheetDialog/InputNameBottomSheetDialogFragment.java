@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -62,9 +63,16 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
         view.findViewById(R.id.button_input_name_create).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == PurchaseFragment.class) {
+                CreateProduct createProduct = new CreateProduct(
+                        productName,
+                        null,
+                        null,
+                        null,
+                        null
+                );
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
                 activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
             }
             dismiss();

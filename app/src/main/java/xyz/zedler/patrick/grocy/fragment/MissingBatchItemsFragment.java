@@ -28,9 +28,9 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -111,6 +111,20 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         activity.updateUI(Constants.UI.MISSING_BATCH_ITEMS, TAG);
     }
 
+    public void createdProduct(Bundle bundle) {
+        if(bundle != null && bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
+            // TODO
+        }
+    }
+
+    public int getMissingProductsSize() { // TODO
+        return missingBatchItems.size();
+    }
+
+    public void exitWarning() {
+        // TODO
+    }
+
     private void setError(boolean isError, boolean isOffline, boolean animated) {
         LinearLayout linearLayoutError = activity.findViewById(R.id.linear_error);
         ImageView imageViewError = activity.findViewById(R.id.image_error);
@@ -168,13 +182,21 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
     @Override
     public void onItemRowClicked(int position) {
-        MissingBatchItem batchProduct = missingBatchItems.get(position);
+        MissingBatchItem batchItem = missingBatchItems.get(position);
+
+        String defaultBestBeforeDays = String.valueOf(batchItem.getDefaultBestBeforeDays());
+        String defaultLocationId = String.valueOf(batchItem.getDefaultLocationId());
+
+        CreateProduct createProduct = new CreateProduct(
+                batchItem.getProductName(),
+                batchItem.getBarcodes(),
+                batchItem.getDefaultStoreId(),
+                defaultBestBeforeDays,
+                defaultLocationId
+        );
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
-        bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, batchProduct.getProductName());
-        bundle.putString(Constants.ARGUMENT.BARCODES, batchProduct.getBarcodes());
-        bundle.putString(Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS, String.valueOf(DateUtil.getDaysFromNow(Constants.DATE.NEVER_EXPIRES)));
-        bundle.putInt(Constants.ARGUMENT.AMOUNT, batchProduct.getAmount());
+        bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
 
         activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
     }
