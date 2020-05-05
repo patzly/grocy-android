@@ -113,7 +113,8 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MissingBatchItemAdapter(missingBatchItems, this));
+        missingBatchItemAdapter = new MissingBatchItemAdapter(missingBatchItems, this);
+        recyclerView.setAdapter(missingBatchItemAdapter);
 
         // UPDATE UI
 
@@ -130,7 +131,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                 missingBatchItem.setIsOnServer(true);
                 missingBatchItem.setProductId(bundle.getInt(Constants.ARGUMENT.PRODUCT_ID));
             }
-            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            MissingBatchItemAdapter adapter = (MissingBatchItemAdapter) recyclerView.getAdapter();
             if(adapter != null) adapter.notifyItemChanged(
                     missingBatchItems.indexOf(missingBatchItem)
             );
@@ -162,7 +163,8 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     private void updateFab() {
-        activity.updateFab(
+        Log.i(TAG, "updateFab: " + getReadyPurchaseEntries());
+        activity.setFabIcon(
                 new BitmapDrawable(
                         getResources(),
                         BitmapUtil.getFromDrawableWithNumber(
@@ -173,15 +175,11 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                                 -1.5f,
                                 8
                         )
-                ),
-                R.string.action_perform_purchasing_processes,
-                Constants.FAB.TAG.CREATE_PURCHASE,
-                true,
-                this::doOnePurchaseRequest
+                )
         );
     }
 
-    private void doOnePurchaseRequest() {
+    public void doOnePurchaseRequest() {
         if(missingBatchItems.isEmpty()) {
             updateFab();
             showSnackbarMessage("All purchases complete");
@@ -202,8 +200,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                     batchPurchaseEntries.remove(0);
                     if(batchPurchaseEntries.isEmpty()) {
                         missingBatchItems.remove(0);
-                        RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                        if(adapter != null) adapter.notifyItemRemoved(0);
+                        missingBatchItemAdapter.notifyItemRemoved(0);
                     }
                     updateFab();
                     doOnePurchaseRequest();
