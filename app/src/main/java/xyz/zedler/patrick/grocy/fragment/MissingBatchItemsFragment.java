@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,7 +136,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             if(adapter != null) adapter.notifyItemChanged(
                     missingBatchItems.indexOf(missingBatchItem)
             );
-            updateFab();
+            new Handler().postDelayed(this::updateFab, 500);
         }
     }
 
@@ -163,7 +164,6 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     private void updateFab() {
-        Log.i(TAG, "updateFab: " + getReadyPurchaseEntries());
         activity.setFabIcon(
                 new BitmapDrawable(
                         getResources(),
