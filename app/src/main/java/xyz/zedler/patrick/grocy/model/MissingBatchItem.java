@@ -66,6 +66,10 @@ public class MissingBatchItem implements Parcelable {
         return productName;
     }
 
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public String getBarcodes() {
         return barcodes;
     }

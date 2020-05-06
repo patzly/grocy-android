@@ -116,6 +116,8 @@ public final class Constants {
         public final static String LINK = "action_link";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
+        public final static String EDIT_THEN_PURCHASE_BATCH = "edit_then_purchase_batch";
+        public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
     }
 
     public final static class ARGUMENT {

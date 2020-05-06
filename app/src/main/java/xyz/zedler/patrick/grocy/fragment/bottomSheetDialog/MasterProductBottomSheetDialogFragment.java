@@ -149,7 +149,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		}
 
 		// LOCATION
-		itemLocation.setText(
+		if(location != null) itemLocation.setText(
 				activity.getString(R.string.property_location),
 				location.getName()
 		);
@@ -161,13 +161,13 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		);
 
 		// QUANTITY UNIT PURCHASE
-		itemQuPurchase.setText(
+		if(quantityUnitPurchase != null) itemQuPurchase.setText(
 				activity.getString(R.string.property_qu_purchase),
 				quantityUnitPurchase.getName()
 		);
 
 		// QUANTITY UNIT STOCK
-		itemQuStock.setText(
+		if(quantityUnitStock != null) itemQuStock.setText(
 				activity.getString(R.string.property_qu_stock),
 				quantityUnitStock.getName()
 		);

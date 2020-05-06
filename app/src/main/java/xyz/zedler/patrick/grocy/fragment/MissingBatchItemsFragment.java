@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -49,6 +52,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     private MainActivity activity;
     private GrocyApi grocyApi;
     private WebRequest request;
+    private Gson gson = new Gson();
     private MissingBatchItemAdapter missingBatchItemAdapter;
 
     private ArrayList<MissingBatchItem> missingBatchItems;
@@ -133,8 +137,13 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         );
     }
 
-    public void createdProduct(Bundle bundle) {
-        if(bundle != null && bundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
+    public void createdOrEditedProduct(Bundle bundle) {
+        if(bundle == null) return;
+
+        String intendedAction = bundle.getString(Constants.ARGUMENT.TYPE);
+        if(intendedAction == null) return;
+
+        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
             MissingBatchItem missingBatchItem = getMissingBatchItemFromName(
                     bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
             );
@@ -147,6 +156,23 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                     missingBatchItems.indexOf(missingBatchItem)
             );
             updateFab();
+        } else if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {
+            int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
+            String productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+            MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
+            if(missingBatchItem != null && productName != null) {
+                missingBatchItem.setProductName(productName);
+                int index = getIndexOfMissingBatchItemFromProductId(productId);
+                if(index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+            }
+        } else if(intendedAction.equals(Constants.ACTION.DELETE_THEN_PURCHASE_BATCH)) {
+            int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
+            MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
+            if(missingBatchItem != null) {
+                missingBatchItem.setIsOnServer(false);
+                int index = getIndexOfMissingBatchItemFromProductId(productId);
+                if(index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+            }
         }
     }
 
@@ -171,6 +197,28 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             }
         }
         return null;
+    }
+
+    private MissingBatchItem getMissingBatchItemFromProductId(int productId) {
+        for(MissingBatchItem missingBatchItem : missingBatchItems) {
+            if(missingBatchItem.getProductId() != null
+                    && missingBatchItem.getProductId().equals(String.valueOf(productId))
+            ) {
+                return missingBatchItem;
+            }
+        }
+        return null;
+    }
+
+    private int getIndexOfMissingBatchItemFromProductId(int productId) {
+        for(int i = 0; i < missingBatchItems.size(); i++) {
+            if(missingBatchItems.get(i).getProductId() != null
+                    && missingBatchItems.get(i).getProductId().equals(String.valueOf(productId))
+            ) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void updateFab() {
@@ -311,21 +359,45 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     public void onItemRowClicked(int position) {
         MissingBatchItem batchItem = missingBatchItems.get(position);
 
-        String defaultBestBeforeDays = String.valueOf(batchItem.getDefaultBestBeforeDays());
-        String defaultLocationId = String.valueOf(batchItem.getDefaultLocationId());
-
-        CreateProduct createProduct = new CreateProduct(
-                batchItem.getProductName(),
-                batchItem.getBarcodes(),
-                batchItem.getDefaultStoreId(),
-                defaultBestBeforeDays,
-                defaultLocationId
-        );
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
-        bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
 
-        activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
+        if(!batchItem.getIsOnServer()) {
+            CreateProduct createProduct = new CreateProduct(
+                    batchItem.getProductName(),
+                    batchItem.getBarcodes(),
+                    batchItem.getDefaultStoreId(),
+                    String.valueOf(batchItem.getDefaultBestBeforeDays()),
+                    String.valueOf(batchItem.getDefaultLocationId())
+            );
+            bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
+            bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
+            activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
+        } else {
+            request.get(
+                    grocyApi.getStockProductDetails(Integer.parseInt(batchItem.getProductId())),
+                    response -> {
+                        ProductDetails productDetails = gson.fromJson(
+                                response,
+                                new TypeToken<ProductDetails>(){}.getType()
+                        );
+                        Log.i(TAG, "onItemRowClicked: " + productDetails.getProduct().getName());
+                        bundle.putString(
+                                Constants.ARGUMENT.TYPE,
+                                Constants.ACTION.EDIT_THEN_PURCHASE_BATCH
+                        );
+                        bundle.putParcelable(
+                                Constants.ARGUMENT.PRODUCT,
+                                productDetails.getProduct()
+                        );
+                        activity.replaceFragment(
+                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                bundle,
+                                true
+                        );
+                    },
+                    error -> showMessage(activity.getString(R.string.msg_error))
+            );
+        }
     }
 
     public void setUpBottomMenu() {

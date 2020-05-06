@@ -502,25 +502,6 @@ public class MasterProductsFragment extends Fragment
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-        if(product.getParentProductId() != null) {
-            bundle.putParcelable(
-                    Constants.ARGUMENT.PARENT_PRODUCT,
-                    getProduct(Integer.parseInt(product.getParentProductId()))
-            );
-        }
-        bundle.putParcelable(
-                Constants.ARGUMENT.LOCATION,
-                getLocation(product.getLocationId())
-        );
-        bundle.putParcelable(
-                Constants.ARGUMENT.PRODUCT_GROUP,
-                getProductGroup(product.getProductGroupId())
-        );
-        bundle.putParcelable(
-                Constants.ARGUMENT.QUANTITY_UNIT,
-                getQuantityUnit(product.getQuIdStock())
-        );
-
         activity.replaceFragment(
                 Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
                 bundle,

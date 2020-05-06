@@ -894,7 +894,7 @@ public class MainActivity extends AppCompatActivity {
                 if(fragmentCurrent.getClass() == PurchaseFragment.class) {
                     ((PurchaseFragment) fragmentCurrent).giveBundle(bundle);
                 } else if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                    ((MissingBatchItemsFragment) fragmentCurrent).createdProduct(bundle);
+                    ((MissingBatchItemsFragment) fragmentCurrent).createdOrEditedProduct(bundle);
                 }
                 if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {
