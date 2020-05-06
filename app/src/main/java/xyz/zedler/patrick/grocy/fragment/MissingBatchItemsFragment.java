@@ -1,9 +1,11 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
@@ -75,6 +78,10 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         grocyApi = activity.getGrocy();
 
         // INITIALIZE VIEWS
+
+        activity.findViewById(R.id.frame_missing_batch_items_back).setOnClickListener(
+                v -> activity.onBackPressed()
+        );
 
         scrollView = activity.findViewById(R.id.scroll_missing_batch_items);
         recyclerView = activity.findViewById(R.id.recycler_missing_batch_items);
@@ -321,15 +328,18 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
     }
 
-    private void refreshAdapter(MissingBatchItemAdapter adapter) {
-        missingBatchItemAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
-        }).start();
+    public void setUpBottomMenu() {
+        MenuItem menuItemScan;
+        menuItemScan = activity.getBottomMenu().findItem(R.id.action_scan);
+        menuItemScan.setOnMenuItemClickListener(item -> {
+            activity.dismissFragments();
+            Intent intent = new Intent(activity, ScanBatchActivity.class);
+            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
+            intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            return true;
+        });
     }
-
-    public void setUpBottomMenu() {}
 
     public interface OnResponseListener {
         void onResponse(JSONObject response);

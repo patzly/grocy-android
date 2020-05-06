@@ -14,11 +14,10 @@
     android:gravity="center_vertical">
 
     <ImageView
-        android:id="@+id/image_missing_batch_item_check"
+        android:id="@+id/image_missing_batch_item_status"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="32dp"
-        android:src="@drawable/ic_round_check_circle"
         tools:ignore="ContentDescription" />
 
     <LinearLayout

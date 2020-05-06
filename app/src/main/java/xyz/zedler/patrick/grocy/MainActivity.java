@@ -370,8 +370,8 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MISSING_BATCH_ITEMS:
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER,
-                        R.menu.menu_consume,
+                        Constants.FAB.POSITION.END,
+                        R.menu.menu_missing_batch_items,
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
@@ -961,10 +961,6 @@ public class MainActivity extends AppCompatActivity {
 
     public Fragment getCurrentFragment() {
         return fragmentCurrent;
-    }
-
-    private void replaceFabIcon(@DrawableRes int resId, String tag, boolean animated) {
-        replaceFabIcon(ContextCompat.getDrawable(this, resId), tag, animated);
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

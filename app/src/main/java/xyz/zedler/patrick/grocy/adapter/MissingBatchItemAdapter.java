@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,7 @@ public class MissingBatchItemAdapter
             linearLayoutItemContainer = view.findViewById(R.id.linear_missing_batch_item_container);
             textViewName = view.findViewById(R.id.text_missing_batch_item_name);
             textViewAmount = view.findViewById(R.id.text_missing_batch_item_amount);
-            imageViewOnServer = view.findViewById(R.id.image_missing_batch_item_check);
+            imageViewOnServer = view.findViewById(R.id.image_missing_batch_item_status);
         }
     }
 
@@ -78,14 +77,12 @@ public class MissingBatchItemAdapter
 
         // IS ON SERVER
 
-        holder.imageViewOnServer.setImageTintList(
-                ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                                holder.imageViewOnServer.getContext(),
-                                missingBatchItem.getIsOnServer()
-                                        ? R.color.retro_green
-                                        : R.color.on_background_tertiary
-                        )
+        holder.imageViewOnServer.setImageDrawable(
+                ContextCompat.getDrawable(
+                        holder.imageViewOnServer.getContext(),
+                        missingBatchItem.getIsOnServer()
+                                ? R.drawable.ic_round_cloud_done_outline
+                                : R.drawable.ic_round_cloud_pending
                 )
         );
 

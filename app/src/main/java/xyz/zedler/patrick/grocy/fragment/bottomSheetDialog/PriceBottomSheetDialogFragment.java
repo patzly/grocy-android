@@ -3,6 +3,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +94,7 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
             editTextPrice.setText(price);
         } else {
             editTextPrice.requestFocus();
-            activity.showKeyboard(editTextPrice); // TODO: Does not work
+            new Handler().postDelayed(() -> activity.showKeyboard(editTextPrice), 200);
         }
     }
 

@@ -80,6 +80,8 @@
             style="@style/Widget.Grocy.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:rippleColor="@color/highlight"
+            android:textColor="@color/on_background_secondary"
             android:text="@string/action_reset" />
 
         <com.google.android.material.button.MaterialButton

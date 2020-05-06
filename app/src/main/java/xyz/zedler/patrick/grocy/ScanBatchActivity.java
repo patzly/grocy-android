@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -80,6 +81,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private ActionButton buttonFlash,buttonConfig;
     private TextView textViewCount;
     private boolean isTorchOn;
+    private long lastClick = 0;
 
     private Intent intent;
     private String actionType;
@@ -186,6 +188,8 @@ public class ScanBatchActivity extends AppCompatActivity
 
         buttonConfig = findViewById(R.id.button_scan_batch_config);
         buttonConfig.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
+            lastClick = SystemClock.elapsedRealtime();
             pauseScan();
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, actionType);

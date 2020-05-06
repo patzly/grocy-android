@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame_back_missing_batch_items"
+                android:id="@+id/frame_missing_batch_items_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
