@@ -284,7 +284,7 @@ public class MasterProductGroupsFragment extends Fragment
     private void sortProductGroups() {
         if(DEBUG) Log.i(TAG, "sortProductGroups: sort by name, ascending = " + sortAscending);
         SortUtil.sortProductGroupsByName(displayedProductGroups, sortAscending);
-        refreshAdapter(new MasterProductGroupAdapter(activity, displayedProductGroups, this));
+        refreshAdapter(new MasterProductGroupAdapter(displayedProductGroups, this));
     }
 
     private void refreshAdapter(MasterProductGroupAdapter adapter) {

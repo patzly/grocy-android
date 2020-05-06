@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -411,20 +412,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
             fillWithEditReferences();
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
-            /*createPurchaseName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
-            createPurchaseBarcodes = bundle.getString(Constants.ARGUMENT.BARCODES);
-            createPurchaseBestBeforeDays = bundle.getString(
-                    Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS
-            );*/
             fillWithCreateProductObject();
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
             fillWithCreateProductObject();
-            /*MissingBatchItem batchItem = bundle.getParcelable(Constants.ARGUMENT.BATCH_ITEM);
-            assert batchItem != null;
-            createPurchaseName = batchItem.getProductName();
-            createPurchaseBarcodes = batchItem.getBarcodes();
-            createPurchaseBestBeforeDays = String.valueOf(batchItem.getDefaultBestBeforeDays());*/
         }
 
         // START

@@ -386,7 +386,7 @@ public class MasterProductsFragment extends Fragment
         if(DEBUG) Log.i(TAG, "sortProducts: sort by name, ascending = " + ascending);
         sortAscending = ascending;
         SortUtil.sortProductsByName(displayedProducts, ascending);
-        refreshAdapter(new MasterProductAdapter(activity, displayedProducts, this));
+        refreshAdapter(new MasterProductAdapter(displayedProducts, this));
     }
 
     private void refreshAdapter(MasterProductAdapter adapter) {

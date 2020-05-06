@@ -284,7 +284,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void sortQuantityUnits() {
         if(DEBUG) Log.i(TAG, "sortQuantityUnits: sort by name, ascending = " + sortAscending);
         SortUtil.sortQuantityUnitsByName(displayedQuantityUnits, sortAscending);
-        refreshAdapter(new MasterQuantityUnitAdapter(activity, displayedQuantityUnits, this));
+        refreshAdapter(new MasterQuantityUnitAdapter(displayedQuantityUnits, this));
     }
 
     private void refreshAdapter(MasterQuantityUnitAdapter adapter) {

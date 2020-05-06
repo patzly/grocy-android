@@ -284,7 +284,7 @@ public class MasterStoresFragment extends Fragment
     private void sortStores() {
         if(DEBUG) Log.i(TAG, "sortStores: sort by name, ascending = " + sortAscending);
         SortUtil.sortStoresByName(displayedStores, sortAscending);
-        refreshAdapter(new MasterStoreAdapter(activity, displayedStores, this));
+        refreshAdapter(new MasterStoreAdapter(displayedStores, this));
     }
 
     private void refreshAdapter(MasterStoreAdapter adapter) {
