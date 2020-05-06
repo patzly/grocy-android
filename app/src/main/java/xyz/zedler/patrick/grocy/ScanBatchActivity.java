@@ -48,6 +48,7 @@ import java.util.Map;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchConfigBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
@@ -107,15 +108,6 @@ public class ScanBatchActivity extends AppCompatActivity
     private enum ProductType {
         PRODUCT, MISSING_BATCH_ITEM
     }
-    private enum QuestionInterval {
-        NEVER, FIRST_TIME, ALWAYS;
-    }
-
-    private QuestionInterval askForBestBeforeDate = QuestionInterval.NEVER; // (only purchase)
-    private QuestionInterval askForPrice = QuestionInterval.NEVER; // (only purchase)
-    private QuestionInterval askForStore = QuestionInterval.NEVER; // (only purchase)
-    private QuestionInterval askForLocation = QuestionInterval.NEVER; // (consume & purchase)
-    private QuestionInterval askForSpecificItem = QuestionInterval.NEVER; // (only consume)
 
     private String bestBeforeDate;
     private String price;
@@ -184,7 +176,11 @@ public class ScanBatchActivity extends AppCompatActivity
                 );
                 finish();
             } else {
-                showSnackbarMessage(getString(R.string.msg_batch_no_products));
+                pauseScan();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.ARGUMENT.TYPE, actionType);
+                showBottomSheet(new BatchConfigBottomSheetDialogFragment(), bundle);
+                //showSnackbarMessage(getString(R.string.msg_batch_no_products));
             }
         });
 
@@ -559,14 +555,17 @@ public class ScanBatchActivity extends AppCompatActivity
 
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
-            // TODO: SPECIFIC
+            // TODO: SPECIFIC & STOCK LOCATION
 
             consumeProduct();
 
         } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
 
             // BEST BEFORE DATE
-            if(askForBestBeforeDate == QuestionInterval.NEVER && bestBeforeDate == null) {
+            int askForBestBeforeDate = sharedPrefs.getInt(
+                    Constants.PREF.BATCH_CONFIG_BBD, 0
+            );
+            if(askForBestBeforeDate == 0 && bestBeforeDate == null) {
                 if(currentDefaultBestBeforeDays == 0) {
                     if(savedBestBeforeDates.containsKey(currentProductName)) {
                         bestBeforeDate = savedBestBeforeDates.get(currentProductName);
@@ -581,14 +580,14 @@ public class ScanBatchActivity extends AppCompatActivity
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     bestBeforeDate = dateFormat.format(calendar.getTime());
                 }
-            } else if(askForBestBeforeDate == QuestionInterval.FIRST_TIME && bestBeforeDate == null) {
+            } else if(askForBestBeforeDate == 1 && bestBeforeDate == null) {
                 if(savedBestBeforeDates.containsKey(currentProductName)) {
                     bestBeforeDate = savedBestBeforeDates.get(currentProductName);
                 } else {
                     showBBDateBottomSheet();
                     return;
                 }
-            } else if(askForBestBeforeDate == QuestionInterval.ALWAYS && bestBeforeDate == null) {
+            } else if(askForBestBeforeDate == 2 && bestBeforeDate == null) {
                 if(savedBestBeforeDates.containsKey(currentProductName)) {
                     bestBeforeDate = savedBestBeforeDates.get(currentProductName);
                 }
@@ -597,9 +596,10 @@ public class ScanBatchActivity extends AppCompatActivity
             }
 
             // PRICE
-            if(askForPrice == QuestionInterval.NEVER && price == null) {
+            int askForPrice = sharedPrefs.getInt(Constants.PREF.BATCH_CONFIG_PRICE, 0);
+            if(askForPrice == 0 && price == null) {
                 price = "";  // price is never required
-            } else if(askForPrice == QuestionInterval.FIRST_TIME && price == null) {
+            } else if(askForPrice == 1 && price == null) {
                 if(savedPrices.containsKey(currentProductName)) {
                     price = savedPrices.get(currentProductName);
                 } else {
@@ -607,7 +607,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     showPriceBottomSheet();
                     return;
                 }
-            } else if(askForPrice == QuestionInterval.ALWAYS && price == null) {
+            } else if(askForPrice == 2 && price == null) {
                 if(savedPrices.containsKey(currentProductName)) {
                     price = savedPrices.get(currentProductName);
                 } else if(currentLastPrice != null) {
@@ -618,13 +618,14 @@ public class ScanBatchActivity extends AppCompatActivity
             }
 
             // STORE
-            if(askForStore == QuestionInterval.NEVER && storeId == null) {
+            int askForStore = sharedPrefs.getInt(Constants.PREF.BATCH_CONFIG_STORE, 0);
+            if(askForStore == 0 && storeId == null) {
                 if(currentDefaultStoreId == null) {
                     storeId = "";
                 } else {
                     storeId = currentDefaultStoreId;
                 }
-            } else if(askForStore == QuestionInterval.FIRST_TIME && storeId == null) {
+            } else if(askForStore == 1 && storeId == null) {
                 if(savedStoreIds.containsKey(currentProductName)) {
                     storeId = savedStoreIds.get(currentProductName);
                 } else {
@@ -632,7 +633,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     showStoresBottomSheet();
                     return;
                 }
-            } else if(askForStore == QuestionInterval.ALWAYS && storeId == null) {
+            } else if(askForStore == 2 && storeId == null) {
                 if(savedStoreIds.containsKey(currentProductName)) {
                     storeId = savedStoreIds.get(currentProductName);
                 } else if(currentDefaultStoreId != null) {
@@ -643,14 +644,17 @@ public class ScanBatchActivity extends AppCompatActivity
             }
 
             // LOCATION
-            if(askForLocation == QuestionInterval.NEVER && locationId == null) {
+            int askForLocation = sharedPrefs.getInt(
+                    Constants.PREF.BATCH_CONFIG_LOCATION, 0
+            );
+            if(askForLocation == 0 && locationId == null) {
                 if(currentDefaultLocationId == -1) {
                     showLocationsBottomSheet();
                     return;
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
                 }
-            } else if(askForLocation == QuestionInterval.FIRST_TIME && locationId == null) {
+            } else if(askForLocation == 1 && locationId == null) {
                 if(savedLocationIds.containsKey(currentProductName)) {
                     locationId = savedLocationIds.get(currentProductName);
                 } else {
@@ -658,7 +662,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     showLocationsBottomSheet();
                     return;
                 }
-            } else if(askForLocation == QuestionInterval.ALWAYS && locationId == null) {
+            } else if(askForLocation == 2 && locationId == null) {
                 if(savedLocationIds.containsKey(currentProductName)) {
                     locationId = savedLocationIds.get(currentProductName);
                 } else {

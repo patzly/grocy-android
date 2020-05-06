@@ -20,6 +20,13 @@ public final class Constants {
         public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
 
+        public final static String BATCH_CONFIG_BBD = "batch_config_bbd";
+        public final static String BATCH_CONFIG_PRICE = "batch_config_price";
+        public final static String BATCH_CONFIG_STORE = "batch_config_store";
+        public final static String BATCH_CONFIG_LOCATION = "batch_config_location";
+        public final static String BATCH_CONFIG_STOCK_LOCATION = "batch_config_stock_location";
+        public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
+
         public final static String DARK_MODE = "force_dark_mode";
         public final static String ANIM_UI_UPDATE = "animated_ui_update";
 

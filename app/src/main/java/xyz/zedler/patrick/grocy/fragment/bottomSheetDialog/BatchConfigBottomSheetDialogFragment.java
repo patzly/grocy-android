@@ -1,0 +1,223 @@
+package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
+
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
+import xyz.zedler.patrick.grocy.util.Constants;
+
+public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragment {
+
+    private final static boolean DEBUG = false;
+    private final static String TAG = "BatchConfigBottomSheet";
+
+    private SharedPreferences sharedPrefs;
+    private String batchType;
+
+    private ScanBatchActivity activity;
+    private TextView textViewBestBeforeDate, textViewPrice, textViewStore, textViewLocation;
+    private TextView textViewStockLocation, textViewSpecific;
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+    }
+
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+        View view = inflater.inflate(
+                R.layout.fragment_bottomsheet_batch_config, container, false
+        );
+
+        activity = (ScanBatchActivity) getActivity();
+        assert activity != null;
+
+        if(getArguments() == null
+                || getArguments().getString(Constants.ARGUMENT.TYPE) == null
+        ) {
+            dismissWithMessage(activity.getString(R.string.msg_error));
+            return view;
+        }
+
+        batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        // BEST BEFORE DATE
+        textViewBestBeforeDate = view.findViewById(R.id.text_batch_config_bbd);
+        LinearLayout linearLayoutBestBeforeDate = view.findViewById(R.id.linear_batch_config_bbd);
+        if(batchType.equals(Constants.ACTION.PURCHASE)) {
+            linearLayoutBestBeforeDate.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD);
+                if(status < 2) status++;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_BBD, status);
+                textViewBestBeforeDate.setText(
+                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD)
+                );
+            });
+            textViewBestBeforeDate.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD));
+        } else {
+            linearLayoutBestBeforeDate.setVisibility(View.GONE);
+        }
+
+        // PRICE
+        textViewPrice = view.findViewById(R.id.text_batch_config_price);
+        LinearLayout linearLayoutPrice = view.findViewById(R.id.linear_batch_config_price);
+        if(batchType.equals(Constants.ACTION.PURCHASE)) {
+            linearLayoutPrice.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE);
+                if(status < 2) status++;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_PRICE, status);
+                textViewPrice.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE));
+            });
+            textViewPrice.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE));
+        } else {
+            linearLayoutPrice.setVisibility(View.GONE);
+        }
+
+        // STORE
+        textViewStore = view.findViewById(R.id.text_batch_config_store);
+        LinearLayout linearLayoutStore = view.findViewById(R.id.linear_batch_config_store);
+        if(batchType.equals(Constants.ACTION.PURCHASE)) {
+            linearLayoutStore.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE);
+                if(status < 2) status++;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_STORE, status);
+                textViewStore.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE));
+            });
+            textViewStore.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE));
+        } else {
+            linearLayoutStore.setVisibility(View.GONE);
+        }
+
+        // LOCATION
+        textViewLocation = view.findViewById(R.id.text_batch_config_location);
+        LinearLayout linearLayoutLocation = view.findViewById(R.id.linear_batch_config_location);
+        if(batchType.equals(Constants.ACTION.PURCHASE)) {
+            linearLayoutLocation.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION);
+                if(status < 2) status++;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_LOCATION, status);
+                textViewLocation.setText(
+                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION)
+                );
+            });
+            textViewLocation.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION));
+        } else {
+            linearLayoutLocation.setVisibility(View.GONE);
+        }
+
+        // LOCATION
+        textViewStockLocation = view.findViewById(R.id.text_batch_config_stock_location);
+        LinearLayout linearLayoutStockLocation = view.findViewById(
+                R.id.linear_batch_config_stock_location
+        );
+        if(batchType.equals(Constants.ACTION.CONSUME)) {
+            linearLayoutStockLocation.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION);
+                if(status == 0) status = 1;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, status);
+                textViewStockLocation.setText(
+                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
+                );
+            });
+            textViewStockLocation.setText(
+                    getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
+            );
+        } else {
+            linearLayoutStockLocation.setVisibility(View.GONE);
+        }
+
+        // SPECIFIC
+        textViewSpecific = view.findViewById(R.id.text_batch_config_specific);
+        LinearLayout linearLayoutSpecific = view.findViewById(R.id.linear_batch_config_specific);
+        if(batchType.equals(Constants.ACTION.CONSUME)) {
+            linearLayoutSpecific.setOnClickListener(v -> {
+                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC);
+                if(status == 0) status = 1;
+                else status = 0;
+                setPrefToStatus(Constants.PREF.BATCH_CONFIG_SPECIFIC, status);
+                textViewSpecific.setText(
+                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
+                );
+            });
+            textViewSpecific.setText(
+                    getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
+            );
+        } else {
+            linearLayoutSpecific.setVisibility(View.GONE);
+        }
+
+        return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        activity.resumeScan();
+    }
+
+    private int getIntStatusFromPref(String pref) {
+        return sharedPrefs.getInt(pref, 0);
+    }
+
+    private void setPrefToStatus(String pref, int status) {
+        sharedPrefs.edit().putInt(pref, status).apply();
+    }
+
+    private String getTextStatusFromPref(String pref) {
+        int status = sharedPrefs.getInt(pref, 0);
+        if(status == 1) {
+            return "First time in session";
+        } else if(status == 2) {
+            return "Always";
+        }
+        return "Never";
+    }
+
+    private void dismissWithMessage(String msg) {
+        Snackbar.make(
+                activity.findViewById(R.id.barcode_scan_batch),
+                msg,
+                Snackbar.LENGTH_SHORT
+        ).show();
+        dismiss();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return TAG;
+    }
+}
