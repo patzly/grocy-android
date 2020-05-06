@@ -78,6 +78,10 @@ public class LocationsBottomSheetDialogFragment
                 )
         );
 
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+        }
+
         return view;
     }
 
