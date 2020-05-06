@@ -182,7 +182,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         );
     }
 
-    public void doOnePurchaseRequest() {
+    private void doOnePurchaseRequest() {
         if(getReadyPurchaseEntriesSize() == 0) {
             showMessage(activity.getString(R.string.msg_no_purchase_transactions));
             return;

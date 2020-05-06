@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -62,7 +61,6 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -378,27 +376,6 @@ public class MainActivity extends AppCompatActivity {
                         () -> {
                             if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
                                 ((MissingBatchItemsFragment) fragmentCurrent).setUpBottomMenu();
-                            }
-                        }
-                );
-                updateFab(
-                        new BitmapDrawable(
-                                getResources(),
-                                BitmapUtil.getFromDrawableWithNumber(
-                                        this,
-                                        R.drawable.ic_round_shopping_cart,
-                                        0,
-                                        7.3f,
-                                        -1.5f,
-                                        8
-                                )
-                        ),
-                        R.string.action_perform_purchasing_processes,
-                        Constants.FAB.TAG.PURCHASE,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                                ((MissingBatchItemsFragment) fragmentCurrent).doOnePurchaseRequest();
                             }
                         }
                 );
