@@ -542,7 +542,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private void storeResetSelectedValues() {
         // BEST BEFORE DATE
-        if(!bestBeforeDate.equals("")) {
+        if(bestBeforeDate != null && !bestBeforeDate.equals("")) {
             savedBestBeforeDates.put(currentProductName, bestBeforeDate);
         }
         bestBeforeDate = null;
