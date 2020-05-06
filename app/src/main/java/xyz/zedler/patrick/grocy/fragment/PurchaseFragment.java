@@ -164,18 +164,6 @@ public class PurchaseFragment extends Fragment {
                 startAnimatedIcon(R.id.image_purchase_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
-            } else {
-                String input = autoCompleteTextViewProduct.getText().toString().trim();
-                if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
-                        && !nameAutoFilled
-                ) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                    bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-                    activity.showBottomSheet(
-                            new InputNameBottomSheetDialogFragment(), bundle
-                    );
-                }
             }
         });
         autoCompleteTextViewProduct.setOnItemClickListener(
@@ -189,6 +177,17 @@ public class PurchaseFragment extends Fragment {
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
+                        String input = autoCompleteTextViewProduct.getText().toString().trim();
+                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
+                                && !nameAutoFilled
+                        ) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
+                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
+                            activity.showBottomSheet(
+                                    new InputNameBottomSheetDialogFragment(), bundle
+                            );
+                        }
                         return true;
                     } return false;
         });
@@ -665,10 +664,13 @@ public class PurchaseFragment extends Fragment {
 
     private boolean isFormIncomplete() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
-            // TODO
-            autoCompleteTextViewProduct.requestFocus();
-            autoCompleteTextViewProduct.clearFocus();
+        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("") && !nameAutoFilled) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
+            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
+            activity.showBottomSheet(
+                    new InputNameBottomSheetDialogFragment(), bundle
+            );
             return true;
         } else if(productDetails == null
                 || !isBestBeforeDateValid()
