@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +20,13 @@ public class MasterStoreAdapter extends RecyclerView.Adapter<MasterStoreAdapter.
     private final static String TAG = MasterStoreAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private Context context;
     private ArrayList<Store> stores;
     private MasterStoreAdapterListener listener;
 
     public MasterStoreAdapter(
-            Context context,
             ArrayList<Store> stores,
             MasterStoreAdapterListener listener
     ) {
-        this.context = context;
         this.stores = stores;
         this.listener = listener;
     }

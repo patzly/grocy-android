@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +20,13 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
     private final static String TAG = MasterLocationAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private Context context;
     private ArrayList<Location> locations;
     private MasterLocationAdapterListener listener;
 
     public MasterLocationAdapter(
-            Context context,
             ArrayList<Location> locations,
             MasterLocationAdapterListener listener
     ) {
-        this.context = context;
         this.locations = locations;
         this.listener = listener;
     }
@@ -69,11 +65,6 @@ public class MasterLocationAdapter extends RecyclerView.Adapter<MasterLocationAd
         holder.linearLayoutItemContainer.setOnClickListener(
                 view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return locations.get(position).getId();
     }
 
     @Override

@@ -284,7 +284,7 @@ public class MasterLocationsFragment extends Fragment
     private void sortLocations() {
         if(DEBUG) Log.i(TAG, "sortLocations: sort by name, ascending = " + sortAscending);
         SortUtil.sortLocationsByName(displayedLocations, sortAscending);
-        refreshAdapter(new MasterLocationAdapter(activity, displayedLocations, this));
+        refreshAdapter(new MasterLocationAdapter(displayedLocations, this));
     }
 
     private void refreshAdapter(MasterLocationAdapter adapter) {

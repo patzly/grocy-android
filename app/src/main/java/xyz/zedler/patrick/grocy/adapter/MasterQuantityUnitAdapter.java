@@ -1,7 +1,6 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +20,13 @@ public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuanti
     private final static String TAG = MasterQuantityUnitAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private Context context;
     private ArrayList<QuantityUnit> quantityUnits;
     private MasterQuantityUnitAdapterListener listener;
 
     public MasterQuantityUnitAdapter(
-            Context context,
             ArrayList<QuantityUnit> quantityUnits,
             MasterQuantityUnitAdapterListener listener
     ) {
-        this.context = context;
         this.quantityUnits = quantityUnits;
         this.listener = listener;
     }
