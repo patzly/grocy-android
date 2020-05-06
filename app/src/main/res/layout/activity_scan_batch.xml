@@ -42,9 +42,10 @@
 
         </FrameLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:orientation="horizontal"
             android:minWidth="48dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
@@ -98,10 +99,31 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-        </FrameLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="RelativeOverlap">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/bg_shape_circle_button"
+                    app:tint="#50000000"/>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_scan_batch_config"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:tint="@color/white"
+                    app:icon="@drawable/ic_round_tune" />
+
+            </FrameLayout>
+
+        </LinearLayout>
 
         <FrameLayout
-            android:id="@+id/frame_scan_batch_flash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

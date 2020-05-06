@@ -77,7 +77,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private ScanBatchCaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private BarcodeRipple barcodeRipple;
-    private ActionButton actionButtonFlash;
+    private ActionButton buttonFlash,buttonConfig;
     private TextView textViewCount;
     private boolean isTorchOn;
 
@@ -176,22 +176,25 @@ public class ScanBatchActivity extends AppCompatActivity
                 );
                 finish();
             } else {
-                pauseScan();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, actionType);
-                showBottomSheet(new BatchConfigBottomSheetDialogFragment(), bundle);
-                //showSnackbarMessage(getString(R.string.msg_batch_no_products));
+                showSnackbarMessage(getString(R.string.msg_batch_no_products));
             }
         });
-
-        findViewById(R.id.button_scan_batch_flash).setOnClickListener(v -> switchTorch());
 
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setTorchListener(this);
 
-        actionButtonFlash = findViewById(R.id.button_scan_batch_flash);
-        actionButtonFlash.setIcon(R.drawable.ic_round_flash_off_to_on);
+        buttonConfig = findViewById(R.id.button_scan_batch_config);
+        buttonConfig.setOnClickListener(v -> {
+            pauseScan();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.TYPE, actionType);
+            showBottomSheet(new BatchConfigBottomSheetDialogFragment(), bundle);
+        });
+
+        buttonFlash = findViewById(R.id.button_scan_batch_flash);
+        buttonFlash.setOnClickListener(v -> switchTorch());
+        buttonFlash.setIcon(R.drawable.ic_round_flash_off_to_on);
 
         barcodeRipple = findViewById(R.id.ripple_scan);
 
@@ -920,15 +923,15 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @Override
     public void onTorchOn() {
-        actionButtonFlash.setIcon(R.drawable.ic_round_flash_off_to_on);
-        actionButtonFlash.startIconAnimation();
+        buttonFlash.setIcon(R.drawable.ic_round_flash_off_to_on);
+        buttonFlash.startIconAnimation();
         isTorchOn = true;
     }
 
     @Override
     public void onTorchOff() {
-        actionButtonFlash.setIcon(R.drawable.ic_round_flash_on_to_off);
-        actionButtonFlash.startIconAnimation();
+        buttonFlash.setIcon(R.drawable.ic_round_flash_on_to_off);
+        buttonFlash.startIconAnimation();
         isTorchOn = false;
     }
 

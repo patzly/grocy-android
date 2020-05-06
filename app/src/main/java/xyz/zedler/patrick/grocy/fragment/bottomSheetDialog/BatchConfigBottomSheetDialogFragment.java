@@ -73,9 +73,12 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status < 2) status++;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_BBD, status);
-                textViewBestBeforeDate.setText(
-                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD)
-                );
+                textViewBestBeforeDate.animate().alpha(0).withEndAction(() -> {
+                    textViewBestBeforeDate.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD)
+                    );
+                    textViewBestBeforeDate.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewBestBeforeDate.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD));
         } else {
@@ -91,7 +94,12 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status < 2) status++;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_PRICE, status);
-                textViewPrice.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE));
+                textViewPrice.animate().alpha(0).withEndAction(() -> {
+                    textViewPrice.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE)
+                    );
+                    textViewPrice.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewPrice.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE));
         } else {
@@ -107,7 +115,12 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status < 2) status++;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_STORE, status);
-                textViewStore.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE));
+                textViewStore.animate().alpha(0).withEndAction(() -> {
+                    textViewStore.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE)
+                    );
+                    textViewStore.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewStore.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE));
         } else {
@@ -123,16 +136,19 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status < 2) status++;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_LOCATION, status);
-                textViewLocation.setText(
-                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION)
-                );
+                textViewLocation.animate().alpha(0).withEndAction(() -> {
+                    textViewLocation.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION)
+                    );
+                    textViewLocation.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewLocation.setText(getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION));
         } else {
             linearLayoutLocation.setVisibility(View.GONE);
         }
 
-        // LOCATION
+        // STOCK LOCATION
         textViewStockLocation = view.findViewById(R.id.text_batch_config_stock_location);
         LinearLayout linearLayoutStockLocation = view.findViewById(
                 R.id.linear_batch_config_stock_location
@@ -143,9 +159,12 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status == 0) status = 1;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, status);
-                textViewStockLocation.setText(
-                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
-                );
+                textViewStockLocation.animate().alpha(0).withEndAction(() -> {
+                    textViewStockLocation.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
+                    );
+                    textViewStockLocation.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewStockLocation.setText(
                     getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
@@ -163,9 +182,12 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 if(status == 0) status = 1;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_SPECIFIC, status);
-                textViewSpecific.setText(
-                        getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
-                );
+                textViewSpecific.animate().alpha(0).withEndAction(() -> {
+                    textViewSpecific.setText(
+                            getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
+                    );
+                    textViewSpecific.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
             });
             textViewSpecific.setText(
                     getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
