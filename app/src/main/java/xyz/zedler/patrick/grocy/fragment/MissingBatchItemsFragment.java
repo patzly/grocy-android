@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,7 +102,28 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         // UPDATE UI
 
         activity.updateUI(Constants.UI.MISSING_BATCH_ITEMS, TAG);
-        updateFab();
+        activity.updateFab(
+                new BitmapDrawable(
+                        getResources(),
+                        BitmapUtil.getFromDrawableWithNumber(
+                                activity,
+                                R.drawable.ic_round_shopping_cart,
+                                getReadyPurchaseEntriesSize(),
+                                7.3f,
+                                -1.5f,
+                                8
+                        )
+                ),
+                R.string.action_perform_purchasing_processes,
+                Constants.FAB.TAG.PURCHASE,
+                true,
+                () -> {
+                    if(activity.getCurrentFragment().getClass()== MissingBatchItemsFragment.class) {
+                        ((MissingBatchItemsFragment) activity.getCurrentFragment())
+                                .doOnePurchaseRequest();
+                    }
+                }
+        );
     }
 
     public void createdProduct(Bundle bundle) {
@@ -119,7 +139,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             if(adapter != null) adapter.notifyItemChanged(
                     missingBatchItems.indexOf(missingBatchItem)
             );
-            new Handler().postDelayed(this::updateFab, 500);
+            updateFab();
         }
     }
 
