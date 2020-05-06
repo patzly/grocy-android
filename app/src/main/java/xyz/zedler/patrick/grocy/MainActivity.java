@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, "");
-        if(serverUrl == null || serverUrl.equals("")) {
+        if(serverUrl.equals("")) {
             startActivityForResult(
                     new Intent(this, LoginActivity.class),
                     Constants.REQUEST.LOGIN
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 updateFab(
                         R.drawable.ic_round_barcode_scan,
-                        R.string.action_scan, // TODO: Correct string
+                        R.string.action_scan,
                         Constants.FAB.TAG.SCAN,
                         animated,
                         () -> {
@@ -739,6 +739,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
+            case Constants.UI.MASTER_PRODUCTS_DEFAULT:
+            case Constants.UI.MASTER_LOCATIONS_DEFAULT:
+            case Constants.UI.MASTER_STORES_DEFAULT:
+            case Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT:
+            case Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT:
                 dismissFragments();
                 break;
             case Constants.UI.MISSING_BATCH_ITEMS:
@@ -752,13 +757,6 @@ public class MainActivity extends AppCompatActivity {
                         );
                     }
                 }
-                break;
-            case Constants.UI.MASTER_PRODUCTS_DEFAULT:
-            case Constants.UI.MASTER_LOCATIONS_DEFAULT:
-            case Constants.UI.MASTER_STORES_DEFAULT:
-            case Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT:
-            case Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT:
-                dismissFragments();
                 break;
             case Constants.UI.MASTER_PRODUCTS_SEARCH:
                 if(fragmentCurrent.getClass() == MasterProductsFragment.class) {
