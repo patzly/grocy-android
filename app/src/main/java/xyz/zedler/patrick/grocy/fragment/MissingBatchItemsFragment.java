@@ -1,7 +1,5 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,14 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MissingBatchItemsFragment extends Fragment implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
@@ -50,19 +45,11 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
     private MissingBatchItemAdapter missingBatchItemAdapter;
-    private BroadcastReceiver broadcastReceiver;
-    private ActionButton actionButtonFlash;
 
     private ArrayList<MissingBatchItem> missingBatchItems;
-    private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
-    private String search = "";
-    private String sortMode;
-    private boolean sortAscending;
 
     private RecyclerView recyclerView;
     private NestedScrollView scrollView;
@@ -82,10 +69,6 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
         activity = (MainActivity) getActivity();
         assert activity != null;
-
-        // GET PREFERENCES
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // WEB REQUESTS
 
@@ -144,14 +127,14 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         return missingBatchItems.size();
     }
 
-    private int getReadyPurchaseEntries() {
-        int readyPurchaseEntries = 0;
+    private int getReadyPurchaseEntriesSize() {
+        int readyPurchaseEntriesSize = 0;
         for(MissingBatchItem missingBatchItem : missingBatchItems) {
             if(missingBatchItem.getIsOnServer()) {
-                readyPurchaseEntries += missingBatchItem.getPurchaseEntriesSize();
+                readyPurchaseEntriesSize += missingBatchItem.getPurchaseEntriesSize();
             }
         }
-        return readyPurchaseEntries;
+        return readyPurchaseEntriesSize;
     }
 
     private MissingBatchItem getMissingBatchItemFromName(String productName) {
@@ -170,7 +153,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                         BitmapUtil.getFromDrawableWithNumber(
                                 activity,
                                 R.drawable.ic_round_shopping_cart,
-                                getReadyPurchaseEntries(),
+                                getReadyPurchaseEntriesSize(),
                                 7.3f,
                                 -1.5f,
                                 8
@@ -180,9 +163,8 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     public void doOnePurchaseRequest() {
-        if(missingBatchItems.isEmpty()) {
-            updateFab();
-            showSnackbarMessage("All purchases complete");
+        if(getReadyPurchaseEntriesSize() == 0) {
+            showSnackbarMessage(activity.getString(R.string.msg_no_purchase_transactions));
             return;
         }
 
@@ -203,7 +185,13 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                         missingBatchItemAdapter.notifyItemRemoved(0);
                     }
                     updateFab();
-                    doOnePurchaseRequest();
+                    if(getReadyPurchaseEntriesSize() == 0) {
+                        showSnackbarMessage(
+                                activity.getString(R.string.msg_purchase_transactions_done)
+                        );
+                    } else {
+                        doOnePurchaseRequest();
+                    }
                 },
                 error -> showSnackbarMessage(activity.getString(R.string.msg_error))
         );
