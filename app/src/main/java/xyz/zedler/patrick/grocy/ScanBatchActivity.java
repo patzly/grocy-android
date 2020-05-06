@@ -271,6 +271,13 @@ public class ScanBatchActivity extends AppCompatActivity
                             new TypeToken<List<Product>>(){}.getType()
                     );
                     productNames = getProductNames();
+                    for(MissingBatchItem missingBatchItem : missingBatchItems) {
+                        if(!missingBatchItem.getIsOnServer()
+                                && !productNames.contains(missingBatchItem.getProductName())
+                        ) {
+                            productNames.add(missingBatchItem.getProductName());
+                        }
+                    }
                     responseListener.onResponse(response);
                 }, errorListener::onError
         );
