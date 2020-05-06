@@ -164,7 +164,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
     public void doOnePurchaseRequest() {
         if(getReadyPurchaseEntriesSize() == 0) {
-            showSnackbarMessage(activity.getString(R.string.msg_no_purchase_transactions));
+            showMessage(activity.getString(R.string.msg_no_purchase_transactions));
             return;
         }
 
@@ -186,14 +186,14 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                     }
                     updateFab();
                     if(getReadyPurchaseEntriesSize() == 0) {
-                        showSnackbarMessage(
+                        showMessage(
                                 activity.getString(R.string.msg_purchase_transactions_done)
                         );
                     } else {
                         doOnePurchaseRequest();
                     }
                 },
-                error -> showSnackbarMessage(activity.getString(R.string.msg_error))
+                error -> showMessage(activity.getString(R.string.msg_error))
         );
     }
 
@@ -270,7 +270,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         }
     }
 
-    private void showSnackbarMessage(String msg) {
+    private void showMessage(String msg) {
         activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),

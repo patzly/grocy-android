@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -76,13 +78,16 @@ public class MissingBatchItemAdapter
 
         // IS ON SERVER
 
-        if(missingBatchItem.getIsOnServer()) {
-            holder.imageViewOnServer.setAlpha(1.0f);
-        } else {
-            // TODO: Other better way to mark it as onServer
-            holder.imageViewOnServer.setAlpha(0.2f);
-        }
-
+        holder.imageViewOnServer.setImageTintList(
+                ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                                holder.imageViewOnServer.getContext(),
+                                missingBatchItem.getIsOnServer()
+                                        ? R.color.retro_green
+                                        : R.color.on_background_tertiary
+                        )
+                )
+        );
 
         // CONTAINER
 
