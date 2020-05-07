@@ -41,7 +41,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_bbd"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -65,7 +66,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_price"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -89,7 +91,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_store"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -113,7 +116,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_location"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -137,7 +141,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_stock_location"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -161,7 +166,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_batch_config_specific"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
