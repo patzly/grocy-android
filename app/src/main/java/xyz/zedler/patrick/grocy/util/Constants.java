@@ -94,6 +94,7 @@ public final class Constants {
     public final static class EXTRA {
         public final static String SCAN_RESULT = "scan_result";
         public final static String FLASH_VIEW_ID = "flash_view_id";
+        public final static String AFTER_FEATURES_ACTIVITY = "after_features_activity";
     }
 
     public final static class ACTION {

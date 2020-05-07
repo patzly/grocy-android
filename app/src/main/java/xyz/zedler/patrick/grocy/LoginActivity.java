@@ -4,17 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.webkit.URLUtil;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -83,7 +79,9 @@ public class LoginActivity extends AppCompatActivity {
             textInputLayoutServer.setErrorEnabled(false);
             textInputLayoutKey.setErrorEnabled(false);
 
-            String server = editTextServer.getText().toString();
+            String server = editTextServer.getText()
+                    .toString()
+                    .replaceAll("/+$", "");
             String key = editTextKey.getText().toString().trim();
             if(server.equals("")) {
                 textInputLayoutServer.setError(getString(R.string.error_empty));
@@ -103,11 +101,8 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
-            startActivityForResult(
-                    new Intent(this, FeaturesActivity.class),
-                    Constants.REQUEST.FEATURES
-            );
+        if(getIntent().getBooleanExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, false)) {
+            showMessage(getString(R.string.msg_features));
         }
     }
 
@@ -115,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
+                    if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
@@ -124,21 +120,13 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> {
                     if(error instanceof AuthFailureError) {
-                        textInputLayoutKey.setError("API key not working"); // TODO: XML String
+                        textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else {
-                        showMessage("That didn't work!" + error); // TODO: XML String
+                        Log.e(TAG, "requestLogin: VolleyError: " + error);
+                        showMessage(getString(R.string.msg_error) + ": " + error);
                     }
                 }
         );
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Constants.REQUEST.FEATURES && resultCode == Activity.RESULT_OK) {
-            showMessage(getString(R.string.msg_features));
-        }
     }
 
     @Override
@@ -152,13 +140,5 @@ public class LoginActivity extends AppCompatActivity {
                 text,
                 Snackbar.LENGTH_SHORT
         ).show();
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        try {
-            ((Animatable) ((ImageView) findViewById(viewId)).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
-        }
     }
 }

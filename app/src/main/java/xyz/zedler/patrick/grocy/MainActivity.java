@@ -43,6 +43,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     private final static boolean DEBUG = true;
 
     private RequestQueue requestQueue;
-    private WebRequest request;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private GrocyApi grocyApi;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // WEB REQUESTS
 
         requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
-        request = new WebRequest(requestQueue);
+        WebRequest request = new WebRequest(requestQueue);
 
         // API
 
@@ -225,8 +226,15 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, "");
-        if(serverUrl.equals("")) {
+        if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+            startActivityForResult(
+                    new Intent(this, FeaturesActivity.class),
+                    Constants.REQUEST.FEATURES
+            );
+            return;
+        }
+
+        if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
             startActivityForResult(
                     new Intent(this, LoginActivity.class),
                     Constants.REQUEST.LOGIN
@@ -240,7 +248,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
+        if(requestCode == Constants.REQUEST.FEATURES) {
+            if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, true);
+                startActivityForResult(
+                        new Intent(this, LoginActivity.class),
+                        Constants.REQUEST.LOGIN
+                );
+            }
+        } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
             setUp(null);
         } else if(requestCode == Constants.REQUEST.SCAN_PURCHASE
@@ -934,6 +951,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                 Context.CONNECTIVITY_SERVICE
         );
+        assert connectivityManager != null;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
@@ -957,7 +975,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) Objects
+                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
                 .showSoftInput(
                         editText,
                         InputMethodManager.SHOW_IMPLICIT
@@ -965,7 +984,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hideKeyboard() {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) Objects
+                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
                 .hideSoftInputFromWindow(
                         findViewById(android.R.id.content).getWindowToken(),
                         0

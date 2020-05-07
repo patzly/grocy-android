@@ -83,6 +83,7 @@
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes or questions? Contact us!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
 
+    <string name="error_api_not_working">API key not working</string>
     <string name="error_select_product">Select a product</string>
     <string name="error_empty">Required</string>
     <string name="error_duplicate">Already exists</string>

@@ -16,7 +16,6 @@ public class MissingBatchItem implements Parcelable {
     private boolean isDefaultBestBeforeDaysSet = false;
     private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
 
-    // TODO: purchaseEntries parcelable
     public MissingBatchItem(
             String productName,
             String barcodes
