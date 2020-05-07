@@ -121,9 +121,10 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 break;
             case R.id.linear_settings:
                 startAnimatedIcon(R.id.image_settings);
-                dismiss();
-                startActivity(new Intent(activity, SettingsActivity.class));
-                //new Handler().postDelayed(this::dismiss, 500);
+                new Handler().postDelayed(() -> {
+                    dismiss();
+                    startActivity(new Intent(activity, SettingsActivity.class));
+                }, 300);
                 break;
             case R.id.linear_feedback:
                 dismiss();

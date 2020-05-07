@@ -272,6 +272,21 @@ public class MainActivity extends AppCompatActivity {
                     ).commit();
             bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
         }
+
+        // get shortcut action if available
+
+        Intent intentAction = getIntent();
+        if(intentAction != null && intentAction.getAction() != null) {
+            if(intentAction.getAction().equals(Constants.SHORTCUT_ACTION.CONSUME)) {
+                Intent intent = new Intent(this, ScanBatchActivity.class);
+                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+                startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+            } else if(intentAction.getAction().equals(Constants.SHORTCUT_ACTION.PURCHASE)) {
+                Intent intent = new Intent(this, ScanBatchActivity.class);
+                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
+                startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            }
+        }
     }
 
     @Override

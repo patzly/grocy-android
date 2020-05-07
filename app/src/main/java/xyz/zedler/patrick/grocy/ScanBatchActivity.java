@@ -125,9 +125,11 @@ public class ScanBatchActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_scan_batch);
+
         intent = getIntent();
         actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
-        if(actionType == null) showSnackbarMessage(getString(R.string.msg_error));
+        if(actionType == null) finish();
 
         isTorchOn = false;
 
@@ -146,8 +148,6 @@ public class ScanBatchActivity extends AppCompatActivity
 
         // INITIALIZE VIEWS
 
-        setContentView(R.layout.activity_scan_batch);
-
         ActionButton buttonClose = findViewById(R.id.button_scan_batch_close);
         buttonClose.setOnClickListener(v -> onBackPressed());
         buttonClose.setTooltipText(getString(R.string.action_close));
@@ -159,11 +159,8 @@ public class ScanBatchActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cardViewCount.setTooltipText(getString(R.string.tooltip_new_products_count));
         }
-        String type = intent.getStringExtra(Constants.ARGUMENT.TYPE);
-        if(type == null) finish();
-        assert type != null;
         cardViewCount.setVisibility(
-                type.equals(Constants.ACTION.PURCHASE)
+                actionType.equals(Constants.ACTION.PURCHASE)
                         ? View.VISIBLE
                         : View.GONE
         );
@@ -178,7 +175,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 );
                 finish();
             } else {
-                showSnackbarMessage(getString(R.string.msg_batch_no_products));
+                showMessage(getString(R.string.msg_batch_no_products));
             }
         });
 
@@ -333,7 +330,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     );
 
                     if(currentProductDetails.getProduct().getEnableTareWeightHandling() == 1) {
-                        showSnackbarMessage(getString(R.string.msg_batch_tare_weight));
+                        showMessage(getString(R.string.msg_batch_tare_weight));
                         return;
                     }
                     askNecessaryDetails();
@@ -358,13 +355,13 @@ public class ScanBatchActivity extends AppCompatActivity
                             downloadProducts(
                                     response1 -> showChooseBottomSheet(barcode),
                                     error1 -> {
-                                        showSnackbarMessage(getString(R.string.msg_error));
+                                        showMessage(getString(R.string.msg_error));
                                         resumeScan();
                                     }
                             );
                         }
                     } else {
-                        showSnackbarMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.msg_error));
                         resumeScan();
                     }
                 }
@@ -418,12 +415,12 @@ public class ScanBatchActivity extends AppCompatActivity
                 error -> {
                     NetworkResponse networkResponse = error.networkResponse;
                     if(networkResponse != null && networkResponse.statusCode == 400) {
-                        showSnackbarMessage(getString(
+                        showMessage(getString(
                                 R.string.msg_not_in_stock,
                                 currentProductName
                         ));
                     } else {
-                        showSnackbarMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.msg_error));
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
                     resumeScan();
@@ -483,7 +480,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     resumeScan();
                 },
                 error -> {
-                    showSnackbarMessage(getString(R.string.msg_error));
+                    showMessage(getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "purchaseProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
@@ -495,10 +492,10 @@ public class ScanBatchActivity extends AppCompatActivity
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    showSnackbarMessage(getString(R.string.msg_undone_transaction));
+                    showMessage(getString(R.string.msg_undone_transaction));
                     if(DEBUG) Log.i(TAG, "undoTransaction: undone");
                 }, error -> {
-                    showSnackbarMessage(getString(R.string.msg_error));
+                    showMessage(getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "undoTransaction: error: " + error);
                 }
         );
@@ -523,7 +520,7 @@ public class ScanBatchActivity extends AppCompatActivity
             missingBatchItem.setDefaultStoreId(storeId);
         }
         Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
-        showSnackbarMessage(
+        showMessage(
                 getString(R.string.msg_saved_purchase,
                         missingBatchItem.getProductName())
         );
@@ -735,7 +732,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     response -> showStoresBottomSheet(),
                     error -> {
                         discardCurrentProduct();
-                        showSnackbarMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.msg_error));
                     }
             );
             return;
@@ -756,7 +753,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     response -> showLocationsBottomSheet(),
                     error -> {
                         discardCurrentProduct();
-                        showSnackbarMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.msg_error));
                     }
             );
             return;
@@ -820,7 +817,7 @@ public class ScanBatchActivity extends AppCompatActivity
         return null;
     }
 
-    private void showSnackbarMessage(String msg) {
+    private void showMessage(String msg) {
         Snackbar.make(
                 findViewById(R.id.barcode_scan_batch),
                 msg,

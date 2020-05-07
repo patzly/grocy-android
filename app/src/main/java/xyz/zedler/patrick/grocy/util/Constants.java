@@ -118,6 +118,11 @@ public final class Constants {
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
     }
 
+    public final static class SHORTCUT_ACTION {
+        public final static String CONSUME = "xyz.zedler.patrick.grocy.action.consume";
+        public final static String PURCHASE = "xyz.zedler.patrick.grocy.action.purchase";
+    }
+
     public final static class ARGUMENT {
         public final static String UI_MODE = "ui_mode";
         public final static String STOCK_ITEM = "stock_item";
