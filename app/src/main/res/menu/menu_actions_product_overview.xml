@@ -13,4 +13,9 @@
         android:title="Consume 1 as spoiled"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_edit_product"
+        android:title="Edit product"
+        app:showAsAction="never"/>
+
 </menu>
