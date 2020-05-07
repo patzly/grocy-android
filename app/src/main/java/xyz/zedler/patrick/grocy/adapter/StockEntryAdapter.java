@@ -24,7 +24,6 @@ public class StockEntryAdapter
         extends RecyclerView.Adapter<StockEntryAdapter.ViewHolder> {
 
     private final static String TAG = StockEntryAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private Context context;
     private ArrayList<StockEntry> stockEntries;
@@ -86,7 +85,7 @@ public class StockEntryAdapter
             holder.textViewSubtitle.setText(
                     context.getString(R.string.subtitle_stock_entry_no_specific)
             );
-            if(selectedId == null) {
+            if(selectedId == null || selectedId.equals("")) {
                 holder.imageViewSelected.setVisibility(View.VISIBLE);
             }
         } else {

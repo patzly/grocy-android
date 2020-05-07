@@ -24,11 +24,9 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "BatchConfigBottomSheet";
 
     private SharedPreferences sharedPrefs;
-    private String batchType;
 
     private ScanBatchActivity activity;
     private TextView textViewBestBeforeDate, textViewPrice, textViewStore, textViewLocation;
@@ -60,13 +58,14 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
             return view;
         }
 
-        batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
+        String batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // BEST BEFORE DATE
         textViewBestBeforeDate = view.findViewById(R.id.text_batch_config_bbd);
         LinearLayout linearLayoutBestBeforeDate = view.findViewById(R.id.linear_batch_config_bbd);
+        assert batchType != null;
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutBestBeforeDate.setOnClickListener(v -> {
                 int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD);
@@ -156,7 +155,7 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         if(batchType.equals(Constants.ACTION.CONSUME)) {
             linearLayoutStockLocation.setOnClickListener(v -> {
                 int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION);
-                if(status == 0) status = 1;
+                if(status == 0) status = 2;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, status);
                 textViewStockLocation.animate().alpha(0).withEndAction(() -> {
@@ -179,7 +178,7 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         if(batchType.equals(Constants.ACTION.CONSUME)) {
             linearLayoutSpecific.setOnClickListener(v -> {
                 int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC);
-                if(status == 0) status = 1;
+                if(status == 0) status = 2;
                 else status = 0;
                 setPrefToStatus(Constants.PREF.BATCH_CONFIG_SPECIFIC, status);
                 textViewSpecific.animate().alpha(0).withEndAction(() -> {

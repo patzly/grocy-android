@@ -54,12 +54,16 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchConfigBottomShee
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -113,6 +117,8 @@ public class ScanBatchActivity extends AppCompatActivity
     private String price;
     private String storeId;
     private String locationId;
+    private String entryId;
+    private String stockLocationId;
 
     private Map<String, String> sessionBestBeforeDates = new HashMap<>();
     private Map<String, String> sessionPrices = new HashMap<>();
@@ -371,6 +377,9 @@ public class ScanBatchActivity extends AppCompatActivity
             body.put("amount", 1);
             body.put("transaction_type", "consume");
             body.put("spoiled", false);
+            if(entryId != null && !entryId.equals("")) {
+                body.put("stock_entry_id", entryId);
+            }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
@@ -406,6 +415,7 @@ public class ScanBatchActivity extends AppCompatActivity
                                 v -> undoTransaction(transId)
                         );
                     }
+                    storeResetSelectedValues();
                     snackbar.show();
                     resumeScan();
                 },
@@ -420,6 +430,7 @@ public class ScanBatchActivity extends AppCompatActivity
                         showMessage(getString(R.string.msg_error));
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                    storeResetSelectedValues();
                     resumeScan();
                 }
         );
@@ -556,6 +567,10 @@ public class ScanBatchActivity extends AppCompatActivity
         // LOCATION
         sessionLocationIds.put(currentProductName, locationId);
         locationId = null;
+        // STOCK ENTRY
+        entryId = null;
+        // STOCK LOCATION
+        stockLocationId = null;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -567,8 +582,23 @@ public class ScanBatchActivity extends AppCompatActivity
             int askForSpecific = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_SPECIFIC, 0
             );
+            if(askForSpecific == 0 && entryId == null) {
+                entryId = "";
+            } else if(askForSpecific == 2 && entryId == null) {
+                showSpecificEntryBottomSheet();
+                return;
+            }
 
-            // TODO: SPECIFIC & STOCK LOCATION
+            // STOCK LOCATION
+            int askForStockLocation = sharedPrefs.getInt(
+                    Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, 0
+            );
+            if(askForStockLocation == 0 && stockLocationId == null) {
+                stockLocationId = "";
+            } else if(askForStockLocation == 2 && stockLocationId == null) {
+                showStockLocationsBottomSheet();
+                return;
+            }
 
             consumeProduct();
 
@@ -699,6 +729,8 @@ public class ScanBatchActivity extends AppCompatActivity
         price = null;
         storeId = null;
         locationId = null;
+        entryId = null;
+        stockLocationId = null;
         resumeScan();
     }
 
@@ -770,6 +802,60 @@ public class ScanBatchActivity extends AppCompatActivity
         }
         bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
         showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
+    }
+
+    private void showSpecificEntryBottomSheet() {
+        request.get(
+                grocyApi.getStockEntriesFromProduct(currentProductDetails.getProduct().getId()),
+                response -> {
+                    ArrayList<StockEntry> stockEntries = gson.fromJson(
+                            response,
+                            new TypeToken<ArrayList<StockEntry>>(){}.getType()
+                    );
+                    if(stockEntries.isEmpty()) {
+                        showMessage(getString(
+                                R.string.msg_not_in_stock,
+                                currentProductName
+                        ));
+                        discardCurrentProduct();
+                        return;
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES, stockEntries);
+                    bundle.putString(Constants.ARGUMENT.SELECTED_ID, entryId);
+                    showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                },
+                error -> showMessage(getString(R.string.msg_error))
+        );
+    }
+
+    private void showStockLocationsBottomSheet() {
+        request.get(
+                grocyApi.getStockLocationsFromProduct(currentProductDetails.getProduct().getId()),
+                response -> {
+                    ArrayList<StockLocation> stockLocations = gson.fromJson(
+                            response,
+                            new TypeToken<ArrayList<StockLocation>>(){}.getType()
+                    );
+                    if(stockLocations.isEmpty()) {
+                        showMessage(getString(
+                                R.string.msg_not_in_stock,
+                                currentProductName
+                        ));
+                        discardCurrentProduct();
+                        return;
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(
+                            Constants.ARGUMENT.STOCK_LOCATIONS,
+                            stockLocations
+                    );
+                    bundle.putString(Constants.ARGUMENT.SELECTED_ID, stockLocationId);
+                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, currentProductDetails);
+                    showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
+                },
+                error -> showMessage(getString(R.string.msg_error))
+        );
     }
 
     private ArrayList<String> getProductNames() {
@@ -889,6 +975,14 @@ public class ScanBatchActivity extends AppCompatActivity
 
     public void setLocationId(String locationId) {
         this.locationId = locationId;
+    }
+
+    public void setEntryId(String entryId) {
+        this.entryId = entryId;
+    }
+
+    public void setStockLocationId(String stockLocationId) {
+        this.stockLocationId = stockLocationId;
     }
 
     public boolean isOnline() {
