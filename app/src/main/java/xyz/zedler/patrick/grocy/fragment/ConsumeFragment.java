@@ -536,6 +536,10 @@ public class ConsumeFragment extends Fragment {
             body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", isSpoiled);
+            body.put("location_id", selectedLocationId);
+            if(selectedStockEntryId != null && !selectedStockEntryId.equals("")) {
+                body.put("stock_entry_id", selectedStockEntryId);
+            }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
@@ -604,6 +608,10 @@ public class ConsumeFragment extends Fragment {
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amount);
+            body.put("location_id", selectedLocationId);
+            if(selectedStockEntryId != null && !selectedStockEntryId.equals("")) {
+                body.put("stock_entry_id", selectedStockEntryId);
+            }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "openProduct: " + e);
         }

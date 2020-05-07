@@ -563,6 +563,11 @@ public class ScanBatchActivity extends AppCompatActivity
 
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
+            // SPECIFIC STOCK ENTRY
+            int askForSpecific = sharedPrefs.getInt(
+                    Constants.PREF.BATCH_CONFIG_SPECIFIC, 0
+            );
+
             // TODO: SPECIFIC & STOCK LOCATION
 
             consumeProduct();
