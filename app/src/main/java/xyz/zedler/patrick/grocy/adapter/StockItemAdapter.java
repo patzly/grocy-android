@@ -154,11 +154,15 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             holder.linearLayoutDays.setVisibility(View.VISIBLE);
             int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
 
-            if(sortMode.equals(Constants.STOCK.SORT.BBD) || days <= daysExpiringSoon) {
+            if(sortMode.equals(Constants.STOCK.SORT.BBD)
+                    || days <= daysExpiringSoon
+                    && !stockItem.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)) {
                 holder.textViewDays.setText(
                         new DateUtil(context).getHumanForDaysFromNow(stockItem.getBestBeforeDate())
                 );
-                if(days <= 5) {
+                if(days <= 5
+                        && !stockItem.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)
+                ) {
                     holder.textViewDays.setTypeface(
                             ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
                     );

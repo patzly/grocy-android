@@ -42,7 +42,6 @@ public class DateUtil {
 
     public static int getDaysFromNow(String dateString) {
         if(dateString == null) return 0;
-        if(dateString.equals(Constants.DATE.NEVER_EXPIRES)) return -1;
         Date current = Calendar.getInstance().getTime();
         Date date = null;
         try {
