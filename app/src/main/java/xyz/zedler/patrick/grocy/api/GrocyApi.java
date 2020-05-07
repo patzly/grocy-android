@@ -105,9 +105,9 @@ public class GrocyApi {
     }
 
     /**
-     * Sets the given setting of the currently logged in user
+     * Returns the given setting of the currently logged in user
      */
-    public String setUserSetting(String key) {
+    public String getUserSetting(String key) {
         return getUrl("/user/settings/" + key);
     }
 

@@ -45,6 +45,8 @@
 
         <activity android:name=".AboutActivity"/>
 
+        <activity android:name=".RestartActivity"/>
+
         <activity
             android:name=".ScanInputActivity"
             android:screenOrientation="portrait"

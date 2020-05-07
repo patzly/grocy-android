@@ -13,12 +13,11 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/text_exit_scan_batch_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="@string/title_batch_scan_exit"
+            android:text="Logout from Grocy?"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>
@@ -45,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="viewStart"
-                android:text="@string/description_scan_batch_exit"
+                android:text="Nothing on your server will be deleted. You will be redirected to the login page."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
@@ -56,21 +55,24 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_exit_scan_batch_discard"
+                    android:id="@+id/button_logout_cancel"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:rippleColor="@color/highlight"
                     android:textColor="@color/on_background_secondary"
-                    android:text="@string/action_discard_products" />
+                    android:text="@string/action_cancel" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_exit_scan_batch_open"
+                    android:id="@+id/button_logout_logout"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/action_open_forms" />
+                    app:backgroundTint="@color/retro_red"
+                    app:rippleColor="@color/highlight_on_secondary"
+                    android:textColor="@color/white"
+                    android:text="Logout" />
 
             </LinearLayout>
 

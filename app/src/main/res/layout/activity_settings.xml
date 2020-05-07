@@ -107,41 +107,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_setting_demo"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_setting_demo"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_tune"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_demo" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_demo_description" />
-
-                </LinearLayout>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_setting_demo"
-                    style="@style/Widget.Grocy.Switch"/>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/linear_setting_logout"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
 
                 <ImageView
                     android:id="@+id/image_setting_logout"
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_tune"
+                    android:src="@drawable/ic_round_logout"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
@@ -153,30 +125,6 @@
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Description"
                         android:text="@string/setting_logout_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_setting_currency"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_setting_currency"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_money"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="@string/setting_currency" />
-
-                    <TextView
-                        android:id="@+id/text_setting_currency"
-                        style="@style/Theme.Grocy.ListItem.Title" />
 
                 </LinearLayout>
 

@@ -901,12 +901,10 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) Objects
-                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
-                .showSoftInput(
-                        editText,
-                        InputMethodManager.SHOW_IMPLICIT
-                );
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
+                editText,
+                InputMethodManager.SHOW_IMPLICIT
+        );
     }
 
     public void hideKeyboard() {

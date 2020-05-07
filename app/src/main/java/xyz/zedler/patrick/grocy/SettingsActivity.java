@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -11,8 +12,11 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +26,23 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DefaultAmountBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
+import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class SettingsActivity extends AppCompatActivity
 		implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -35,19 +50,37 @@ public class SettingsActivity extends AppCompatActivity
 	private final static boolean DEBUG = false;
 	private final static String TAG = "SettingsActivity";
 
+	private GrocyApi grocyApi;
+	private RequestQueue requestQueue;
+	private WebRequest request;
+
 	private long lastClick = 0;
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
 	private SwitchMaterial switchDark;
 	private NestedScrollView nestedScrollView;
+	private TextView textViewAmountPurchase, textViewAmountConsume;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setContentView(R.layout.activity_settings);
+
+		// PREFERENCES
+
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		setContentView(R.layout.activity_settings);
+		// WEB REQUESTS
+
+		requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+		request = new WebRequest(requestQueue);
+
+		// API
+
+		grocyApi = new GrocyApi(this);
+
+		// INITIALIZE VIEWS
 
 		findViewById(R.id.frame_back_settings).setOnClickListener(v -> {
 			if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
@@ -64,7 +97,7 @@ public class SettingsActivity extends AppCompatActivity
 					startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
-					showBottomSheet(new FeedbackBottomSheetDialogFragment());
+					showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
 					break;
 			}
 			return true;
@@ -94,7 +127,16 @@ public class SettingsActivity extends AppCompatActivity
 		);
 
 		setOnClickListeners(
-				R.id.linear_setting_dark_mode
+				R.id.linear_setting_dark_mode,
+				R.id.linear_setting_logout,
+				R.id.linear_setting_default_amount_purchase
+		);
+
+		// VALUES
+
+		textViewAmountPurchase = findViewById(R.id.text_setting_default_amount_purchase);
+		textViewAmountPurchase.setText(
+				sharedPrefs.getString(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1")
 		);
 	}
 
@@ -155,6 +197,13 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_dark_mode:
 				switchDark.setChecked(!switchDark.isChecked());
 				break;
+			case R.id.linear_setting_logout:
+				showBottomSheet(new LogoutBottomSheetDialogFragment(), null);
+				break;
+			case R.id.linear_setting_default_amount_purchase:
+				startAnimatedIcon(R.id.image_setting_default_amount_purchase);
+				showBottomSheet(new DefaultAmountBottomSheetDialogFragment(), null);
+				break;
 		}
 	}
 
@@ -182,6 +231,34 @@ public class SettingsActivity extends AppCompatActivity
 		}
 	}
 
+	public void setAmountPurchase(double amount) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, amount);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setAmountPurchase: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
+				body,
+				response -> {
+					textViewAmountPurchase.setText(NumUtil.trim(amount));
+					sharedPrefs.edit().putString(
+							Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+							NumUtil.trim(amount)
+					).apply();
+				},
+				error -> {
+					showMessage(getString(R.string.msg_error));
+					if(DEBUG) Log.i(TAG, "setAmountPurchase: " + error);
+				}
+		);
+	}
+
+	private void showMessage(String msg) {
+		Snackbar.make(findViewById(R.id.scroll_settings), msg, Snackbar.LENGTH_SHORT).show();
+	}
+
 	private void startAnimatedIcon(int viewId) {
 		try {
 			((Animatable) ((ImageView) findViewById(viewId)).getDrawable()).start();
@@ -190,10 +267,18 @@ public class SettingsActivity extends AppCompatActivity
 		}
 	}
 
-	private void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
+	private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+		if(bundle != null) bottomSheet.setArguments(bundle);
 		getSupportFragmentManager()
 				.beginTransaction()
 				.add(bottomSheet, bottomSheet.toString())
 				.commit();
+	}
+
+	public void showKeyboard(EditText editText) {
+		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
+				editText,
+				InputMethodManager.SHOW_IMPLICIT
+		);
 	}
 }
