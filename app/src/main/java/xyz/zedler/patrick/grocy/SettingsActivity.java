@@ -1,6 +1,7 @@
 package xyz.zedler.patrick.grocy;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
@@ -60,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity
 			lastClick = SystemClock.elapsedRealtime();
 			switch (item.getItemId()) {
 				case R.id.action_about:
-					//startActivity(new Intent(this, AboutActivity.class));
+					startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
 					showBottomSheet(new FeedbackBottomSheetDialogFragment());

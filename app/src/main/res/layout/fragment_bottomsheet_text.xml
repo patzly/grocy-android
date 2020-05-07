@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="0dp"
+        android:paddingEnd="4dp">
+
+        <TextView
+            android:id="@+id/text_text_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
+
+        <FrameLayout
+            android:id="@+id/frame_text_open_link"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:layout_gravity="end|center_vertical"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/image_text_open_link"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_round_open_in_browser_anim" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/text_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text.Small"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
