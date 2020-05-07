@@ -32,6 +32,7 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
+import com.android.volley.VolleyError;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -360,7 +361,7 @@ public class PurchaseFragment extends Fragment {
 
         // START
 
-        load();
+        refresh();
 
         // UPDATE UI
 
@@ -369,12 +370,6 @@ public class PurchaseFragment extends Fragment {
 
     public void giveBundle(Bundle bundle) {
         startupBundle = bundle;
-    }
-
-    private void load() {
-        if(activity.isOnline()) {
-            download();
-        }
     }
 
     private void refresh() {
@@ -409,6 +404,7 @@ public class PurchaseFragment extends Fragment {
     private void downloadProductNames() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
+                TAG,
                 response -> {
                     products = gson.fromJson(
                             response,
@@ -417,45 +413,16 @@ public class PurchaseFragment extends Fragment {
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     autoCompleteTextViewProduct.setAdapter(adapterProducts);
-                    // download finished
-                    String action = null;
-                    if(startupBundle != null) {
-                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-                    }
-                    if(action != null && action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
-                        Product product = getProductFromName(
-                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                        );
-                        if(product != null) {
-                            loadProductDetails(product.getId());
-                        } else {
-                            autoCompleteTextViewProduct.setText(
-                                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                            );
-                        }
-                    }
-                    swipeRefreshLayout.setRefreshing(false);
-                }, error -> {
-                    swipeRefreshLayout.setRefreshing(false);
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
-                                    activity.getString(R.string.msg_error),
-                                    Snackbar.LENGTH_SHORT
-                            ).setActionTextColor(
-                                    ContextCompat.getColor(activity, R.color.secondary)
-                            ).setAction(
-                                    activity.getString(R.string.action_retry),
-                                    v1 -> download()
-                            )
-                    );
-                }
+                },
+                this::onError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadStores() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+                TAG,
                 response -> {
                     stores = gson.fromJson(
                             response,
@@ -467,21 +434,64 @@ public class PurchaseFragment extends Fragment {
                             0,
                             new Store(-1, activity.getString(R.string.subtitle_none))
                     );
-                }, error -> {} // TODO: Make queue, so on error all requests can be cancelled
+                },
+                this::onError,
+                this::onQueueEmpty
         );
     }
 
     private void downloadLocations() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+                TAG,
                 response -> {
                     locations = gson.fromJson(
                             response,
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     SortUtil.sortLocationsByName(locations, true);
-                }, error -> {} // TODO: Make queue, so on error all requests can be cancelled
+                },
+                this::onError,
+                this::onQueueEmpty
         );
+    }
+
+    private void onError(VolleyError error) {
+        Log.e(TAG, "onError: VolleyError: " + error);
+        request.cancelAll(TAG);
+        swipeRefreshLayout.setRefreshing(false);
+        activity.showSnackbar(
+                Snackbar.make(
+                        activity.findViewById(R.id.linear_container_main),
+                        activity.getString(R.string.msg_error),
+                        Snackbar.LENGTH_SHORT
+                ).setActionTextColor(
+                        ContextCompat.getColor(activity, R.color.secondary)
+                ).setAction(
+                        activity.getString(R.string.action_retry),
+                        v1 -> download()
+                )
+        );
+    }
+
+    private void onQueueEmpty() {
+        String action = null;
+        if(startupBundle != null) {
+            action = startupBundle.getString(Constants.ARGUMENT.TYPE);
+        }
+        if(action != null && action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+            Product product = getProductFromName(
+                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+            );
+            if(product != null) {
+                loadProductDetails(product.getId());
+            } else {
+                autoCompleteTextViewProduct.setText(
+                        startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                );
+            }
+        }
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -589,7 +599,7 @@ public class PurchaseFragment extends Fragment {
 
         // STORE
         String storeId = productDetails.getProduct().getStoreId();
-        if(storeId == null || storeId.equals("")) { // TODO: ""-check needed?
+        if(storeId == null || storeId.equals("")) {
             selectedStoreId = -1;
             textViewStore.setText(getString(R.string.subtitle_none));
         } else {

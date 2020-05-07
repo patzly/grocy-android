@@ -279,17 +279,11 @@ public class ConsumeFragment extends Fragment {
 
         // START
 
-        load();
+        refresh();
 
         // UPDATE UI
 
         activity.updateUI(Constants.UI.CONSUME, TAG);
-    }
-
-    private void load() {
-        if(activity.isOnline()) {
-            download();
-        }
     }
 
     private void refresh() {
