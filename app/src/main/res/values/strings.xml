@@ -2,7 +2,7 @@
 
     <string name="app_name">Grocy</string>
     <string name="app_version" translatable="false">1.0</string>
-    <string name="app_developer" translatable="false">Patrick Zedler, Dominic Zedler</string>
+    <string name="app_developer">Patrick and Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
     <string name="action_purchase">Purchase</string>
@@ -208,8 +208,7 @@
     <string name="feature_3_description">Scan a whole purchase in seconds</string>
 
     <string name="category_licenses">Open source licenses</string>
-    <string name="category_appearance">Appearance</string>
-    <string name="category_behavior">Behavior</string>
+    <string name="category_general">General</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Valid API key</string>
@@ -217,7 +216,18 @@
 
     <string name="setting_dark_mode">Force dark mode</string>
     <string name="setting_dark_mode_description">Off for system dependency</string>
+    <string name="setting_demo">Use demo instance</string>
+    <string name="setting_demo_description">Only for testing</string>
+    <string name="setting_logout">Logout</string>
+    <string name="setting_logout_description">Return to login page</string>
+    <string name="setting_currency">Currency</string>
     <string name="setting_currency_default">USD</string>
+    <string name="setting_expiring_soon_days">Expiring soon days</string>
+    <string name="setting_default_amount_purchase">Default amount for purchase</string>
+    <string name="setting_default_amount_consume">Default amount for consume</string>
+    <string name="setting_default_location">Default location</string>
+    <string name="setting_default_product_group">Default product group</string>
+    <string name="setting_default_quantity_unit">Default quantity unit</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>

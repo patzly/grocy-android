@@ -79,11 +79,11 @@
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                     <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
+                        style="@style/Theme.Grocy.ListItem.OverLine"
                         android:text="@string/info_version" />
 
                     <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
+                        style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/app_version" />
 
                 </LinearLayout>
@@ -127,11 +127,11 @@
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                     <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
+                        style="@style/Theme.Grocy.ListItem.OverLine"
                         android:text="@string/info_developers" />
 
                     <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
+                        style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/app_developer" />
 
                 </LinearLayout>
@@ -175,7 +175,7 @@
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                     <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
+                        style="@style/Theme.Grocy.ListItem.OverLine"
                         android:text="@string/info_material_components_built_with" />
 
                     <TextView
