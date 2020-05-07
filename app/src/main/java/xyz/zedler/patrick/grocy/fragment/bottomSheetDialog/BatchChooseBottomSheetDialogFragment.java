@@ -234,7 +234,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
             }
         }
         if(selectedMissingBatchItem == null) {
-            // TODO: Error
+            dismissWithMessage(activity.getString(R.string.msg_error));
             return;
         }
 
