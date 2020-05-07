@@ -804,7 +804,6 @@ public class MainActivity extends AppCompatActivity {
                 ) {
                     dismissFragment(fragmentCurrent.getArguments());
                 } else {
-                    // TODO
                     dismissFragment();
                 }
                 break;
@@ -905,7 +904,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void dismissFragment() {
         int count = fragmentManager.getBackStackEntryCount();
-        if(count > 1) {
+        if(count >= 1) {
             fragmentManager.popBackStack();
             String tag = fragmentManager.getBackStackEntryAt(0).getName();
             fragmentCurrent = fragmentManager.findFragmentByTag(tag);
