@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -190,7 +191,7 @@ public class ScanBatchActivity extends AppCompatActivity
         findViewById(R.id.button_scan_batch_config).setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
             lastClick = SystemClock.elapsedRealtime();
-            pauseScan();
+            new Handler().postDelayed(this::pauseScan, 300);
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, actionType);
             showBottomSheet(new BatchConfigBottomSheetDialogFragment(), bundle);
