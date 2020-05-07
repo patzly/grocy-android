@@ -80,7 +80,6 @@ public final class Constants {
         public final static String MASTER_PRODUCT_GROUPS_SEARCH = "master_product_groups_search";
         public final static String MASTER_PRODUCT_GROUP_EDIT = "master_product_group";
         public final static String BATCH_SCAN = "batch_scan";
-        public final static String BATCH_SCAN_BOTTOM_SHEET = "batch_scan_bottom_sheet";
         public final static String MISSING_BATCH_ITEMS = "missing_batch_products";
     }
 
@@ -96,7 +95,6 @@ public final class Constants {
         public final static class SORT {
             public final static String NAME = "name";
             public final static String BBD = "best_before";
-            public final static String LAST_PURCHASED = "last_purchased";
         }
     }
 
@@ -141,7 +139,6 @@ public final class Constants {
         public final static String PRODUCT_NAME = "product_name";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
-        public final static String PARENT_PRODUCT = "parent_product";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
@@ -150,16 +147,13 @@ public final class Constants {
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
         public final static String BARCODES = "barcodes";
-        public final static String BATCH_ITEM = "batch_item";
-        public final static String CREATE_PRODUCT_OBJECT = "batch_item";
+        public final static String CREATE_PRODUCT_OBJECT = "create_product_object";
         public final static String BATCH_ITEMS = "batch_items";
         public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
         public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
-        public final static String AMOUNT = "amount";
         public final static String PRICE = "price";
         public final static String CURRENCY = "currency";
-        public final static String LAST_PRICE = "last_price";
     }
 
     public final static class FAB {
@@ -173,7 +167,6 @@ public final class Constants {
             public final static String SCAN = "scan";
             public final static String CONSUME = "consume";
             public final static String PURCHASE = "purchase";
-            public final static String CREATE_PURCHASE = "create_and_purchase";
             public final static String SAVE = "save";
         }
     }

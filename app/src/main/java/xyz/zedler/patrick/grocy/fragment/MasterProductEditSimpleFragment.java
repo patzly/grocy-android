@@ -106,11 +106,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
             textViewQuantityUnit,
             textViewQuantityUnitLabel;
     private ImageView imageViewName, imageViewMinAmount, imageViewDays;
-    private int selectedLocationId, selectedQuantityUnitId;
+    private int selectedLocationId = -1, selectedQuantityUnitId = -1;
     private String selectedProductGroupId, intendedAction;
     private double minAmount;
     private int bestBeforeDays;
-    private boolean isRefresh = false;
 
     @Override
     public View onCreateView(
@@ -404,10 +403,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
             editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
-            fillWithCreateProductObject();
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
-            fillWithCreateProductObject();
         }
 
         // START
@@ -428,7 +425,6 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private void refresh() {
         // for only fill with up-to-date data on refresh,
         // not on startup as the bundle should contain everything needed
-        isRefresh = true;
         if(activity.isOnline()) {
             download();
         } else {
@@ -562,6 +558,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 case Constants.ACTION.CREATE_THEN_PURCHASE:
                 case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
                     fillWithCreateProductObject();
+                    isFormInvalid();
                     break;
             }
         } else {
@@ -614,6 +611,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             if(location != null) {
                 locationText = location.getName();
             }
+            textViewLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
         }
         textViewLocation.setText(locationText);
     }
@@ -663,6 +661,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             if(quantityUnit != null) {
                 quantityUnitText = quantityUnit.getName();
             }
+            textViewQuantityUnitLabel.setTextColor(getColor(R.color.on_background_secondary));
         }
         textViewQuantityUnit.setText(quantityUnitText);
     }
@@ -931,6 +930,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                                 bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                                bundle.putParcelable(  // to search for old name in batch items
+                                        Constants.ARGUMENT.CREATE_PRODUCT_OBJECT,
+                                        createProductObj
+                                );
                                 bundle.putInt(
                                         Constants.ARGUMENT.PRODUCT_ID,
                                         response.getInt("created_object_id")

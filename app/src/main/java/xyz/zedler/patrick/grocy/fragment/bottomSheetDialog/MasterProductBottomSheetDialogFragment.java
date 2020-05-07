@@ -149,10 +149,14 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		}
 
 		// LOCATION
-		if(location != null) itemLocation.setText(
-				activity.getString(R.string.property_location),
-				location.getName()
-		);
+		if(location != null) {
+			itemLocation.setText(
+					activity.getString(R.string.property_location),
+					location.getName()
+			);
+		} else {
+			itemLocation.setVisibility(View.GONE);
+		}
 
 		// MIN STOCK AMOUNT
 		itemMinStockAmount.setText(
@@ -161,18 +165,26 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		);
 
 		// QUANTITY UNIT PURCHASE
-		if(quantityUnitPurchase != null) itemQuPurchase.setText(
-				activity.getString(R.string.property_qu_purchase),
-				quantityUnitPurchase.getName()
-		);
+		if(quantityUnitPurchase != null) {
+			itemQuPurchase.setText(
+					activity.getString(R.string.property_qu_purchase),
+					quantityUnitPurchase.getName()
+			);
+		} else {
+			itemQuPurchase.setVisibility(View.GONE);
+		}
 
 		// QUANTITY UNIT STOCK
-		if(quantityUnitStock != null) itemQuStock.setText(
-				activity.getString(R.string.property_qu_stock),
-				quantityUnitStock.getName()
-		);
+		if(quantityUnitStock != null) {
+			itemQuStock.setText(
+					activity.getString(R.string.property_qu_stock),
+					quantityUnitStock.getName()
+			);
+		} else {
+			itemQuStock.setVisibility(View.GONE);
+		}
 
-		// QUANTITY UNIT STOCK
+		// QUANTITY UNIT FACTOR
 		itemQuFactor.setText(
 				activity.getString(R.string.property_qu_factor),
 				NumUtil.trim(product.getQuFactorPurchaseToStock())

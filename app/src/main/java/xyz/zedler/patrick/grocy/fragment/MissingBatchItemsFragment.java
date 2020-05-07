@@ -143,35 +143,46 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         String intendedAction = bundle.getString(Constants.ARGUMENT.TYPE);
         if(intendedAction == null) return;
 
-        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
-            MissingBatchItem missingBatchItem = getMissingBatchItemFromName(
-                    bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-            );
-            if(missingBatchItem != null) {
+        switch (intendedAction) {
+            case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH: {
+                CreateProduct oldCreateProduct = bundle.getParcelable(
+                        Constants.ARGUMENT.CREATE_PRODUCT_OBJECT
+                );
+                assert oldCreateProduct != null;
+                MissingBatchItem missingBatchItem = getMissingBatchItemFromName(
+                        oldCreateProduct.getProductName()
+                );
+                String productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                assert missingBatchItem != null;
+                missingBatchItem.setProductName(productName);
                 missingBatchItem.setIsOnServer(true);
                 missingBatchItem.setProductId(bundle.getInt(Constants.ARGUMENT.PRODUCT_ID));
+                missingBatchItemAdapter.notifyItemChanged(
+                        missingBatchItems.indexOf(missingBatchItem)
+                );
+                updateFab();
+                break;
             }
-            MissingBatchItemAdapter adapter = (MissingBatchItemAdapter) recyclerView.getAdapter();
-            if(adapter != null) adapter.notifyItemChanged(
-                    missingBatchItems.indexOf(missingBatchItem)
-            );
-            updateFab();
-        } else if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {
-            int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
-            String productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
-            MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
-            if(missingBatchItem != null && productName != null) {
-                missingBatchItem.setProductName(productName);
-                int index = getIndexOfMissingBatchItemFromProductId(productId);
-                if(index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+            case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH: {
+                int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
+                String productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
+                if (missingBatchItem != null && productName != null) {
+                    missingBatchItem.setProductName(productName);
+                    int index = getIndexOfMissingBatchItemFromProductId(productId);
+                    if (index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+                }
+                break;
             }
-        } else if(intendedAction.equals(Constants.ACTION.DELETE_THEN_PURCHASE_BATCH)) {
-            int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
-            MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
-            if(missingBatchItem != null) {
-                missingBatchItem.setIsOnServer(false);
-                int index = getIndexOfMissingBatchItemFromProductId(productId);
-                if(index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+            case Constants.ACTION.DELETE_THEN_PURCHASE_BATCH: {
+                int productId = bundle.getInt(Constants.ARGUMENT.PRODUCT_ID);
+                MissingBatchItem missingBatchItem = getMissingBatchItemFromProductId(productId);
+                if (missingBatchItem != null) {
+                    missingBatchItem.setIsOnServer(false);
+                    int index = getIndexOfMissingBatchItemFromProductId(productId);
+                    if (index > -1) missingBatchItemAdapter.notifyItemChanged(index);
+                }
+                break;
             }
         }
     }
