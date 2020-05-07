@@ -30,13 +30,6 @@ public final class Constants {
         public final static String DARK_MODE = "force_dark_mode";
         public final static String ANIM_UI_UPDATE = "animated_ui_update";
 
-        public final static String WEAR_POP_UP_COUNT = "wear_pop_up_count";
-        public final static String SHOW_HELP = "show_help";
-        public final static String SHOW_GUIDELINE = "show_guideline";
-        public final static String EXTERNAL_BROWSER = "external_browser";
-        public final static String GUIDELINE_PAGE = "guideline_page";
-        public final static String USE_KEYBOARD = "use_keyboard";
-        public final static String SHOW_ARROWS = "show_arrows";
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
@@ -178,9 +171,10 @@ public final class Constants {
 
     public final static class REQUEST {
         public final static int LOGIN = 1;
-        public final static int SCAN = 2;
-        public final static int SCAN_CONSUME = 3;
-        public final static int SCAN_PURCHASE = 4;
-        public final static int SCAN_PARENT_PRODUCT = 5;
+        public final static int FEATURES = 2;
+        public final static int SCAN = 3;
+        public final static int SCAN_CONSUME = 4;
+        public final static int SCAN_PURCHASE = 5;
+        public final static int SCAN_PARENT_PRODUCT = 6;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -101,6 +102,13 @@ public class LoginActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK);
             finish();
         });
+
+        if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+            startActivityForResult(
+                    new Intent(this, FeaturesActivity.class),
+                    Constants.REQUEST.FEATURES
+            );
+        }
     }
 
     private void requestLogin(String server, String key) {
@@ -118,10 +126,19 @@ public class LoginActivity extends AppCompatActivity {
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError("API key not working"); // TODO: XML String
                     } else {
-                        showSnackbar("That didn't work!" + error); // TODO: XML String
+                        showMessage("That didn't work!" + error); // TODO: XML String
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST.FEATURES && resultCode == Activity.RESULT_OK) {
+            showMessage(getString(R.string.msg_features));
+        }
     }
 
     @Override
@@ -129,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    private void showSnackbar(String text) {
+    private void showMessage(String text) {
         Snackbar.make(
                 findViewById(R.id.linear_login_container),
                 text,

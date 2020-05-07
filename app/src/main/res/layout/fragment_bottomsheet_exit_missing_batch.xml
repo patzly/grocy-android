@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -58,6 +60,8 @@
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:rippleColor="@color/highlight"
+                    android:textColor="@color/on_background_secondary"
                     android:text="@string/action_discard" />
 
                 <com.google.android.material.button.MaterialButton

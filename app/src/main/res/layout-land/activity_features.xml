@@ -71,7 +71,6 @@
             style="@style/Widget.Grocy.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/button_text_color_secondary_selector"
             android:text="@string/action_get_started"/>
 
         <LinearLayout

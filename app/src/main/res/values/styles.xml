@@ -234,7 +234,7 @@
     <style name="Widget.Grocy.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="rippleColor">@color/secondary_translucent</item>
         <item name="iconTint">@color/icon</item>
-        <item name="android:textColor">@color/button_text_color_secondary_selector</item>
+        <item name="android:textColor">@color/secondary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
         <item name="strokeColor">@color/stroke_secondary</item>

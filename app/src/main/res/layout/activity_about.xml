@@ -128,7 +128,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/info_developer" />
+                        android:text="@string/info_developers" />
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Description"
