@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else {
                         Log.e(TAG, "requestLogin: VolleyError: " + error);
-                        showMessage(getString(R.string.msg_error) + ": " + error);
+                        showMessage(getString(R.string.msg_error));
                     }
                 }
         );
