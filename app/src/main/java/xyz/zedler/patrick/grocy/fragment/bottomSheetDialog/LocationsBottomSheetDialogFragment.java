@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,8 @@ public class LocationsBottomSheetDialogFragment
         TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_locations));
 
+        MaterialButton button = view.findViewById(R.id.button_master_edit_selection_discard);
+
         RecyclerView recyclerView = view.findViewById(R.id.recycler_master_edit_selection);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -80,6 +83,13 @@ public class LocationsBottomSheetDialogFragment
 
         if(activity.getClass() == ScanBatchActivity.class) {
             setCancelable(false);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(
+                    v -> {
+                        ((ScanBatchActivity) activity).discardCurrentProduct();
+                        dismiss();
+                    }
+            );
         }
 
         return view;
