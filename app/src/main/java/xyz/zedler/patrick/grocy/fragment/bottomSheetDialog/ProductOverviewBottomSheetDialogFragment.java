@@ -167,6 +167,17 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					);
 					dismiss();
 					return true;
+				case R.id.action_edit_product:
+					Bundle bundle1 = new Bundle();
+					bundle1.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+					bundle1.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+					activity.replaceFragment(
+							Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+							bundle1,
+							true
+					);
+					dismiss();
+					return true;
 			}
 			return false;
 		});

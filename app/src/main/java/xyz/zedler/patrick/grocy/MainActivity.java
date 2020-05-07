@@ -804,6 +804,7 @@ public class MainActivity extends AppCompatActivity {
                 ) {
                     dismissFragment(fragmentCurrent.getArguments());
                 } else {
+                    // TODO
                     dismissFragment();
                 }
                 break;
