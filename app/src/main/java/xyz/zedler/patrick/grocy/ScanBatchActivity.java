@@ -45,6 +45,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
@@ -78,7 +79,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private ScanBatchCaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private BarcodeRipple barcodeRipple;
-    private ActionButton buttonFlash,buttonConfig;
+    private ActionButton buttonFlash;
     private TextView textViewCount;
     private boolean isTorchOn;
     private long lastClick = 0;
@@ -100,12 +101,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private ProductDetails currentProductDetails;
     private MissingBatchItem currentMissingBatchItem;
-    private String currentProductName;
     private ProductType currentProductType;
-    private String currentDefaultStoreId;
-    private String currentLastPrice;
-    private int currentDefaultBestBeforeDays = 0;
-    private int currentDefaultLocationId = -1;
+    private String currentProductName, currentDefaultStoreId, currentLastPrice;
+    private int currentDefaultBestBeforeDays = 0, currentDefaultLocationId = -1;
 
     private enum ProductType {
         PRODUCT, MISSING_BATCH_ITEM
@@ -116,10 +114,10 @@ public class ScanBatchActivity extends AppCompatActivity
     private String storeId;
     private String locationId;
 
-    private Map<String, String> savedBestBeforeDates = new HashMap<>();
-    private Map<String, String> savedPrices = new HashMap<>();
-    private Map<String, String> savedStoreIds = new HashMap<>();
-    private Map<String, String> savedLocationIds = new HashMap<>();
+    private Map<String, String> sessionBestBeforeDates = new HashMap<>();
+    private Map<String, String> sessionPrices = new HashMap<>();
+    private Map<String, String> sessionStoreIds = new HashMap<>();
+    private Map<String, String> sessionLocationIds = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -183,8 +181,7 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setTorchListener(this);
 
-        buttonConfig = findViewById(R.id.button_scan_batch_config);
-        buttonConfig.setOnClickListener(v -> {
+        findViewById(R.id.button_scan_batch_config).setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
             lastClick = SystemClock.elapsedRealtime();
             pauseScan();
@@ -218,7 +215,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
         hideInfo();
 
-        // LOAD NECESSARY OBJECTS
+        // DOWNLOAD NECESSARY OBJECTS
         downloadProducts(response -> {}, error -> {});
         downloadStores(response -> {}, error -> {});
         downloadLocations(response -> {}, error -> {});
@@ -547,17 +544,17 @@ public class ScanBatchActivity extends AppCompatActivity
     private void storeResetSelectedValues() {
         // BEST BEFORE DATE
         if(bestBeforeDate != null && !bestBeforeDate.equals("")) {
-            savedBestBeforeDates.put(currentProductName, bestBeforeDate);
+            sessionBestBeforeDates.put(currentProductName, bestBeforeDate);
         }
         bestBeforeDate = null;
         // PRICE
-        savedPrices.put(currentProductName, price);
+        sessionPrices.put(currentProductName, price);
         price = null;
         // STORE
-        savedStoreIds.put(currentProductName, storeId);
+        sessionStoreIds.put(currentProductName, storeId);
         storeId = null;
         // LOCATION
-        savedLocationIds.put(currentProductName, locationId);
+        sessionLocationIds.put(currentProductName, locationId);
         locationId = null;
     }
 
@@ -578,8 +575,8 @@ public class ScanBatchActivity extends AppCompatActivity
             );
             if(askForBestBeforeDate == 0 && bestBeforeDate == null) {
                 if(currentDefaultBestBeforeDays == 0) {
-                    if(savedBestBeforeDates.containsKey(currentProductName)) {
-                        bestBeforeDate = savedBestBeforeDates.get(currentProductName);
+                    if(sessionBestBeforeDates.containsKey(currentProductName)) {
+                        bestBeforeDate = sessionBestBeforeDates.get(currentProductName);
                     }
                     showBBDateBottomSheet();
                     return;
@@ -592,15 +589,15 @@ public class ScanBatchActivity extends AppCompatActivity
                     bestBeforeDate = dateFormat.format(calendar.getTime());
                 }
             } else if(askForBestBeforeDate == 1 && bestBeforeDate == null) {
-                if(savedBestBeforeDates.containsKey(currentProductName)) {
-                    bestBeforeDate = savedBestBeforeDates.get(currentProductName);
+                if(sessionBestBeforeDates.containsKey(currentProductName)) {
+                    bestBeforeDate = sessionBestBeforeDates.get(currentProductName);
                 } else {
                     showBBDateBottomSheet();
                     return;
                 }
             } else if(askForBestBeforeDate == 2 && bestBeforeDate == null) {
-                if(savedBestBeforeDates.containsKey(currentProductName)) {
-                    bestBeforeDate = savedBestBeforeDates.get(currentProductName);
+                if(sessionBestBeforeDates.containsKey(currentProductName)) {
+                    bestBeforeDate = sessionBestBeforeDates.get(currentProductName);
                 }
                 showBBDateBottomSheet();
                 return;
@@ -611,16 +608,16 @@ public class ScanBatchActivity extends AppCompatActivity
             if(askForPrice == 0 && price == null) {
                 price = "";  // price is never required
             } else if(askForPrice == 1 && price == null) {
-                if(savedPrices.containsKey(currentProductName)) {
-                    price = savedPrices.get(currentProductName);
+                if(sessionPrices.containsKey(currentProductName)) {
+                    price = sessionPrices.get(currentProductName);
                 } else {
                     if(currentLastPrice != null) price = currentLastPrice;
                     showPriceBottomSheet();
                     return;
                 }
             } else if(askForPrice == 2 && price == null) {
-                if(savedPrices.containsKey(currentProductName)) {
-                    price = savedPrices.get(currentProductName);
+                if(sessionPrices.containsKey(currentProductName)) {
+                    price = sessionPrices.get(currentProductName);
                 } else if(currentLastPrice != null) {
                     price = currentLastPrice;
                 }
@@ -637,16 +634,16 @@ public class ScanBatchActivity extends AppCompatActivity
                     storeId = currentDefaultStoreId;
                 }
             } else if(askForStore == 1 && storeId == null) {
-                if(savedStoreIds.containsKey(currentProductName)) {
-                    storeId = savedStoreIds.get(currentProductName);
+                if(sessionStoreIds.containsKey(currentProductName)) {
+                    storeId = sessionStoreIds.get(currentProductName);
                 } else {
                     if(currentDefaultStoreId != null) storeId = currentDefaultStoreId;
                     showStoresBottomSheet();
                     return;
                 }
             } else if(askForStore == 2 && storeId == null) {
-                if(savedStoreIds.containsKey(currentProductName)) {
-                    storeId = savedStoreIds.get(currentProductName);
+                if(sessionStoreIds.containsKey(currentProductName)) {
+                    storeId = sessionStoreIds.get(currentProductName);
                 } else if(currentDefaultStoreId != null) {
                     storeId = currentDefaultStoreId;
                 }
@@ -666,16 +663,16 @@ public class ScanBatchActivity extends AppCompatActivity
                     locationId = String.valueOf(currentDefaultLocationId);
                 }
             } else if(askForLocation == 1 && locationId == null) {
-                if(savedLocationIds.containsKey(currentProductName)) {
-                    locationId = savedLocationIds.get(currentProductName);
+                if(sessionLocationIds.containsKey(currentProductName)) {
+                    locationId = sessionLocationIds.get(currentProductName);
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
                     showLocationsBottomSheet();
                     return;
                 }
             } else if(askForLocation == 2 && locationId == null) {
-                if(savedLocationIds.containsKey(currentProductName)) {
-                    locationId = savedLocationIds.get(currentProductName);
+                if(sessionLocationIds.containsKey(currentProductName)) {
+                    locationId = sessionLocationIds.get(currentProductName);
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
                 }
@@ -695,6 +692,8 @@ public class ScanBatchActivity extends AppCompatActivity
     public void discardCurrentProduct() {
         bestBeforeDate = null;
         price = null;
+        storeId = null;
+        locationId = null;
         resumeScan();
     }
 
@@ -897,7 +896,8 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) Objects
+                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
                 .showSoftInput(
                         editText,
                         InputMethodManager.SHOW_IMPLICIT
@@ -905,7 +905,8 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void hideKeyboard() {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) Objects
+                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE)))
                 .hideSoftInputFromWindow(
                         findViewById(android.R.id.content).getWindowToken(),
                         0
