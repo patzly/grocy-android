@@ -299,7 +299,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void refresh() {
+    public void refresh() {
         if(activity.isOnline()) {
             setError(false, false, true);
             download();

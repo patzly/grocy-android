@@ -252,6 +252,11 @@ public class MainActivity extends AppCompatActivity {
                     data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
                     true
             );
+        } else if(requestCode == Constants.REQUEST.SCAN_PURCHASE
+                && resultCode == Activity.RESULT_CANCELED
+                && fragmentCurrent.getClass() == StockFragment.class
+        ) {
+            ((StockFragment) fragmentCurrent).refresh();
         }
     }
 
