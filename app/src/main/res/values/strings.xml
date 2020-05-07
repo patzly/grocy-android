@@ -113,7 +113,8 @@
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
     <string name="title_link_product">Link barcode to product</string>
-    <string name="title_batch_exit">Fill out the product forms?</string>
+    <string name="title_batch_scan_exit">Fill out the product forms?</string>
+    <string name="title_batch_missing_exit">Back to scanner?</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
 
@@ -131,7 +132,7 @@
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
     <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>
-    <string name="description_missing_batch_exit">Some new products have not yet been sent to the server. Discard them or go back to the scanner?</string>
+    <string name="description_missing_batch_exit">Some purchase transactions have not yet been sent to the server. Discard them or go back to the scanner?</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>

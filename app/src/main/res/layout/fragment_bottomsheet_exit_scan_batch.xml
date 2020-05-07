@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="@string/title_batch_exit"
+            android:text="@string/title_batch_scan_exit"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>

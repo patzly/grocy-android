@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="Back to batch mode?"
+            android:text="@string/title_batch_missing_exit"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>
