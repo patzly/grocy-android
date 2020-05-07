@@ -198,12 +198,12 @@
     <string name="info_changelog_description">What\'s new?</string>
     <string name="info_developer">Developer</string>
 
-    <string name="feature_1_title">Write Stiefografie</string>
-    <string name="feature_1_description">Learn a German shorthand in a few days</string>
-    <string name="feature_2_title">Practice the components</string>
-    <string name="feature_2_description">Complete exercises with consonants, vowels and words</string>
-    <string name="feature_3_title">Show progress</string>
-    <string name="feature_3_description">Complete your exercise units</string>
+    <string name="feature_1_title">Grocery management for your home</string>
+    <string name="feature_1_description">Self-hosted and private</string>
+    <string name="feature_2_title">Intuitive controls</string>
+    <string name="feature_2_description">Purchase and consume with one swipe</string>
+    <string name="feature_3_title">Powerful batch processing</string>
+    <string name="feature_3_description">Scan a whole purchase in seconds</string>
 
     <string name="category_licenses">Open source licenses</string>
     <string name="category_appearance">Appearance</string>

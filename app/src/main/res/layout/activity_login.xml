@@ -67,7 +67,8 @@
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="Create Key" />
+            android:text="Create Key"
+            app:strokeColor="@color/button_stroke_color_selector"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_login_login"
