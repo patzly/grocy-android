@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager_features"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:overScrollMode="never"/>
+
+    <LinearLayout
+        android:id="@+id/linear_features_text_land"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        tools:ignore="NestedWeights"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_features_title_land"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/text_features_description_land"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_features_start"
+        style="@style/Widget.Grocy.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/button_text_color_secondary_selector"
+        android:text="@string/action_get_started"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:baselineAligned="false">
+
+        <FrameLayout
+            android:id="@+id/frame_features_previous"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="start|center_vertical"
+            android:contentDescription="@string/action_prev"
+            android:tooltipText="@string/action_prev"
+            android:focusable="true"
+            tools:targetApi="o">
+
+            <ImageView
+                android:id="@+id/image_features_previous"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_round_chevron_left_anim" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs_features"
+                style="@style/Widget.Grocy.TabLayout.PageIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="8dp"
+                android:background="@null"
+                app:tabMaxWidth="16dp"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicator="@drawable/tab_indicator_features"
+                app:tabIndicatorColor="@color/secondary"
+                app:tabBackground="@drawable/tab_background_features" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_features_next"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="end"
+            android:contentDescription="@string/action_next"
+            android:tooltipText="@string/action_next"
+            android:focusable="true"
+            tools:targetApi="o">
+
+            <ImageView
+                android:id="@+id/image_features_next"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_round_chevron_right_anim" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

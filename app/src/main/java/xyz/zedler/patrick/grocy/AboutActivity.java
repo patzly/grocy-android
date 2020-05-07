@@ -87,10 +87,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 		switch(v.getId()) {
 			case R.id.linear_intro:
 				startAnimatedIcon(R.id.image_intro);
-				/*new Handler().postDelayed(
+				new Handler().postDelayed(
 						() -> startActivity(new Intent(this, FeaturesActivity.class)),
 						150
-				);*/
+				);
 				break;
 			case R.id.linear_changelog:
 				startAnimatedIcon(R.id.image_changelog);

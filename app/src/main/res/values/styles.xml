@@ -222,6 +222,14 @@
         <item name="android:minHeight">0dp</item>
     </style>
 
+    <style name="Widget.Grocy.TabLayout.PageIndicator" parent="@style/Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/primary</item>
+        <item name="tabIndicatorColor">@color/secondary</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabRippleColor">@color/highlight</item>
+        <item name="tabTextColor">@color/on_primary</item>
+    </style>
+
     <!-- Buttons -->
     <style name="Widget.Grocy.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="rippleColor">@color/secondary_translucent</item>
@@ -229,7 +237,7 @@
         <item name="android:textColor">@color/button_text_color_secondary_selector</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
-        <item name="strokeColor">@color/button_stroke_color_selector</item>
+        <item name="strokeColor">@color/stroke_secondary</item>
         <item name="strokeWidth">1dp</item>
     </style>
 

@@ -37,6 +37,8 @@
 
         <activity android:name=".SettingsActivity"/>
 
+        <activity android:name=".FeaturesActivity"/>
+
         <activity android:name=".AboutActivity"/>
 
         <activity
