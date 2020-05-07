@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -28,10 +31,9 @@ public class StockEntriesBottomSheetDialogFragment
         extends BottomSheetDialogFragment
         implements StockEntryAdapter.StockEntryAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "ProductEntriesBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<StockEntry> stockEntries;
 
     @NonNull
@@ -50,12 +52,14 @@ public class StockEntriesBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_stock_entries, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
         stockEntries = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES);
         String selectedStockId = bundle.getString(Constants.ARGUMENT.SELECTED_ID);
+
+        MaterialButton button = view.findViewById(R.id.button_stock_entries_discard);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);
         recyclerView.setLayoutManager(
@@ -72,17 +76,36 @@ public class StockEntriesBottomSheetDialogFragment
                 )
         );
 
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(
+                    v -> {
+                        ((ScanBatchActivity) activity).discardCurrentProduct();
+                        dismiss();
+                    }
+            );
+        }
+
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == ConsumeFragment.class) {
-            ((ConsumeFragment) currentFragment).selectStockEntry(
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == ConsumeFragment.class) {
+                ((ConsumeFragment) currentFragment).selectStockEntry(
+                        stockEntries.get(position).getStockId()
+                );
+            }
+        } else if(activity.getClass() == ScanBatchActivity.class) {
+            ((ScanBatchActivity) activity).setEntryId(
                     stockEntries.get(position).getStockId()
             );
+            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
+
         dismiss();
     }
 

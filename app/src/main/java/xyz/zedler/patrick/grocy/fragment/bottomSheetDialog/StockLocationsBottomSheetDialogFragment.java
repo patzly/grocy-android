@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -30,10 +33,9 @@ public class StockLocationsBottomSheetDialogFragment
         extends BottomSheetDialogFragment
         implements StockLocationAdapter.StockLocationAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "StockLocationsBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<StockLocation> stockLocations;
 
     @NonNull
@@ -52,7 +54,7 @@ public class StockLocationsBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_stock_locations, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -72,6 +74,8 @@ public class StockLocationsBottomSheetDialogFragment
             textViewSubtitle.setVisibility(View.GONE);
         }
 
+        MaterialButton button = view.findViewById(R.id.button_stock_locations_discard);
+
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_locations);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -87,17 +91,36 @@ public class StockLocationsBottomSheetDialogFragment
                 )
         );
 
+        if(activity.getClass() == ScanBatchActivity.class) {
+            setCancelable(false);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(
+                    v -> {
+                        ((ScanBatchActivity) activity).discardCurrentProduct();
+                        dismiss();
+                    }
+            );
+        }
+
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == ConsumeFragment.class) {
-            ((ConsumeFragment) currentFragment).selectLocation(
-                    stockLocations.get(position).getLocationId()
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == ConsumeFragment.class) {
+                ((ConsumeFragment) currentFragment).selectLocation(
+                        stockLocations.get(position).getLocationId()
+                );
+            }
+        } else if(activity.getClass() == ScanBatchActivity.class) {
+            ((ScanBatchActivity) activity).setStockLocationId(
+                    String.valueOf(stockLocations.get(position).getLocationId())
             );
+            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
+
         dismiss();
     }
 
