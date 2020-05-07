@@ -229,19 +229,19 @@ public class FeaturesActivity extends AppCompatActivity {
 
             switch (position) {
                 case 1:
-                    imageViewBack.setImageResource(R.drawable.feature_2_bg);
-                    imageViewFocused.setImageResource(R.drawable.feature_2_focus);
-                    imageViewFront.setImageResource(R.drawable.feature_2_fg);
+                    imageViewBack.setImageResource(R.drawable.feature_2_b);
+                    imageViewFocused.setImageResource(R.drawable.feature_2_m);
+                    imageViewFront.setImageResource(R.drawable.feature_2_f);
                     break;
                 case 2:
-                    imageViewBack.setImageResource(R.drawable.feature_3_bg);
-                    imageViewFocused.setImageResource(R.drawable.feature_3_focus);
-                    imageViewFront.setImageResource(R.drawable.feature_3_fg);
+                    imageViewBack.setImageResource(R.drawable.feature_3_b);
+                    imageViewFocused.setImageResource(R.drawable.feature_3_m);
+                    imageViewFront.setImageResource(R.drawable.feature_3_f);
                     break;
                 default:
-                    imageViewBack.setImageResource(R.drawable.feature_1_bg);
-                    imageViewFocused.setImageResource(R.drawable.feature_1_focus);
-                    imageViewFront.setImageResource(R.drawable.feature_1_fg);
+                    imageViewBack.setImageResource(R.drawable.feature_1_b);
+                    imageViewFocused.setImageResource(R.drawable.feature_1_m);
+                    imageViewFront.setImageResource(R.drawable.feature_1_f);
             }
 
             FeaturesActivity activity = (FeaturesActivity) getActivity();
