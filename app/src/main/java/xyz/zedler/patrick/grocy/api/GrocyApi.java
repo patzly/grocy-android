@@ -151,8 +151,11 @@ public class GrocyApi {
         // on the server; and get the value on the first App start from server
         return getUrl(
                 "/stock/volatile", "expiring_days="
-                        + sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5)
-                );
+                        + sharedPrefs.getString(
+                                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                                String.valueOf(5)
+                        )
+        );
     }
 
     /**

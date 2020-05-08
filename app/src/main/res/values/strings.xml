@@ -225,6 +225,7 @@
     <string name="setting_default_location">Default location</string>
     <string name="setting_default_product_group">Default product group</string>
     <string name="setting_default_quantity_unit">Default quantity unit</string>
+    <string name="setting_empty_value">Empty</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>

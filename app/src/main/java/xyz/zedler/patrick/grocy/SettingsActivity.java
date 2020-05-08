@@ -36,9 +36,9 @@ import org.json.JSONObject;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DefaultAmountBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -59,7 +59,10 @@ public class SettingsActivity extends AppCompatActivity
 	private ImageView imageViewDark;
 	private SwitchMaterial switchDark;
 	private NestedScrollView nestedScrollView;
-	private TextView textViewAmountPurchase, textViewAmountConsume;
+	private TextView
+			textViewExpiringSoonDays,
+			textViewAmountPurchase,
+			textViewAmountConsume;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,15 +132,30 @@ public class SettingsActivity extends AppCompatActivity
 		setOnClickListeners(
 				R.id.linear_setting_dark_mode,
 				R.id.linear_setting_logout,
-				R.id.linear_setting_default_amount_purchase
+				R.id.linear_setting_expiring_soon_days,
+				R.id.linear_setting_default_amount_purchase,
+				R.id.linear_setting_default_amount_consume
 		);
 
 		// VALUES
 
-		textViewAmountPurchase = findViewById(R.id.text_setting_default_amount_purchase);
-		textViewAmountPurchase.setText(
-				sharedPrefs.getString(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1")
+		String days = sharedPrefs.getString(
+				Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+				String.valueOf(5)
 		);
+		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
+		textViewExpiringSoonDays.setText(
+				days == null || days.equals("") || days.equals("null")
+						? String.valueOf(5)
+						: days
+		);
+
+		String amountPurchase = sharedPrefs.getString(
+				Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+				null
+		);
+		textViewAmountPurchase = findViewById(R.id.text_setting_default_amount_purchase);
+		textViewAmountPurchase.setText(amountPurchase);
 	}
 
 	@Override
@@ -200,9 +218,59 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_logout:
 				showBottomSheet(new LogoutBottomSheetDialogFragment(), null);
 				break;
+			case R.id.linear_setting_expiring_soon_days:
+				startAnimatedIcon(R.id.image_setting_expiring_soon_days);
+				Bundle bundleExpiringSoonDays = new Bundle();
+				bundleExpiringSoonDays.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.PREF.STOCK_EXPIRING_SOON_DAYS
+				);
+				bundleExpiringSoonDays.putString(
+						Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+						textViewExpiringSoonDays.getText().toString()
+				);
+				showBottomSheet(
+						new SettingInputBottomSheetDialogFragment(),
+						bundleExpiringSoonDays
+				);
+				break;
 			case R.id.linear_setting_default_amount_purchase:
 				startAnimatedIcon(R.id.image_setting_default_amount_purchase);
-				showBottomSheet(new DefaultAmountBottomSheetDialogFragment(), null);
+				Bundle bundleAmountPurchase = new Bundle();
+				bundleAmountPurchase.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT
+				);
+				bundleAmountPurchase.putString(
+						Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+						sharedPrefs.getString(
+								Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+								String.valueOf(1)
+						)
+				);
+				showBottomSheet(
+						new SettingInputBottomSheetDialogFragment(),
+						bundleAmountPurchase
+				);
+				break;
+			case R.id.linear_setting_default_amount_consume:
+				startAnimatedIcon(R.id.image_setting_default_amount_consume);
+				Bundle bundleAmountConsume = new Bundle();
+				bundleAmountConsume.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT
+				);
+				bundleAmountConsume.putString(
+						Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+						sharedPrefs.getString(
+								Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+								String.valueOf(1)
+						)
+				);
+				showBottomSheet(
+						new SettingInputBottomSheetDialogFragment(),
+						bundleAmountConsume
+				);
 				break;
 		}
 	}
@@ -231,7 +299,30 @@ public class SettingsActivity extends AppCompatActivity
 		}
 	}
 
-	public void setAmountPurchase(double amount) {
+	public void setExpiringSoonDays(String days) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, days);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
+				body,
+				response -> {
+					textViewExpiringSoonDays.setText(days);
+					sharedPrefs.edit()
+							.putString(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, days)
+							.apply();
+				},
+				error -> {
+					showMessage(getString(R.string.msg_error));
+					if(DEBUG) Log.i(TAG, "setExpiringSoonDays: " + error);
+				}
+		);
+	}
+
+	public void setAmountPurchase(String amount) {
 		JSONObject body = new JSONObject();
 		try {
 			body.put(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, amount);
@@ -242,10 +333,13 @@ public class SettingsActivity extends AppCompatActivity
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
 				body,
 				response -> {
-					textViewAmountPurchase.setText(NumUtil.trim(amount));
+					String amountFormatted = amount == null
+							? null
+							: NumUtil.trim(NumUtil.stringToDouble(amount));
+					textViewAmountPurchase.setText(amountFormatted);
 					sharedPrefs.edit().putString(
 							Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-							NumUtil.trim(amount)
+							amountFormatted
 					).apply();
 				},
 				error -> {
@@ -280,5 +374,13 @@ public class SettingsActivity extends AppCompatActivity
 				editText,
 				InputMethodManager.SHOW_IMPLICIT
 		);
+	}
+
+	public void hideKeyboard() {
+		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+				.hideSoftInputFromWindow(
+						findViewById(android.R.id.content).getWindowToken(),
+						0
+				);
 	}
 }

@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="viewStart"
-                android:text="Nothing on your server will be deleted. You will be redirected to the login page."
+                android:text="Nothing on your server will be changed. You will be redirected to the login page."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 

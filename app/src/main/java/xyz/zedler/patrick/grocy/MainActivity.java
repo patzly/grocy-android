@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
                                 ).putInt(
                                         Constants.PREF.PRODUCT_PRESETS_QU_ID,
                                         jsonObject.getInt("product_presets_qu_id")
-                                ).putInt(
+                                ).putString(
                                         Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                                        jsonObject.getInt("stock_expring_soon_days")
+                                        jsonObject.getString("stock_expring_soon_days")
                                 ).putString(
                                         Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                                         jsonObject.getString(

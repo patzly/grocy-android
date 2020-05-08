@@ -126,7 +126,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        daysExpiringSoon = sharedPrefs.getInt(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, 5);
+        String days = sharedPrefs.getString(
+                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                String.valueOf(5)
+        );
+        // ignore server value if not available
+        daysExpiringSoon = days == null || days.equals("") || days.equals("null")
+                ? 5
+                : Integer.parseInt(days);
         sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
         sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
 
