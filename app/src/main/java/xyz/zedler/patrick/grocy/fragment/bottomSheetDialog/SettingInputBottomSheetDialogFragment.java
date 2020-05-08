@@ -3,11 +3,9 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -68,13 +66,6 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
                         ? InputType.TYPE_CLASS_NUMBER
                         : InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
         );
-        editText.setOnEditorActionListener(
-                (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        activity.hideKeyboard();
-                        return true;
-                    } return false;
-                });
 
         view.findViewById(R.id.button_setting_input_more).setOnClickListener(v -> {
             if(editText.getText().toString().equals("")) {
@@ -116,6 +107,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
                     activity.setAmountPurchase(editText.getText().toString());
                     break;
                 case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
+                    activity.setAmountConsume(editText.getText().toString());
                     break;
             }
             dismiss();
@@ -153,7 +145,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
 
         textInput.setHint(hint);
 
-        editText.setText(input == null || input.equals("null") ? null : input);
+        editText.setText(input == null || input.equals("") || input.equals("null") ? null : input);
 
         return view;
     }

@@ -155,7 +155,26 @@ public class SettingsActivity extends AppCompatActivity
 				null
 		);
 		textViewAmountPurchase = findViewById(R.id.text_setting_default_amount_purchase);
-		textViewAmountPurchase.setText(amountPurchase);
+		textViewAmountPurchase.setText(
+				amountPurchase == null
+						|| amountPurchase.equals("")
+						|| amountPurchase.equals("null")
+				? getString(R.string.setting_empty_value)
+				: amountPurchase
+		);
+
+		String amountConsume = sharedPrefs.getString(
+				Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+				null
+		);
+		textViewAmountConsume = findViewById(R.id.text_setting_default_amount_consume);
+		textViewAmountConsume.setText(
+				amountConsume == null
+						|| amountConsume.equals("")
+						|| amountConsume.equals("null")
+						? getString(R.string.setting_empty_value)
+						: amountConsume
+		);
 	}
 
 	@Override
@@ -245,7 +264,7 @@ public class SettingsActivity extends AppCompatActivity
 						Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
 						sharedPrefs.getString(
 								Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-								String.valueOf(1)
+								null
 						)
 				);
 				showBottomSheet(
@@ -264,7 +283,7 @@ public class SettingsActivity extends AppCompatActivity
 						Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
 						sharedPrefs.getString(
 								Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-								String.valueOf(1)
+								null
 						)
 				);
 				showBottomSheet(
@@ -333,10 +352,14 @@ public class SettingsActivity extends AppCompatActivity
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
 				body,
 				response -> {
-					String amountFormatted = amount == null
+					String amountFormatted = amount == null || amount.equals("")
 							? null
 							: NumUtil.trim(NumUtil.stringToDouble(amount));
-					textViewAmountPurchase.setText(amountFormatted);
+					textViewAmountPurchase.setText(
+							amountFormatted != null
+									? amountFormatted
+									: getString(R.string.setting_empty_value)
+					);
 					sharedPrefs.edit().putString(
 							Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
 							amountFormatted
@@ -345,6 +368,37 @@ public class SettingsActivity extends AppCompatActivity
 				error -> {
 					showMessage(getString(R.string.msg_error));
 					if(DEBUG) Log.i(TAG, "setAmountPurchase: " + error);
+				}
+		);
+	}
+
+	public void setAmountConsume(String amount) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT, amount);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setAmountConsume: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT),
+				body,
+				response -> {
+					String amountFormatted = amount == null || amount.equals("")
+							? null
+							: NumUtil.trim(NumUtil.stringToDouble(amount));
+					textViewAmountConsume.setText(
+							amountFormatted != null
+									? amountFormatted
+									: getString(R.string.setting_empty_value)
+					);
+					sharedPrefs.edit().putString(
+							Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
+							amountFormatted
+					).apply();
+				},
+				error -> {
+					showMessage(getString(R.string.msg_error));
+					if(DEBUG) Log.i(TAG, "setAmountConsume: " + error);
 				}
 		);
 	}
