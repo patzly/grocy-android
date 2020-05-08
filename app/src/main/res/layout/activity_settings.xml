@@ -204,7 +204,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="@string/setting_default_amount_purchase" />
+                        android:text="@string/setting_default_amount_consume" />
 
                     <TextView
                         android:id="@+id/text_setting_default_amount_consume"
