@@ -25,7 +25,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.DrawerItem.Icon"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_local_grocery_store" />
+                    android:src="@drawable/ic_round_add_shopping_cart" />
 
                 <TextView
                     android:id="@+id/text_drawer_shopping_list"
