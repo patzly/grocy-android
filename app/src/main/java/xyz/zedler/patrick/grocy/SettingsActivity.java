@@ -321,7 +321,7 @@ public class SettingsActivity extends AppCompatActivity
 	public void setExpiringSoonDays(String days) {
 		JSONObject body = new JSONObject();
 		try {
-			body.put(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, days);
+			body.put("value", Integer.parseInt(days));
 		} catch (JSONException e) {
 			if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
@@ -344,7 +344,7 @@ public class SettingsActivity extends AppCompatActivity
 	public void setAmountPurchase(String amount) {
 		JSONObject body = new JSONObject();
 		try {
-			body.put(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, amount);
+			body.put("value", amount);
 		} catch (JSONException e) {
 			if(DEBUG) Log.e(TAG, "setAmountPurchase: " + e);
 		}
@@ -375,7 +375,7 @@ public class SettingsActivity extends AppCompatActivity
 	public void setAmountConsume(String amount) {
 		JSONObject body = new JSONObject();
 		try {
-			body.put(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT, amount);
+			body.put("value", amount);
 		} catch (JSONException e) {
 			if(DEBUG) Log.e(TAG, "setAmountConsume: " + e);
 		}
