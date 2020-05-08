@@ -34,11 +34,16 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -53,6 +58,10 @@ public class SettingsActivity extends AppCompatActivity
 	private GrocyApi grocyApi;
 	private RequestQueue requestQueue;
 	private WebRequest request;
+
+	private ArrayList<Location> locations = new ArrayList<>();
+	private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+	private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
 
 	private long lastClick = 0;
 	private SharedPreferences sharedPrefs;

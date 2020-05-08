@@ -214,7 +214,7 @@
 
             </LinearLayout>
 
-            <TextView
+            <!--<TextView
                 style="@style/Theme.Grocy.Category"
                 android:text="Presets for new products"/>
 
@@ -288,7 +288,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 
