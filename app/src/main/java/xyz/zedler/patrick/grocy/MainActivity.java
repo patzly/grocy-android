@@ -772,7 +772,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
-            case Constants.UI.SHOPPING_LIST_DEFAULT:
                 super.onBackPressed();
                 break;
             case Constants.UI.STOCK_SEARCH:
@@ -785,7 +784,7 @@ public class MainActivity extends AppCompatActivity {
                     ((ShoppingListFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
-            case Constants.UI.SHOPPING_LIST:
+            case Constants.UI.SHOPPING_LIST_DEFAULT:
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
