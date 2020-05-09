@@ -117,6 +117,13 @@ public class SortUtil {
             boolean ascending
     ) {
         if(shoppingListItems == null) return;
+        ArrayList<ShoppingListItem> itemsWithoutProduct = new ArrayList<>();
+        for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(shoppingListItem.getProduct() == null) {
+                itemsWithoutProduct.add(shoppingListItem);
+            }
+        }
+        shoppingListItems.removeAll(itemsWithoutProduct);
         Collections.sort(
                 shoppingListItems,
                 (item1, item2) -> (ascending ? item1 : item2).getProduct()
@@ -125,5 +132,6 @@ public class SortUtil {
                                 (ascending ? item2 : item1).getProduct().getName().toLowerCase()
                         )
         );
+        shoppingListItems.addAll(itemsWithoutProduct);
     }
 }

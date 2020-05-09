@@ -13,7 +13,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     private int id;
 
     @SerializedName("product_id")
-    private int productId;
+    private String productId;
 
     @SerializedName("note")
     private String note;
@@ -33,7 +33,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
     private ShoppingListItem(Parcel parcel) {
         id = parcel.readInt();
-        productId = parcel.readInt();
+        productId = parcel.readString();
         note = parcel.readString();
         amount = parcel.readDouble();
         shoppingListId = parcel.readInt();
@@ -45,7 +45,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeInt(productId);
+        dest.writeString(productId);
         dest.writeString(note);
         dest.writeDouble(amount);
         dest.writeInt(shoppingListId);
@@ -71,7 +71,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return id;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 

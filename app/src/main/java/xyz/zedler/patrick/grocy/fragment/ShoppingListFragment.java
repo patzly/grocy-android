@@ -454,14 +454,14 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void onQueueEmpty() {
-        ArrayList<Integer> missingProductIds = new ArrayList<>();
+        ArrayList<String> missingProductIds = new ArrayList<>();
         for(MissingItem missingItem : missingItems) {
-            missingProductIds.add(missingItem.getId());
+            missingProductIds.add(String.valueOf(missingItem.getId()));
         }
         missingShoppingListItems = new ArrayList<>();
         undoneShoppingListItems = new ArrayList<>();
         shoppingListItemsSelected = new ArrayList<>();
-        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
+        ArrayList<String> shoppingListProductIds = new ArrayList<>();
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
             if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
             shoppingListItemsSelected.add(shoppingListItem);
@@ -481,9 +481,10 @@ public class ShoppingListFragment extends Fragment
                 activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
         );
         for(Product product : products) {
-            if(shoppingListProductIds.contains(product.getId())) {
+            if(shoppingListProductIds.contains(String.valueOf(product.getId()))) {
                 for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                    if(product.getId() == shoppingListItem.getProductId()) {
+                    if(shoppingListItem.getProductId() == null) continue;
+                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
                         shoppingListItem.setProduct(product);
                     }
                 }
