@@ -10,19 +10,19 @@ import com.google.gson.annotations.SerializedName;
 public class Location implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     @SerializedName("is_freezer")
-    int isFreezer;
+    private int isFreezer;
 
     public Location(Parcel parcel) {
         id = parcel.readInt();
