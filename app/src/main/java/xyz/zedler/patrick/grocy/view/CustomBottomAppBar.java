@@ -44,6 +44,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	private static final int INVISIBLE = 0, VISIBLE = 1;
 	private static final boolean USE_ACCURATE_CRADLE_ANIMATION = true;
 	private static final int ICON_ANIM_DURATION = 200;
+	private static final double ICON_ANIM_DELAY_FACTOR = 0.7;
 
 	private ViewPropertyAnimator currentAnimator;
 	private ValueAnimator valueAnimatorNavigationIcon;
@@ -171,7 +172,8 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 		changeMenu(menuNew, position, animated);
 		new Handler().postDelayed(() -> {
 			if(onChanged != null) onChanged.run();
-		}, ICON_ANIM_DURATION + 50); // wait for menu being changed
+		}, ICON_ANIM_DURATION + 50 + // wait for menu being fully changed
+				(long) (getMenu().size() * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION));
 	}
 
 	/**
@@ -296,7 +298,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 			int finalI = i;
 			new Handler().postDelayed(
 					() -> animateMenuItem(getMenu().getItem(finalI), VISIBLE),
-					(long) (delayIndex * 0.7 * ICON_ANIM_DURATION)
+					(long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
 			);
 			delayIndex++;
 		}
