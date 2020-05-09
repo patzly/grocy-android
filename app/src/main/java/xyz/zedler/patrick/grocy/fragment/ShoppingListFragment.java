@@ -578,12 +578,12 @@ public class ShoppingListFragment extends Fragment
         ArrayList<ProductGroup> neededProductGroups = new ArrayList<>();
         boolean containsUngroupedItems = false;
         for(ShoppingListItem shoppingListItem : displayedItems) {
-            if(shoppingListItem.getProduct().getProductGroupId() != null
-                    && !shoppingListItem.getProduct().getProductGroupId().equals("")) {
+            String groupId = shoppingListItem.getProduct().getProductGroupId();
+            if(groupId != null && !groupId.equals("")) {
                 for(ProductGroup productGroup : productGroups) {
-                    if(productGroup.getId().equals(shoppingListItem.getProduct()
-                            .getProductGroupId()) && !neededProductGroups.contains(productGroup))
-                    {
+                    if(productGroup.getId() == Integer.parseInt(groupId)
+                            && !neededProductGroups.contains(productGroup)
+                    ) {
                         neededProductGroups.add(productGroup);
                         break;
                     }
@@ -595,7 +595,7 @@ public class ShoppingListFragment extends Fragment
         SortUtil.sortProductGroupsByName(neededProductGroups, true);
         if(containsUngroupedItems) {
             neededProductGroups.add(new ProductGroup(
-                    "-1",
+                    -1,
                     activity.getString(R.string.title_shopping_list_ungrouped)
             ));
         }
@@ -606,7 +606,7 @@ public class ShoppingListFragment extends Fragment
             for(ShoppingListItem shoppingListItem : displayedItems) {
                 String groupId = shoppingListItem.getProduct().getProductGroupId();
                 if(groupId == null || groupId.equals("")) groupId = "-1";
-                if(groupId.equals(productGroup.getId())) {
+                if(groupId.equals(String.valueOf(productGroup.getId()))) {
                     itemsOneGroup.add(shoppingListItem);
                 }
             }
@@ -647,9 +647,8 @@ public class ShoppingListFragment extends Fragment
             textViewTitle.setText(shoppingList.getName());
             textViewTitle.animate().alpha(1).setDuration(150).start();
         }).setDuration(150).start();
-        buttonLists.animate().alpha(0).withEndAction(() -> {
-            buttonLists.animate().alpha(1).setDuration(150).start();
-        }).setDuration(150).start();
+        buttonLists.animate().alpha(0).withEndAction(() ->
+                buttonLists.animate().alpha(1).setDuration(150).start()).setDuration(150).start();
         chipMissing.changeState(false);
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;

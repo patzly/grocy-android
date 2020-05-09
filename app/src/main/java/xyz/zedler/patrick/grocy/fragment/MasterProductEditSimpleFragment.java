@@ -106,8 +106,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
             textViewQuantityUnit,
             textViewQuantityUnitLabel;
     private ImageView imageViewName, imageViewMinAmount, imageViewDays;
-    private int selectedLocationId = -1, selectedQuantityUnitId = -1;
-    private String selectedProductGroupId, intendedAction;
+    private int selectedLocationId = -1, selectedQuantityUnitId = -1, selectedProductGroupId = -1;
+    private String intendedAction;
     private double minAmount;
     private int bestBeforeDays;
 
@@ -358,7 +358,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             if(!productGroups.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, productGroups);
-                bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedProductGroupId);
+                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedProductGroupId);
                 activity.showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundle);
             }
         });
@@ -500,7 +500,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                     // Insert NONE as first element
                     productGroups.add(
                             0,
-                            new ProductGroup(null, activity.getString(R.string.subtitle_none))
+                            new ProductGroup(-1, activity.getString(R.string.subtitle_none))
                     );
                 },
                 this::onDownloadError,
@@ -558,11 +558,13 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 case Constants.ACTION.CREATE_THEN_PURCHASE:
                 case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
                     fillWithCreateProductObject();
+                    fillWithPresets();
                     isFormInvalid();
                     break;
             }
         } else {
             resetAll();
+            fillWithPresets();
         }
     }
 
@@ -617,6 +619,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     }
 
     private Location getLocation(int locationId) {
+        if(locationId == -1) return null;
         for(Location location : locations) {
             if(location.getId() == locationId) {
                 return location;
@@ -624,7 +627,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         } return null;
     }
 
-    public void selectProductGroup(String selectedId) {
+    public void selectProductGroup(int selectedId) {
         selectedProductGroupId = selectedId;
         String productGroupText;
         if(productGroups.isEmpty()) {
@@ -641,11 +644,20 @@ public class MasterProductEditSimpleFragment extends Fragment {
     }
 
     private ProductGroup getProductGroup(String productGroupId) {
-        if(productGroupId != null) {
-            for(ProductGroup productGroup : productGroups) {
-                if(productGroup.getId() != null && productGroup.getId().equals(productGroupId)) {
-                    return productGroup;
-                }
+        if(productGroupId == null || productGroupId.equals("")) return null;
+        for(ProductGroup productGroup : productGroups) {
+            if(productGroup.getId() == Integer.parseInt(productGroupId)) {
+                return productGroup;
+            }
+        }
+        return null;
+    }
+
+    private ProductGroup getProductGroup(int productGroupId) {
+        if(productGroupId == -1) return null;
+        for(ProductGroup productGroup : productGroups) {
+            if(productGroup.getId() == productGroupId) {
+                return productGroup;
             }
         }
         return null;
@@ -667,6 +679,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     }
 
     private QuantityUnit getQuantityUnit(int quantityUnitId) {
+        if(quantityUnitId == -1) return null;
         for(QuantityUnit quantityUnit : quantityUnits) {
             if(quantityUnit.getId() == quantityUnitId) {
                 return quantityUnit;
@@ -731,6 +744,32 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 textViewQuantityUnit.setText(quantityUnit.getName());
                 selectedQuantityUnitId = quantityUnit.getId();
             }
+        }
+    }
+
+    private void fillWithPresets() {
+        int locationId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID, -1);
+        Location location = getLocation(locationId);
+        if(selectedLocationId == -1 && location != null) {
+            textViewLocation.setText(location.getName());
+            selectedLocationId = location.getId();
+        }
+
+        int productGroupId = sharedPrefs.getInt(
+                Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
+                -1
+        );
+        ProductGroup productGroup = getProductGroup(productGroupId);
+        if(selectedProductGroupId == -1 && productGroup != null) {
+            textViewProductGroup.setText(productGroup.getName());
+            selectedProductGroupId = productGroup.getId();
+        }
+
+        int quantityUnitId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_QU_ID, -1);
+        QuantityUnit quantityUnit = getQuantityUnit(quantityUnitId);
+        if(selectedQuantityUnitId == -1 && quantityUnit != null) {
+            textViewQuantityUnit.setText(quantityUnit.getName());
+            selectedQuantityUnitId = quantityUnit.getId();
         }
     }
 
@@ -834,14 +873,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
         );
     }
 
-    public void addInputAsBarcode() {
+    private void addInputAsBarcode() {
         addBarcode(editTextBarcodes.getText().toString());
         editTextBarcodes.setText(null);
         textInputBarcodes.clearFocus();
         activity.hideKeyboard();
     }
 
-    public void addBarcode(String barcode) {
+    private void addBarcode(String barcode) {
         barcode = barcode.trim();
         if(barcode.equals("")) return;
         for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
@@ -886,7 +925,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             jsonObject.put("default_best_before_days", bestBeforeDays);
             jsonObject.put(
                     "product_group_id",
-                    selectedProductGroupId != null
+                    selectedProductGroupId != -1
                             ? selectedProductGroupId
                             : JSONObject.NULL
             );
@@ -895,7 +934,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             jsonObject.put("qu_factor_purchase_to_stock", 1);
 
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveProduct: " + e);;
+            if(DEBUG) Log.e(TAG, "saveProduct: " + e);
         }
         if(editProduct != null) {
             request.put(
@@ -1042,15 +1081,9 @@ public class MasterProductEditSimpleFragment extends Fragment {
         autoCompleteTextViewParentProduct.setText(null);
         editTextBarcodes.setText(null);
 
-        int locationId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID, -1);
-        Location location = getLocation(locationId);
-        if(location != null) {
-            textViewLocation.setText(location.getName());
-            selectedLocationId = locationId;
-        } else {
-            textViewLocation.setText(R.string.subtitle_none);
-            selectedLocationId = -1;
-        }
+
+        textViewLocation.setText(R.string.subtitle_none);
+        selectedLocationId = -1;
 
         if(createProductObj != null && createProductObj.getDefaultLocationId() != null) {
             selectLocation(Integer.parseInt(createProductObj.getDefaultLocationId()));
@@ -1064,31 +1097,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
             editTextDays.setText(String.valueOf(0));
         }
 
-        String productGroupId = sharedPrefs.getString(
-                Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                null
-        );
-        ProductGroup productGroup = getProductGroup(productGroupId);
-        if(productGroup != null) {
-            textViewProductGroup.setText(productGroup.getName());
-            selectedProductGroupId = productGroupId;
-        } else {
-            textViewProductGroup.setText(R.string.subtitle_none);
-            selectedProductGroupId = null;
-        }
+        textViewProductGroup.setText(R.string.subtitle_none);
+        selectedProductGroupId = -1;
 
-        int quantityUnitId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_QU_ID, -1);
-        QuantityUnit quantityUnit = getQuantityUnit(quantityUnitId);
-        if(quantityUnit != null) {
-            textViewQuantityUnit.setText(quantityUnit.getName());
-            selectedQuantityUnitId = quantityUnitId;
-        } else {
-            textViewQuantityUnit.setText(R.string.subtitle_none);
-            selectedQuantityUnitId = -1;
-        }
+        textViewQuantityUnit.setText(R.string.subtitle_none);
+        selectedQuantityUnitId = -1;
     }
 
-    public void checkForStock(Product product) {
+    private void checkForStock(Product product) {
         request.get(
                 grocyApi.getStockProductDetails(product.getId()),
                 response -> {

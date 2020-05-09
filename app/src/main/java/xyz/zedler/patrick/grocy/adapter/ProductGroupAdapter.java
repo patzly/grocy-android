@@ -22,12 +22,12 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
     private final static boolean DEBUG = false;
 
     private ArrayList<ProductGroup> productGroups;
-    private String selectedId;
+    private int selectedId;
     private ProductGroupAdapterListener listener;
 
     public ProductGroupAdapter(
             ArrayList<ProductGroup> productGroups,
-            String selectedId,
+            int selectedId,
             ProductGroupAdapterListener listener
     ) {
         this.productGroups = productGroups;
@@ -75,11 +75,11 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
 
         // SELECTED
 
-        if(selectedId != null && productGroup.getId() != null) {
-            if(productGroup.getId().equals(selectedId)) {
+        if(productGroup.getId() != -1 && selectedId != -1) {
+            if(productGroup.getId() == selectedId) {
                 holder.imageViewSelected.setVisibility(View.VISIBLE);
             }
-        } else if(selectedId == null && productGroup.getId() == null) {
+        } else if(selectedId == -1 && productGroup.getId() == -1){
             holder.imageViewSelected.setVisibility(View.VISIBLE);
         }
 

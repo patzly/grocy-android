@@ -300,9 +300,9 @@ public class MasterProductGroupsFragment extends Fragment
      * Used for providing a safe and up-to-date value
      * e.g. when the items are filtered/sorted before server responds
      */
-    private int getProductGroupPosition(String productGroupId) {
+    private int getProductGroupPosition(int productGroupId) {
         for(int i = 0; i < displayedProductGroups.size(); i++) {
-            if(displayedProductGroups.get(i).getId().equals(productGroupId)) {
+            if(displayedProductGroups.get(i).getId() == productGroupId) {
                 return i;
             }
         }
@@ -369,7 +369,7 @@ public class MasterProductGroupsFragment extends Fragment
         }
     }
 
-    public void setUpSearch() {
+    private void setUpSearch() {
         if(search.equals("")) { // only if no search is active
             appBarBehavior.replaceLayout(
                     R.id.linear_master_product_groups_app_bar_search,
@@ -423,7 +423,7 @@ public class MasterProductGroupsFragment extends Fragment
 
     public void deleteProductGroup(ProductGroup productGroup) {
         request.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, Integer.parseInt(productGroup.getId())),
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
                 response -> {
                     int index = getProductGroupPosition(productGroup.getId());
                     if(index != -1) {

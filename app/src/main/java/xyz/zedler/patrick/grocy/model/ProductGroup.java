@@ -10,27 +10,27 @@ import com.google.gson.annotations.SerializedName;
 public class ProductGroup extends GroupedListItem implements Parcelable {
 
     @SerializedName("id")
-    String id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     /**
      * First element in bottomSheet selection: NONE (id = null)
      */
-    public ProductGroup(String id, String name) {
+    public ProductGroup(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public ProductGroup(Parcel parcel) {
-        id = parcel.readString();
+        id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
         rowCreatedTimestamp = parcel.readString();
@@ -38,7 +38,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(rowCreatedTimestamp);
@@ -57,7 +57,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         }
     };
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

@@ -145,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
                                 .putInt(
                                         Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
                                         jsonObject.getInt("product_presets_location_id")
-                                ).putString(
+                                ).putInt(
                                         Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                                        jsonObject.getString(
+                                        jsonObject.getInt(
                                                 "product_presets_product_group_id"
                                         )
                                 ).putInt(
@@ -1012,10 +1012,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
-                editText,
-                InputMethodManager.SHOW_IMPLICIT
-        );
+        ((InputMethodManager) Objects
+                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
+        ).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void hideKeyboard() {

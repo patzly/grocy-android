@@ -238,7 +238,7 @@ public class MasterProductGroupFragment extends Fragment {
         if(productGroups != null) {
             for(ProductGroup productGroup : productGroups) {
                 if(editProductGroup != null) {
-                    if(!productGroup.getId().equals(editProductGroup.getId())) {
+                    if(productGroup.getId() != editProductGroup.getId()) {
                         names.add(productGroup.getName().trim());
                     }
                 } else {
@@ -249,9 +249,9 @@ public class MasterProductGroupFragment extends Fragment {
         return names;
     }
 
-    private ProductGroup getProductGroup(String productGroupId) {
+    private ProductGroup getProductGroup(int productGroupId) {
         for(ProductGroup productGroup : productGroups) {
-            if(productGroup.getId().equals(productGroupId)) {
+            if(productGroup.getId() == productGroupId) {
                 return productGroup;
             }
         } return null;
@@ -289,7 +289,7 @@ public class MasterProductGroupFragment extends Fragment {
             request.put(
                     grocyApi.getObject(
                             GrocyApi.ENTITY.PRODUCT_GROUPS,
-                            Integer.parseInt(editProductGroup.getId())
+                            editProductGroup.getId()
                     ),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -361,7 +361,7 @@ public class MasterProductGroupFragment extends Fragment {
 
     public void deleteProductGroup(ProductGroup productGroup) {
         request.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, Integer.parseInt(productGroup.getId())),
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );

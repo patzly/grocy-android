@@ -56,7 +56,7 @@ public class ProductGroupsBottomSheetDialogFragment
         assert activity != null && bundle != null;
 
         productGroups = bundle.getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
-        String selected = bundle.getString(Constants.ARGUMENT.SELECTED_ID, null);
+        int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_product_groups));

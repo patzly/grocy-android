@@ -73,7 +73,7 @@ public class MasterProductsFragment extends Fragment
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 
     private String search = "";
-    private String filterProductGroupId = "";
+    private int filterProductGroupId = -1;
     private boolean sortAscending = true;
 
     private RecyclerView recyclerView;
@@ -311,10 +311,12 @@ public class MasterProductsFragment extends Fragment
     private void filterProducts() {
         filteredProducts = products;
         // PRODUCT GROUP
-        if(!filterProductGroupId.equals("")) {
+        if(filterProductGroupId != -1) {
             ArrayList<Product> tempProducts = new ArrayList<>();
             for(Product product : filteredProducts) {
-                if(filterProductGroupId.equals(product.getProductGroupId())) {
+                String groupId = product.getProductGroupId();
+                if(groupId == null || groupId.equals("")) continue;
+                if(filterProductGroupId == Integer.parseInt(groupId)) {
                     tempProducts.add(product);
                 }
             }
@@ -358,7 +360,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void filterProductGroup(ProductGroup productGroup) {
-        if(!filterProductGroupId.equals(productGroup.getId())) {
+        if(filterProductGroupId != productGroup.getId()) {
             if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = productGroup.getId();
             if(inputChipFilterProductGroup != null) {
@@ -370,7 +372,7 @@ public class MasterProductsFragment extends Fragment
                         R.drawable.ic_round_category,
                         true,
                         () -> {
-                            filterProductGroupId = "";
+                            filterProductGroupId = -1;
                             inputChipFilterProductGroup = null;
                             filterProducts();
                         });
@@ -395,14 +397,6 @@ public class MasterProductsFragment extends Fragment
             recyclerView.setAdapter(adapter);
             recyclerView.animate().alpha(1).setDuration(150).start();
         }).start();
-    }
-
-    private Product getProduct(int productId) {
-        for(Product product : displayedProducts) {
-            if(product.getId() == productId) {
-                return product;
-            }
-        } return null;
     }
 
     /**
@@ -436,8 +430,9 @@ public class MasterProductsFragment extends Fragment
     }
 
     private ProductGroup getProductGroup(String id) {
+        if(id == null || id.equals("")) return null;
         for(ProductGroup productGroup : productGroups) {
-            if(productGroup.getId().equals(id)) {
+            if(productGroup.getId() == Integer.parseInt(id)) {
                 return productGroup;
             }
         } return null;
@@ -527,7 +522,7 @@ public class MasterProductsFragment extends Fragment
         }
     }
 
-    public void setUpSearch() {
+    private void setUpSearch() {
         if(search.equals("")) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_app_bar_master_products_search, true);
             editTextSearch.setText("");
