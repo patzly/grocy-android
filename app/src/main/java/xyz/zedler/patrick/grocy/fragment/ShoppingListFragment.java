@@ -238,7 +238,7 @@ public class ShoppingListFragment extends Fragment
                             viewHolder.getAdapterPosition()
                     );
                     underlayButtons.add(new UnderlayButton(
-                            R.drawable.ic_round_edit,
+                            R.drawable.ic_round_done,
                             position -> toggleDoneStatus(
                                     shoppingListItem,
                                     viewHolder.getAdapterPosition()
