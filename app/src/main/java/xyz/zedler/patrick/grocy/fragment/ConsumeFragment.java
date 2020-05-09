@@ -406,6 +406,10 @@ public class ConsumeFragment extends Fragment {
             );
             if(defaultAmount.equals("")) {
                 editTextAmount.setText(null);
+            } else if(Double.parseDouble(defaultAmount)
+                    > productDetails.getStockAmount()
+            ) {
+                editTextAmount.setText(NumUtil.trim(productDetails.getStockAmount()));
             } else {
                 editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
             }
