@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -64,6 +65,7 @@ public class MasterProductsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterProductAdapter masterProductAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Product> filteredProducts = new ArrayList<>();
@@ -489,7 +491,7 @@ public class MasterProductsFragment extends Fragment
 
     @Override
     public void onItemRowClicked(int position) {
-        // MASTER PRODUCT CLICK
+        if(clickUtil.isDisabled()) return;
         showProductSheet(displayedProducts.get(position));
     }
 

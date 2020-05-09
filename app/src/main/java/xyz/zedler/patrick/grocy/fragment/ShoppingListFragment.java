@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
@@ -74,6 +75,7 @@ public class ShoppingListFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
     private ArrayList<ShoppingListItem> shoppingListItems = new ArrayList<>();
@@ -136,6 +138,9 @@ public class ShoppingListFragment extends Fragment
 
         // top app bar
         textViewTitle = activity.findViewById(R.id.text_shopping_list_title);
+        textViewTitle.setOnClickListener(
+                v -> showShoppingListsBottomSheet()
+        );
         buttonLists = activity.findViewById(R.id.button_shopping_list_lists);
         buttonLists.setOnClickListener(
                 v -> showShoppingListsBottomSheet()
@@ -763,7 +768,7 @@ public class ShoppingListFragment extends Fragment
 
     @Override
     public void onItemRowClicked(int position) {
-        // SHOPPING LIST ITEM CLICK
+        if(clickUtil.isDisabled()) return;
         swipeBehavior.recoverLatestSwipedItem();
     }
 

@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -67,6 +66,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -87,7 +87,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private ActionButton buttonFlash;
     private TextView textViewCount;
     private boolean isTorchOn;
-    private long lastClick = 0;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private Intent intent;
     private String actionType;
@@ -189,8 +189,7 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeScannerView.setTorchListener(this);
 
         findViewById(R.id.button_scan_batch_config).setOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
-            lastClick = SystemClock.elapsedRealtime();
+            if(clickUtil.isDisabled()) return;
             new Handler().postDelayed(this::pauseScan, 300);
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, actionType);

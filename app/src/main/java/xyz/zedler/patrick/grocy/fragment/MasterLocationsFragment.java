@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -58,6 +59,7 @@ public class MasterLocationsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterLocationAdapter masterLocationAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Location> filteredLocations = new ArrayList<>();
@@ -351,7 +353,7 @@ public class MasterLocationsFragment extends Fragment
 
     @Override
     public void onItemRowClicked(int position) {
-        // MASTER PRODUCT CLICK
+        if(clickUtil.isDisabled()) return;
         showLocationSheet(displayedLocations.get(position));
     }
 

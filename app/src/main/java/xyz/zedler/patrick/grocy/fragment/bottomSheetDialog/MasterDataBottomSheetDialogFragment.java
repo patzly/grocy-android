@@ -2,7 +2,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -27,7 +27,7 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
     private MainActivity activity;
     private View view;
     private String uiMode;
-    private long lastClick = 0;
+    private ClickUtil clickUtil = new ClickUtil();
 
     @NonNull
     @Override
@@ -81,8 +81,7 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
     }
 
     public void onClick(View v) {
-        if(SystemClock.elapsedRealtime() - lastClick < 2000) return;
-        lastClick = SystemClock.elapsedRealtime();
+        if(clickUtil.isDisabled()) return;
 
         switch(v.getId()) {
             case R.id.linear_master_data_products:

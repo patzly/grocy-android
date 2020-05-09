@@ -8,7 +8,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomShe
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity
 	private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 	private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
 
-	private long lastClick = 0;
+	private ClickUtil clickUtil = new ClickUtil();
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
 	private SwitchMaterial switchDark;
@@ -95,15 +95,13 @@ public class SettingsActivity extends AppCompatActivity
 		// INITIALIZE VIEWS
 
 		findViewById(R.id.frame_back_settings).setOnClickListener(v -> {
-			if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
-			lastClick = SystemClock.elapsedRealtime();
+			if(clickUtil.isDisabled()) return;
 			finish();
 		});
 
 		Toolbar toolbar = findViewById(R.id.toolbar_settings);
 		toolbar.setOnMenuItemClickListener((MenuItem item) -> {
-			if (SystemClock.elapsedRealtime() - lastClick < 1000) return false;
-			lastClick = SystemClock.elapsedRealtime();
+			if(clickUtil.isDisabled()) return false;
 			switch (item.getItemId()) {
 				case R.id.action_about:
 					startActivity(new Intent(this, AboutActivity.class));
@@ -235,9 +233,7 @@ public class SettingsActivity extends AppCompatActivity
 
 	@Override
 	public void onClick(View v) {
-
-		if(SystemClock.elapsedRealtime() - lastClick < 400) return;
-		lastClick = SystemClock.elapsedRealtime();
+		if(clickUtil.isDisabled()) return;
 
 		switch(v.getId()) {
 			case R.id.linear_setting_dark_mode:

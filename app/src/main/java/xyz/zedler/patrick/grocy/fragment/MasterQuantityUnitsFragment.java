@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -58,6 +59,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
     private ArrayList<QuantityUnit> filteredQuantityUnits = new ArrayList<>();
@@ -351,7 +353,7 @@ public class MasterQuantityUnitsFragment extends Fragment
 
     @Override
     public void onItemRowClicked(int position) {
-        // MASTER PRODUCT CLICK
+        if(clickUtil.isDisabled()) return;
         showQuantityUnitSheet(displayedQuantityUnits.get(position));
     }
 

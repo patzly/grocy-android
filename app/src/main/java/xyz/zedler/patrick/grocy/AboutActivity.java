@@ -6,7 +6,6 @@ import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,7 +28,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 	private final static boolean DEBUG = false;
 	private final static String TAG = "AboutActivity";
 
-	private long lastClick = 0;
+	private ClickUtil clickUtil = new ClickUtil();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 		setContentView(R.layout.activity_about);
 
 		findViewById(R.id.frame_about_back).setOnClickListener(v -> {
-			if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
-			lastClick = SystemClock.elapsedRealtime();
+			if(clickUtil.isDisabled()) return;
 			finish();
 		});
 
@@ -80,9 +79,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
 	@Override
 	public void onClick(View v) {
-
-		if(SystemClock.elapsedRealtime() - lastClick < 600) return;
-		lastClick = SystemClock.elapsedRealtime();
+		if(clickUtil.isDisabled()) return;
 
 		switch(v.getId()) {
 			case R.id.linear_intro:

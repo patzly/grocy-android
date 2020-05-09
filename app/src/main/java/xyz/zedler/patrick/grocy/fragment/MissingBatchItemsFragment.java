@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -54,6 +55,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     private WebRequest request;
     private Gson gson = new Gson();
     private MissingBatchItemAdapter missingBatchItemAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<MissingBatchItem> missingBatchItems;
 
@@ -368,6 +370,8 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
     @Override
     public void onItemRowClicked(int position) {
+        if(clickUtil.isDisabled()) return;
+
         MissingBatchItem batchItem = missingBatchItems.get(position);
 
         Bundle bundle = new Bundle();

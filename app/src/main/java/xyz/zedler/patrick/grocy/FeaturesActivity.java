@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +28,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class FeaturesActivity extends AppCompatActivity {
@@ -41,7 +41,7 @@ public class FeaturesActivity extends AppCompatActivity {
     private PagerAdapter pagerAdapter;
     private FrameLayout frameLayoutPrevious, frameLayoutNext;
     private TextView textViewTitle, textViewDescription;
-    private long lastClick = 0;
+    private ClickUtil clickUtil = new ClickUtil();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -78,8 +78,7 @@ public class FeaturesActivity extends AppCompatActivity {
 
         MaterialButton buttonGetStarted = findViewById(R.id.button_features_start);
         buttonGetStarted.setOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
-            lastClick = SystemClock.elapsedRealtime();
+            if(clickUtil.isDisabled()) return;
             sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
             finish();
         });

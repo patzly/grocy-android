@@ -47,9 +47,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
-import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -77,6 +78,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private StockItemAdapter stockItemAdapter;
+    private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<StockItem> stockItems = new ArrayList<>();
     private ArrayList<StockItem> expiringItems = new ArrayList<>();
@@ -1180,6 +1182,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     @Override
     public void onItemRowClicked(int position) {
+        if(clickUtil.isDisabled()) return;
         // STOCK ITEM CLICK
         swipeBehavior.recoverLatestSwipedItem();
         showProductOverview(displayedItems.get(position));

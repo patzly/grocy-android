@@ -14,7 +14,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,6 +63,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private GrocyApi grocyApi;
-    private long lastClick = 0;
+    private ClickUtil clickUtil = new ClickUtil();
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
 
@@ -212,8 +212,7 @@ public class MainActivity extends AppCompatActivity {
         // BOTTOM APP BAR
 
         bottomAppBar.setNavigationOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - lastClick < 1000) return;
-            lastClick = SystemClock.elapsedRealtime();
+            if(clickUtil.isDisabled()) return;
             startAnimatedIcon(bottomAppBar.getNavigationIcon());
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
