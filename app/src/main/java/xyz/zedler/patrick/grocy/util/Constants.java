@@ -49,8 +49,8 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String SHOPPING_LIST = "shopping_list";
-        public final static String SHOPPING_LIST_DEFAULT = "shopping_default";
-        public final static String SHOPPING_LIST_SEARCH = "shopping_search";
+        public final static String SHOPPING_LIST_DEFAULT = "shopping_list_default";
+        public final static String SHOPPING_LIST_SEARCH = "shopping_list_search";
         public final static String CONSUME = "consume";
         public final static String PURCHASE = "purchase";
         public final static String MASTER = "master";

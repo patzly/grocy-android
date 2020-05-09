@@ -47,18 +47,21 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutItemContainer, linearLayoutNote;
+        private LinearLayout linearLayoutContainer, linearLayoutNote;
         private TextView textViewName, textViewAmount, textViewGroupName, textViewNote;
+        private View divider;
 
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutItemContainer = view.findViewById(R.id.linear_shopping_list_item_container);
+            linearLayoutContainer = view.findViewById(R.id.linear_shopping_list_item_container);
             linearLayoutNote = view.findViewById(R.id.linear_shopping_list_note);
             textViewName = view.findViewById(R.id.text_shopping_list_item_name);
             textViewAmount = view.findViewById(R.id.text_shopping_list_item_amount);
-            textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
             textViewNote = view.findViewById(R.id.text_shopping_list_note);
+
+            textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
+            divider = view.findViewById(R.id.view_shopping_list_group_divider);
         }
     }
 
@@ -97,6 +100,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         int type = getItemViewType(position);
         if (type == GroupedListItem.TYPE_HEADER) {
+            if(holder.getAdapterPosition() == 0) {
+                holder.divider.setVisibility(View.GONE);
+            }
             holder.textViewGroupName.setText(((ProductGroup) groupedListItem).getName());
             return;
         }
@@ -185,7 +191,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // CONTAINER
 
-        holder.linearLayoutItemContainer.setOnClickListener(
+        holder.linearLayoutContainer.setOnClickListener(
                 view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
 

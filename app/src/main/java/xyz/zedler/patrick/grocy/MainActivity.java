@@ -357,19 +357,17 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.SHOPPING_LIST_DEFAULT:
+                scrollBehavior.setUpScroll(R.id.scroll_shopping_list);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated,
-                        () -> new Handler().postDelayed(
-                                () -> {
-                                    if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                                        ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
-                                    }
-                                },
-                                50
-                        )
+                        Constants.FAB.POSITION.GONE, R.menu.menu_shopping_list, animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                                ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
                 );
-                updateFab( // TODO
+                /*updateFab( // TODO
                         R.drawable.ic_round_add_anim, // TODO: No anim
                         R.string.action_consume,
                         Constants.FAB.TAG.CONSUME,
@@ -379,9 +377,10 @@ public class MainActivity extends AppCompatActivity {
                                 // ((ShoppingListFragment) fragmentCurrent).consumeProduct();
                             }
                         }
-                );
+                );*/
                 break;
             case Constants.UI.CONSUME:
+                scrollBehavior.setUpScroll(R.id.scroll_consume);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END, R.menu.menu_consume, animated,
@@ -407,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.PURCHASE:
+                scrollBehavior.setUpScroll(R.id.scroll_purchase);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END, R.menu.menu_purchase, animated,
@@ -432,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MISSING_BATCH_ITEMS:
+                scrollBehavior.setUpScroll(R.id.scroll_missing_batch_items);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END,

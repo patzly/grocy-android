@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private final static String TAG = "DrawerBottomSheet";
+    private final boolean DEBUG = true;
 
     private MainActivity activity;
     private View view;
@@ -56,6 +57,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         assert activity != null && bundle != null;
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
+        if(DEBUG) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
@@ -81,11 +83,11 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 R.id.linear_help
         );
 
-        if(uiMode.equals(Constants.UI.SHOPPING_LIST)) {
-            select(R.id.linear_drawer_consume, R.id.text_drawer_shopping_list);
-        } else if(uiMode.equals(Constants.UI.CONSUME)) {
+        if(uiMode.startsWith(Constants.UI.SHOPPING_LIST)) {
+            select(R.id.linear_drawer_shopping_list, R.id.text_drawer_shopping_list);
+        } else if(uiMode.startsWith(Constants.UI.CONSUME)) {
             select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
-        } else if(uiMode.equals(Constants.UI.PURCHASE)) {
+        } else if(uiMode.startsWith(Constants.UI.PURCHASE)) {
             select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase);
         } else if(uiMode.startsWith(Constants.UI.MASTER)) {
             select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);

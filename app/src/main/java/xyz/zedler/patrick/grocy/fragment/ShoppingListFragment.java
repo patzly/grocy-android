@@ -1,6 +1,5 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -42,7 +41,6 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -59,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -99,9 +98,10 @@ public class ShoppingListFragment extends Fragment
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
-    private LinearLayout linearLayoutFilterContainer, linearLayoutBottomNotes, linearLayoutTitle;
+    private LinearLayout linearLayoutBottomNotes;
     private NestedScrollView scrollView;
     private TextView textViewBottomNotes, textViewTitle;
+    private ActionButton buttonLists;
 
     @Override
     public View onCreateView(
@@ -130,14 +130,17 @@ public class ShoppingListFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        // top app bar
-        linearLayoutTitle = activity.findViewById(R.id.linear_shopping_list_title);
-        linearLayoutTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
-        textViewTitle = activity.findViewById(R.id.text_shopping_list_title);
-
-        linearLayoutFilterContainer = activity.findViewById(
-                R.id.linear_shopping_list_filter_container_bottom
+        activity.findViewById(R.id.frame_shopping_list_back).setOnClickListener(
+                v -> activity.onBackPressed()
         );
+
+        // top app bar
+        textViewTitle = activity.findViewById(R.id.text_shopping_list_title);
+        buttonLists = activity.findViewById(R.id.button_shopping_list_lists);
+        buttonLists.setOnClickListener(
+                v -> showShoppingListsBottomSheet()
+        );
+
         linearLayoutBottomNotes = activity.findViewById(R.id.linear_shopping_list_bottom_notes);
         textViewBottomNotes = activity.findViewById(R.id.text_shopping_list_bottom_notes);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
@@ -150,13 +153,6 @@ public class ShoppingListFragment extends Fragment
         activity.findViewById(R.id.frame_shopping_list_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
-        activity.findViewById(R.id.frame_shopping_list_search_scan).setOnClickListener(v -> {
-            startActivityForResult(
-                    new Intent(activity, ScanInputActivity.class),
-                    Constants.REQUEST.SCAN
-            );
-            dismissSearch();
-        });
         textInputLayoutSearch = activity.findViewById(R.id.text_input_shopping_list_search);
         editTextSearch = textInputLayoutSearch.getEditText();
         assert editTextSearch != null;
@@ -177,7 +173,7 @@ public class ShoppingListFragment extends Fragment
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_app_bar_shopping_list_default);
+        appBarBehavior = new AppBarBehavior(activity, R.id.linear_shopping_list_app_bar_default);
 
         // SWIPE REFRESH
 
@@ -262,10 +258,6 @@ public class ShoppingListFragment extends Fragment
         // UPDATE UI
 
         activity.updateUI(Constants.UI.SHOPPING_LIST_DEFAULT, TAG);
-
-        if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
-            sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();
-        }
     }
 
     private void load() {
@@ -655,6 +647,9 @@ public class ShoppingListFragment extends Fragment
             textViewTitle.setText(shoppingList.getName());
             textViewTitle.animate().alpha(1).setDuration(150).start();
         }).setDuration(150).start();
+        buttonLists.animate().alpha(0).withEndAction(() -> {
+            buttonLists.animate().alpha(1).setDuration(150).start();
+        }).setDuration(150).start();
         chipMissing.changeState(false);
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
@@ -747,7 +742,7 @@ public class ShoppingListFragment extends Fragment
 
     private void setUpSearch() {
         if(search.equals("")) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_app_bar_shopping_list_search, true);
+            appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_search, true);
             editTextSearch.setText("");
         }
         textInputLayoutSearch.requestFocus();
@@ -757,7 +752,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_app_bar_shopping_list_default, true);
+        appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);
