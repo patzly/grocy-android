@@ -579,17 +579,6 @@ public class ScanBatchActivity extends AppCompatActivity
 
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
-            // SPECIFIC STOCK ENTRY
-            int askForSpecific = sharedPrefs.getInt(
-                    Constants.PREF.BATCH_CONFIG_SPECIFIC, 0
-            );
-            if(askForSpecific == 0 && entryId == null) {
-                entryId = "";
-            } else if(askForSpecific == 2 && entryId == null) {
-                showSpecificEntryBottomSheet();
-                return;
-            }
-
             // STOCK LOCATION
             int askForStockLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, 0
@@ -598,6 +587,17 @@ public class ScanBatchActivity extends AppCompatActivity
                 stockLocationId = "";
             } else if(askForStockLocation == 2 && stockLocationId == null) {
                 showStockLocationsBottomSheet();
+                return;
+            }
+
+            // SPECIFIC STOCK ENTRY
+            int askForSpecific = sharedPrefs.getInt(
+                    Constants.PREF.BATCH_CONFIG_SPECIFIC, 0
+            );
+            if(askForSpecific == 0 && entryId == null) {
+                entryId = "";
+            } else if(askForSpecific == 2 && entryId == null) {
+                showSpecificEntryBottomSheet();
                 return;
             }
 
@@ -674,7 +674,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     storeId = sessionStoreIds.get(currentProductName);
                 } else {
                     if(currentDefaultStoreId != null) storeId = currentDefaultStoreId;
-                    showStoresBottomSheet();
+                    showStoresBottomSheet(true);
                     return;
                 }
             } else if(askForStore == 2 && storeId == null) {
@@ -683,7 +683,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 } else if(currentDefaultStoreId != null) {
                     storeId = currentDefaultStoreId;
                 }
-                showStoresBottomSheet();
+                showStoresBottomSheet(true);
                 return;
             }
 
@@ -693,7 +693,7 @@ public class ScanBatchActivity extends AppCompatActivity
             );
             if(askForLocation == 0 && locationId == null) {
                 if(currentDefaultLocationId == -1) {
-                    showLocationsBottomSheet();
+                    showLocationsBottomSheet(true);
                     return;
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
@@ -703,7 +703,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     locationId = sessionLocationIds.get(currentProductName);
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
-                    showLocationsBottomSheet();
+                    showLocationsBottomSheet(true);
                     return;
                 }
             } else if(askForLocation == 2 && locationId == null) {
@@ -712,7 +712,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 } else {
                     locationId = String.valueOf(currentDefaultLocationId);
                 }
-                showLocationsBottomSheet();
+                showLocationsBottomSheet(true);
                 return;
             }
 
@@ -763,15 +763,19 @@ public class ScanBatchActivity extends AppCompatActivity
         showBottomSheet(new PriceBottomSheetDialogFragment(), bundle);
     }
 
-    private void showStoresBottomSheet() {
-        if(stores.isEmpty()) {
+    private void showStoresBottomSheet(boolean tryDownload) {
+        if(stores.isEmpty() && tryDownload) {
             downloadStores(
-                    response -> showStoresBottomSheet(),
+                    response -> showStoresBottomSheet(false),
                     error -> {
                         discardCurrentProduct();
                         showMessage(getString(R.string.msg_error));
                     }
             );
+            return;
+        } else if(stores.isEmpty()) {
+            storeId = "";
+            askNecessaryDetails();
             return;
         }
         Bundle bundle = new Bundle();
@@ -784,15 +788,19 @@ public class ScanBatchActivity extends AppCompatActivity
         showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
     }
 
-    private void showLocationsBottomSheet() {
-        if(locations.isEmpty()) {
+    private void showLocationsBottomSheet(boolean tryDownload) {
+        if(locations.isEmpty() && tryDownload) {
             downloadLocations(
-                    response -> showLocationsBottomSheet(),
+                    response -> showLocationsBottomSheet(false),
                     error -> {
                         discardCurrentProduct();
                         showMessage(getString(R.string.msg_error));
                     }
             );
+            return;
+        } else if(locations.isEmpty()) {
+            showMessage(getString(R.string.msg_error));
+            discardCurrentProduct();
             return;
         }
         Bundle bundle = new Bundle();
@@ -821,8 +829,26 @@ public class ScanBatchActivity extends AppCompatActivity
                         discardCurrentProduct();
                         return;
                     }
+                    ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
+                    if(stockLocationId != null && !stockLocationId.equals("")) {
+                        for(StockEntry stockEntry : stockEntries) {
+                            if(stockEntry.getLocationId() == Integer.parseInt(stockLocationId)) {
+                                filteredStockEntries.add(stockEntry);
+                            }
+                        }
+                        if(filteredStockEntries.size() == 1) {
+                            setEntryId(String.valueOf(filteredStockEntries.get(0).getId()));
+                            askNecessaryDetails();
+                            return;
+                        }
+                    } else {
+                        filteredStockEntries.addAll(stockEntries);
+                    }
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES, stockEntries);
+                    bundle.putParcelableArrayList(
+                            Constants.ARGUMENT.STOCK_ENTRIES,
+                            filteredStockEntries
+                    );
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, entryId);
                     showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
                 },
@@ -844,6 +870,11 @@ public class ScanBatchActivity extends AppCompatActivity
                                 currentProductName
                         ));
                         discardCurrentProduct();
+                        return;
+                    }
+                    if(stockLocations.size() == 1) {
+                        setStockLocationId(String.valueOf(stockLocations.get(0).getLocationId()));
+                        askNecessaryDetails();
                         return;
                     }
                     Bundle bundle = new Bundle();

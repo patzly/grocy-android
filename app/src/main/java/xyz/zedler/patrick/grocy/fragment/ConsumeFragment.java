@@ -189,6 +189,7 @@ public class ConsumeFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
+                if(productDetails == null) return;
                 String input = s.toString();
                 if(!input.equals("")) {
                     amount = Double.parseDouble(input);
@@ -255,8 +256,17 @@ public class ConsumeFragment extends Fragment {
         activity.findViewById(R.id.linear_consume_specific).setOnClickListener(v -> {
             startAnimatedIcon(R.id.image_consume_specific);
             if(productDetails != null) {
+                ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
+                for(StockEntry stockEntry : stockEntries) {
+                    if(stockEntry.getLocationId() == selectedLocationId) {
+                        filteredStockEntries.add(stockEntry);
+                    }
+                }
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES, stockEntries);
+                bundle.putParcelableArrayList(
+                        Constants.ARGUMENT.STOCK_ENTRIES,
+                        filteredStockEntries
+                );
                 bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
                 activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
             } else {
@@ -396,6 +406,10 @@ public class ConsumeFragment extends Fragment {
             );
             if(defaultAmount.equals("")) {
                 editTextAmount.setText(null);
+            } else if(Double.parseDouble(defaultAmount)
+                    > productDetails.getStockAmount()
+            ) {
+                editTextAmount.setText(NumUtil.trim(productDetails.getStockAmount()));
             } else {
                 editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
             }
