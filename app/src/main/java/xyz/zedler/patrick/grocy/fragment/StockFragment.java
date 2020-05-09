@@ -49,7 +49,7 @@ import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
-import xyz.zedler.patrick.grocy.behavior.ItemAnimator;
+import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;

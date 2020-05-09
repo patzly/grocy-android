@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,6 +42,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
@@ -220,7 +220,7 @@ public class ShoppingListFragment extends Fragment
                         false
                 )
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemAnimator(new ItemAnimator());
         recyclerView.setAdapter(new StockPlaceholderAdapter());
 
         swipeBehavior = new SwipeBehavior(activity) {

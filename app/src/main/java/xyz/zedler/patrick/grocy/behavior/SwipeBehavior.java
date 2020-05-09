@@ -195,9 +195,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 translationX = dX * buffer.size() * BUTTON_WIDTH / itemView.getWidth();
 
                 int limit = UnitUtil.getDp(context, 24);
-                if(translationX < limit) {
+                if(translationX < limit && itemView.getElevation() > 0) {
                     itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
-                } else {
+                } else if(isCurrentlyActive) {
                     itemView.setElevation(UnitUtil.getDp(context, 2));
                 }
 
