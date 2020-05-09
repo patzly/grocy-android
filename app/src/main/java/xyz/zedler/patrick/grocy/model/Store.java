@@ -10,16 +10,16 @@ import com.google.gson.annotations.SerializedName;
 public class Store implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     /**
      * First element in bottomSheet selection: NONE (id = -1)

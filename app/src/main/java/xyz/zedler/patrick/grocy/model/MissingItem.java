@@ -7,16 +7,16 @@ import com.google.gson.annotations.SerializedName;
 public class MissingItem {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("amount_missing")
-    double amountMissing;
+    private double amountMissing;
 
     @SerializedName("is_partly_in_stock")
-    int isPartlyInStock;
+    private int isPartlyInStock;
 
     public int getId() {
         return id;

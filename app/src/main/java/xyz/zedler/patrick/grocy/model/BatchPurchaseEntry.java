@@ -21,7 +21,7 @@ public class BatchPurchaseEntry implements Parcelable {
         if(storeId != null && !storeId.equals("")) this.storeId = storeId;
     }
 
-    public BatchPurchaseEntry(Parcel parcel) {
+    private BatchPurchaseEntry(Parcel parcel) {
         bestBeforeDate = parcel.readString();
         locationId = parcel.readString();
         price = parcel.readString();

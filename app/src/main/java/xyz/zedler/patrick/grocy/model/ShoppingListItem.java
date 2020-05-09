@@ -10,28 +10,28 @@ import com.google.gson.annotations.SerializedName;
 public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("product_id")
-    int productId;
+    private int productId;
 
     @SerializedName("note")
-    String note;
+    private String note;
 
     @SerializedName("amount")
-    double amount;
+    private double amount;
 
     @SerializedName("shopping_list_id")
-    int shoppingListId;
+    private int shoppingListId;
 
     @SerializedName("done")
-    int done;
+    private int done;
 
-    Product product = null;
+    private Product product = null;
 
-    int isMissing = 0;
+    private int isMissing;
 
-    public ShoppingListItem(Parcel parcel) {
+    private ShoppingListItem(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();
         note = parcel.readString();
@@ -87,8 +87,8 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return shoppingListId;
     }
 
-    public boolean isDone() {
-        return done == 1;
+    public boolean isUndone() {
+        return done != 1;
     }
 
     public void setDone(boolean isDone) {

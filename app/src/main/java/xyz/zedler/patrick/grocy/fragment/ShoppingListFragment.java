@@ -469,7 +469,7 @@ public class ShoppingListFragment extends Fragment
                 shoppingListItem.setIsMissing(true);
                 missingShoppingListItems.add(shoppingListItem);
             }
-            if(!shoppingListItem.isDone()) {
+            if(shoppingListItem.isUndone()) {
                 undoneShoppingListItems.add(shoppingListItem);
             }
             shoppingListProductIds.add(shoppingListItem.getProductId());
@@ -667,7 +667,7 @@ public class ShoppingListFragment extends Fragment
     private void toggleDoneStatus(ShoppingListItem shoppingListItem, int position) {
         JSONObject body = new JSONObject();
         try {
-            body.put("done", !shoppingListItem.isDone());
+            body.put("done", shoppingListItem.isUndone());
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
@@ -675,7 +675,7 @@ public class ShoppingListFragment extends Fragment
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 body,
                 response -> {
-                    shoppingListItem.setDone(!shoppingListItem.isDone());
+                    shoppingListItem.setDone(shoppingListItem.isUndone());
                     shoppingListItemAdapter.notifyItemChanged(position);
                     swipeBehavior.recoverLatestSwipedItem();
                 },

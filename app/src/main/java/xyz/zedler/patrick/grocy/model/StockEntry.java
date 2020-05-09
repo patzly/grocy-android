@@ -10,43 +10,43 @@ import com.google.gson.annotations.SerializedName;
 public class StockEntry implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("product_id")
-    int productId;
+    private int productId;
 
     @SerializedName("amount")
-    double amount;
+    private double amount;
 
     @SerializedName("best_before_date")
-    String bestBeforeDate;
+    private String bestBeforeDate;
 
     @SerializedName("purchased_date")
-    String purchasedDate;
+    private String purchasedDate;
 
     @SerializedName("stock_id")
-    String stockId;
+    private String stockId;
 
     @SerializedName("price")
-    String price;
+    private String price;
 
     @SerializedName("open")
-    int open;
+    private int open;
 
     @SerializedName("opened_date")
-    String openedDate;
+    private String openedDate;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     @SerializedName("location_id")
-    int locationId;
+    private int locationId;
 
     public StockEntry() {
         stockId = null;
     }
 
-    public StockEntry(Parcel parcel) {
+    private StockEntry(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();
         amount = parcel.readDouble();

@@ -112,7 +112,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         // NAME
 
         holder.textViewName.setText(shoppingListItem.getProduct().getName());
-        if(!shoppingListItem.isDone()) {
+        if(shoppingListItem.isUndone()) {
             holder.textViewName.setPaintFlags(
                     holder.textViewName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -160,7 +160,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     ContextCompat.getColor(context, R.color.on_background_secondary)
             );
         }
-        if(!shoppingListItem.isDone()) {
+        if(shoppingListItem.isUndone()) {
             holder.textViewAmount.setPaintFlags(
                     holder.textViewAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -179,7 +179,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             holder.linearLayoutNote.setVisibility(View.GONE);
             holder.textViewNote.setText(null);
         }
-        if(!shoppingListItem.isDone()) {
+        if(shoppingListItem.isUndone()) {
             holder.textViewNote.setPaintFlags(
                     holder.textViewNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );

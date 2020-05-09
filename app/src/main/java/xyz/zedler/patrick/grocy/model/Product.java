@@ -10,76 +10,76 @@ import com.google.gson.annotations.SerializedName;
 public class Product implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
     @SerializedName("location_id")
-    int locationId;
+    private int locationId;
 
     @SerializedName("qu_id_purchase")
-    int quIdPurchase; // quantity unit
+    private int quIdPurchase; // quantity unit
 
     @SerializedName("qu_id_stock")
-    int quIdStock; // quantity unit
+    private int quIdStock; // quantity unit
 
     @SerializedName("qu_factor_purchase_to_stock")
-    double quFactorPurchaseToStock; // quantity unit
+    private double quFactorPurchaseToStock; // quantity unit
 
     @SerializedName("enable_tare_weight_handling")
-    int enableTareWeightHandling;
+    private int enableTareWeightHandling;
 
     @SerializedName("picture_file_name")
-    String pictureFileName;
+    private String pictureFileName;
 
     @SerializedName("barcode")
-    String barcode;
+    private String barcode;
 
     @SerializedName("min_stock_amount")
-    double minStockAmount;
+    private double minStockAmount;
 
     @SerializedName("default_best_before_days")
-    int defaultBestBeforeDays;
+    private int defaultBestBeforeDays;
 
     @SerializedName("default_best_before_days_after_open")
-    int defaultBestBeforeDaysAfterOpen;
+    private int defaultBestBeforeDaysAfterOpen;
 
     @SerializedName("default_best_before_days_after_freezing")
-    int defaultBestBeforeDaysAfterFreezing;
+    private int defaultBestBeforeDaysAfterFreezing;
 
     @SerializedName("default_best_before_days_after_thawing")
-    int defaultBestBeforeDaysAfterThawing;
+    private int defaultBestBeforeDaysAfterThawing;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     @SerializedName("product_group_id")
-    String productGroupId;
+    private String productGroupId;
 
     @SerializedName("allow_partial_units_in_stock")
-    int allowPartialUnitsInStock;
+    private int allowPartialUnitsInStock;
 
     @SerializedName("tare_weight")
-    double tareWeight;
+    private double tareWeight;
 
     @SerializedName("not_check_stock_fulfillment_for_recipes")
-    int notCheckStockFulfillmentForRecipes;
+    private int notCheckStockFulfillmentForRecipes;
 
     @SerializedName("parent_product_id")
-    String parentProductId; /// STRING: null for empty
+    private String parentProductId; /// STRING: null for empty
 
     @SerializedName("calories")
-    double calories;
+    private double calories;
 
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
-    int cumulateMinStockAmountOfSubProducts;
+    private int cumulateMinStockAmountOfSubProducts;
 
     @SerializedName("shopping_location_id")
-    String storeId;
+    private String storeId;
 
     public Product(Parcel parcel) {
         id = parcel.readInt();

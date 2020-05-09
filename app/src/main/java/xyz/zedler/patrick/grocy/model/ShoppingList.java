@@ -10,15 +10,15 @@ import com.google.gson.annotations.SerializedName;
 public class ShoppingList implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
-    public ShoppingList(Parcel parcel) {
+    private ShoppingList(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();

@@ -10,21 +10,21 @@ import com.google.gson.annotations.SerializedName;
 public class StockLocation implements Parcelable {
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("product_id")
-    int productId;
+    private int productId;
 
     @SerializedName("location_id")
-    int locationId;
+    private int locationId;
 
     @SerializedName("location_name")
-    String locationName;
+    private String locationName;
 
     @SerializedName("location_is_freezer")
-    int isFreezer;
+    private int isFreezer;
 
-    public StockLocation(Parcel parcel) {
+    private StockLocation(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();
         locationId = parcel.readInt();

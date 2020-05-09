@@ -10,49 +10,49 @@ import com.google.gson.annotations.SerializedName;
 public class ProductDetails implements Parcelable {
 
     @SerializedName("product")
-    Product product;
+    private Product product;
 
     @SerializedName("last_purchased")
-    String lastPurchased;
+    private String lastPurchased;
 
     @SerializedName("last_used")
-    String lastUsed;
+    private String lastUsed;
 
     @SerializedName("stock_amount")
-    double stockAmount;
+    private double stockAmount;
 
     @SerializedName("stock_amount_opened")
-    double stockAmountOpened;
+    private double stockAmountOpened;
 
     @SerializedName("stock_amount_aggregated")
-    double stockAmountAggregated;
+    private double stockAmountAggregated;
 
     @SerializedName("stock_amount_opened_aggregated")
-    double stockAmountOpenedAggregated;
+    private double stockAmountOpenedAggregated;
 
     @SerializedName("quantity_unit_purchase")
-    QuantityUnit quantityUnitPurchase;
+    private QuantityUnit quantityUnitPurchase;
 
     @SerializedName("quantity_unit_stock")
-    QuantityUnit quantityUnitStock;
+    private QuantityUnit quantityUnitStock;
 
     @SerializedName("last_price")
-    String lastPrice;
+    private String lastPrice;
 
     @SerializedName("next_best_before_date")
-    String nextBestBeforeDate;
+    private String nextBestBeforeDate;
 
     @SerializedName("location")
-    Location location;
+    private Location location;
 
     @SerializedName("average_shelf_life_days")
-    int averageShelfLifeDays;
+    private int averageShelfLifeDays;
 
     @SerializedName("spoil_rate_percent")
-    double spoilRatePercent;
+    private double spoilRatePercent;
 
     @SerializedName("is_aggregated_amount")
-    int isAggregatedAmount;
+    private int isAggregatedAmount;
 
     public ProductDetails(Parcel parcel) {
         product = parcel.readParcelable(Product.class.getClassLoader());

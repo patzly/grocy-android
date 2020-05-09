@@ -10,28 +10,28 @@ import com.google.gson.annotations.SerializedName;
 public class StockItem implements Parcelable {
 
     @SerializedName("amount")
-    double amount;
+    private double amount;
 
     @SerializedName("amount_aggregated")
-    double amountAggregated;
+    private double amountAggregated;
 
     @SerializedName("best_before_date")
-    String bestBeforeDate;
+    private String bestBeforeDate;
 
     @SerializedName("amount_opened")
-    double amountOpened;
+    private double amountOpened;
 
     @SerializedName("amount_opened_aggregated")
-    double amountOpenedAggregated;
+    private double amountOpenedAggregated;
 
     @SerializedName("is_aggregated_amount")
-    int isAggregatedAmount;
+    private int isAggregatedAmount;
 
     @SerializedName("product_id")
-    int productId;
+    private int productId;
 
     @SerializedName("product")
-    Product product;
+    private Product product;
 
     public StockItem(
             double amount,
@@ -53,7 +53,7 @@ public class StockItem implements Parcelable {
         this.product = product;
     }
 
-    public StockItem(Parcel parcel) {
+    private StockItem(Parcel parcel) {
         amount = parcel.readDouble();
         amountAggregated = parcel.readDouble();
         bestBeforeDate = parcel.readString();

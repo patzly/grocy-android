@@ -12,22 +12,22 @@ public class QuantityUnit implements Parcelable {
     public QuantityUnit() {}
 
     @SerializedName("id")
-    int id;
+    private int id;
 
     @SerializedName("name")
-    String name;
+    private String name;
 
     @SerializedName("description")
-    String description;
+    private String description;
 
     @SerializedName("row_created_timestamp")
-    String rowCreatedTimestamp;
+    private String rowCreatedTimestamp;
 
     @SerializedName("name_plural")
-    String namePlural;
+    private String namePlural;
 
     @SerializedName("plural_forms")
-    String pluralForms;
+    private String pluralForms;
 
     public QuantityUnit(Parcel parcel) {
         id = parcel.readInt();
