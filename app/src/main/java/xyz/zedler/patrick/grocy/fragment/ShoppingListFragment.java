@@ -578,7 +578,11 @@ public class ShoppingListFragment extends Fragment
         ArrayList<ProductGroup> neededProductGroups = new ArrayList<>();
         boolean containsUngroupedItems = false;
         for(ShoppingListItem shoppingListItem : displayedItems) {
-            String groupId = shoppingListItem.getProduct().getProductGroupId();
+            Product product = shoppingListItem.getProduct();
+            String groupId = null;
+            if(product != null) {
+                groupId = shoppingListItem.getProduct().getProductGroupId();
+            }
             if(groupId != null && !groupId.equals("")) {
                 for(ProductGroup productGroup : productGroups) {
                     if(productGroup.getId() == Integer.parseInt(groupId)
@@ -604,7 +608,11 @@ public class ShoppingListFragment extends Fragment
             groupedListItems.add(productGroup);
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>();
             for(ShoppingListItem shoppingListItem : displayedItems) {
-                String groupId = shoppingListItem.getProduct().getProductGroupId();
+                Product product = shoppingListItem.getProduct();
+                String groupId = null;
+                if(product != null) {
+                    groupId = product.getProductGroupId();
+                }
                 if(groupId == null || groupId.equals("")) groupId = "-1";
                 if(groupId.equals(String.valueOf(productGroup.getId()))) {
                     itemsOneGroup.add(shoppingListItem);

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -111,7 +112,14 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NAME
 
-        holder.textViewName.setText(shoppingListItem.getProduct().getName());
+        Product product = shoppingListItem.getProduct();
+        if(product != null) {
+            holder.textViewName.setText(product.getName());
+            holder.textViewName.setVisibility(View.VISIBLE);
+        } else {
+            holder.textViewName.setText(null);
+            holder.textViewName.setVisibility(View.GONE);
+        }
         if(shoppingListItem.isUndone()) {
             holder.textViewName.setPaintFlags(
                     holder.textViewName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
@@ -124,27 +132,30 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // AMOUNT
 
-        QuantityUnit quantityUnit = new QuantityUnit();
-        for(int i = 0; i < quantityUnits.size(); i++) {
-            if(quantityUnits.get(i).getId() == shoppingListItem.getProduct().getQuIdPurchase()) {
-                quantityUnit = quantityUnits.get(i);
-                break;
+        if(shoppingListItem.getProduct() != null) {
+            QuantityUnit quantityUnit = new QuantityUnit();
+            for(int i = 0; i < quantityUnits.size(); i++) {
+                if(quantityUnits.get(i).getId() == shoppingListItem.getProduct().getQuIdPurchase()) {
+                    quantityUnit = quantityUnits.get(i);
+                    break;
+                }
             }
+
+            if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
+
+            holder.textViewAmount.setText(
+                    context.getString(
+                            R.string.subtitle_amount,
+                            NumUtil.trim(shoppingListItem.getAmount()),
+                            shoppingListItem.getAmount() == 1
+                                    ? quantityUnit.getName()
+                                    : quantityUnit.getNamePlural()
+                    )
+            );
+        } else {
+            holder.textViewAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
         }
 
-        if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
-
-        StringBuilder stringBuilderAmount = new StringBuilder(
-                context.getString(
-                        R.string.subtitle_amount,
-                        NumUtil.trim(shoppingListItem.getAmount()),
-                        shoppingListItem.getAmount() == 1
-                                ? quantityUnit.getName()
-                                : quantityUnit.getNamePlural()
-                )
-        );
-
-        holder.textViewAmount.setText(stringBuilderAmount);
         if(shoppingListItem.isMissing()) {
             holder.textViewAmount.setTypeface(
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)

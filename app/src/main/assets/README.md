@@ -10,6 +10,7 @@
 - shorter tags & ids for master edit
 - edit product from product overview
 - id naming convention: "frame_back_..." to "frame_..._back" + close + linear_app_bar_..._default to linear_..._app_bar_default
+- shopping list doesn't show items without name & description, but it shows items with only description?
 
 
 ## ILLUSTRATIONS
