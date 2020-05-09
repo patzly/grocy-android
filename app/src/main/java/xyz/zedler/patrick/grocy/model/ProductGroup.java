@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ProductGroup implements Parcelable {
+public class ProductGroup extends GroupedListItem implements Parcelable {
 
     @SerializedName("id")
     String id;
@@ -72,6 +72,11 @@ public class ProductGroup implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE_HEADER;
     }
 
     @NonNull

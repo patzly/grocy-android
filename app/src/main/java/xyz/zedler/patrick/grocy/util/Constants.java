@@ -48,6 +48,9 @@ public final class Constants {
         public final static String STOCK = "stock";
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
+        public final static String SHOPPING_LIST = "shopping_list";
+        public final static String SHOPPING_LIST_DEFAULT = "shopping_default";
+        public final static String SHOPPING_LIST_SEARCH = "shopping_search";
         public final static String CONSUME = "consume";
         public final static String PURCHASE = "purchase";
         public final static String MASTER = "master";
@@ -91,6 +94,14 @@ public final class Constants {
         }
     }
 
+    public final static class SHOPPING_LIST {
+        public final static class FILTER {
+            public final static String UNDONE = "undone";
+            public final static String MISSING = "missing";
+            public final static String ALL = "all";
+        }
+    }
+
     public final static class EXTRA {
         public final static String SCAN_RESULT = "scan_result";
         public final static String FLASH_VIEW_ID = "flash_view_id";
@@ -128,6 +139,7 @@ public final class Constants {
         public final static String LOCATIONS = "locations";
         public final static String STORE = "store";
         public final static String STORES = "stores";
+        public final static String SHOPPING_LISTS = "shopping_lists";
         public final static String PRODUCT_GROUP = "product_group";
         public final static String PRODUCT_GROUPS = "product_groups";
         public final static String STOCK_LOCATIONS = "stock_locations";

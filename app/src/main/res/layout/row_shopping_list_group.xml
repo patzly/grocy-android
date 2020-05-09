@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_shopping_list_item_container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="0dp"
+    android:gravity="center_vertical">
+
+    <View style="@style/Theme.Grocy.Divider" />
+
+    <TextView
+        android:id="@+id/text_shopping_list_group_name"
+        style="@style/Theme.Grocy.Category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="0dp"
+        android:paddingBottom="12dp"
+        android:layout_marginStart="0dp"
+        android:singleLine="true" />
+
+</LinearLayout>

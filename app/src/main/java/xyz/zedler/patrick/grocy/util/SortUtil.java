@@ -8,6 +8,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -89,7 +90,7 @@ public class SortUtil {
             ArrayList<ProductGroup> productGroups,
             boolean ascending
     ) {
-        if(productGroups == null) return;
+        if(productGroups == null || productGroups.isEmpty()) return;
         Collections.sort(
                 productGroups,
                 (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
@@ -108,6 +109,21 @@ public class SortUtil {
                 (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
                         (ascending ? item2 : item1).getName().toLowerCase()
                 )
+        );
+    }
+
+    public static void sortShoppingListItemsByName(
+            List<ShoppingListItem> shoppingListItems,
+            boolean ascending
+    ) {
+        if(shoppingListItems == null) return;
+        Collections.sort(
+                shoppingListItems,
+                (item1, item2) -> (ascending ? item1 : item2).getProduct()
+                        .getName()
+                        .toLowerCase().compareTo(
+                                (ascending ? item2 : item1).getProduct().getName().toLowerCase()
+                        )
         );
     }
 }

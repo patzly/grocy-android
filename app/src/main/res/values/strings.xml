@@ -62,6 +62,7 @@
     <string name="msg_consumed">Consumed %1$s %2$s of %3$s</string>
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+    <string name="msg_undone_items">%1$d undone</string>
     <string name="msg_purchased_no_amount">Purchased %1$s</string>
     <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
@@ -108,6 +109,7 @@
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
     <string name="title_stock_entries">Stock entries</string>
+    <string name="title_shopping_list">Shopping list</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Settings</string>
     <string name="title_about">About</string>
@@ -118,6 +120,8 @@
     <string name="title_batch_missing_exit">Back to scanner?</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
+    <string name="title_shopping_list_ungrouped">Ungrouped</string>
+    <string name="title_shopping_list_notes">Notes</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>
@@ -162,6 +166,7 @@
     <string name="property_store">Store</string>
     <string name="property_store_default">Default store</string>
     <string name="property_stores">Stores</string>
+    <string name="property_shopping_lists">Shopping lists</string>
     <string name="property_last_purchased">Last purchased</string>
     <string name="property_purchased">Purchased</string>
     <string name="property_last_used">Last used</string>

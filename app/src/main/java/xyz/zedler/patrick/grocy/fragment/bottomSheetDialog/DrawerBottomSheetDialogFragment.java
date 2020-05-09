@@ -72,6 +72,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         });
 
         setOnClickListeners(
+                R.id.linear_drawer_shopping_list,
                 R.id.linear_drawer_consume,
                 R.id.linear_drawer_purchase,
                 R.id.linear_drawer_master_data,
@@ -80,7 +81,9 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 R.id.linear_help
         );
 
-        if(uiMode.equals(Constants.UI.CONSUME)) {
+        if(uiMode.equals(Constants.UI.SHOPPING_LIST)) {
+            select(R.id.linear_drawer_consume, R.id.text_drawer_shopping_list);
+        } else if(uiMode.equals(Constants.UI.CONSUME)) {
             select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
         } else if(uiMode.equals(Constants.UI.PURCHASE)) {
             select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase);
@@ -102,6 +105,11 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         lastClick = SystemClock.elapsedRealtime();
 
         switch(v.getId()) {
+            case R.id.linear_drawer_shopping_list:
+                if(!uiMode.startsWith(Constants.UI.SHOPPING_LIST)) {
+                    replaceFragment(Constants.UI.SHOPPING_LIST);
+                }
+                break;
             case R.id.linear_drawer_consume:
                 if(!uiMode.startsWith(Constants.UI.CONSUME)) {
                     replaceFragment(Constants.UI.CONSUME);

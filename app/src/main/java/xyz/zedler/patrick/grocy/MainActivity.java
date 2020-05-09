@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
@@ -351,6 +352,31 @@ public class MainActivity extends AppCompatActivity {
                                 );
                                 intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
                                 startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+                            }
+                        }
+                );
+                break;
+            case Constants.UI.SHOPPING_LIST_DEFAULT:
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated,
+                        () -> new Handler().postDelayed(
+                                () -> {
+                                    if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                                        ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
+                                    }
+                                },
+                                50
+                        )
+                );
+                updateFab( // TODO
+                        R.drawable.ic_round_add_anim, // TODO: No anim
+                        R.string.action_consume,
+                        Constants.FAB.TAG.CONSUME,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                                // ((ShoppingListFragment) fragmentCurrent).consumeProduct();
                             }
                         }
                 );
@@ -745,6 +771,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
+            case Constants.UI.SHOPPING_LIST_DEFAULT:
                 super.onBackPressed();
                 break;
             case Constants.UI.STOCK_SEARCH:
@@ -752,6 +779,12 @@ public class MainActivity extends AppCompatActivity {
                     ((StockFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
+            case Constants.UI.SHOPPING_LIST_SEARCH:
+                if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                    ((ShoppingListFragment) fragmentCurrent).dismissSearch();
+                }
+                break;
+            case Constants.UI.SHOPPING_LIST:
             case Constants.UI.CONSUME:
             case Constants.UI.PURCHASE:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
@@ -821,6 +854,9 @@ public class MainActivity extends AppCompatActivity {
         switch (newFragment) {
             case Constants.UI.STOCK:
                 fragmentCurrent = new StockFragment();
+                break;
+            case Constants.UI.SHOPPING_LIST:
+                fragmentCurrent = new ShoppingListFragment();
                 break;
             case Constants.UI.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
