@@ -230,22 +230,14 @@ public class ShoppingListFragment extends Fragment
                     List<UnderlayButton> underlayButtons
             ) {
                 if(viewHolder.getItemViewType() == GroupedListItem.TYPE_ENTRY) {
-                    ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(
-                            viewHolder.getAdapterPosition()
-                    );
+
                     underlayButtons.add(new UnderlayButton(
                             R.drawable.ic_round_done,
-                            position -> toggleDoneStatus(
-                                    shoppingListItem,
-                                    viewHolder.getAdapterPosition()
-                            )
+                            position -> toggleDoneStatus(position)
                     ));
                     underlayButtons.add(new UnderlayButton(
                             R.drawable.ic_round_delete_anim, // TODO: No anim
-                            position -> deleteItem(
-                                    shoppingListItem,
-                                    viewHolder.getAdapterPosition()
-                            )
+                            position -> deleteRequest(position)
                     ));
                 }
             }
@@ -673,20 +665,44 @@ public class ShoppingListFragment extends Fragment
         return null;
     }
 
-    private void toggleDoneStatus(ShoppingListItem shoppingListItem, int position) {
+    private void toggleDoneStatus(int position) {
+        ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         JSONObject body = new JSONObject();
         try {
             body.put("done", shoppingListItem.isUndone());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+            if(DEBUG) Log.e(TAG, "toggleDoneStatus: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 body,
                 response -> {
                     shoppingListItem.setDone(shoppingListItem.isUndone());
-                    shoppingListItemAdapter.notifyItemChanged(position);
-                    swipeBehavior.recoverLatestSwipedItem();
+                    if(!shoppingListItem.isUndone()) {
+                        undoneShoppingListItems.remove(shoppingListItem);
+                    } else {
+                        undoneShoppingListItems = new ArrayList<>();
+                        for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
+                            if(shoppingListItem1.getShoppingListId() != selectedShoppingListId) {
+                                continue;
+                            }
+                            if(shoppingListItem1.isUndone()) {
+                                undoneShoppingListItems.add(shoppingListItem1);
+                            }
+                        }
+                    }
+                    chipUndone.setText(
+                            activity.getString(
+                                    R.string.msg_undone_items,
+                                    undoneShoppingListItems.size()
+                            )
+                    );
+                    if(itemsToDisplay.equals(Constants.SHOPPING_LIST.FILTER.UNDONE)) {
+                        removeItemFromList(position);
+                    } else {
+                        shoppingListItemAdapter.notifyItemChanged(position);
+                        swipeBehavior.recoverLatestSwipedItem();
+                    }
                 },
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
@@ -695,40 +711,43 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private void deleteItem(ShoppingListItem shoppingListItem, int position) {
+    private void deleteRequest(int position) {
+        ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         request.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
-                response -> {
-                    if(position-1 >= 0
-                            && groupedListItems.get(position-1).getType()
-                            == GroupedListItem.TYPE_HEADER
-                            && groupedListItems.size() > position+1
-                            && groupedListItems.get(position+1).getType()
-                            == GroupedListItem.TYPE_HEADER
-                    ) {
-                        groupedListItems.remove(position);
-                        shoppingListItemAdapter.notifyItemRemoved(position);
-                        groupedListItems.remove(position - 1);
-                        shoppingListItemAdapter.notifyItemRemoved(position - 1);
-                    } else if(position-1 >= 0
-                            && groupedListItems.get(position-1).getType()
-                            == GroupedListItem.TYPE_HEADER
-                            && groupedListItems.size() == position+1
-                    ) {
-                        groupedListItems.remove(position);
-                        shoppingListItemAdapter.notifyItemRemoved(position);
-                        groupedListItems.remove(position - 1);
-                        shoppingListItemAdapter.notifyItemRemoved(position - 1);
-                    } else {
-                        groupedListItems.remove(position);
-                        shoppingListItemAdapter.notifyItemRemoved(position);
-                    }
-                },
+                response -> removeItemFromList(position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "deleteItem: " + error);
                 }
         );
+    }
+
+    private void removeItemFromList(int position) {
+        if(position-1 >= 0
+                && groupedListItems.get(position-1).getType()
+                == GroupedListItem.TYPE_HEADER
+                && groupedListItems.size() > position+1
+                && groupedListItems.get(position+1).getType()
+                == GroupedListItem.TYPE_HEADER
+        ) {
+            groupedListItems.remove(position);
+            shoppingListItemAdapter.notifyItemRemoved(position);
+            groupedListItems.remove(position - 1);
+            shoppingListItemAdapter.notifyItemRemoved(position - 1);
+        } else if(position-1 >= 0
+                && groupedListItems.get(position-1).getType()
+                == GroupedListItem.TYPE_HEADER
+                && groupedListItems.size() == position+1
+        ) {
+            groupedListItems.remove(position);
+            shoppingListItemAdapter.notifyItemRemoved(position);
+            groupedListItems.remove(position - 1);
+            shoppingListItemAdapter.notifyItemRemoved(position - 1);
+        } else {
+            groupedListItems.remove(position);
+            shoppingListItemAdapter.notifyItemRemoved(position);
+        }
     }
 
     public void setUpBottomMenu() {
