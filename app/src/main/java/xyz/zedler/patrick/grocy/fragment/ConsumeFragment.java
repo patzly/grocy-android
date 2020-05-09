@@ -255,8 +255,17 @@ public class ConsumeFragment extends Fragment {
         activity.findViewById(R.id.linear_consume_specific).setOnClickListener(v -> {
             startAnimatedIcon(R.id.image_consume_specific);
             if(productDetails != null) {
+                ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
+                for(StockEntry stockEntry : stockEntries) {
+                    if(stockEntry.getLocationId() == selectedLocationId) {
+                        filteredStockEntries.add(stockEntry);
+                    }
+                }
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES, stockEntries);
+                bundle.putParcelableArrayList(
+                        Constants.ARGUMENT.STOCK_ENTRIES,
+                        filteredStockEntries
+                );
                 bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
                 activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
             } else {
