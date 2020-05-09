@@ -9,7 +9,7 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
+        versionCode 3
     }
 
     buildTypes {
