@@ -70,7 +70,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ConsumeFragment extends Fragment {
 
     private final static String TAG = Constants.UI.CONSUME;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;

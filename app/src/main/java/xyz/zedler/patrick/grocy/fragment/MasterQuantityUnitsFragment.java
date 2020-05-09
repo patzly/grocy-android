@@ -358,7 +358,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     public void editQuantityUnit(QuantityUnit quantityUnit) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-        activity.replaceFragment(Constants.UI.MASTER_QUANTITY_UNIT_EDIT, bundle, true);
+        activity.replaceFragment(Constants.UI.MASTER_QUANTITY_UNIT, bundle, true);
     }
 
     private void showQuantityUnitSheet(QuantityUnit quantityUnit) {

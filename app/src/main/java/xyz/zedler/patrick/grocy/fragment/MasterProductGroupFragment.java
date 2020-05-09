@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterProductGroupFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUP_EDIT;
+    private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUP;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;

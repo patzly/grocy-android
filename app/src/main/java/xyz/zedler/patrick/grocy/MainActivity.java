@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                Constants.UI.MASTER_PRODUCT_SIMPLE,
                                 null,
                                 true
                         )
@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_LOCATION_EDIT,
+                                Constants.UI.MASTER_LOCATION,
                                 null,
                                 true
                         )
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_STORE_EDIT,
+                                Constants.UI.MASTER_STORE,
                                 null,
                                 true
                         )
@@ -539,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_QUANTITY_UNIT_EDIT,
+                                Constants.UI.MASTER_QUANTITY_UNIT,
                                 null,
                                 true
                         )
@@ -564,13 +564,13 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.ADD,
                         animated,
                         () -> replaceFragment(
-                                Constants.UI.MASTER_PRODUCT_GROUP_EDIT,
+                                Constants.UI.MASTER_PRODUCT_GROUP,
                                 null,
                                 true
                         )
                 );
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+            case Constants.UI.MASTER_PRODUCT_SIMPLE:
                 scrollBehavior.setUpScroll(R.id.scroll_master_product_edit_simple);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -595,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            case Constants.UI.MASTER_LOCATION_EDIT:
+            case Constants.UI.MASTER_LOCATION:
                 scrollBehavior.setUpScroll(R.id.scroll_master_location);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -620,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            case Constants.UI.MASTER_STORE_EDIT:
+            case Constants.UI.MASTER_STORE:
                 scrollBehavior.setUpScroll(R.id.scroll_master_store);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -645,7 +645,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
+            case Constants.UI.MASTER_QUANTITY_UNIT:
                 scrollBehavior.setUpScroll(R.id.scroll_master_quantity_unit);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -670,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
+            case Constants.UI.MASTER_PRODUCT_GROUP:
                 scrollBehavior.setUpScroll(R.id.scroll_master_product_group);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
@@ -831,7 +831,7 @@ public class MainActivity extends AppCompatActivity {
                     ((MasterProductGroupsFragment) fragmentCurrent).dismissSearch();
                 }
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+            case Constants.UI.MASTER_PRODUCT_SIMPLE:
                 if(((MasterProductEditSimpleFragment) fragmentCurrent)
                         .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)
                 ) {
@@ -840,10 +840,10 @@ public class MainActivity extends AppCompatActivity {
                     dismissFragment();
                 }
                 break;
-            case Constants.UI.MASTER_LOCATION_EDIT:
-            case Constants.UI.MASTER_STORE_EDIT:
-            case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
-            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
+            case Constants.UI.MASTER_LOCATION:
+            case Constants.UI.MASTER_STORE:
+            case Constants.UI.MASTER_QUANTITY_UNIT:
+            case Constants.UI.MASTER_PRODUCT_GROUP:
                 dismissFragment();
                 break;
             default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
@@ -882,19 +882,19 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MASTER_PRODUCT_GROUPS:
                 fragmentCurrent = new MasterProductGroupsFragment();
                 break;
-            case Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE:
+            case Constants.UI.MASTER_PRODUCT_SIMPLE:
                 fragmentCurrent = new MasterProductEditSimpleFragment();
                 break;
-            case Constants.UI.MASTER_LOCATION_EDIT:
+            case Constants.UI.MASTER_LOCATION:
                 fragmentCurrent = new MasterLocationFragment();
                 break;
-            case Constants.UI.MASTER_STORE_EDIT:
+            case Constants.UI.MASTER_STORE:
                 fragmentCurrent = new MasterStoreFragment();
                 break;
-            case Constants.UI.MASTER_QUANTITY_UNIT_EDIT:
+            case Constants.UI.MASTER_QUANTITY_UNIT:
                 fragmentCurrent = new MasterQuantityUnitFragment();
                 break;
-            case Constants.UI.MASTER_PRODUCT_GROUP_EDIT:
+            case Constants.UI.MASTER_PRODUCT_GROUP:
                 fragmentCurrent = new MasterProductGroupFragment();
                 break;
             default:

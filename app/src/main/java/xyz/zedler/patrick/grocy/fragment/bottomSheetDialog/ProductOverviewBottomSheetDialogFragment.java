@@ -172,7 +172,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					bundle1.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
 					bundle1.putParcelable(Constants.ARGUMENT.PRODUCT, product);
 					activity.replaceFragment(
-							Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+							Constants.UI.MASTER_PRODUCT_SIMPLE,
 							bundle1,
 							true
 					);

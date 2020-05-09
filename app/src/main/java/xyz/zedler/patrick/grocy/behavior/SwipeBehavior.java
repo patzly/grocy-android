@@ -345,7 +345,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
             Paint paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
             paintBg.setColor(Color.BLACK);
-            paintBg.setAlpha(12);
+            paintBg.setAlpha(20);
             canvas.drawCircle(
                     rect.centerX() + offsetX,
                     rect.centerY(),

@@ -382,7 +382,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             );
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
             bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-            activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
+            activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
         } else {
             request.get(
                     grocyApi.getStockProductDetails(Integer.parseInt(batchItem.getProductId())),
@@ -401,7 +401,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                                 productDetails.getProduct()
                         );
                         activity.replaceFragment(
-                                Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE,
+                                Constants.UI.MASTER_PRODUCT_SIMPLE,
                                 bundle,
                                 true
                         );

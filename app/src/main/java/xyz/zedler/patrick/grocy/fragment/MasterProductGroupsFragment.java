@@ -358,7 +358,7 @@ public class MasterProductGroupsFragment extends Fragment
     public void editProductGroup(ProductGroup productGroup) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-        activity.replaceFragment(Constants.UI.MASTER_PRODUCT_GROUP_EDIT, bundle, true);
+        activity.replaceFragment(Constants.UI.MASTER_PRODUCT_GROUP, bundle, true);
     }
 
     private void showProductGroupSheet(ProductGroup productGroup) {

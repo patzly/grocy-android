@@ -358,7 +358,7 @@ public class MasterStoresFragment extends Fragment
     public void editStore(Store store) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.STORE, store);
-        activity.replaceFragment(Constants.UI.MASTER_STORE_EDIT, bundle, true);
+        activity.replaceFragment(Constants.UI.MASTER_STORE, bundle, true);
     }
 
     private void showStoreSheet(Store store) {

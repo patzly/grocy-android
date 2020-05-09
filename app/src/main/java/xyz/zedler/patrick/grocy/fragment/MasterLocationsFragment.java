@@ -50,7 +50,7 @@ public class MasterLocationsFragment extends Fragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_LOCATIONS;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson = new Gson();
@@ -358,7 +358,7 @@ public class MasterLocationsFragment extends Fragment
     public void editLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        activity.replaceFragment(Constants.UI.MASTER_LOCATION_EDIT, bundle, true);
+        activity.replaceFragment(Constants.UI.MASTER_LOCATION, bundle, true);
     }
 
     private void showLocationSheet(Location location) {

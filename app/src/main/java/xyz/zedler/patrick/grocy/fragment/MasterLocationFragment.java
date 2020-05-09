@@ -42,7 +42,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterLocationFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.MASTER_LOCATION_EDIT;
+    private final static String TAG = Constants.UI.MASTER_LOCATION;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;

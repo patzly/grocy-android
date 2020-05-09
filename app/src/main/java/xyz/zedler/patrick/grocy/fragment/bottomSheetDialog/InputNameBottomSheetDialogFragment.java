@@ -73,7 +73,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                 bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_EDIT_SIMPLE, bundle, true);
+                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
             }
             dismiss();
         });

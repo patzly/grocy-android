@@ -1,1 +1,5 @@
-1.0 beta: initial release
+0.9.1:
+- implement shopping list
+- bug fixes and improvements
+
+0.9.0: initial release
