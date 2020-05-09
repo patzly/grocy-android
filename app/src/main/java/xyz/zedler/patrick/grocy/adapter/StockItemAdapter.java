@@ -52,8 +52,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutItemContainer, linearLayoutDays;
-        private TextView textViewName, textViewAmount, textViewDays;
+        LinearLayout linearLayoutItemContainer, linearLayoutDays;
+        public TextView textViewName, textViewAmount, textViewDays;
 
         public ViewHolder(View view) {
             super(view);
