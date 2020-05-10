@@ -1,5 +1,24 @@
 package xyz.zedler.patrick.grocy;
 
+/*
+    This file is part of Grocy Android.
+
+    Grocy Android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Grocy Android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2020 by Patrick Zedler & Dominic Zedler
+*/
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +30,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,6 +62,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -518,7 +540,11 @@ public class ScanBatchActivity extends AppCompatActivity
         );
         missingBatchItem.addPurchaseEntry(batchPurchaseEntry);
         // Store default values, so that the fields can be filled in the product creator
-        if(!missingBatchItem.getIsDefaultBestBeforeDaysSet()) {
+        if(!missingBatchItem.getIsDefaultBestBeforeDaysSet()
+                && bestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)
+        ) {
+            missingBatchItem.setDefaultBestBeforeDays(-1);
+        } else {
             missingBatchItem.setDefaultBestBeforeDays(DateUtil.getDaysFromNow(bestBeforeDate));
         }
         if(missingBatchItem.getDefaultLocationId() == -1) {
@@ -526,6 +552,9 @@ public class ScanBatchActivity extends AppCompatActivity
         }
         if(missingBatchItem.getDefaultStoreId() == null) {
             missingBatchItem.setDefaultStoreId(storeId);
+        }
+        if(price != null && !price.equals("")) {
+            missingBatchItem.setLastPrice(price);
         }
         Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
         showMessage(
@@ -899,15 +928,12 @@ public class ScanBatchActivity extends AppCompatActivity
         return names;
     }
 
-    public void setMissingBatchItems(ArrayList<MissingBatchItem> missingBatchItems) {
-        this.missingBatchItems = missingBatchItems;
-    }
-
     public void createMissingBatchItemPurchase(String productName, String barcode) {
         MissingBatchItem missingBatchItem = new MissingBatchItem(productName, barcode);
         missingBatchItems.add(missingBatchItem);
         productNames.add(productName);
         refreshCounter();
+
         // purchase it
         currentMissingBatchItem = missingBatchItem;
         setCurrentValues(
@@ -915,6 +941,43 @@ public class ScanBatchActivity extends AppCompatActivity
                 missingBatchItem.getProductName(),
                 missingBatchItem.getDefaultStoreId(),
                 null,
+                missingBatchItem.getDefaultBestBeforeDays(),
+                missingBatchItem.getDefaultLocationId()
+        );
+        askNecessaryDetails();
+    }
+
+    public void addBatchItemBarcode(String barcode, String inputText) {
+        List<String> barcodes;
+        MissingBatchItem missingBatchItem = null;
+        for(MissingBatchItem missingBatchItemTmp : missingBatchItems) {
+            if(missingBatchItemTmp.getProductName().equals(inputText)) {
+                missingBatchItem = missingBatchItemTmp;
+                break;
+            }
+        }
+        if(missingBatchItem == null) {
+            showMessage(getString(R.string.msg_error));
+            return;
+        }
+
+        if(missingBatchItem.getBarcodes() != null && !missingBatchItem.getBarcodes().equals("")) {
+            barcodes = new ArrayList<>(Arrays.asList(
+                    missingBatchItem.getBarcodes().split(",")
+            ));
+        } else {
+            barcodes = new ArrayList<>();
+        }
+        barcodes.add(barcode);
+        missingBatchItem.setBarcodes(TextUtils.join(",", barcodes));
+
+        // purchase it
+        currentMissingBatchItem = missingBatchItem;
+        setCurrentValues(
+                ProductType.MISSING_BATCH_ITEM,
+                missingBatchItem.getProductName(),
+                missingBatchItem.getDefaultStoreId(),
+                missingBatchItem.getLastPrice(),
                 missingBatchItem.getDefaultBestBeforeDays(),
                 missingBatchItem.getDefaultLocationId()
         );

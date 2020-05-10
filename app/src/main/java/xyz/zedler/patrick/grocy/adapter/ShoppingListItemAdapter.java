@@ -1,5 +1,24 @@
 package xyz.zedler.patrick.grocy.adapter;
 
+/*
+    This file is part of Grocy Android.
+
+    Grocy Android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Grocy Android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2020 by Patrick Zedler & Dominic Zedler
+*/
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
@@ -48,8 +67,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer, linearLayoutNote;
+        private LinearLayout linearLayoutContainer, linearLayoutNote, linearLayoutNoteName;
         private TextView textViewName, textViewAmount, textViewGroupName, textViewNote;
+        private TextView textViewNoteName;
         private View divider;
 
         public ViewHolder(View view) {
@@ -60,6 +80,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             textViewName = view.findViewById(R.id.text_shopping_list_item_name);
             textViewAmount = view.findViewById(R.id.text_shopping_list_item_amount);
             textViewNote = view.findViewById(R.id.text_shopping_list_note);
+            textViewNoteName = view.findViewById(R.id.text_shopping_list_note_as_name);
 
             textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
             divider = view.findViewById(R.id.view_shopping_list_group_divider);
@@ -130,6 +151,13 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             );
         }
 
+        // NOTE AS NAME
+
+        if(holder.textViewName.getVisibility() == View.VISIBLE) {
+            holder.textViewNoteName.setVisibility(View.GONE);
+            holder.textViewNoteName.setText(null);
+        }
+
         // AMOUNT
 
         if(shoppingListItem.getProduct() != null) {
@@ -181,14 +209,21 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             );
         }
 
-        // DESCRIPTION
+        // NOTE
 
         if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().equals("")) {
-            holder.linearLayoutNote.setVisibility(View.VISIBLE);
-            holder.textViewNote.setText(shoppingListItem.getNote().trim());
+            if(holder.textViewName.getVisibility() == View.VISIBLE) {
+                holder.linearLayoutNote.setVisibility(View.VISIBLE);
+                holder.textViewNote.setText(shoppingListItem.getNote().trim());
+            } else {
+                holder.textViewNoteName.setVisibility(View.VISIBLE);
+                holder.textViewNoteName.setText(shoppingListItem.getNote().trim());
+            }
         } else {
-            holder.linearLayoutNote.setVisibility(View.GONE);
-            holder.textViewNote.setText(null);
+            if(holder.textViewName.getVisibility() == View.VISIBLE) {
+                holder.linearLayoutNote.setVisibility(View.GONE);
+                holder.textViewNote.setText(null);
+            }
         }
         if(shoppingListItem.isUndone()) {
             holder.textViewNote.setPaintFlags(

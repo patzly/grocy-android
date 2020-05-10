@@ -1,5 +1,24 @@
 package xyz.zedler.patrick.grocy.model;
 
+/*
+    This file is part of Grocy Android.
+
+    Grocy Android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Grocy Android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2020 by Patrick Zedler & Dominic Zedler
+*/
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +31,7 @@ public class MissingBatchItem implements Parcelable {
     private String productName, barcodes;
     private String defaultStoreId;
     private String productId;
+    private String lastPrice;
     private int defaultBestBeforeDays, defaultLocationId = -1, isOnServer = 0;
     private boolean isDefaultBestBeforeDaysSet = false;
     private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
@@ -132,6 +152,14 @@ public class MissingBatchItem implements Parcelable {
 
     public void setProductId(int productId) {
         this.productId = String.valueOf(productId);
+    }
+
+    public String getLastPrice() {
+        return lastPrice;
+    }
+
+    public void setLastPrice(String lastPrice) {
+        this.lastPrice = lastPrice;
     }
 
     @Override

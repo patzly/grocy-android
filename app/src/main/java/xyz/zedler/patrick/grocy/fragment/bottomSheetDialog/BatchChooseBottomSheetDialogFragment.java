@@ -1,5 +1,24 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+/*
+    This file is part of Grocy Android.
+
+    Grocy Android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Grocy Android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2020 by Patrick Zedler & Dominic Zedler
+*/
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
@@ -138,7 +157,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                         addProductBarcode(barcode);
                     } else {
                         // name from list is name of batchItem product
-                        addBatchItemBarcode(barcode, inputText);
+                        activity.addBatchItemBarcode(barcode, inputText);
                     }
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
@@ -224,35 +243,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         );
     }
 
-    private void addBatchItemBarcode(String barcode, String inputText) {
-        List<String> barcodes;
-        MissingBatchItem selectedMissingBatchItem = null;
-        for(MissingBatchItem missingBatchItem : missingBatchItems) {
-            if(missingBatchItem.getProductName().equals(inputText)) {
-                selectedMissingBatchItem = missingBatchItem;
-                break;
-            }
-        }
-        if(selectedMissingBatchItem == null) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
-            return;
-        }
 
-        if(selectedMissingBatchItem.getBarcodes() != null && !selectedMissingBatchItem.getBarcodes().equals("")) {
-            barcodes = new ArrayList<>(Arrays.asList(
-                    selectedMissingBatchItem.getBarcodes().split(",")
-            ));
-        } else {
-            barcodes = new ArrayList<>();
-        }
-
-        barcodes.add(barcode);
-        selectedMissingBatchItem.setBarcodes(TextUtils.join(",", barcodes));
-        activity.setMissingBatchItems(missingBatchItems);
-        activity.purchaseBatchItem(selectedMissingBatchItem);
-        dismiss();
-        activity.resumeScan();
-    }
 
     private void dismissWithMessage(String msg) {
         Snackbar.make(
