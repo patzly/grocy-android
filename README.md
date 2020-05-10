@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/patzly/grocy-android/master/images/github_header.png" />
+
 # Grocy Android
 
 ![GitHub](https://img.shields.io/github/license/patzly/grocy-android.svg)
@@ -23,7 +25,8 @@ grocy is a self-hosted groceries & household management solution for your home.
 
 ## Downloads
 
-* [Play store](https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy)
+<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
 * F-Droid: coming soon
 * GitHub: coming soon
 
