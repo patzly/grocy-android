@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/patzly/grocy-android.svg)
 
-An awesome Android app for [grocy](https://grocy.info/)
+*An awesome Android app for [grocy](https://grocy.info/)*
 
 grocy is a self-hosted groceries & household management solution for your home.
 
@@ -20,6 +20,12 @@ grocy is a self-hosted groceries & household management solution for your home.
 * Built with Material Components
 * Low data usage
 * Tiny size (~ 5MB)
+
+## Downloads
+
+* [Play store](https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy)
+* F-Droid: coming soon
+* GitHub: coming soon
 
 ## Compatibility
 
