@@ -1,5 +1,41 @@
 # Grocy Android
-An awesome Android app for Grocy.
+
+![GitHub](https://img.shields.io/github/license/patzly/grocy-android.svg)
+
+*An awesome Android app for [grocy](https://grocy.info/)*
+
+grocy is a self-hosted groceries & household management solution for your home.
+
+## Features
+
+* 100 % open source
+* Stock overview
+* Barcode scanning
+* Consume and purchase with shortcuts
+* Master data editing
+* Shopping list
+* Intuitive batch processing
+* Dark mode
+* No ads, analytics or in-app purchases
+* Built with Material Components
+* Low data usage
+* Tiny size (~ 5MB)
+
+## Downloads
+
+* [Play store](https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy)
+* F-Droid: coming soon
+* GitHub: coming soon
+
+## Compatibility
+
+Grocy Android requires at least Android 5 Lollipop.
+
+## Contribution
+
+Grocy Android is still under development. If you're running into a bug or miss a feature, feel free to give feedback in the app, write us an email or open an issue in this repository.
+
+App translations are coming soon!
 
 ## License
 
