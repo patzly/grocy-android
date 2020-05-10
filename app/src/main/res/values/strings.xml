@@ -55,6 +55,7 @@
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
+    <string name="tooltip_demo">Your\'re in demo mode</string>
 
     <string name="msg_expiring_products">%1$d expiring soon</string>
     <string name="msg_expired_products">%1$d expired</string>

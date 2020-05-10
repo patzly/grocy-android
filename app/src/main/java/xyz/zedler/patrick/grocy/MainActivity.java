@@ -36,8 +36,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
@@ -82,6 +84,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomBottomAppBar bottomAppBar;
     private Fragment fragmentCurrent;
     private FloatingActionButton fab;
+    private FrameLayout frameLayoutDemoIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +231,11 @@ public class MainActivity extends AppCompatActivity {
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fab = findViewById(R.id.fab_main);
+        frameLayoutDemoIndicator = findViewById(R.id.frame_main_demo);
+        frameLayoutDemoIndicator.setOnClickListener(
+                // bottomSheet only checks if bundle is != null, then it's of type demo
+                v -> showBottomSheet(new LogoutBottomSheetDialogFragment(), new Bundle())
+        );
 
         // BOTTOM APP BAR
 
@@ -253,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
+        if(isServerUrlEmpty()) {
             startActivityForResult(
                     new Intent(this, LoginActivity.class),
                     Constants.REQUEST.LOGIN
@@ -268,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.REQUEST.FEATURES) {
-            if(sharedPrefs.getString(Constants.PREF.SERVER_URL, "").equals("")) {
+            if(isServerUrlEmpty()) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, true);
                 startActivityForResult(
@@ -346,6 +355,12 @@ public class MainActivity extends AppCompatActivity {
         if(DEBUG) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
         boolean animated = sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false);
         this.uiMode = uiMode;
+
+        if(uiMode.startsWith(Constants.UI.STOCK) && isDemo()) {
+            showDemoIndicator(animated);
+        } else {
+            hideDemoIndicator(animated);
+        }
 
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
@@ -1010,7 +1025,7 @@ public class MainActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
-    public void showSnackbar(Snackbar snackbar) {
+    public void showMessage(Snackbar snackbar) {
         snackbar.setAnchorView(fab.isOrWillBeShown() ? fab : bottomAppBar).show();
     }
 
@@ -1028,6 +1043,29 @@ public class MainActivity extends AppCompatActivity {
         return requestQueue;
     }
 
+    private void showDemoIndicator(boolean animated) {
+        if(uiMode.startsWith(Constants.UI.STOCK)) {
+            if(animated) {
+                frameLayoutDemoIndicator.setVisibility(View.VISIBLE);
+                frameLayoutDemoIndicator.animate().alpha(1).setDuration(200).start();
+            } else {
+                frameLayoutDemoIndicator.setAlpha(1);
+                frameLayoutDemoIndicator.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void hideDemoIndicator(boolean animated) {
+        if(animated) {
+            frameLayoutDemoIndicator.animate().alpha(0).setDuration(200).withEndAction(
+                    () -> frameLayoutDemoIndicator.setVisibility(View.GONE)
+            );
+        } else {
+            frameLayoutDemoIndicator.setAlpha(0);
+            frameLayoutDemoIndicator.setVisibility(View.GONE);
+        }
+    }
+
     public void showKeyboard(EditText editText) {
         ((InputMethodManager) Objects
                 .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
@@ -1041,6 +1079,16 @@ public class MainActivity extends AppCompatActivity {
                         findViewById(android.R.id.content).getWindowToken(),
                         0
                 );
+    }
+
+    private boolean isServerUrlEmpty() {
+        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        return server == null || server.equals("");
+    }
+
+    private boolean isDemo() {
+        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        return server != null && server.contains("grocy.info");
     }
 
     public GrocyApi getGrocy() {

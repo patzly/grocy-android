@@ -206,7 +206,7 @@ public class MasterProductsFragment extends Fragment
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -460,7 +460,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void showErrorMessage() {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),
@@ -584,7 +584,7 @@ public class MasterProductsFragment extends Fragment
                                 bundle
                         );
                     } else {
-                        activity.showSnackbar(
+                        activity.showMessage(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
                                         activity.getString(R.string.msg_master_delete_stock),

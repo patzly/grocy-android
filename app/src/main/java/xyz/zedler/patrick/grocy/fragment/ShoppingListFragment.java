@@ -290,7 +290,7 @@ public class ShoppingListFragment extends Fragment
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -812,7 +812,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void showMessage(String msg) {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         msg,

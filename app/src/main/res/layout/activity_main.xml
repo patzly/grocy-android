@@ -18,9 +18,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:contentInsetStartWithNavigation="0dp"
         app:backgroundTint="@color/primary"
         app:navigationIcon="@drawable/ic_round_menu_anim"
-        app:fabAnimationMode="scale"/>
+        app:fabAnimationMode="scale">
+
+        <FrameLayout
+            android:id="@+id/frame_main_demo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?actionBarItemBackground"
+            android:contentDescription="@string/tooltip_demo"
+            android:tooltipText="@string/tooltip_demo"
+            tools:targetApi="o">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="1dp"
+                android:importantForAccessibility="no"
+                android:tint="@color/error"
+                android:src="@drawable/ic_round_warning" />
+
+        </FrameLayout>
+
+    </xyz.zedler.patrick.grocy.view.CustomBottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main"
@@ -30,7 +55,8 @@
         android:tint="@color/on_secondary"
         app:layout_anchor="@id/bottom_app_bar"
         app:rippleColor="@color/highlight_on_secondary"
-        android:contentDescription="add" />
+        app:fabSize="auto"
+        android:contentDescription="@string/action_scan" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_scroll"

@@ -193,7 +193,7 @@ public class MasterStoresFragment extends Fragment
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -331,7 +331,7 @@ public class MasterStoresFragment extends Fragment
     }
 
     private void showErrorMessage() {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),
@@ -422,7 +422,7 @@ public class MasterStoresFragment extends Fragment
             for(Product product : products) {
                 if(product.getStoreId() == null) continue;
                 if(product.getStoreId().equals(String.valueOf(store.getId()))) {
-                    activity.showSnackbar(
+                    activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(

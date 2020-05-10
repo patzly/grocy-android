@@ -320,7 +320,7 @@ public class ConsumeFragment extends Fragment {
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -357,7 +357,7 @@ public class ConsumeFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 }, error -> {
                     swipeRefreshLayout.setRefreshing(false);
-                    activity.showSnackbar(
+                    activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(R.string.msg_error),
@@ -390,7 +390,7 @@ public class ConsumeFragment extends Fragment {
                 .getEnableTareWeightHandling() == 1;
 
         if(productDetails.getStockAmount() == 0) { // check if stock is empty
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(
@@ -532,7 +532,7 @@ public class ConsumeFragment extends Fragment {
                                 new InputBarcodeBottomSheetDialogFragment(), null
                         );
                     } else {
-                        activity.showSnackbar(
+                        activity.showMessage(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
                                         activity.getString(R.string.msg_error),
@@ -624,7 +624,7 @@ public class ConsumeFragment extends Fragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showSnackbar(snackbar);
+                    activity.showMessage(snackbar);
 
                     // CLEAR USER INPUT
                     clearAll();
@@ -692,7 +692,7 @@ public class ConsumeFragment extends Fragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showSnackbar(snackbar);
+                    activity.showMessage(snackbar);
 
                     // CLEAR USER INPUT
                     clearAll();
@@ -708,7 +708,7 @@ public class ConsumeFragment extends Fragment {
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    activity.showSnackbar(
+                    activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(R.string.msg_undone_transaction),
@@ -940,7 +940,7 @@ public class ConsumeFragment extends Fragment {
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showSnackbar(
+                activity.showMessage(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -979,7 +979,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void showErrorMessage(VolleyError error) {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),

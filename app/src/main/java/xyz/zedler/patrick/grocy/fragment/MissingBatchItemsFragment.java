@@ -378,7 +378,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     private void showMessage(String msg) {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         msg,

@@ -396,7 +396,7 @@ public class PurchaseFragment extends Fragment {
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -479,7 +479,7 @@ public class PurchaseFragment extends Fragment {
         Log.e(TAG, "onError: VolleyError: " + error);
         request.cancelAll(TAG);
         swipeRefreshLayout.setRefreshing(false);
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),
@@ -678,7 +678,7 @@ public class PurchaseFragment extends Fragment {
                                 new InputBarcodeBottomSheetDialogFragment(), bundle
                         );
                     } else {
-                        activity.showSnackbar(
+                        activity.showMessage(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
                                         activity.getString(R.string.msg_error),
@@ -783,7 +783,7 @@ public class PurchaseFragment extends Fragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showSnackbar(snackbar);
+                    activity.showMessage(snackbar);
 
                     // CLEAR USER INPUT
                     nameAutoFilled = false;
@@ -800,7 +800,7 @@ public class PurchaseFragment extends Fragment {
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    activity.showSnackbar(
+                    activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(R.string.msg_undone_transaction),
@@ -1022,7 +1022,7 @@ public class PurchaseFragment extends Fragment {
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showSnackbar(
+                activity.showMessage(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -1068,7 +1068,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void showErrorMessage() {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),

@@ -448,7 +448,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -546,7 +546,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     private void onDownloadError(VolleyError error) {
         request.cancelAll(TAG);
         swipeRefreshLayout.setRefreshing(false);
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),
@@ -859,7 +859,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                             autoCompleteTextViewParentProduct.setText(productParent.getName());
                             textInputParentProduct.clearFocus();
                         } else {
-                            activity.showSnackbar(
+                            activity.showMessage(
                                     Snackbar.make(
                                             activity.findViewById(R.id.linear_container_main),
                                             "Product can't be parent of itself",
@@ -877,7 +877,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        activity.showSnackbar(
+                        activity.showMessage(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
                                         "Product not found",
@@ -905,7 +905,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(barcode)) {
-                activity.showSnackbar(
+                activity.showMessage(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -1140,7 +1140,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                                 bundle
                         );
                     } else {
-                        activity.showSnackbar(
+                        activity.showMessage(
                                 Snackbar.make(
                                         activity.findViewById(R.id.linear_container_main),
                                         activity.getString(R.string.msg_master_delete_stock),
@@ -1174,7 +1174,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     }
 
     private void showErrorMessage() {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),

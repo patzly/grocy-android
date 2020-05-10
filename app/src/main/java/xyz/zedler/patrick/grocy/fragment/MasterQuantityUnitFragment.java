@@ -182,7 +182,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnackbar(
+            activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
@@ -226,7 +226,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                 },
                 error -> {
                     swipeRefreshLayout.setRefreshing(false);
-                    activity.showSnackbar(
+                    activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.linear_container_main),
                                     activity.getString(R.string.msg_error),
@@ -376,7 +376,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             for(Product product : products) {
                 if(product.getQuIdStock() != quantityUnit.getId()
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
-                activity.showSnackbar(
+                activity.showMessage(
                         Snackbar.make(
                                 activity.findViewById(R.id.linear_container_main),
                                 activity.getString(
@@ -404,7 +404,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     private void showErrorMessage() {
-        activity.showSnackbar(
+        activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.linear_container_main),
                         activity.getString(R.string.msg_error),
