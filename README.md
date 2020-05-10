@@ -33,6 +33,7 @@ Grocy is a self-hosted groceries & household management solution for your home.
 ## Compatibility
 
 Grocy Android requires at least Android 5 Lollipop.
+
 It also requires at least grocy 2.7.0 on your server.
 
 ## Contribution
