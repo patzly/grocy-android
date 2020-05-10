@@ -157,7 +157,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                         addProductBarcode(barcode);
                     } else {
                         // name from list is name of batchItem product
-                        addBatchItemBarcode(barcode, inputText);
+                        activity.addBatchItemBarcode(barcode, inputText);
                     }
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
@@ -243,35 +243,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         );
     }
 
-    private void addBatchItemBarcode(String barcode, String inputText) {
-        List<String> barcodes;
-        MissingBatchItem selectedMissingBatchItem = null;
-        for(MissingBatchItem missingBatchItem : missingBatchItems) {
-            if(missingBatchItem.getProductName().equals(inputText)) {
-                selectedMissingBatchItem = missingBatchItem;
-                break;
-            }
-        }
-        if(selectedMissingBatchItem == null) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
-            return;
-        }
 
-        if(selectedMissingBatchItem.getBarcodes() != null && !selectedMissingBatchItem.getBarcodes().equals("")) {
-            barcodes = new ArrayList<>(Arrays.asList(
-                    selectedMissingBatchItem.getBarcodes().split(",")
-            ));
-        } else {
-            barcodes = new ArrayList<>();
-        }
-
-        barcodes.add(barcode);
-        selectedMissingBatchItem.setBarcodes(TextUtils.join(",", barcodes));
-        activity.setMissingBatchItems(missingBatchItems);
-        activity.purchaseBatchItem(selectedMissingBatchItem);
-        dismiss();
-        activity.resumeScan();
-    }
 
     private void dismissWithMessage(String msg) {
         Snackbar.make(

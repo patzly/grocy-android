@@ -31,6 +31,7 @@ public class MissingBatchItem implements Parcelable {
     private String productName, barcodes;
     private String defaultStoreId;
     private String productId;
+    private String lastPrice;
     private int defaultBestBeforeDays, defaultLocationId = -1, isOnServer = 0;
     private boolean isDefaultBestBeforeDaysSet = false;
     private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
@@ -151,6 +152,14 @@ public class MissingBatchItem implements Parcelable {
 
     public void setProductId(int productId) {
         this.productId = String.valueOf(productId);
+    }
+
+    public String getLastPrice() {
+        return lastPrice;
+    }
+
+    public void setLastPrice(String lastPrice) {
+        this.lastPrice = lastPrice;
     }
 
     @Override

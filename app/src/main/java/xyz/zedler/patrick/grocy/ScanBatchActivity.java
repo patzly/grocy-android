@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,6 +62,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -547,6 +549,9 @@ public class ScanBatchActivity extends AppCompatActivity
         if(missingBatchItem.getDefaultStoreId() == null) {
             missingBatchItem.setDefaultStoreId(storeId);
         }
+        if(price != null && !price.equals("")) {
+            missingBatchItem.setLastPrice(price);
+        }
         Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
         showMessage(
                 getString(R.string.msg_saved_purchase,
@@ -919,15 +924,12 @@ public class ScanBatchActivity extends AppCompatActivity
         return names;
     }
 
-    public void setMissingBatchItems(ArrayList<MissingBatchItem> missingBatchItems) {
-        this.missingBatchItems = missingBatchItems;
-    }
-
     public void createMissingBatchItemPurchase(String productName, String barcode) {
         MissingBatchItem missingBatchItem = new MissingBatchItem(productName, barcode);
         missingBatchItems.add(missingBatchItem);
         productNames.add(productName);
         refreshCounter();
+
         // purchase it
         currentMissingBatchItem = missingBatchItem;
         setCurrentValues(
@@ -935,6 +937,43 @@ public class ScanBatchActivity extends AppCompatActivity
                 missingBatchItem.getProductName(),
                 missingBatchItem.getDefaultStoreId(),
                 null,
+                missingBatchItem.getDefaultBestBeforeDays(),
+                missingBatchItem.getDefaultLocationId()
+        );
+        askNecessaryDetails();
+    }
+
+    public void addBatchItemBarcode(String barcode, String inputText) {
+        List<String> barcodes;
+        MissingBatchItem missingBatchItem = null;
+        for(MissingBatchItem missingBatchItemTmp : missingBatchItems) {
+            if(missingBatchItemTmp.getProductName().equals(inputText)) {
+                missingBatchItem = missingBatchItemTmp;
+                break;
+            }
+        }
+        if(missingBatchItem == null) {
+            showMessage(getString(R.string.msg_error));
+            return;
+        }
+
+        if(missingBatchItem.getBarcodes() != null && !missingBatchItem.getBarcodes().equals("")) {
+            barcodes = new ArrayList<>(Arrays.asList(
+                    missingBatchItem.getBarcodes().split(",")
+            ));
+        } else {
+            barcodes = new ArrayList<>();
+        }
+        barcodes.add(barcode);
+        missingBatchItem.setBarcodes(TextUtils.join(",", barcodes));
+
+        // purchase it
+        currentMissingBatchItem = missingBatchItem;
+        setCurrentValues(
+                ProductType.MISSING_BATCH_ITEM,
+                missingBatchItem.getProductName(),
+                missingBatchItem.getDefaultStoreId(),
+                missingBatchItem.getLastPrice(),
                 missingBatchItem.getDefaultBestBeforeDays(),
                 missingBatchItem.getDefaultLocationId()
         );
