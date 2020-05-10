@@ -149,36 +149,41 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         // BEST BEFORE
 
-        if(stockItem.getBestBeforeDate() != null) {
+        String date = stockItem.getBestBeforeDate();
+        String days = null;
+        boolean colorDays = false;
+        if(date != null) days = String.valueOf(DateUtil.getDaysFromNow(date));
 
+        if(days != null && (sortMode.equals(Constants.STOCK.SORT.BBD)
+                || Integer.parseInt(days) <= daysExpiringSoon
+                && !date.equals(Constants.DATE.NEVER_EXPIRES))
+        ) {
             holder.linearLayoutDays.setVisibility(View.VISIBLE);
-            int days = DateUtil.getDaysFromNow(stockItem.getBestBeforeDate());
-
-            if(sortMode.equals(Constants.STOCK.SORT.BBD)
-                    || days <= daysExpiringSoon
-                    && !stockItem.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)) {
-                holder.textViewDays.setText(
-                        new DateUtil(context).getHumanForDaysFromNow(stockItem.getBestBeforeDate())
-                );
-                if(days <= 5
-                        && !stockItem.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)
-                ) {
-                    holder.textViewDays.setTypeface(
-                            ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
-                    );
-                    holder.textViewDays.setTextColor(
-                            ContextCompat.getColor(
-                                    context, days < 0
-                                            ? R.color.retro_red_dark
-                                            : R.color.retro_yellow_dark
-                            )
-                    );
-                }
-            } else {
-                holder.linearLayoutDays.setVisibility(View.GONE);
-            }
+            holder.textViewDays.setText(new DateUtil(context).getHumanForDaysFromNow(date));
+            if(Integer.parseInt(days) <= 5) colorDays = true;
         } else {
             holder.linearLayoutDays.setVisibility(View.GONE);
+            holder.textViewDays.setText(null);
+        }
+
+        if(colorDays) {
+            holder.textViewDays.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
+            );
+            holder.textViewDays.setTextColor(
+                    ContextCompat.getColor(
+                            context, Integer.parseInt(days) < 0
+                                    ? R.color.retro_red_dark
+                                    : R.color.retro_yellow_dark
+                    )
+            );
+        } else {
+            holder.textViewDays.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
+            );
+            holder.textViewDays.setTextColor(
+                    ContextCompat.getColor(context, R.color.on_background_secondary)
+            );
         }
 
         // CONTAINER
