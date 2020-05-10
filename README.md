@@ -1,4 +1,4 @@
-# grocy-android
+# Grocy Android
 An awesome Android app for Grocy.
 
 ## License
