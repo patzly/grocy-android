@@ -1,5 +1,29 @@
 # Grocy Android
-An awesome Android app for Grocy.
+An awesome Android app for [grocy](https://grocy.info/)
+grocy is a self-hosted groceries & household management solution for your home.
+
+## Features
+
+* Stock overview
+* Barcode scanning
+* Consume and purchase with shortcuts
+* Master data editing
+* Shopping list
+* Intuitive batch processing
+* Dark mode
+* No ads, analytics or in-app purchases
+* Built with Material Components
+* Tiny download size
+
+## Compatibility
+
+Grocy Android requires at least Android 5 Lollipop.
+
+## Contribution
+
+Grocy Android is still under development. If you're running into a bug or miss a feature, feel free to give feedback in the app, write us an email or open an issue in this repository.
+
+App translations are coming soon!
 
 ## License
 
