@@ -1,12 +1,12 @@
-<img src="https://raw.githubusercontent.com/patzly/grocy-android/master/images/github_header.png" />
+<img src="https://raw.githubusercontent.com/patzly/grocy-android/cdb729f4f94e94f6f1025601ed86762405823e8a/images/github_header.png" />
 
 # Grocy Android
 
-![GitHub](https://img.shields.io/github/license/patzly/grocy-android.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-*An awesome Android app for [grocy](https://grocy.info/)*
+*An awesome client for [grocy](https://grocy.info/)*
 
-grocy is a self-hosted groceries & household management solution for your home.
+Grocy is a self-hosted groceries & household management solution for your home.
 
 ## Features
 
