@@ -22,6 +22,16 @@
         android:fontFamily="@font/roboto_mono_medium"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
+    <TextView
+        android:id="@+id/text_shopping_list_note_as_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textStyle="italic"
+        android:visibility="gone"
+        android:fontFamily="@font/roboto_mono_medium"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

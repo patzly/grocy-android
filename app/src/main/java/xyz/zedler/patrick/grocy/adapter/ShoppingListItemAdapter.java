@@ -48,8 +48,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer, linearLayoutNote;
+        private LinearLayout linearLayoutContainer, linearLayoutNote, linearLayoutNoteName;
         private TextView textViewName, textViewAmount, textViewGroupName, textViewNote;
+        private TextView textViewNoteName;
         private View divider;
 
         public ViewHolder(View view) {
@@ -60,6 +61,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             textViewName = view.findViewById(R.id.text_shopping_list_item_name);
             textViewAmount = view.findViewById(R.id.text_shopping_list_item_amount);
             textViewNote = view.findViewById(R.id.text_shopping_list_note);
+            textViewNoteName = view.findViewById(R.id.text_shopping_list_note_as_name);
 
             textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
             divider = view.findViewById(R.id.view_shopping_list_group_divider);
@@ -130,6 +132,13 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             );
         }
 
+        // NOTE AS NAME
+
+        if(holder.textViewName.getVisibility() == View.VISIBLE) {
+            holder.textViewNoteName.setVisibility(View.GONE);
+            holder.textViewNoteName.setText(null);
+        }
+
         // AMOUNT
 
         if(shoppingListItem.getProduct() != null) {
@@ -181,14 +190,21 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             );
         }
 
-        // DESCRIPTION
+        // NOTE
 
         if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().equals("")) {
-            holder.linearLayoutNote.setVisibility(View.VISIBLE);
-            holder.textViewNote.setText(shoppingListItem.getNote().trim());
+            if(holder.textViewName.getVisibility() == View.VISIBLE) {
+                holder.linearLayoutNote.setVisibility(View.VISIBLE);
+                holder.textViewNote.setText(shoppingListItem.getNote().trim());
+            } else {
+                holder.textViewNoteName.setVisibility(View.VISIBLE);
+                holder.textViewNoteName.setText(shoppingListItem.getNote().trim());
+            }
         } else {
-            holder.linearLayoutNote.setVisibility(View.GONE);
-            holder.textViewNote.setText(null);
+            if(holder.textViewName.getVisibility() == View.VISIBLE) {
+                holder.linearLayoutNote.setVisibility(View.GONE);
+                holder.textViewNote.setText(null);
+            }
         }
         if(shoppingListItem.isUndone()) {
             holder.textViewNote.setPaintFlags(
