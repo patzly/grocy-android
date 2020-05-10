@@ -540,7 +540,11 @@ public class ScanBatchActivity extends AppCompatActivity
         );
         missingBatchItem.addPurchaseEntry(batchPurchaseEntry);
         // Store default values, so that the fields can be filled in the product creator
-        if(!missingBatchItem.getIsDefaultBestBeforeDaysSet()) {
+        if(!missingBatchItem.getIsDefaultBestBeforeDaysSet()
+                && bestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)
+        ) {
+            missingBatchItem.setDefaultBestBeforeDays(-1);
+        } else {
             missingBatchItem.setDefaultBestBeforeDays(DateUtil.getDaysFromNow(bestBeforeDate));
         }
         if(missingBatchItem.getDefaultLocationId() == -1) {
