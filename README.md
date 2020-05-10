@@ -1,4 +1,7 @@
 # Grocy Android
+
+![GitHub](https://img.shields.io/github/license/patzly/grocy-android.svg)
+
 An awesome Android app for [grocy](https://grocy.info/)
 
 grocy is a self-hosted groceries & household management solution for your home.
