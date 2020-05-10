@@ -1,5 +1,6 @@
 # Grocy Android
 An awesome Android app for [grocy](https://grocy.info/)
+
 grocy is a self-hosted groceries & household management solution for your home.
 
 ## Features
