@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/patzly/grocy-android/master/images/github_header.png" />
+<img src="https://raw.githubusercontent.com/patzly/grocy-android/cdb729f4f94e94f6f1025601ed86762405823e8a/images/github_header.png" />
 
 # Grocy Android
 
