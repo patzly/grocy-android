@@ -4,6 +4,7 @@ grocy is a self-hosted groceries & household management solution for your home.
 
 ## Features
 
+* 100 % open source
 * Stock overview
 * Barcode scanning
 * Consume and purchase with shortcuts
@@ -13,7 +14,8 @@ grocy is a self-hosted groceries & household management solution for your home.
 * Dark mode
 * No ads, analytics or in-app purchases
 * Built with Material Components
-* Tiny download size
+* Low data usage
+* Tiny size (~ 5MB)
 
 ## Compatibility
 
