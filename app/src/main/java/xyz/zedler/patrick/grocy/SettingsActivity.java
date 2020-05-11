@@ -259,7 +259,10 @@ public class SettingsActivity extends AppCompatActivity
 				switchDark.setChecked(!switchDark.isChecked());
 				break;
 			case R.id.linear_setting_logout:
-				showBottomSheet(new LogoutBottomSheetDialogFragment(), null);
+				Bundle bundle = null;
+				if(isDemo()) bundle = new Bundle();
+				// empty bundle for indicating demo type
+				showBottomSheet(new LogoutBottomSheetDialogFragment(), bundle);
 				break;
 			case R.id.linear_setting_expiring_soon_days:
 				startAnimatedIcon(R.id.image_setting_expiring_soon_days);
@@ -429,6 +432,11 @@ public class SettingsActivity extends AppCompatActivity
 
 	private void showMessage(String msg) {
 		Snackbar.make(findViewById(R.id.scroll_settings), msg, Snackbar.LENGTH_SHORT).show();
+	}
+
+	private boolean isDemo() {
+		String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+		return server != null && server.contains("grocy.info");
 	}
 
 	private void startAnimatedIcon(int viewId) {

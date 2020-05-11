@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -63,6 +64,14 @@ public class LogoutBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         activity = getActivity();
         assert activity != null;
+
+        if(getArguments() != null) {
+            // bundle was set to new Bundle() to indicate the demo type
+            TextView textViewTitle = view.findViewById(R.id.text_logout_title);
+            textViewTitle.setText(activity.getString(R.string.title_logout_demo));
+            TextView textViewMsg = view.findViewById(R.id.text_logout_msg);
+            textViewMsg.setText(activity.getText(R.string.msg_logout_demo));
+        }
 
         view.findViewById(R.id.button_logout_cancel).setOnClickListener(v -> dismiss());
 
