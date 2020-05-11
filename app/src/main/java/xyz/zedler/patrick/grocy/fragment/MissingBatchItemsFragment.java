@@ -33,11 +33,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
@@ -57,6 +60,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -78,7 +82,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
 
     private ArrayList<MissingBatchItem> missingBatchItems;
 
-    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private NestedScrollView scrollView;
 
     @Override
@@ -107,9 +111,9 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         activity.findViewById(R.id.frame_missing_batch_items_back).setOnClickListener(
                 v -> activity.onBackPressed()
         );
-
+        swipeRefreshLayout = activity.findViewById(R.id.swipe_missing_batch_items);
         scrollView = activity.findViewById(R.id.scroll_missing_batch_items);
-        recyclerView = activity.findViewById(R.id.recycler_missing_batch_items);
+        RecyclerView recyclerView = activity.findViewById(R.id.recycler_missing_batch_items);
 
         if(getArguments() == null ||
                 getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
@@ -117,7 +121,9 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             setError(true, false, false);
             activity.findViewById(R.id.button_error_retry).setVisibility(View.GONE);
         } else {
-            missingBatchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+            missingBatchItems = getArguments().getParcelableArrayList(
+                    Constants.ARGUMENT.BATCH_ITEMS
+            );
         }
 
         recyclerView.setLayoutManager(
@@ -130,6 +136,16 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         missingBatchItemAdapter = new MissingBatchItemAdapter(missingBatchItems, this);
         recyclerView.setAdapter(missingBatchItemAdapter);
+
+        // SWIPE REFRESH
+
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+                ContextCompat.getColor(activity, R.color.surface)
+        );
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(activity, R.color.secondary)
+        );
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         // UPDATE UI
 
@@ -206,6 +222,44 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                 break;
             }
         }
+    }
+
+    private void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
+                response -> {
+                    ArrayList<Product> products = gson.fromJson(
+                            response,
+                            new TypeToken<List<Product>>(){}.getType()
+                    );
+                    if(DEBUG) Log.i(TAG, "refresh: products = " + products);
+
+                    ArrayList<String> missingBatchItemsNames = new ArrayList<>();
+                    for(MissingBatchItem missingBatchItem : missingBatchItems) {
+                        missingBatchItemsNames.add(missingBatchItem.getProductName());
+                    }
+                    for(Product product : products) {
+                        if(!missingBatchItemsNames.contains(product.getName())) continue;
+
+                        for(MissingBatchItem missingBatchItem: missingBatchItems) {
+                            if(missingBatchItem.getProductName().equals(product.getName())) {
+                                missingBatchItem.setIsOnServer(true);
+                                missingBatchItem.setProductId(product.getId());
+                                missingBatchItemAdapter.notifyItemChanged(
+                                        missingBatchItems.indexOf(missingBatchItem)
+                                );
+                            }
+                        }
+                    }
+                    updateFab();
+                    swipeRefreshLayout.setRefreshing(false);
+                },
+                error -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    showMessage(activity.getString(R.string.msg_error));
+                }
+        );
     }
 
     public int getMissingBatchItemsSize() {
@@ -414,7 +468,6 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                                 response,
                                 new TypeToken<ProductDetails>(){}.getType()
                         );
-                        Log.i(TAG, "onItemRowClicked: " + productDetails.getProduct().getName());
                         bundle.putString(
                                 Constants.ARGUMENT.TYPE,
                                 Constants.ACTION.EDIT_THEN_PURCHASE_BATCH

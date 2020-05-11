@@ -53,38 +53,47 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_missing_batch_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize">
+        android:layout_marginTop="?android:actionBarSize"
+        android:overScrollMode="never">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_missing_batch_items"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:layout_marginTop="?actionBarSize">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_missing_batch_items"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="100dp">
+                android:layout_height="match_parent"
+                android:overScrollMode="never">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_missing_batch_items"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
-                    android:clipToPadding="false"/>
+                    android:orientation="vertical"
+                    android:paddingBottom="100dp">
 
-            </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_missing_batch_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:overScrollMode="never"
+                        android:nestedScrollingEnabled="false"
+                        android:clipToPadding="false"/>
 
-        </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
 
-        <include layout="@layout/partial_error"/>
+            </androidx.core.widget.NestedScrollView>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <include layout="@layout/partial_error"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
