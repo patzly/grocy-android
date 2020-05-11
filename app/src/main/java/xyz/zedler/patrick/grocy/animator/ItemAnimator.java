@@ -20,10 +20,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -31,6 +33,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.ColorUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 
@@ -377,27 +381,45 @@ public class ItemAnimator extends SimpleItemAnimator {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     dispatchChangeStarting(changeInfo.oldHolder, true);
-
-                    view.animate().alpha(0).setDuration(200).start();
                 }
             });
             oldViewAnim.setDuration(getChangeDuration()).start();
         }
 
         if(newView != null) {
-            newView.setAlpha(0);
-            newView.animate().alpha(1).setDuration(200).start();
+            float currentElevation = UnitUtil.getDp(newView.getContext(), 2);
+            int currentColor = ContextCompat.getColor(newView.getContext(), R.color.surface);
+            if(view != null) {
+                currentElevation = view.getElevation();
+                view.setElevation(0);
+                if(view.getBackgroundTintList() != null) {
+                    currentColor = view.getBackgroundTintList().getDefaultColor();
+                }
+            }
 
-            float currentElevation = view != null
-                    ? view.getElevation()
-                    : UnitUtil.getDp(newView.getContext(), 2);
+            newView.setAlpha(1);
+            newView.setElevation(currentElevation);
+            newView.setBackgroundTintList(ColorStateList.valueOf(currentColor));
 
-            if(view != null) view.setElevation(0);
+            float finalCurrentElevation = currentElevation;
+            int finalCurrentColor = currentColor;
 
-            ValueAnimator newViewAnim = ValueAnimator.ofFloat(1, 0);
+            final ValueAnimator newViewAnim = ValueAnimator.ofFloat(1, 0);
             newViewAnim.addUpdateListener(animation -> {
                 float fraction = (float) animation.getAnimatedValue();
-                newView.setElevation(fraction * currentElevation);
+                newView.setElevation(fraction * finalCurrentElevation);
+                newView.setBackgroundTintList(
+                        ColorStateList.valueOf(
+                                ColorUtil.blend(
+                                        ContextCompat.getColor(
+                                                newView.getContext(),
+                                                R.color.background
+                                        ),
+                                        finalCurrentColor,
+                                        fraction
+                                )
+                        )
+                );
             });
             newViewAnim.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -422,31 +444,30 @@ public class ItemAnimator extends SimpleItemAnimator {
             });
             newViewAnim.setDuration(getChangeDuration()).start();
 
-
-
-
-            newView.setAlpha(1);
-            newView.setElevation(UnitUtil.getDp(newView.getContext(), 2));
-
             final ViewPropertyAnimator newViewAnimation = newView.animate();
             mChangeAnimations.add(changeInfo.newHolder);
-            newViewAnimation.translationX(0).translationY(0).setDuration(getChangeDuration())
-                    .alpha(1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-                    dispatchChangeStarting(changeInfo.newHolder, false);
-                }
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    newViewAnimation.setListener(null);
-                    newView.setAlpha(1);
-                    newView.setTranslationX(0);
-                    newView.setTranslationY(0);
-                    dispatchChangeFinished(changeInfo.newHolder, false);
-                    mChangeAnimations.remove(changeInfo.newHolder);
-                    dispatchFinishedWhenDone();
-                }
-            }).start();
+            newView.animate()
+                    .translationX(0)
+                    .translationY(0)
+                    .setDuration(getChangeDuration())
+                    .alpha(1)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+                            dispatchChangeStarting(changeInfo.newHolder, false);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            newViewAnimation.setListener(null);
+                            newView.setAlpha(1);
+                            newView.setTranslationX(0);
+                            newView.setTranslationY(0);
+                            dispatchChangeFinished(changeInfo.newHolder, false);
+                            mChangeAnimations.remove(changeInfo.newHolder);
+                            dispatchFinishedWhenDone();
+                        }
+                    }).start();
         }
     }
 

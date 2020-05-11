@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.behavior;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -49,6 +50,7 @@ import java.util.Queue;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
+import xyz.zedler.patrick.grocy.util.ColorUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -216,7 +218,19 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 int limit = UnitUtil.getDp(context, 24);
                 if(translationX < limit && itemView.getElevation() > 0) {
                     itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
+                    itemView.setBackgroundTintList(
+                            ColorStateList.valueOf(
+                                    ColorUtil.blend(
+                                            ContextCompat.getColor(context, R.color.background),
+                                            ContextCompat.getColor(context, R.color.surface),
+                                            translationX / limit
+                                    )
+                            )
+                    );
                 } else if(isCurrentlyActive) {
+                    itemView.setBackgroundTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(context, R.color.surface)
+                    ));
                     itemView.setElevation(UnitUtil.getDp(context, 2));
                 }
 
@@ -269,10 +283,8 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         Paint paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.secondary));
         if(dX < UnitUtil.getDp(context, 24)) {
-            if(dX > UnitUtil.getDp(context, 4)) {
-                float friction = (dX - UnitUtil.getDp(context, 4)) / UnitUtil.getDp(
-                        context, 20
-                );
+            if(dX > 0) {
+                float friction = dX / UnitUtil.getDp(context, 24);
                 paint.setAlpha((int) (255 * friction));
             } else {
                 paint.setAlpha(0);
