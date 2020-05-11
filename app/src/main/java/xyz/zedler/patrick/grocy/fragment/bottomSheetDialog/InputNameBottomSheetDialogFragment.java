@@ -41,7 +41,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "InputNameBottomSheet";
 
     private MainActivity activity;
@@ -77,7 +76,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
         String productName = getArguments().getString(Constants.ARGUMENT.PRODUCT_NAME);
 
         TextView textView = view.findViewById(R.id.text_input_name_question);
-        textView.setText("Create new product with the name \"" + productName + "\"?");
+        textView.setText(activity.getString(R.string.description_input_name, productName));
 
         view.findViewById(R.id.button_input_name_create).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
@@ -97,13 +96,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
             dismiss();
         });
 
-        view.findViewById(R.id.button_input_name_cancel).setOnClickListener(v -> {
-            /*Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) current).clearAll();
-            }*/
-            dismiss();
-        });
+        view.findViewById(R.id.button_input_name_cancel).setOnClickListener(v -> dismiss());
 
         return view;
     }

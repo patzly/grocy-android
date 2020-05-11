@@ -139,6 +139,7 @@
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
     <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>
     <string name="description_missing_batch_exit">Some purchase transactions have not yet been sent to the server. Discard them or go back to the scanner?</string>
+    <string name="description_input_name">Create new product with the name \"%1$s\"?</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
