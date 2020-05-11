@@ -245,7 +245,7 @@
     <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
     <string name="license_xzing_android_author" translatable="false">JourneyApps</string>
 
-    <string name="url_grocy_demo">https://en.demo-prerelease.grocy.info</string>
+    <string name="url_grocy_demo">https://en.demo.grocy.info</string>
     <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
     <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
     <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
