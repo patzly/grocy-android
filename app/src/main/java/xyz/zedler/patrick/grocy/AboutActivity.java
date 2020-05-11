@@ -84,7 +84,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				R.id.linear_license_roboto,
 				R.id.linear_license_volley,
 				R.id.linear_license_gson,
-				R.id.linear_license_xzing,
 				R.id.linear_license_picasso,
 				R.id.linear_license_xzing_android
 		);
@@ -161,14 +160,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 						"apache",
 						R.string.license_gson,
 						R.string.url_gson
-				);
-				break;
-			case R.id.linear_license_xzing:
-				startAnimatedIcon(R.id.image_license_xzing);
-				showTextBottomSheet(
-						"apache",
-						R.string.license_xzing,
-						R.string.url_zxing
 				);
 				break;
 			case R.id.linear_license_picasso:
