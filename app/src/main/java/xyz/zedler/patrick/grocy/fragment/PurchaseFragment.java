@@ -701,19 +701,11 @@ public class PurchaseFragment extends Fragment {
                     new InputNameBottomSheetDialogFragment(), bundle
             );
             return true;
-        } else if(productDetails == null
-                || !isBestBeforeDateValid()
-                || !isAmountValid()
-                || !isPriceValid()
-                || !isLocationValid()
-        ) {
-            if(productDetails == null) {
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
-            }
+        } else if(productDetails == null) {
+            textInputProduct.setError(activity.getString(R.string.error_select_product));
             return true;
-        } else {
-            return false;
-        }
+        } else return !isBestBeforeDateValid() || !isAmountValid()
+                || !isPriceValid() || !isLocationValid();
     }
 
     public void purchaseProduct() {
@@ -814,11 +806,18 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
-        ArrayList<String> barcodes = new ArrayList<>(
-                Arrays.asList(
-                        productDetails.getProduct().getBarcode().split(",")
-                )
-        );
+        String barcodesString = productDetails.getProduct().getBarcode();
+        ArrayList<String> barcodes;
+        if(barcodesString == null || barcodesString.equals("")) {
+            barcodes = new ArrayList<>();
+        } else {
+            barcodes = new ArrayList<>(
+                    Arrays.asList(
+                            productDetails.getProduct().getBarcode().split(",")
+                    )
+            );
+        }
+
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(!barcodes.contains(inputChip.getText())) {
