@@ -693,7 +693,11 @@ public class PurchaseFragment extends Fragment {
 
     private boolean isFormIncomplete() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("") && !nameAutoFilled) {
+        if(!productNames.isEmpty()
+                && !productNames.contains(input)
+                && !input.equals("")
+                && !nameAutoFilled
+        ) {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
@@ -1064,6 +1068,7 @@ public class PurchaseFragment extends Fragment {
             ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
         }
         productDetails = null;
+        nameAutoFilled = false;
     }
 
     private void showErrorMessage() {
