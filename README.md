@@ -10,7 +10,7 @@ Grocy is a self-hosted groceries & household management solution for your home.
 
 ## Features
 
-* 100 % open source
+* 100% open source
 * Stock overview
 * Barcode scanning
 * Consume and purchase with shortcuts
