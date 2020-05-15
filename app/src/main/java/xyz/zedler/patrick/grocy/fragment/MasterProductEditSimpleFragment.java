@@ -269,7 +269,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
-                if(!input.equals("")) {
+                if(!input.isEmpty()) {
                     minAmount = Double.parseDouble(input);
                 } else {
                     minAmount = 0;
@@ -291,7 +291,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.button_master_product_edit_simple_amount_more
         ).setOnClickListener(v -> {
             startAnimatedIcon(imageViewMinAmount);
-            if(editTextMinAmount.getText().toString().equals("")) {
+            if(editTextMinAmount.getText().toString().isEmpty()) {
                 editTextMinAmount.setText(String.valueOf(0));
             } else {
                 double amountNew = Double.parseDouble(editTextMinAmount.getText().toString()) + 1;
@@ -302,7 +302,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.button_master_product_edit_simple_amount_less
         ).setOnClickListener(v -> {
-            if(!editTextMinAmount.getText().toString().equals("")) {
+            if(!editTextMinAmount.getText().toString().isEmpty()) {
                 startAnimatedIcon(imageViewMinAmount);
                 double amountNew = Double.parseDouble(editTextMinAmount.getText().toString()) - 1;
                 if(amountNew >= 0) {

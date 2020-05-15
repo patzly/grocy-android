@@ -249,7 +249,7 @@ public class PurchaseFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
-                if(!input.equals("")) {
+                if(!input.isEmpty()) {
                     amount = Double.parseDouble(input);
                 } else {
                     amount = 0;
@@ -272,7 +272,7 @@ public class PurchaseFragment extends Fragment {
 
         activity.findViewById(R.id.button_purchase_amount_more).setOnClickListener(v -> {
             startAnimatedIcon(R.id.image_purchase_amount);
-            if(editTextAmount.getText().toString().equals("")) {
+            if(editTextAmount.getText().toString().isEmpty()) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
@@ -281,7 +281,7 @@ public class PurchaseFragment extends Fragment {
         });
 
         activity.findViewById(R.id.button_purchase_amount_less).setOnClickListener(v -> {
-            if(!editTextAmount.getText().toString().equals("")) {
+            if(!editTextAmount.getText().toString().isEmpty()) {
                 startAnimatedIcon(R.id.image_purchase_amount);
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
                 if(amountNew >= minAmount) {
@@ -572,7 +572,7 @@ public class PurchaseFragment extends Fragment {
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                     "1"
             );
-            if(defaultAmount.equals("")) {
+            if(defaultAmount.isEmpty()) {
                 editTextAmount.setText(null);
             } else {
                 editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
@@ -595,7 +595,7 @@ public class PurchaseFragment extends Fragment {
 
         // PRICE
 
-        if(productDetails.getLastPrice() != null && !productDetails.getLastPrice().equals("")) {
+        if(productDetails.getLastPrice() != null && !productDetails.getLastPrice().isEmpty()) {
             editTextPrice.setText(
                     NumUtil.trimPrice(Double.parseDouble(productDetails.getLastPrice()))
             );

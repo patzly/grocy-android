@@ -41,7 +41,7 @@ public class NumUtil {
 
     public static double stringToDouble(String input) {
         double num;
-        if(!input.equals("")) {
+        if(!input.isEmpty()) {
             if(input.contains(",")) {
                 List<String> stringWithComma = Arrays.asList(input.split(","));
                 if (stringWithComma.size() > 1) { // with comma
@@ -50,7 +50,7 @@ public class NumUtil {
                     input = stringWithComma.get(0);
                 }
             }
-            if(input.equals("")) return 0;
+            if(input.isEmpty()) return 0;
             num = Double.parseDouble(input);
         } else {
             num = 0;

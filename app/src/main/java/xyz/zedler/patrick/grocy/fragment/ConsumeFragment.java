@@ -210,7 +210,7 @@ public class ConsumeFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if(productDetails == null) return;
                 String input = s.toString();
-                if(!input.equals("")) {
+                if(!input.isEmpty()) {
                     amount = Double.parseDouble(input);
                 } else {
                     amount = 0;
@@ -233,7 +233,7 @@ public class ConsumeFragment extends Fragment {
 
         activity.findViewById(R.id.button_consume_amount_more).setOnClickListener(v -> {
             startAnimatedIcon(R.id.image_consume_amount);
-            if(editTextAmount.getText().toString().equals("")) {
+            if(editTextAmount.getText().toString().isEmpty()) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
@@ -244,7 +244,7 @@ public class ConsumeFragment extends Fragment {
         });
 
         activity.findViewById(R.id.button_consume_amount_less).setOnClickListener(v -> {
-            if(!editTextAmount.getText().toString().equals("")) {
+            if(!editTextAmount.getText().toString().isEmpty()) {
                 startAnimatedIcon(R.id.image_consume_amount);
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
                 if(amountNew >= minAmount) {
@@ -423,7 +423,7 @@ public class ConsumeFragment extends Fragment {
                     Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
                     "1"
             );
-            if(defaultAmount.equals("")) {
+            if(defaultAmount.isEmpty()) {
                 editTextAmount.setText(null);
             } else if(Double.parseDouble(defaultAmount)
                     > productDetails.getStockAmount()
