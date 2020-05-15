@@ -327,7 +327,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES)
 						? dateUtil.getLocalizedDate(bestBefore)
 						: activity.getString(R.string.date_never),
-				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.equals("")
+				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.isEmpty()
 						? dateUtil.getHumanForDaysFromNow(bestBefore)
 						: null
 		);

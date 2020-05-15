@@ -104,7 +104,7 @@ public class StockEntryAdapter
             holder.textViewSubtitle.setText(
                     context.getString(R.string.subtitle_stock_entry_no_specific)
             );
-            if(selectedId == null || selectedId.equals("")) {
+            if(selectedId == null || selectedId.isEmpty()) {
                 holder.imageViewSelected.setVisibility(View.VISIBLE);
             }
         } else {

@@ -171,7 +171,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
 		textViewExpiringSoonDays.setText(
-				days == null || days.equals("") || days.equals("null")
+				days == null || days.isEmpty() || days.equals("null")
 						? String.valueOf(5)
 						: days
 		);
@@ -183,7 +183,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewAmountPurchase = findViewById(R.id.text_setting_default_amount_purchase);
 		textViewAmountPurchase.setText(
 				amountPurchase == null
-						|| amountPurchase.equals("")
+						|| amountPurchase.isEmpty()
 						|| amountPurchase.equals("null")
 				? getString(R.string.setting_empty_value)
 				: amountPurchase
@@ -196,7 +196,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewAmountConsume = findViewById(R.id.text_setting_default_amount_consume);
 		textViewAmountConsume.setText(
 				amountConsume == null
-						|| amountConsume.equals("")
+						|| amountConsume.isEmpty()
 						|| amountConsume.equals("null")
 						? getString(R.string.setting_empty_value)
 						: amountConsume
@@ -379,7 +379,7 @@ public class SettingsActivity extends AppCompatActivity
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
 				body,
 				response -> {
-					String amountFormatted = amount == null || amount.equals("")
+					String amountFormatted = amount == null || amount.isEmpty()
 							? null
 							: NumUtil.trim(NumUtil.stringToDouble(amount));
 					textViewAmountPurchase.setText(
@@ -410,7 +410,7 @@ public class SettingsActivity extends AppCompatActivity
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT),
 				body,
 				response -> {
-					String amountFormatted = amount == null || amount.equals("")
+					String amountFormatted = amount == null || amount.isEmpty()
 							? null
 							: NumUtil.trim(NumUtil.stringToDouble(amount));
 					textViewAmountConsume.setText(

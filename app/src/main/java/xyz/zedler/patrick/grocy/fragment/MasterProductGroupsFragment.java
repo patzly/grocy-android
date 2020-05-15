@@ -266,7 +266,7 @@ public class MasterProductGroupsFragment extends Fragment
     private void filterProductGroups() {
         filteredProductGroups = productGroups;
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchProductGroups(search);
         } else {
             if(displayedProductGroups != filteredProductGroups) {
@@ -281,7 +281,7 @@ public class MasterProductGroupsFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchProductGroups: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterProductGroups();
         } else { // only if search contains something
             ArrayList<ProductGroup> searchedProductGroups = new ArrayList<>();
@@ -391,7 +391,7 @@ public class MasterProductGroupsFragment extends Fragment
     }
 
     private void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(
                     R.id.linear_master_product_groups_app_bar_search,
                     true

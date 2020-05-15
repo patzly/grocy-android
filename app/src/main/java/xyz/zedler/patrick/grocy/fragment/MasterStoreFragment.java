@@ -328,7 +328,7 @@ public class MasterStoreFragment extends Fragment {
         boolean isInvalid = false;
 
         String name = String.valueOf(editTextName.getText()).trim();
-        if(name.equals("")) {
+        if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!storeNames.isEmpty() && storeNames.contains(name)) {

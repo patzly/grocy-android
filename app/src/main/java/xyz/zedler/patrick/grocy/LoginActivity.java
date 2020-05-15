@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         assert editTextKey != null;
 
         findViewById(R.id.button_login_key).setOnClickListener(v -> {
-            if(editTextServer.getText().toString().equals("")) {
+            if(editTextServer.getText().toString().isEmpty()) {
                 textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
                 textInputLayoutServer.setError(getString(R.string.error_invalid_url));
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                     .toString()
                     .replaceAll("/+$", "");
             String key = editTextKey.getText().toString().trim();
-            if(server.equals("")) {
+            if(server.isEmpty()) {
                 textInputLayoutServer.setError(getString(R.string.error_empty));
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 textInputLayoutServer.setError(getString(R.string.error_invalid_url));

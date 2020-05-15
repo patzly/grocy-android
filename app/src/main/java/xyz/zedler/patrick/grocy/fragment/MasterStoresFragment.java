@@ -266,7 +266,7 @@ public class MasterStoresFragment extends Fragment
     private void filterStores() {
         filteredStores = stores;
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchStores(search);
         } else {
             if(displayedStores != filteredStores) {
@@ -281,7 +281,7 @@ public class MasterStoresFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchStores: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterStores();
         } else { // only if search contains something
             ArrayList<Store> searchedStores = new ArrayList<>();
@@ -391,7 +391,7 @@ public class MasterStoresFragment extends Fragment
     }
 
     public void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(
                     R.id.linear_master_stores_app_bar_search,
                     true

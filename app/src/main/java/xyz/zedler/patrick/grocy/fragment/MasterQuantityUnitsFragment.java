@@ -266,7 +266,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void filterQuantityUnits() {
         filteredQuantityUnits = quantityUnits;
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchQuantityUnits(search);
         } else {
             if(displayedQuantityUnits != filteredQuantityUnits) {
@@ -281,7 +281,7 @@ public class MasterQuantityUnitsFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchQuantityUnits: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterQuantityUnits();
         } else { // only if search contains something
             ArrayList<QuantityUnit> searchedQuantityUnits = new ArrayList<>();
@@ -391,7 +391,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     }
 
     private void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(
                     R.id.linear_master_quantity_units_app_bar_search,
                     true

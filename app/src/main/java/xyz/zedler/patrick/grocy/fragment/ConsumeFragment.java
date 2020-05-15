@@ -436,7 +436,7 @@ public class ConsumeFragment extends Fragment {
             editTextAmount.setText(null);
         }
 
-        if(editTextAmount.getText().toString().equals("")) {
+        if(editTextAmount.getText().toString().isEmpty()) {
             editTextAmount.requestFocus();
             activity.showKeyboard(editTextAmount);
         }
@@ -547,7 +547,7 @@ public class ConsumeFragment extends Fragment {
 
     private boolean isFormIncomplete() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")) {
+        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
             textInputProduct.setError(activity.getString(R.string.error_invalid_product));
             return true;
         } else if(productDetails == null || !isAmountValid()) {
@@ -570,7 +570,7 @@ public class ConsumeFragment extends Fragment {
             body.put("transaction_type", "consume");
             body.put("spoiled", isSpoiled);
             body.put("location_id", selectedLocationId);
-            if(selectedStockEntryId != null && !selectedStockEntryId.equals("")) {
+            if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
         } catch (JSONException e) {
@@ -642,7 +642,7 @@ public class ConsumeFragment extends Fragment {
         try {
             body.put("amount", amount);
             body.put("location_id", selectedLocationId);
-            if(selectedStockEntryId != null && !selectedStockEntryId.equals("")) {
+            if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
         } catch (JSONException e) {
@@ -724,7 +724,7 @@ public class ConsumeFragment extends Fragment {
     private void editProductBarcodes() {
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
-        if(barcodesString != null && !barcodesString.equals("")) {
+        if(barcodesString != null && !barcodesString.isEmpty()) {
             barcodes = new ArrayList<>(Arrays.asList(barcodesString.split(",")));
         } else {
             barcodes = new ArrayList<>();
@@ -837,7 +837,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private boolean isAmountValid() {
-        if(!editTextAmount.getText().toString().equals("")) {
+        if(!editTextAmount.getText().toString().isEmpty()) {
             if(amount >= minAmount && amount <= maxAmount) {
                 textInputAmount.setErrorEnabled(false);
                 return true;
@@ -936,7 +936,7 @@ public class ConsumeFragment extends Fragment {
 
     public void addInputAsBarcode() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(input.equals("")) return;
+        if(input.isEmpty()) return;
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {

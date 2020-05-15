@@ -399,7 +399,7 @@ public class ScanBatchActivity extends AppCompatActivity
             body.put("amount", 1);
             body.put("transaction_type", "consume");
             body.put("spoiled", false);
-            if(entryId != null && !entryId.equals("")) {
+            if(entryId != null && !entryId.isEmpty()) {
                 body.put("stock_entry_id", entryId);
             }
         } catch (JSONException e) {
@@ -464,10 +464,10 @@ public class ScanBatchActivity extends AppCompatActivity
             body.put("amount", 1);
             body.put("transaction_type", "purchase");
             body.put("best_before_date", bestBeforeDate);
-            if(!price.equals("")) {
+            if(!price.isEmpty()) {
                 body.put("price", NumUtil.formatPrice(price));
             }
-            if(!storeId.equals("") && Integer.parseInt(storeId) > -1) {
+            if(!storeId.isEmpty() && Integer.parseInt(storeId) > -1) {
                 body.put("shopping_location_id", Integer.parseInt(storeId));
             }
             body.put("location_id", locationId);
@@ -553,7 +553,7 @@ public class ScanBatchActivity extends AppCompatActivity
         if(missingBatchItem.getDefaultStoreId() == null) {
             missingBatchItem.setDefaultStoreId(storeId);
         }
-        if(price != null && !price.equals("")) {
+        if(price != null && !price.isEmpty()) {
             missingBatchItem.setLastPrice(price);
         }
         Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
@@ -583,7 +583,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private void storeResetSelectedValues() {
         // BEST BEFORE DATE
-        if(bestBeforeDate != null && !bestBeforeDate.equals("")) {
+        if(bestBeforeDate != null && !bestBeforeDate.isEmpty()) {
             sessionBestBeforeDates.put(currentProductName, bestBeforeDate);
         }
         bestBeforeDate = null;
@@ -807,7 +807,7 @@ public class ScanBatchActivity extends AppCompatActivity
             return;
         }
         Bundle bundle = new Bundle();
-        if(storeId != null && !storeId.equals("")) {
+        if(storeId != null && !storeId.isEmpty()) {
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, Integer.parseInt(storeId));
         } else {
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
@@ -832,7 +832,7 @@ public class ScanBatchActivity extends AppCompatActivity
             return;
         }
         Bundle bundle = new Bundle();
-        if(locationId != null && !locationId.equals("")) {
+        if(locationId != null && !locationId.isEmpty()) {
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, Integer.parseInt(locationId));
         } else {
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
@@ -858,7 +858,7 @@ public class ScanBatchActivity extends AppCompatActivity
                         return;
                     }
                     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
-                    if(stockLocationId != null && !stockLocationId.equals("")) {
+                    if(stockLocationId != null && !stockLocationId.isEmpty()) {
                         for(StockEntry stockEntry : stockEntries) {
                             if(stockEntry.getLocationId() == Integer.parseInt(stockLocationId)) {
                                 filteredStockEntries.add(stockEntry);
@@ -961,7 +961,7 @@ public class ScanBatchActivity extends AppCompatActivity
             return;
         }
 
-        if(missingBatchItem.getBarcodes() != null && !missingBatchItem.getBarcodes().equals("")) {
+        if(missingBatchItem.getBarcodes() != null && !missingBatchItem.getBarcodes().isEmpty()) {
             barcodes = new ArrayList<>(Arrays.asList(
                     missingBatchItem.getBarcodes().split(",")
             ));
@@ -992,7 +992,7 @@ public class ScanBatchActivity extends AppCompatActivity
     public MissingBatchItem getBatchItemFromBarcode(String barcode) {
         for(MissingBatchItem missingBatchItem : missingBatchItems) {
             String barcodesString = missingBatchItem.getBarcodes();
-            if(barcodesString == null || barcodesString.trim().equals("")) return null;
+            if(barcodesString == null || barcodesString.trim().isEmpty()) return null;
             String[] barcodes = barcodesString.trim().split(",");
             for(String tmpBarcode : barcodes) {
                 if(tmpBarcode.trim().equals(barcode)) return missingBatchItem;

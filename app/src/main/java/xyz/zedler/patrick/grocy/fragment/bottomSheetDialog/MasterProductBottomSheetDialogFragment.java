@@ -220,7 +220,7 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		}
 
 		// BARCODES
-		if(product.getBarcode() != null && !product.getBarcode().trim().equals("")) {
+		if(product.getBarcode() != null && !product.getBarcode().trim().isEmpty()) {
 			itemBarcodes.setSingleLine(false);
 			itemBarcodes.setText(
 					activity.getString(R.string.property_barcodes),

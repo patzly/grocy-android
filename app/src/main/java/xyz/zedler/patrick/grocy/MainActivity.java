@@ -1083,7 +1083,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isServerUrlEmpty() {
         String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-        return server == null || server.equals("");
+        return server == null || server.isEmpty();
     }
 
     private boolean isDemo() {

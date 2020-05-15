@@ -344,7 +344,7 @@ public class MasterLocationFragment extends Fragment {
         boolean isInvalid = false;
 
         String name = String.valueOf(editTextName.getText()).trim();
-        if(name.equals("")) {
+        if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!locationNames.isEmpty() && locationNames.contains(name)) {

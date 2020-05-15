@@ -335,7 +335,7 @@ public class MasterProductGroupFragment extends Fragment {
         boolean isInvalid = false;
 
         String name = String.valueOf(editTextName.getText()).trim();
-        if(name.equals("")) {
+        if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!productGroupNames.isEmpty() && productGroupNames.contains(name)) {

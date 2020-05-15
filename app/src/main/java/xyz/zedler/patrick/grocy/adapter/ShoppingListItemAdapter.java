@@ -211,7 +211,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NOTE
 
-        if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().equals("")) {
+        if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().isEmpty()) {
             if(holder.textViewName.getVisibility() == View.VISIBLE) {
                 holder.linearLayoutNote.setVisibility(View.VISIBLE);
                 holder.textViewNote.setText(shoppingListItem.getNote().trim());

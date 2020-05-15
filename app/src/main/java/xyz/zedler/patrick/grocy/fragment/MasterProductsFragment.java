@@ -336,7 +336,7 @@ public class MasterProductsFragment extends Fragment
             ArrayList<Product> tempProducts = new ArrayList<>();
             for(Product product : filteredProducts) {
                 String groupId = product.getProductGroupId();
-                if(groupId == null || groupId.equals("")) continue;
+                if(groupId == null || groupId.isEmpty()) continue;
                 if(filterProductGroupId == Integer.parseInt(groupId)) {
                     tempProducts.add(product);
                 }
@@ -344,7 +344,7 @@ public class MasterProductsFragment extends Fragment
             filteredProducts = tempProducts;
         }
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchProducts(search);
         } else {
             if(displayedProducts != filteredProducts) {
@@ -359,7 +359,7 @@ public class MasterProductsFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchProducts: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterProducts();
         } else { // only if search contains something
             ArrayList<Product> searchedProducts = new ArrayList<>();
@@ -451,7 +451,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     private ProductGroup getProductGroup(String id) {
-        if(id == null || id.equals("")) return null;
+        if(id == null || id.isEmpty()) return null;
         for(ProductGroup productGroup : productGroups) {
             if(productGroup.getId() == Integer.parseInt(id)) {
                 return productGroup;
@@ -544,7 +544,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_app_bar_master_products_search, true);
             editTextSearch.setText("");
         }

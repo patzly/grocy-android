@@ -152,7 +152,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 String.valueOf(5)
         );
         // ignore server value if not available
-        daysExpiringSoon = days == null || days.equals("") || days.equals("null")
+        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
                 ? 5
                 : Integer.parseInt(days);
         sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
@@ -570,7 +570,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void filterItems(String filter) {
-        itemsToDisplay = filter.equals("") ? Constants.STOCK.FILTER.ALL : filter;
+        itemsToDisplay = filter.isEmpty() ? Constants.STOCK.FILTER.ALL : filter;
         if(DEBUG) Log.i(
                 TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
         );
@@ -601,7 +601,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             filteredItems = tempItems;
         }
         // PRODUCT GROUP
-        if(!filterProductGroupId.equals("")) {
+        if(!filterProductGroupId.isEmpty()) {
             ArrayList<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
                 if(filterProductGroupId.equals(stockItem.getProduct().getProductGroupId())) {
@@ -611,7 +611,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             filteredItems = tempItems;
         }
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchItems(search);
         } else {
             if(displayedItems != filteredItems) {
@@ -625,7 +625,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchItems: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterItems(itemsToDisplay);
         } else { // only if search contains something
             ArrayList<StockItem> searchedItems = new ArrayList<>();
@@ -1234,7 +1234,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
             editTextSearch.setText("");
         }

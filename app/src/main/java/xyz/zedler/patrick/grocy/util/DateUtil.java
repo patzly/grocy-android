@@ -79,7 +79,7 @@ public class DateUtil {
     }
 
     public String getLocalizedDate(String dateString, int format) {
-        if(dateString == null || dateString.equals("")) {
+        if(dateString == null || dateString.isEmpty()) {
             return context.getString(R.string.date_unknown);
         }
         Date date = null;
@@ -105,7 +105,7 @@ public class DateUtil {
     }
 
     public String getHumanForDaysFromNow(String dateString) {
-        if(dateString == null || dateString.equals("")) {
+        if(dateString == null || dateString.isEmpty()) {
             return context.getString(R.string.date_unknown);
         } else if(dateString.equals(Constants.DATE.NEVER_EXPIRES)) {
             return context.getString(R.string.date_never);

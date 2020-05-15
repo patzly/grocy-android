@@ -509,7 +509,7 @@ public class ShoppingListFragment extends Fragment
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         if(shoppingList != null && shoppingList.getDescription() != null) {
             String description = TextUtil.getFromHtml(shoppingList.getDescription().trim()).trim();
-            if(!description.equals("")) {
+            if(!description.isEmpty()) {
                 linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
                     linearLayoutBottomNotes.setVisibility(View.VISIBLE);
                     linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
@@ -539,7 +539,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void filterItems(String filter) {
-        itemsToDisplay = filter.equals("") ? Constants.SHOPPING_LIST.FILTER.ALL : filter;
+        itemsToDisplay = filter.isEmpty() ? Constants.SHOPPING_LIST.FILTER.ALL : filter;
         if(DEBUG) Log.i(
                 TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
         );
@@ -557,7 +557,7 @@ public class ShoppingListFragment extends Fragment
         }
         if(DEBUG) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchItems(search);
         } else {
             if(displayedItems != filteredItems) {
@@ -571,7 +571,7 @@ public class ShoppingListFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchItems: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterItems(itemsToDisplay);
         } else { // only if search contains something
             ArrayList<ShoppingListItem> searchedItems = new ArrayList<>();
@@ -600,7 +600,7 @@ public class ShoppingListFragment extends Fragment
             if(product != null) {
                 groupId = shoppingListItem.getProduct().getProductGroupId();
             }
-            if(groupId != null && !groupId.equals("")) {
+            if(groupId != null && !groupId.isEmpty()) {
                 for(ProductGroup productGroup : productGroups) {
                     if(productGroup.getId() == Integer.parseInt(groupId)
                             && !neededProductGroups.contains(productGroup)
@@ -630,7 +630,7 @@ public class ShoppingListFragment extends Fragment
                 if(product != null) {
                     groupId = product.getProductGroupId();
                 }
-                if(groupId == null || groupId.equals("")) groupId = "-1";
+                if(groupId == null || groupId.isEmpty()) groupId = "-1";
                 if(groupId.equals(String.valueOf(productGroup.getId()))) {
                     itemsOneGroup.add(shoppingListItem);
                 }
@@ -792,7 +792,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_search, true);
             editTextSearch.setText("");
         }

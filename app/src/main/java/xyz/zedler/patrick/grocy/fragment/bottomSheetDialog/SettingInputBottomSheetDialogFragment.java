@@ -114,7 +114,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
         view.findViewById(R.id.button_setting_input_save).setOnClickListener(v -> {
             switch (type) {
                 case Constants.PREF.STOCK_EXPIRING_SOON_DAYS:
-                    if(editText.getText().toString().equals("")) {
+                    if(editText.getText().toString().isEmpty()) {
                         textInput.setError(activity.getString(R.string.error_empty));
                         return;
                     } else {
@@ -164,7 +164,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
 
         textInput.setHint(hint);
 
-        editText.setText(input == null || input.equals("") || input.equals("null") ? null : input);
+        editText.setText(input == null || input.isEmpty() || input.equals("null") ? null : input);
 
         return view;
     }

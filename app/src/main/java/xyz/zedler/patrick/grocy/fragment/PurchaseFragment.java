@@ -198,7 +198,7 @@ public class PurchaseFragment extends Fragment {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
                         String input = autoCompleteTextViewProduct.getText().toString().trim();
-                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.equals("")
+                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()
                                 && !nameAutoFilled
                         ) {
                             Bundle bundle = new Bundle();
@@ -294,7 +294,7 @@ public class PurchaseFragment extends Fragment {
 
         textInputPrice = activity.findViewById(R.id.text_input_purchase_price);
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        if(currency.equals("")) {
+        if(currency.isEmpty()) {
             textInputPrice.setHint(getString(R.string.property_price));
         } else {
             textInputPrice.setHint(getString(R.string.property_price_in, currency));
@@ -322,7 +322,7 @@ public class PurchaseFragment extends Fragment {
 
         activity.findViewById(R.id.button_purchase_price_more).setOnClickListener(v -> {
             startAnimatedIcon(R.id.image_purchase_price);
-            if(editTextPrice.getText().toString().equals("")) {
+            if(editTextPrice.getText().toString().isEmpty()) {
                 editTextPrice.setText(NumUtil.trimPrice(1));
             } else {
                 double priceNew = NumUtil.stringToDouble(editTextPrice.getText().toString()) + 1;
@@ -330,7 +330,7 @@ public class PurchaseFragment extends Fragment {
             }
         });
         activity.findViewById(R.id.button_purchase_price_less).setOnClickListener(v -> {
-            if(!editTextPrice.getText().toString().equals("")) {
+            if(!editTextPrice.getText().toString().isEmpty()) {
                 startAnimatedIcon(R.id.image_purchase_price);
                 double priceNew = NumUtil.stringToDouble(editTextPrice.getText().toString()) - 1;
                 if(priceNew >= 0) {
@@ -581,7 +581,7 @@ public class PurchaseFragment extends Fragment {
             editTextAmount.setText(null);
         }
 
-        if(editTextAmount.getText().toString().equals("")) {
+        if(editTextAmount.getText().toString().isEmpty()) {
             editTextAmount.requestFocus();
             activity.showKeyboard(editTextAmount);
         }
@@ -618,7 +618,7 @@ public class PurchaseFragment extends Fragment {
 
         // STORE
         String storeId = productDetails.getProduct().getStoreId();
-        if(storeId == null || storeId.equals("")) {
+        if(storeId == null || storeId.isEmpty()) {
             selectedStoreId = -1;
             textViewStore.setText(getString(R.string.subtitle_none));
         } else {
@@ -695,7 +695,7 @@ public class PurchaseFragment extends Fragment {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
         if(!productNames.isEmpty()
                 && !productNames.contains(input)
-                && !input.equals("")
+                && !input.isEmpty()
                 && !nameAutoFilled
         ) {
             Bundle bundle = new Bundle();
@@ -718,7 +718,7 @@ public class PurchaseFragment extends Fragment {
         try {
             body.put("amount", amount);
             body.put("transaction_type", "purchase");
-            if(!editTextPrice.getText().toString().equals("")) {
+            if(!editTextPrice.getText().toString().isEmpty()) {
                 double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
                 if(checkBoxTotalPrice.isChecked()) {
                     price = price / amount;
@@ -812,7 +812,7 @@ public class PurchaseFragment extends Fragment {
     private void editProductBarcodes() {
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
-        if(barcodesString == null || barcodesString.equals("")) {
+        if(barcodesString == null || barcodesString.isEmpty()) {
             barcodes = new ArrayList<>();
         } else {
             barcodes = new ArrayList<>(
@@ -940,7 +940,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isBestBeforeDateValid() {
-        if(selectedBestBeforeDate == null || selectedBestBeforeDate.equals("")) {
+        if(selectedBestBeforeDate == null || selectedBestBeforeDate.isEmpty()) {
             textViewBbdLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
@@ -960,7 +960,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isAmountValid() {
-        if(!editTextAmount.getText().toString().equals("")) {
+        if(!editTextAmount.getText().toString().isEmpty()) {
             if(amount >= minAmount) {
                 textInputAmount.setErrorEnabled(false);
                 return true;
@@ -982,7 +982,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isPriceValid() {
-        if(!editTextPrice.getText().toString().equals("")) {
+        if(!editTextPrice.getText().toString().isEmpty()) {
             if(NumUtil.stringToDouble(editTextPrice.getText().toString()) >= 0) {
                 textInputPrice.setErrorEnabled(false);
                 return true;
@@ -1021,7 +1021,7 @@ public class PurchaseFragment extends Fragment {
 
     public void addInputAsBarcode() {
         String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(input.equals("")) return;
+        if(input.isEmpty()) return;
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {

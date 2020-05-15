@@ -266,7 +266,7 @@ public class MasterLocationsFragment extends Fragment
     private void filterLocations() {
         filteredLocations = locations;
         // SEARCH
-        if(!search.equals("")) { // active search
+        if(!search.isEmpty()) { // active search
             searchLocations(search);
         } else {
             if(displayedLocations != filteredLocations) {
@@ -281,7 +281,7 @@ public class MasterLocationsFragment extends Fragment
         search = search.toLowerCase();
         if(DEBUG) Log.i(TAG, "searchLocations: search = " + search);
         this.search = search;
-        if(search.equals("")) {
+        if(search.isEmpty()) {
             filterLocations();
         } else { // only if search contains something
             ArrayList<Location> searchedLocations = new ArrayList<>();
@@ -391,7 +391,7 @@ public class MasterLocationsFragment extends Fragment
     }
 
     public void setUpSearch() {
-        if(search.equals("")) { // only if no search is active
+        if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(
                     R.id.linear_master_locations_app_bar_search,
                     true

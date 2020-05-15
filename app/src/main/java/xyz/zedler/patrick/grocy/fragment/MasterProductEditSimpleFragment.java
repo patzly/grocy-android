@@ -321,7 +321,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
-                if(!input.equals("")) {
+                if(!input.isEmpty()) {
                     try {
                         bestBeforeDays = Integer.parseInt(input);
                     } catch (NumberFormatException e) {
@@ -349,7 +349,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.button_master_product_edit_simple_days_more
         ).setOnClickListener(v -> {
             startAnimatedIcon(imageViewDays);
-            if(editTextDays.getText().toString().equals("")) {
+            if(editTextDays.getText().toString().isEmpty()) {
                 editTextDays.setText(String.valueOf(0));
             } else {
                 int daysNew = Integer.parseInt(editTextDays.getText().toString()) + 1;
@@ -360,7 +360,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.button_master_product_edit_simple_days_less
         ).setOnClickListener(v -> {
-            if(!editTextDays.getText().toString().equals("")) {
+            if(!editTextDays.getText().toString().isEmpty()) {
                 startAnimatedIcon(imageViewDays);
                 int daysNew = Integer.parseInt(editTextDays.getText().toString()) - 1;
                 if(daysNew >= -1) {
@@ -663,7 +663,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
     }
 
     private ProductGroup getProductGroup(String productGroupId) {
-        if(productGroupId == null || productGroupId.equals("")) return null;
+        if(productGroupId == null || productGroupId.isEmpty()) return null;
         for(ProductGroup productGroup : productGroups) {
             if(productGroup.getId() == Integer.parseInt(productGroupId)) {
                 return productGroup;
@@ -722,7 +722,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 autoCompleteTextViewParentProduct.setText(null);
             }
             // barcodes
-            if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().equals("")) {
+            if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().isEmpty()) {
                 String[] barcodes = editProduct.getBarcode().split(",");
                 linearLayoutBarcodeContainer.removeAllViews();
                 for(String tmpBarcode : barcodes) {
@@ -901,7 +901,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
     private void addBarcode(String barcode) {
         barcode = barcode.trim();
-        if(barcode.equals("")) return;
+        if(barcode.isEmpty()) return;
         for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(barcode)) {
@@ -929,7 +929,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             jsonObject.put("name", productName);
             // parent product json null shit
             if(productParent != null) {
-                if(String.valueOf(autoCompleteTextViewParentProduct.getText()).trim().equals("")) {
+                if(String.valueOf(autoCompleteTextViewParentProduct.getText()).trim().isEmpty()) {
                     jsonObject.put("parent_product_id", JSONObject.NULL);
                 } else {
                     jsonObject.put("parent_product_id", productParent.getId());
@@ -1027,7 +1027,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         boolean isInvalid = false;
 
         String name = String.valueOf(editTextName.getText()).trim();
-        if(name.equals("")) {
+        if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!productNames.isEmpty() && productNames.contains(name)) {
@@ -1036,10 +1036,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
         }
 
         String parentProduct = String.valueOf(autoCompleteTextViewParentProduct.getText()).trim();
-        if(!parentProduct.equals("") && parentProduct.equals(name)) {
+        if(!parentProduct.isEmpty() && parentProduct.equals(name)) {
             textInputParentProduct.setError(activity.getString(R.string.error_parent));
             isInvalid = true;
-        } else if(!parentProduct.equals("") && !productNames.contains(parentProduct)) {
+        } else if(!parentProduct.isEmpty() && !productNames.contains(parentProduct)) {
             textInputParentProduct.setError(activity.getString(R.string.error_invalid_product));
             isInvalid = true;
         }

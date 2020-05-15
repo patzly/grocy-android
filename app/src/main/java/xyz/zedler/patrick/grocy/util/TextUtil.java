@@ -40,7 +40,7 @@ public class TextUtil {
     }
 
     public static String getFromHtml(String html) {
-        return html != null && !html.equals("")
+        return html != null && !html.isEmpty()
                 ? trim(Html.fromHtml(html).toString().trim())
                 : null;
     }

@@ -371,16 +371,16 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         try {
             body.put("amount", 1);
             body.put("transaction_type", "purchase");
-            if(bestBeforeDate != null && !bestBeforeDate.equals("")) {
+            if(bestBeforeDate != null && !bestBeforeDate.isEmpty()) {
                 body.put("best_before_date", bestBeforeDate);
             }
-            if(price != null && !price.equals("")) {
+            if(price != null && !price.isEmpty()) {
                 body.put("price", NumUtil.formatPrice(price));
             }
-            if(storeId != null && !storeId.equals("") && Integer.parseInt(storeId) > -1) {
+            if(storeId != null && !storeId.isEmpty() && Integer.parseInt(storeId) > -1) {
                 body.put("shopping_location_id", Integer.parseInt(storeId));
             }
-            if(locationId != null && !locationId.equals("")) {
+            if(locationId != null && !locationId.isEmpty()) {
                 body.put("location_id", locationId);
             }
         } catch (JSONException e) {

@@ -142,7 +142,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         batchButtonLinkCreate.setOnClickListener(v -> {
             String inputText = autoCompleteTextViewProduct.getText().toString().trim();
-            if(inputText.equals("")) {
+            if(inputText.isEmpty()) {
                 textInputProduct.setError(activity.getString(R.string.error_empty));
             } else if(buttonAction.equals(Constants.ACTION.CREATE)) {
                 textInputProduct.setErrorEnabled(false);
@@ -215,7 +215,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
     private void addProductBarcode(String barcode) {
         List<String> barcodes;
-        if(selectedProduct.getBarcode() != null && !selectedProduct.getBarcode().equals("")) {
+        if(selectedProduct.getBarcode() != null && !selectedProduct.getBarcode().isEmpty()) {
             barcodes = new ArrayList<>(Arrays.asList(
                     selectedProduct.getBarcode().split(",")
             ));

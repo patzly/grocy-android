@@ -36,8 +36,8 @@ public class BatchPurchaseEntry implements Parcelable {
     ) {
         this.bestBeforeDate = bestBeforeDate;
         this.locationId = locationId;
-        if(price != null && !price.equals("")) this.price = price;
-        if(storeId != null && !storeId.equals("")) this.storeId = storeId;
+        if(price != null && !price.isEmpty()) this.price = price;
+        if(storeId != null && !storeId.isEmpty()) this.storeId = storeId;
     }
 
     private BatchPurchaseEntry(Parcel parcel) {
