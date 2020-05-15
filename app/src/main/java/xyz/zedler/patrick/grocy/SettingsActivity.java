@@ -123,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity
 			if(clickUtil.isDisabled()) return false;
 			switch (item.getItemId()) {
 				case R.id.action_about:
+					((Animatable) item.getIcon()).start();
 					startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
