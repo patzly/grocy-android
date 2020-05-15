@@ -87,7 +87,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
         );
 
         view.findViewById(R.id.button_setting_input_more).setOnClickListener(v -> {
-            if(editText.getText().toString().equals("")) {
+            if(editText.getText().toString().isEmpty()) {
                 editText.setText(String.valueOf(1));
             } else {
                 double amountNew = Double.parseDouble(editText.getText().toString()) + 1;
@@ -96,7 +96,7 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
         });
 
         view.findViewById(R.id.button_setting_input_less).setOnClickListener(v -> {
-            if(!editText.getText().toString().equals("")) {
+            if(!editText.getText().toString().isEmpty()) {
                 double amountNew = Double.parseDouble(editText.getText().toString()) - 1;
                 if(amountNew >= 0) {
                     editText.setText(NumUtil.trim(amountNew));
