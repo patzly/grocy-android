@@ -178,7 +178,9 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <include layout="@layout/partial_error"/>
+            <include
+                android:id="@+id/linear_error"
+                layout="@layout/partial_error"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

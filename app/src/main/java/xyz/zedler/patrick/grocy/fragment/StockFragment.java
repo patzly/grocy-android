@@ -34,24 +34,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -70,6 +65,7 @@ import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentStockBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -118,15 +114,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private int daysExpiringSoon;
     private boolean sortAscending;
 
-    private RecyclerView recyclerView;
+    private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
     private FilterChip chipExpiring, chipExpired, chipMissing;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
     private EditText editTextSearch;
-    private LinearLayout linearLayoutFilterContainer;
     private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
-    private NestedScrollView scrollView;
 
     @Override
     public View onCreateView(
@@ -134,7 +126,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_stock, container, false);
+        binding = FragmentStockBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -152,7 +151,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 String.valueOf(5)
         );
         // ignore server value if not available
-        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
+        daysExpiringSoon = days.isEmpty() || days.equals("null")
                 ? 5
                 : Integer.parseInt(days);
         sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
@@ -165,28 +164,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // INITIALIZE VIEWS
 
-        linearLayoutFilterContainer = activity.findViewById(
-                R.id.linear_stock_filter_container_bottom
-        );
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_stock);
-        scrollView = activity.findViewById(R.id.scroll_stock);
         // retry button on offline error page
-        activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> refresh());
-        recyclerView = activity.findViewById(R.id.recycler_stock);
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         // search
-        activity.findViewById(R.id.frame_stock_search_close).setOnClickListener(
-                v -> dismissSearch()
-        );
-        activity.findViewById(R.id.frame_stock_search_scan).setOnClickListener(v -> {
+        binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
+        binding.frameStockSearchScan.setOnClickListener(v -> {
             startActivityForResult(
                     new Intent(activity, ScanInputActivity.class),
                     Constants.REQUEST.SCAN
             );
             dismissSearch();
         });
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_stock_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
+        editTextSearch = binding.textInputStockSearch.getEditText();
         assert editTextSearch != null;
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -209,13 +199,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeStock.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeStock.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeStock.setOnRefreshListener(this::refresh);
 
         // CHIPS
 
@@ -252,22 +242,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 },
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
-        LinearLayout chipContainer = activity.findViewById(
-                R.id.linear_stock_filter_container_top
-        );
-        chipContainer.addView(chipExpiring);
-        chipContainer.addView(chipExpired);
-        chipContainer.addView(chipMissing);
+        binding.linearStockFilterContainerTop.addView(chipExpiring);
+        binding.linearStockFilterContainerTop.addView(chipExpired);
+        binding.linearStockFilterContainerTop.addView(chipMissing);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerStock.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
                         LinearLayoutManager.VERTICAL,
                         false
                 )
         );
-        recyclerView.setItemAnimator(new ItemAnimator());
-        recyclerView.setAdapter(new StockPlaceholderAdapter());
+        binding.recyclerStock.setItemAnimator(new ItemAnimator());
+        binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
         swipeBehavior = new SwipeBehavior(activity) {
             @Override
@@ -305,7 +292,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 }
             }
         };
-        swipeBehavior.attachToRecyclerView(recyclerView);
+        swipeBehavior.attachToRecyclerView(binding.recyclerStock);
 
 
         load();
@@ -332,10 +319,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             setError(false, false, true);
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeStock.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.binding.linearContainerMain,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -349,19 +336,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {
-        LinearLayout linearLayoutError = activity.findViewById(R.id.linear_error);
-        ImageView imageViewError = activity.findViewById(R.id.image_error);
-        TextView textViewTitle = activity.findViewById(R.id.text_error_title);
-        TextView textViewSubtitle = activity.findViewById(R.id.text_error_subtitle);
-
         if(isError) {
-            imageViewError.setImageResource(
+            binding.linearError.imageError.setImageResource(
                     isOffline
                             ? R.drawable.illustration_broccoli
                             : R.drawable.illustration_popsicle
             );
-            textViewTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
-            textViewSubtitle.setText(
+            binding.linearError.textErrorTitle.setText(
+                    isOffline ? R.string.error_offline : R.string.error_unknown
+            );
+            binding.linearError.textErrorSubtitle.setText(
                     isOffline
                             ? R.string.error_offline_subtitle
                             : R.string.error_unknown_subtitle
@@ -369,8 +353,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
 
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError ? binding.scrollStock : binding.linearError.linearError;
+            View viewIn = isError ? binding.linearError.linearError : binding.scrollStock;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -380,13 +364,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.scrollStock.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeStock.setRefreshing(true);
         downloadQuantityUnits();
         downloadLocations();
         downloadProductGroups();
@@ -559,13 +543,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void onQueueEmpty() {
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipeStock.setRefreshing(false);
         filterItems(itemsToDisplay);
     }
 
     private void onDownloadError(VolleyError error) {
         request.cancelAll(TAG);
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipeStock.setRefreshing(false);
         setError(true, false, true);
     }
 
@@ -662,7 +646,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             inputChipFilterLocation = null;
                             filterItems(itemsToDisplay);
                         });
-                linearLayoutFilterContainer.addView(inputChipFilterLocation);
+                binding.linearStockFilterContainerBottom.addView(inputChipFilterLocation);
             }
             filterItems(itemsToDisplay);
         } else {
@@ -671,7 +655,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void filterProductGroup(ProductGroup productGroup) {
-        if(!filterProductGroupId.equals(productGroup.getId())) {
+        if(!filterProductGroupId.equals(String.valueOf(productGroup.getId()))) {
             if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = String.valueOf(productGroup.getId());
             if(inputChipFilterProductGroup != null) {
@@ -687,7 +671,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             inputChipFilterProductGroup = null;
                             filterItems(itemsToDisplay);
                         });
-                linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
+                binding.linearStockFilterContainerBottom.addView(inputChipFilterProductGroup);
             }
             filterItems(itemsToDisplay);
         } else {
@@ -733,9 +717,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void refreshAdapter(StockItemAdapter adapter) {
         stockItemAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerStock.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerStock.setAdapter(adapter);
+            binding.recyclerStock.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -753,13 +737,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     Snackbar snackbar;
                     if(response != null && response.statusCode == 400) {
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(R.string.msg_not_found),
                                 Snackbar.LENGTH_SHORT
                         );
                     } else {
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(R.string.msg_error),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -882,7 +866,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
 
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(
                                         spoiled
                                                 ? R.string.msg_consumed_spoiled
@@ -922,7 +906,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                     } else {
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -994,7 +978,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(
                                         R.string.msg_opened,
                                         NumUtil.trim(1),
@@ -1027,7 +1011,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         if(DEBUG) Log.i(TAG, "updateOpenedStockItem: opened 1");
                     } else {
                         snackbar = Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.binding.linearContainerMain,
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -1096,7 +1080,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void showErrorMessage(VolleyError error) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.binding.linearContainerMain,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
@@ -1238,7 +1222,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
             editTextSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
+        binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(editTextSearch);
 
         activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);

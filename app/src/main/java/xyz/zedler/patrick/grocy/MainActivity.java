@@ -67,6 +67,7 @@ import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
+import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
 
+    public ActivityMainBinding binding;
     private CustomBottomAppBar bottomAppBar;
     private Fragment fragmentCurrent;
     private FloatingActionButton fab;
@@ -125,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                         ? AppCompatDelegate.MODE_NIGHT_YES
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
-        setContentView(R.layout.activity_main);
 
         // WEB REQUESTS
 
@@ -228,6 +229,9 @@ public class MainActivity extends AppCompatActivity {
         ); // TODO: info if version is not supported
 
         // VIEWS
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fab = findViewById(R.id.fab_main);
