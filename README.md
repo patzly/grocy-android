@@ -6,12 +6,10 @@
 
 [Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
 
-
 Grocy Android uses its official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
 ## Features
 
-* 100% open source
 * Stock overview
 * Barcode scanning
 * Consume and purchase with shortcuts
@@ -33,9 +31,7 @@ Grocy Android uses its official API to provide you a beautiful interface on your
 
 ## Compatibility
 
-Grocy Android requires at least Android 5 Lollipop.
-
-It also requires at least grocy 2.7.0 on your server.
+Grocy Android requires at least Android 5 (Lollipop) on your phone and at least grocy '2.7.0' on your server.
 
 ## Contribution
 
