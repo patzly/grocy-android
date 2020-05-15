@@ -4,9 +4,10 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-*An awesome client for [grocy](https://grocy.info/)*
+[Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
 
-Grocy is a self-hosted groceries & household management solution for your home.
+
+Grocy Android uses its API to provide you a standalone interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
 ## Features
 
