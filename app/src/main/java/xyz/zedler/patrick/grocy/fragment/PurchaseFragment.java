@@ -595,7 +595,7 @@ public class PurchaseFragment extends Fragment {
 
         // PRICE
 
-        if(productDetails.getLastPrice() != null) {
+        if(productDetails.getLastPrice() != null && !productDetails.getLastPrice().equals("")) {
             editTextPrice.setText(
                     NumUtil.trimPrice(Double.parseDouble(productDetails.getLastPrice()))
             );

@@ -44,14 +44,14 @@ public class NumUtil {
         if(!input.equals("")) {
             if(input.contains(",")) {
                 List<String> stringWithComma = Arrays.asList(input.split(","));
-                if(stringWithComma.size() > 1) { // with comma
-                    num = Double.parseDouble(stringWithComma.get(0) + "." + stringWithComma.get(1));
+                if (stringWithComma.size() > 1) { // with comma
+                    input = stringWithComma.get(0) + "." + stringWithComma.get(1);
                 } else {
-                    num = Double.parseDouble(stringWithComma.get(0));
+                    input = stringWithComma.get(0);
                 }
-            } else {
-                num = Double.parseDouble(input);
             }
+            if(input.equals("")) return 0;
+            num = Double.parseDouble(input);
         } else {
             num = 0;
         }
