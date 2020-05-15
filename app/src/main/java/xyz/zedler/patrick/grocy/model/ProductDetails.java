@@ -38,16 +38,16 @@ public class ProductDetails implements Parcelable {
     private String lastUsed;
 
     @SerializedName("stock_amount")
-    private double stockAmount;
+    private String stockAmount;
 
     @SerializedName("stock_amount_opened")
-    private double stockAmountOpened;
+    private String stockAmountOpened;
 
     @SerializedName("stock_amount_aggregated")
-    private double stockAmountAggregated;
+    private String stockAmountAggregated;
 
     @SerializedName("stock_amount_opened_aggregated")
-    private double stockAmountOpenedAggregated;
+    private String stockAmountOpenedAggregated;
 
     @SerializedName("quantity_unit_purchase")
     private QuantityUnit quantityUnitPurchase;
@@ -68,7 +68,7 @@ public class ProductDetails implements Parcelable {
     private int averageShelfLifeDays;
 
     @SerializedName("spoil_rate_percent")
-    private double spoilRatePercent;
+    private String spoilRatePercent;
 
     @SerializedName("is_aggregated_amount")
     private int isAggregatedAmount;
@@ -77,17 +77,17 @@ public class ProductDetails implements Parcelable {
         product = parcel.readParcelable(Product.class.getClassLoader());
         lastPurchased = parcel.readString();
         lastUsed = parcel.readString();
-        stockAmount = parcel.readDouble();
-        stockAmountOpened = parcel.readDouble();
-        stockAmountAggregated = parcel.readDouble();
-        stockAmountOpenedAggregated = parcel.readDouble();
+        stockAmount = parcel.readString();
+        stockAmountOpened = parcel.readString();
+        stockAmountAggregated = parcel.readString();
+        stockAmountOpenedAggregated = parcel.readString();
         quantityUnitPurchase = parcel.readParcelable(QuantityUnit.class.getClassLoader());
         quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
         lastPrice = parcel.readString();
         nextBestBeforeDate = parcel.readString();
         location = parcel.readParcelable(Location.class.getClassLoader());
         averageShelfLifeDays = parcel.readInt();
-        spoilRatePercent = parcel.readDouble();
+        spoilRatePercent = parcel.readString();
         isAggregatedAmount = parcel.readInt();
     }
 
@@ -96,17 +96,17 @@ public class ProductDetails implements Parcelable {
         dest.writeParcelable(product, 0);
         dest.writeString(lastPurchased);
         dest.writeString(lastUsed);
-        dest.writeDouble(stockAmount);
-        dest.writeDouble(stockAmountOpened);
-        dest.writeDouble(stockAmountAggregated);
-        dest.writeDouble(stockAmountOpenedAggregated);
+        dest.writeString(stockAmount);
+        dest.writeString(stockAmountOpened);
+        dest.writeString(stockAmountAggregated);
+        dest.writeString(stockAmountOpenedAggregated);
         dest.writeParcelable(quantityUnitPurchase, 0);
         dest.writeParcelable(quantityUnitStock, 0);
         dest.writeString(lastPrice);
         dest.writeString(nextBestBeforeDate);
         dest.writeParcelable(location, 0);
         dest.writeInt(averageShelfLifeDays);
-        dest.writeDouble(spoilRatePercent);
+        dest.writeString(spoilRatePercent);
         dest.writeInt(isAggregatedAmount);
     }
 
@@ -136,19 +136,35 @@ public class ProductDetails implements Parcelable {
     }
 
     public double getStockAmount() {
-        return stockAmount;
+        if(stockAmount == null || stockAmount.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(stockAmount);
+        }
     }
 
     public double getStockAmountOpened() {
-        return stockAmountOpened;
+        if(stockAmountOpened == null || stockAmountOpened.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(stockAmountOpened);
+        }
     }
 
     public double getStockAmountAggregated() {
-        return stockAmountAggregated;
+        if(stockAmountAggregated == null || stockAmountAggregated.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(stockAmountAggregated);
+        }
     }
 
     public double getStockAmountOpenedAggregated() {
-        return stockAmountOpenedAggregated;
+        if(stockAmountOpenedAggregated == null || stockAmountOpenedAggregated.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(stockAmountOpenedAggregated);
+        }
     }
 
     public QuantityUnit getQuantityUnitPurchase() {
@@ -176,7 +192,11 @@ public class ProductDetails implements Parcelable {
     }
 
     public double getSpoilRatePercent() {
-        return spoilRatePercent;
+        if(spoilRatePercent == null || spoilRatePercent.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(spoilRatePercent);
+        }
     }
 
     public int getIsAggregatedAmount() {

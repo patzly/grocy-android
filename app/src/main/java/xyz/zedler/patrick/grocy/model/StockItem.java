@@ -29,19 +29,19 @@ import com.google.gson.annotations.SerializedName;
 public class StockItem implements Parcelable {
 
     @SerializedName("amount")
-    private double amount;
+    private String amount;
 
     @SerializedName("amount_aggregated")
-    private double amountAggregated;
+    private String amountAggregated;
 
     @SerializedName("best_before_date")
     private String bestBeforeDate;
 
     @SerializedName("amount_opened")
-    private double amountOpened;
+    private String amountOpened;
 
     @SerializedName("amount_opened_aggregated")
-    private double amountOpenedAggregated;
+    private String amountOpenedAggregated;
 
     @SerializedName("is_aggregated_amount")
     private int isAggregatedAmount;
@@ -62,22 +62,22 @@ public class StockItem implements Parcelable {
             int productId,
             Product product
     ) {
-        this.amount = amount;
-        this.amountAggregated = amountAggregated;
+        this.amount = String.valueOf(amount);
+        this.amountAggregated = String.valueOf(amountAggregated);
         this.bestBeforeDate = bestBeforeDate;
-        this.amountOpened = amountOpened;
-        this.amountOpenedAggregated = amountOpenedAggregated;
+        this.amountOpened = String.valueOf(amountOpened);
+        this.amountOpenedAggregated = String.valueOf(amountOpenedAggregated);
         this.isAggregatedAmount = isAggregatedAmount;
         this.productId = productId;
         this.product = product;
     }
 
     private StockItem(Parcel parcel) {
-        amount = parcel.readDouble();
-        amountAggregated = parcel.readDouble();
+        amount = parcel.readString();
+        amountAggregated = parcel.readString();
         bestBeforeDate = parcel.readString();
-        amountOpened = parcel.readDouble();
-        amountOpenedAggregated = parcel.readDouble();
+        amountOpened = parcel.readString();
+        amountOpenedAggregated = parcel.readString();
         isAggregatedAmount = parcel.readInt();
         productId = parcel.readInt();
         product = parcel.readParcelable(Product.class.getClassLoader());
@@ -85,11 +85,11 @@ public class StockItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(amount);
-        dest.writeDouble(amountAggregated);
+        dest.writeString(amount);
+        dest.writeString(amountAggregated);
         dest.writeString(bestBeforeDate);
-        dest.writeDouble(amountOpened);
-        dest.writeDouble(amountOpenedAggregated);
+        dest.writeString(amountOpened);
+        dest.writeString(amountOpenedAggregated);
         dest.writeInt(isAggregatedAmount);
         dest.writeInt(productId);
         dest.writeParcelable(product, 0);
@@ -109,7 +109,11 @@ public class StockItem implements Parcelable {
     };
 
     public double getAmountAggregated() {
-        return amountAggregated;
+        if(amountAggregated == null || amountAggregated.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(amountAggregated);
+        }
     }
 
     public String getBestBeforeDate() {
@@ -117,7 +121,11 @@ public class StockItem implements Parcelable {
     }
 
     public double getAmountOpenedAggregated() {
-        return amountOpenedAggregated;
+        if(amountOpenedAggregated == null || amountOpenedAggregated.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(amountOpenedAggregated);
+        }
     }
 
     public int getIsAggregatedAmount() {
@@ -133,11 +141,19 @@ public class StockItem implements Parcelable {
     }
 
     public double getAmount() {
-        return amount;
+        if(amount == null || amount.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(amount);
+        }
     }
 
     public double getAmountOpened() {
-        return amountOpened;
+        if(amountOpened == null || amountOpened.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(amountOpened);
+        }
     }
 
     @Override

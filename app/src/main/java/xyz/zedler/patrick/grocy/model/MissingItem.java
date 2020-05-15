@@ -32,7 +32,7 @@ public class MissingItem {
     private String name;
 
     @SerializedName("amount_missing")
-    private double amountMissing;
+    private String amountMissing;
 
     @SerializedName("is_partly_in_stock")
     private int isPartlyInStock;
@@ -46,7 +46,11 @@ public class MissingItem {
     }
 
     public double getAmountMissing() {
-        return amountMissing;
+        if(amountMissing == null || amountMissing.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(amountMissing);
+        }
     }
 
     public int getIsPartlyInStock() {
