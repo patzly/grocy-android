@@ -20,8 +20,6 @@ package xyz.zedler.patrick.grocy.util;
 */
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.List;
 
 public class NumUtil {
 
@@ -40,21 +38,7 @@ public class NumUtil {
     }
 
     public static double stringToDouble(String input) {
-        double num;
-        if(!input.isEmpty()) {
-            if(input.contains(",")) {
-                List<String> stringWithComma = Arrays.asList(input.split(","));
-                if (stringWithComma.size() > 1) { // with comma
-                    input = stringWithComma.get(0) + "." + stringWithComma.get(1);
-                } else {
-                    input = stringWithComma.get(0);
-                }
-            }
-            if(input.isEmpty()) return 0;
-            num = Double.parseDouble(input);
-        } else {
-            num = 0;
-        }
-        return num;
+        if(input.isEmpty()) return 0;
+        return Double.parseDouble(input.replace(",", "."));
     }
 }
