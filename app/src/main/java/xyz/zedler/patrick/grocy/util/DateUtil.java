@@ -251,6 +251,6 @@ public class DateUtil {
                     }
                 }
             }
-        } else return "";
+        } else return context.getString(R.string.date_unknown);
     }
 }
