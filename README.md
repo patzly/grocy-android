@@ -31,7 +31,7 @@ Grocy Android uses its official API to provide you a beautiful interface on your
 
 ## Compatibility
 
-Grocy Android requires at least Android 5 (Lollipop) on your phone and at least grocy '2.7.0' on your server.
+Grocy Android requires at least Android 5 Lollipop on your phone and at least grocy `2.7.0` on your server.
 
 ## Contribution
 
