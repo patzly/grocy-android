@@ -16,7 +16,7 @@
 - id naming convention: `frame_back_...` to `frame_..._back`, same with close and `linear_app_bar_..._default` to `linear_..._app_bar_default`
 - shopping list doesn't show items without name & description, but it shows items with only description?
 - average shelf life is empty in product overview when expired
-- fix color contrast of retro colors with text: [contast checker](https://webaim.org/resources/contrastchecker/)
+- fix color contrast of retro colors with text: [contrast checker](https://webaim.org/resources/contrastchecker/)
 - better reachable ABOUT
 - Github page in ABOUT and thanks to grocy author
 
@@ -25,3 +25,9 @@
 - search not found
 - unknown error
 - empty
+
+## View id naming conventions
+TYPE_LAYOUT_NAME
+- type: e.g. image for ImageView, text_input for TextInputLayout, text for TextView
+- layout: e.g. consume for fragment_consume, list_item
+- name: action for buttons or other identification, e.g. amount for TextInputLayout of amount input
