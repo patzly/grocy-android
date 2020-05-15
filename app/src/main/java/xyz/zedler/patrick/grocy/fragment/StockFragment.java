@@ -84,7 +84,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
     private final static String TAG = Constants.UI.STOCK;
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -151,7 +151,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 String.valueOf(5)
         );
         // ignore server value if not available
-        daysExpiringSoon = days.isEmpty() || days.equals("null")
+        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
                 ? 5
                 : Integer.parseInt(days);
         sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
