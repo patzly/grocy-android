@@ -2,6 +2,7 @@
 - prevent double taps in lists
 - swiped items with elevation in dark mode
 - demo indicator
+- Github link in About
 - critical bug fixes and other improvements
 
 0.9.2
