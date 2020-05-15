@@ -79,6 +79,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				R.id.linear_intro,
 				R.id.linear_changelog,
 				R.id.linear_developer,
+				R.id.linear_github,
 				R.id.linear_license_material_components,
 				R.id.linear_license_material_icons,
 				R.id.linear_license_roboto,
@@ -120,6 +121,14 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 										Uri.parse(getString(R.string.url_developer))
 								)
 						), 300
+				);
+				break;
+			case R.id.linear_github:
+				startActivity(
+						new Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse(getString(R.string.url_github))
+						)
 				);
 				break;
 			case R.id.linear_license_material_components:
