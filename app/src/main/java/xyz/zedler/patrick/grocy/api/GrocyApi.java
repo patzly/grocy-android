@@ -38,7 +38,6 @@ public class GrocyApi {
     private SharedPreferences sharedPrefs;
     private Context context;
 
-    public final static String DEMO_SERVER = "https://de.demo-prerelease.grocy.info";
     public final static class ENTITY {
         public final static String PRODUCTS = "products";
         public final static String LOCATIONS = "locations";
