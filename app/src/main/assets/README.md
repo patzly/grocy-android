@@ -17,8 +17,7 @@
 - shopping list doesn't show items without name & description, but it shows items with only description?
 - average shelf life is empty in product overview when expired
 - fix color contrast of retro colors with text: [contrast checker](https://webaim.org/resources/contrastchecker/)
-- better reachable ABOUT
-- Github page in ABOUT and thanks to grocy author
+- thanks to grocy author in ABOUT
 
 ## Illustrations
 - offline
