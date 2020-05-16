@@ -47,7 +47,7 @@ public class Product implements Parcelable {
     private int quIdStock; // quantity unit
 
     @SerializedName("qu_factor_purchase_to_stock")
-    private double quFactorPurchaseToStock; // quantity unit
+    private String quFactorPurchaseToStock; // quantity unit
 
     @SerializedName("enable_tare_weight_handling")
     private int enableTareWeightHandling;
@@ -59,7 +59,7 @@ public class Product implements Parcelable {
     private String barcode;
 
     @SerializedName("min_stock_amount")
-    private double minStockAmount;
+    private String minStockAmount;
 
     @SerializedName("default_best_before_days")
     private int defaultBestBeforeDays;
@@ -83,7 +83,7 @@ public class Product implements Parcelable {
     private int allowPartialUnitsInStock;
 
     @SerializedName("tare_weight")
-    private double tareWeight;
+    private String tareWeight;
 
     @SerializedName("not_check_stock_fulfillment_for_recipes")
     private int notCheckStockFulfillmentForRecipes;
@@ -92,7 +92,7 @@ public class Product implements Parcelable {
     private String parentProductId; /// STRING: null for empty
 
     @SerializedName("calories")
-    private double calories;
+    private String calories;
 
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
     private int cumulateMinStockAmountOfSubProducts;
@@ -107,11 +107,11 @@ public class Product implements Parcelable {
         locationId = parcel.readInt();
         quIdPurchase = parcel.readInt();
         quIdStock = parcel.readInt();
-        quFactorPurchaseToStock = parcel.readDouble();
+        quFactorPurchaseToStock = parcel.readString();
         enableTareWeightHandling = parcel.readInt();
         pictureFileName = parcel.readString();
         barcode = parcel.readString();
-        minStockAmount = parcel.readDouble();
+        minStockAmount = parcel.readString();
         defaultBestBeforeDays = parcel.readInt();
         defaultBestBeforeDaysAfterOpen = parcel.readInt();
         defaultBestBeforeDaysAfterFreezing = parcel.readInt();
@@ -119,10 +119,10 @@ public class Product implements Parcelable {
         rowCreatedTimestamp = parcel.readString();
         productGroupId = parcel.readString();
         allowPartialUnitsInStock = parcel.readInt();
-        tareWeight = parcel.readDouble();
+        tareWeight = parcel.readString();
         notCheckStockFulfillmentForRecipes = parcel.readInt();
         parentProductId = parcel.readString();
-        calories = parcel.readInt();
+        calories = parcel.readString();
         cumulateMinStockAmountOfSubProducts = parcel.readInt();
         storeId = parcel.readString();
     }
@@ -135,11 +135,11 @@ public class Product implements Parcelable {
         dest.writeInt(locationId);
         dest.writeInt(quIdPurchase);
         dest.writeInt(quIdStock);
-        dest.writeDouble(quFactorPurchaseToStock);
+        dest.writeString(quFactorPurchaseToStock);
         dest.writeInt(enableTareWeightHandling);
         dest.writeString(pictureFileName);
         dest.writeString(barcode);
-        dest.writeDouble(minStockAmount);
+        dest.writeString(minStockAmount);
         dest.writeInt(defaultBestBeforeDays);
         dest.writeInt(defaultBestBeforeDaysAfterOpen);
         dest.writeInt(defaultBestBeforeDaysAfterFreezing);
@@ -147,10 +147,10 @@ public class Product implements Parcelable {
         dest.writeString(rowCreatedTimestamp);
         dest.writeString(productGroupId);
         dest.writeInt(allowPartialUnitsInStock);
-        dest.writeDouble(tareWeight);
+        dest.writeString(tareWeight);
         dest.writeInt(notCheckStockFulfillmentForRecipes);
         dest.writeString(parentProductId);
-        dest.writeDouble(calories);
+        dest.writeString(calories);
         dest.writeInt(cumulateMinStockAmountOfSubProducts);
         dest.writeString(storeId);
     }
@@ -197,7 +197,11 @@ public class Product implements Parcelable {
     }
 
     public double getQuFactorPurchaseToStock() {
-        return quFactorPurchaseToStock;
+        if(quFactorPurchaseToStock == null || quFactorPurchaseToStock.isEmpty()) {
+            return 1;
+        } else {
+            return Double.parseDouble(quFactorPurchaseToStock);
+        }
     }
 
     public int getEnableTareWeightHandling() {
@@ -209,7 +213,11 @@ public class Product implements Parcelable {
     }
 
     public double getMinStockAmount() {
-        return minStockAmount;
+        if(minStockAmount == null || minStockAmount.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(minStockAmount);
+        }
     }
 
     public int getDefaultBestBeforeDays() {
@@ -241,7 +249,11 @@ public class Product implements Parcelable {
     }
 
     public double getTareWeight() {
-        return tareWeight;
+        if(tareWeight == null || tareWeight.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(tareWeight);
+        }
     }
 
     public int getNotCheckStockFulfillmentForRecipes() {
@@ -253,7 +265,11 @@ public class Product implements Parcelable {
     }
 
     public double getCalories() {
-        return calories;
+        if(calories == null || calories.isEmpty()) {
+            return 0;
+        } else {
+            return Double.parseDouble(calories);
+        }
     }
 
     public int getCumulateMinStockAmountOfSubProducts() {
