@@ -9,8 +9,6 @@
 - translations
 
 ## Improvements
-- api: inner classes for categories
-- hide `<br>` in product description
 - use server settings and configs
 - shorter tags & ids for master edit
 - id naming convention: `frame_back_...` to `frame_..._back`, same with close and `linear_app_bar_..._default` to `linear_..._app_bar_default`
