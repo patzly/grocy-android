@@ -110,7 +110,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				break;
 			case R.id.linear_changelog:
 				startAnimatedIcon(R.id.image_changelog);
-				showTextBottomSheet("changelog", R.string.info_changelog, 0);
+				showTextBottomSheet("CHANGELOG", R.string.info_changelog, 0);
 				break;
 			case R.id.linear_developer:
 				startAnimatedIcon(R.id.image_developer);
@@ -134,7 +134,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_material_components:
 				startAnimatedIcon(R.id.image_license_material_components);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_material_components,
 						R.string.url_material_components
 				);
@@ -142,7 +142,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_material_icons:
 				startAnimatedIcon(R.id.image_license_material_icons);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_material_icons,
 						R.string.url_material_icons
 				);
@@ -150,7 +150,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_roboto:
 				startAnimatedIcon(R.id.image_license_roboto);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_roboto,
 						R.string.url_roboto
 				);
@@ -158,7 +158,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_volley:
 				startAnimatedIcon(R.id.image_license_volley);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_volley,
 						R.string.url_volley
 				);
@@ -166,7 +166,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_gson:
 				startAnimatedIcon(R.id.image_license_gson);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_gson,
 						R.string.url_gson
 				);
@@ -174,7 +174,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_picasso:
 				startAnimatedIcon(R.id.image_license_picasso);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_picasso,
 						R.string.url_picasso
 				);
@@ -182,7 +182,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			case R.id.linear_license_xzing_android:
 				startAnimatedIcon(R.id.image_license_xzing_android);
 				showTextBottomSheet(
-						"apache",
+						"APACHE",
 						R.string.license_xzing_android,
 						R.string.url_zxing_android
 				);
