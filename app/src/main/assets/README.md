@@ -15,8 +15,6 @@
 - shorter tags & ids for master edit
 - id naming convention: `frame_back_...` to `frame_..._back`, same with close and `linear_app_bar_..._default` to `linear_..._app_bar_default`
 - shopping list doesn't show items without name & description, but it shows items with only description?
-- fix color contrast of retro colors with text: [contrast checker](https://webaim.org/resources/contrastchecker/)
-- thanks to grocy author in ABOUT
 
 ## Illustrations
 - offline
