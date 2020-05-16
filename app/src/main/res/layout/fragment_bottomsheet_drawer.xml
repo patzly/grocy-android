@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:paddingTop="14dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/transparent"
+    app:cardCornerRadius="16dp"
     tools:ignore="UseCompoundDrawables">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="8dp"
             android:paddingBottom="8dp">
 
             <LinearLayout
@@ -33,6 +38,8 @@
                     android:text="Shopping list" />
 
             </LinearLayout>
+
+            <View style="@style/Theme.Grocy.Divider"/>
 
             <!--<LinearLayout
                 android:id="@+id/linear_drawer_recipes"
@@ -65,8 +72,6 @@
                     android:text="Meal plan" />
 
             </LinearLayout>-->
-
-            <View style="@style/Theme.Grocy.Divider" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -203,4 +208,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
