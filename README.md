@@ -2,7 +2,7 @@
 
 # Grocy Android
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![HitCount](http://hits.dwyl.com/patzly/grocy-android.svg)](http://hits.dwyl.com/patzly/grocy-android) ![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0) [![HitCount](http://hits.dwyl.com/patzly/grocy-android.svg)](http://hits.dwyl.com/patzly/grocy-android) ![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&style=flat-square)
 
 [Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
 
