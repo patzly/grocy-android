@@ -1,3 +1,6 @@
+0.9.4
+- bug fixes and other improvements
+
 0.9.3
 - prevent double taps in lists
 - swiped items with elevation in dark mode
