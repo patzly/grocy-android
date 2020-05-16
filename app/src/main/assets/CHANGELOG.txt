@@ -1,4 +1,5 @@
-0.9.4
+1.0.0
+- initial stable version
 - bug fixes and other improvements
 
 0.9.3
