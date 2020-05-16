@@ -26,6 +26,7 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -100,10 +101,12 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	 */
 	public void hide() {
 		MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
+		int addOffset = Build.VERSION.SDK_INT == 27 ? 0 : UnitUtil.getDp(getContext(), 10);
 		animateTo(
-				getMeasuredHeight() + params.bottomMargin + UnitUtil.getDp(
-						getContext(), 10
-				), EXIT_ANIMATION_DURATION,
+				getMeasuredHeight()
+						+ params.bottomMargin
+						+ addOffset,
+				EXIT_ANIMATION_DURATION,
 				AnimationUtils.FAST_OUT_LINEAR_IN_INTERPOLATOR
 		);
 		if(isFabVisibleOrWillBeShown()) setCradleVisibility(false);

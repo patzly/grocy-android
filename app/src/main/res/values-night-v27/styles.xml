@@ -6,10 +6,16 @@
     <style name="Theme.Grocy" parent="Base.Grocy">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>
         <item name="android:navigationBarColor">@color/background</item>
         <item name="android:statusBarColor">@color/background</item>
         <item name="elevationOverlayEnabled">true</item>
         <item name="android:windowSplashscreenContent">@drawable/splash_content</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:navigationBarDividerColor">@color/transparent</item>
     </style>
 
     <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
