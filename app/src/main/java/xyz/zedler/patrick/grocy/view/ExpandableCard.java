@@ -24,7 +24,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class ExpandableCard extends LinearLayout {
 
@@ -67,8 +67,14 @@ public class ExpandableCard extends LinearLayout {
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        heightCollapsed = textViewCollapsed.getHeight() + dp(32);
-                        heightExpanded = textViewExpanded.getHeight() + dp(32);
+                        heightCollapsed = textViewCollapsed.getHeight() + UnitUtil.getDp(
+                                context,
+                                32
+                        );
+                        heightExpanded = textViewExpanded.getHeight() + UnitUtil.getDp(
+                                context,
+                                32
+                        ) ;
 
                         getLayoutParams().height = heightCollapsed;
                         requestLayout();
@@ -112,13 +118,5 @@ public class ExpandableCard extends LinearLayout {
         ).setInterpolator(new FastOutSlowInInterpolator());
         heightAnimator.start();
         isOrWillBeExpanded = !isOrWillBeExpanded;
-    }
-
-    private int dp(float dp){
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                getResources().getDisplayMetrics()
-        );
     }
 }
