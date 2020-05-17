@@ -31,4 +31,12 @@ public class UnitUtil {
                 context.getResources().getDisplayMetrics()
         );
     }
+
+    public static int getSp(Context context, float sp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP,
+                sp,
+                context.getResources().getDisplayMetrics()
+        );
+    }
 }

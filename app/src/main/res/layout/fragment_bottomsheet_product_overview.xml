@@ -200,7 +200,7 @@
                     android:id="@+id/item_product_overview_price_history"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
-                    android:layout_marginBottom="14dp"
+                    android:layout_marginBottom="0dp"
                     android:layout_marginStart="14dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginTop="0dp"/>
