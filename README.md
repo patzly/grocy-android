@@ -39,6 +39,10 @@ Grocy Android is still under development. If you're running into a bug or miss a
 
 App translations are coming soon!
 
+## Acknowledgment
+
+We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
+
 ## License
 
 Copyright &copy; 2020 Patrick Zedler & Dominic Zedler. All rights reserved.
