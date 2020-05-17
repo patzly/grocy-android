@@ -24,10 +24,7 @@ _Grocy Android_ uses grocy's official API to provide you a beautiful interface o
 
 ## Downloads
 
-<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
-
-* [GitHub](https://github.com/patzly/grocy-android/releases)
-* F-Droid: coming soon
+<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a> <a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='https://github.com/patzly/grocy-android/blob/master/images/github_badge.png'/></a>
 
 ## Compatibility
 
