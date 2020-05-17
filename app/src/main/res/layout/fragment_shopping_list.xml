@@ -161,6 +161,7 @@
                         android:id="@+id/recycler_shopping_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
                         android:overScrollMode="never"
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"/>
