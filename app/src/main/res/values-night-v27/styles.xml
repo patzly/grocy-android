@@ -16,6 +16,7 @@
     <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
         <item name="android:navigationBarColor">@color/primary</item>
         <item name="android:navigationBarDividerColor">@color/transparent</item>
+        <item name="android:windowSplashscreenContent">@drawable/splash_content_primary</item>
     </style>
 
     <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
