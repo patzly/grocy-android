@@ -26,6 +26,7 @@ public final class Constants {
         public final static String API_KEY = "api_key";
         public final static String CURRENCY = "currency";
         public final static String GROCY_VERSION = "grocy_version";
+        public final static String CREDENTIALS = "credentials";
 
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";

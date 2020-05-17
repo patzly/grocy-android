@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -48,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private final static boolean DEBUG = false;
 
     private SharedPreferences sharedPrefs;
+    private SharedPreferences credentials;
     private WebRequest request;
 
     private TextInputLayout textInputLayoutKey;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        credentials = getSharedPreferences(Constants.PREF.CREDENTIALS, Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_login);
 
@@ -73,10 +76,16 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout textInputLayoutServer = findViewById(R.id.text_input_login_server);
         EditText editTextServer = textInputLayoutServer.getEditText();
         assert editTextServer != null;
+        if(credentials.getString(Constants.PREF.SERVER_URL, null) != null) {
+            editTextServer.setText(credentials.getString(Constants.PREF.SERVER_URL, null));
+        }
 
         textInputLayoutKey = findViewById(R.id.text_input_login_key);
         EditText editTextKey = textInputLayoutKey.getEditText();
         assert editTextKey != null;
+        if(credentials.getString(Constants.PREF.API_KEY, null) != null) {
+            editTextKey.setText(credentials.getString(Constants.PREF.API_KEY, null));
+        }
 
         findViewById(R.id.button_login_key).setOnClickListener(v -> {
             if(editTextServer.getText().toString().isEmpty()) {
@@ -131,6 +140,10 @@ public class LoginActivity extends AppCompatActivity {
                 response -> {
                     if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
+                            .putString(Constants.PREF.SERVER_URL, server)
+                            .putString(Constants.PREF.API_KEY, key)
+                            .apply();
+                    credentials.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
                             .apply();
