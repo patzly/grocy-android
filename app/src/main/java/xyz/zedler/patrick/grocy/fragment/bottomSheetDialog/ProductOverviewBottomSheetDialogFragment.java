@@ -41,21 +41,27 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -75,6 +81,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
 	private boolean setUpWithProductDetails = false, showActions = false;
+	private BezierCurveChart priceHistory;
 	private ListItem
 			itemAmount,
 			itemLocation,
@@ -145,6 +152,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		itemLastPrice = view.findViewById(R.id.item_product_overview_last_price);
 		itemShelfLife = view.findViewById(R.id.item_product_overview_shelf_life);
 		itemSpoilRate = view.findViewById(R.id.item_product_overview_spoil_rate);
+		priceHistory = view.findViewById(R.id.item_product_overview_price_history);
 
 		refreshItems();
 
@@ -269,18 +277,24 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		// LOAD DETAILS
 
-		if(activity.isOnline() && !hasDetails()) {
+		if(activity.isOnline()) {
 			// TODO: global queue
-			new WebRequest(activity.getRequestQueue()).get(
-					activity.getGrocy().getStockProductDetails(product.getId()),
-					response -> {
-						Type listType = new TypeToken<ProductDetails>(){}.getType();
-						productDetails = new Gson().fromJson(response, listType);
-						refreshButtonStates(true);
-						refreshItems();
-					},
-					error -> { }
-			);
+			if(!hasDetails()) {
+				new WebRequest(activity.getRequestQueue()).get(
+						activity.getGrocy().getStockProductDetails(product.getId()),
+						response -> {
+							Type listType = new TypeToken<ProductDetails>(){}.getType();
+							productDetails = new Gson().fromJson(response, listType);
+							refreshButtonStates(true);
+							refreshItems();
+							loadPriceHistory(view);
+						},
+						error -> { }
+				);
+			} else {
+				loadPriceHistory(view);
+			}
+
 		}
 
 		return view;
@@ -392,6 +406,52 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					null
 			);
 		}
+	}
+
+	private void loadPriceHistory(View view) {
+		new WebRequest(activity.getRequestQueue()).get(
+				activity.getGrocy().getPriceHistory(product.getId()),
+				response -> {
+					Type listType = new TypeToken<ArrayList<PriceHistoryEntry>>(){}.getType();
+					ArrayList<PriceHistoryEntry> priceHistoryEntries;
+					priceHistoryEntries = new Gson().fromJson(response, listType);
+					if(priceHistoryEntries.isEmpty()) return;
+
+					ArrayList<String> dates = new ArrayList<>();
+					Collections.reverse(priceHistoryEntries);
+
+					HashMap<String, ArrayList<BezierCurveChart.Point>> curveLists = new HashMap<>();
+
+					for(PriceHistoryEntry priceHistoryEntry : priceHistoryEntries) {
+						Store store = priceHistoryEntry.getStore();
+						String storeName;
+						if(store == null || store.getName().trim().isEmpty()) {
+							storeName = activity.getString(R.string.property_store_unknown);
+						} else {
+							storeName = store.getName().trim();
+						}
+						if(!curveLists.containsKey(storeName)) {
+							curveLists.put(storeName, new ArrayList<>());
+						}
+						ArrayList<BezierCurveChart.Point> curveList = curveLists.get(storeName);
+
+						String date = new DateUtil(activity).getLocalizedDate(
+								priceHistoryEntry.getDate(),
+								DateUtil.FORMAT_SHORT
+						);
+						if(!dates.contains(date)) dates.add(date);
+						assert curveList != null;
+						curveList.add(new BezierCurveChart.Point(
+								dates.indexOf(date),
+								(float) priceHistoryEntry.getPrice()
+						));
+					}
+					priceHistory.init(curveLists, dates);
+					view.findViewById(R.id.linear_product_overview_price_history)
+							.setVisibility(View.VISIBLE);
+				},
+				error -> { }
+		);
 	}
 
 	private void refreshButtonStates(boolean animated) {

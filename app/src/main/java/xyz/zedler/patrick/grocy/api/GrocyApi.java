@@ -177,6 +177,13 @@ public class GrocyApi {
     }
 
     /**
+     * Returns the price history of the given product
+     */
+    public String getPriceHistory(int productId) {
+        return getUrl("/stock/products/" + productId + "/price-history");
+    }
+
+    /**
      * Adds the given amount of the given product to stock
      */
     public String purchaseProduct(int productId) {

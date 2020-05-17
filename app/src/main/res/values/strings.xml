@@ -169,6 +169,7 @@
     <string name="property_location_default">Default location</string>
     <string name="property_locations">Locations</string>
     <string name="property_store">Store</string>
+    <string name="property_store_unknown">Unknown store</string>
     <string name="property_store_default">Default store</string>
     <string name="property_stores">Stores</string>
     <string name="property_shopping_lists">Shopping lists</string>
@@ -178,6 +179,7 @@
     <string name="property_last_price">Last price</string>
     <string name="property_average_shelf_life">Average shelf life</string>
     <string name="property_spoil_rate">Spoil rate</string>
+    <string name="property_price_history">Price history</string>
     <string name="property_product_group">Product group</string>
     <string name="property_product_groups">Product groups</string>
     <string name="property_opened">opened</string>
