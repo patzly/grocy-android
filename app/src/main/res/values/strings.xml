@@ -201,7 +201,7 @@
     <string name="date_month_one">1 month</string>
     <string name="date_year_one">1 year</string>
 
-    <string name="info_acknowledgement">The developers would like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
+    <string name="info_acknowledgement">We\'d like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
     <string name="info_intro">Replay intro</string>
     <string name="info_intro_description">Showcasing features</string>
     <string name="info_material_components_built_with">Built with</string>
