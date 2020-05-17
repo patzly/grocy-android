@@ -41,9 +41,7 @@ Grocy Android requires at least Android 5 Lollipop on your phone and at least gr
 
 ## Contribution
 
-Grocy Android is still under development. If you're running into a bug or miss a feature, feel free to give feedback in the app, write us an email or open an issue in this repository.
-
-App translations are coming soon!
+If you're running into a bug or miss a feature, feel free to give feedback in the app, write us an email or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
 
 ## Acknowledgment
 
