@@ -695,16 +695,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 SortUtil.sortStockItemsByBBD(displayedItems, ascending);
                 break;
         }
-        refreshAdapter(
-                new StockItemAdapter(
-                        activity,
-                        displayedItems,
-                        quantityUnits,
-                        daysExpiringSoon,
-                        sortMode,
-                        this
-                )
-        );
+        refreshAdapter();
     }
 
     private void sortItems(String sortMode) {
@@ -715,10 +706,25 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         sortItems(sortMode, ascending);
     }
 
-    private void refreshAdapter(StockItemAdapter adapter) {
-        stockItemAdapter = adapter;
+    @SuppressWarnings({"rawtypes"})
+    private void refreshAdapter() {
         binding.recyclerStock.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            binding.recyclerStock.setAdapter(adapter);
+            RecyclerView.Adapter adapterCurrent = binding.recyclerStock.getAdapter();
+            if(adapterCurrent != null && adapterCurrent.getClass() != StockItemAdapter.class) {
+                stockItemAdapter = new StockItemAdapter(
+                        activity,
+                        displayedItems,
+                        quantityUnits,
+                        daysExpiringSoon,
+                        sortMode,
+                        this
+                );
+                binding.recyclerStock.setAdapter(stockItemAdapter);
+            } else {
+                stockItemAdapter.setSortMode(sortMode);
+                stockItemAdapter.updateData(displayedItems);
+                stockItemAdapter.notifyDataSetChanged();
+            }
             binding.recyclerStock.animate().alpha(1).setDuration(150).start();
         }).start();
     }

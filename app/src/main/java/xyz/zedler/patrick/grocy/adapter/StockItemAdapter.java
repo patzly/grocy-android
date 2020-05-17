@@ -212,6 +212,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         );
     }
 
+    public void setSortMode(String sortMode) {
+        this.sortMode = sortMode;
+    }
+
+    public void updateData(ArrayList<StockItem> stockItems) {
+        this.stockItems = stockItems;
+    }
+
     @Override
     public long getItemId(int position) {
         return stockItems.get(position).getProductId();
