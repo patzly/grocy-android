@@ -6,21 +6,30 @@
 
 [Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
 
-_Grocy Android_ uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
+Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
 ## Features
 
 * Stock overview
-* Barcode scanning
+* Fast barcode scanning
 * Consume and purchase with shortcuts
 * Master data editing
 * Shopping list
 * Intuitive batch processing
 * Dark mode
 * No ads, analytics or in-app purchases
-* Built with Material Components
 * Low data usage
-* Tiny size (~ 5MB)
+* Tiny size (~5MB)
+
+## Upcoming
+
+Grocy Android is still under development. In the next weeks we're going to implement some more features!
+
+* Full shopping list support
+* Disabling of unused features with server config flags
+* Recipes
+* Meal plans
+* App translations
 
 ## Downloads
 
