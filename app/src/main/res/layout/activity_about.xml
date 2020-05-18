@@ -402,15 +402,6 @@
 
             </LinearLayout>
 
-            <TextView
-                style="@style/Theme.Grocy.ListItem.Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:text="@string/info_closing"/>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
