@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <color name="retro_green_dark">@color/retro_green</color>
-    <color name="retro_red_dark">@color/retro_red_light</color>
-    <color name="retro_yellow_dark">@color/retro_yellow_light</color>
-    <color name="retro_dirt_dark">@color/retro_dirt</color>
-    <color name="retro_blue_dark">@color/retro_blue_light</color>
-    <color name="retro_dark_day_night">#527b6e</color>
+    <color name="retro_red_fg">@color/retro_red_bg</color>
+    <color name="retro_yellow_fg">@color/retro_yellow_bg</color>
+    <color name="retro_dirt_fg">@color/retro_dirt_bg</color>
+    <color name="retro_green_fg">@color/retro_green_bg_black</color>
+    <color name="retro_blue_fg">@color/retro_blue_bg</color>
+    <color name="retro_dark_fg">#527b6e</color>
 
     <!-- PRIMARY -->
 

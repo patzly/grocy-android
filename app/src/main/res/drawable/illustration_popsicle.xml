@@ -24,7 +24,7 @@
       android:pathData="M11.85,15.75l-1.04,0.15 0.68,-0.83m-2.4,1.34l1.04,-0.15 -0.68,0.83"
       android:strokeLineJoin="round"
       android:strokeWidth=".3"
-      android:strokeColor="@color/on_retro"
+      android:strokeColor="#111111"
       android:strokeLineCap="round"/>
   <path
       android:pathData="M9.155,14.8236L9.9807,14.3337A0.4,0.4 104.32,0 1,10.5288 14.4736L10.5339,14.4822A0.4,0.4 104.32,0 1,10.394 15.0303L9.5683,15.5202A0.4,0.4 104.32,0 1,9.0202 15.3803L9.0151,15.3717A0.4,0.4 104.32,0 1,9.155 14.8236z"
@@ -32,6 +32,6 @@
   <path
       android:pathData="M15.8,19.02s0.24,-0.9 -0.44,-2.09"
       android:strokeWidth=".6"
-      android:strokeColor="@color/retro_red_light"
+      android:strokeColor="@color/retro_red_bg"
       android:strokeLineCap="round"/>
 </vector>

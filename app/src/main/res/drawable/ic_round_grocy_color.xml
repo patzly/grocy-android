@@ -14,7 +14,7 @@
       android:fillColor="#e2d9a2"/>
   <path
       android:pathData="M12,3C9.23,3 7,5.23 7,8v1h2V8a3,3 0,1 1,6 0v1h2V8c0,-2.77 -2.23,-5 -5,-5z"
-      android:fillColor="@color/retro_dark_day_night"/>
+      android:fillColor="@color/retro_dark_fg"/>
   <path
       android:pathData="M2,9a1,1 0,0 0,-0.96 1.27l1.98,7.22A4.5,4.5 0,0 0,7.42 21h9.2a4.5,4.5 0,0 0,4.38 -3.52l1.98,-7.21L23,10a1,1 0,0 0,-1 -1z"
       android:fillColor="#93b3a2"/>

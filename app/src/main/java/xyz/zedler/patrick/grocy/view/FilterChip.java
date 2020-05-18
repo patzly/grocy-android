@@ -83,7 +83,7 @@ public class FilterChip extends LinearLayout {
         textView = findViewById(R.id.text_filter_chip);
 
         setText(text);
-        setIconTint(ContextCompat.getColor(context, R.color.on_retro));
+        setIconTint(ContextCompat.getColor(context, R.color.black));
         setBackgroundColor(ContextCompat.getColor(context, colorId));
 
         setOnClickListener(v -> {

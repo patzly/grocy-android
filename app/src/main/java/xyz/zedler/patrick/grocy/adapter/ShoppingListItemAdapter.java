@@ -189,7 +189,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
             holder.textViewAmount.setTextColor(
-                    ContextCompat.getColor(context, R.color.retro_blue_dark)
+                    ContextCompat.getColor(context, R.color.retro_blue_fg)
             );
         } else {
             holder.textViewAmount.setTypeface(

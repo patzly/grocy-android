@@ -11,5 +11,5 @@
       android:fillColor="@color/retro_green"/>
   <path
       android:pathData="M7,11v6a1,1 0,0 0,1 1h8a1,1 0,0 0,1 -1v-6H7z"
-      android:fillColor="@color/retro_yellow_light"/>
+      android:fillColor="@color/retro_yellow_bg"/>
 </vector>

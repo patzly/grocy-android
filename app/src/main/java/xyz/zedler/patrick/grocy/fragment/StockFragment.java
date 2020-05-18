@@ -206,7 +206,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         chipExpiring = new FilterChip(
                 activity,
-                R.color.retro_yellow_light,
+                R.color.retro_yellow_bg,
                 activity.getString(R.string.msg_expiring_products, 0),
                 () -> {
                     chipExpired.changeState(false);
@@ -217,7 +217,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         chipExpired = new FilterChip(
                 activity,
-                R.color.retro_red_light,
+                R.color.retro_red_bg,
                 activity.getString(R.string.msg_expired_products, 0),
                 () -> {
                     chipExpiring.changeState(false);
@@ -228,7 +228,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         chipMissing = new FilterChip(
                 activity,
-                R.color.retro_blue_light,
+                R.color.retro_blue_bg,
                 activity.getString(R.string.msg_missing_products, 0),
                 () -> {
                     chipExpiring.changeState(false);

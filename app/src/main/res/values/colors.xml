@@ -6,21 +6,28 @@
     <color name="transparent">#00000000</color>
 
     <color name="retro_red">#e06a4e</color>
-    <color name="retro_red_light">#e8917c</color>
-    <color name="retro_red_dark">#dd5a3b</color>
+    <color name="retro_red_fg">#c14f33</color>
+    <color name="retro_red_bg">#E3795F</color>
+
     <color name="retro_yellow">#deb853</color>
-    <color name="retro_yellow_light">#e5c778</color>
-    <color name="retro_yellow_dark">#c69926</color>
+    <color name="retro_yellow_fg">#8E6F1A</color>
+    <color name="retro_yellow_bg">#E2C269</color>
+
     <color name="retro_dirt">#e2d9a2</color>
-    <color name="retro_dirt_dark">#938950</color>
+    <color name="retro_dirt_fg">#807128</color>
+    <color name="retro_dirt_bg">@color/retro_dirt</color>
+
     <color name="retro_green">#789f8a</color>
-    <color name="retro_green_dark">#42745a</color>
-    <color name="retro_dark">#0a373a</color>
-    <color name="retro_dark_day_night">@color/retro_dark</color>
+    <color name="retro_green_fg">#60837a</color>
+    <color name="retro_green_bg_black">#789f8a</color>
+    <color name="retro_green_bg_white">#689283</color>
+
     <color name="retro_blue">#5a97aa</color>
-    <color name="retro_blue_light">#96bdc9</color>
-    <color name="retro_blue_dark">#4f8799</color>
-    <color name="on_retro">#111111</color>
+    <color name="retro_blue_fg">#497C8D</color>
+    <color name="retro_blue_bg">#96bdc9</color>
+
+    <color name="retro_dark">#0a373a</color>
+    <color name="retro_dark_fg">@color/retro_dark</color>
 
     <color name="grey50">#f8f9fa</color>
     <color name="grey100">#f1f3f4</color>
@@ -41,7 +48,7 @@
 
     <!-- SECONDARY -->
 
-    <color name="secondary">@color/retro_green</color>
+    <color name="secondary">@color/retro_green_bg_white</color>
     <color name="secondary_translucent">#226bad9e</color>
     <color name="on_secondary">@color/white</color>
     <color name="highlight_on_secondary">#22ffffff</color>
@@ -49,7 +56,7 @@
     <!-- BACKGROUND -->
 
     <color name="background">@color/white</color>
-    <color name="on_background">#dd000000</color>
+    <color name="on_background">#000000</color>
     <color name="on_background_variant">#edeff1</color>
     <color name="on_background_secondary">@color/grey600</color>
     <color name="on_background_tertiary">@color/grey200</color>
@@ -72,7 +79,7 @@
 
     <!-- ERROR -->
 
-    <color name="error">@color/retro_red_dark</color>
+    <color name="error">@color/retro_red_fg</color>
 
     <!-- STROKES -->
 

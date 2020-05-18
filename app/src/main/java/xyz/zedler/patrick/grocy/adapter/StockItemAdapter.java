@@ -155,7 +155,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
             holder.textViewAmount.setTextColor(
-                    ContextCompat.getColor(context, R.color.retro_blue_dark)
+                    ContextCompat.getColor(context, R.color.retro_blue_fg)
             );
         } else {
             holder.textViewAmount.setTypeface(
@@ -192,8 +192,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             holder.textViewDays.setTextColor(
                     ContextCompat.getColor(
                             context, Integer.parseInt(days) < 0
-                                    ? R.color.retro_red_dark
-                                    : R.color.retro_yellow_dark
+                                    ? R.color.retro_red_fg
+                                    : R.color.retro_yellow_fg
                     )
             );
         } else {

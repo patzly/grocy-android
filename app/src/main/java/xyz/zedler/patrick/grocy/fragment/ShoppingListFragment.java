@@ -214,7 +214,7 @@ public class ShoppingListFragment extends Fragment
 
         chipMissing = new FilterChip(
                 activity,
-                R.color.retro_blue_light,
+                R.color.retro_blue_bg,
                 activity.getString(R.string.msg_missing_products, 0),
                 () -> {
                     chipUndone.changeState(false);
@@ -224,7 +224,7 @@ public class ShoppingListFragment extends Fragment
         );
         chipUndone = new FilterChip(
                 activity,
-                R.color.retro_yellow_light,
+                R.color.retro_yellow_bg,
                 activity.getString(R.string.msg_undone_items, 0),
                 () -> {
                     chipMissing.changeState(false);

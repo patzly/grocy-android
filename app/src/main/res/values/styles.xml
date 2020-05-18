@@ -478,7 +478,7 @@
     <style name="TextAppearance.Grocy.Category" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textColor">@color/retro_green_fg</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
 

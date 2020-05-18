@@ -190,11 +190,11 @@ public class BezierCurveChart extends View {
 
     private void drawCurve(Canvas canvas) {
         ArrayList<Integer> curveColors = new ArrayList<>();
-        curveColors.add(getColor(R.color.retro_blue_light));
-        curveColors.add(getColor(R.color.retro_yellow_light));
-        curveColors.add(getColor(R.color.retro_red_light));
-        curveColors.add(getColor(R.color.retro_dirt_dark)); // TODO: light variants
-        curveColors.add(getColor(R.color.retro_green_dark));
+        curveColors.add(getColor(R.color.retro_blue_bg));
+        curveColors.add(getColor(R.color.retro_yellow_bg));
+        curveColors.add(getColor(R.color.retro_red_bg));
+        curveColors.add(getColor(R.color.retro_dirt_bg)); // TODO: light variants
+        curveColors.add(getColor(R.color.retro_green_bg_black));
         int colorIndex = 0;
 
         for(String curveLabel : adjustedCurveLists.keySet()) {

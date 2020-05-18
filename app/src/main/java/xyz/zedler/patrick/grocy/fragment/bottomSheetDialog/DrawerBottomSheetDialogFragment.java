@@ -173,7 +173,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId) {
         view.findViewById(linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
         ((TextView) view.findViewById(textViewId)).setTextColor(
-                ContextCompat.getColor(activity, R.color.secondary)
+                ContextCompat.getColor(activity, R.color.retro_green_fg)
         );
     }
 
