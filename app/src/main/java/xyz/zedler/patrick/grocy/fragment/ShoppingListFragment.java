@@ -75,6 +75,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
@@ -778,7 +779,7 @@ public class ShoppingListFragment extends Fragment
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 setUpSearch();
                 return true;
             });

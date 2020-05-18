@@ -19,8 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.annotation.SuppressLint;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -56,6 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -124,7 +122,7 @@ public class MasterLocationFragment extends Fragment {
         editTextName = textInputName.getEditText();
         assert editTextName != null;
         editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewName);
+            if(hasFocus) IconUtil.start(imageViewName);
         });
 
         // description
@@ -133,16 +131,19 @@ public class MasterLocationFragment extends Fragment {
         editTextDescription = textInputDescription.getEditText();
         assert editTextDescription != null;
         editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewDescription);
+            if(hasFocus) IconUtil.start(imageViewDescription);
         });
 
         // is freezer
         checkBoxIsFreezer = activity.findViewById(R.id.checkbox_master_location_freezer);
         checkBoxIsFreezer.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> startAnimatedIcon(R.id.image_master_location_freezer)
+                (buttonView, isChecked) -> IconUtil.start(
+                        activity,
+                        R.id.image_master_location_freezer
+                )
         );
         activity.findViewById(R.id.linear_master_location_freezer).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_master_location_freezer);
+            IconUtil.start(activity, R.id.image_master_location_freezer);
             checkBoxIsFreezer.setChecked(!checkBoxIsFreezer.isChecked());
         });
 
@@ -409,24 +410,11 @@ public class MasterLocationFragment extends Fragment {
         MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 checkForUsage(editLocation);
                 return true;
             });
             delete.setVisible(editLocation != null);
-        }
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        startAnimatedIcon(activity.findViewById(viewId));
-    }
-
-    @SuppressLint("LongLogTag")
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
     }
 

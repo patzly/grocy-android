@@ -19,8 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.annotation.SuppressLint;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +52,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -125,7 +124,7 @@ public class MasterProductGroupFragment extends Fragment {
         editTextName = textInputName.getEditText();
         assert editTextName != null;
         editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewName);
+            if(hasFocus) IconUtil.start(imageViewName);
         });
 
         // description
@@ -134,7 +133,7 @@ public class MasterProductGroupFragment extends Fragment {
         editTextDescription = textInputDescription.getEditText();
         assert editTextDescription != null;
         editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewDescription);
+            if(hasFocus) IconUtil.start(imageViewDescription);
         });
 
         // BUNDLE WHEN EDIT
@@ -400,20 +399,11 @@ public class MasterProductGroupFragment extends Fragment {
         MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 checkForUsage(editProductGroup);
                 return true;
             });
             delete.setVisible(editProductGroup != null);
-        }
-    }
-
-    @SuppressLint("LongLogTag")
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
     }
 

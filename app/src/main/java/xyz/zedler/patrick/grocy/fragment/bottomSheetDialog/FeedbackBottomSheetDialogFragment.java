@@ -23,18 +23,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -42,6 +38,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -69,7 +66,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		assert activity != null;
 
 		view.findViewById(R.id.linear_rate).setOnClickListener(v -> {
-			startAnimatedIcon(view, R.id.image_feedback_rate);
+			IconUtil.start(activity, R.id.image_feedback_rate);
 			Uri uri = Uri.parse(
 					"market://details?id=" + activity.getApplicationContext().getPackageName()
 			);
@@ -95,7 +92,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		EditText editText = textInputLayoutFeedback.getEditText();
 		assert editText != null;
 		editText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-			if(hasFocus) startAnimatedIcon(view, R.id.image_feedback_box);
+			if(hasFocus) IconUtil.start(activity, R.id.image_feedback_box);
 		});
 
 		view.findViewById(R.id.button_feedback_send).setOnClickListener(v -> {
@@ -113,14 +110,6 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		});
 
 		return view;
-	}
-
-	private void startAnimatedIcon(View view, @IdRes int viewId) {
-		try {
-			((Animatable) ((ImageView) view.findViewById(viewId)).getDrawable()).start();
-		} catch (ClassCastException cla) {
-			Log.e(TAG, "startAnimatedIcon(ImageView) requires AVD!");
-		}
 	}
 
 	@NonNull

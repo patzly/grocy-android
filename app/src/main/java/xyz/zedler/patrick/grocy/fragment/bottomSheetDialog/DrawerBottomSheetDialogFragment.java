@@ -21,14 +21,12 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
@@ -44,6 +42,7 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.SettingsActivity;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
@@ -148,7 +147,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), bundle);
                 break;
             case R.id.linear_settings:
-                startAnimatedIcon(R.id.image_settings);
+                IconUtil.start(activity, R.id.image_settings);
                 new Handler().postDelayed(() -> {
                     dismiss();
                     startActivity(new Intent(activity, SettingsActivity.class));
@@ -159,7 +158,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 activity.showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
                 break;
             case R.id.linear_help:
-                startAnimatedIcon(R.id.image_help);
+                IconUtil.start(activity, R.id.image_help);
                 //startActivity(new Intent(activity, HelpActivity.class));
                 new Handler().postDelayed(this::dismiss, 500);
                 break;
@@ -176,14 +175,6 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        try {
-            ((Animatable) ((ImageView) view.findViewById(viewId)).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(ImageView) requires AVD!");
-        }
     }
 
     @NonNull

@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +46,7 @@ import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -90,9 +89,7 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 		String link = bundle.getString(Constants.BOTTOM_SHEET_TEXT.LINK);
 		if (link != null) {
 			frameLayoutLink.setOnClickListener(v -> {
-				((Animatable) ((ImageView) view.findViewById(
-						R.id.image_text_open_link
-				)).getDrawable()).start();
+				IconUtil.start(getActivity(), R.id.image_text_open_link);
 				new Handler().postDelayed(
 						() -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
 						500

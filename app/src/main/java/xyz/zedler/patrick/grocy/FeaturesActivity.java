@@ -21,10 +21,8 @@ package xyz.zedler.patrick.grocy;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +46,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class FeaturesActivity extends AppCompatActivity {
 
@@ -82,14 +80,14 @@ public class FeaturesActivity extends AppCompatActivity {
         frameLayoutPrevious = findViewById(R.id.frame_features_previous);
         frameLayoutPrevious.setOnClickListener(v -> {
             if(viewPager.getCurrentItem() > 0) {
-                startAnimatedIcon(R.id.image_features_previous);
+                IconUtil.start(this, R.id.image_features_previous);
                 viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
             }
         });
         frameLayoutNext = findViewById(R.id.frame_features_next);
         frameLayoutNext.setOnClickListener(v -> {
             if(viewPager.getCurrentItem() < 3) {
-                startAnimatedIcon(R.id.image_features_next);
+                IconUtil.start(this, R.id.image_features_next);
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
             }
         });
@@ -190,14 +188,6 @@ public class FeaturesActivity extends AppCompatActivity {
                 scrollPos,
                 offset
         );
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        try {
-            ((Animatable) ((ImageView) findViewById(viewId)).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(ImageView) requires AVD!");
-        }
     }
 
     private static class FeaturesPagerAdapter extends FragmentStatePagerAdapter {

@@ -23,7 +23,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -42,7 +41,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -84,6 +82,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -181,7 +180,7 @@ public class PurchaseFragment extends Fragment {
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(R.id.image_purchase_product);
+                IconUtil.start(activity, R.id.image_purchase_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             }
@@ -259,7 +258,7 @@ public class PurchaseFragment extends Fragment {
         });
         editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(imageViewAmount);
+                IconUtil.start(imageViewAmount);
                 // editTextAmount.selectAll();
             }
         });
@@ -271,7 +270,7 @@ public class PurchaseFragment extends Fragment {
         });
 
         activity.findViewById(R.id.button_purchase_amount_more).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_purchase_amount);
+            IconUtil.start(activity, R.id.image_purchase_amount);
             if(editTextAmount.getText().toString().isEmpty()) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
@@ -282,7 +281,7 @@ public class PurchaseFragment extends Fragment {
 
         activity.findViewById(R.id.button_purchase_amount_less).setOnClickListener(v -> {
             if(!editTextAmount.getText().toString().isEmpty()) {
-                startAnimatedIcon(R.id.image_purchase_amount);
+                IconUtil.start(activity, R.id.image_purchase_amount);
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
                 if(amountNew >= minAmount) {
                     editTextAmount.setText(NumUtil.trim(amountNew));
@@ -309,7 +308,7 @@ public class PurchaseFragment extends Fragment {
         });
         editTextPrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(imageViewPrice);
+                IconUtil.start(imageViewPrice);
                 // editTextAmount.selectAll();
             }
         });
@@ -321,7 +320,7 @@ public class PurchaseFragment extends Fragment {
         });
 
         activity.findViewById(R.id.button_purchase_price_more).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_purchase_price);
+            IconUtil.start(activity, R.id.image_purchase_price);
             if(editTextPrice.getText().toString().isEmpty()) {
                 editTextPrice.setText(NumUtil.trimPrice(1));
             } else {
@@ -331,7 +330,7 @@ public class PurchaseFragment extends Fragment {
         });
         activity.findViewById(R.id.button_purchase_price_less).setOnClickListener(v -> {
             if(!editTextPrice.getText().toString().isEmpty()) {
-                startAnimatedIcon(R.id.image_purchase_price);
+                IconUtil.start(activity, R.id.image_purchase_price);
                 double priceNew = NumUtil.stringToDouble(editTextPrice.getText().toString()) - 1;
                 if(priceNew >= 0) {
                     editTextPrice.setText(NumUtil.trimPrice(priceNew));
@@ -365,7 +364,7 @@ public class PurchaseFragment extends Fragment {
 
         activity.findViewById(R.id.linear_purchase_location).setOnClickListener(v -> {
             if(productDetails != null) {
-                startAnimatedIcon(R.id.image_purchase_location);
+                IconUtil.start(activity, R.id.image_purchase_location);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
@@ -878,7 +877,7 @@ public class PurchaseFragment extends Fragment {
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) {
             menuItemDetails.setOnMenuItemClickListener(item -> {
-                ((Animatable) menuItemDetails.getIcon()).start();
+                IconUtil.start(menuItemDetails);
                 if(productDetails != null) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
@@ -1079,18 +1078,6 @@ public class PurchaseFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        startAnimatedIcon(activity.findViewById(viewId));
-    }
-
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
-        }
     }
 
     private int getColor(@ColorRes int color) {

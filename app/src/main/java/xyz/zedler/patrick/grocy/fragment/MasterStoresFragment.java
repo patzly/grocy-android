@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -352,7 +353,7 @@ public class MasterStoresFragment extends Fragment
                             : R.drawable.ic_round_sort_desc_to_asc_anim
             );
             itemSort.getIcon().setAlpha(255);
-            activity.startAnimatedIcon(item);
+            IconUtil.start(item);
             sortStores();
             return true;
         });
@@ -363,7 +364,7 @@ public class MasterStoresFragment extends Fragment
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 setUpSearch();
                 return true;
             });

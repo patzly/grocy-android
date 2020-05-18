@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,7 +34,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -88,6 +86,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBotto
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomAppBar.setNavigationOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            startAnimatedIcon(bottomAppBar.getNavigationIcon());
+            IconUtil.start(bottomAppBar.getNavigationIcon());
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
             showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
@@ -797,7 +796,7 @@ public class MainActivity extends AppCompatActivity {
     ) {
         replaceFabIcon(icon, tag, animated);
         fab.setOnClickListener(v -> {
-            startAnimatedIcon(fab.getDrawable());
+            IconUtil.start(fab.getDrawable());
             onClick.run();
         });
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -1143,25 +1142,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFabIcon(Drawable icon) {
         fab.setImageDrawable(icon);
-    }
-
-    private void startAnimatedIcon(Drawable drawable) {
-        try {
-            ((Animatable) drawable).start();
-        } catch (ClassCastException cla) {
-            if(DEBUG) Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
-        }
-    }
-
-    public void startAnimatedIcon(MenuItem item) {
-        try {
-            try {
-                ((Animatable) item.getIcon()).start();
-            } catch (ClassCastException e) {
-                if(DEBUG) Log.e(TAG, "startAnimatedIcon(MenuItem) requires AVD!");
-            }
-        } catch (NullPointerException e) {
-            if(DEBUG) Log.e(TAG, "startAnimatedIcon(MenuItem): Icon missing!");
-        }
     }
 }

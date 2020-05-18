@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -64,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -123,7 +123,7 @@ public class SettingsActivity extends AppCompatActivity
 			if(clickUtil.isDisabled()) return false;
 			switch (item.getItemId()) {
 				case R.id.action_about:
-					((Animatable) item.getIcon()).start();
+					IconUtil.start(item);
 					startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
@@ -266,7 +266,7 @@ public class SettingsActivity extends AppCompatActivity
 				showBottomSheet(new LogoutBottomSheetDialogFragment(), bundle);
 				break;
 			case R.id.linear_setting_expiring_soon_days:
-				startAnimatedIcon(R.id.image_setting_expiring_soon_days);
+				IconUtil.start(this, R.id.image_setting_expiring_soon_days);
 				Bundle bundleExpiringSoonDays = new Bundle();
 				bundleExpiringSoonDays.putString(
 						Constants.ARGUMENT.TYPE,
@@ -282,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity
 				);
 				break;
 			case R.id.linear_setting_default_amount_purchase:
-				startAnimatedIcon(R.id.image_setting_default_amount_purchase);
+				IconUtil.start(this, R.id.image_setting_default_amount_purchase);
 				Bundle bundleAmountPurchase = new Bundle();
 				bundleAmountPurchase.putString(
 						Constants.ARGUMENT.TYPE,
@@ -301,7 +301,7 @@ public class SettingsActivity extends AppCompatActivity
 				);
 				break;
 			case R.id.linear_setting_default_amount_consume:
-				startAnimatedIcon(R.id.image_setting_default_amount_consume);
+				IconUtil.start(this, R.id.image_setting_default_amount_consume);
 				Bundle bundleAmountConsume = new Bundle();
 				bundleAmountConsume.putString(
 						Constants.ARGUMENT.TYPE,
@@ -326,7 +326,7 @@ public class SettingsActivity extends AppCompatActivity
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		switch (buttonView.getId()) {
 			case R.id.switch_setting_dark_mode:
-				startAnimatedIcon(R.id.image_setting_dark_mode);
+				IconUtil.start(this, R.id.image_setting_dark_mode);
 				sharedPrefs.edit().putBoolean(Constants.PREF.DARK_MODE, isChecked).apply();
 				new Handler().postDelayed(() -> {
 					imageViewDark.setImageResource(
@@ -438,14 +438,6 @@ public class SettingsActivity extends AppCompatActivity
 	private boolean isDemo() {
 		String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
 		return server != null && server.contains("grocy.info");
-	}
-
-	private void startAnimatedIcon(int viewId) {
-		try {
-			((Animatable) ((ImageView) findViewById(viewId)).getDrawable()).start();
-		} catch (ClassCastException e) {
-			if(DEBUG) Log.e(TAG, "startAnimatedIcon() requires AVD!");
-		}
 	}
 
 	private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {

@@ -75,6 +75,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
@@ -1167,7 +1168,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 setUpSearch();
                 return true;
             });

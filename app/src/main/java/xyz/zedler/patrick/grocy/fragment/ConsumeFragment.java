@@ -23,7 +23,6 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -42,7 +41,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -81,6 +79,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -170,7 +169,7 @@ public class ConsumeFragment extends Fragment {
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(R.id.image_consume_product);
+                IconUtil.start(activity, R.id.image_consume_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             } else {
@@ -220,7 +219,7 @@ public class ConsumeFragment extends Fragment {
         });
         editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(imageViewAmount);
+                IconUtil.start(imageViewAmount);
                 // editTextAmount.selectAll();
             }
         });
@@ -232,7 +231,7 @@ public class ConsumeFragment extends Fragment {
         });
 
         activity.findViewById(R.id.button_consume_amount_more).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_consume_amount);
+            IconUtil.start(activity, R.id.image_consume_amount);
             if(editTextAmount.getText().toString().isEmpty()) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
@@ -245,7 +244,7 @@ public class ConsumeFragment extends Fragment {
 
         activity.findViewById(R.id.button_consume_amount_less).setOnClickListener(v -> {
             if(!editTextAmount.getText().toString().isEmpty()) {
-                startAnimatedIcon(R.id.image_consume_amount);
+                IconUtil.start(activity, R.id.image_consume_amount);
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
                 if(amountNew >= minAmount) {
                     editTextAmount.setText(NumUtil.trim(amountNew));
@@ -256,7 +255,7 @@ public class ConsumeFragment extends Fragment {
         // location
 
         activity.findViewById(R.id.linear_consume_location).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_consume_location);
+            IconUtil.start(activity, R.id.image_consume_location);
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
@@ -273,7 +272,7 @@ public class ConsumeFragment extends Fragment {
         // specific
 
         activity.findViewById(R.id.linear_consume_specific).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_consume_specific);
+            IconUtil.start(activity, R.id.image_consume_specific);
             if(productDetails != null) {
                 ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
                 for(StockEntry stockEntry : stockEntries) {
@@ -299,10 +298,10 @@ public class ConsumeFragment extends Fragment {
 
         checkBoxSpoiled = activity.findViewById(R.id.checkbox_consume_spoiled);
         checkBoxSpoiled.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> startAnimatedIcon(R.id.image_consume_spoiled)
+                (buttonView, isChecked) -> IconUtil.start(activity, R.id.image_consume_spoiled)
         );
         activity.findViewById(R.id.linear_consume_spoiled).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_consume_spoiled);
+            IconUtil.start(activity, R.id.image_consume_spoiled);
             checkBoxSpoiled.setChecked(!checkBoxSpoiled.isChecked());
         });
 
@@ -893,7 +892,7 @@ public class ConsumeFragment extends Fragment {
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) {
             menuItemDetails.setOnMenuItemClickListener(item -> {
-                ((Animatable) menuItemDetails.getIcon()).start();
+                IconUtil.start(menuItemDetails);
                 if(productDetails != null) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
@@ -986,18 +985,6 @@ public class ConsumeFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        startAnimatedIcon(activity.findViewById(viewId));
-    }
-
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
-        }
     }
 
     @NonNull

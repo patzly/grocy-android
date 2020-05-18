@@ -150,21 +150,19 @@ public class FilterChip extends LinearLayout {
                         ? R.drawable.ic_round_filter_list_in_anim
                         : R.drawable.ic_round_filter_list_out_anim
                 );
-        new Handler().postDelayed(this::startIconAnimation, active ? 100 : 0);
+        new Handler().postDelayed(() -> {
+            try {
+                ((Animatable) imageViewIcon.getDrawable()).start();
+            } catch (ClassCastException cla) {
+                if(DEBUG) Log.e(TAG, "startIconAnimation() requires AVD!");
+            }
+        }, active ? 100 : 0);
     }
 
     @Override
     public boolean callOnClick() {
         setActive(!isActive);
         return super.callOnClick();
-    }
-
-    private void startIconAnimation() {
-        try {
-            ((Animatable) (imageViewIcon).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            if(DEBUG) Log.e(TAG, "startIconAnimation() requires AVD!");
-        }
     }
 
     private int dp(int dp){

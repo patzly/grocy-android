@@ -21,14 +21,11 @@ package xyz.zedler.patrick.grocy;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
@@ -41,6 +38,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -102,18 +100,18 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
 		switch(v.getId()) {
 			case R.id.linear_intro:
-				startAnimatedIcon(R.id.image_intro);
+				IconUtil.start(this, R.id.image_intro);
 				new Handler().postDelayed(
 						() -> startActivity(new Intent(this, FeaturesActivity.class)),
 						150
 				);
 				break;
 			case R.id.linear_changelog:
-				startAnimatedIcon(R.id.image_changelog);
+				IconUtil.start(this, R.id.image_changelog);
 				showTextBottomSheet("CHANGELOG", R.string.info_changelog, 0);
 				break;
 			case R.id.linear_developer:
-				startAnimatedIcon(R.id.image_developer);
+				IconUtil.start(this, R.id.image_developer);
 				new Handler().postDelayed(
 						() -> startActivity(
 								new Intent(
@@ -132,7 +130,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_material_components:
-				startAnimatedIcon(R.id.image_license_material_components);
+				IconUtil.start(this, R.id.image_license_material_components);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_material_components,
@@ -140,7 +138,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_material_icons:
-				startAnimatedIcon(R.id.image_license_material_icons);
+				IconUtil.start(this, R.id.image_license_material_icons);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_material_icons,
@@ -148,7 +146,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_roboto:
-				startAnimatedIcon(R.id.image_license_roboto);
+				IconUtil.start(this, R.id.image_license_roboto);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_roboto,
@@ -156,7 +154,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_volley:
-				startAnimatedIcon(R.id.image_license_volley);
+				IconUtil.start(this, R.id.image_license_volley);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_volley,
@@ -164,7 +162,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_gson:
-				startAnimatedIcon(R.id.image_license_gson);
+				IconUtil.start(this, R.id.image_license_gson);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_gson,
@@ -172,7 +170,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_picasso:
-				startAnimatedIcon(R.id.image_license_picasso);
+				IconUtil.start(this, R.id.image_license_picasso);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_picasso,
@@ -180,7 +178,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				);
 				break;
 			case R.id.linear_license_xzing_android:
-				startAnimatedIcon(R.id.image_license_xzing_android);
+				IconUtil.start(this, R.id.image_license_xzing_android);
 				showTextBottomSheet(
 						"APACHE",
 						R.string.license_xzing_android,
@@ -202,13 +200,5 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 		getSupportFragmentManager().beginTransaction()
 				.add(bottomSheet, bottomSheet.toString())
 				.commit();
-	}
-
-	private void startAnimatedIcon(int viewId) {
-		try {
-			((Animatable) ((ImageView) findViewById(viewId)).getDrawable()).start();
-		} catch (ClassCastException e) {
-			if(DEBUG) Log.e(TAG, "startAnimatedIcon() requires AVD!");
-		}
 	}
 }

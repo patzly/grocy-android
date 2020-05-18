@@ -127,7 +127,7 @@ public class ActionButton extends LinearLayout {
 
     public void startIconAnimation() {
         try {
-            ((Animatable) (imageViewIcon).getDrawable()).start();
+            ((Animatable) imageViewIcon.getDrawable()).start();
         } catch (ClassCastException cla) {
             if(DEBUG) Log.e(TAG, "startIconAnimation() requires AVD!");
         }

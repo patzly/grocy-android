@@ -23,7 +23,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -42,7 +41,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -81,6 +79,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -181,7 +180,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         editTextName = textInputName.getEditText();
         assert editTextName != null;
         editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewName);
+            if(hasFocus) IconUtil.start(imageViewName);
         });
 
         // parent product
@@ -241,7 +240,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.linear_master_product_edit_simple_location
         ).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_master_product_edit_simple_location);
+            IconUtil.start(activity, R.id.image_master_product_edit_simple_location);
             if(!locations.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(
@@ -277,7 +276,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             }
         });
         editTextMinAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) startAnimatedIcon(imageViewMinAmount);
+            if(hasFocus) IconUtil.start(imageViewMinAmount);
         });
         editTextMinAmount.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -290,7 +289,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.button_master_product_edit_simple_amount_more
         ).setOnClickListener(v -> {
-            startAnimatedIcon(imageViewMinAmount);
+            IconUtil.start(imageViewMinAmount);
             if(editTextMinAmount.getText().toString().isEmpty()) {
                 editTextMinAmount.setText(String.valueOf(0));
             } else {
@@ -303,7 +302,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.button_master_product_edit_simple_amount_less
         ).setOnClickListener(v -> {
             if(!editTextMinAmount.getText().toString().isEmpty()) {
-                startAnimatedIcon(imageViewMinAmount);
+                IconUtil.start(imageViewMinAmount);
                 double amountNew = Double.parseDouble(editTextMinAmount.getText().toString()) - 1;
                 if(amountNew >= 0) {
                     editTextMinAmount.setText(NumUtil.trim(amountNew));
@@ -334,7 +333,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
         editTextDays.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(imageViewDays);
+                IconUtil.start(imageViewDays);
             }
         });
         editTextDays.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
@@ -348,7 +347,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.button_master_product_edit_simple_days_more
         ).setOnClickListener(v -> {
-            startAnimatedIcon(imageViewDays);
+            IconUtil.start(imageViewDays);
             if(editTextDays.getText().toString().isEmpty()) {
                 editTextDays.setText(String.valueOf(0));
             } else {
@@ -361,7 +360,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.button_master_product_edit_simple_days_less
         ).setOnClickListener(v -> {
             if(!editTextDays.getText().toString().isEmpty()) {
-                startAnimatedIcon(imageViewDays);
+                IconUtil.start(imageViewDays);
                 int daysNew = Integer.parseInt(editTextDays.getText().toString()) - 1;
                 if(daysNew >= -1) {
                     editTextDays.setText(String.valueOf(daysNew));
@@ -373,7 +372,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.linear_master_product_edit_simple_product_group
         ).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_master_product_edit_simple_product_group);
+            IconUtil.start(activity, R.id.image_master_product_edit_simple_product_group);
             if(!productGroups.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, productGroups);
@@ -389,7 +388,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         activity.findViewById(
                 R.id.linear_master_product_edit_simple_quantity_unit
         ).setOnClickListener(v -> {
-            startAnimatedIcon(R.id.image_master_product_edit_simple_quantity_unit);
+            IconUtil.start(activity, R.id.image_master_product_edit_simple_quantity_unit);
             if(!quantityUnits.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
@@ -1191,24 +1190,11 @@ public class MasterProductEditSimpleFragment extends Fragment {
         MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
-                activity.startAnimatedIcon(item);
+                IconUtil.start(item);
                 checkForStock(editProduct);
                 return true;
             });
             delete.setVisible(editProduct != null);
-        }
-    }
-
-    private void startAnimatedIcon(@IdRes int viewId) {
-        startAnimatedIcon(activity.findViewById(viewId));
-    }
-
-    @SuppressLint("LongLogTag")
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
         }
     }
 
