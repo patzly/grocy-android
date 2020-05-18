@@ -26,6 +26,7 @@ import android.view.ViewPropertyAnimator;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.ColorUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 
@@ -410,7 +410,7 @@ public class ItemAnimator extends SimpleItemAnimator {
                 newView.setElevation(fraction * finalCurrentElevation);
                 newView.setBackgroundTintList(
                         ColorStateList.valueOf(
-                                ColorUtil.blend(
+                                ColorUtils.blendARGB(
                                         ContextCompat.getColor(
                                                 newView.getContext(),
                                                 R.color.background

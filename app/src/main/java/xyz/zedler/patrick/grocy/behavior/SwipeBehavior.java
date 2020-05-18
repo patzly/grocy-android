@@ -38,6 +38,7 @@ import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +51,6 @@ import java.util.Queue;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
-import xyz.zedler.patrick.grocy.util.ColorUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -220,7 +220,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                     itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
                     itemView.setBackgroundTintList(
                             ColorStateList.valueOf(
-                                    ColorUtil.blend(
+                                    ColorUtils.blendARGB(
                                             ContextCompat.getColor(context, R.color.background),
                                             ContextCompat.getColor(context, R.color.surface),
                                             translationX / limit
