@@ -66,7 +66,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		assert activity != null;
 
 		view.findViewById(R.id.linear_rate).setOnClickListener(v -> {
-			IconUtil.start(activity, R.id.image_feedback_rate);
+			IconUtil.start(view, R.id.image_feedback_rate);
 			Uri uri = Uri.parse(
 					"market://details?id=" + activity.getApplicationContext().getPackageName()
 			);
@@ -92,7 +92,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		EditText editText = textInputLayoutFeedback.getEditText();
 		assert editText != null;
 		editText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-			if(hasFocus) IconUtil.start(activity, R.id.image_feedback_box);
+			if(hasFocus) IconUtil.start(view, R.id.image_feedback_box);
 		});
 
 		view.findViewById(R.id.button_feedback_send).setOnClickListener(v -> {

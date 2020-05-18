@@ -89,7 +89,7 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 		String link = bundle.getString(Constants.BOTTOM_SHEET_TEXT.LINK);
 		if (link != null) {
 			frameLayoutLink.setOnClickListener(v -> {
-				IconUtil.start(getActivity(), R.id.image_text_open_link);
+				IconUtil.start(view, R.id.image_text_open_link);
 				new Handler().postDelayed(
 						() -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
 						500

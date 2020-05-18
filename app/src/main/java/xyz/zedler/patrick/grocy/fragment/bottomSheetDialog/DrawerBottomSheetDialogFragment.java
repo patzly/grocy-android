@@ -147,7 +147,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), bundle);
                 break;
             case R.id.linear_settings:
-                IconUtil.start(activity, R.id.image_settings);
+                IconUtil.start(view, R.id.image_settings);
                 new Handler().postDelayed(() -> {
                     dismiss();
                     startActivity(new Intent(activity, SettingsActivity.class));
@@ -158,7 +158,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 activity.showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
                 break;
             case R.id.linear_help:
-                IconUtil.start(activity, R.id.image_help);
+                IconUtil.start(view, R.id.image_help);
                 //startActivity(new Intent(activity, HelpActivity.class));
                 new Handler().postDelayed(this::dismiss, 500);
                 break;

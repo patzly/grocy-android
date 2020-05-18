@@ -36,11 +36,19 @@ public class IconUtil {
 
     public static void start(Activity activity, @IdRes int viewId) {
         if(activity == null) return;
-        View view = activity.findViewById(viewId);
+        start((View) activity.findViewById(viewId));
+    }
+
+    public static void start(View view, @IdRes int viewId) {
+        if(view == null) return;
+        start((View) view.findViewById(viewId));
+    }
+
+    public static void start(View view) {
         if(view == null) return;
         try {
             ImageView imageView = (ImageView) view;
-            start(imageView.getDrawable());
+            start(imageView);
         } catch (ClassCastException e) {
             if(DEBUG) Log.e(TAG, "start() requires ImageView");
         }
