@@ -168,6 +168,7 @@
         <item name="android:textColorHint">@color/on_background_secondary</item>
         <item name="errorTextColor">@color/error</item>
         <item name="errorIconTint">@color/error</item>
+        <item name="errorIconDrawable">@drawable/ic_round_error</item>
         <item name="boxStrokeErrorColor">@color/error</item>
     </style>
 
@@ -182,6 +183,7 @@
         <item name="android:textColorHint">@color/on_background_secondary</item>
         <item name="errorTextColor">@color/error</item>
         <item name="errorIconTint">@color/error</item>
+        <item name="errorIconDrawable">@drawable/ic_round_error</item>
         <item name="boxStrokeErrorColor">@color/error</item>
     </style>
 
@@ -192,6 +194,8 @@
         <item name="boxStrokeColor">@color/secondary</item>
         <item name="android:textColorHint">@color/on_background_secondary</item>
         <item name="errorTextColor">@color/error</item>
+        <item name="errorIconTint">@color/error</item>
+        <item name="errorIconDrawable">@drawable/ic_round_error</item>
         <item name="hintTextColor">@color/transparent</item>
         <item name="boxCollapsedPaddingTop">0dp</item>
         <item name="boxCornerRadiusTopStart">5dp</item>
