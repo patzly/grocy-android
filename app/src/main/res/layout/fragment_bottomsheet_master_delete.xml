@@ -39,9 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/action_delete"
-            android:textColor="@color/on_background"
+            android:textColor="@color/white"
             app:rippleColor="@color/highlight_on_secondary"
-            app:backgroundTint="@color/retro_red_bg"/>
+            app:backgroundTint="@color/retro_red_bg_white"/>
 
     </LinearLayout>
 

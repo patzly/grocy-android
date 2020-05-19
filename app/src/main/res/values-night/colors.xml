@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <color name="retro_red_fg">@color/retro_red_bg</color>
+    <color name="retro_red_fg">@color/retro_red_bg_black</color>
     <color name="retro_yellow_fg">@color/retro_yellow_bg</color>
     <color name="retro_dirt_fg">@color/retro_dirt_bg</color>
     <color name="retro_green_fg">@color/retro_green_bg_black</color>

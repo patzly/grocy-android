@@ -192,7 +192,7 @@ public class BezierCurveChart extends View {
         ArrayList<Integer> curveColors = new ArrayList<>();
         curveColors.add(getColor(R.color.retro_blue_bg));
         curveColors.add(getColor(R.color.retro_yellow_bg));
-        curveColors.add(getColor(R.color.retro_red_bg));
+        curveColors.add(getColor(R.color.retro_red_bg_black));
         curveColors.add(getColor(R.color.retro_dirt_bg)); // TODO: light variants
         curveColors.add(getColor(R.color.retro_green_bg_black));
         int colorIndex = 0;

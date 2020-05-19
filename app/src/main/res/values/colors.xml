@@ -7,7 +7,8 @@
 
     <color name="retro_red">#e06a4e</color>
     <color name="retro_red_fg">#c14f33</color>
-    <color name="retro_red_bg">#E3795F</color>
+    <color name="retro_red_bg_black">#E3795F</color>
+    <color name="retro_red_bg_white">#c35d45</color>
 
     <color name="retro_yellow">#deb853</color>
     <color name="retro_yellow_fg">#8E6F1A</color>

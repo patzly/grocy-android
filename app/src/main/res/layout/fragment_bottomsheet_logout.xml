@@ -71,8 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/on_background"
-                    app:backgroundTint="@color/retro_red_bg"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/retro_red_bg_white"
                     app:rippleColor="@color/highlight_on_secondary"
                     android:text="Logout" />
 
