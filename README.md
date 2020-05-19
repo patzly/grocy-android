@@ -8,6 +8,10 @@
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
+## Screenshots
+
+<img src="images/screen1.png" width="220px" /><img src="images/screen2.png" width="220px" /><img src="images/screen3.png" width="220px" />
+
 ## Features
 
 * Stock overview
