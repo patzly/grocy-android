@@ -72,6 +72,7 @@
     <string name="msg_error">An error occurred</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
+    <string name="msg_shopping_list_cleared">%1$s cleared successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
     <string name="msg_barcode_error">An error occurred</string>
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>

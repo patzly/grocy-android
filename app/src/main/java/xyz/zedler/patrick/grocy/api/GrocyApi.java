@@ -220,6 +220,15 @@ public class GrocyApi {
         return getUrl("/stock/products/by-barcode/" + barcode);
     }
 
+    // SHOPPING LIST
+
+    /**
+     * Removes all items from the given shopping list
+     */
+    public String clearShoppingList() {
+        return getUrl("/stock/shoppinglist/clear");
+    }
+
     // PICTURE
 
     /**

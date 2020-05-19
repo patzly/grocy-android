@@ -460,6 +460,11 @@ public class ShoppingListFragment extends Fragment
                             response,
                             new TypeToken<List<ShoppingList>>(){}.getType()
                     );
+                    // change app bar title to shopping list name
+                    ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                    if(shoppingList != null) {
+                        textViewTitle.setText(shoppingList.getName());
+                    }
                     if(DEBUG) Log.i(
                             TAG,
                             "downloadShoppingLists: shoppingLists = " + shoppingLists
@@ -781,6 +786,46 @@ public class ShoppingListFragment extends Fragment
             search.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
                 setUpSearch();
+                return true;
+            });
+        }
+        MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
+        if(clear != null) {
+            clear.setOnMenuItemClickListener(item -> {
+                IconUtil.start(item);
+                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                if(shoppingList != null) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("list_id", selectedShoppingListId);
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "setUpBottomMenu: clear list: " + e);
+                    }
+                    request.post(
+                            grocyApi.clearShoppingList(),
+                            jsonObject,
+                            response -> {
+                                showMessage(
+                                        activity.getString(
+                                                R.string.msg_shopping_list_cleared,
+                                                shoppingList.getName()
+                                        )
+                                );
+                                // reload now empty list
+                                refresh();
+                            },
+                            error -> {
+                                showMessage(activity.getString(R.string.msg_error));
+                                Log.e(
+                                        TAG, "setUpBottomMenu: clear "
+                                                + shoppingList.getName()
+                                                + ": " + error
+                                );
+                            }
+                    );
+                } else {
+                    showMessage(activity.getString(R.string.msg_error));
+                }
                 return true;
             });
         }
