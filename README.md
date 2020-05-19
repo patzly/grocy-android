@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/patzly/grocy-android/cdb729f4f94e94f6f1025601ed86762405823e8a/images/github_header.png" />
+<img src="images/github_header.png" />
 
 # Grocy Android
 
@@ -33,7 +33,7 @@ Grocy Android is still under development. In the next weeks we're going to imple
 
 ## Downloads
 
-<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a> <a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='https://github.com/patzly/grocy-android/blob/master/images/github_badge.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a> <a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='images/github_badge.png'/></a>
 
 ## Compatibility
 
