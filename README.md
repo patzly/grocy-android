@@ -10,7 +10,7 @@ Grocy Android uses grocy's official API to provide you a beautiful interface on 
 
 ## Screenshots
 
-<img src="images/github_screen1.png" width="220px" />
+<img src="images/github_screen1.png" width="220px" /><img src="images/github_screen2.png" width="220px" />
 
 ## Features
 
