@@ -30,7 +30,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -107,7 +106,8 @@ public class ScanBatchActivity extends AppCompatActivity
     private DecoratedBarcodeView barcodeScannerView;
     private BarcodeRipple barcodeRipple;
     private ActionButton buttonFlash;
-    private TextView textViewCount;
+    private TextView textViewCount, textViewType;
+    private MaterialCardView cardViewCount, cardViewType;
     private boolean isTorchOn;
     private ClickUtil clickUtil = new ClickUtil();
 
@@ -179,19 +179,14 @@ public class ScanBatchActivity extends AppCompatActivity
         buttonClose.setOnClickListener(v -> onBackPressed());
         buttonClose.setTooltipText(getString(R.string.action_close));
 
+        textViewType = findViewById(R.id.text_scan_batch_type);
         textViewCount = findViewById(R.id.text_scan_batch_count);
         refreshCounter();
 
-        MaterialCardView cardViewCount = findViewById(R.id.card_scan_batch_count);
+        cardViewCount = findViewById(R.id.card_scan_batch_count);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cardViewCount.setTooltipText(getString(R.string.tooltip_new_products_count));
         }
-        cardViewCount.setVisibility(
-                actionType.equals(Constants.ACTION.PURCHASE)
-                        ? View.VISIBLE
-                        : View.GONE
-        );
-
         cardViewCount.setOnClickListener(v -> {
             if(missingBatchItems.size() > 0) {
                 Bundle bundle = new Bundle();
@@ -205,6 +200,17 @@ public class ScanBatchActivity extends AppCompatActivity
                 showMessage(getString(R.string.msg_batch_no_products));
             }
         });
+
+        cardViewType = findViewById(R.id.card_scan_batch_type);
+        cardViewType.setOnClickListener(v -> {
+            if(actionType.equals(Constants.ACTION.CONSUME)) {
+                setActionType(Constants.ACTION.PURCHASE);
+            } else {
+                setActionType(Constants.ACTION.CONSUME);
+            }
+        });
+
+        setActionType(actionType);
 
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
         barcodeScannerView.setTorchOff();
@@ -390,6 +396,32 @@ public class ScanBatchActivity extends AppCompatActivity
                         resumeScan();
                     }
                 }
+        );
+    }
+
+    private void setActionType(String actionType) {
+        this.actionType = actionType;
+        cardViewType.animate().alpha(0).setDuration(300).withEndAction(() -> {
+            if(actionType.equals(Constants.ACTION.CONSUME)) {
+                textViewType.setText(getString(R.string.action_consume));
+            } else {
+                textViewType.setText(getString(R.string.action_purchase));
+            }
+            cardViewType.animate().alpha(1).setDuration(300).start();
+        }).start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(actionType.equals(Constants.ACTION.CONSUME)) {
+                cardViewType.setTooltipText(getString(R.string.tooltip_switch_purchase));
+            } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
+                cardViewType.setTooltipText(getString(R.string.tooltip_switch_consume));
+            } else {
+                cardViewType.setTooltipText(null);
+            }
+        }
+        cardViewCount.setVisibility(
+                actionType.equals(Constants.ACTION.CONSUME)
+                        ? View.GONE
+                        : View.VISIBLE
         );
     }
 
@@ -604,7 +636,6 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @SuppressLint("SimpleDateFormat")
     public void askNecessaryDetails() {
-
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
             // STOCK LOCATION
@@ -765,7 +796,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private void showChooseBottomSheet(String barcode) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TYPE, intent.getStringExtra(Constants.ARGUMENT.TYPE));
+        bundle.putString(Constants.ARGUMENT.TYPE, actionType);
         bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
         bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
         bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);

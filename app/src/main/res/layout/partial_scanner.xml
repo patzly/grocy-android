@@ -24,7 +24,7 @@
     <View
         android:layout_width="277dp"
         android:layout_height="3dp"
-        android:background="@color/retro_red"
+        android:background="@color/retro_red_bg_white"
         android:alpha="0.7"
         android:layout_gravity="center"/>
 

@@ -1,4 +1,5 @@
 1.1.0:
+- Switch between scan modes
 - Price history
 - Scanning with haptic feedback
 - Clear shopping lists
