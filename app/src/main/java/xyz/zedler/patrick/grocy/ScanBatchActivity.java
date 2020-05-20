@@ -202,15 +202,14 @@ public class ScanBatchActivity extends AppCompatActivity
         });
 
         cardViewType = findViewById(R.id.card_scan_batch_type);
-        cardViewType.setOnClickListener(v -> {
-            if(actionType.equals(Constants.ACTION.CONSUME)) {
-                setActionType(Constants.ACTION.PURCHASE);
-            } else {
-                setActionType(Constants.ACTION.CONSUME);
-            }
-        });
+        cardViewType.setOnClickListener(v -> setActionType(
+                actionType.equals(Constants.ACTION.CONSUME)
+                        ? Constants.ACTION.PURCHASE
+                        : Constants.ACTION.CONSUME,
+                true
+        ));
 
-        setActionType(actionType);
+        setActionType(actionType, false);
 
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
         barcodeScannerView.setTorchOff();
@@ -399,16 +398,26 @@ public class ScanBatchActivity extends AppCompatActivity
         );
     }
 
-    private void setActionType(String actionType) {
+    private void setActionType(String actionType, boolean animated) {
         this.actionType = actionType;
-        cardViewType.animate().alpha(0).setDuration(300).withEndAction(() -> {
+
+        if(animated) {
+            cardViewType.animate().alpha(0).setDuration(300).withEndAction(() -> {
+                if(actionType.equals(Constants.ACTION.CONSUME)) {
+                    textViewType.setText(getString(R.string.action_consume));
+                } else {
+                    textViewType.setText(getString(R.string.action_purchase));
+                }
+                cardViewType.animate().alpha(1).setDuration(300).start();
+            }).start();
+        } else {
             if(actionType.equals(Constants.ACTION.CONSUME)) {
                 textViewType.setText(getString(R.string.action_consume));
             } else {
                 textViewType.setText(getString(R.string.action_purchase));
             }
-            cardViewType.animate().alpha(1).setDuration(300).start();
-        }).start();
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if(actionType.equals(Constants.ACTION.CONSUME)) {
                 cardViewType.setTooltipText(getString(R.string.tooltip_switch_purchase));
@@ -418,6 +427,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 cardViewType.setTooltipText(null);
             }
         }
+
         cardViewCount.setVisibility(
                 actionType.equals(Constants.ACTION.CONSUME)
                         ? View.GONE
