@@ -67,7 +67,7 @@ public class QuantityUnitsBottomSheetDialogFragment
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_master_edit_selection, container, false
+                R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
         activity = (MainActivity) getActivity();
@@ -77,10 +77,10 @@ public class QuantityUnitsBottomSheetDialogFragment
         quantityUnits = bundle.getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
         int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
-        TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);
+        TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_quantity_units));
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_master_edit_selection);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         activity,

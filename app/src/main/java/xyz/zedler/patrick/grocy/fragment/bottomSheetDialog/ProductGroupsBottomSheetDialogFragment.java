@@ -67,7 +67,7 @@ public class ProductGroupsBottomSheetDialogFragment
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_master_edit_selection, container, false
+                R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
         activity = (MainActivity) getActivity();
@@ -77,10 +77,10 @@ public class ProductGroupsBottomSheetDialogFragment
         productGroups = bundle.getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
         int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
-        TextView textViewTitle = view.findViewById(R.id.text_master_edit_selection_title);
+        TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_product_groups));
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_master_edit_selection);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         activity,

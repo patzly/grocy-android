@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_master_edit_selection_title"
+            android:id="@+id/text_list_selection_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_master_edit_selection_discard"
+                android:id="@+id/button_list_selection_discard"
                 style="@style/Widget.Grocy.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             android:paddingBottom="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_master_edit_selection"
+                android:id="@+id/recycler_list_selection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"/>
