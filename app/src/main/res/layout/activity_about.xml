@@ -12,7 +12,7 @@
         android:layout_height="?android:actionBarSize">
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_about"
+            android:id="@+id/linear_about_app_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

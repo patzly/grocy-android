@@ -142,7 +142,7 @@ public class ConsumeFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_back_consume).setOnClickListener(
+        activity.findViewById(R.id.frame_consume_back).setOnClickListener(
                 v -> activity.onBackPressed()
         );
 

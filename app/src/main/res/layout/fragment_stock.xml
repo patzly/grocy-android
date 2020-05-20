@@ -12,7 +12,7 @@
         android:background="@color/primary">
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_stock_default"
+            android:id="@+id/linear_stock_default_app_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -30,7 +30,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_stock_search"
+            android:id="@+id/linear_stock_app_bar_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

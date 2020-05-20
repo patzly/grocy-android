@@ -68,7 +68,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 		(new AppBarScrollBehavior()).setUpScroll(
 				this,
 				R.id.app_bar_about,
-				R.id.linear_app_bar_about,
+				R.id.linear_about_app_bar,
 				R.id.scroll_about,
 				true
 		);

@@ -190,7 +190,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_app_bar_stock_default);
+        appBarBehavior = new AppBarBehavior(activity, R.id.linear_stock_default_app_bar);
 
         // SWIPE REFRESH
 
@@ -1220,7 +1220,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_search, true);
+            appBarBehavior.replaceLayout(R.id.linear_stock_app_bar_search, true);
             editTextSearch.setText("");
         }
         binding.textInputStockSearch.requestFocus();
@@ -1230,7 +1230,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_app_bar_stock_default, true);
+        appBarBehavior.replaceLayout(R.id.linear_stock_default_app_bar, true);
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);

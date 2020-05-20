@@ -113,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity
 
 		// INITIALIZE VIEWS
 
-		findViewById(R.id.frame_back_settings).setOnClickListener(v -> {
+		findViewById(R.id.frame_settings_back).setOnClickListener(v -> {
 			if(clickUtil.isDisabled()) return;
 			finish();
 		});
@@ -136,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity
 		(new AppBarScrollBehavior()).setUpScroll(
 				this,
 				R.id.app_bar_settings,
-				R.id.linear_app_bar_settings,
+				R.id.linear_settings_app_bar,
 				R.id.scroll_settings,
 				true
 		);

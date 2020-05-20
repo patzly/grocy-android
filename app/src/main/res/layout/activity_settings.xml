@@ -12,7 +12,7 @@
         android:layout_height="?android:actionBarSize">
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_settings"
+            android:id="@+id/linear_settings_app_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -20,7 +20,7 @@
             android:background="@color/background">
 
             <FrameLayout
-                android:id="@+id/frame_back_settings"
+                android:id="@+id/frame_settings_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"

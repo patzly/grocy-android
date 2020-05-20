@@ -11,14 +11,14 @@
         android:background="@color/primary">
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_master_products_default"
+            android:id="@+id/linear_master_products_app_bar_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame_back_master_products"
+                android:id="@+id/frame_master_products_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -54,7 +54,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_app_bar_master_products_search"
+            android:id="@+id/linear_master_products_app_bar_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

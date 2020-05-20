@@ -130,7 +130,7 @@ public class MasterProductsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_back_master_products).setOnClickListener(
+        activity.findViewById(R.id.frame_master_products_back).setOnClickListener(
                 v -> activity.onBackPressed()
         );
         linearLayoutFilterContainer = activity.findViewById(
@@ -164,7 +164,7 @@ public class MasterProductsFragment extends Fragment
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_app_bar_master_products_default);
+        appBarBehavior = new AppBarBehavior(activity, R.id.linear_master_products_app_bar_default);
 
         // SWIPE REFRESH
 
@@ -546,7 +546,7 @@ public class MasterProductsFragment extends Fragment
 
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_app_bar_master_products_search, true);
+            appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_search, true);
             editTextSearch.setText("");
         }
         textInputLayoutSearch.requestFocus();
@@ -560,7 +560,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_app_bar_master_products_default, true);
+        appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
         filterProducts(); // TODO: buggy animation

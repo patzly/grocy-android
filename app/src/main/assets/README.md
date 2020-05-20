@@ -11,7 +11,6 @@
 ## Improvements
 - use server settings and configs
 - shorter tags & ids for master edit
-- id naming convention: `frame_back_...` to `frame_..._back`, same with close and `linear_app_bar_..._default` to `linear_..._app_bar_default`
 - shopping list doesn't show items without name & description, but it shows items with only description?
 
 ## Illustrations
@@ -20,7 +19,7 @@
 - unknown error
 - empty
 
-## View id naming convention
+## View ID naming convention
 TYPE_LAYOUT_NAME
 - type: e.g. image for ImageView, text_input for TextInputLayout, text for TextView
 - layout: e.g. consume for fragment_consume, list_item
