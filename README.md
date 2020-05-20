@@ -1,4 +1,4 @@
-<img src="images/github_header.png" />
+<img src="assets/header.png" />
 
 # Grocy Android
 
@@ -10,7 +10,7 @@ Grocy Android uses grocy's official API to provide you a beautiful interface on 
 
 ## Screenshots
 
-<a href="#"><img src="images/github_screen1.png" width="220px"/></a><a href="#"><img src="images/github_screen2.png" width="220px"/></a>
+<a href="#"><img src="assets/screen1.png" width="220px"/></a><a href="#"><img src="assets/screen2.png" width="220px"/></a>
 
 ## Features
 
@@ -37,7 +37,7 @@ Grocy Android is still under development. In the next weeks we're going to imple
 
 ## Downloads
 
-<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='images/github_badge.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
 ## Compatibility
 
