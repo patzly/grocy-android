@@ -36,7 +36,6 @@ public class BezierCurveChart extends View {
     private static final float BADGE_FONT_SIZE = 70; // 100 means font fills badge with height
     private static final float X_LABEL_OFFSET_Y = 16;
     private static final float Y_LABEL_OFFSET_X = 12;
-    private static final float DOT_RADIUS = 8;
 
     public static class Point {
         float x;
@@ -78,6 +77,7 @@ public class BezierCurveChart extends View {
     private float maxY = 0;
     private float scaleY;
     private int cornerRadius;
+    private int dotRadius;
 
     public BezierCurveChart(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -85,6 +85,7 @@ public class BezierCurveChart extends View {
         this.context = context;
 
         cornerRadius = UnitUtil.getDp(context, 4);
+        dotRadius = UnitUtil.getDp(context, 3);
 
         paintCurve.setStyle(Paint.Style.STROKE);
         paintCurve.setStrokeCap(Paint.Cap.ROUND);
@@ -152,7 +153,7 @@ public class BezierCurveChart extends View {
         }
 
         // Move left border
-        rectChart.left = (int) (rectChart.left + DOT_RADIUS);
+        rectChart.left = (int) (rectChart.left + dotRadius);
         if(getTextWidth(paintLabel, labels.get(labels.size() - 1)) > maxWidth) {
             rectChart.right -= getTextWidth(paintLabel, labels.get(labels.size() - 1)) - 40;
         } else {
@@ -328,7 +329,7 @@ public class BezierCurveChart extends View {
     private void drawDots(Canvas canvas, ArrayList<Point> curveList, int color) {
         paintDot.setColor(color);
         for(Point point : curveList) {
-            canvas.drawCircle(point.x, point.y, DOT_RADIUS, paintDot);
+            canvas.drawCircle(point.x, point.y, dotRadius, paintDot);
         }
     }
 
