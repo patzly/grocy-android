@@ -447,8 +447,15 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 						));
 					}
 					priceHistory.init(curveLists, dates);
-					view.findViewById(R.id.linear_product_overview_price_history)
-							.setVisibility(View.VISIBLE);
+
+					LinearLayout priceHistory = view.findViewById(
+							R.id.linear_product_overview_price_history
+					);
+					priceHistory.setVisibility(View.VISIBLE);
+					priceHistory.setAlpha(0);
+					priceHistory.animate().setDuration(400).alpha(1).start();
+
+
 				},
 				error -> { }
 		);
