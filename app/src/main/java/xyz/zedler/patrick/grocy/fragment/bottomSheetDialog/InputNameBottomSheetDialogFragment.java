@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -90,6 +91,18 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
                 );
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
+                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
+                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
+            } else if(current.getClass() == ShoppingListItemEditFragment.class) {
+                CreateProduct createProduct = new CreateProduct(
+                        productName,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM);
                 bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
                 activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
             }

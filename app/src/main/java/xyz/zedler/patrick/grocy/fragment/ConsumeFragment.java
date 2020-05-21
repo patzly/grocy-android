@@ -721,6 +721,8 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
+        if(linearLayoutBarcodesContainer.getChildCount() == 0) return;
+
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
         if(barcodesString != null && !barcodesString.isEmpty()) {
@@ -961,6 +963,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void clearAll() {
+        productDetails = null;
         textInputProduct.setErrorEnabled(false);
         autoCompleteTextViewProduct.setText(null);
         textInputAmount.setErrorEnabled(false);
@@ -974,7 +977,6 @@ public class ConsumeFragment extends Fragment {
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
         }
-        productDetails = null;
     }
 
     private void showErrorMessage(VolleyError error) {

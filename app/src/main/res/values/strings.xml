@@ -129,12 +129,15 @@
     <string name="title_stock_entry_no_specific">No specific</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_shopping_list_notes">Notes</string>
+    <string name="title_list_entry">List entry</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
     <string name="subtitle_none">None</string>
+    <string name="subtitle_done">Done</string>
+    <string name="subtitle_undone">Undone</string>
     <string name="subtitle_never_expires">Never expires</string>
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
@@ -150,8 +153,11 @@
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
     <string name="property_name_plural">Name (plural form)</string>
+    <string name="property_product">Product</string>
     <string name="property_product_name">Product name</string>
     <string name="property_description">Description</string>
+    <string name="property_note">Note</string>
+    <string name="property_status">Status</string>
     <string name="property_amount">Amount</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
@@ -175,6 +181,7 @@
     <string name="property_store_unknown">Unknown store</string>
     <string name="property_store_default">Default store</string>
     <string name="property_stores">Stores</string>
+    <string name="property_shopping_list">Shopping list</string>
     <string name="property_shopping_lists">Shopping lists</string>
     <string name="property_last_purchased">Last purchased</string>
     <string name="property_purchased">Purchased</string>

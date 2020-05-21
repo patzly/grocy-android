@@ -65,6 +65,7 @@ import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -260,9 +261,17 @@ public class ShoppingListFragment extends Fragment
                             R.drawable.ic_round_done,
                             position -> toggleDoneStatus(position)
                     ));
+
+                    // check if item has product or is only note
+                    if(viewHolder.getAdapterPosition() == -1
+                            || ((ShoppingListItem) groupedListItems
+                            .get(viewHolder.getAdapterPosition()))
+                            .getProduct() == null
+                    ) return;
+
                     underlayButtons.add(new UnderlayButton(
-                            R.drawable.ic_round_delete_anim, // TODO: No anim
-                            position -> deleteRequest(position)
+                            R.drawable.ic_round_shopping_cart,
+                            position -> purchaseItem(position)
                     ));
                 }
             }
@@ -695,7 +704,7 @@ public class ShoppingListFragment extends Fragment
         return null;
     }
 
-    private void toggleDoneStatus(int position) {
+    public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         JSONObject body = new JSONObject();
         try {
@@ -741,7 +750,31 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private void deleteRequest(int position) {
+    public void editItem(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+        bundle.putParcelable(
+                Constants.ARGUMENT.SHOPPING_LIST_ITEM,
+                (ShoppingListItem) groupedListItems.get(position)
+        );
+        activity.replaceFragment(
+                Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+                bundle,
+                true
+        );
+    }
+
+    private void purchaseItem(int position) {
+        ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
+        if(shoppingListItem.getProduct() == null) return;
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST);
+        bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, shoppingListItem.getProduct().getName());
+        bundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(shoppingListItem.getAmount()));
+        activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
+    }
+
+    public void deleteRequest(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         request.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
@@ -778,6 +811,13 @@ public class ShoppingListFragment extends Fragment
             groupedListItems.remove(position);
             shoppingListItemAdapter.notifyItemRemoved(position);
         }
+    }
+
+
+    public void addItem() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+        activity.replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundle, true);
     }
 
     public void setUpBottomMenu() {
@@ -835,6 +875,44 @@ public class ShoppingListFragment extends Fragment
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
         swipeBehavior.recoverLatestSwipedItem();
+        showItemBottomSheet(groupedListItems.get(position), position);
+    }
+
+    private void showItemBottomSheet(GroupedListItem groupedListItem, int position) {
+        if(groupedListItem != null) {
+            ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItem;
+            Product product = shoppingListItem.getProduct();
+
+            Bundle bundle = new Bundle();
+            if(product != null) {
+                bundle.putString(
+                        Constants.ARGUMENT.PRODUCT_NAME,
+                        shoppingListItem.getProduct().getName()
+                );
+                QuantityUnit quantityUnit = getQuantityUnit(
+                        shoppingListItem.getProduct().getQuIdStock()
+                );
+                if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
+                    bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
+                } else if(quantityUnit != null) {
+                    bundle.putString(
+                            Constants.ARGUMENT.QUANTITY_UNIT,
+                            quantityUnit.getNamePlural()
+                    );
+                }
+            }
+            bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
+            bundle.putInt(Constants.ARGUMENT.POSITION, position);
+            activity.showBottomSheet(new ShoppingListItemBottomSheetDialogFragment(), bundle);
+        }
+    }
+
+    private QuantityUnit getQuantityUnit(int id) {
+        for(QuantityUnit quantityUnit : quantityUnits) {
+            if(quantityUnit.getId() == id) {
+                return quantityUnit;
+            }
+        } return null;
     }
 
     private void setUpSearch() {

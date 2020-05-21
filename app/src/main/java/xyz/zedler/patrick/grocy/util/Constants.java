@@ -71,6 +71,7 @@ public final class Constants {
         public final static String SHOPPING_LIST = "shopping_list";
         public final static String SHOPPING_LIST_DEFAULT = "shopping_list_default";
         public final static String SHOPPING_LIST_SEARCH = "shopping_list_search";
+        public final static String SHOPPING_LIST_ITEM_EDIT = "shopping_list_item_edit";
         public final static String CONSUME = "consume";
         public final static String PURCHASE = "purchase";
         public final static String MASTER = "master";
@@ -137,10 +138,13 @@ public final class Constants {
         public final static String CREATE = "action_create";
         public final static String EDIT = "action_edit";
         public final static String LINK = "action_link";
+        public final static String CREATE_FROM_STOCK = "action_create_from_stock";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
+        public final static String CREATE_THEN_SHOPPING_LIST_ITEM = "create_then_shopping_list_item";
         public final static String EDIT_THEN_PURCHASE_BATCH = "edit_then_purchase_batch";
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
+        public final static String PURCHASE_THEN_SHOPPING_LIST = "purchase_then_shopping_list";
     }
 
     public final static class SHORTCUT_ACTION {
@@ -159,6 +163,7 @@ public final class Constants {
         public final static String LOCATIONS = "locations";
         public final static String STORE = "store";
         public final static String STORES = "stores";
+        public final static String SHOPPING_LIST = "shopping_list";
         public final static String SHOPPING_LISTS = "shopping_lists";
         public final static String PRODUCT_GROUP = "product_group";
         public final static String PRODUCT_GROUPS = "product_groups";
@@ -168,6 +173,7 @@ public final class Constants {
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
         public final static String PRODUCT_NAME = "product_name";
+        public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
         public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
@@ -177,6 +183,7 @@ public final class Constants {
         public final static String SELECTED_DATE = "selected_date";
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
+        public final static String SHOPPING_LIST_ITEM = "barcode";
         public final static String BARCODES = "barcodes";
         public final static String CREATE_PRODUCT_OBJECT = "create_product_object";
         public final static String BATCH_ITEMS = "batch_items";
@@ -184,6 +191,9 @@ public final class Constants {
         public final static String BUNDLE = "bundle";
         public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
         public final static String PRICE = "price";
+        public final static String AMOUNT = "amount";
+        public final static String NOTE = "note";
+        public final static String STATUS = "status";
         public final static String CURRENCY = "currency";
     }
 

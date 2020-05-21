@@ -1,3 +1,9 @@
+1.2.0:
+- Create and edit shopping list items
+- Purchase fragment now takes last store into account
+- Fixed bug with settings not being loaded from server
+- Other bug fixes and improvements
+
 1.1.0:
 - Switch between scan modes
 - Price history

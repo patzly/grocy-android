@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -102,6 +103,10 @@ public class ShoppingListsBottomSheetDialogFragment
         Fragment currentFragment = activity.getCurrentFragment();
         if(currentFragment.getClass() == ShoppingListFragment.class) {
             ((ShoppingListFragment) currentFragment).selectShoppingList(
+                    shoppingLists.get(position).getId()
+            );
+        } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
+            ((ShoppingListItemEditFragment) currentFragment).selectShoppingList(
                     shoppingLists.get(position).getId()
             );
         }

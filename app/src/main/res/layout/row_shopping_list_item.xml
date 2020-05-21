@@ -9,7 +9,7 @@
     android:minHeight="64dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/bg_list_item_disabled"
+    android:background="@drawable/bg_list_item"
     android:padding="16dp"
     android:gravity="center_vertical">
 

@@ -423,6 +423,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
+        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)) {
+            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
         }
 
         // START
@@ -982,6 +984,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
                         if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
                                 || intendedAction.equals(
                                         Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
+                                || intendedAction.equals(
+                                        Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)
                         ) {
                             try {
                                 Bundle bundle = new Bundle();

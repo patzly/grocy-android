@@ -73,6 +73,12 @@ public class ProductDetails implements Parcelable {
     @SerializedName("is_aggregated_amount")
     private int isAggregatedAmount;
 
+    @SerializedName("last_shopping_location_id")
+    private String lastShoppingLocationId;
+
+    @SerializedName("default_shopping_location_id")
+    private String defaultShoppingLocationId;
+
     public ProductDetails(Parcel parcel) {
         product = parcel.readParcelable(Product.class.getClassLoader());
         lastPurchased = parcel.readString();
@@ -89,6 +95,8 @@ public class ProductDetails implements Parcelable {
         averageShelfLifeDays = parcel.readInt();
         spoilRatePercent = parcel.readString();
         isAggregatedAmount = parcel.readInt();
+        lastShoppingLocationId = parcel.readString();
+        defaultShoppingLocationId = parcel.readString();
     }
 
     @Override
@@ -108,6 +116,8 @@ public class ProductDetails implements Parcelable {
         dest.writeInt(averageShelfLifeDays);
         dest.writeString(spoilRatePercent);
         dest.writeInt(isAggregatedAmount);
+        dest.writeString(lastShoppingLocationId);
+        dest.writeString(defaultShoppingLocationId);
     }
 
     public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
@@ -201,6 +211,14 @@ public class ProductDetails implements Parcelable {
 
     public int getIsAggregatedAmount() {
         return isAggregatedAmount;
+    }
+
+    public String getLastShoppingLocationId() {
+        return lastShoppingLocationId;
+    }
+
+    public String getDefaultShoppingLocationId() {
+        return defaultShoppingLocationId;
     }
 
     @Override

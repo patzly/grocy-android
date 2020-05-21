@@ -80,6 +80,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
@@ -195,9 +196,9 @@ public class MainActivity extends AppCompatActivity {
                                                 "show_icon_on_stock_overview_page_" +
                                                         "when_product_is_on_shopping_list"
                                         )
-                                ).putBoolean(
+                                ).putString(
                                         Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
-                                        jsonObject.getBoolean(
+                                        jsonObject.getString(
                                                 "recipe_ingredients_group_by_product_group"
                                         )
                                 ).apply();
@@ -396,24 +397,50 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setUpScroll(R.id.scroll_shopping_list);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.GONE, R.menu.menu_shopping_list, animated,
+                        Constants.FAB.POSITION.CENTER, R.menu.menu_shopping_list, animated,
                         () -> {
                             if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
                                 ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
                             }
                         }
                 );
-                /*updateFab( // TODO
-                        R.drawable.ic_round_add_anim, // TODO: No anim
-                        R.string.action_consume,
-                        Constants.FAB.TAG.CONSUME,
+                updateFab(
+                        R.drawable.ic_round_add_anim,
+                        R.string.action_add,
+                        Constants.FAB.TAG.ADD,
                         animated,
                         () -> {
                             if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                                // ((ShoppingListFragment) fragmentCurrent).consumeProduct();
+                                ((ShoppingListFragment) fragmentCurrent).addItem();
                             }
                         }
-                );*/
+                );
+                break;
+            case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
+                scrollBehavior.setUpScroll(R.id.scroll_purchase);
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.END, R.menu.menu_shopping_list_item, animated,
+                        () -> new Handler().postDelayed(
+                                () -> {
+                                    if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
+                                        ((ShoppingListItemEditFragment) fragmentCurrent).setUpBottomMenu();
+                                    }
+                                },
+                                50
+                        )
+                );
+                updateFab(
+                        R.drawable.ic_round_save_alt_anim,
+                        R.string.action_save,
+                        Constants.FAB.TAG.SAVE,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
+                                ((ShoppingListItemEditFragment) fragmentCurrent).saveItem();
+                            }
+                        }
+                );
                 break;
             case Constants.UI.CONSUME:
                 scrollBehavior.setUpScroll(R.id.scroll_consume);
@@ -822,7 +849,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.SHOPPING_LIST_DEFAULT:
             case Constants.UI.CONSUME:
-            case Constants.UI.PURCHASE:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -876,10 +902,12 @@ public class MainActivity extends AppCompatActivity {
                     dismissFragment();
                 }
                 break;
+            case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
             case Constants.UI.MASTER_LOCATION:
             case Constants.UI.MASTER_STORE:
             case Constants.UI.MASTER_QUANTITY_UNIT:
             case Constants.UI.MASTER_PRODUCT_GROUP:
+            case Constants.UI.PURCHASE:
                 dismissFragment();
                 break;
             default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
@@ -893,6 +921,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.SHOPPING_LIST:
                 fragmentCurrent = new ShoppingListFragment();
+                break;
+            case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
+                fragmentCurrent = new ShoppingListItemEditFragment();
                 break;
             case Constants.UI.CONSUME:
                 fragmentCurrent = new ConsumeFragment();
@@ -996,7 +1027,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void dismissFragment(Bundle bundle) {
         int count = fragmentManager.getBackStackEntryCount();
-        if(count > 1) {
+        if(count >= 1) {
             fragmentManager.popBackStack();
             String tag = fragmentManager.getBackStackEntryAt(0).getName();
             fragmentCurrent = fragmentManager.findFragmentByTag(tag);
@@ -1005,6 +1036,10 @@ public class MainActivity extends AppCompatActivity {
                     ((PurchaseFragment) fragmentCurrent).giveBundle(bundle);
                 } else if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
                     ((MissingBatchItemsFragment) fragmentCurrent).createdOrEditedProduct(bundle);
+                } else if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
+                    ((ShoppingListItemEditFragment) fragmentCurrent).setProductName(
+                            bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                    );
                 }
                 if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {

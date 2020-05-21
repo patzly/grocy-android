@@ -63,6 +63,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
@@ -137,6 +138,8 @@ public class PurchaseFragment extends Fragment {
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        if(getArguments() != null) startupBundle = getArguments();
 
         // GET PREFERENCES
 
@@ -508,6 +511,13 @@ public class PurchaseFragment extends Fragment {
                         startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                 );
             }
+        } else if(action != null && action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)) {
+            Product product = getProductFromName(
+                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+            );
+            if(product != null) {
+                loadProductDetails(product.getId());
+            }
         }
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -565,19 +575,26 @@ public class PurchaseFragment extends Fragment {
                     + productDetails.getStockAmount();
         }
 
-        // leave amount empty if tare weight handling enabled
-        if(!isTareWeightHandlingEnabled) {
-            String defaultAmount = sharedPrefs.getString(
-                    Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                    "1"
-            );
-            if(defaultAmount.isEmpty()) {
-                editTextAmount.setText(null);
-            } else {
-                editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
-            }
+        if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
+            double amount = Double.parseDouble(Objects.requireNonNull(
+                    startupBundle.getString(Constants.ARGUMENT.AMOUNT)
+            ));
+            editTextAmount.setText(NumUtil.trim(amount));
         } else {
-            editTextAmount.setText(null);
+            // leave amount empty if tare weight handling enabled
+            if(!isTareWeightHandlingEnabled) {
+                String defaultAmount = sharedPrefs.getString(
+                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
+                        "1"
+                );
+                if(defaultAmount.isEmpty()) {
+                    editTextAmount.setText(null);
+                } else {
+                    editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
+                }
+            } else {
+                editTextAmount.setText(null);
+            }
         }
 
         if(editTextAmount.getText().toString().isEmpty()) {
@@ -616,7 +633,14 @@ public class PurchaseFragment extends Fragment {
         }
 
         // STORE
-        String storeId = productDetails.getProduct().getStoreId();
+        String storeId;
+        if(productDetails.getLastShoppingLocationId() != null
+                && !productDetails.getLastShoppingLocationId().isEmpty()
+        ) {
+            storeId = productDetails.getLastShoppingLocationId();
+        } else {
+            storeId = productDetails.getProduct().getStoreId();
+        }
         if(storeId == null || storeId.isEmpty()) {
             selectedStoreId = -1;
             textViewStore.setText(getString(R.string.subtitle_none));
@@ -809,6 +833,8 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
+        if(linearLayoutBarcodesContainer.getChildCount() == 0) return;
+
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
         if(barcodesString == null || barcodesString.isEmpty()) {
@@ -959,23 +985,18 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isAmountValid() {
-        if(!editTextAmount.getText().toString().isEmpty()) {
-            if(amount >= minAmount) {
-                textInputAmount.setErrorEnabled(false);
-                return true;
-            } else {
-                if(productDetails != null) {
-                    textInputAmount.setError(
-                            activity.getString(
-                                    R.string.error_bounds_min,
-                                    NumUtil.trim(minAmount)
-                            )
-                    );
-                }
-                return false;
-            }
-        } else {
+        if(amount >= minAmount) {
             textInputAmount.setErrorEnabled(false);
+            return true;
+        } else {
+            if(productDetails != null) {
+                textInputAmount.setError(
+                        activity.getString(
+                                R.string.error_bounds_min,
+                                NumUtil.trim(minAmount)
+                        )
+                );
+            }
             return false;
         }
     }
@@ -1046,6 +1067,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     public void clearAll() {
+        productDetails = null;
         textInputProduct.setErrorEnabled(false);
         autoCompleteTextViewProduct.setText(null);
         textViewBestBeforeDate.setText(activity.getString(R.string.subtitle_none));
@@ -1066,7 +1088,6 @@ public class PurchaseFragment extends Fragment {
         for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
             ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
         }
-        productDetails = null;
         nameAutoFilled = false;
     }
 
