@@ -283,7 +283,13 @@ public class ShoppingListFragment extends Fragment
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.SHOPPING_LIST_DEFAULT, TAG);
+        activity.updateUI(
+                Constants.UI.SHOPPING_LIST_DEFAULT,
+                getArguments() == null || getArguments().getBoolean(
+                        Constants.ARGUMENT.ANIMATED, true
+                ),
+                TAG
+        );
     }
 
     private void load() {

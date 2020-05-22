@@ -294,11 +294,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
-
-        if(!sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false)) {
-            sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, true).apply();
-        }
+        activity.updateUI(
+                Constants.UI.STOCK_DEFAULT,
+                getArguments() == null || getArguments().getBoolean(
+                        Constants.ARGUMENT.ANIMATED, true
+                ),
+                TAG
+        );
     }
 
     private void load() {

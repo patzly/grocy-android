@@ -296,7 +296,13 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.SHOPPING_LIST_ITEM_EDIT, TAG);
+        activity.updateUI(
+                Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+                getArguments() == null || getArguments().getBoolean(
+                        Constants.ARGUMENT.ANIMATED, true
+                ),
+                TAG
+        );
     }
 
     private void refresh() {
@@ -669,6 +675,11 @@ public class ShoppingListItemEditFragment extends Fragment {
         MenuItem menuItemDelete;
         menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(menuItemDelete != null) {
+            // hide action if type create
+            // TODO: ugly flickering
+            menuItemDelete.setVisible(action.equals(Constants.ACTION.EDIT));
+            if(action.equals(Constants.ACTION.CREATE)) return;
+
             menuItemDelete.setOnMenuItemClickListener(item -> {
                 ((Animatable) menuItemDelete.getIcon()).start();
                 // TODO: Removes the given amount of the given product from the given shopping list, if it's on it

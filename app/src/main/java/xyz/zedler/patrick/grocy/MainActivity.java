@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPrefs.edit().putBoolean(Constants.PREF.ANIM_UI_UPDATE, false).apply();
 
         // DARK MODE
 
@@ -321,6 +320,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // STOCK FRAGMENT
             fragmentCurrent = new StockFragment();
+            Bundle bundleNoAnim = new Bundle();
+            bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
+            fragmentCurrent.setArguments(bundleNoAnim);
             fragmentManager.beginTransaction()
                     .replace(
                             R.id.linear_container_main,
@@ -334,6 +336,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intentAction = getIntent();
         if(intentAction != null && intentAction.getAction() != null) {
+            // no animation for shortcut fragments
+            Bundle bundleNoAnim = new Bundle();
+            bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
+
             switch (intentAction.getAction()) {
                 case Constants.SHORTCUT_ACTION.CONSUME:
                     Intent intentConsume = new Intent(this, ScanBatchActivity.class);
@@ -346,11 +352,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intentPurchase, Constants.REQUEST.SCAN_PURCHASE);
                     break;
                 case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
-                    replaceFragment(Constants.UI.SHOPPING_LIST, null, false);
+                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                     break;
                 case Constants.SHORTCUT_ACTION.ADD_ENTRY:
+                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                     Bundle bundleCreate = new Bundle();
                     bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+                    bundleCreate.putBoolean(Constants.ARGUMENT.ANIMATED, false);
                     replaceFragment(
                             Constants.UI.SHOPPING_LIST_ITEM_EDIT,
                             bundleCreate,
@@ -373,8 +381,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(String uiMode, String origin) {
+        updateUI(uiMode, true, origin);
+    }
+
+    public void updateUI(String uiMode, boolean animated, String origin) {
         if(DEBUG) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
-        boolean animated = sharedPrefs.getBoolean(Constants.PREF.ANIM_UI_UPDATE, false);
+
         this.uiMode = uiMode;
 
         if(uiMode.startsWith(Constants.UI.STOCK) && isDemo()) {
@@ -438,13 +450,11 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END, R.menu.menu_shopping_list_item_edit, animated,
-                        () -> new Handler().postDelayed(
-                                () -> {
-                                    if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
-                                        ((ShoppingListItemEditFragment) fragmentCurrent).setUpBottomMenu();
-                                    }
-                                }, 50
-                        )
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
+                                ((ShoppingListItemEditFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
                 );
                 updateFab(
                         R.drawable.ic_round_backup,
@@ -787,7 +797,7 @@ public class MainActivity extends AppCompatActivity {
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
+                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
@@ -796,7 +806,7 @@ public class MainActivity extends AppCompatActivity {
                         newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
                 );
                 bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-                bottomAppBar.hideNavigationIcon();
+                bottomAppBar.hideNavigationIcon(animated);
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB.POSITION.GONE:
@@ -804,7 +814,7 @@ public class MainActivity extends AppCompatActivity {
                 bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
-                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim);
+                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
