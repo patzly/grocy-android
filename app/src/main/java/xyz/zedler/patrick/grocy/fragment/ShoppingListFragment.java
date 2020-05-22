@@ -270,7 +270,7 @@ public class ShoppingListFragment extends Fragment
                     ) return;
 
                     underlayButtons.add(new UnderlayButton(
-                            R.drawable.ic_round_shopping_cart,
+                            R.drawable.ic_round_local_grocery_store,
                             position -> purchaseItem(position)
                     ));
                 }
