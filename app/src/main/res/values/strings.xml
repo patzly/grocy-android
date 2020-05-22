@@ -12,6 +12,7 @@
     <string name="action_open">Mark as opened</string>
     <string name="action_open_one">Open 1 %1$s of %2$s</string>
     <string name="action_open_one_description">Open 1 product</string>
+    <string name="action_shopping_list_add">Add to shopping list</string>
 
     <string name="action_back">Back</string>
     <string name="action_search">Search</string>

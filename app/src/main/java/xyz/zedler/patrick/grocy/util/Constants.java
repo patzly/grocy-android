@@ -150,10 +150,13 @@ public final class Constants {
     public final static class SHORTCUT_ACTION {
         public final static String CONSUME = "xyz.zedler.patrick.grocy.action.consume";
         public final static String PURCHASE = "xyz.zedler.patrick.grocy.action.purchase";
+        public final static String SHOPPING_LIST = "xyz.zedler.patrick.grocy.action.shoppingList";
+        public final static String ADD_ENTRY = "xyz.zedler.patrick.grocy.action.shoppingListEntry";
     }
 
     public final static class ARGUMENT {
         public final static String UI_MODE = "ui_mode";
+        public final static String ANIMATED = "animated";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";
         public final static String QUANTITY_UNITS = "quantity_units";

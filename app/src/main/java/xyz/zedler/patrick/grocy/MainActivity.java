@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -310,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ApplySharedPref")
     private void setUp(Bundle savedInstanceState) {
         if(savedInstanceState != null) {
             String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
@@ -332,14 +334,29 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intentAction = getIntent();
         if(intentAction != null && intentAction.getAction() != null) {
-            if(intentAction.getAction().equals(Constants.SHORTCUT_ACTION.CONSUME)) {
-                Intent intent = new Intent(this, ScanBatchActivity.class);
-                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
-            } else if(intentAction.getAction().equals(Constants.SHORTCUT_ACTION.PURCHASE)) {
-                Intent intent = new Intent(this, ScanBatchActivity.class);
-                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-                startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            switch (intentAction.getAction()) {
+                case Constants.SHORTCUT_ACTION.CONSUME:
+                    Intent intentConsume = new Intent(this, ScanBatchActivity.class);
+                    intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+                    startActivityForResult(intentConsume, Constants.REQUEST.SCAN_CONSUME);
+                    break;
+                case Constants.SHORTCUT_ACTION.PURCHASE:
+                    Intent intentPurchase = new Intent(this, ScanBatchActivity.class);
+                    intentPurchase.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
+                    startActivityForResult(intentPurchase, Constants.REQUEST.SCAN_PURCHASE);
+                    break;
+                case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
+                    replaceFragment(Constants.UI.SHOPPING_LIST, null, false);
+                    break;
+                case Constants.SHORTCUT_ACTION.ADD_ENTRY:
+                    Bundle bundleCreate = new Bundle();
+                    bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+                    replaceFragment(
+                            Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+                            bundleCreate,
+                            false
+                    );
+                    break;
             }
         }
     }

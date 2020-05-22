@@ -225,14 +225,26 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                 holder.textViewNote.setText(null);
             }
         }
-        if(shoppingListItem.isUndone()) {
-            holder.textViewNote.setPaintFlags(
-                    holder.textViewNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-            );
+        if(holder.textViewNoteName.getVisibility() == View.VISIBLE) {
+            if(shoppingListItem.isUndone()) {
+                holder.textViewNoteName.setPaintFlags(
+                        holder.textViewNoteName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+                );
+            } else {
+                holder.textViewNoteName.setPaintFlags(
+                        holder.textViewNoteName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                );
+            }
         } else {
-            holder.textViewNote.setPaintFlags(
-                    holder.textViewNote.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-            );
+            if(shoppingListItem.isUndone()) {
+                holder.textViewNote.setPaintFlags(
+                        holder.textViewNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+                );
+            } else {
+                holder.textViewNote.setPaintFlags(
+                        holder.textViewNote.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                );
+            }
         }
 
         // CONTAINER

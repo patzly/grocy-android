@@ -4,6 +4,30 @@
     tools:targetApi="n_mr1">
 
     <shortcut
+        android:shortcutId="shortcut_shopping_list_add"
+        android:shortcutShortLabel="@string/action_shopping_list_add"
+        android:icon="@mipmap/ic_add">
+
+        <intent
+            android:action="xyz.zedler.patrick.grocy.action.shoppingListEntry"
+            android:targetPackage="xyz.zedler.patrick.grocy"
+            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="shortcut_shopping_list"
+        android:shortcutShortLabel="@string/title_shopping_list"
+        android:icon="@mipmap/ic_shopping_list">
+
+        <intent
+            android:action="xyz.zedler.patrick.grocy.action.shoppingList"
+            android:targetPackage="xyz.zedler.patrick.grocy"
+            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+
+    </shortcut>
+
+    <shortcut
         android:shortcutId="shortcut_consume"
         android:shortcutShortLabel="@string/action_consume"
         android:icon="@mipmap/ic_consume">
