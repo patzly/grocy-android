@@ -290,6 +290,9 @@ public class ShoppingListFragment extends Fragment
                 ),
                 TAG
         );
+        if(getArguments() != null) {
+            getArguments().putBoolean(Constants.ARGUMENT.ANIMATED, true);
+        }
     }
 
     private void load() {

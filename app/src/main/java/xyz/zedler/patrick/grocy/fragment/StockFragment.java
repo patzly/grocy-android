@@ -301,6 +301,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 ),
                 TAG
         );
+        setArguments(null);
     }
 
     private void load() {
