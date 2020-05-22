@@ -137,7 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="100dp">
+                    android:paddingBottom="140dp">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
@@ -171,12 +171,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="0dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="0dp"
                         android:visibility="gone">
 
-                        <View style="@style/Theme.Grocy.Divider" />
+                        <View
+                            style="@style/Theme.Grocy.Divider"
+                            android:layout_marginTop="0dp"/>
 
                         <TextView
                             style="@style/Theme.Grocy.Category"
@@ -184,7 +186,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:paddingTop="0dp"
-                            android:paddingBottom="32dp"
+                            android:paddingBottom="16dp"
                             android:layout_marginStart="0dp"
                             android:singleLine="true"
                             android:text="@string/title_shopping_list_notes"/>
