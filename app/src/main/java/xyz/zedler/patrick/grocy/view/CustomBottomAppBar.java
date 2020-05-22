@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -68,7 +67,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 
 	private ViewPropertyAnimator currentAnimator;
 	private ValueAnimator valueAnimatorNavigationIcon;
-	private AnimatorSet animatorSetNavigationIcon;
 
 	private Runnable runnableOnShow;
 	private Runnable runnableOnHide;
@@ -192,54 +190,78 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 			Runnable onChanged
 	) {
 		changeMenu(menuNew, position, animated);
-		new Handler().postDelayed(() -> {
+		if(animated) {
+			new Handler().postDelayed(
+					() -> {
+						if(onChanged != null) onChanged.run();
+						},
+					ICON_ANIM_DURATION + 50 + // wait for menu being fully changed
+						(long) (getMenu().size() * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
+			);
+		} else {
 			if(onChanged != null) onChanged.run();
-		}, ICON_ANIM_DURATION + 50 + // wait for menu being fully changed
-				(long) (getMenu().size() * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION));
+		}
 	}
 
 	/**
 	 * Animatedly shows the navigation icon
 	 * @param navigationResId necessary because nav icon has to be null for being gone
 	 */
-	public void showNavigationIcon(@DrawableRes int navigationResId) {
+	public void showNavigationIcon(@DrawableRes int navigationResId, boolean animated) {
 		if(getNavigationIcon() == null) {
-			new Handler().postDelayed(() -> {
-				Drawable navigationIcon = ContextCompat.getDrawable(getContext(), navigationResId);
-				assert navigationIcon != null;
+			Drawable navigationIcon = ContextCompat.getDrawable(getContext(), navigationResId);
+			assert navigationIcon != null;
+			if(animated) {
+				new Handler().postDelayed(() -> {
+					setNavigationIcon(navigationIcon);
+					valueAnimatorNavigationIcon = ValueAnimator
+							.ofInt(navigationIcon.getAlpha(), 255)
+							.setDuration(ICON_ANIM_DURATION);
+					valueAnimatorNavigationIcon.removeAllUpdateListeners();
+					valueAnimatorNavigationIcon.addUpdateListener(
+							animation -> navigationIcon.setAlpha(
+									(int) (animation.getAnimatedValue())
+							)
+					);
+					valueAnimatorNavigationIcon.start();
+				}, ICON_ANIM_DURATION);
+			} else {
+				navigationIcon.setAlpha(255);
 				setNavigationIcon(navigationIcon);
-				valueAnimatorNavigationIcon = ValueAnimator
-						.ofInt(navigationIcon.getAlpha(), 255)
-						.setDuration(ICON_ANIM_DURATION);
-				valueAnimatorNavigationIcon.removeAllUpdateListeners();
-				valueAnimatorNavigationIcon.addUpdateListener(
-						animation -> navigationIcon.setAlpha((int) (animation.getAnimatedValue()))
-				);
-				animatorSetNavigationIcon = new AnimatorSet();
-				animatorSetNavigationIcon.play(valueAnimatorNavigationIcon);
-				animatorSetNavigationIcon.start();
-			}, ICON_ANIM_DURATION);
+			}
 		}
+	}
+
+	public void showNavigationIcon(@DrawableRes int navigationResId) {
+		showNavigationIcon(navigationResId, true);
 	}
 
 	/**
 	 * Animatedly hides the navigation icon
 	 */
-	public void hideNavigationIcon() {
+	public void hideNavigationIcon(boolean animated) {
 		if(getNavigationIcon() != null) {
 			Drawable navigationIcon = getNavigationIcon();
-			valueAnimatorNavigationIcon = ValueAnimator
-					.ofInt(navigationIcon.getAlpha(), 0)
-					.setDuration(ICON_ANIM_DURATION);
-			valueAnimatorNavigationIcon.removeAllUpdateListeners();
-			valueAnimatorNavigationIcon.addUpdateListener(
-					animation -> navigationIcon.setAlpha((int) (animation.getAnimatedValue()))
-			);
-			animatorSetNavigationIcon = new AnimatorSet();
-			animatorSetNavigationIcon.play(valueAnimatorNavigationIcon);
-			animatorSetNavigationIcon.start();
-			new Handler().postDelayed(() -> setNavigationIcon(null), ICON_ANIM_DURATION + 5);
+			if(animated) {
+				valueAnimatorNavigationIcon = ValueAnimator
+						.ofInt(navigationIcon.getAlpha(), 0)
+						.setDuration(ICON_ANIM_DURATION);
+				valueAnimatorNavigationIcon.removeAllUpdateListeners();
+				valueAnimatorNavigationIcon.addUpdateListener(
+						animation -> navigationIcon.setAlpha((int) (animation.getAnimatedValue()))
+				);
+				valueAnimatorNavigationIcon.start();
+				new Handler().postDelayed(
+						() -> setNavigationIcon(null), ICON_ANIM_DURATION + 5
+				);
+			} else {
+				setNavigationIcon(null);
+			}
 		}
+	}
+
+	public void hideNavigationIcon() {
+		hideNavigationIcon(true);
 	}
 
 	/**
