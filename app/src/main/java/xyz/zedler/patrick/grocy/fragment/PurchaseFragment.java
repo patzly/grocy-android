@@ -655,8 +655,10 @@ public class PurchaseFragment extends Fragment {
         }
 
         // LOCATION
-        selectedLocationId = productDetails.getLocation().getId();
-        textViewLocation.setText(productDetails.getLocation().getName());
+        if(productDetails.getLocation() != null) {
+            selectedLocationId = productDetails.getLocation().getId();
+            textViewLocation.setText(productDetails.getLocation().getName());
+        }
     }
 
     private void clearInputFocus() {

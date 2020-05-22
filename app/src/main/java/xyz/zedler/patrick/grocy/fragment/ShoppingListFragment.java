@@ -774,7 +774,7 @@ public class ShoppingListFragment extends Fragment
         activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
     }
 
-    public void deleteRequest(int position) {
+    public void deleteItem(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         request.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),

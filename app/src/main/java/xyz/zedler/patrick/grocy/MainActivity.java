@@ -420,18 +420,17 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setUpScroll(R.id.scroll_purchase);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
-                        Constants.FAB.POSITION.END, R.menu.menu_shopping_list_item, animated,
+                        Constants.FAB.POSITION.END, R.menu.menu_shopping_list_item_edit, animated,
                         () -> new Handler().postDelayed(
                                 () -> {
                                     if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
                                         ((ShoppingListItemEditFragment) fragmentCurrent).setUpBottomMenu();
                                     }
-                                },
-                                50
+                                }, 50
                         )
                 );
                 updateFab(
-                        R.drawable.ic_round_save_alt_anim,
+                        R.drawable.ic_round_backup,
                         R.string.action_save,
                         Constants.FAB.TAG.SAVE,
                         animated,
@@ -447,14 +446,11 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END, R.menu.menu_consume, animated,
-                        () -> new Handler().postDelayed(
-                                () -> {
-                                    if(fragmentCurrent.getClass() == ConsumeFragment.class) {
-                                        ((ConsumeFragment) fragmentCurrent).setUpBottomMenu();
-                                    }
-                                },
-                                50
-                        )
+                        () -> {
+                            if(fragmentCurrent.getClass() == ConsumeFragment.class) {
+                                ((ConsumeFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
                 );
                 updateFab(
                         R.drawable.ic_round_consume_product,
@@ -478,8 +474,7 @@ public class MainActivity extends AppCompatActivity {
                                     if(fragmentCurrent.getClass() == PurchaseFragment.class) {
                                         ((PurchaseFragment) fragmentCurrent).setUpBottomMenu();
                                     }
-                                },
-                                50
+                                }, 50
                         )
                 );
                 updateFab(

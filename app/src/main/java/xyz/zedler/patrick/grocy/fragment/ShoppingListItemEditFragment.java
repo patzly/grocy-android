@@ -40,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -70,13 +69,13 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -195,7 +194,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(binding.imageShoppingListItemEditProduct);
+                IconUtil.start(binding.imageShoppingListItemEditProduct);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             }
@@ -256,7 +255,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         });
         editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                startAnimatedIcon(imageViewAmount);
+                IconUtil.start(imageViewAmount);
                 // editTextAmount.selectAll();
             }
         });
@@ -268,7 +267,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         });
 
         binding.buttonShoppingListItemEditAmountMore.setOnClickListener(v -> {
-            startAnimatedIcon(binding.imageShoppingListItemEditAmount);
+            IconUtil.start(binding.imageShoppingListItemEditAmount);
             if(editTextAmount.getText().toString().isEmpty()) {
                 editTextAmount.setText(String.valueOf(1));
             } else {
@@ -279,7 +278,7 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         binding.buttonShoppingListItemEditAmountLess.setOnClickListener(v -> {
             if(!editTextAmount.getText().toString().isEmpty()) {
-                startAnimatedIcon(binding.imageShoppingListItemEditAmount);
+                IconUtil.start(binding.imageShoppingListItemEditAmount);
                 double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
                 if(amountNew >= 1) {
                     editTextAmount.setText(NumUtil.trim(amountNew));
@@ -667,23 +666,20 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemDetails;
-        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        if(menuItemDetails != null) {
-            menuItemDetails.setOnMenuItemClickListener(item -> {
-                ((Animatable) menuItemDetails.getIcon()).start();
-                if(productDetails != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                    bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
-                    bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, false);
-                    activity.showBottomSheet(
-                            new ProductOverviewBottomSheetDialogFragment(),
-                            bundle
-                    );
-                } else {
-                    textInputProduct.setError(activity.getString(R.string.error_select_product));
-                }
+        MenuItem menuItemDelete;
+        menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
+        if(menuItemDelete != null) {
+            menuItemDelete.setOnMenuItemClickListener(item -> {
+                ((Animatable) menuItemDelete.getIcon()).start();
+                // TODO: Removes the given amount of the given product from the given shopping list, if it's on it
+                /*request.delete(
+                        grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
+                        response -> activity.dismissFragment(),
+                        error -> {
+                            showErrorMessage();
+                            if(DEBUG) Log.i(TAG, "setUpMenu: deleteItem: " + error);
+                        }
+                );*/
                 return true;
             });
         }
@@ -753,18 +749,6 @@ public class ShoppingListItemEditFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
-    }
-
-    private void startAnimatedIcon(View view) {
-        try {
-            ((Animatable) ((ImageView) view).getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startAnimatedIcon(Drawable) requires AVD!");
-        }
-    }
-
-    private int getColor(@ColorRes int color) {
-        return ContextCompat.getColor(activity, color);
     }
 
     @NonNull

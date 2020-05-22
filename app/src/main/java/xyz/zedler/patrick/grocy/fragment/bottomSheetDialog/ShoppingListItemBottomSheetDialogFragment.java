@@ -103,7 +103,7 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 					dismiss();
 					return true;
 				case R.id.action_delete:
-					((ShoppingListFragment) fragmentCurrent).deleteRequest(position);
+					((ShoppingListFragment) fragmentCurrent).deleteItem(position);
 					dismiss();
 					return true;
 			}
