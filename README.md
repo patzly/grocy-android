@@ -8,6 +8,8 @@
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
+**This app requires a running self-hosted instance of the [grocy server application](https://grocy.info/). You can try it using the demo option available on the login screen.**
+
 ## Downloads
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a><a href='#'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://apt.izzysoft.de/fdroid/index/apk/xyz.zedler.patrick.grocy'><img alt='Get it on IzzyOnDroid' height="80" src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png'/></a>
