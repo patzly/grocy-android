@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -284,10 +283,7 @@ public class MainActivity extends AppCompatActivity {
             if(isServerUrlEmpty()) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, true);
-                startActivityForResult(
-                        new Intent(this, LoginActivity.class),
-                        Constants.REQUEST.LOGIN
-                );
+                startActivityForResult(intent, Constants.REQUEST.LOGIN);
             }
         } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
@@ -310,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("ApplySharedPref")
     private void setUp(Bundle savedInstanceState) {
         if(savedInstanceState != null) {
             String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
