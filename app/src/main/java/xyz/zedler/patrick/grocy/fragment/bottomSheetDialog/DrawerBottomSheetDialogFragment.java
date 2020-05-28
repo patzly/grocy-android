@@ -80,14 +80,14 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             new Handler().postDelayed(this::dismiss, 500);
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             new Handler().postDelayed(this::dismiss, 500);
         });
 

@@ -888,7 +888,7 @@ public class ConsumeFragment extends Fragment {
         menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             return true;
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);

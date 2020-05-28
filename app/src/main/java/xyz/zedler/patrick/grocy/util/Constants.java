@@ -219,8 +219,7 @@ public final class Constants {
         public final static int LOGIN = 1;
         public final static int FEATURES = 2;
         public final static int SCAN = 3;
-        public final static int SCAN_CONSUME = 4;
-        public final static int SCAN_PURCHASE = 5;
-        public final static int SCAN_PARENT_PRODUCT = 6;
+        public final static int SCAN_BATCH = 4;
+        public final static int SCAN_PARENT_PRODUCT = 5;
     }
 }

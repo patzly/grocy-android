@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
             setUp(null);
-        } else if(requestCode == Constants.REQUEST.SCAN_PURCHASE
+        } else if(requestCode == Constants.REQUEST.SCAN_BATCH
                 && resultCode == Activity.RESULT_OK
                 && data != null
         ) {
@@ -297,8 +297,7 @@ public class MainActivity extends AppCompatActivity {
                     data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
                     true
             );
-        } else if((requestCode == Constants.REQUEST.SCAN_PURCHASE
-                || requestCode == Constants.REQUEST.SCAN_CONSUME)
+        } else if((requestCode == Constants.REQUEST.SCAN_BATCH)
                 && resultCode == Activity.RESULT_CANCELED
                 && fragmentCurrent.getClass() == StockFragment.class
         ) {
@@ -339,12 +338,12 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.SHORTCUT_ACTION.CONSUME:
                     Intent intentConsume = new Intent(this, ScanBatchActivity.class);
                     intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                    startActivityForResult(intentConsume, Constants.REQUEST.SCAN_CONSUME);
+                    startActivityForResult(intentConsume, Constants.REQUEST.SCAN_BATCH);
                     break;
                 case Constants.SHORTCUT_ACTION.PURCHASE:
                     Intent intentPurchase = new Intent(this, ScanBatchActivity.class);
                     intentPurchase.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-                    startActivityForResult(intentPurchase, Constants.REQUEST.SCAN_PURCHASE);
+                    startActivityForResult(intentPurchase, Constants.REQUEST.SCAN_BATCH);
                     break;
                 case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
                     replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
@@ -417,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
                                         this, ScanBatchActivity.class
                                 );
                                 intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                                startActivityForResult(intent, Constants.REQUEST.SCAN_CONSUME);
+                                startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
                             }
                         }
                 );

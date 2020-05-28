@@ -68,7 +68,7 @@ public class ExitMissingBatchBottomSheetDialogFragment extends BottomSheetDialog
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
             intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
         });
 
         view.findViewById(R.id.button_exit_missing_batch_discard).setOnClickListener(v -> {

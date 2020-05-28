@@ -495,7 +495,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
             intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             return true;
         });
     }

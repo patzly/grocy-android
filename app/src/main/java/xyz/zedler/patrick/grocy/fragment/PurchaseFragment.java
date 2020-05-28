@@ -899,7 +899,7 @@ public class PurchaseFragment extends Fragment {
         menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_PURCHASE);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             return true;
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
