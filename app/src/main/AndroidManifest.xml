@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Grocy"
         android:hardwareAccelerated="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
             android:name=".MainActivity"

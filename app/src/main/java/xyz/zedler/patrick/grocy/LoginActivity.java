@@ -35,7 +35,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -138,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
+                    Log.i(TAG, "requestLogin: " + response);
                     if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
@@ -151,10 +155,21 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 },
                 error -> {
+                    Log.e(TAG, "requestLogin: VolleyError: " + error);
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
+                    } else if(error instanceof NoConnectionError) {
+                        showMessage("Failed to connect to " + server);
+                    } else if(error instanceof ServerError) {
+                        if (error.networkResponse != null) {
+                            int code = error.networkResponse.statusCode;
+                            showMessage("Unexpected response code: " + code);
+                        } else {
+                            showMessage("Unexpected server response");
+                        }
+                    } else if(error instanceof TimeoutError) {
+                        showMessage("Error: Timeout");
                     } else {
-                        Log.e(TAG, "requestLogin: VolleyError: " + error);
                         showMessage(getString(R.string.msg_error));
                     }
                 }
