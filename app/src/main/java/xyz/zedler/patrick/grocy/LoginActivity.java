@@ -142,6 +142,10 @@ public class LoginActivity extends AppCompatActivity {
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
+                    if(!response.contains("grocy_version")) {
+                        showMessage("This is not a grocy instance");
+                        return;
+                    }
                     if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
