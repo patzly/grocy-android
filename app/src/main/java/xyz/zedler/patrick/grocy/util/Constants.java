@@ -198,6 +198,10 @@ public final class Constants {
         public final static String NOTE = "note";
         public final static String STATUS = "status";
         public final static String CURRENCY = "currency";
+        public final static String SUPPORTED_VERSIONS = "supported_versions";
+        public final static String VERSION = "version";
+        public final static String SERVER = "server";
+        public final static String KEY = "key";
     }
 
     public final static class FAB {

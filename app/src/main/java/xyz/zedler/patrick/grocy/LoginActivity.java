@@ -32,6 +32,8 @@ import android.webkit.URLUtil;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.AuthFailureError;
@@ -39,9 +41,17 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -54,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
     private WebRequest request;
+    private FragmentManager fragmentManager;
 
     private TextInputLayout textInputLayoutKey;
 
@@ -66,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         credentials = getSharedPreferences(Constants.PREF.CREDENTIALS, Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_login);
+
+        fragmentManager = getSupportFragmentManager();
 
         // WEB REQUESTS
 
@@ -119,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 textInputLayoutServer.setError(getString(R.string.error_invalid_url));
             } else {
-                requestLogin(server, key);
+                requestLogin(server, key, true);
             }
         });
 
@@ -137,15 +150,45 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void requestLogin(String server, String key) {
+    public void requestLogin(String server, String key, boolean checkVersion) {
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
-                        showMessage("This is not a grocy instance");
+                        showMessage(getString(R.string.error_no_grocy_instance));
                         return;
                     }
+                    try {
+                        String grocyVersion = new JSONObject(response)
+                                .getJSONObject("grocy_version")
+                                .getString("Version");
+                        ArrayList<String> supportedVersions = new ArrayList<>(
+                                Arrays.asList(
+                                        getResources().getStringArray(
+                                                R.array.compatible_grocy_versions
+                                        )
+                                )
+                        );
+                        if(checkVersion && !supportedVersions.contains(grocyVersion)) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.ARGUMENT.SERVER, server);
+                            bundle.putString(Constants.ARGUMENT.KEY, key);
+                            bundle.putString(Constants.ARGUMENT.VERSION, grocyVersion);
+                            bundle.putStringArrayList(
+                                    Constants.ARGUMENT.SUPPORTED_VERSIONS,
+                                    supportedVersions
+                            );
+                            showBottomSheet(
+                                    new CompatibilityBottomSheetDialogFragment(),
+                                    bundle
+                            );
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "requestLogin: " + e);
+                    }
+
                     if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
@@ -163,21 +206,33 @@ public class LoginActivity extends AppCompatActivity {
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
-                        showMessage("Failed to connect to " + server);
-                    } else if(error instanceof ServerError) {
-                        if (error.networkResponse != null) {
-                            int code = error.networkResponse.statusCode;
-                            showMessage("Unexpected response code: " + code);
+                        showMessage(getString(R.string.error_failed_to_connect_to, server));
+                    } else if(error instanceof ServerError && error.networkResponse != null) {
+                        int code = error.networkResponse.statusCode;
+                        if (code == 404) {
+                            showMessage(getString(R.string.error_no_grocy_instance));
                         } else {
-                            showMessage("Unexpected server response");
+                            showMessage(getString(R.string.error_unexpected_response_code, code));
                         }
+                    } else if(error instanceof ServerError) {
+                        showMessage(getString(R.string.error_unexpected_response));
                     } else if(error instanceof TimeoutError) {
-                        showMessage("Error: Timeout");
+                        showMessage(getString(R.string.error_timeout));
                     } else {
                         showMessage(getString(R.string.msg_error));
                     }
                 }
         );
+    }
+
+    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+        String tag = bottomSheet.toString();
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        if (fragment == null || !fragment.isVisible()) {
+            if(bundle != null) bottomSheet.setArguments(bundle);
+            fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
+        } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     @Override

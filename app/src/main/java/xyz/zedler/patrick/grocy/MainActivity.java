@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }, error -> {}
-        ); // TODO: info if version is not supported
+        );
 
         // VIEWS
 

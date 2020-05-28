@@ -85,6 +85,7 @@
     <string name="msg_batch_tare_weight">Product doesn\'t support batch mode: tare weight handling enabled</string>
     <string name="msg_purchase_transactions_done">Done purchase transactions of created products</string>
     <string name="msg_no_purchase_transactions">No pending purchase transactions</string>
+    <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
@@ -104,6 +105,11 @@
     <string name="error_offline">Offline</string>
     <string name="error_offline_subtitle">Check your connection and try again</string>
     <string name="error_unknown">Uups!</string>
+    <string name="error_no_grocy_instance">This is not a grocy instance</string>
+    <string name="error_timeout">Timeout error</string>
+    <string name="error_failed_to_connect_to">Failed to connect to %1$s</string>
+    <string name="error_unexpected_response_code">Unexpected response code: %1$i</string>
+    <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_unknown_subtitle">An error occurred</string>
 
     <string name="type_product">product</string>
@@ -124,6 +130,7 @@
     <string name="title_link_product">Link barcode to product</string>
     <string name="title_batch_scan_exit">Fill out the product forms?</string>
     <string name="title_batch_missing_exit">Back to scanner?</string>
+    <string name="title_compatibility">Compatibility issues</string>
     <string name="title_logout">Logout from Grocy?</string>
     <string name="title_logout_demo">Logout from demo mode?</string>
 
