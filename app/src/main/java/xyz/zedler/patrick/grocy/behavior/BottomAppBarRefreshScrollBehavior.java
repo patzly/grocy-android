@@ -39,6 +39,7 @@ import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 
 public class BottomAppBarRefreshScrollBehavior {
@@ -53,6 +54,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private int pufferSize = 0; // distance before top scroll when overScroll is turned off
 	private int pufferDivider = 2; // distance gets divided to prevent cutoff of edge effect
 	private int topScrollLimit = 100;
+	private int storedFirstBottomScrollY = 0;
 
 	private boolean isTopScroll = false;
 	private boolean hideOnScroll = true;
@@ -119,6 +121,7 @@ public class BottomAppBarRefreshScrollBehavior {
 					onTopScroll();
 				} else {
 					if (scrollY < oldScrollY) { // UP
+						storedFirstBottomScrollY = 0;
 						if (currentState != STATE_SCROLLED_UP) {
 							onScrollUp();
 						}
@@ -133,7 +136,14 @@ public class BottomAppBarRefreshScrollBehavior {
 							if (fabScroll.isOrWillBeShown()) fabScroll.hide();
 						}
 					} else if (scrollY > oldScrollY) {
-						if (currentState != STATE_SCROLLED_DOWN) { // DOWN
+						if(storedFirstBottomScrollY == 0) {
+							storedFirstBottomScrollY = oldScrollY;
+						}
+						int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
+								activity,
+								24
+						);
+						if (currentState != STATE_SCROLLED_DOWN && scrollY > scrollYHide) { // DOWN
 							onScrollDown();
 						}
 						if (scrollY > dp(topScrollLimit) && fabScroll != null && showTopScroll) {
