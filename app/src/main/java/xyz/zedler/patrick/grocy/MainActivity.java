@@ -390,6 +390,11 @@ public class MainActivity extends AppCompatActivity {
             hideDemoIndicator(animated);
         }
 
+        if(fragmentCurrent == null) {
+            recreate();
+            return;
+        }
+
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 scrollBehavior.setUpScroll(R.id.scroll_stock);

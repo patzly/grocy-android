@@ -48,6 +48,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -381,15 +382,21 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 TAG,
                 response -> {
-                    quantityUnits = gson.fromJson(
-                            response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
-                    );
+                    try {
+                        quantityUnits = gson.fromJson(
+                                response,
+                                new TypeToken<List<QuantityUnit>>(){}.getType()
+                        );
+                    } catch (JsonSyntaxException e) {
+                        onDownloadError();
+                        return;
+                    }
+
                     if(DEBUG) Log.i(
                             TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
                     );
                 },
-                this::onDownloadError,
+                (error) -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -399,14 +406,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                 TAG,
                 response -> {
-                    locations = gson.fromJson(
-                            response,
-                            new TypeToken<List<Location>>(){}.getType()
-                    );
+                    try {
+                        locations = gson.fromJson(
+                                response,
+                                new TypeToken<List<Location>>(){}.getType()
+                        );
+                    } catch (JsonSyntaxException e) {
+                        onDownloadError();
+                        return;
+                    }
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
                     setMenuLocationFilters();
                 },
-                this::onDownloadError,
+                (error) -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -416,16 +428,21 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                 TAG,
                 response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
-                    );
+                    try {
+                        productGroups = gson.fromJson(
+                                response,
+                                new TypeToken<List<ProductGroup>>(){}.getType()
+                        );
+                    } catch (JsonSyntaxException e) {
+                        onDownloadError();
+                        return;
+                    }
                     if(DEBUG) Log.i(
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
                     setMenuProductGroupFilters();
                 },
-                this::onDownloadError,
+                (error) -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -435,10 +452,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 grocyApi.getStock(),
                 TAG,
                 response -> {
-                    stockItems = gson.fromJson(
-                            response,
-                            new TypeToken<List<StockItem>>(){}.getType()
-                    );
+                    try {
+                        stockItems = gson.fromJson(
+                                response,
+                                new TypeToken<List<StockItem>>(){}.getType()
+                        );
+                    } catch (JsonSyntaxException e) {
+                        onDownloadError();
+                        return;
+                    }
                     if(DEBUG) Log.i(TAG, "downloadStock: stockItems = " + stockItems);
                     downloadVolatile();
                     for(StockItem stockItem : stockItems) {
@@ -448,7 +470,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         }
                     }
                 },
-                this::onDownloadError,
+                (error) -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -499,7 +521,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                     downloadMissingProductDetails();
                 },
-                this::onDownloadError,
+                (error) -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -534,7 +556,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         stockItems.add(stockItem);
                         missingStockItems.add(stockItem);
                     },
-                    this::onDownloadError,
+                    (error) -> onDownloadError(),
                     this::onQueueEmpty
             );
         }
@@ -545,7 +567,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterItems(itemsToDisplay);
     }
 
-    private void onDownloadError(VolleyError error) {
+    private void onDownloadError() {
         request.cancelAll(TAG);
         binding.swipeStock.setRefreshing(false);
         setError(true, false, true);
