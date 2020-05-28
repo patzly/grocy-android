@@ -142,13 +142,18 @@ public class SortUtil {
                 itemsWithoutProduct.add(shoppingListItem);
             }
         }
+        Collections.sort(
+                itemsWithoutProduct,
+                (item1, item2) -> (ascending ? item1 : item2).getNote().compareToIgnoreCase(
+                        (ascending ? item2 : item1).getNote()
+                )
+        );
         shoppingListItems.removeAll(itemsWithoutProduct);
         Collections.sort(
                 shoppingListItems,
                 (item1, item2) -> (ascending ? item1 : item2).getProduct()
-                        .getName()
-                        .toLowerCase().compareTo(
-                                (ascending ? item2 : item1).getProduct().getName().toLowerCase()
+                        .getName().compareToIgnoreCase(
+                                (ascending ? item2 : item1).getProduct().getName()
                         )
         );
         shoppingListItems.addAll(itemsWithoutProduct);
