@@ -2,7 +2,7 @@
 - Add delay before bottom bar is hidden
 - Fix alphabetically sort of ungrouped items in shopping list
 - Show compatibility information if server version is not supported
-- Allow HTTP cleartext traffic
+- Allow HTTP cleartext traffic: http://... is now possible
 - Fix mistake which didn't let MissingBatchItemsFragment appear
 - Fix crashes with non-grocy domains
 - Improve error messages
