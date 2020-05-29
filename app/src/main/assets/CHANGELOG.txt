@@ -1,3 +1,13 @@
+1.3.0:
+- Add delay before bottom bar is hidden
+- Fix alphabetically sort of ungrouped items in shopping list
+- Show compatibility information if server version is not supported
+- Allow HTTP cleartext traffic
+- Fix mistake which didn't let MissingBatchItemsFragment appear
+- Fix crashes with non-grocy domains
+- Improve error messages
+- Other improvements
+
 1.2.0:
 - Create and edit shopping list items
 - Purchase fragment now takes last store into account
