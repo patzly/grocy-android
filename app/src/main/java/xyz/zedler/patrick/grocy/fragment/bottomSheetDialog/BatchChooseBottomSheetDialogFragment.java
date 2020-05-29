@@ -175,9 +175,12 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         assert autoCompleteTextViewProduct != null;
         autoCompleteTextViewProduct.setAdapter(new MatchArrayAdapter(activity, productNames));
         autoCompleteTextViewProduct.setOnItemClickListener(
-                (parent, v, position, id) -> selectedProduct = getProductFromName(
-                        String.valueOf(parent.getItemAtPosition(position))
-                )
+                (parent, v, position, id) -> {
+                    textInputProduct.setErrorEnabled(false);
+                    selectedProduct = getProductFromName(
+                            String.valueOf(parent.getItemAtPosition(position))
+                    );
+                }
         );
         autoCompleteTextViewProduct.addTextChangedListener(new TextWatcher() {
             @Override
