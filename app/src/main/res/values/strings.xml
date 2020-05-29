@@ -163,6 +163,7 @@
     <string name="property_name_plural">Name (plural form)</string>
     <string name="property_product">Product</string>
     <string name="property_product_name">Product name</string>
+    <string name="property_parent_product">Parent product</string>
     <string name="property_description">Description</string>
     <string name="property_note">Note</string>
     <string name="property_status">Status</string>
@@ -180,6 +181,7 @@
     <string name="property_barcodes">Barcodes</string>
     <string name="property_bbd">Best before date</string>
     <string name="property_bbd_next">Next best before date</string>
+    <string name="property_bb_days">Best before days</string>
     <string name="property_bb_days_default">Default best before days</string>
     <string name="property_bb_days_default_opened">Default best before days after opened</string>
     <string name="property_location">Location</string>

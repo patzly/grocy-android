@@ -196,6 +196,9 @@ public final class Constants {
         public final static String PRICE = "price";
         public final static String AMOUNT = "amount";
         public final static String NOTE = "note";
+        public final static String TEXT = "text";
+        public final static String TITLE = "title";
+        public final static String HINT = "hint";
         public final static String STATUS = "status";
         public final static String CURRENCY = "currency";
         public final static String SUPPORTED_VERSIONS = "supported_versions";
