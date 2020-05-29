@@ -1,10 +1,7 @@
 # TODO
 
 ## Features
-- add and edit shopping lists and shopping list entries
-- scanning: indicate type (consume or purchase) and maybe allow switching
-- app shortcut: new shopping list entry
-- maybe open food facts implementation for product naming with barcode
+- open food facts implementation for product naming with barcode
 - HELP page with note that all buttons can be long pressed to get a tip
 - translations
 
@@ -20,7 +17,7 @@
 - empty
 
 ## View ID naming convention
-TYPE_LAYOUT_NAME
+type_layout_name
 - type: e.g. image for ImageView, text_input for TextInputLayout, text for TextView
 - layout: e.g. consume for fragment_consume, list_item
 - name: action for buttons or other identification, e.g. amount for TextInputLayout of amount input
