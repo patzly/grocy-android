@@ -12,6 +12,13 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
+        android:id="@+id/action_edit_notes"
+        android:title="@string/action_edit_notes"
+        android:icon="@drawable/ic_round_subject_anim"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
         android:id="@+id/action_clear"
         android:title="@string/action_clear"
         android:icon="@drawable/ic_round_delete_sweep_anim"

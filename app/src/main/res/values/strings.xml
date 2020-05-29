@@ -52,6 +52,7 @@
     <string name="action_open_forms">Open forms</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
+    <string name="action_edit_notes">Edit notes</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
 
@@ -186,6 +187,7 @@
     <string name="property_bb_days_default_opened">Default best before days after opened</string>
     <string name="property_location">Location</string>
     <string name="property_location_default">Default location</string>
+    <string name="property_notes">Notes</string>
     <string name="property_locations">Locations</string>
     <string name="property_store">Store</string>
     <string name="property_store_unknown">Unknown store</string>

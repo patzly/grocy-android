@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -82,13 +85,22 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
         textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
         EditText editText = textInputLayout.getEditText();
         assert editText != null;
-        editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
+        if(getArguments().getString(Constants.ARGUMENT.TEXT) != null) {
+            editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
+        } else if(getArguments().getString(Constants.ARGUMENT.HTML) != null) {
+            Spanned text = Html.fromHtml(getArguments().getString(Constants.ARGUMENT.HTML));
+            editText.setText(text);
+        }
 
         view.findViewById(R.id.button_text_edit_ok).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductEditSimpleFragment.class) {
                 ((MasterProductEditSimpleFragment) current).editDescription(
                         editText.getText().toString()
+                );
+            } else if(current.getClass() == ShoppingListFragment.class) {
+                ((ShoppingListFragment) current).saveNotes(
+                        editText.getText()
                 );
             }
             dismiss();

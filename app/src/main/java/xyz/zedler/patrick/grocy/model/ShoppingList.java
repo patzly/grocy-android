@@ -35,19 +35,19 @@ public class ShoppingList implements Parcelable {
     private String name;
 
     @SerializedName("description")
-    private String description;
+    private String notes;
 
     private ShoppingList(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
-        description = parcel.readString();
+        notes = parcel.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
-        dest.writeString(description);
+        dest.writeString(notes);
     }
 
     public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
@@ -71,8 +71,12 @@ public class ShoppingList implements Parcelable {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override

@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -67,6 +69,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -78,7 +81,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -365,7 +367,6 @@ public class ShoppingListFragment extends Fragment
         swipeRefreshLayout.setRefreshing(true);
         linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
                 linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
-        textViewBottomNotes.animate().alpha(0).setDuration(150).start();
         downloadQuantityUnits();
         downloadProducts();
         downloadProductGroups();
@@ -531,22 +532,15 @@ public class ShoppingListFragment extends Fragment
             }
         }
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        if(shoppingList != null && shoppingList.getDescription() != null) {
-            String description = TextUtil.getFromHtml(shoppingList.getDescription().trim()).trim();
-            if(!description.isEmpty()) {
-                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    linearLayoutBottomNotes.setVisibility(View.VISIBLE);
-                    linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
-                }).setDuration(150).start();
-                textViewBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    textViewBottomNotes.setText(description);
-                    textViewBottomNotes.animate().alpha(1).setDuration(150).start();
-                }).setDuration(150).start();
-            } else {
-                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
-                        linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
-                textViewBottomNotes.setText(null);
-            }
+        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
+                ? Html.fromHtml(shoppingList.getNotes().trim())
+                : null;
+        if(shoppingList != null && notes != null && !notes.toString().isEmpty()) {
+            linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
+                textViewBottomNotes.setText(notes);
+                linearLayoutBottomNotes.setVisibility(View.VISIBLE);
+                linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
+            }).setDuration(150).start();
         } else {
             linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
                     linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
@@ -773,6 +767,31 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
+    public void saveNotes(Spanned notes) {
+        JSONObject body = new JSONObject();
+
+        String notesHtml = Html.toHtml(notes);
+        try {
+            body.put("description", notesHtml);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "saveNotes: " + e);
+        }
+        request.put(
+                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, selectedShoppingListId),
+                body,
+                response -> {
+                    ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                    if(shoppingList == null) return;
+                    shoppingList.setNotes(notesHtml);
+                    onQueueEmpty();
+                },
+                error -> {
+                    showMessage(activity.getString(R.string.msg_error));
+                    if(DEBUG) Log.i(TAG, "saveNotes: " + error);
+                }
+        );
+    }
+
     private void purchaseItem(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         if(shoppingListItem.getProduct() == null) return;
@@ -835,6 +854,25 @@ public class ShoppingListFragment extends Fragment
             search.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
                 setUpSearch();
+                return true;
+            });
+        }
+        MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
+        if(editNotes != null) {
+            editNotes.setOnMenuItemClickListener(item -> {
+                Bundle bundle = new Bundle();
+                bundle.putString(
+                        Constants.ARGUMENT.TITLE,
+                        activity.getString(R.string.action_edit_notes)
+                );
+                bundle.putString(
+                        Constants.ARGUMENT.HINT,
+                        activity.getString(R.string.property_notes)
+                );
+                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                if(shoppingList == null) return false;
+                bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
+                activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
                 return true;
             });
         }
