@@ -73,6 +73,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -101,6 +102,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ArrayList<StockItem> expiringItems = new ArrayList<>();
     private ArrayList<StockItem> expiredItems = new ArrayList<>();
     private ArrayList<MissingItem> missingItems = new ArrayList<>();
+    private ArrayList<String> shoppingListProductIds = new ArrayList<>();
     private ArrayList<StockItem> missingStockItems;
     private ArrayList<StockItem> filteredItems = new ArrayList<>();
     private ArrayList<StockItem> displayedItems = new ArrayList<>();
@@ -375,6 +377,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         downloadProductGroups();
         missingStockItems = new ArrayList<>();
         downloadStock();
+        if(sharedPrefs.getBoolean(
+                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+                false
+        )) {
+            downloadShoppingList();
+        }
     }
 
     private void downloadQuantityUnits() {
@@ -396,7 +404,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
                     );
                 },
-                (error) -> onDownloadError(),
+                error -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -418,7 +426,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
                     setMenuLocationFilters();
                 },
-                (error) -> onDownloadError(),
+                error -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -442,7 +450,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     );
                     setMenuProductGroupFilters();
                 },
-                (error) -> onDownloadError(),
+                error -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -470,7 +478,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         }
                     }
                 },
-                (error) -> onDownloadError(),
+                error -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -521,7 +529,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                     downloadMissingProductDetails();
                 },
-                (error) -> onDownloadError(),
+                error -> onDownloadError(),
                 this::onQueueEmpty
         );
     }
@@ -556,10 +564,37 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         stockItems.add(stockItem);
                         missingStockItems.add(stockItem);
                     },
-                    (error) -> onDownloadError(),
+                    error -> onDownloadError(),
                     this::onQueueEmpty
             );
         }
+    }
+
+    private void downloadShoppingList() {
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+                TAG,
+                response -> {
+                    ArrayList<ShoppingListItem> shoppingListItems = gson.fromJson(
+                            response,
+                            new TypeToken<List<ShoppingListItem>>(){}.getType()
+                    );
+                    if(shoppingListItems != null && !shoppingListItems.isEmpty()) {
+                        for(ShoppingListItem item : shoppingListItems) {
+                            if(item.getProductId() != null && !item.getProductId().isEmpty()) {
+                                shoppingListProductIds.add(item.getProductId());
+                            }
+                        }
+                    }
+                    if(DEBUG) Log.i(
+                            TAG,
+                            "downloadShoppingList: shoppingListItems = " + shoppingListItems
+                            + ", productIds = " + shoppingListProductIds
+                    );
+                },
+                error -> onDownloadError(),
+                this::onQueueEmpty
+        );
     }
 
     private void onQueueEmpty() {
@@ -735,6 +770,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         activity,
                         displayedItems,
                         quantityUnits,
+                        shoppingListProductIds,
                         daysExpiringSoon,
                         sortMode,
                         this

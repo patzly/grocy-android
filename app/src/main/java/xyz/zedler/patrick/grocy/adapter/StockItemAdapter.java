@@ -50,6 +50,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private Context context;
     private ArrayList<StockItem> stockItems;
     private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<String> shoppingListProductIds;
     private StockItemAdapterListener listener;
     private int daysExpiringSoon;
     private String sortMode;
@@ -58,6 +59,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             Context context,
             ArrayList<StockItem> stockItems,
             ArrayList<QuantityUnit> quantityUnits,
+            ArrayList<String> shoppingListProductIds,
             int daysExpiringSoon,
             String sortMode,
             StockItemAdapterListener listener
@@ -65,6 +67,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.context = context;
         this.stockItems = stockItems;
         this.quantityUnits = quantityUnits;
+        this.shoppingListProductIds = shoppingListProductIds;
         this.daysExpiringSoon = daysExpiringSoon;
         this.sortMode = sortMode;
         this.listener = listener;
@@ -73,6 +76,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayoutItemContainer, linearLayoutDays;
         private TextView textViewName, textViewAmount, textViewDays;
+        private View iconIsOnShoppingList;
 
         public ViewHolder(View view) {
             super(view);
@@ -82,6 +86,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
             textViewDays = view.findViewById(R.id.text_stock_item_days);
+            iconIsOnShoppingList = view.findViewById(R.id.view_stock_item_on_shopping_list);
         }
     }
 
@@ -105,6 +110,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         // NAME
 
         holder.textViewName.setText(stockItem.getProduct().getName());
+
+        // IS ON SHOPPING LIST
+
+        if(shoppingListProductIds.contains(String.valueOf(stockItem.getProduct().getId()))) {
+            holder.iconIsOnShoppingList.setVisibility(View.VISIBLE);
+        } else {
+            holder.iconIsOnShoppingList.setVisibility(View.GONE);
+        }
 
         // AMOUNT
 

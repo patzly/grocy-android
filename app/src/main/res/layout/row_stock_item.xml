@@ -12,14 +12,31 @@
     android:padding="16dp"
     android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/text_stock_item_name"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:singleLine="true"
-        android:fontFamily="@font/roboto_mono_medium"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_stock_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+        <View
+            android:id="@+id/view_stock_item_on_shopping_list"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="6dp"
+            android:visibility="gone"
+            android:background="@drawable/shape_is_on_shopping_list"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
