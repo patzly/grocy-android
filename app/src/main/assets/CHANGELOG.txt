@@ -1,18 +1,9 @@
-1.3.0:
-- Add delay before bottom bar is hidden
-- Fix alphabetically sort of ungrouped items in shopping list
-- Show compatibility information if server version is not supported
-- Allow HTTP cleartext traffic: http://... is now possible
-- Fix mistake which didn't let MissingBatchItemsFragment appear
-- Fix crashes with non-grocy domains
-- Improve error messages
-- Other improvements
-
 1.2.0:
-- Create and edit shopping list items
-- Purchase fragment now takes last store into account
-- Fixed bug with settings not being loaded from server
-- Other bug fixes and improvements
+- Create and edit shopping list entries
+- Indicator in stock overview when product is on shopping list
+- Grocy version compatibility information
+- HTTP support
+- Bug fixes and improvements
 
 1.1.0:
 - Switch between scan modes
@@ -27,7 +18,6 @@
 - Bug fixes and improvements
 
 0.9.3
-- Prevent double taps in lists
 - Swiped items with elevation in dark mode
 - Demo indicator
 - GitHub link in About
@@ -37,5 +27,5 @@
 - Bug fixes and improvements
 
 0.9.1:
-- Implement shopping list
+- Shopping lists
 - Bug fixes and improvements
