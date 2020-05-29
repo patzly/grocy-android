@@ -1,7 +1,9 @@
 1.2.0:
 - Create and edit shopping list entries
-- Indicator in stock overview when product is on shopping list
-- Grocy version compatibility information
+- Add stock items to shopping list
+- Indicate "on shopping list" in stock overview
+- Edit product description
+- Grocy version incompatibility information
 - HTTP support
 - Bug fixes and improvements
 
