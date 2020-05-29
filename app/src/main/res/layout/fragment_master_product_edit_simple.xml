@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="Product"
+                android:text="@string/property_product"
                 android:textAlignment="viewStart"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_regular"
@@ -90,7 +90,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/text_input_master_product_edit_simple_name"
                         style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                        android:hint="Name"
+                        android:hint="@string/property_name"
                         app:helperTextEnabled="true"
                         app:helperText=" ">
 
@@ -123,7 +123,7 @@
                         app:endIconDrawable="@drawable/ic_round_barcode_scan"
                         app:endIconTint="@color/icon"
                         app:endIconContentDescription="Scan barcode"
-                        android:hint="Parent product"
+                        android:hint="@string/property_parent_product"
                         app:helperTextEnabled="true"
                         app:helperText=" ">
 
@@ -137,6 +137,33 @@
                             android:popupBackground="@drawable/bg_auto_complete"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_master_product_edit_simple_description"
+                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                    <ImageView
+                        android:id="@+id/image_master_product_edit_simple_description"
+                        style="@style/Theme.Grocy.ListItem.Icon"
+                        android:src="@drawable/ic_round_subject_anim"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                        <TextView
+                            android:id="@+id/text_master_product_edit_simple_description_label"
+                            style="@style/Theme.Grocy.ListItem.OverLine"
+                            android:text="@string/property_description" />
+
+                        <TextView
+                            android:id="@+id/text_master_product_edit_simple_description"
+                            style="@style/Theme.Grocy.ListItem.Title"
+                            android:singleLine="true"
+                            android:text="@string/subtitle_none"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -159,7 +186,7 @@
                         app:endIconDrawable="@drawable/ic_round_barcode_scan"
                         app:endIconTint="@color/icon"
                         app:endIconContentDescription="Scan barcode"
-                        android:hint="Barcodes"
+                        android:hint="@string/property_barcodes"
                         app:helperTextEnabled="true"
                         app:helperText=" ">
 
@@ -305,7 +332,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/text_input_master_product_edit_simple_days"
                             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="Best before days"
+                            android:hint="@string/property_bb_days"
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 

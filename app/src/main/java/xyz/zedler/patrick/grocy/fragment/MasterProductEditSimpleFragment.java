@@ -72,6 +72,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetD
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -122,9 +123,11 @@ public class MasterProductEditSimpleFragment extends Fragment {
             textViewLocationLabel,
             textViewProductGroup,
             textViewQuantityUnit,
-            textViewQuantityUnitLabel;
+            textViewQuantityUnitLabel,
+            textViewDescription;
     private ImageView imageViewName, imageViewMinAmount, imageViewDays;
     private int selectedLocationId = -1, selectedQuantityUnitId = -1, selectedProductGroupId = -1;
+    private String productDescription = "";
     private String intendedAction;
     private double minAmount;
     private int bestBeforeDays;
@@ -213,6 +216,21 @@ public class MasterProductEditSimpleFragment extends Fragment {
                         return true;
                     } return false;
         });
+
+        // description
+
+        activity.findViewById(
+                R.id.linear_master_product_edit_simple_description
+        ).setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.TEXT, productDescription);
+            bundle.putString(Constants.ARGUMENT.TITLE, "Edit description");
+            bundle.putString(Constants.ARGUMENT.HINT, "Product description");
+            activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+        });
+        textViewDescription = activity.findViewById(
+                R.id.text_master_product_edit_simple_description
+        );
 
         // barcodes
 
@@ -623,11 +641,26 @@ public class MasterProductEditSimpleFragment extends Fragment {
         return null;
     }
 
+    public void editDescription(String description) {
+        if(description == null || description.trim().isEmpty()) {
+            textViewDescription.setText(activity.getString(R.string.subtitle_none));
+            productDescription = "";
+        } else {
+            description = description.trim();
+            productDescription = description;
+            if(description.length() > 100) {
+                textViewDescription.setText(description.subSequence(0, 100));
+            } else {
+                textViewDescription.setText(description);
+            }
+        }
+    }
+
     public void selectLocation(int selectedId) {
         selectedLocationId = selectedId;
         String locationText = null;
         if(locations.isEmpty()) {
-            locationText = "None";
+            locationText = activity.getString(R.string.subtitle_none);
         } else {
             Location location = getLocation(selectedId);
             if(location != null) {
@@ -687,7 +720,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         selectedQuantityUnitId = selectedId;
         String quantityUnitText = null;
         if(quantityUnits.isEmpty()) {
-            quantityUnitText = "None";
+            quantityUnitText = activity.getString(R.string.subtitle_none);
         } else {
             QuantityUnit quantityUnit = getQuantityUnit(selectedId);
             if(quantityUnit != null) {
@@ -722,6 +755,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
             } else {
                 autoCompleteTextViewParentProduct.setText(null);
             }
+            // description
+            editDescription(editProduct.getDescription());
             // barcodes
             if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().isEmpty()) {
                 String[] barcodes = editProduct.getBarcode().split(",");
@@ -939,6 +974,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 jsonObject.put("parent_product_id", JSONObject.NULL);
             }
             // others
+            jsonObject.put("description", productDescription);
             jsonObject.put("barcode", getBarcodes());
             jsonObject.put("location_id", selectedLocationId);
             jsonObject.put("min_stock_amount", minAmount);
