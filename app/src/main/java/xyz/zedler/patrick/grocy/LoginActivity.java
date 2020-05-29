@@ -58,7 +58,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
-    final static String TAG = "LoginActivity";
+    final static String TAG = LoginActivity.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private SharedPreferences sharedPrefs;
