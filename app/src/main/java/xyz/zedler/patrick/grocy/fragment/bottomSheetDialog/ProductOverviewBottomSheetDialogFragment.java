@@ -180,6 +180,25 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		);
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
+				case R.id.action_add_to_shopping_list:
+					Bundle bundleShoppingList = new Bundle();
+					bundleShoppingList.putString(
+							Constants.ARGUMENT.TYPE,
+							Constants.ACTION.CREATE_FROM_STOCK
+					);
+					bundleShoppingList.putParcelable(
+							Constants.ARGUMENT.PRODUCT,
+							setUpWithProductDetails
+									? productDetails.getProduct()
+									: stockItem.getProduct()
+					);
+					activity.replaceFragment(
+							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+							bundleShoppingList,
+							true
+					);
+					dismiss();
+					return true;
 				case R.id.action_consume_all:
 					((StockFragment) activity.getCurrentFragment()).performAction(
 							Constants.ACTION.CONSUME_ALL,
@@ -329,11 +348,15 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		);
 
 		// LOCATION
-		itemLocation.setText(
-				activity.getString(R.string.property_location_default),
-				location != null ? location.getName() : "",
-				null
-		);
+		if(location != null) {
+			itemLocation.setText(
+					activity.getString(R.string.property_location_default),
+					location.getName(),
+					null
+			);
+		} else {
+			itemLocation.setVisibility(View.GONE);
+		}
 
 		// BEST BEFORE
 		itemBestBefore.setText(

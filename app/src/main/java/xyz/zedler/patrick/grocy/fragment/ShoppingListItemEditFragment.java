@@ -419,10 +419,12 @@ public class ShoppingListItemEditFragment extends Fragment {
                 selectShoppingList(-1);
             }
         } else if(action != null && action.equals(Constants.ACTION.CREATE_FROM_STOCK)) {
-            ProductDetails productDetails = startupBundle.getParcelable(
-                    Constants.ARGUMENT.PRODUCT_DETAILS
+            Product product = startupBundle.getParcelable(
+                    Constants.ARGUMENT.PRODUCT
             );
-            if(productDetails == null) return;
+            if(product == null) return;
+            assert textInputProduct.getEditText() != null;
+            textInputProduct.getEditText().setText(product.getName());
             if(shoppingLists.size() >= 1) {
                 selectShoppingList(shoppingLists.get(0).getId());
             } else {
