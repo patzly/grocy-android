@@ -180,6 +180,20 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		);
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
+				case R.id.action_consume_all:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_ALL,
+							product.getId()
+					);
+					dismiss();
+					return true;
+				case R.id.action_consume_spoiled:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_SPOILED,
+							product.getId()
+					);
+					dismiss();
+					return true;
 				case R.id.action_add_to_shopping_list:
 					Bundle bundleShoppingList = new Bundle();
 					bundleShoppingList.putString(
@@ -196,20 +210,6 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
 							bundleShoppingList,
 							true
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_all:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_ALL,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_spoiled:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_SPOILED,
-							product.getId()
 					);
 					dismiss();
 					return true;
