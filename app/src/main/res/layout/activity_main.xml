@@ -29,6 +29,7 @@
             android:layout_height="48dp"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             android:background="?actionBarItemBackground"
             android:contentDescription="@string/tooltip_demo"
             android:tooltipText="@string/tooltip_demo"

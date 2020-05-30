@@ -21,7 +21,6 @@
 ## Bugs
 
 - bottom menu and fab not clickable after back press from Purchase
-- don't let red warning from demo blink up on non-demo start
 - crash on batch activity after press back from "product edit" or "add to shopping list"
 - sort product groups and locations in filter menu alphabetically (stock and master products)
 
