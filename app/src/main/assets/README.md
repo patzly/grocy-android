@@ -8,7 +8,6 @@
 - create and edit shopping lists
 - extended product edit
 - Master product group sheet: go to master products with this product filter applied
-- app setting for shopping list indicator with server integration
 
 ## Improvements
 

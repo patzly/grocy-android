@@ -377,9 +377,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         downloadProductGroups();
         missingStockItems = new ArrayList<>();
         downloadStock();
+        shoppingListProductIds = new ArrayList<>();
         if(sharedPrefs.getBoolean(
                 Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                false
+                true
         )) {
             downloadShoppingList();
         }
@@ -399,7 +400,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         onDownloadError();
                         return;
                     }
-
                     if(DEBUG) Log.i(
                             TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
                     );
@@ -778,7 +778,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 binding.recyclerStock.setAdapter(stockItemAdapter);
             } else {
                 stockItemAdapter.setSortMode(sortMode);
-                stockItemAdapter.updateData(displayedItems);
+                stockItemAdapter.updateData(displayedItems, shoppingListProductIds);
                 stockItemAdapter.notifyDataSetChanged();
             }
             binding.recyclerStock.animate().alpha(1).setDuration(150).start();

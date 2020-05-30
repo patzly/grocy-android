@@ -229,8 +229,12 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.sortMode = sortMode;
     }
 
-    public void updateData(ArrayList<StockItem> stockItems) {
+    public void updateData(
+            ArrayList<StockItem> stockItems,
+            ArrayList<String> shoppingListProductIds
+    ) {
         this.stockItems = stockItems;
+        this.shoppingListProductIds = shoppingListProductIds;
     }
 
     @Override

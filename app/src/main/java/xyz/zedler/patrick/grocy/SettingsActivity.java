@@ -85,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity
 	private ClickUtil clickUtil = new ClickUtil();
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
-	private SwitchMaterial switchDark, switchFoodFacts;
+	private SwitchMaterial switchDark, switchFoodFacts, switchListIndicator;
 	private NestedScrollView nestedScrollView;
 	private TextView
 			textViewExpiringSoonDays,
@@ -157,15 +157,25 @@ public class SettingsActivity extends AppCompatActivity
 				sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
 		);
 
+		switchListIndicator = findViewById(R.id.switch_setting_list_indicator);
+		switchListIndicator.setChecked(
+				sharedPrefs.getBoolean(
+						Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+						true
+				)
+		);
+
 		setOnCheckedChangeListeners(
 				R.id.switch_setting_dark_mode,
-				R.id.switch_setting_open_food_facts
+				R.id.switch_setting_open_food_facts,
+				R.id.switch_setting_list_indicator
 		);
 
 		setOnClickListeners(
 				R.id.linear_setting_dark_mode,
 				R.id.linear_setting_open_food_facts,
 				R.id.linear_setting_logout,
+				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_default_amount_purchase,
 				R.id.linear_setting_default_amount_consume
@@ -291,6 +301,9 @@ public class SettingsActivity extends AppCompatActivity
 						bundleExpiringSoonDays
 				);
 				break;
+			case R.id.linear_setting_list_indicator:
+				switchListIndicator.setChecked(!switchListIndicator.isChecked());
+				break;
 			case R.id.linear_setting_default_amount_purchase:
 				IconUtil.start(this, R.id.image_setting_default_amount_purchase);
 				Bundle bundleAmountPurchase = new Bundle();
@@ -359,6 +372,27 @@ public class SettingsActivity extends AppCompatActivity
 						switchFoodFacts.isChecked()
 				).apply();
 				break;
+			case R.id.switch_setting_list_indicator:
+				JSONObject body = new JSONObject();
+				try {
+					body.put("value", switchListIndicator.isChecked());
+				} catch (JSONException e) {
+					if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + e);
+				}
+				request.put(
+						grocyApi.getUserSetting(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK),
+						body,
+						response -> sharedPrefs.edit().putBoolean(
+								Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+								switchListIndicator.isChecked()
+						).apply(),
+						error -> {
+							switchListIndicator.setChecked(!switchListIndicator.isChecked());
+							showMessage(getString(R.string.msg_error));
+							if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
+						}
+				);
+				break;
 		}
 	}
 
@@ -380,7 +414,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showMessage(getString(R.string.msg_error));
-					if(DEBUG) Log.i(TAG, "setExpiringSoonDays: " + error);
+					if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
 	}
@@ -411,7 +445,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showMessage(getString(R.string.msg_error));
-					if(DEBUG) Log.i(TAG, "setAmountPurchase: " + error);
+					if(DEBUG) Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
 	}
@@ -442,7 +476,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showMessage(getString(R.string.msg_error));
-					if(DEBUG) Log.i(TAG, "setAmountConsume: " + error);
+					if(DEBUG) Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
 	}
