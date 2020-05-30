@@ -5,6 +5,7 @@
 - Open new issue from feedback
 - Dense stock overview in landscape mode
 - Proper purchase to stock amount calculation
+- Bug fixes and improvements
 
 1.2.0:
 - Create and edit shopping list entries
