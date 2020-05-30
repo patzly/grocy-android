@@ -34,6 +34,8 @@
     <string name="action_clear_all">Clear all</string>
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
+    <string name="action_new_issue">Open new issue on GitHub</string>
+    <string name="action_new_issue_description">Report a bug or request a feature</string>
     <string name="action_tap_to_view">Tap to view</string>
     <string name="action_help">Help</string>
     <string name="action_get_started">Get started</string>
@@ -250,7 +252,7 @@
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Valid API key</string>
-    <string name="hint_message">Message</string>
+    <string name="hint_message">Write email</string>
 
     <string name="setting_dark_mode">Force dark mode</string>
     <string name="setting_dark_mode_description">Off for system dependency</string>
@@ -279,6 +281,7 @@
     <string name="url_grocy_demo">https://en.demo.grocy.info</string>
     <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
     <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
+    <string name="url_github_new_issue" translatable="false">https://github.com/patzly/grocy-android/issues/new</string>
     <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
     <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
     <string name="url_roboto" translatable="false">https://github.com/google/roboto</string>

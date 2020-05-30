@@ -65,7 +65,7 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 		Activity activity = getActivity();
 		assert activity != null;
 
-		view.findViewById(R.id.linear_rate).setOnClickListener(v -> {
+		view.findViewById(R.id.linear_feedback_rate).setOnClickListener(v -> {
 			IconUtil.start(view, R.id.image_feedback_rate);
 			Uri uri = Uri.parse(
 					"market://details?id=" + activity.getApplicationContext().getPackageName()
@@ -86,6 +86,18 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 				}
 				dismiss();
 			}, 300);
+		});
+
+		view.findViewById(R.id.linear_feedback_issue).setOnClickListener(v -> {
+			IconUtil.start(view, R.id.image_feedback_issue);
+			new Handler().postDelayed(
+					() -> startActivity(
+							new Intent(
+									Intent.ACTION_VIEW,
+									Uri.parse(activity.getString(R.string.url_github_new_issue))
+							)
+					), 0
+			);
 		});
 
 		TextInputLayout textInputLayoutFeedback = view.findViewById(R.id.text_input_feedback);
