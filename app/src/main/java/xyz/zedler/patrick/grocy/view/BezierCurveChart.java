@@ -30,7 +30,7 @@ public class BezierCurveChart extends View {
 
     private static final String TAG = BezierCurveChart.class.getSimpleName();
 
-    private static final float CURVE_LINE_WIDTH = 4f;
+    private static final float CURVE_LINE_WIDTH = 2f;
     private static final float BADGE_HEIGHT = 10; // percentage of chartRect height
     private static final float BADGE_MARGIN = 5;
     private static final float BADGE_FONT_SIZE = 70; // 100 means font fills badge with height
@@ -89,7 +89,7 @@ public class BezierCurveChart extends View {
 
         paintCurve.setStyle(Paint.Style.STROKE);
         paintCurve.setStrokeCap(Paint.Cap.ROUND);
-        paintCurve.setStrokeWidth(CURVE_LINE_WIDTH);
+        paintCurve.setStrokeWidth(UnitUtil.getDp(context, CURVE_LINE_WIDTH));
         paintCurve.setAntiAlias(true);
 
         curveColors.add(getColor(R.color.retro_blue_bg));
