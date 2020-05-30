@@ -57,7 +57,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     private static final String TAG = SwipeBehavior.class.getSimpleName();
 
-    private static final int BUTTON_WIDTH = 200;
+    private static final int BUTTON_WIDTH = 80;
     private Context context;
     private RecyclerView recyclerView;
     private List<UnderlayButton> buttons;
@@ -66,6 +66,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     private float swipeThreshold = 0.5f;
     private Map<Integer, List<UnderlayButton>> buttonsBuffer;
     private Queue<Integer> recoverQueue;
+    private int buttonWidth;
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
@@ -102,6 +103,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         super(0, ItemTouchHelper.RIGHT);
         this.context = context;
         this.buttons = new ArrayList<>();
+        buttonWidth = UnitUtil.getDp(context, BUTTON_WIDTH);
         GestureDetector.SimpleOnGestureListener gestureListener
                 = new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -163,7 +165,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
         buttonsBuffer.clear();
         assert buttons != null;
-        swipeThreshold = 0.5f * buttons.size() * BUTTON_WIDTH;
+        swipeThreshold = 0.5f * buttons.size() * buttonWidth;
         recoverSwipedItem();
     }
 
@@ -213,7 +215,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                 }
                 assert buffer != null;
 
-                translationX = dX * buffer.size() * BUTTON_WIDTH / itemView.getWidth();
+                translationX = dX * buffer.size() * buttonWidth / itemView.getWidth();
 
                 int limit = UnitUtil.getDp(context, 24);
                 if(translationX < limit && itemView.getElevation() > 0) {
@@ -307,7 +309,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
         float buttonLeft = left;
         for (int i = 0; i < buttons.size(); i++) {
-            float right = buttonLeft + BUTTON_WIDTH;
+            float right = buttonLeft + buttonWidth;
             buttons.get(i).onDraw(
                     recyclerView.getContext(),
                     canvas,
