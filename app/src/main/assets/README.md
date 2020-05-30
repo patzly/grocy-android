@@ -16,10 +16,6 @@
 - use server settings and configs
 - shorter tags & ids for master edit
 
-## Bugs
-
-- crash on batch activity after press back from "product edit" or "add to shopping list"
-
 ## Illustrations
 
 - offline
