@@ -109,7 +109,7 @@
     <string name="error_offline">Offline</string>
     <string name="error_offline_subtitle">Check your connection and try again</string>
     <string name="error_unknown">Uups!</string>
-    <string name="error_no_grocy_instance">This is not a grocy instance</string>
+    <string name="error_no_grocy_instance">This is not a valid grocy instance</string>
     <string name="error_timeout">Timeout error</string>
     <string name="error_failed_to_connect_to">Failed to connect to %1$s</string>
     <string name="error_unexpected_response_code">Unexpected response code: %1$i</string>
