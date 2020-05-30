@@ -230,7 +230,8 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeRipple = findViewById(R.id.ripple_scan);
 
         if(!hasFlash()) {
-            findViewById(R.id.frame_scan_flash).setVisibility(View.GONE);
+            View view = findViewById(R.id.frame_scan_flash);
+            if(view != null) view.setVisibility(View.GONE);
         }
 
         fragmentManager = getSupportFragmentManager();
@@ -428,7 +429,7 @@ public class ScanBatchActivity extends AppCompatActivity
             }
         }
 
-        cardViewCount.setVisibility(
+        if(cardViewCount != null) cardViewCount.setVisibility(
                 actionType.equals(Constants.ACTION.CONSUME)
                         ? View.GONE
                         : View.VISIBLE
