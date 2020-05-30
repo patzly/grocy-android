@@ -262,7 +262,6 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 response -> {
                     activity.loadProductDetailsByBarcode(barcode);
                     dismiss();
-                    activity.resumeScan();
                 },
                 error -> dismissWithMessage(activity.getString(R.string.msg_error))
         );
