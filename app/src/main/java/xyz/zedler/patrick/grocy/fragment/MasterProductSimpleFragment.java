@@ -849,6 +849,7 @@ public class MasterProductSimpleFragment extends Fragment {
             editTextName.setText(createProductObj.getProductName());
         } else if(createProductObj.getBarcodes() != null
                 && !createProductObj.getBarcodes().isEmpty()
+                && sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
         ) {
             // get product name from open food facts
             request.get(

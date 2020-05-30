@@ -207,22 +207,24 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         // GET PRODUCT NAME FROM OPEN FOOD FACTS
 
-        request.get(
-                OpenFoodFactsApi.getProduct(barcode),
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONObject product = jsonObject.getJSONObject("product");
-                        String name = product.getString("product_name");
-                        autoCompleteTextViewProduct.setText(name);
-                        if(DEBUG) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
-                    } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "onCreateView: " + e);
-                    }
-                },
-                error -> {},
-                OpenFoodFactsApi.getUserAgent(activity)
-        );
+        if(activity.isOpenFoodFactsEnabled()) {
+            request.get(
+                    OpenFoodFactsApi.getProduct(barcode),
+                    response -> {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject product = jsonObject.getJSONObject("product");
+                            String name = product.getString("product_name");
+                            autoCompleteTextViewProduct.setText(name);
+                            if(DEBUG) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
+                        } catch (JSONException e) {
+                            if(DEBUG) Log.e(TAG, "onCreateView: " + e);
+                        }
+                    },
+                    error -> {},
+                    OpenFoodFactsApi.getUserAgent(activity)
+            );
+        }
 
         // Set Input mode -> keyboard hid autocomplete popup, this call solves the issue
         Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow())

@@ -48,7 +48,7 @@ public final class Constants {
         public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
 
         public final static String DARK_MODE = "force_dark_mode";
-        public final static String ANIM_UI_UPDATE = "animated_ui_update";
+        public final static String FOOD_FACTS = "use_open_food_facts";
 
         public final static String INTRO_SHOWN = "intro_shown";
     }

@@ -1120,6 +1120,10 @@ public class ScanBatchActivity extends AppCompatActivity
         this.stockLocationId = stockLocationId;
     }
 
+    public boolean isOpenFoodFactsEnabled() {
+        return sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false);
+    }
+
     public boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                 Context.CONNECTIVITY_SERVICE

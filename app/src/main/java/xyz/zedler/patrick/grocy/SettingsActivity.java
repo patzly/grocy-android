@@ -85,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity
 	private ClickUtil clickUtil = new ClickUtil();
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
-	private SwitchMaterial switchDark;
+	private SwitchMaterial switchDark, switchFoodFacts;
 	private NestedScrollView nestedScrollView;
 	private TextView
 			textViewExpiringSoonDays,
@@ -152,12 +152,19 @@ public class SettingsActivity extends AppCompatActivity
 						: R.drawable.ic_round_dark_mode_on_anim
 		);
 
+		switchFoodFacts = findViewById(R.id.switch_setting_open_food_facts);
+		switchFoodFacts.setChecked(
+				sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
+		);
+
 		setOnCheckedChangeListeners(
-				R.id.switch_setting_dark_mode
+				R.id.switch_setting_dark_mode,
+				R.id.switch_setting_open_food_facts
 		);
 
 		setOnClickListeners(
 				R.id.linear_setting_dark_mode,
+				R.id.linear_setting_open_food_facts,
 				R.id.linear_setting_logout,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_default_amount_purchase,
@@ -259,6 +266,9 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_dark_mode:
 				switchDark.setChecked(!switchDark.isChecked());
 				break;
+			case R.id.linear_setting_open_food_facts:
+				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
+				break;
 			case R.id.linear_setting_logout:
 				Bundle bundle = null;
 				if(isDemo()) bundle = new Bundle();
@@ -342,6 +352,12 @@ public class SettingsActivity extends AppCompatActivity
 					);
 					onStart();
 				}, 300);
+				break;
+			case R.id.switch_setting_open_food_facts:
+				sharedPrefs.edit().putBoolean(
+						Constants.PREF.FOOD_FACTS,
+						switchFoodFacts.isChecked()
+				).apply();
 				break;
 		}
 	}

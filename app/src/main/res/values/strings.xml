@@ -258,6 +258,8 @@
 
     <string name="setting_dark_mode">Force dark mode</string>
     <string name="setting_dark_mode_description">Off for system dependency</string>
+    <string name="setting_open_food_facts">Use Open Food Facts</string>
+    <string name="setting_open_food_facts_description">Get info from barcodes</string>
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
     <string name="setting_currency_default">USD</string>

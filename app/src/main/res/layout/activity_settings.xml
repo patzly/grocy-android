@@ -107,6 +107,34 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linear_setting_open_food_facts"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_open_food_facts"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_barcode"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_open_food_facts" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_open_food_facts_description" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_setting_open_food_facts"
+                    style="@style/Widget.Grocy.Switch"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/linear_setting_logout"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
 
