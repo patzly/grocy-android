@@ -57,7 +57,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     private static final String TAG = SwipeBehavior.class.getSimpleName();
 
-    private static final int BUTTON_WIDTH = 80;
     private Context context;
     private RecyclerView recyclerView;
     private List<UnderlayButton> buttons;
@@ -103,7 +102,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         super(0, ItemTouchHelper.RIGHT);
         this.context = context;
         this.buttons = new ArrayList<>();
-        buttonWidth = UnitUtil.getDp(context, BUTTON_WIDTH);
+        buttonWidth = UnitUtil.getDp(context, 66);
         GestureDetector.SimpleOnGestureListener gestureListener
                 = new GestureDetector.SimpleOnGestureListener() {
             @Override
