@@ -535,7 +535,7 @@ public class ShoppingListFragment extends Fragment
         Spanned notes = shoppingList != null && shoppingList.getNotes() != null
                 ? Html.fromHtml(shoppingList.getNotes().trim())
                 : null;
-        if(shoppingList != null && notes != null && !notes.toString().isEmpty()) {
+        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
             linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
                 textViewBottomNotes.setText(notes);
                 linearLayoutBottomNotes.setVisibility(View.VISIBLE);
