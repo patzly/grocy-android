@@ -71,15 +71,6 @@
                     android:textColor="@color/on_background_secondary" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_text_edit_cancel"
-                    style="@style/Widget.Grocy.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/action_cancel"
-                    app:rippleColor="@color/highlight"
-                    android:textColor="@color/on_background_secondary" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_text_edit_ok"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"

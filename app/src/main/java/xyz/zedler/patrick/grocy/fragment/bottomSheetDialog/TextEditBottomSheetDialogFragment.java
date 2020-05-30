@@ -105,8 +105,6 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
             dismiss();
         });
 
-        view.findViewById(R.id.button_text_edit_cancel).setOnClickListener(v -> dismiss());
-
         view.findViewById(R.id.button_text_edit_clear).setOnClickListener(
                 v -> editText.setText(null)
         );
