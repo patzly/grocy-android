@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -62,7 +63,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
     private final static String TAG = "BatchChooseBottomSheet";
 
     private GrocyApi grocyApi;
@@ -203,6 +204,25 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 }
             }
         });
+
+        // GET PRODUCT NAME FROM OPEN FOOD FACTS
+
+        request.get(
+                OpenFoodFactsApi.getProduct(barcode),
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONObject product = jsonObject.getJSONObject("product");
+                        String name = product.getString("product_name");
+                        autoCompleteTextViewProduct.setText(name);
+                        if(DEBUG) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "onCreateView: " + e);
+                    }
+                },
+                error -> {},
+                OpenFoodFactsApi.getUserAgent(activity)
+        );
 
         // Set Input mode -> keyboard hid autocomplete popup, this call solves the issue
         Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow())

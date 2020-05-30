@@ -7,6 +7,9 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WebRequest {
 
     private RequestQueue requestQueue;
@@ -54,6 +57,29 @@ public class WebRequest {
                         onResponse::onResponse,
                         onError::onError
                 )
+        );
+    }
+
+    public void get(
+            String url,
+            OnResponseListener onResponse,
+            OnErrorListener onError,
+            String userAgent
+    ) {
+        requestQueue.add(
+                new StringRequest(
+                        Request.Method.GET,
+                        url,
+                        onResponse::onResponse,
+                        onError::onError
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("User-Agent", userAgent);
+                        return params;
+                    }
+                }
         );
     }
 
