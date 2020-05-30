@@ -184,6 +184,11 @@ public class ScanBatchActivity extends AppCompatActivity
         refreshCounter();
 
         cardViewCount = findViewById(R.id.card_scan_batch_count);
+        cardViewCount.setVisibility(
+                actionType.equals(Constants.ACTION.CONSUME)
+                        ? View.GONE
+                        : View.VISIBLE
+        );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cardViewCount.setTooltipText(getString(R.string.tooltip_new_products_count));
         }
