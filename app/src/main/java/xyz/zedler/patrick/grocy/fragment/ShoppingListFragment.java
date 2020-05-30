@@ -170,6 +170,9 @@ public class ShoppingListFragment extends Fragment
         );
 
         linearLayoutBottomNotes = activity.findViewById(R.id.linear_shopping_list_bottom_notes);
+        activity.findViewById(R.id.linear_shopping_list_bottom_notes_click).setOnClickListener(
+                v -> showNotesEditor()
+        );
         textViewBottomNotes = activity.findViewById(R.id.text_shopping_list_bottom_notes);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
         scrollView = activity.findViewById(R.id.scroll_shopping_list);
@@ -848,6 +851,22 @@ public class ShoppingListFragment extends Fragment
         activity.replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundle, true);
     }
 
+    private void showNotesEditor() {
+        Bundle bundle = new Bundle();
+        bundle.putString(
+                Constants.ARGUMENT.TITLE,
+                activity.getString(R.string.action_edit_notes)
+        );
+        bundle.putString(
+                Constants.ARGUMENT.HINT,
+                activity.getString(R.string.property_notes)
+        );
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        if(shoppingList == null) return;
+        bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
+        activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+    }
+
     public void setUpBottomMenu() {
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
@@ -860,19 +879,7 @@ public class ShoppingListFragment extends Fragment
         MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
         if(editNotes != null) {
             editNotes.setOnMenuItemClickListener(item -> {
-                Bundle bundle = new Bundle();
-                bundle.putString(
-                        Constants.ARGUMENT.TITLE,
-                        activity.getString(R.string.action_edit_notes)
-                );
-                bundle.putString(
-                        Constants.ARGUMENT.HINT,
-                        activity.getString(R.string.property_notes)
-                );
-                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-                if(shoppingList == null) return false;
-                bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
-                activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+                showNotesEditor();
                 return true;
             });
         }
