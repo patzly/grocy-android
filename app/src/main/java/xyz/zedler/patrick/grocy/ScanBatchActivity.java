@@ -509,7 +509,7 @@ public class ScanBatchActivity extends AppCompatActivity
     public void purchaseProduct() {
         JSONObject body = new JSONObject();
         try {
-            body.put("amount", 1);
+            body.put("amount", currentProductDetails.getProduct().getQuFactorPurchaseToStock());
             body.put("transaction_type", "purchase");
             body.put("best_before_date", bestBeforeDate);
             if(!price.isEmpty()) {
@@ -539,7 +539,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             findViewById(R.id.barcode_scan_batch),
                             getString(
                                     R.string.msg_purchased,
-                                    String.valueOf(1),
+                                    String.valueOf(currentProductDetails.getProduct().getQuFactorPurchaseToStock()),
                                     currentProductDetails.getQuantityUnitStock().getName(),
                                     currentProductDetails.getProduct().getName()
                             ), Snackbar.LENGTH_LONG
