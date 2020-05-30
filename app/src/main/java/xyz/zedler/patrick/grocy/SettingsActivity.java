@@ -387,7 +387,10 @@ public class SettingsActivity extends AppCompatActivity
 								switchListIndicator.isChecked()
 						).apply(),
 						error -> {
-							switchListIndicator.setChecked(!switchListIndicator.isChecked());
+							sharedPrefs.edit().putBoolean(
+									Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+									switchListIndicator.isChecked()
+							).apply();
 							showMessage(getString(R.string.msg_error));
 							if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
