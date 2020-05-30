@@ -207,7 +207,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
-                        if(error.toString().startsWith("com.android.volley.NoConnectionError: " +
+                        if(error.toString().startsWith(
+                                "com.android.volley.NoConnectionError: " +
                                 "javax.net.ssl.SSLHandshakeException")
                         ) {
                             Bundle bundle = new Bundle();

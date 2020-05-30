@@ -38,7 +38,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 public class MessageBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
 	private final static String TAG = "MessageBottomSheet";
-	private final static boolean DEBUG = false;
 
 	@NonNull
 	@Override
