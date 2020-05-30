@@ -104,6 +104,7 @@
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_invalid_amount">Invalid amount</string>
     <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
+    <string name="error_invalid_factor">Invalid factor</string>
     <string name="error_bounds_min_max">Between %1$s and %2$s</string>
     <string name="error_bounds_min">Equal to or higher than %1$s</string>
     <string name="error_offline">Offline</string>
@@ -182,7 +183,7 @@
     <string name="property_quantity_units">Quantity units</string>
     <string name="property_qu_purchase">Quantity unit purchase</string>
     <string name="property_qu_stock">Quantity unit stock</string>
-    <string name="property_qu_factor">Quantity unit factor</string>
+    <string name="property_qu_factor">Factor purchase to stock</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_bbd">Best before date</string>

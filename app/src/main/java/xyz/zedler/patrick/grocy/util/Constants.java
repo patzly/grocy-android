@@ -201,6 +201,8 @@ public final class Constants {
         public final static String VERSION = "version";
         public final static String SERVER = "server";
         public final static String KEY = "key";
+        public final static String QU_PURCHASE = "quantity_unit_purchase";
+        public final static String QU_STOCK = "quantity_unit_stock";
     }
 
     public final static class FAB {

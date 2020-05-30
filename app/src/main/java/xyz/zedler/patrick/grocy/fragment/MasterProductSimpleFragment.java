@@ -118,20 +118,32 @@ public class MasterProductSimpleFragment extends Fragment {
             textInputParentProduct,
             textInputBarcodes,
             textInputMinAmount,
-            textInputDays;
-    private EditText editTextName, editTextBarcodes, editTextMinAmount, editTextDays;
+            textInputDays,
+            textInputQUFactor;
+    private EditText
+            editTextName,
+            editTextBarcodes,
+            editTextMinAmount,
+            editTextDays,
+            editTextQUFactor;
     private TextView
             textViewLocation,
             textViewLocationLabel,
             textViewProductGroup,
-            textViewQuantityUnit,
-            textViewQuantityUnitLabel,
+            textViewQUPurchase,
+            textViewQUPurchaseLabel,
+            textViewQUStock,
+            textViewQUStockLabel,
             textViewDescription;
-    private ImageView imageViewName, imageViewMinAmount, imageViewDays;
-    private int selectedLocationId = -1, selectedQuantityUnitId = -1, selectedProductGroupId = -1;
+    private ImageView imageViewName, imageViewMinAmount, imageViewDays, imageViewQUFactor;
+    private int selectedLocationId = -1,
+            selectedQUPurchaseId = -1,
+            selectedQUStockId = -1,
+            selectedProductGroupId = -1;
     private String productDescriptionHtml = "";
     private String intendedAction;
     private double minAmount;
+    private int quantityUnitFactor;
     private int bestBeforeDays;
 
     @Override
@@ -404,24 +416,102 @@ public class MasterProductSimpleFragment extends Fragment {
                 R.id.text_master_product_simple_product_group
         );
 
-        // quantity unit
+        // quantity unit purchase
         activity.findViewById(
-                R.id.linear_master_product_simple_quantity_unit
+                R.id.linear_master_product_simple_qu_purchase
         ).setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_master_product_simple_quantity_unit);
+            IconUtil.start(activity, R.id.image_master_product_simple_qu_purchase);
             if(!quantityUnits.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQuantityUnitId);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QU_PURCHASE);
+                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQUPurchaseId);
                 activity.showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundle);
             }
         });
-        textViewQuantityUnit = activity.findViewById(
-                R.id.text_master_product_simple_quantity_unit
+        textViewQUPurchase = activity.findViewById(
+                R.id.text_master_product_simple_qu_purchase
         );
-        textViewQuantityUnitLabel = activity.findViewById(
-                R.id.text_master_product_simple_quantity_unit_label
+        textViewQUPurchaseLabel = activity.findViewById(
+                R.id.text_master_product_simple_qu_label_purchase
         );
+
+        // quantity unit stock
+        activity.findViewById(
+                R.id.linear_master_product_simple_qu_stock
+        ).setOnClickListener(v -> {
+            IconUtil.start(activity, R.id.image_master_product_simple_qu_stock);
+            if(!quantityUnits.isEmpty()) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QU_STOCK);
+                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQUStockId);
+                activity.showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundle);
+            }
+        });
+        textViewQUStock = activity.findViewById(
+                R.id.text_master_product_simple_qu_stock
+        );
+        textViewQUStockLabel = activity.findViewById(
+                R.id.text_master_product_simple_qu_label_stock
+        );
+
+        // quantity unit factor
+        textInputQUFactor = activity.findViewById(
+                R.id.text_input_master_product_simple_qu_factor
+        );
+        imageViewQUFactor = activity.findViewById(R.id.image_master_product_simple_qu_factor);
+        editTextQUFactor = textInputQUFactor.getEditText();
+        assert editTextQUFactor != null;
+        editTextQUFactor.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable s) {
+                String input = s.toString();
+                if(!input.isEmpty() && NumUtil.isStringInt(input) && Integer.parseInt(input) > 0) {
+                    quantityUnitFactor = Integer.parseInt(input);
+                    textInputQUFactor.setErrorEnabled(false);
+                } else if(!input.isEmpty()) {
+                    textInputQUFactor.setError(activity.getString(R.string.error_invalid_factor));
+                } else {
+                    quantityUnitFactor = 1;
+                }
+            }
+        });
+        editTextQUFactor.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+            if(hasFocus) IconUtil.start(imageViewQUFactor);
+        });
+        editTextQUFactor.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                editTextQUFactor.clearFocus();
+                activity.hideKeyboard();
+                return true;
+            } return false;
+        });
+
+        activity.findViewById(
+                R.id.button_master_product_simple_qu_factor_more
+        ).setOnClickListener(v -> {
+            IconUtil.start(imageViewQUFactor);
+            if(editTextQUFactor.getText().toString().isEmpty()) {
+                editTextQUFactor.setText(String.valueOf(1));
+            } else {
+                double amountNew = Double.parseDouble(editTextQUFactor.getText().toString()) + 1;
+                editTextQUFactor.setText(NumUtil.trim(amountNew));
+            }
+        });
+
+        activity.findViewById(
+                R.id.button_master_product_simple_qu_factor_less
+        ).setOnClickListener(v -> {
+            if(!editTextQUFactor.getText().toString().isEmpty()) {
+                IconUtil.start(imageViewQUFactor);
+                double amountNew = Double.parseDouble(editTextQUFactor.getText().toString()) - 1;
+                if(amountNew >= 1) {
+                    editTextQUFactor.setText(NumUtil.trim(amountNew));
+                }
+            }
+        });
 
         // STARTUP BUNDLE
 
@@ -718,8 +808,8 @@ public class MasterProductSimpleFragment extends Fragment {
         return null;
     }
 
-    public void selectQuantityUnit(int selectedId) {
-        selectedQuantityUnitId = selectedId;
+    public void selectQuantityUnitPurchase(int selectedId) {
+        selectedQUPurchaseId = selectedId;
         String quantityUnitText = null;
         if(quantityUnits.isEmpty()) {
             quantityUnitText = activity.getString(R.string.subtitle_none);
@@ -728,9 +818,27 @@ public class MasterProductSimpleFragment extends Fragment {
             if(quantityUnit != null) {
                 quantityUnitText = quantityUnit.getName();
             }
-            textViewQuantityUnitLabel.setTextColor(getColor(R.color.on_background_secondary));
+            textViewQUPurchaseLabel.setTextColor(getColor(R.color.on_background_secondary));
         }
-        textViewQuantityUnit.setText(quantityUnitText);
+        textViewQUPurchase.setText(quantityUnitText);
+        if(selectedQUStockId == -1) {
+            selectQuantityUnitStock(selectedId);
+        }
+    }
+
+    public void selectQuantityUnitStock(int selectedId) {
+        selectedQUStockId = selectedId;
+        String quantityUnitText = null;
+        if(quantityUnits.isEmpty()) {
+            quantityUnitText = activity.getString(R.string.subtitle_none);
+        } else {
+            QuantityUnit quantityUnit = getQuantityUnit(selectedId);
+            if(quantityUnit != null) {
+                quantityUnitText = quantityUnit.getName();
+            }
+            textViewQUStockLabel.setTextColor(getColor(R.color.on_background_secondary));
+        }
+        textViewQUStock.setText(quantityUnitText);
     }
 
     private QuantityUnit getQuantityUnit(int quantityUnitId) {
@@ -805,12 +913,20 @@ public class MasterProductSimpleFragment extends Fragment {
                 textViewProductGroup.setText(productGroup.getName());
                 selectedProductGroupId = productGroup.getId();
             }
-            // quantity unit
-            QuantityUnit quantityUnit = getQuantityUnit(editProduct.getQuIdStock());
-            if(quantityUnit != null) {
-                textViewQuantityUnit.setText(quantityUnit.getName());
-                selectedQuantityUnitId = quantityUnit.getId();
+            // quantity unit purchase
+            QuantityUnit quantityUnitPurchase = getQuantityUnit(editProduct.getQuIdPurchase());
+            if(quantityUnitPurchase != null) {
+                textViewQUPurchase.setText(quantityUnitPurchase.getName());
+                selectedQUPurchaseId = quantityUnitPurchase.getId();
             }
+            // quantity unit stock
+            QuantityUnit quantityUnitStock = getQuantityUnit(editProduct.getQuIdStock());
+            if(quantityUnitStock != null) {
+                textViewQUStock.setText(quantityUnitStock.getName());
+                selectedQUStockId = quantityUnitStock.getId();
+            }
+            // quantity unit factor
+            editTextQUFactor.setText(NumUtil.trim(editProduct.getQuFactorPurchaseToStock()));
         }
     }
 
@@ -834,10 +950,16 @@ public class MasterProductSimpleFragment extends Fragment {
 
         int quantityUnitId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_QU_ID, -1);
         QuantityUnit quantityUnit = getQuantityUnit(quantityUnitId);
-        if(selectedQuantityUnitId == -1 && quantityUnit != null) {
-            textViewQuantityUnit.setText(quantityUnit.getName());
-            selectedQuantityUnitId = quantityUnit.getId();
+        if(selectedQUPurchaseId == -1 && quantityUnit != null) {
+            textViewQUPurchase.setText(quantityUnit.getName());
+            selectedQUPurchaseId = quantityUnit.getId();
         }
+        if(selectedQUStockId == -1 && quantityUnit != null) {
+            textViewQUStock.setText(quantityUnit.getName());
+            selectedQUStockId = quantityUnit.getId();
+        }
+
+        editTextQUFactor.setText(String.valueOf(1));
     }
 
     private void fillWithCreateProductObject() {
@@ -906,7 +1028,10 @@ public class MasterProductSimpleFragment extends Fragment {
         textInputMinAmount.setErrorEnabled(false);
         textInputDays.clearFocus();
         textInputDays.setErrorEnabled(false);
-        textViewQuantityUnitLabel.setTextColor(getColor(R.color.on_background_secondary));
+        textViewQUPurchaseLabel.setTextColor(getColor(R.color.on_background_secondary));
+        textViewQUStockLabel.setTextColor(getColor(R.color.on_background_secondary));
+        textInputQUFactor.clearFocus();
+        textInputQUFactor.setErrorEnabled(false);
     }
 
     @Override
@@ -1027,9 +1152,9 @@ public class MasterProductSimpleFragment extends Fragment {
                             ? selectedProductGroupId
                             : JSONObject.NULL
             );
-            jsonObject.put("qu_id_purchase", selectedQuantityUnitId);
-            jsonObject.put("qu_id_stock", selectedQuantityUnitId);
-            jsonObject.put("qu_factor_purchase_to_stock", 1);
+            jsonObject.put("qu_id_purchase", selectedQUPurchaseId);
+            jsonObject.put("qu_id_stock", selectedQUStockId);
+            jsonObject.put("qu_factor_purchase_to_stock", quantityUnitFactor);
 
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "saveProduct: " + e);
@@ -1105,47 +1230,58 @@ public class MasterProductSimpleFragment extends Fragment {
 
     private boolean isFormInvalid() {
         clearInputFocusAndErrors();
-        boolean isInvalid = false;
 
         String name = String.valueOf(editTextName.getText()).trim();
         if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
-            isInvalid = true;
+            return true;
         } else if(!productNames.isEmpty() && productNames.contains(name)) {
             textInputName.setError(activity.getString(R.string.error_duplicate));
-            isInvalid = true;
+            return true;
         }
 
         String parentProduct = String.valueOf(autoCompleteTextViewParentProduct.getText()).trim();
         if(!parentProduct.isEmpty() && parentProduct.equals(name)) {
             textInputParentProduct.setError(activity.getString(R.string.error_parent));
-            isInvalid = true;
+            return true;
         } else if(!parentProduct.isEmpty() && !productNames.contains(parentProduct)) {
             textInputParentProduct.setError(activity.getString(R.string.error_invalid_product));
-            isInvalid = true;
+            return true;
         }
 
         if(selectedLocationId == -1) {
             textViewLocationLabel.setTextColor(getColor(R.color.error));
-            isInvalid = true;
+            return true;
         }
 
         if(minAmount < 0) {
             textInputMinAmount.setError(activity.getString(R.string.error_invalid_amount));
-            isInvalid = true;
+            return true;
         }
 
         if(bestBeforeDays < -1) {
             textInputDays.setError(activity.getString(R.string.error_invalid_best_before_days));
-            isInvalid = true;
+            return true;
         }
 
-        if(selectedQuantityUnitId == -1) {
-            textViewQuantityUnitLabel.setTextColor(getColor(R.color.error));
-            isInvalid = true;
+        if(selectedQUPurchaseId == -1) {
+            textViewQUPurchaseLabel.setTextColor(getColor(R.color.error));
+            return true;
         }
 
-        return isInvalid;
+        if(selectedQUStockId == -1) {
+            textViewQUStockLabel.setTextColor(getColor(R.color.error));
+            return true;
+        }
+
+        if(editTextQUFactor.getText().toString().trim().isEmpty()
+                || !NumUtil.isStringInt(editTextQUFactor.getText().toString())
+                || Integer.parseInt(editTextQUFactor.getText().toString()) < 1
+        ) {
+            textInputQUFactor.setError(activity.getString(R.string.error_invalid_factor));
+            return true;
+        }
+        return false;
     }
 
     private void resetAll() {
@@ -1200,8 +1336,13 @@ public class MasterProductSimpleFragment extends Fragment {
         textViewProductGroup.setText(R.string.subtitle_none);
         selectedProductGroupId = -1;
 
-        textViewQuantityUnit.setText(R.string.subtitle_none);
-        selectedQuantityUnitId = -1;
+        textViewQUPurchase.setText(R.string.subtitle_none);
+        selectedQUPurchaseId = -1;
+
+        textViewQUStock.setText(R.string.subtitle_none);
+        selectedQUStockId = -1;
+
+        editTextQUFactor.setText(String.valueOf(1));
     }
 
     private void checkForStock(Product product) {

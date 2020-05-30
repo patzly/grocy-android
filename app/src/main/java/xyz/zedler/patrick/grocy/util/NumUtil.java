@@ -41,4 +41,13 @@ public class NumUtil {
         if(input.isEmpty()) return 0;
         return Double.parseDouble(input.replace(",", "."));
     }
+
+    public static boolean isStringInt(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
 }

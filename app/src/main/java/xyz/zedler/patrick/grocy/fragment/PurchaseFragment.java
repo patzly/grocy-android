@@ -565,7 +565,7 @@ public class PurchaseFragment extends Fragment {
         textInputAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
-                        productDetails.getQuantityUnitStock().getNamePlural()
+                        productDetails.getQuantityUnitPurchase().getNamePlural()
                 )
         );
         if(!isTareWeightHandlingEnabled) {
@@ -739,9 +739,10 @@ public class PurchaseFragment extends Fragment {
 
     public void purchaseProduct() {
         if(isFormIncomplete()) return;
+        double amountMultiplied = amount * productDetails.getProduct().getQuFactorPurchaseToStock();
         JSONObject body = new JSONObject();
         try {
-            body.put("amount", amount);
+            body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");
             if(!editTextPrice.getText().toString().isEmpty()) {
                 double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
@@ -772,14 +773,14 @@ public class PurchaseFragment extends Fragment {
                     } catch (JSONException e) {
                         if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
                     }
-                    if(DEBUG) Log.i(TAG, "purchaseProduct: purchased " + amount);
+                    if(DEBUG) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
 
                     double amountAdded;
                     if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
-                        amountAdded = amount;
+                        amountAdded = amountMultiplied;
                     } else {
                         // calculate difference of amount if tare weight handling enabled
-                        amountAdded = amount - productDetails.getProduct().getTareWeight()
+                        amountAdded = amountMultiplied - productDetails.getProduct().getTareWeight()
                                 - productDetails.getStockAmount();
                     }
 
@@ -788,7 +789,7 @@ public class PurchaseFragment extends Fragment {
                             activity.getString(
                                     R.string.msg_purchased,
                                     NumUtil.trim(amountAdded),
-                                    amount == 1
+                                    amountMultiplied == 1
                                             ? productDetails.getQuantityUnitStock().getName()
                                             : productDetails.getQuantityUnitStock().getNamePlural(),
                                     productDetails.getProduct().getName()

@@ -53,6 +53,7 @@ public class QuantityUnitsBottomSheetDialogFragment
 
     private MainActivity activity;
     private ArrayList<QuantityUnit> quantityUnits;
+    private Bundle bundle;
 
     @NonNull
     @Override
@@ -71,7 +72,7 @@ public class QuantityUnitsBottomSheetDialogFragment
         );
 
         activity = (MainActivity) getActivity();
-        Bundle bundle = getArguments();
+        bundle = getArguments();
         assert activity != null && bundle != null;
 
         quantityUnits = bundle.getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
@@ -102,9 +103,18 @@ public class QuantityUnitsBottomSheetDialogFragment
     public void onItemRowClicked(int position) {
         Fragment currentFragment = activity.getCurrentFragment();
         if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-            ((MasterProductSimpleFragment) currentFragment).selectQuantityUnit(
-                    quantityUnits.get(position).getId()
-            );
+            assert bundle != null;
+            String type = bundle.getString(Constants.ARGUMENT.TYPE);
+            assert type != null;
+            if(type.equals(Constants.ARGUMENT.QU_PURCHASE)) {
+                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitPurchase(
+                        quantityUnits.get(position).getId()
+                );
+            } else {
+                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitStock(
+                        quantityUnits.get(position).getId()
+                );
+            }
         }
         dismiss();
     }
