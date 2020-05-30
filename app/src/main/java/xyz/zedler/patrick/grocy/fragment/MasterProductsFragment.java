@@ -475,9 +475,9 @@ public class MasterProductsFragment extends Fragment
         if(menuItem != null) {
             SubMenu menuProductGroups = menuItem.getSubMenu();
             menuProductGroups.clear();
+            SortUtil.sortProductGroupsByName(productGroups, true);
             for(ProductGroup productGroup : productGroups) {
                 menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
-                    //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
                     filterProductGroup(productGroup);
                     return true;
                 });

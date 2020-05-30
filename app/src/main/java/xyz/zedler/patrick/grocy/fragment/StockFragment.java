@@ -1154,6 +1154,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(menuItem != null) {
             SubMenu menuLocations = menuItem.getSubMenu();
             menuLocations.clear();
+            SortUtil.sortLocationsByName(locations, true);
             for(Location location : locations) {
                 menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
                     //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
@@ -1170,6 +1171,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(menuItem != null) {
             SubMenu menuProductGroups = menuItem.getSubMenu();
             menuProductGroups.clear();
+            SortUtil.sortProductGroupsByName(productGroups, true);
             for(ProductGroup productGroup : productGroups) {
                 menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
                     //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;

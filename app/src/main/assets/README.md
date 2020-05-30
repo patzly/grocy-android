@@ -21,7 +21,6 @@
 ## Bugs
 
 - crash on batch activity after press back from "product edit" or "add to shopping list"
-- sort product groups and locations in filter menu alphabetically (stock and master products)
 
 ## Illustrations
 
