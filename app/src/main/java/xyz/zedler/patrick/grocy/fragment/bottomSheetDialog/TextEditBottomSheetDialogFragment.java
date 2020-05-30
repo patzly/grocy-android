@@ -96,6 +96,7 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductEditSimpleFragment.class) {
                 ((MasterProductEditSimpleFragment) current).editDescription(
+                        Html.toHtml(editText.getText()),
                         editText.getText().toString()
                 );
             } else if(current.getClass() == ShoppingListFragment.class) {

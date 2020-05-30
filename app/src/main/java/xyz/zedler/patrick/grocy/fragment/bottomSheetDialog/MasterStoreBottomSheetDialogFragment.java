@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterStoreBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -107,7 +106,7 @@ public class MasterStoreBottomSheetDialogFragment extends BottomSheetDialogFragm
 		itemName.setText(activity.getString(R.string.property_name), store.getName());
 
 		// DESCRIPTION
-		String description = TextUtil.getFromHtml(store.getDescription());
+		String description = store.getDescription();
 		if(description != null) {
 			itemDescription.setSingleLine(false);
 			itemDescription.setText(activity.getString(R.string.property_description), description);

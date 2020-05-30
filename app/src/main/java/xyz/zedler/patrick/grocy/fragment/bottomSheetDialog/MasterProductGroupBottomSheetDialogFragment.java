@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterProductGroupBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -107,7 +106,7 @@ public class MasterProductGroupBottomSheetDialogFragment extends BottomSheetDial
 		itemName.setText(activity.getString(R.string.property_name), productGroup.getName());
 
 		// DESCRIPTION
-		String description = TextUtil.getFromHtml(productGroup.getDescription());
+		String description = productGroup.getDescription();
 		if(description != null) {
 			itemDescription.setSingleLine(false);
 			itemDescription.setText(activity.getString(R.string.property_description), description);

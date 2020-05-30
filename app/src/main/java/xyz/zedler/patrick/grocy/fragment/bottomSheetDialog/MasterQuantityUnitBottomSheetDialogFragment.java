@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterQuantityUnitBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -115,7 +114,7 @@ public class MasterQuantityUnitBottomSheetDialogFragment extends BottomSheetDial
 		);
 
 		// DESCRIPTION
-		String description = TextUtil.getFromHtml(quantityUnit.getDescription());
+		String description = quantityUnit.getDescription();
 		if(description != null) {
 			itemDescription.setSingleLine(false);
 			itemDescription.setText(activity.getString(R.string.property_description), description);

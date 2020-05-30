@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -127,7 +128,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             textViewDescription;
     private ImageView imageViewName, imageViewMinAmount, imageViewDays;
     private int selectedLocationId = -1, selectedQuantityUnitId = -1, selectedProductGroupId = -1;
-    private String productDescription = "";
+    private String productDescriptionHtml = "";
     private String intendedAction;
     private double minAmount;
     private int bestBeforeDays;
@@ -223,7 +224,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 R.id.linear_master_product_edit_simple_description
         ).setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.TEXT, productDescription);
+            bundle.putString(Constants.ARGUMENT.HTML, productDescriptionHtml);
             bundle.putString(Constants.ARGUMENT.TITLE, "Edit description");
             bundle.putString(Constants.ARGUMENT.HINT, "Product description");
             activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
@@ -641,13 +642,13 @@ public class MasterProductEditSimpleFragment extends Fragment {
         return null;
     }
 
-    public void editDescription(String description) {
-        if(description == null || description.trim().isEmpty()) {
+    public void editDescription(String descriptionHtml, String description) {
+        if(description == null || descriptionHtml == null || description.trim().isEmpty()) {
             textViewDescription.setText(activity.getString(R.string.subtitle_none));
-            productDescription = "";
+            productDescriptionHtml = "";
         } else {
             description = description.trim();
-            productDescription = description;
+            productDescriptionHtml = descriptionHtml;
             if(description.length() > 100) {
                 textViewDescription.setText(description.subSequence(0, 100));
             } else {
@@ -756,7 +757,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 autoCompleteTextViewParentProduct.setText(null);
             }
             // description
-            editDescription(editProduct.getDescription());
+            editDescription(
+                    editProduct.getDescription(),
+                    Html.fromHtml(editProduct.getDescription()).toString()
+            );
             // barcodes
             if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().isEmpty()) {
                 String[] barcodes = editProduct.getBarcode().split(",");
@@ -974,7 +978,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 jsonObject.put("parent_product_id", JSONObject.NULL);
             }
             // others
-            jsonObject.put("description", productDescription);
+            jsonObject.put("description", productDescriptionHtml);
             jsonObject.put("barcode", getBarcodes());
             jsonObject.put("location_id", selectedLocationId);
             jsonObject.put("min_stock_amount", minAmount);
