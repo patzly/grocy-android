@@ -14,7 +14,6 @@
 ## Improvements
 
 - use server settings and configs
-- shorter tags & ids for master edit
 - access feedback, info and help from login screen
 
 ## Bugs

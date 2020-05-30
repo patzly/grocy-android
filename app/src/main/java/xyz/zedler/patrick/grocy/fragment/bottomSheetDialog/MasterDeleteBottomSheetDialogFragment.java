@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
@@ -140,8 +140,8 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
             Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductsFragment.class) {
                 ((MasterProductsFragment) current).deleteProduct(product);
-            } else if(current.getClass() == MasterProductEditSimpleFragment.class) {
-                ((MasterProductEditSimpleFragment) current).deleteProduct(product);
+            } else if(current.getClass() == MasterProductSimpleFragment.class) {
+                ((MasterProductSimpleFragment) current).deleteProduct(product);
             } else if(current.getClass() == MasterLocationsFragment.class) {
                 ((MasterLocationsFragment) current).deleteLocation(location);
             } else if(current.getClass() == MasterLocationFragment.class) {

@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -101,8 +101,8 @@ public class ProductGroupsBottomSheetDialogFragment
     @Override
     public void onItemRowClicked(int position) {
         Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == MasterProductEditSimpleFragment.class) {
-            ((MasterProductEditSimpleFragment) currentFragment).selectProductGroup(
+        if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
+            ((MasterProductSimpleFragment) currentFragment).selectProductGroup(
                     productGroups.get(position).getId()
             );
         }

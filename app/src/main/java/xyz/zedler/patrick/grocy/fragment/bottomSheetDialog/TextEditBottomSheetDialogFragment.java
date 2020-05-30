@@ -39,7 +39,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -92,8 +92,8 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
 
         view.findViewById(R.id.button_text_edit_ok).setOnClickListener(v -> {
             Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == MasterProductEditSimpleFragment.class) {
-                ((MasterProductEditSimpleFragment) current).editDescription(
+            if(current.getClass() == MasterProductSimpleFragment.class) {
+                ((MasterProductSimpleFragment) current).editDescription(
                         Html.toHtml(editText.getText()),
                         editText.getText().toString()
                 );

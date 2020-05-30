@@ -69,7 +69,7 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductEditSimpleFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
@@ -655,15 +655,15 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_PRODUCT_SIMPLE:
-                scrollBehavior.setUpScroll(R.id.scroll_master_product_edit_simple);
+                scrollBehavior.setUpScroll(R.id.scroll_master_product_simple);
                 scrollBehavior.setHideOnScroll(false);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END,
                         R.menu.menu_master_product_edit,
                         animated,
                         () -> {
-                            if(fragmentCurrent.getClass() == MasterProductEditSimpleFragment.class) {
-                                ((MasterProductEditSimpleFragment) fragmentCurrent).setUpBottomMenu();
+                            if(fragmentCurrent.getClass() == MasterProductSimpleFragment.class) {
+                                ((MasterProductSimpleFragment) fragmentCurrent).setUpBottomMenu();
                             }
                         }
                 );
@@ -673,8 +673,8 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.SAVE,
                         true,
                         () -> {
-                            if(getCurrentFragment().getClass() == MasterProductEditSimpleFragment.class) {
-                                ((MasterProductEditSimpleFragment) fragmentCurrent).saveProduct();
+                            if(getCurrentFragment().getClass() == MasterProductSimpleFragment.class) {
+                                ((MasterProductSimpleFragment) fragmentCurrent).saveProduct();
                             }
                         }
                 );
@@ -916,7 +916,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.MASTER_PRODUCT_SIMPLE:
-                if(((MasterProductEditSimpleFragment) fragmentCurrent)
+                if(((MasterProductSimpleFragment) fragmentCurrent)
                         .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)
                 ) {
                     dismissFragment(fragmentCurrent.getArguments());
@@ -971,7 +971,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentCurrent = new MasterProductGroupsFragment();
                 break;
             case Constants.UI.MASTER_PRODUCT_SIMPLE:
-                fragmentCurrent = new MasterProductEditSimpleFragment();
+                fragmentCurrent = new MasterProductSimpleFragment();
                 break;
             case Constants.UI.MASTER_LOCATION:
                 fragmentCurrent = new MasterLocationFragment();

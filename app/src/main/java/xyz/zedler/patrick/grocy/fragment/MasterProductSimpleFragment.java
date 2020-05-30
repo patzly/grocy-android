@@ -87,7 +87,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class MasterProductEditSimpleFragment extends Fragment {
+public class MasterProductSimpleFragment extends Fragment {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_SIMPLE;
     private final static boolean DEBUG = false;
@@ -140,7 +140,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         return inflater.inflate(
-                R.layout.fragment_master_product_edit_simple,
+                R.layout.fragment_master_product_simple,
                 container,
                 false
         );
@@ -164,12 +164,12 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_product_edit_simple_cancel).setOnClickListener(
+        activity.findViewById(R.id.frame_master_product_simple_cancel).setOnClickListener(
                 v -> activity.onBackPressed()
         );
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_product_edit_simple);
+        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_product_simple);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
@@ -179,8 +179,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_product_edit_simple_name);
-        imageViewName = activity.findViewById(R.id.image_master_product_edit_simple_name);
+        textInputName = activity.findViewById(R.id.text_input_master_product_simple_name);
+        imageViewName = activity.findViewById(R.id.image_master_product_simple_name);
         editTextName = textInputName.getEditText();
         assert editTextName != null;
         editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -189,7 +189,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
         // parent product
         textInputParentProduct = activity.findViewById(
-                R.id.text_input_master_product_edit_simple_parent_product
+                R.id.text_input_master_product_simple_parent_product
         );
         textInputParentProduct.setErrorIconDrawable(null);
         textInputParentProduct.setEndIconOnClickListener(v -> startActivityForResult(
@@ -221,7 +221,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         // description
 
         activity.findViewById(
-                R.id.linear_master_product_edit_simple_description
+                R.id.linear_master_product_simple_description
         ).setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.HTML, productDescriptionHtml);
@@ -230,13 +230,13 @@ public class MasterProductEditSimpleFragment extends Fragment {
             activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
         });
         textViewDescription = activity.findViewById(
-                R.id.text_master_product_edit_simple_description
+                R.id.text_master_product_simple_description
         );
 
         // barcodes
 
         textInputBarcodes = activity.findViewById(
-                R.id.text_input_master_product_edit_simple_barcodes
+                R.id.text_input_master_product_simple_barcodes
         );
         textInputBarcodes.setErrorIconDrawable(null);
         textInputBarcodes.setEndIconOnClickListener(v -> startActivityForResult(
@@ -252,14 +252,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
             } return false;
         });
         linearLayoutBarcodeContainer = activity.findViewById(
-                R.id.linear_master_product_edit_simple_barcode_container
+                R.id.linear_master_product_simple_barcode_container
         );
 
         // location
         activity.findViewById(
-                R.id.linear_master_product_edit_simple_location
+                R.id.linear_master_product_simple_location
         ).setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_master_product_edit_simple_location);
+            IconUtil.start(activity, R.id.image_master_product_simple_location);
             if(!locations.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(
@@ -270,16 +270,16 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
             }
         });
-        textViewLocation = activity.findViewById(R.id.text_master_product_edit_simple_location);
+        textViewLocation = activity.findViewById(R.id.text_master_product_simple_location);
         textViewLocationLabel = activity.findViewById(
-                R.id.text_master_product_edit_simple_location_label
+                R.id.text_master_product_simple_location_label
         );
 
         // min stock amount
         textInputMinAmount = activity.findViewById(
-                R.id.text_input_master_product_edit_simple_amount
+                R.id.text_input_master_product_simple_amount
         );
-        imageViewMinAmount = activity.findViewById(R.id.image_master_product_edit_simple_amount);
+        imageViewMinAmount = activity.findViewById(R.id.image_master_product_simple_amount);
         editTextMinAmount = textInputMinAmount.getEditText();
         assert editTextMinAmount != null;
         editTextMinAmount.addTextChangedListener(new TextWatcher() {
@@ -306,7 +306,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
 
         activity.findViewById(
-                R.id.button_master_product_edit_simple_amount_more
+                R.id.button_master_product_simple_amount_more
         ).setOnClickListener(v -> {
             IconUtil.start(imageViewMinAmount);
             if(editTextMinAmount.getText().toString().isEmpty()) {
@@ -318,7 +318,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
 
         activity.findViewById(
-                R.id.button_master_product_edit_simple_amount_less
+                R.id.button_master_product_simple_amount_less
         ).setOnClickListener(v -> {
             if(!editTextMinAmount.getText().toString().isEmpty()) {
                 IconUtil.start(imageViewMinAmount);
@@ -330,8 +330,8 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
 
         // best before days
-        textInputDays = activity.findViewById(R.id.text_input_master_product_edit_simple_days);
-        imageViewDays = activity.findViewById(R.id.image_master_product_edit_simple_days);
+        textInputDays = activity.findViewById(R.id.text_input_master_product_simple_days);
+        imageViewDays = activity.findViewById(R.id.image_master_product_simple_days);
         editTextDays = textInputDays.getEditText();
         assert editTextDays != null;
         editTextDays.addTextChangedListener(new TextWatcher() {
@@ -364,7 +364,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
 
         activity.findViewById(
-                R.id.button_master_product_edit_simple_days_more
+                R.id.button_master_product_simple_days_more
         ).setOnClickListener(v -> {
             IconUtil.start(imageViewDays);
             if(editTextDays.getText().toString().isEmpty()) {
@@ -376,7 +376,7 @@ public class MasterProductEditSimpleFragment extends Fragment {
         });
 
         activity.findViewById(
-                R.id.button_master_product_edit_simple_days_less
+                R.id.button_master_product_simple_days_less
         ).setOnClickListener(v -> {
             if(!editTextDays.getText().toString().isEmpty()) {
                 IconUtil.start(imageViewDays);
@@ -389,9 +389,9 @@ public class MasterProductEditSimpleFragment extends Fragment {
 
         // product group
         activity.findViewById(
-                R.id.linear_master_product_edit_simple_product_group
+                R.id.linear_master_product_simple_product_group
         ).setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_master_product_edit_simple_product_group);
+            IconUtil.start(activity, R.id.image_master_product_simple_product_group);
             if(!productGroups.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, productGroups);
@@ -400,14 +400,14 @@ public class MasterProductEditSimpleFragment extends Fragment {
             }
         });
         textViewProductGroup = activity.findViewById(
-                R.id.text_master_product_edit_simple_product_group
+                R.id.text_master_product_simple_product_group
         );
 
         // quantity unit
         activity.findViewById(
-                R.id.linear_master_product_edit_simple_quantity_unit
+                R.id.linear_master_product_simple_quantity_unit
         ).setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_master_product_edit_simple_quantity_unit);
+            IconUtil.start(activity, R.id.image_master_product_simple_quantity_unit);
             if(!quantityUnits.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
@@ -416,10 +416,10 @@ public class MasterProductEditSimpleFragment extends Fragment {
             }
         });
         textViewQuantityUnit = activity.findViewById(
-                R.id.text_master_product_edit_simple_quantity_unit
+                R.id.text_master_product_simple_quantity_unit
         );
         textViewQuantityUnitLabel = activity.findViewById(
-                R.id.text_master_product_edit_simple_quantity_unit_label
+                R.id.text_master_product_simple_quantity_unit_label
         );
 
         // STARTUP BUNDLE
