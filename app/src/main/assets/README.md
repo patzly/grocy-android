@@ -4,7 +4,6 @@
 - open food facts implementation for product naming with barcode
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution
-- open new issue in feedback bottom sheet
 - Batch consume: icon action for opening product
 - create and edit shopping lists
 - extended product edit
