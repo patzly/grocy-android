@@ -12,16 +12,16 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_edit_notes"
-        android:title="@string/action_edit_notes"
-        android:icon="@drawable/ic_round_subject_anim"
+        android:id="@+id/action_clear"
+        android:title="@string/action_clear_all"
+        android:icon="@drawable/ic_round_delete_sweep_anim"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_clear"
-        android:title="@string/action_clear_all"
-        android:icon="@drawable/ic_round_delete_sweep_anim"
+        android:id="@+id/action_edit_notes"
+        android:title="@string/action_edit_notes"
+        android:icon="@drawable/ic_round_subject_anim"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
