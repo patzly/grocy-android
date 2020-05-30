@@ -76,8 +76,6 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
             return view;
         }
 
-        setCancelable(false);
-
         TextView textView = view.findViewById(R.id.text_text_edit_title);
         textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
 
