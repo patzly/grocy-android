@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,7 +38,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,7 +46,6 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -158,16 +155,6 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		refreshItems();
 
 		((TextView) view.findViewById(R.id.text_product_overview_name)).setText(product.getName());
-
-		if(product.getPictureFileName() != null) {
-			Picasso.get().load(
-					new GrocyApi(activity).getPicture(product.getPictureFileName(), 300)
-			).into((ImageView) view.findViewById(R.id.image_product_overview));
-		} else {
-			view.findViewById(
-					R.id.linear_product_overview_picture_container
-			).setVisibility(View.GONE);
-		}
 
 		// TOOLBAR
 

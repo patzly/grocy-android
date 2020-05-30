@@ -38,36 +38,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_product_overview_picture_container"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="end">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="@color/stroke_secondary"
-                app:strokeWidth="1dp"
-                app:cardElevation="0dp">
-
-                <ImageView
-                    android:id="@+id/image_product_overview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:maxWidth="70dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    tools:ignore="ContentDescription" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_product_overview"
             android:layout_width="wrap_content"

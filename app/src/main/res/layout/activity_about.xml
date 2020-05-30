@@ -355,30 +355,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_license_picasso"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_license_picasso"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_copyright_anim"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/license_picasso" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/license_picasso_author" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/linear_license_xzing_android"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
 

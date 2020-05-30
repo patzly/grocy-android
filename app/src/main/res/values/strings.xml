@@ -273,8 +273,6 @@
     <string name="license_material_icons" translatable="false">Material Design Icons</string>
     <string name="license_material_components" translatable="false">Material Components Android</string>
     <string name="license_roboto" translatable="false">Roboto Typeface</string>
-    <string name="license_picasso" translatable="false">Picasso</string>
-    <string name="license_picasso_author" translatable="false">Square</string>
     <string name="license_gson" translatable="false">Gson</string>
     <string name="license_volley" translatable="false">Volley</string>
     <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
@@ -289,7 +287,6 @@
     <string name="url_roboto" translatable="false">https://github.com/google/roboto</string>
     <string name="url_volley" translatable="false">https://github.com/google/volley</string>
     <string name="url_gson" translatable="false">https://github.com/google/gson</string>
-    <string name="url_picasso" translatable="false">https://github.com/square/picasso</string>
     <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
 
 </resources>

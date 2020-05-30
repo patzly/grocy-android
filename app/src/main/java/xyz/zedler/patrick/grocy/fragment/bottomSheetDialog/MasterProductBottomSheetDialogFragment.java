@@ -25,7 +25,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,11 +32,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.squareup.picasso.Picasso;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -113,16 +110,6 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		itemQuFactor = view.findViewById(R.id.item_master_product_qu_factor);
 		itemProductGroup = view.findViewById(R.id.item_master_product_product_group);
 		itemBarcodes = view.findViewById(R.id.item_master_product_barcodes);
-
-		if(product.getPictureFileName() != null) {
-			Picasso.get().load(
-					new GrocyApi(activity).getPicture(product.getPictureFileName(), 300)
-			).into((ImageView) view.findViewById(R.id.image_master_product));
-		} else {
-			view.findViewById(
-					R.id.linear_master_product_picture_container
-			).setVisibility(View.GONE);
-		}
 
 		// TOOLBAR
 

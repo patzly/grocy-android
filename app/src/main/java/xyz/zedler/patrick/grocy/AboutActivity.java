@@ -83,7 +83,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 				R.id.linear_license_roboto,
 				R.id.linear_license_volley,
 				R.id.linear_license_gson,
-				R.id.linear_license_picasso,
 				R.id.linear_license_xzing_android
 		);
 	}
@@ -167,14 +166,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 						"APACHE",
 						R.string.license_gson,
 						R.string.url_gson
-				);
-				break;
-			case R.id.linear_license_picasso:
-				IconUtil.start(this, R.id.image_license_picasso);
-				showTextBottomSheet(
-						"APACHE",
-						R.string.license_picasso,
-						R.string.url_picasso
 				);
 				break;
 			case R.id.linear_license_xzing_android:

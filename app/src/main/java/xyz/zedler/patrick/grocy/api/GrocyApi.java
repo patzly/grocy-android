@@ -21,11 +21,8 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
 import androidx.preference.PreferenceManager;
-
-import java.nio.charset.StandardCharsets;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -227,24 +224,5 @@ public class GrocyApi {
      */
     public String clearShoppingList() {
         return getUrl("/stock/shoppinglist/clear");
-    }
-
-    // PICTURE
-
-    /**
-     * Serves the given picture
-     */
-    public String getPicture(String fileName, int width) {
-        if(fileName != null) {
-            return getUrl(
-                    "/files/productpictures/" + Base64.encodeToString(
-                            fileName.getBytes(StandardCharsets.UTF_8),
-                            Base64.DEFAULT
-                    ), "force_serve_as=picture",
-                    "best_fit_width=" + width
-            );
-        } else {
-            return null;
-        }
     }
 }
