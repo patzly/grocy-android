@@ -1,8 +1,8 @@
 1.3.0:
-- Open new issue from feedback
+- Get product name for barcode (enable Open Food Facts in settings)
 - Edit shopping list bottom notes
-- Get product name for barcodes (enable Open Food Facts in settings)
 - Toggle shopping list indicator dots in settings
+- Open new issue from feedback
 - Dense stock overview in landscape mode
 - Proper purchase to stock amount calculation
 
