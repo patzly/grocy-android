@@ -159,6 +159,10 @@ public class BottomAppBarRefreshScrollBehavior {
 				fabScroll.hide();
 			});
 		}
+		if(bottomAppBar != null) {
+			bottomAppBar.show();
+			onChangeBottomAppBarVisibility(true);
+		}
 		if(DEBUG) Log.i(TAG, "setUpScroll");
 	}
 

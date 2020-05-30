@@ -15,7 +15,6 @@
 
 - use server settings and configs
 - shorter tags & ids for master edit
-- Always show bottom app bar on new fragment or on back press
 
 ## Bugs
 

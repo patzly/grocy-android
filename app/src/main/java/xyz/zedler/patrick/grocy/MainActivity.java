@@ -1001,7 +1001,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.linear_container_main, fragmentCurrent, fragmentCurrent.toString())
                 .addToBackStack(fragmentCurrent.toString())
                 .commit();
-        //bottomAppBar.show(fab.isOrWillBeShown());
 
         if(DEBUG) Log.i(
                 TAG,
