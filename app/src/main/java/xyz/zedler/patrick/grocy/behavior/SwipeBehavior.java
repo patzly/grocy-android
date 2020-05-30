@@ -381,7 +381,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             canvas.drawCircle(
                     rect.centerX() + offsetX,
                     rect.centerY(),
-                    UnitUtil.getDp(context, 20),
+                    UnitUtil.getDp(
+                            context,
+                            context.getResources().getInteger(R.integer.swipe_action_bg_radius)
+                    ),
                     paintBg
             );
 

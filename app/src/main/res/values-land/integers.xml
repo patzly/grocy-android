@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="swipe_action_bg_radius">18</integer>
+
+</resources>
