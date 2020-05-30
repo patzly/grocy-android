@@ -69,6 +69,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
@@ -842,9 +843,38 @@ public class MasterProductSimpleFragment extends Fragment {
     private void fillWithCreateProductObject() {
         clearInputFocusAndErrors();
 
-        editTextName.setText(createProductObj.getProductName());
+        if(createProductObj.getProductName() != null
+                && !createProductObj.getProductName().isEmpty()
+        ) {
+            editTextName.setText(createProductObj.getProductName());
+        } else if(createProductObj.getBarcodes() != null
+                && !createProductObj.getBarcodes().isEmpty()
+        ) {
+            // get product name from open food facts
+            request.get(
+                    OpenFoodFactsApi.getProduct(
+                            Arrays.asList(createProductObj.getBarcodes().split(",")).get(0)
+                    ),
+                    response -> {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject product = jsonObject.getJSONObject("product");
+                            String name = product.getString("product_name");
+                            editTextName.setText(name);
+                            if(DEBUG) Log.i(
+                                    TAG,
+                                    "fillWithCreateProductObject: OpenFoodFacts = " + name
+                            );
+                        } catch (JSONException e) {
+                            if(DEBUG) Log.e(TAG, "fillWithCreateProductObject: " + e);
+                        }
+                    },
+                    error -> {},
+                    OpenFoodFactsApi.getUserAgent(activity)
+            );
+        }
 
-        if(createProductObj.getBarcodes() != null) {
+        if(createProductObj.getBarcodes() != null && !createProductObj.getBarcodes().isEmpty()) {
             List<String> barcodes = Arrays.asList(createProductObj.getBarcodes().split(","));
             linearLayoutBarcodeContainer.removeAllViews();
             for(int i = 0; i < barcodes.size(); i++) {
