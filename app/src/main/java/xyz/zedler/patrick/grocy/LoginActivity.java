@@ -202,7 +202,11 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 },
                 error -> {
-                    Log.e(TAG, "requestLogin: VolleyError: " + error);
+                    Log.e(
+                            TAG,
+                            "requestLogin: VolleyError: " + error
+                                    + ", cause: " + error.getCause()
+                    );
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
@@ -219,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else if(error instanceof TimeoutError) {
                         showMessage(getString(R.string.error_timeout));
                     } else {
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.msg_error) + ": " + error);
                     }
                 }
         );
