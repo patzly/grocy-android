@@ -1,10 +1,11 @@
 # TODO
 
 ## Features
+
 - open food facts implementation for product naming with barcode
 - help page with note that all buttons can be long pressed to get a tip
-- translation contribution (weblate.org)
-- Batch consume: icon like flash toggle for opening product
+- translation contribution
+- Batch consume: icon (like flash toggle) for opening product, default is off for each scan
 - create and edit shopping lists
 - extended product edit
 - Master product group sheet: go to master products with this product filter applied
