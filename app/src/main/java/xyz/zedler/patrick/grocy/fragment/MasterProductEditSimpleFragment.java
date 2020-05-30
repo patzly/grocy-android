@@ -757,10 +757,17 @@ public class MasterProductEditSimpleFragment extends Fragment {
                 autoCompleteTextViewParentProduct.setText(null);
             }
             // description
-            editDescription(
-                    editProduct.getDescription(),
-                    Html.fromHtml(editProduct.getDescription()).toString()
-            );
+            if(editProduct.getDescription() != null) {
+                editDescription(
+                        editProduct.getDescription(),
+                        Html.fromHtml(editProduct.getDescription()).toString()
+                );
+            } else {
+                editDescription(
+                        editProduct.getDescription(),
+                        ""
+                );
+            }
             // barcodes
             if(editProduct.getBarcode() != null && !editProduct.getBarcode().trim().isEmpty()) {
                 String[] barcodes = editProduct.getBarcode().split(",");
