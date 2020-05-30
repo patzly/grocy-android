@@ -70,7 +70,6 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
 
         if(getArguments() == null
                 || getArguments().getString(Constants.ARGUMENT.TITLE) == null
-                || getArguments().getString(Constants.ARGUMENT.HINT) == null
         ) {
             dismissWithMessage(activity.getString(R.string.msg_error));
             return view;
@@ -80,7 +79,9 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
         textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
 
         TextInputLayout textInputLayout = view.findViewById(R.id.text_input_text_edit_text);
-        textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
+        if(getArguments().getString(Constants.ARGUMENT.HINT) != null) {
+            textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
+        }
         EditText editText = textInputLayout.getEditText();
         assert editText != null;
         if(getArguments().getString(Constants.ARGUMENT.TEXT) != null) {
