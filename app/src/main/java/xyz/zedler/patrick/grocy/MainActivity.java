@@ -1029,9 +1029,15 @@ public class MainActivity extends AppCompatActivity {
     public void dismissFragment() {
         int count = fragmentManager.getBackStackEntryCount();
         if(count >= 1) {
-            fragmentManager.popBackStack();
-            String tag = fragmentManager.getBackStackEntryAt(0).getName();
-            fragmentCurrent = fragmentManager.findFragmentByTag(tag);
+            fragmentManager.popBackStackImmediate();
+            String tag;
+            if(fragmentManager.getBackStackEntryCount() == 0) {
+                tag = Constants.UI.STOCK;
+                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
+            } else {
+                tag = fragmentManager.getBackStackEntryAt(0).getName();
+                fragmentCurrent = fragmentManager.findFragmentByTag(tag);
+            }
             if(fragmentCurrent != null) {
                 if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {
