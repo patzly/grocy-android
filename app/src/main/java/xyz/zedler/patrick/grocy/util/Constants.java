@@ -57,13 +57,6 @@ public final class Constants {
         public final static String NEVER_EXPIRES = "2999-12-31";
     }
 
-    public final static class BOTTOM_SHEET_TEXT {
-        public final static String TITLE = "title";
-        public final static String FILE = "file";
-        public final static String BIG_TEXT = "big";
-        public final static String LINK = "link";
-    }
-
     public final static class UI {
         public final static String STOCK = "stock";
         public final static String STOCK_DEFAULT = "stock_default";
@@ -197,6 +190,8 @@ public final class Constants {
         public final static String AMOUNT = "amount";
         public final static String NOTE = "note";
         public final static String TEXT = "text";
+        public final static String FILE = "file";
+        public final static String LINK = "link";
         public final static String HTML = "html";
         public final static String TITLE = "title";
         public final static String HINT = "hint";

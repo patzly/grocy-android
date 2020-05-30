@@ -191,10 +191,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 	private void showTextBottomSheet(String file, @StringRes int title, @StringRes int link) {
 		BottomSheetDialogFragment bottomSheet = new TextBottomSheetDialogFragment();
 		Bundle bundle = new Bundle();
-		bundle.putString(Constants.BOTTOM_SHEET_TEXT.TITLE, getString(title));
-		bundle.putString(Constants.BOTTOM_SHEET_TEXT.FILE, file);
+		bundle.putString(Constants.ARGUMENT.TITLE, getString(title));
+		bundle.putString(Constants.ARGUMENT.FILE, file);
 		if(link != 0) {
-			bundle.putString(Constants.BOTTOM_SHEET_TEXT.LINK, getString(link));
+			bundle.putString(Constants.ARGUMENT.LINK, getString(link));
 		}
 		bottomSheet.setArguments(bundle);
 		getSupportFragmentManager().beginTransaction()

@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,18 +74,18 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 		Bundle bundle = getArguments();
 		assert context != null && bundle != null;
 
-		String file = bundle.getString(Constants.BOTTOM_SHEET_TEXT.FILE) + ".txt";
-		String fileLocalized = bundle.getString(Constants.BOTTOM_SHEET_TEXT.FILE)
+		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
+		String fileLocalized = bundle.getString(Constants.ARGUMENT.FILE)
 				+ "-" + Locale.getDefault().getLanguage()
 				+ ".txt";
 		if(readFromFile(context, fileLocalized) != null) file = fileLocalized;
 
 		((TextView) view.findViewById(R.id.text_text_title)).setText(
-				bundle.getString(Constants.BOTTOM_SHEET_TEXT.TITLE)
+				bundle.getString(Constants.ARGUMENT.TITLE)
 		);
 
 		FrameLayout frameLayoutLink = view.findViewById(R.id.frame_text_open_link);
-		String link = bundle.getString(Constants.BOTTOM_SHEET_TEXT.LINK);
+		String link = bundle.getString(Constants.ARGUMENT.LINK);
 		if (link != null) {
 			frameLayoutLink.setOnClickListener(v -> {
 				IconUtil.start(view, R.id.image_text_open_link);
@@ -100,12 +99,6 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 		}
 
 		((TextView) view.findViewById(R.id.text_text)).setText(readFromFile(context, file));
-		if(bundle.getBoolean(Constants.BOTTOM_SHEET_TEXT.BIG_TEXT, false)) {
-			((TextView) view.findViewById(R.id.text_text)).setTextSize(
-					TypedValue.COMPLEX_UNIT_SP,
-					14.5f
-			);
-		}
 
 		return view;
 	}

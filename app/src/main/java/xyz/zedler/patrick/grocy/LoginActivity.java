@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -202,15 +203,26 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 },
                 error -> {
-                    Log.e(
-                            TAG,
-                            "requestLogin: VolleyError: " + error
-                                    + ", cause: " + error.getCause()
-                    );
+                    Log.e(TAG, "requestLogin: VolleyError: " + error);
                     if(error instanceof AuthFailureError) {
                         textInputLayoutKey.setError(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
-                        showMessage(getString(R.string.error_failed_to_connect_to, server));
+                        if(error.toString().startsWith("com.android.volley.NoConnectionError: " +
+                                "javax.net.ssl.SSLHandshakeException")
+                        ) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(
+                                    Constants.ARGUMENT.TITLE,
+                                    getString(R.string.error_handshake)
+                            );
+                            bundle.putString(
+                                    Constants.ARGUMENT.TEXT,
+                                    getString(R.string.error_handshake_description, server)
+                            );
+                            showBottomSheet(new MessageBottomSheetDialogFragment(), bundle);
+                        } else {
+                            showMessage(getString(R.string.error_failed_to_connect_to, server));
+                        }
                     } else if(error instanceof ServerError && error.networkResponse != null) {
                         int code = error.networkResponse.statusCode;
                         if (code == 404) {
@@ -229,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+    private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
         String tag = bottomSheet.toString();
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
