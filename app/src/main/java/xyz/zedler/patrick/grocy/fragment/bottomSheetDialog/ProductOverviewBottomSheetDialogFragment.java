@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.MenuCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -174,26 +175,15 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		boolean isInStock = setUpWithProductDetails
 				? productDetails.getStockAmount() > 0
 				: stockItem.getAmount() > 0;
+		MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
+		// disable consume actions if necessary
 		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
 		toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
 				isInStock && product.getEnableTareWeightHandling() == 0
 		);
+		toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
-				case R.id.action_consume_all:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_ALL,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_spoiled:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_SPOILED,
-							product.getId()
-					);
-					dismiss();
-					return true;
 				case R.id.action_add_to_shopping_list:
 					Bundle bundleShoppingList = new Bundle();
 					bundleShoppingList.putString(
@@ -211,6 +201,28 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 							bundleShoppingList,
 							true
 					);
+					dismiss();
+					return true;
+				case R.id.action_consume_all:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_ALL,
+							product.getId()
+					);
+					dismiss();
+					return true;
+				case R.id.action_consume_spoiled:
+					((StockFragment) activity.getCurrentFragment()).performAction(
+							Constants.ACTION.CONSUME_SPOILED,
+							product.getId()
+					);
+					dismiss();
+					return true;
+				case R.id.action_purchase:
+
+					dismiss();
+					return true;
+				case R.id.action_consume:
+
 					dismiss();
 					return true;
 				case R.id.action_edit_product:

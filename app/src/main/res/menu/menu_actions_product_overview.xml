@@ -3,24 +3,48 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_consume_all"
-        android:title="Consume all"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group_1">
 
-    <item
-        android:id="@+id/action_consume_spoiled"
-        android:title="Consume 1 as spoiled"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_add_to_shopping_list"
+            android:title="Add to shopping list"
+            app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_add_to_shopping_list"
-        android:title="Add to shopping list"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_consume_all"
+            android:title="Consume all"
+            app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_edit_product"
-        android:title="Edit product"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_consume_spoiled"
+            android:title="Consume 1 as spoiled"
+            app:showAsAction="never"/>
+
+    </group>
+
+    <group
+        android:id="@+id/group_2"
+        android:visible="false">
+
+        <item
+            android:id="@+id/action_purchase"
+            android:title="Purchase"
+            app:showAsAction="never"/>
+
+        <item
+            android:id="@+id/action_consume"
+            android:title="Consume"
+            app:showAsAction="never"/>
+
+    </group>
+
+    <group android:id="@+id/group_3">
+
+        <item
+            android:id="@+id/action_edit_product"
+            android:title="Edit product"
+            app:showAsAction="never"/>
+
+    </group>
 
 </menu>
