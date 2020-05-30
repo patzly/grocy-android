@@ -870,6 +870,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.SHOPPING_LIST_DEFAULT:
             case Constants.UI.CONSUME:
+            case Constants.UI.PURCHASE:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -928,7 +929,6 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MASTER_STORE:
             case Constants.UI.MASTER_QUANTITY_UNIT:
             case Constants.UI.MASTER_PRODUCT_GROUP:
-            case Constants.UI.PURCHASE:
                 dismissFragment();
                 break;
             default: if(DEBUG) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
