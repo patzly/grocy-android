@@ -17,10 +17,6 @@
 - shorter tags & ids for master edit
 - Always show bottom app bar on new fragment or on back press
 
-## Bugs
-
-- crash on batch activity after press back from "product edit" or "add to shopping list"
-
 ## Illustrations
 
 - offline
