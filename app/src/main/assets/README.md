@@ -4,7 +4,6 @@
 
 ## Improvements
 
-- feedback and About accessible from login
 - use server settings and configs
 
 ## Features
