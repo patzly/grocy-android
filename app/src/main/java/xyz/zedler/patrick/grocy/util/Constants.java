@@ -138,6 +138,8 @@ public final class Constants {
         public final static String EDIT_THEN_PURCHASE_BATCH = "edit_then_purchase_batch";
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
         public final static String PURCHASE_THEN_SHOPPING_LIST = "purchase_then_shopping_list";
+        public final static String PURCHASE_THEN_STOCK = "purchase_then_stock";
+        public final static String CONSUME_THEN_STOCK = "consume_then_stock";
     }
 
     public final static class SHORTCUT_ACTION {
@@ -179,7 +181,7 @@ public final class Constants {
         public final static String SELECTED_DATE = "selected_date";
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
-        public final static String SHOPPING_LIST_ITEM = "barcode";
+        public final static String SHOPPING_LIST_ITEM = "shopping_list_item";
         public final static String BARCODES = "barcodes";
         public final static String CREATE_PRODUCT_OBJECT = "create_product_object";
         public final static String BATCH_ITEMS = "batch_items";

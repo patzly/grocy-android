@@ -80,6 +80,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDial
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -500,23 +501,27 @@ public class PurchaseFragment extends Fragment {
         if(startupBundle != null) {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
         }
-        if(action != null && action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
-            Product product = getProductFromName(
-                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-            );
-            if(product != null) {
-                loadProductDetails(product.getId());
-            } else {
-                autoCompleteTextViewProduct.setText(
+        if(action != null) {
+            if(action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+                Product product = getProductFromName(
                         startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                 );
-            }
-        } else if(action != null && action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)) {
-            Product product = getProductFromName(
-                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-            );
-            if(product != null) {
-                loadProductDetails(product.getId());
+                if(product != null) {
+                    loadProductDetails(product.getId());
+                } else {
+                    autoCompleteTextViewProduct.setText(
+                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                    );
+                }
+            } else if(action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)
+                    || action.equals(Constants.ACTION.PURCHASE_THEN_STOCK)
+            ) {
+                Product product = getProductFromName(
+                        startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                );
+                if(product != null) {
+                    loadProductDetails(product.getId());
+                }
             }
         }
         swipeRefreshLayout.setRefreshing(false);
@@ -806,6 +811,32 @@ public class PurchaseFragment extends Fragment {
                         );
                     }
                     activity.showMessage(snackbar);
+
+                    String action = null;
+                    if(startupBundle != null) {
+                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
+                    }
+                    if(action != null) {
+                        if(action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)) {
+                            // delete entry from shopping list
+                            ShoppingListItem shoppingListItem = startupBundle.getParcelable(
+                                    Constants.ARGUMENT.SHOPPING_LIST_ITEM
+                            );
+                            assert shoppingListItem != null;
+                            request.delete(
+                                    grocyApi.getObject(
+                                            GrocyApi.ENTITY.SHOPPING_LIST,
+                                            shoppingListItem.getId()
+                                    ),
+                                    response1 -> activity.dismissFragment(),
+                                    error -> activity.dismissFragment()
+                            );
+                            return;
+                        } else if(action.equals(Constants.ACTION.PURCHASE_THEN_STOCK)) {
+                            activity.dismissFragment();
+                            return;
+                        }
+                    }
 
                     // CLEAR USER INPUT
                     nameAutoFilled = false;

@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -97,6 +98,7 @@ public class ConsumeFragment extends Fragment {
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
+    private Bundle startupBundle;
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<StockLocation> stockLocations = new ArrayList<>();
@@ -130,6 +132,8 @@ public class ConsumeFragment extends Fragment {
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        if(getArguments() != null) startupBundle = getArguments();
 
         // GET PREFERENCES
 
@@ -352,7 +356,27 @@ public class ConsumeFragment extends Fragment {
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     autoCompleteTextViewProduct.setAdapter(adapterProducts);
-                    // download finished
+
+                    // fill with product from bundle
+                    String action = null;
+                    if(startupBundle != null) {
+                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
+                    }
+                    if(action != null && action.equals(Constants.ACTION.CONSUME_THEN_STOCK)
+                    ) {
+                        Product product = getProductFromName(
+                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                        );
+                        if(product != null) {
+                            // delay is necessary because bottom app bar maybe isn't loaded yet –
+                            // this prevents NullPointerException
+                            new Handler().postDelayed(
+                                    () -> loadProductDetails(product.getId()),
+                                    200
+                            );
+                        }
+                    }
+
                     swipeRefreshLayout.setRefreshing(false);
                 }, error -> {
                     swipeRefreshLayout.setRefreshing(false);

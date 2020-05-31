@@ -23,8 +23,7 @@
     </group>
 
     <group
-        android:id="@+id/group_2"
-        android:visible="false">
+        android:id="@+id/group_2">
 
         <item
             android:id="@+id/action_purchase"

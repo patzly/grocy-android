@@ -803,6 +803,7 @@ public class ShoppingListFragment extends Fragment
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST);
         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, shoppingListItem.getProduct().getName());
         bundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(shoppingListItem.getAmount()));
+        bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
         activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
     }
 

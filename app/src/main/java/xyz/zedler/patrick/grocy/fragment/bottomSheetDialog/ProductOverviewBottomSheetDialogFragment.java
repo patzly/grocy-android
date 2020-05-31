@@ -115,23 +115,23 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-		Bundle bundle = getArguments();
-		if(bundle != null) {
-			showActions = bundle.getBoolean(
+		Bundle startupBundle = getArguments();
+		if(startupBundle != null) {
+			showActions = startupBundle.getBoolean(
 					Constants.ARGUMENT.SHOW_ACTIONS,
 					false
 			);
 
 			// setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem
 
-			productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
+			productDetails = startupBundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
 			if(productDetails != null) {
 				product = productDetails.getProduct();
 				stockItem = new StockItem(productDetails);
 			} else {
-				stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
-				quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-				location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
+				stockItem = startupBundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
+				quantityUnit = startupBundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+				location = startupBundle.getParcelable(Constants.ARGUMENT.LOCATION);
 				product = stockItem.getProduct();
 			}
 		}
@@ -166,17 +166,17 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		);
 		toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
 		toolbar.setOnMenuItemClickListener(item -> {
+			Bundle bundle = new Bundle();
 			switch (item.getItemId()) {
 				case R.id.action_add_to_shopping_list:
-					Bundle bundleShoppingList = new Bundle();
-					bundleShoppingList.putString(
+					bundle.putString(
 							Constants.ARGUMENT.TYPE,
 							Constants.ACTION.CREATE_FROM_STOCK
 					);
-					bundleShoppingList.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
 					activity.replaceFragment(
 							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-							bundleShoppingList,
+							bundle,
 							true
 					);
 					dismiss();
@@ -196,20 +196,29 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					dismiss();
 					return true;
 				case R.id.action_purchase:
-
+					bundle.putString(
+							Constants.ARGUMENT.TYPE,
+							Constants.ACTION.PURCHASE_THEN_STOCK
+					);
+					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
+					activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
 					dismiss();
 					return true;
 				case R.id.action_consume:
-
+					bundle.putString(
+							Constants.ARGUMENT.TYPE,
+							Constants.ACTION.CONSUME_THEN_STOCK
+					);
+					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
+					activity.replaceFragment(Constants.UI.CONSUME, bundle, true);
 					dismiss();
 					return true;
 				case R.id.action_edit_product:
-					Bundle bundle1 = new Bundle();
-					bundle1.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-					bundle1.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+					bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
 					activity.replaceFragment(
 							Constants.UI.MASTER_PRODUCT_SIMPLE,
-							bundle1,
+							bundle,
 							true
 					);
 					dismiss();
