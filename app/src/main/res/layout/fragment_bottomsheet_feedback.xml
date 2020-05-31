@@ -44,31 +44,6 @@
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
             <LinearLayout
-                android:id="@+id/linear_feedback_rate"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
-                android:background="@drawable/bg_list_item_surface">
-
-                <ImageView
-                    android:id="@+id/image_feedback_rate"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_star_anim"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/action_rate" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/action_rate_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/linear_feedback_issue"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
                 android:background="@drawable/bg_list_item_surface">
@@ -88,6 +63,31 @@
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Description"
                         android:text="@string/action_new_issue_description" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_feedback_rate"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
+                android:background="@drawable/bg_list_item_surface">
+
+                <ImageView
+                    android:id="@+id/image_feedback_rate"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_star_anim"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/action_rate" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/action_rate_description" />
 
                 </LinearLayout>
 
