@@ -560,7 +560,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 "downloadMissingProductDetails: "
                                         + "name = " + productDetails.getProduct().getName()
                         );
-                        StockItem stockItem = createStockItem(productDetails);
+                        StockItem stockItem = new StockItem(productDetails);
                         stockItems.add(stockItem);
                         missingStockItems.add(stockItem);
                     },
@@ -901,7 +901,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             new TypeToken<ProductDetails>(){}.getType()
                     );
                     // create updated stockItem object
-                    StockItem stockItemNew = createStockItem(productDetails);
+                    StockItem stockItemNew = new StockItem(productDetails);
 
                     if(!undo && stockItemNew.getAmount() == 0
                             && stockItemNew.getProduct().getMinStockAmount() == 0
@@ -1029,7 +1029,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             }.getType()
                     );
                     // create updated stockItem object
-                    StockItem stockItem = createStockItem(productDetails);
+                    StockItem stockItem = new StockItem(productDetails);
 
                     displayedItems.set(index, stockItem);
                     stockItemAdapter.notifyItemChanged(index);
@@ -1094,19 +1094,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 return stockItem;
             }
         } return null;
-    }
-
-    private StockItem createStockItem(ProductDetails productDetails) {
-        return new StockItem(
-                productDetails.getStockAmount(),
-                productDetails.getStockAmountAggregated(),
-                productDetails.getNextBestBeforeDate(),
-                productDetails.getStockAmountOpened(),
-                productDetails.getStockAmountOpenedAggregated(),
-                productDetails.getIsAggregatedAmount(),
-                productDetails.getProduct().getId(),
-                productDetails.getProduct()
-        );
     }
 
     /**
@@ -1272,7 +1259,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(productDetails != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-            bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
             bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
             activity.showBottomSheet(
                     new ProductOverviewBottomSheetDialogFragment(),

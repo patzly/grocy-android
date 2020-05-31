@@ -52,24 +52,15 @@ public class StockItem implements Parcelable {
     @SerializedName("product")
     private Product product;
 
-    public StockItem(
-            double amount,
-            double amountAggregated,
-            String bestBeforeDate,
-            double amountOpened,
-            double amountOpenedAggregated,
-            int isAggregatedAmount,
-            int productId,
-            Product product
-    ) {
-        this.amount = String.valueOf(amount);
-        this.amountAggregated = String.valueOf(amountAggregated);
-        this.bestBeforeDate = bestBeforeDate;
-        this.amountOpened = String.valueOf(amountOpened);
-        this.amountOpenedAggregated = String.valueOf(amountOpenedAggregated);
-        this.isAggregatedAmount = isAggregatedAmount;
-        this.productId = productId;
-        this.product = product;
+    public StockItem(ProductDetails productDetails) {
+        this.amount = String.valueOf(productDetails.getStockAmount());
+        this.amountAggregated = String.valueOf(productDetails.getStockAmountAggregated());
+        this.bestBeforeDate = productDetails.getNextBestBeforeDate();
+        this.amountOpened = String.valueOf(productDetails.getStockAmountOpened());
+        this.amountOpenedAggregated = String.valueOf(productDetails.getStockAmountOpenedAggregated());
+        this.isAggregatedAmount = productDetails.getIsAggregatedAmount();
+        this.productId = productDetails.getProduct().getId();
+        this.product = productDetails.getProduct();
     }
 
     private StockItem(Parcel parcel) {

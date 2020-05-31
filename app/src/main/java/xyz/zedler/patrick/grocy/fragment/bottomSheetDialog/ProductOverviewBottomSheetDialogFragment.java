@@ -80,7 +80,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	private QuantityUnit quantityUnit;
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
-	private boolean setUpWithProductDetails = false, showActions = false;
+	private boolean showActions = false;
 	private BezierCurveChart priceHistory;
 	private ListItem
 			itemAmount,
@@ -117,21 +117,17 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		Bundle bundle = getArguments();
 		if(bundle != null) {
-			setUpWithProductDetails = bundle.getBoolean(
-					Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS,
-					false
-			);
 			showActions = bundle.getBoolean(
 					Constants.ARGUMENT.SHOW_ACTIONS,
 					false
 			);
 
-			// setup in CONSUME is with ProductDetails, in STOCK with StockItem
+			// setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem
 
-			if(setUpWithProductDetails) {
-				productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
-				assert productDetails != null;
+			productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
+			if(productDetails != null) {
 				product = productDetails.getProduct();
+				stockItem = new StockItem(productDetails);
 			} else {
 				stockItem = bundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
 				quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
@@ -161,9 +157,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		// TOOLBAR
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
-		boolean isInStock = setUpWithProductDetails
-				? productDetails.getStockAmount() > 0
-				: stockItem.getAmount() > 0;
+		boolean isInStock = stockItem.getAmount() > 0;
 		MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
 		// disable consume actions if necessary
 		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
@@ -179,12 +173,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 							Constants.ARGUMENT.TYPE,
 							Constants.ACTION.CREATE_FROM_STOCK
 					);
-					bundleShoppingList.putParcelable(
-							Constants.ARGUMENT.PRODUCT,
-							setUpWithProductDetails
-									? productDetails.getProduct()
-									: stockItem.getProduct()
-					);
+					bundleShoppingList.putParcelable(Constants.ARGUMENT.PRODUCT, product);
 					activity.replaceFragment(
 							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
 							bundleShoppingList,
@@ -308,6 +297,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 						response -> {
 							Type listType = new TypeToken<ProductDetails>(){}.getType();
 							productDetails = new Gson().fromJson(response, listType);
+							stockItem = new StockItem(productDetails);
 							refreshButtonStates(true);
 							refreshItems();
 							loadPriceHistory(view);
@@ -327,21 +317,11 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		DateUtil dateUtil = new DateUtil(activity);
 
 		// quantity unit refresh for an up-to-date value (productDetails has it in it)
-		if(hasDetails()) {
-			quantityUnit = productDetails.getQuantityUnitStock();
-		}
+		if(hasDetails()) quantityUnit = productDetails.getQuantityUnitStock();
 		// aggregated amount
-		int isAggregatedAmount = hasDetails()
-				? productDetails.getIsAggregatedAmount()
-				: stockItem.getIsAggregatedAmount();
-		// location refresh for an up-to-date value (productDetails has it in it)
-		if(hasDetails()) {
-			location = productDetails.getLocation();
-		}
+		int isAggregatedAmount = stockItem.getIsAggregatedAmount();
 		// best before
-		String bestBefore = hasDetails()
-				? productDetails.getNextBestBeforeDate()
-				: stockItem.getBestBeforeDate();
+		String bestBefore = stockItem.getBestBeforeDate();
 		if(bestBefore == null) bestBefore = ""; // for "never" from dateUtil
 
 		// AMOUNT
@@ -352,6 +332,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		);
 
 		// LOCATION
+		if(hasDetails()) location = productDetails.getLocation(); // refresh
 		if(location != null) {
 			itemLocation.setText(
 					activity.getString(R.string.property_location_default),
@@ -375,7 +356,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		if(hasDetails()) {
 			// LAST PURCHASED
-			if(setUpWithProductDetails) itemLastPurchased.setVisibility(View.VISIBLE);
+			itemLastPurchased.setVisibility(View.VISIBLE);
 			String lastPurchased = productDetails.getLastPurchased();
 			itemLastPurchased.setText(
 					activity.getString(R.string.property_last_purchased),
@@ -389,7 +370,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 			);
 
 			// LAST USED
-			if(setUpWithProductDetails) itemLastUsed.setVisibility(View.VISIBLE);
+			itemLastUsed.setVisibility(View.VISIBLE);
 			String lastUsed = productDetails.getLastUsed();
 			itemLastUsed.setText(
 					activity.getString(R.string.property_last_used),
@@ -404,7 +385,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
 			if(lastPrice != null) {
-				if(setUpWithProductDetails) itemLastPrice.setVisibility(View.VISIBLE);
+				itemLastPrice.setVisibility(View.VISIBLE);
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
 						lastPrice + " " + sharedPrefs.getString(
@@ -417,7 +398,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 			// SHELF LIFE
 			int shelfLife = productDetails.getAverageShelfLifeDays();
 			if(shelfLife != 0 && shelfLife != -1) {
-				if(setUpWithProductDetails) itemShelfLife.setVisibility(View.VISIBLE);
+				itemShelfLife.setVisibility(View.VISIBLE);
 				itemShelfLife.setText(
 						activity.getString(R.string.property_average_shelf_life),
 						dateUtil.getHumanFromDays(shelfLife),
@@ -426,7 +407,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 			}
 
 			// SPOIL RATE
-			if(setUpWithProductDetails) itemSpoilRate.setVisibility(View.VISIBLE);
+			itemSpoilRate.setVisibility(View.VISIBLE);
 			itemSpoilRate.setText(
 					activity.getString(R.string.property_spoil_rate),
 					NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",
@@ -489,17 +470,9 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private void refreshButtonStates(boolean animated) {
-		boolean consume = hasDetails()
-				? productDetails.getStockAmount() > 0
-					&& productDetails.getProduct().getEnableTareWeightHandling() == 0
-				: stockItem.getAmount() > 0
+		boolean consume = stockItem.getAmount() > 0
 					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
-		boolean open = hasDetails()
-				? productDetails.getStockAmount()
-					> productDetails.getStockAmountOpened()
-					&& productDetails.getProduct().getEnableTareWeightHandling() == 0
-				: stockItem.getAmount()
-					> stockItem.getAmountOpened()
+		boolean open = stockItem.getAmount() > stockItem.getAmountOpened()
 					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
 		if(animated) {
 			actionButtonConsume.refreshState(consume);
@@ -520,10 +493,8 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private String getAmountText() {
-		double amount = hasDetails() ? productDetails.getStockAmount() : stockItem.getAmount();
-		double opened = hasDetails()
-				? productDetails.getStockAmountOpened()
-				: stockItem.getAmountOpened();
+		double amount = stockItem.getAmount();
+		double opened = stockItem.getAmountOpened();
 		StringBuilder stringBuilderAmount = new StringBuilder(
 				activity.getString(
 						R.string.subtitle_amount,
@@ -544,9 +515,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private String getAggregatedAmount() {
-		double amountAggregated = hasDetails()
-				? productDetails.getStockAmountAggregated()
-				: stockItem.getAmountAggregated();
+		double amountAggregated = stockItem.getAmountAggregated();
 		return "∑ " + activity.getString(
 				R.string.subtitle_amount,
 				NumUtil.trim(amountAggregated),

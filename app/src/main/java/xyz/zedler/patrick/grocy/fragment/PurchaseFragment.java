@@ -910,8 +910,6 @@ public class PurchaseFragment extends Fragment {
                 if(productDetails != null) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                    bundle.putBoolean(Constants.ARGUMENT.SET_UP_WITH_PRODUCT_DETAILS, true);
-                    bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, false);
                     activity.showBottomSheet(
                             new ProductOverviewBottomSheetDialogFragment(),
                             bundle
