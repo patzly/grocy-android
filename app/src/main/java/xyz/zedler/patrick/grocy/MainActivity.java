@@ -870,7 +870,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.SHOPPING_LIST_DEFAULT:
             case Constants.UI.CONSUME:
-            case Constants.UI.PURCHASE:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
             case Constants.UI.MASTER_STORES_DEFAULT:
@@ -924,6 +923,7 @@ public class MainActivity extends AppCompatActivity {
                     dismissFragment();
                 }
                 break;
+            case Constants.UI.PURCHASE:
             case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
             case Constants.UI.MASTER_LOCATION:
             case Constants.UI.MASTER_STORE:
