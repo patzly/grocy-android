@@ -21,21 +21,21 @@ Grocy Android uses grocy's official API to provide you a beautiful interface on 
 ## Features
 
 * Stock overview
+* Shopping lists
 * Fast barcode scanning
+* Open and consume with one swipe
 * Consume and purchase with shortcuts
 * Master data editing
-* Shopping list
 * Intuitive batch processing
 * Dark mode
 * No ads, analytics or in-app purchases
 * Low data usage
-* Tiny size (~5MB)
+* Tiny app size (~5MB)
 
 ## Upcoming
 
 Grocy Android is still under development. In the next weeks we're going to implement some more features!
 
-* Full shopping list support
 * Disabling of unused features with server config flags
 * Recipes
 * Meal plans
@@ -45,6 +45,9 @@ Grocy Android is still under development. In the next weeks we're going to imple
 ## Compatibility
 
 Grocy Android requires at least Android 5 Lollipop on your phone and at least grocy `2.7.0` on your server.
+
+**Self-signed certificates are not supported right now**, but an implementation is planned.
+However, you can use a certificate from [letsencrypt.org](https://letsencrypt.org/) instead of self-signed certificates for `https` encryption.
 
 ## Contribution
 
