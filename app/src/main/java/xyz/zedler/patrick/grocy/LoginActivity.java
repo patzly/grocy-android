@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -52,8 +51,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -69,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayoutKey;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +144,18 @@ public class LoginActivity extends AppCompatActivity {
                     .apply();
             setResult(Activity.RESULT_OK);
             finish();
+        });
+
+        ActionButton buttonFeedback = findViewById(R.id.button_login_feedback);
+        buttonFeedback.setOnClickListener(v -> {
+            buttonFeedback.startIconAnimation();
+            showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+        });
+
+        ActionButton buttonAbout = findViewById(R.id.button_login_about);
+        buttonAbout.setOnClickListener(v -> {
+            buttonAbout.startIconAnimation();
+            startActivity(new Intent(this, AboutActivity.class));
         });
 
         if(getIntent().getBooleanExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, false)) {
@@ -259,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showMessage(String text) {
         Snackbar.make(
-                findViewById(R.id.linear_login_container),
+                findViewById(R.id.coordinator_login_container),
                 text,
                 Snackbar.LENGTH_SHORT
         ).show();
