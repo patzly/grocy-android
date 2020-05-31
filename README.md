@@ -51,7 +51,7 @@ However, you can use a certificate from [letsencrypt.org](https://letsencrypt.or
 
 ## Contribution
 
-If you're running into a bug or miss a feature, feel free to give feedback in the app, write us an email or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
+If you run into a bug or miss a feature, feel free to give feedback in the app, send us an [email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
 
 ## Acknowledgment
 
