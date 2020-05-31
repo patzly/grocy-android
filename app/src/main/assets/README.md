@@ -1,20 +1,20 @@
-# TODO
+# TODO (sorted by priority)
 
-## Features
-
-- help page with note that all buttons can be long pressed to get a tip
-- translation contribution
-- Batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- create and edit shopping lists
-- extended product edit
-- Master product group sheet: go to master products with this product filter applied
+## Bugs
 
 ## Improvements
 
+- Feedback and About accessible from login
 - use server settings and configs
-- access feedback, info and help from login screen
 
-## Bugs
+## Features
+
+- create, edit and delete shopping lists
+- Batch consume: icon (like flash toggle) for opening product, default is off for each scan
+- Master product group sheet: go to master products with this product filter applied
+- help page with note that all buttons can be long pressed to get a tip
+- translation contribution
+- extended product editing
 
 ## Illustrations
 
@@ -23,7 +23,9 @@
 - unknown error
 - empty
 
-## View ID naming convention
+# Conventions
+
+## View ID naming
 
 `type_layout_name`
 
