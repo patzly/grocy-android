@@ -411,7 +411,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             }
             editTextAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
             selectShoppingList(shoppingListItem.getShoppingListId());
-            editTextNote.setText(TextUtil.getFromHtml(shoppingListItem.getNote()));
+            editTextNote.setText(TextUtil.trimCharSequence(shoppingListItem.getNote()));
         } else if(action != null && action.equals(Constants.ACTION.CREATE)) {
             if(shoppingLists.size() >= 1) {
                 selectShoppingList(shoppingLists.get(0).getId());

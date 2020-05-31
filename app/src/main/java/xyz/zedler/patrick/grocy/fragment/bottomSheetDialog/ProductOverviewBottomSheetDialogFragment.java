@@ -23,6 +23,8 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,9 +234,12 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		ExpandableCard cardDescription = view.findViewById(
 				R.id.card_product_overview_description
 		);
-		String description = TextUtil.getFromHtml(product.getDescription());
-		if(description != null) {
-			cardDescription.setText(description);
+		Spanned description = product.getDescription() != null
+				? Html.fromHtml(product.getDescription())
+				: null;
+		description = (Spanned) TextUtil.trimCharSequence(description);
+		if(description != null && !description.toString().isEmpty()) {
+			cardDescription.setText(description.toString());
 		} else {
 			cardDescription.setVisibility(View.GONE);
 		}

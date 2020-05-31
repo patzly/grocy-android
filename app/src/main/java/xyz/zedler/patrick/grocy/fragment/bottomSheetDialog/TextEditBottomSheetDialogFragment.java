@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -88,7 +89,7 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
             editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
         } else if(getArguments().getString(Constants.ARGUMENT.HTML) != null) {
             Spanned text = Html.fromHtml(getArguments().getString(Constants.ARGUMENT.HTML));
-            editText.setText(text);
+            editText.setText(TextUtil.trimCharSequence(text));
         }
 
         view.findViewById(R.id.button_text_edit_ok).setOnClickListener(v -> {
@@ -100,7 +101,7 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
                 );
             } else if(current.getClass() == ShoppingListFragment.class) {
                 ((ShoppingListFragment) current).saveNotes(
-                        editText.getText()
+                        (Spanned) TextUtil.trimCharSequence(editText.getText())
                 );
             }
             dismiss();

@@ -81,6 +81,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -536,7 +537,7 @@ public class ShoppingListFragment extends Fragment
         }
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                ? Html.fromHtml(shoppingList.getNotes().trim())
+                ? (Spanned) TextUtil.trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
                 : null;
         if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
             linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
@@ -773,7 +774,7 @@ public class ShoppingListFragment extends Fragment
     public void saveNotes(Spanned notes) {
         JSONObject body = new JSONObject();
 
-        String notesHtml = Html.toHtml(notes);
+        String notesHtml = notes != null ? Html.toHtml(notes) : "";
         try {
             body.put("description", notesHtml);
         } catch (JSONException e) {

@@ -19,29 +19,18 @@ package xyz.zedler.patrick.grocy.util;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.text.Html;
-
 public class TextUtil {
 
-    private static final String TAG = TextUtil.class.getSimpleName();
-
-    private static String trim(String text) {
-        if(text != null) {
-            String trimmed = text.trim();
-            while (trimmed.startsWith("\u00A0")) {
-                trimmed = trimmed.substring(1);
-            }
-            while (trimmed.endsWith("\u00A0")) {
-                trimmed = trimmed.substring(0, trimmed.length() - 1);
-            }
-            text = trimmed.trim();
+    public static CharSequence trimCharSequence(CharSequence source) {
+        if(source == null) return null;
+        int i = 0;
+        while (i < source.length() && Character.isWhitespace(source.charAt(i))) {
+            i++;
         }
-        return text;
-    }
-
-    public static String getFromHtml(String html) {
-        return html != null && !html.isEmpty()
-                ? trim(Html.fromHtml(html).toString().trim())
-                : null;
+        int j = source.length()-1;
+        while (j >= 0 && Character.isWhitespace(source.charAt(j))) {
+            j--;
+        }
+        return source.subSequence(i, j+1);
     }
 }

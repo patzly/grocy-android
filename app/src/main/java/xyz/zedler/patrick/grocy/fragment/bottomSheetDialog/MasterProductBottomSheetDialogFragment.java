@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,12 +145,15 @@ public class MasterProductBottomSheetDialogFragment extends BottomSheetDialogFra
 		);
 
 		// DESCRIPTION
-		String description = TextUtil.getFromHtml(product.getDescription());
-		if(description != null) {
+		Spanned description = product.getDescription() != null
+				? Html.fromHtml(product.getDescription())
+				: null;
+		description = (Spanned) TextUtil.trimCharSequence(description);
+		if(description != null && !description.toString().isEmpty()) {
 			itemDescription.setSingleLine(false);
 			itemDescription.setText(
 					activity.getString(R.string.property_description),
-					description
+					description.toString()
 			);
 		} else {
 			itemDescription.setVisibility(View.GONE);

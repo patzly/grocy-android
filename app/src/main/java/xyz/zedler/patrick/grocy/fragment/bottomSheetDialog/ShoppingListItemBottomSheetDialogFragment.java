@@ -136,8 +136,8 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 		itemAmount.setText(activity.getString(R.string.property_amount), textAmount);
 
 		// NOTE
-		String trimmedNote = TextUtil.getFromHtml(shoppingListItem.getNote());
-		if(trimmedNote != null) {
+		String trimmedNote = (String) TextUtil.trimCharSequence(shoppingListItem.getNote());
+		if(trimmedNote != null && !trimmedNote.isEmpty()) {
 			itemNote.setSingleLine(false);
 			itemNote.setText(activity.getString(R.string.property_note), trimmedNote);
 		} else {
