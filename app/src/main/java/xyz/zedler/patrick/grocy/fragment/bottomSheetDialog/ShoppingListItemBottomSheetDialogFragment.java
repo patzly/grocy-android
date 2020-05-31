@@ -94,10 +94,19 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 		// TOOLBAR
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_shopping_list_item);
+		if(productName == null) view.findViewById(R.id.action_purchase).setVisibility(View.GONE);
 		toolbar.setOnMenuItemClickListener(item -> {
 			Fragment fragmentCurrent = activity.getCurrentFragment();
 			if(fragmentCurrent.getClass() != ShoppingListFragment.class) return false;
 			switch (item.getItemId()) {
+				case R.id.action_toggle_done:
+					((ShoppingListFragment) fragmentCurrent).toggleDoneStatus(position);
+					dismiss();
+					return true;
+				case R.id.action_purchase:
+					((ShoppingListFragment) fragmentCurrent).purchaseItem(position);
+					dismiss();
+					return true;
 				case R.id.action_edit:
 					((ShoppingListFragment) fragmentCurrent).editItem(position);
 					dismiss();

@@ -58,6 +58,7 @@
     <string name="action_open_forms">Open forms</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
+    <string name="action_toggle_done">Toggle done</string>
     <string name="action_edit_notes">Edit notes</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>

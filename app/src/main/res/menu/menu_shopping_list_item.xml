@@ -5,6 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_toggle_done"
+        android:title="@string/action_toggle_done"
+        android:icon="@drawable/ic_round_done"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_purchase"
+        android:title="@string/action_purchase"
+        android:icon="@drawable/ic_round_local_grocery_store"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_edit"
         android:title="@string/action_edit"
         android:icon="@drawable/ic_round_edit"

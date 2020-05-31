@@ -796,7 +796,7 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private void purchaseItem(int position) {
+    public void purchaseItem(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         if(shoppingListItem.getProduct() == null) return;
         Bundle bundle = new Bundle();
