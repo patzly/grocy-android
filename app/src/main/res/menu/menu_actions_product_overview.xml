@@ -7,17 +7,17 @@
 
         <item
             android:id="@+id/action_add_to_shopping_list"
-            android:title="Add to shopping list"
+            android:title="@string/action_shopping_list_add"
             app:showAsAction="never"/>
 
         <item
             android:id="@+id/action_consume_all"
-            android:title="Consume all"
+            android:title="@string/action_consume_all"
             app:showAsAction="never"/>
 
         <item
             android:id="@+id/action_consume_spoiled"
-            android:title="Consume 1 as spoiled"
+            android:title="@string/action_consume_one_spoiled"
             app:showAsAction="never"/>
 
     </group>
@@ -28,12 +28,12 @@
 
         <item
             android:id="@+id/action_purchase"
-            android:title="Purchase"
+            android:title="@string/action_purchase"
             app:showAsAction="never"/>
 
         <item
             android:id="@+id/action_consume"
-            android:title="Consume"
+            android:title="@string/action_consume"
             app:showAsAction="never"/>
 
     </group>
@@ -42,7 +42,7 @@
 
         <item
             android:id="@+id/action_edit_product"
-            android:title="Edit product"
+            android:title="@string/action_edit_product"
             app:showAsAction="never"/>
 
     </group>
