@@ -4,24 +4,18 @@
 
 ## Improvements
 
-- Feedback and About accessible from login
+- feedback and About accessible from login
 - use server settings and configs
 
 ## Features
 
 - create, edit and delete shopping lists
-- Batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- Master product group sheet: go to master products with this product filter applied
+- batch consume: icon (like flash toggle) for opening product, default is off for each scan
+- illustrations: offline, search, error, empty
+- master product group sheet: go to master products with this product filter applied
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution
 - extended product editing
-
-## Illustrations
-
-- offline
-- search not found
-- unknown error
-- empty
 
 # Conventions
 
