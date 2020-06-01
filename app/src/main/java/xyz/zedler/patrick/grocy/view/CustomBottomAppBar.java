@@ -65,6 +65,8 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	private static final int ICON_ANIM_DURATION = 200;
 	private static final double ICON_ANIM_DELAY_FACTOR = 0.7;
 
+	private boolean isOrWillBeShown = true;
+
 	private ViewPropertyAnimator currentAnimator;
 	private ValueAnimator valueAnimatorNavigationIcon;
 
@@ -85,6 +87,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	 * Animatedly shows the bottomAppBar.
 	 */
 	public void show() {
+		isOrWillBeShown = true;
 		animateTo(
 				0,
 				ENTER_ANIMATION_DURATION,
@@ -100,6 +103,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	public void hide() {
 		MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
 		int addOffset = Build.VERSION.SDK_INT == 27 ? 0 : UnitUtil.getDp(getContext(), 10);
+		isOrWillBeShown = false;
 		animateTo(
 				getMeasuredHeight()
 						+ params.bottomMargin
@@ -109,6 +113,10 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 		);
 		if(isFabVisibleOrWillBeShown()) setCradleVisibility(false);
 		if(runnableOnHide != null) runnableOnHide.run();
+	}
+
+	public boolean isOrWillBeShown() {
+		return isOrWillBeShown;
 	}
 
 	public int getEnterAnimationDuration() {
