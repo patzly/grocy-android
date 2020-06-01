@@ -1062,7 +1062,9 @@ public class MainActivity extends AppCompatActivity {
                 tag = Constants.UI.STOCK;
                 fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
             } else {
-                tag = fragmentManager.getBackStackEntryAt(0).getName();
+                tag = fragmentManager.getBackStackEntryAt(
+                        fragmentManager.getBackStackEntryCount()-1
+                ).getName();
                 fragmentCurrent = fragmentManager.findFragmentByTag(tag);
             }
             if(fragmentCurrent != null) {
@@ -1088,7 +1090,9 @@ public class MainActivity extends AppCompatActivity {
                 tag = Constants.UI.STOCK;
                 fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
             } else {
-                tag = fragmentManager.getBackStackEntryAt(0).getName();
+                tag = fragmentManager.getBackStackEntryAt(
+                        fragmentManager.getBackStackEntryCount()-1
+                ).getName();
                 fragmentCurrent = fragmentManager.findFragmentByTag(tag);
             }
             if(fragmentCurrent != null) {
