@@ -209,6 +209,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 		} else {
 			replaceMenu(menuNew);
 			setMenuVisibility(true);
+			onChanged.run();
 		}
 	}
 
@@ -345,7 +346,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 		int delayIndex = 0;
 		for(
 				int i = indexStart;
-				(indexStart == 0) ? i < getMenu().size() : i >= 0;
+				indexStart == 0 ? i < getMenu().size() : i >= 0;
 				i = (indexStart == 0) ? i + 1 : i - 1
 		) {
 			int finalI = i;
@@ -353,7 +354,9 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 					() -> animateMenuItem(
 							getMenu().getItem(finalI),
 							VISIBLE,
-							finalI == getMenu().size() - 1 ? onAnimEnd : null
+							(indexStart == 0 ? finalI == getMenu().size() - 1 : finalI == 0)
+									? onAnimEnd
+									: null
 					), (long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
 			);
 			delayIndex++;
