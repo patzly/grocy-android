@@ -381,6 +381,8 @@ public class PurchaseFragment extends Fragment {
         textViewLocation = activity.findViewById(R.id.text_purchase_location);
         textViewLocationLabel = activity.findViewById(R.id.text_purchase_location_label);
 
+        hideDisabledFeatures();
+
         // START
 
         refresh();
@@ -923,6 +925,16 @@ public class PurchaseFragment extends Fragment {
             }
         }
         return names;
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+                true
+        )) {
+            activity.findViewById(R.id.linear_purchase_total_price).setVisibility(View.GONE);
+            activity.findViewById(R.id.linear_purchase_price).setVisibility(View.GONE);
+        }
     }
 
     public void setUpBottomMenu() {

@@ -214,6 +214,8 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
             linearLayoutSpecific.setVisibility(View.GONE);
         }
 
+        hideDisabledFeatures(view);
+
         return view;
     }
 
@@ -226,6 +228,15 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         activity.resumeScan();
+    }
+
+    private void hideDisabledFeatures(View view) {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+                true
+        )) {
+            view.findViewById(R.id.linear_batch_config_price).setVisibility(View.GONE);
+        }
     }
 
     private int getIntStatusFromPref(String pref) {

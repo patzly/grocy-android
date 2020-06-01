@@ -720,7 +720,11 @@ public class ScanBatchActivity extends AppCompatActivity
 
             // PRICE
             int askForPrice = sharedPrefs.getInt(Constants.PREF.BATCH_CONFIG_PRICE, 0);
-            if(askForPrice == 0 && price == null) {
+            boolean featureFlagPrice = sharedPrefs.getBoolean(
+                    Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+                    true
+            );
+            if(askForPrice == 0 && price == null || !featureFlagPrice) {
                 price = "";  // price is never required
             } else if(askForPrice == 1 && price == null) {
                 if(sessionPrices.containsKey(currentProductName)) {

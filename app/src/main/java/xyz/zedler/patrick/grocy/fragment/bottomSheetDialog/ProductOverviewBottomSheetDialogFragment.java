@@ -428,6 +428,12 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private void loadPriceHistory(View view) {
+		if(!sharedPrefs.getBoolean(
+				Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+				true
+		)) {
+			return;
+		}
 		new WebRequest(activity.getRequestQueue()).get(
 				activity.getGrocy().getPriceHistory(product.getId()),
 				response -> {

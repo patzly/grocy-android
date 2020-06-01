@@ -94,7 +94,7 @@
                         app:endIconDrawable="@drawable/ic_round_barcode_scan"
                         app:endIconTint="@color/icon"
                         app:endIconContentDescription="Scan barcode"
-                        android:hint="Product"
+                        android:hint="@string/property_product"
                         app:helperTextEnabled="true"
                         app:helperText=" ">
 
@@ -218,6 +218,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linear_purchase_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
