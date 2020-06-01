@@ -418,7 +418,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             editTextNote.setText(TextUtil.trimCharSequence(shoppingListItem.getNote()));
         } else if(action != null && action.equals(Constants.ACTION.CREATE)) {
             if(shoppingLists.size() >= 1) {
-                selectShoppingList(shoppingLists.get(0).getId());
+                selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
             } else {
                 selectShoppingList(-1);
             }
@@ -656,7 +656,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         return names;
     }
 
-    public void setProductName(String productName) {  // TODO: Does not work (after creating product)
+    public void setProductName(String productName) {
         autoCompleteTextViewProduct.setText(productName);
     }
 
