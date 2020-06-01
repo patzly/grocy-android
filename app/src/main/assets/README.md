@@ -8,9 +8,8 @@
 
 ## Features
 
-- create, edit and delete shopping lists
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- illustrations: offline, search, error, empty
+- illustrations: offline, empty
 - master product group sheet: go to master products with this product filter applied
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution
