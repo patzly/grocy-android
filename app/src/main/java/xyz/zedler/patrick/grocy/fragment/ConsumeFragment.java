@@ -309,6 +309,8 @@ public class ConsumeFragment extends Fragment {
             checkBoxSpoiled.setChecked(!checkBoxSpoiled.isChecked());
         });
 
+        hideDisabledFeatures();
+
         // START
 
         refresh();
@@ -475,14 +477,18 @@ public class ConsumeFragment extends Fragment {
         );
 
         // LOCATION
-        selectDefaultLocation();
-        selectStockEntry(null);
-        // load other info for bottomSheet and then for displaying the selected
-        loadStockLocations();
-        loadStockEntries();
+        if(sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            selectDefaultLocation();
+            loadStockLocations();
+        }
 
         // SPECIFIC
-        textViewSpecific.setText(activity.getString(R.string.subtitle_none));
+        selectStockEntry(null);
+        loadStockEntries();
+
 
         // SPOILED
         checkBoxSpoiled.setChecked(false);
@@ -592,7 +598,12 @@ public class ConsumeFragment extends Fragment {
             body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", isSpoiled);
-            body.put("location_id", selectedLocationId);
+            if(sharedPrefs.getBoolean(
+                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                    true
+            )) {
+                body.put("location_id", selectedLocationId);
+            }
             if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
@@ -904,6 +915,15 @@ public class ConsumeFragment extends Fragment {
                 return stockEntry;
             }
         } return null;
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            activity.findViewById(R.id.linear_consume_location).setVisibility(View.GONE);
+        }
     }
 
     public void setUpBottomMenu() {

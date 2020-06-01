@@ -111,7 +111,6 @@ public class ScanBatchActivity extends AppCompatActivity
     private boolean isTorchOn;
     private ClickUtil clickUtil = new ClickUtil();
 
-    private Intent intent;
     private String actionType;
     private FragmentManager fragmentManager;
     private Gson gson = new Gson();
@@ -154,7 +153,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_scan_batch);
 
-        intent = getIntent();
+        Intent intent = getIntent();
         actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
         if(actionType == null) finish();
 
@@ -450,6 +449,9 @@ public class ScanBatchActivity extends AppCompatActivity
             if(entryId != null && !entryId.isEmpty()) {
                 body.put("stock_entry_id", entryId);
             }
+            if(stockLocationId != null && !stockLocationId.isEmpty()) {
+                body.put("location_id", stockLocationId); // TODO: not sure if it's the right key name
+            }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
         }
@@ -656,13 +658,19 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @SuppressLint("SimpleDateFormat")
     public void askNecessaryDetails() {
+
+        boolean featureFlagLocation = sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        );
+
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
             // STOCK LOCATION
             int askForStockLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, 0
             );
-            if(askForStockLocation == 0 && stockLocationId == null) {
+            if(askForStockLocation == 0 && stockLocationId == null || !featureFlagLocation) {
                 stockLocationId = "";
             } else if(askForStockLocation == 2 && stockLocationId == null) {
                 showStockLocationsBottomSheet();
@@ -774,7 +782,9 @@ public class ScanBatchActivity extends AppCompatActivity
             int askForLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_LOCATION, 0
             );
-            if(askForLocation == 0 && locationId == null) {
+            if(!featureFlagLocation) {
+                locationId = "1";
+            } else if(askForLocation == 0 && locationId == null) {
                 if(currentDefaultLocationId == -1) {
                     showLocationsBottomSheet(true);
                     return;

@@ -242,7 +242,19 @@ public class MainActivity extends AppCompatActivity {
                                         jsonObject.getBoolean(
                                                 "FEATURE_FLAG_STOCK_PRICE_TRACKING"
                                         )
-                                ).apply();
+                                )
+                                .putBoolean(
+                                        Constants.PREF.FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS,
+                                        jsonObject.getBoolean(
+                                                "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS"
+                                        )
+                                )
+                                .putBoolean(
+                                        Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                                        jsonObject.getBoolean(
+                                        "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
+                                        )
+                        ).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

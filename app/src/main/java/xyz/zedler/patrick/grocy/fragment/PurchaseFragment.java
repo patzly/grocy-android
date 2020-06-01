@@ -762,7 +762,12 @@ public class PurchaseFragment extends Fragment {
             if(selectedStoreId > -1) {
                 body.put("shopping_location_id", selectedStoreId);
             }
-            body.put("location_id", selectedLocationId);
+            if(sharedPrefs.getBoolean(
+                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                    true
+            )) {
+                body.put("location_id", selectedLocationId);
+            }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
         }
@@ -934,6 +939,12 @@ public class PurchaseFragment extends Fragment {
         )) {
             activity.findViewById(R.id.linear_purchase_total_price).setVisibility(View.GONE);
             activity.findViewById(R.id.linear_purchase_price).setVisibility(View.GONE);
+        }
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            activity.findViewById(R.id.linear_purchase_location).setVisibility(View.GONE);
         }
     }
 

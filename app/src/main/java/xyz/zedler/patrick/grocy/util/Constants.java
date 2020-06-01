@@ -30,6 +30,9 @@ public final class Constants {
 
         public final static String FEATURE_FLAG_SHOPPINGLIST = "feature_flag_shoppinglist";
         public final static String FEATURE_FLAG_STOCK_PRICE_TRACKING = "feature_flag_stock_price_tracking";
+        public final static String FEATURE_FLAG_STOCK_LOCATION_TRACKING = " feature_flag_location_tracking";
+        public final static String FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING = "feature_flag_best_before_date_tracking";
+        public final static String FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS = "feature_flag_multiple_lists";
 
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";

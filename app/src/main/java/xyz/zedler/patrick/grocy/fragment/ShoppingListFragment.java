@@ -285,6 +285,7 @@ public class ShoppingListFragment extends Fragment
         };
         swipeBehavior.attachToRecyclerView(recyclerView);
 
+        hideDisabledFeatures();
 
         load();
 
@@ -1106,6 +1107,16 @@ public class ShoppingListFragment extends Fragment
         if(clickUtil.isDisabled()) return;
         swipeBehavior.recoverLatestSwipedItem();
         showItemBottomSheet(groupedListItems.get(position), position);
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS,
+                true
+        )) {
+            activity.findViewById(R.id.button_shopping_list_lists).setVisibility(View.GONE);
+            textViewTitle.setOnClickListener(null);
+        }
     }
 
     private void showItemBottomSheet(GroupedListItem groupedListItem, int position) {

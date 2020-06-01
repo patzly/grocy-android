@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,6 +40,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,6 +86,7 @@ public class MasterProductsFragment extends Fragment
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
+    private SharedPreferences sharedPrefs;
     private MasterProductAdapter masterProductAdapter;
     private ClickUtil clickUtil = new ClickUtil();
 
@@ -122,6 +125,10 @@ public class MasterProductsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // PREFERENCES
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // WEB REQUESTS
 
@@ -244,9 +251,15 @@ public class MasterProductsFragment extends Fragment
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
         downloadQuantityUnits();
-        downloadLocations();
         downloadProductGroups();
         downloadProducts();
+
+        if(sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            downloadLocations();
+        }
     }
 
     private void downloadQuantityUnits() {

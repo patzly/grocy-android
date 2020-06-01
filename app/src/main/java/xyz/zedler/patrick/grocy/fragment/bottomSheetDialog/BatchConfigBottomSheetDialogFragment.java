@@ -237,6 +237,13 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         )) {
             view.findViewById(R.id.linear_batch_config_price).setVisibility(View.GONE);
         }
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            view.findViewById(R.id.linear_batch_config_location).setVisibility(View.GONE);
+            view.findViewById(R.id.linear_batch_config_stock_location).setVisibility(View.GONE);
+        }
     }
 
     private int getIntStatusFromPref(String pref) {

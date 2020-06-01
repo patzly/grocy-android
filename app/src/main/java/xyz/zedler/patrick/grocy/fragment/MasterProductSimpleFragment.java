@@ -537,6 +537,8 @@ public class MasterProductSimpleFragment extends Fragment {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
         }
 
+        hideDisabledFeatures();
+
         // START
 
         load();
@@ -578,9 +580,15 @@ public class MasterProductSimpleFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
 
         downloadProducts();
-        downloadLocations();
         downloadProductGroups();
         downloadQuantityUnits();
+
+        if(sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            downloadLocations();
+        }
     }
 
     private void downloadProducts() {
@@ -766,7 +774,7 @@ public class MasterProductSimpleFragment extends Fragment {
     }
 
     private Location getLocation(int locationId) {
-        if(locationId == -1) return null;
+        if(locationId == -1 || locations.isEmpty()) return null;
         for(Location location : locations) {
             if(location.getId() == locationId) {
                 return location;
@@ -903,8 +911,8 @@ public class MasterProductSimpleFragment extends Fragment {
             Location location = getLocation(editProduct.getLocationId());
             if(location != null) {
                 textViewLocation.setText(location.getName());
-                selectedLocationId = location.getId();
             }
+            selectedLocationId = editProduct.getLocationId();
             // min stock amount
             editTextMinAmount.setText(NumUtil.trim(editProduct.getMinStockAmount()));
             // best before days
@@ -1145,7 +1153,6 @@ public class MasterProductSimpleFragment extends Fragment {
             // others
             jsonObject.put("description", productDescriptionHtml);
             jsonObject.put("barcode", getBarcodes());
-            jsonObject.put("location_id", selectedLocationId);
             jsonObject.put("min_stock_amount", minAmount);
             jsonObject.put("default_best_before_days", bestBeforeDays);
             jsonObject.put(
@@ -1157,6 +1164,15 @@ public class MasterProductSimpleFragment extends Fragment {
             jsonObject.put("qu_id_purchase", selectedQUPurchaseId);
             jsonObject.put("qu_id_stock", selectedQUStockId);
             jsonObject.put("qu_factor_purchase_to_stock", quantityUnitFactor);
+
+            if(sharedPrefs.getBoolean(
+                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                    true
+            ) || editProduct != null) {
+                jsonObject.put("location_id", selectedLocationId);
+            } else {
+                jsonObject.put("location_id", 1);
+            }
 
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "saveProduct: " + e);
@@ -1253,7 +1269,10 @@ public class MasterProductSimpleFragment extends Fragment {
             isInvalid = true;
         }
 
-        if(selectedLocationId == -1) {
+        if(selectedLocationId == -1 && sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
             textViewLocationLabel.setTextColor(getColor(R.color.error));
             isInvalid = true;
         }
@@ -1411,6 +1430,17 @@ public class MasterProductSimpleFragment extends Fragment {
 
     public String getIntendedAction() {
         return intendedAction;
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            activity.findViewById(
+                    R.id.linear_master_product_simple_location
+            ).setVisibility(View.GONE);
+        }
     }
 
     public void setUpBottomMenu() {

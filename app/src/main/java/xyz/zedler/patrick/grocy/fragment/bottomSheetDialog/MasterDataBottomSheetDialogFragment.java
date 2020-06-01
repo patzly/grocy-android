@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -45,6 +47,7 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
 
     private MainActivity activity;
     private View view;
+    private SharedPreferences sharedPrefs;
     private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
 
@@ -68,6 +71,8 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
 
         setOnClickListeners(
@@ -89,6 +94,8 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
         } else if(uiMode.startsWith(Constants.UI.MASTER_PRODUCT_GROUPS)) {
             select(R.id.linear_master_data_product_groups, R.id.text_master_data_product_groups);
         }
+
+        hideDisabledFeatures();
 
         return view;
     }
@@ -141,6 +148,15 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
     private void replaceFragment(String fragmentNew) {
         activity.replaceFragment(fragmentNew, null, true);
         dismiss();
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                true
+        )) {
+            view.findViewById(R.id.linear_master_data_locations).setVisibility(View.GONE);
+        }
     }
 
     @NonNull
