@@ -875,6 +875,7 @@ public class ShoppingListFragment extends Fragment
     public void addItem() {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+        bundle.putInt(Constants.ARGUMENT.SHOPPING_LIST_ID, selectedShoppingListId);
         activity.replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundle, true);
     }
 

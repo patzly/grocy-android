@@ -163,6 +163,7 @@ public final class Constants {
         public final static String STORE = "store";
         public final static String STORES = "stores";
         public final static String SHOPPING_LIST = "shopping_list";
+        public final static String SHOPPING_LIST_ID = "shopping_list_id";
         public final static String SHOPPING_LIST_NAME = "shopping_list_name";
         public final static String SHOPPING_LISTS = "shopping_lists";
         public final static String PRODUCT_GROUP = "product_group";
