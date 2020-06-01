@@ -35,11 +35,13 @@
                 <TextView
                     android:id="@+id/text_drawer_shopping_list"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Shopping list" />
+                    android:text="@string/title_shopping_list" />
 
             </LinearLayout>
 
-            <View style="@style/Theme.Grocy.Divider"/>
+            <View
+                android:id="@+id/divider_drawer_shopping_list"
+                style="@style/Theme.Grocy.Divider"/>
 
             <!--<LinearLayout
                 android:id="@+id/linear_drawer_recipes"
@@ -89,7 +91,7 @@
                     <TextView
                         android:id="@+id/text_drawer_consume"
                         style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:text="Consume" />
+                        android:text="@string/action_consume" />
 
                 </LinearLayout>
 
@@ -120,7 +122,7 @@
                     <TextView
                         android:id="@+id/text_drawer_purchase"
                         style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:text="Purchase" />
+                        android:text="@string/action_purchase" />
 
                 </LinearLayout>
 
@@ -149,7 +151,7 @@
                 <TextView
                     android:id="@+id/text_drawer_master_data"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Master data" />
+                    android:text="@string/title_master_data" />
 
             </LinearLayout>
 

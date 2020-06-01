@@ -28,6 +28,8 @@ public final class Constants {
         public final static String GROCY_VERSION = "grocy_version";
         public final static String CREDENTIALS = "credentials";
 
+        public final static String FEATURE_FLAG_SHOPPINGLIST = "feature_flag_shoppinglist";
+
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 

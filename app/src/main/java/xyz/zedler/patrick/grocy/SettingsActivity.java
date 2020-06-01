@@ -219,6 +219,8 @@ public class SettingsActivity extends AppCompatActivity
 						? getString(R.string.setting_empty_value)
 						: amountConsume
 		);
+
+		hideDisabledFeatures();
 	}
 
 	@Override
@@ -228,6 +230,12 @@ public class SettingsActivity extends AppCompatActivity
 		if(getIntent() != null) {
 			flashView(getIntent().getIntExtra(Constants.EXTRA.FLASH_VIEW_ID, 0));
 			getIntent().removeExtra(Constants.EXTRA.FLASH_VIEW_ID);
+		}
+	}
+
+	private void hideDisabledFeatures() {
+		if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+			findViewById(R.id.linear_setting_list_indicator).setVisibility(View.GONE);
 		}
 	}
 

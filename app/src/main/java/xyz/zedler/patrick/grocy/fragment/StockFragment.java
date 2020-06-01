@@ -765,12 +765,22 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void refreshAdapter() {
         binding.recyclerStock.animate().alpha(0).setDuration(150).withEndAction(() -> {
             RecyclerView.Adapter adapterCurrent = binding.recyclerStock.getAdapter();
+
+            ArrayList<String> shoppingListProductIdsTmp;
+            if(sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+                // give empty list of product ids if shopping list feature is disabled
+                // so no dots are displayed even if there are products in shopping list
+                shoppingListProductIdsTmp = shoppingListProductIds;
+            } else {
+                shoppingListProductIdsTmp = new ArrayList<>();
+            }
+
             if(adapterCurrent != null && adapterCurrent.getClass() != StockItemAdapter.class) {
                 stockItemAdapter = new StockItemAdapter(
                         activity,
                         displayedItems,
                         quantityUnits,
-                        shoppingListProductIds,
+                        shoppingListProductIdsTmp,
                         daysExpiringSoon,
                         sortMode,
                         this
@@ -778,7 +788,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 binding.recyclerStock.setAdapter(stockItemAdapter);
             } else {
                 stockItemAdapter.setSortMode(sortMode);
-                stockItemAdapter.updateData(displayedItems, shoppingListProductIds);
+                stockItemAdapter.updateData(displayedItems, shoppingListProductIdsTmp);
                 stockItemAdapter.notifyDataSetChanged();
             }
             binding.recyclerStock.animate().alpha(1).setDuration(150).start();

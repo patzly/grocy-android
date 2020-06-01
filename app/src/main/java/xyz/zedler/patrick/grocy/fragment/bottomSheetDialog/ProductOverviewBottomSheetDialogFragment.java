@@ -319,6 +319,8 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		}
 
+		hideDisabledFeatures(view);
+
 		return view;
 	}
 
@@ -495,6 +497,13 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	private void disableActions() {
 		actionButtonConsume.refreshState(false);
 		actionButtonOpen.refreshState(false);
+	}
+
+	private void hideDisabledFeatures(View view) {
+		if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+			MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
+			toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
+		}
 	}
 
 	private boolean hasDetails() {

@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -51,6 +53,7 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
     private MainActivity activity;
     private View view;
+    private SharedPreferences sharedPrefs;
     private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
 
@@ -73,6 +76,8 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         activity = (MainActivity) getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
         if(DEBUG) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
@@ -110,6 +115,8 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         } else if(uiMode.startsWith(Constants.UI.MASTER)) {
             select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
         }
+
+        hideDisabledFeatures();
 
         return view;
     }
@@ -175,6 +182,13 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.retro_green_fg)
         );
+    }
+
+    private void hideDisabledFeatures() {
+        if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+            view.findViewById(R.id.linear_drawer_shopping_list).setVisibility(View.GONE);
+            view.findViewById(R.id.divider_drawer_shopping_list).setVisibility(View.GONE);
+        }
     }
 
     @NonNull

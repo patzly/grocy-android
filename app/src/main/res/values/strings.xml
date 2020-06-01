@@ -136,6 +136,7 @@
 
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
+    <string name="title_master_data">Master data</string>
     <string name="title_stock_entries">Stock entries</string>
     <string name="title_shopping_list">Shopping list</string>
     <string name="title_feedback">Feedback</string>
