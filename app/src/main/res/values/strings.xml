@@ -60,6 +60,8 @@
     <string name="action_discard">Discard</string>
     <string name="action_toggle_done">Toggle done</string>
     <string name="action_edit_notes">Edit notes</string>
+    <string name="action_add_missing">Add missing products</string>
+    <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
 
@@ -83,7 +85,9 @@
     <string name="msg_error">An error occurred</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
+    <string name="msg_added_missing_products">Added missing products to %1$s</string>
     <string name="msg_shopping_list_cleared">%1$s cleared successfully</string>
+    <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
     <string name="msg_barcode_error">An error occurred</string>
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
@@ -112,6 +116,7 @@
     <string name="error_bounds_min_max">Between %1$s and %2$s</string>
     <string name="error_bounds_min">Equal to or higher than %1$s</string>
     <string name="error_offline">Offline</string>
+    <string name="error_name_exists">Name already exists</string>
     <string name="error_offline_subtitle">Check your connection and try again</string>
     <string name="error_unknown">Uups!</string>
     <string name="error_no_grocy_instance">This is not a valid grocy instance</string>
@@ -149,6 +154,10 @@
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_shopping_list_notes">Notes</string>
     <string name="title_list_entry">List entry</string>
+    <string name="title_edit_list_entry">Edit list entry</string>
+    <string name="title_create_list_entry">Create list entry</string>
+    <string name="title_edit_shopping_list">Edit shopping list</string>
+    <string name="title_create_shopping_list">Create shopping list</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>

@@ -115,6 +115,7 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
 
     private int selectedShoppingListId = 1;
+    private String startupShoppingListName;
     private String itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
     private String search = "";
 
@@ -483,10 +484,29 @@ public class ShoppingListFragment extends Fragment
                             response,
                             new TypeToken<List<ShoppingList>>(){}.getType()
                     );
+
+                    // set shopping list if chosen with name on fragment start
+                    if(startupShoppingListName != null) {
+                        for(ShoppingList shoppingList : shoppingLists) {
+                            if(shoppingList.getName().equals(startupShoppingListName)) {
+                                selectedShoppingListId = shoppingList.getId();
+                            }
+                        }
+                        startupShoppingListName = null;
+                    }
+
                     // change app bar title to shopping list name
                     ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-                    if(shoppingList != null) {
-                        textViewTitle.setText(shoppingList.getName());
+                    if(shoppingList != null && !textViewTitle.getText().toString().equals(
+                            shoppingList.getName())
+                    ) {
+                        textViewTitle.animate().alpha(0).withEndAction(() -> {
+                            textViewTitle.setText(shoppingList.getName());
+                            textViewTitle.animate().alpha(1).setDuration(150).start();
+                        }).setDuration(150).start();
+                        buttonLists.animate().alpha(0).withEndAction(
+                                () -> buttonLists.animate().alpha(1).setDuration(150).start()
+                        ).setDuration(150).start();
                     }
                     if(DEBUG) Log.i(
                             TAG,
@@ -700,6 +720,11 @@ public class ShoppingListFragment extends Fragment
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         onQueueEmpty();
+        setUpBottomMenu(); // to hide delete action if necessary
+    }
+
+    public void selectShoppingList(String shoppingListName) {
+        startupShoppingListName = shoppingListName;
     }
 
     private ShoppingList getShoppingList(int shoppingListId) {
@@ -878,16 +903,10 @@ public class ShoppingListFragment extends Fragment
                 return true;
             });
         }
-        MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
-        if(editNotes != null) {
-            editNotes.setOnMenuItemClickListener(item -> {
-                showNotesEditor();
-                return true;
-            });
-        }
-        MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
-        if(clear != null) {
-            clear.setOnMenuItemClickListener(item -> {
+
+        MenuItem addMissing = activity.getBottomMenu().findItem(R.id.action_add_missing);
+        if(addMissing != null) {
+            addMissing.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
                 ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
                 if(shoppingList != null) {
@@ -895,25 +914,24 @@ public class ShoppingListFragment extends Fragment
                     try {
                         jsonObject.put("list_id", selectedShoppingListId);
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "setUpBottomMenu: clear list: " + e);
+                        if(DEBUG) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
                     }
                     request.post(
-                            grocyApi.clearShoppingList(),
+                            grocyApi.addMissingProducts(),
                             jsonObject,
                             response -> {
                                 showMessage(
                                         activity.getString(
-                                                R.string.msg_shopping_list_cleared,
+                                                R.string.msg_added_missing_products,
                                                 shoppingList.getName()
                                         )
                                 );
-                                // reload now empty list
                                 refresh();
                             },
                             error -> {
                                 showMessage(activity.getString(R.string.msg_error));
                                 Log.e(
-                                        TAG, "setUpBottomMenu: clear "
+                                        TAG, "setUpBottomMenu: add missing "
                                                 + shoppingList.getName()
                                                 + ": " + error
                                 );
@@ -925,6 +943,161 @@ public class ShoppingListFragment extends Fragment
                 return true;
             });
         }
+
+        MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
+        if(editNotes != null) {
+            editNotes.setOnMenuItemClickListener(item -> {
+                showNotesEditor();
+                return true;
+            });
+        }
+
+        MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
+        if(clear != null) {
+            clear.setOnMenuItemClickListener(item -> {
+                IconUtil.start(item);
+                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                if(shoppingList == null) {
+                    showMessage(activity.getString(R.string.msg_error));
+                    return true;
+                }
+                clearShoppingList(
+                        shoppingList,
+                        response -> {
+                            showMessage(
+                                    activity.getString(
+                                            R.string.msg_shopping_list_cleared,
+                                            shoppingList.getName()
+                                    )
+                            );
+                            // reload now empty list
+                            refresh();
+                        });
+                return true;
+            });
+        }
+
+        MenuItem editShoppingList = activity.getBottomMenu().findItem(
+                R.id.action_edit_shopping_list
+        );
+        if(editShoppingList != null) {
+            editShoppingList.setOnMenuItemClickListener(item -> {
+                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                if(shoppingList == null) {
+                    showMessage(activity.getString(R.string.msg_error));
+                    return true;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+                bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
+                activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle, true);
+                return true;
+            });
+        }
+
+        MenuItem deleteShoppingList = activity.getBottomMenu().findItem(
+                R.id.action_delete_shopping_list
+        );
+        if(deleteShoppingList != null) {
+            if(selectedShoppingListId == 1) {
+                deleteShoppingList.setVisible(false);
+            } else {
+                deleteShoppingList.setVisible(true);
+            }
+            deleteShoppingList.setOnMenuItemClickListener(item -> {
+                ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+                if(shoppingList == null) {
+                    showMessage(activity.getString(R.string.msg_error));
+                    return true;
+                }
+                clearShoppingList(
+                        shoppingList,
+                        response -> {
+                            deleteShoppingList(shoppingList);
+
+                            // Tidy up lost shopping list items, which have deleted shopping lists
+                            // as an id – else they will never show up on any shopping list
+                            ArrayList<Integer> shoppingListIds = new ArrayList<>();
+                            for(ShoppingList shoppingList1 : shoppingLists) {
+                                shoppingListIds.add(shoppingList1.getId());
+                            }
+                            if(shoppingListIds.isEmpty()) return;
+                            for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                                if(!shoppingListIds.contains(shoppingListItem.getId())) {
+                                    request.delete(
+                                            grocyApi.getObject(
+                                                    GrocyApi.ENTITY.SHOPPING_LIST,
+                                                    shoppingListItem.getId()
+                                            ),
+                                            response1 -> {},
+                                            error -> {}
+                                    );
+                                }
+                            }
+                        }
+                );
+                return true;
+            });
+        }
+    }
+
+    private void clearShoppingList(
+            ShoppingList shoppingList,
+            OnResponseListener responseListener
+    ) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("list_id", selectedShoppingListId);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "clearShoppingList: " + e);
+        }
+        request.post(
+                grocyApi.clearShoppingList(),
+                jsonObject,
+                responseListener::onResponse,
+                error -> {
+                    showMessage(activity.getString(R.string.msg_error));
+                    Log.e(
+                            TAG, "clearShoppingList: "
+                                    + shoppingList.getName()
+                                    + ": " + error
+                    );
+                }
+        );
+    }
+
+    private void deleteShoppingList(ShoppingList shoppingList) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("list_id", selectedShoppingListId);
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "deleteShoppingList: delete list: " + e);
+        }
+
+        request.delete(
+                grocyApi.getObject(
+                        GrocyApi.ENTITY.SHOPPING_LISTS,
+                        shoppingList.getId()
+                ),
+                response -> {
+                    showMessage(
+                            activity.getString(
+                                    R.string.msg_shopping_list_deleted,
+                                    shoppingList.getName()
+                            )
+                    );
+                    shoppingLists.remove(shoppingList);
+                    selectShoppingList(1);
+                },
+                error -> {
+                    showMessage(activity.getString(R.string.msg_error));
+                    Log.e(
+                            TAG, "deleteShoppingList: delete "
+                                    + shoppingList.getName()
+                                    + ": " + error
+                    );
+                }
+        );
     }
 
     @Override
@@ -999,6 +1172,10 @@ public class ShoppingListFragment extends Fragment
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    public interface OnResponseListener {
+        void onResponse(JSONObject response);
     }
 
     @NonNull

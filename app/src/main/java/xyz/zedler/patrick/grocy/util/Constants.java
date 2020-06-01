@@ -62,6 +62,7 @@ public final class Constants {
         public final static String STOCK_DEFAULT = "stock_default";
         public final static String STOCK_SEARCH	= "stock_search";
         public final static String SHOPPING_LIST = "shopping_list";
+        public final static String SHOPPING_LIST_EDIT = "shopping_list_edit";
         public final static String SHOPPING_LIST_DEFAULT = "shopping_list_default";
         public final static String SHOPPING_LIST_SEARCH = "shopping_list_search";
         public final static String SHOPPING_LIST_ITEM_EDIT = "shopping_list_item_edit";
@@ -162,6 +163,7 @@ public final class Constants {
         public final static String STORE = "store";
         public final static String STORES = "stores";
         public final static String SHOPPING_LIST = "shopping_list";
+        public final static String SHOPPING_LIST_NAME = "shopping_list_name";
         public final static String SHOPPING_LISTS = "shopping_lists";
         public final static String PRODUCT_GROUP = "product_group";
         public final static String PRODUCT_GROUPS = "product_groups";

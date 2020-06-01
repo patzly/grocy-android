@@ -63,7 +63,7 @@
         android:overScrollMode="never">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_purchase"
+            android:id="@+id/scroll_shopping_list_item_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never">

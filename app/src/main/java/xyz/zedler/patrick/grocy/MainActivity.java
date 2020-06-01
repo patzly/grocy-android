@@ -79,6 +79,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
 import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
@@ -444,8 +445,31 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
+            case Constants.UI.SHOPPING_LIST_EDIT:
+                scrollBehavior.setUpScroll(R.id.scroll_shopping_list_edit);
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.END, R.menu.menu_shopping_list_edit, animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListEditFragment.class) {
+                                ((ShoppingListEditFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                updateFab(
+                        R.drawable.ic_round_backup,
+                        R.string.action_save,
+                        Constants.FAB.TAG.SAVE,
+                        animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListEditFragment.class) {
+                                ((ShoppingListEditFragment) fragmentCurrent).saveItem();
+                            }
+                        }
+                );
+                break;
             case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
-                scrollBehavior.setUpScroll(R.id.scroll_purchase);
+                scrollBehavior.setUpScroll(R.id.scroll_shopping_list_item_edit);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.END, R.menu.menu_shopping_list_item_edit, animated,
@@ -925,6 +949,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.PURCHASE:
             case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
+            case Constants.UI.SHOPPING_LIST_EDIT:
             case Constants.UI.MASTER_LOCATION:
             case Constants.UI.MASTER_STORE:
             case Constants.UI.MASTER_QUANTITY_UNIT:
@@ -942,6 +967,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.SHOPPING_LIST:
                 fragmentCurrent = new ShoppingListFragment();
+                break;
+            case Constants.UI.SHOPPING_LIST_EDIT:
+                fragmentCurrent = new ShoppingListEditFragment();
                 break;
             case Constants.UI.SHOPPING_LIST_ITEM_EDIT:
                 fragmentCurrent = new ShoppingListItemEditFragment();
@@ -1071,6 +1099,10 @@ public class MainActivity extends AppCompatActivity {
                 } else if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
                     ((ShoppingListItemEditFragment) fragmentCurrent).setProductName(
                             bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                    );
+                } else if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                    ((ShoppingListFragment) fragmentCurrent).selectShoppingList(
+                            bundle.getString(Constants.ARGUMENT.SHOPPING_LIST_NAME)
                     );
                 }
                 if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);

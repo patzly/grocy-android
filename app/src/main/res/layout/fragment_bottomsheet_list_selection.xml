@@ -25,6 +25,16 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
+            <xyz.zedler.patrick.grocy.view.ActionButton
+                android:id="@+id/button_list_selection_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                app:icon="@drawable/ic_round_add_anim"
+                app:tint="@color/icon"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_list_selection_discard"
                 style="@style/Widget.Grocy.Button.TextButton"

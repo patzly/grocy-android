@@ -220,6 +220,13 @@ public class GrocyApi {
     // SHOPPING LIST
 
     /**
+     * Adds currently missing products to the given shopping list
+     */
+    public String addMissingProducts() {
+        return getUrl("/stock/shoppinglist/add-missing-products");
+    }
+
+    /**
      * Removes all items from the given shopping list
      */
     public String clearShoppingList() {

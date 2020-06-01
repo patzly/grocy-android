@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListsBottomSheetDialogFragment
         extends BottomSheetDialogFragment implements ShoppingListAdapter.ShoppingListAdapterListener {
@@ -94,6 +95,15 @@ public class ShoppingListsBottomSheetDialogFragment
                         shoppingLists, selected, this
                 )
         );
+
+        ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
+        buttonNew.setVisibility(View.VISIBLE);
+        buttonNew.setOnClickListener(v -> {
+            dismiss();
+            Bundle bundle1 = new Bundle();
+            bundle1.getString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+            activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle1, true);
+        });
 
         return view;
     }

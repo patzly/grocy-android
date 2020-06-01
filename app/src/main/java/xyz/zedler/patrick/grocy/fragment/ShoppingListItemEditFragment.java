@@ -154,9 +154,13 @@ public class ShoppingListItemEditFragment extends Fragment {
         // title
 
         if(action.equals(Constants.ACTION.EDIT)) {
-            binding.textShoppingListItemEditTitle.setText("Edit entry");
+            binding.textShoppingListItemEditTitle.setText(
+                    activity.getString(R.string.title_edit_list_entry)
+            );
         } else {
-            binding.textShoppingListItemEditTitle.setText("Create new entry");
+            binding.textShoppingListItemEditTitle.setText(
+                    activity.getString(R.string.title_create_list_entry)
+            );
         }
 
         // swipe refresh
@@ -680,22 +684,23 @@ public class ShoppingListItemEditFragment extends Fragment {
         MenuItem menuItemDelete;
         menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(menuItemDelete != null) {
-            // hide action if type create
-            // TODO: ugly flickering
             menuItemDelete.setVisible(action.equals(Constants.ACTION.EDIT));
-            if(action.equals(Constants.ACTION.CREATE)) return;
+            if(!menuItemDelete.isVisible()) return;
 
             menuItemDelete.setOnMenuItemClickListener(item -> {
                 ((Animatable) menuItemDelete.getIcon()).start();
-                // TODO: Removes the given amount of the given product from the given shopping list, if it's on it
-                /*request.delete(
+                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
+                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
+                );
+                assert shoppingListItem != null;
+                request.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                         response -> activity.dismissFragment(),
                         error -> {
                             showErrorMessage();
-                            if(DEBUG) Log.i(TAG, "setUpMenu: deleteItem: " + error);
+                            if(DEBUG) Log.i(TAG, "setUpBottomMenu: deleteItem: " + error);
                         }
-                );*/
+                );
                 return true;
             });
         }
