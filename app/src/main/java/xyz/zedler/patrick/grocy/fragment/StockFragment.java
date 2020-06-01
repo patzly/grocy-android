@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -311,13 +313,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     public void refresh() {
         if(activity.isOnline()) {
-            setError(false, false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeStock.setRefreshing(false);
@@ -336,37 +338,83 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
     }
 
-    private void setError(boolean isError, boolean isOffline, boolean animated) {
-        if(isError) {
-            binding.linearError.imageError.setImageResource(
-                    isOffline
-                            ? R.drawable.illustration_broccoli
-                            : R.drawable.illustration_popsicle
-            );
-            binding.linearError.textErrorTitle.setText(
-                    isOffline ? R.string.error_offline : R.string.error_unknown
-            );
-            binding.linearError.textErrorSubtitle.setText(
-                    isOffline
-                            ? R.string.error_offline_subtitle
-                            : R.string.error_unknown_subtitle
-            );
+    private void setError(String state, boolean animated) {
+        View viewOut = binding.scrollStock;
+        View viewIn = binding.linearError.linearError;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                break;
+            case Constants.STATE.NONE:
+                viewOut = binding.linearError.linearError;
+                viewIn = binding.scrollStock;
+                break;
         }
 
         if(animated) {
-            View viewOut = isError ? binding.scrollStock : binding.linearError.linearError;
-            View viewIn = isError ? binding.linearError.linearError : binding.scrollStock;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
+                View finalViewIn = viewIn;
+                View finalViewOut = viewOut;
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
+                    finalViewIn.setAlpha(0);
+                    finalViewOut.setVisibility(View.GONE);
+                    finalViewIn.setVisibility(View.VISIBLE);
+                    finalViewIn.animate().alpha(1).setDuration(150).start();
                 }).start();
             }
         } else {
-            binding.scrollStock.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            viewOut.setVisibility(View.GONE);
+            viewIn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_stock);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_empty_stock_sub);
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
+            }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
+        } else {
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -605,7 +653,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void onDownloadError() {
         request.cancelAll(TAG);
         binding.swipeStock.setRefreshing(false);
-        setError(true, false, true);
+        setError(Constants.STATE.ERROR, true);
     }
 
     private void filterItems(String filter) {
@@ -653,6 +701,22 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(!search.isEmpty()) { // active search
             searchItems(search);
         } else {
+            // EMPTY STATES
+            if(filteredItems.isEmpty()) {
+                switch (itemsToDisplay) {
+                    case Constants.STOCK.FILTER.VOLATILE.EXPIRING:
+                    case Constants.STOCK.FILTER.VOLATILE.EXPIRED:
+                    case Constants.STOCK.FILTER.VOLATILE.MISSING:
+                        setEmptyState(Constants.STATE.NO_FILTER_RESULTS);
+                        break;
+                    default:
+                        setEmptyState(Constants.STATE.EMPTY);
+                        break;
+                }
+            } else {
+                setEmptyState(Constants.STATE.NONE);
+            }
+            // SORTING
             if(displayedItems != filteredItems) {
                 displayedItems = filteredItems;
                 sortItems(sortMode, sortAscending);
@@ -677,6 +741,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     searchedItems.add(stockItem);
                 }
             }
+            setEmptyState(
+                    searchedItems.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedItems != searchedItems) {
                 displayedItems = searchedItems;
                 sortItems(sortMode, sortAscending);
@@ -1184,6 +1253,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         String sortMode = sharedPrefs.getString(
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );
+        assert sortMode != null;
         SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
         MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
         MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
@@ -1293,6 +1363,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);
+
+        setEmptyState(Constants.STATE.NONE);
 
         activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }

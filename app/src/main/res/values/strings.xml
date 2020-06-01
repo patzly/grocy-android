@@ -106,6 +106,12 @@
     <string name="error_api_not_working">API key not working</string>
     <string name="error_select_product">Select a product</string>
     <string name="error_empty">Required</string>
+    <string name="error_empty_stock">Nothing in stock</string>
+    <string name="error_empty_stock_sub">Go purchase some products</string>
+    <string name="error_search">No search results</string>
+    <string name="error_search_sub">Try other terms</string>
+    <string name="error_filter">Nothing to display</string>
+    <string name="error_filter_sub">Try other filters</string>
     <string name="error_duplicate">Already exists</string>
     <string name="error_parent">Can’t be parent of itself</string>
     <string name="error_invalid_product">Invalid product</string>

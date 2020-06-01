@@ -112,6 +112,15 @@ public final class Constants {
         }
     }
 
+    public final static class STATE {
+        public final static String ERROR = "error";
+        public final static String OFFLINE = "offline";
+        public final static String EMPTY = "empty";
+        public final static String NO_SEARCH_RESULTS = "search";
+        public final static String NO_FILTER_RESULTS = "filter";
+        public final static String NONE = "none";
+    }
+
     public final static class SHOPPING_LIST {
         public final static class FILTER {
             public final static String UNDONE = "undone";
