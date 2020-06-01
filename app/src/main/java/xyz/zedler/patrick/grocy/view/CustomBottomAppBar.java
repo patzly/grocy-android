@@ -157,22 +157,21 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	public void changeMenu(@MenuRes int menuNew, int position, boolean animated) {
 		if(animated) {
 			for(int i = 0; i < this.getMenu().size(); i++) {
-				animateMenuItem(getMenu().getItem(i), INVISIBLE);
+				animateMenuItem(getMenu().getItem(i), INVISIBLE, null);
 			}
 			new Handler().postDelayed(() -> {
 				replaceMenu(menuNew);
 				setMenuVisibility(false);
 				switch (position) {
 					case MENU_START:
-						animateMenu(0);
+						animateMenu(0, null);
 						break;
 					case MENU_END:
-						animateMenu(getMenu().size() - 1);
+						animateMenu(getMenu().size() - 1, null);
 						break;
 					default:
 						if(DEBUG) Log.e(TAG, "changeMenu: wrong argument: " + position);
 				}
-
 			}, ICON_ANIM_DURATION);
 		} else {
 			replaceMenu(menuNew);
@@ -189,17 +188,27 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 			boolean animated,
 			Runnable onChanged
 	) {
-		changeMenu(menuNew, position, animated);
 		if(animated) {
-			new Handler().postDelayed(
-					() -> {
-						if(onChanged != null) onChanged.run();
-						},
-					ICON_ANIM_DURATION + 50 + // wait for menu being fully changed
-						(long) (getMenu().size() * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
-			);
+			for(int i = 0; i < this.getMenu().size(); i++) {
+				animateMenuItem(getMenu().getItem(i), INVISIBLE, null);
+			}
+			new Handler().postDelayed(() -> {
+				replaceMenu(menuNew);
+				setMenuVisibility(false);
+				switch (position) {
+					case MENU_START:
+						animateMenu(0, onChanged);
+						break;
+					case MENU_END:
+						animateMenu(getMenu().size() - 1, onChanged);
+						break;
+					default:
+						if(DEBUG) Log.e(TAG, "changeMenu: wrong argument: " + position);
+				}
+			}, ICON_ANIM_DURATION);
 		} else {
-			if(onChanged != null) onChanged.run();
+			replaceMenu(menuNew);
+			setMenuVisibility(true);
 		}
 	}
 
@@ -332,7 +341,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 						});
 	}
 
-	private void animateMenu(int indexStart) {
+	private void animateMenu(int indexStart, Runnable onAnimEnd) {
 		int delayIndex = 0;
 		for(
 				int i = indexStart;
@@ -341,14 +350,17 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 		) {
 			int finalI = i;
 			new Handler().postDelayed(
-					() -> animateMenuItem(getMenu().getItem(finalI), VISIBLE),
-					(long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
+					() -> animateMenuItem(
+							getMenu().getItem(finalI),
+							VISIBLE,
+							finalI == getMenu().size() - 1 ? onAnimEnd : null
+					), (long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
 			);
 			delayIndex++;
 		}
 	}
 
-	private void animateMenuItem(MenuItem item, int visibility) {
+	private void animateMenuItem(MenuItem item, int visibility, Runnable onAnimEnd) {
 		if(item.getIcon() != null) {
 			Drawable icon = item.getIcon();
 			int targetAlpha;
@@ -359,17 +371,18 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 				case INVISIBLE:
 					targetAlpha = 0;
 					break;
-				default:
-					if(DEBUG) Log.e(
-							TAG,
-							"animateMenuItem(MenuItem): wrong argument: " + visibility
-					);
-					return;
+				default: return;
 			}
 			ValueAnimator alphaAnimator = ValueAnimator.ofInt(icon.getAlpha(), targetAlpha);
 			alphaAnimator.addUpdateListener(
 					animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
 			);
+			alphaAnimator.addListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					if(onAnimEnd != null) onAnimEnd.run();
+				}
+			});
 			alphaAnimator.setDuration(ICON_ANIM_DURATION).start();
 		}
 	}
