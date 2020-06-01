@@ -15,6 +15,7 @@
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution
 - extended product editing
+- edit product from product overview when opening this from e.g. PurchaseFragment
 
 # Conventions
 
