@@ -679,6 +679,7 @@ public class MasterProductSimpleFragment extends Fragment {
         if(editProduct != null
                 || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
                 || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
+                || intendedAction.equals(Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)
         ) {
             switch (intendedAction) {
                 case Constants.ACTION.EDIT:
@@ -687,6 +688,7 @@ public class MasterProductSimpleFragment extends Fragment {
                     break;
                 case Constants.ACTION.CREATE_THEN_PURCHASE:
                 case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
+                case Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM:
                     fillWithCreateProductObject();
                     fillWithPresets();
                     isFormInvalid();
