@@ -1231,47 +1231,49 @@ public class MasterProductSimpleFragment extends Fragment {
     private boolean isFormInvalid() {
         clearInputFocusAndErrors();
 
+        boolean isInvalid = false;
+
         String name = String.valueOf(editTextName.getText()).trim();
         if(name.isEmpty()) {
             textInputName.setError(activity.getString(R.string.error_empty));
-            return true;
+            isInvalid = true;
         } else if(!productNames.isEmpty() && productNames.contains(name)) {
             textInputName.setError(activity.getString(R.string.error_duplicate));
-            return true;
+            isInvalid = true;
         }
 
         String parentProduct = String.valueOf(autoCompleteTextViewParentProduct.getText()).trim();
         if(!parentProduct.isEmpty() && parentProduct.equals(name)) {
             textInputParentProduct.setError(activity.getString(R.string.error_parent));
-            return true;
+            isInvalid = true;
         } else if(!parentProduct.isEmpty() && !productNames.contains(parentProduct)) {
             textInputParentProduct.setError(activity.getString(R.string.error_invalid_product));
-            return true;
+            isInvalid = true;
         }
 
         if(selectedLocationId == -1) {
             textViewLocationLabel.setTextColor(getColor(R.color.error));
-            return true;
+            isInvalid = true;
         }
 
         if(minAmount < 0) {
             textInputMinAmount.setError(activity.getString(R.string.error_invalid_amount));
-            return true;
+            isInvalid = true;
         }
 
         if(bestBeforeDays < -1) {
             textInputDays.setError(activity.getString(R.string.error_invalid_best_before_days));
-            return true;
+            isInvalid = true;
         }
 
         if(selectedQUPurchaseId == -1) {
             textViewQUPurchaseLabel.setTextColor(getColor(R.color.error));
-            return true;
+            isInvalid = true;
         }
 
         if(selectedQUStockId == -1) {
             textViewQUStockLabel.setTextColor(getColor(R.color.error));
-            return true;
+            isInvalid = true;
         }
 
         if(editTextQUFactor.getText().toString().trim().isEmpty()
@@ -1279,9 +1281,9 @@ public class MasterProductSimpleFragment extends Fragment {
                 || Integer.parseInt(editTextQUFactor.getText().toString()) < 1
         ) {
             textInputQUFactor.setError(activity.getString(R.string.error_invalid_factor));
-            return true;
+            isInvalid = true;
         }
-        return false;
+        return isInvalid;
     }
 
     private void resetAll() {
