@@ -69,6 +69,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -681,26 +682,82 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemDelete;
+        MenuItem menuItemDelete, menuItemDetails;
         menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(menuItemDelete != null) {
             menuItemDelete.setVisible(action.equals(Constants.ACTION.EDIT));
-            if(!menuItemDelete.isVisible()) return;
+            if(menuItemDelete.isVisible()) {
+                menuItemDelete.setOnMenuItemClickListener(item -> {
+                    ((Animatable) menuItemDelete.getIcon()).start();
+                    ShoppingListItem shoppingListItem = startupBundle.getParcelable(
+                            Constants.ARGUMENT.SHOPPING_LIST_ITEM
+                    );
+                    assert shoppingListItem != null;
+                    request.delete(
+                            grocyApi.getObject(
+                                    GrocyApi.ENTITY.SHOPPING_LIST,
+                                    shoppingListItem.getId()
+                            ),
+                            response -> activity.dismissFragment(),
+                            error -> {
+                                showErrorMessage();
+                                if(DEBUG) Log.i(
+                                        TAG,
+                                        "setUpBottomMenu: deleteItem: " + error
+                                );
+                            }
+                    );
+                    return true;
+                });
+            }
+        }
 
-            menuItemDelete.setOnMenuItemClickListener(item -> {
-                ((Animatable) menuItemDelete.getIcon()).start();
-                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
-                );
-                assert shoppingListItem != null;
-                request.delete(
-                        grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
-                        response -> activity.dismissFragment(),
-                        error -> {
-                            showErrorMessage();
-                            if(DEBUG) Log.i(TAG, "setUpBottomMenu: deleteItem: " + error);
-                        }
-                );
+        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
+        if(menuItemDetails != null) {
+            menuItemDetails.setOnMenuItemClickListener(item -> {
+                IconUtil.start(menuItemDetails);
+                String input = autoCompleteTextViewProduct.getText().toString().trim();
+                Bundle bundle = new Bundle();
+                if(productDetails != null && input.equals(productDetails.getProduct().getName())) {
+                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+                    activity.showBottomSheet(
+                            new ProductOverviewBottomSheetDialogFragment(),
+                            bundle
+                    );
+                } else {
+                    Product product = getProductFromName(input);
+                    if(product != null) {
+                        request.get(
+                                grocyApi.getStockProductDetails(product.getId()),
+                                response -> {
+                                    productDetails = gson.fromJson(
+                                            response,
+                                            new TypeToken<ProductDetails>() {
+                                            }.getType()
+                                    );
+                                    bundle.putParcelable(
+                                            Constants.ARGUMENT.PRODUCT_DETAILS,
+                                            productDetails
+                                    );
+                                    activity.showBottomSheet(
+                                            new ProductOverviewBottomSheetDialogFragment(),
+                                            bundle
+                                    );
+                                }, error -> {
+                                }
+                        );
+                    } else if(!productNames.isEmpty()) {
+                        activity.showMessage(
+                                Snackbar.make(
+                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.getString(R.string.error_invalid_product),
+                                        Snackbar.LENGTH_SHORT
+                                )
+                        );
+                    } else {
+                        showErrorMessage();
+                    }
+                }
                 return true;
             });
         }

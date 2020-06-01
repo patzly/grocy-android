@@ -12,4 +12,11 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
+    <item
+        android:id="@+id/action_product_overview"
+        android:title="@string/title_product_overview"
+        android:icon="@drawable/ic_round_info_outline_anim"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
 </menu>
