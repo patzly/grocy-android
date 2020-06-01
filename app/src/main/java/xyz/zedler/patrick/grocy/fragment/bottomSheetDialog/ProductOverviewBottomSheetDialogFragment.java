@@ -395,7 +395,11 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
-			if(lastPrice != null) {
+			boolean featurePriceTracking = sharedPrefs.getBoolean(
+					Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+					true
+			);
+			if(lastPrice != null && featurePriceTracking) {
 				itemLastPrice.setVisibility(View.VISIBLE);
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
