@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
+    implementation "androidx.room:room-runtime:2.2.5"
 }

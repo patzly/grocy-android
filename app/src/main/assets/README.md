@@ -2,8 +2,6 @@
 
 ## Bugs
 
-- populate default shopping list -> create new list -> delete this new list -> default list is empty
-
 ## Improvements
 
 - use server settings and configs
