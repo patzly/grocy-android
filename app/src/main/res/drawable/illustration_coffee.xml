@@ -21,7 +21,7 @@
       android:strokeLineCap="round"/>
   <path
       android:pathData="M7.5,14c0,5 1,6 3,7h3c2,-1 3,-2 3,-7z"
-      android:fillColor="#e2d9a2"/>
+      android:fillColor="@color/retro_dirt"/>
   <path
       android:pathData="M16.47,15c0,0.35 -0.02,0.7 -0.05,1h0.08a1,1 0,1 1,0 2h-0.4c-0.1,0.38 -0.2,0.72 -0.35,1h0.75a2,2 0,1 0,0 -4z"
       android:fillColor="#d2ca96"/>

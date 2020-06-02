@@ -20,7 +20,7 @@
       android:strokeLineCap="round"/>
   <path
       android:pathData="M5,11v10c0,0.554 0.446,1 1,1h12c0.554,0 1,-0.446 1,-1V11z"
-      android:fillColor="#deb853"/>
+      android:fillColor="@color/retro_yellow_bg"/>
   <path
       android:pathData="M7.7,15.7v5.622h11.247A0.98,0.98 0,0 0,19 21v-5.3z"
       android:fillColor="#fff"/>
@@ -51,7 +51,7 @@
       android:fillColor="@color/grey700"/>
   <path
       android:pathData="M15.53,14.15l-1.118,0.102 0.358,0.57a0.499,0.499 0,0 0,0.689 0.157,0.5 0.5,0 0,0 0.158,-0.69z"
-      android:fillColor="#e06a4e"/>
+      android:fillColor="@color/retro_red"/>
   <path
       android:pathData="M4.595,18.517c0.175,-0.039 0.358,0.016 0.555,0.252"
       android:strokeLineJoin="round"
