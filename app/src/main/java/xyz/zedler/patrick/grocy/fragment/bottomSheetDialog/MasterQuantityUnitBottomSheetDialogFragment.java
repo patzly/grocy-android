@@ -115,7 +115,7 @@ public class MasterQuantityUnitBottomSheetDialogFragment extends BottomSheetDial
 
 		// DESCRIPTION
 		String description = quantityUnit.getDescription();
-		if(description != null) {
+		if(description != null && !description.isEmpty()) {
 			itemDescription.setSingleLine(false);
 			itemDescription.setText(activity.getString(R.string.property_description), description);
 		} else {
