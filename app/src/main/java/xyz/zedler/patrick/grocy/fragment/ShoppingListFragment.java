@@ -1025,7 +1025,9 @@ public class ShoppingListFragment extends Fragment
                             }
                             if(shoppingListIds.isEmpty()) return;
                             for(ShoppingListItem shoppingListItem : shoppingListItems) {
-                                if(!shoppingListIds.contains(shoppingListItem.getId())) {
+                                if(!shoppingListIds.contains(
+                                        shoppingListItem.getShoppingListId()
+                                )) {
                                     request.delete(
                                             grocyApi.getObject(
                                                     GrocyApi.ENTITY.SHOPPING_LIST,
