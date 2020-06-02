@@ -245,11 +245,13 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		// ACTIONS
 
 		if(!showActions) {
-			// hide actions when set up from CONSUME with productDetails
-			view.findViewById(
-					R.id.linear_product_overview_action_container
-			).setVisibility(View.GONE);
-			toolbar.setVisibility(View.GONE);
+			// hide actions when set up with productDetails
+			view.findViewById(R.id.linear_product_overview_action_container).setVisibility(
+					View.GONE
+			);
+			// set info menu
+			toolbar.getMenu().clear();
+			toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
 		}
 
 		refreshButtonStates(false);
