@@ -174,6 +174,7 @@ public class SettingsActivity extends AppCompatActivity
 		setOnClickListeners(
 				R.id.linear_setting_dark_mode,
 				R.id.linear_setting_open_food_facts,
+				R.id.linear_setting_reload_config,
 				R.id.linear_setting_logout,
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
@@ -294,6 +295,9 @@ public class SettingsActivity extends AppCompatActivity
 				break;
 			case R.id.linear_setting_open_food_facts:
 				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
+				break;
+			case R.id.linear_setting_reload_config:
+				RestartActivity.restartApp(this);
 				break;
 			case R.id.linear_setting_logout:
 				Bundle bundle = null;

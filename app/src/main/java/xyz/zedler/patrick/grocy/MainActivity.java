@@ -138,10 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
         grocyApi = new GrocyApi(this);
 
-        // LOAD CONFIG
-
-        if(!isServerUrlEmpty()) loadConfig(false);
-
         // VIEWS
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -202,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
-            loadConfig(true);
             setUp(null);
         } else if(requestCode == Constants.REQUEST.SCAN_BATCH
                 && resultCode == Activity.RESULT_OK
@@ -221,14 +216,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadConfig(boolean reloadFragment) {
+    private void loadInfo() {
+        // GET CONFIG
         request.get(
                 grocyApi.getSystemConfig(),
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         sharedPrefs.edit()
-                                // GET ALL NEEDED CONFIGS
                                 .putString(
                                         Constants.PREF.CURRENCY,
                                         jsonObject.getString("CURRENCY")
@@ -268,24 +263,18 @@ public class MainActivity extends AppCompatActivity {
                                         )
                                 ).apply();
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadConfig: " + e);
                     }
-                    if(DEBUG) Log.i(
-                            TAG, "downloadConfig: config = " + response
-                    );
-                    if(reloadFragment) {
-                        replaceFragment(fragmentCurrent.toString(), null, false);
-                    }
-                }, error -> {}
+                    if(DEBUG) Log.i(TAG,"downloadConfig: config = " + response);
+                }, error -> Log.e(TAG, "downloadConfig: " + error)
         );
-
+        // GET USER SETTINGS
         request.get(
                 grocyApi.getUserSettings(),
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         sharedPrefs.edit()
-                                // GET SETTINGS
                                 .putInt(
                                         Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
                                         jsonObject.getInt("product_presets_location_id")
@@ -323,14 +312,12 @@ public class MainActivity extends AppCompatActivity {
                                 )
                         ).apply();
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadUserSettings: " + e);
                     }
-                    if(DEBUG) Log.i(
-                            TAG, "downloadUserSettings: settings = " + response
-                    );
-                }, error -> {}
+                    if(DEBUG) Log.i(TAG, "downloadUserSettings: settings = " + response);
+                }, error -> Log.e(TAG, "downloadUserSettings: " + error)
         );
-
+        // GET SYSTEM INFO
         request.get(
                 grocyApi.getSystemInfo(),
                 response -> {
@@ -342,35 +329,38 @@ public class MainActivity extends AppCompatActivity {
                                                 "grocy_version"
                                         ).getString("Version")
                                 ).apply();
+                        if(DEBUG) Log.i(TAG, "downloadSystemInfo: " + response);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadSystemInfo: " + e);
                     }
-                }, error -> {}
+                }, error -> Log.e(TAG, "downloadSystemInfo: " + error)
         );
     }
 
     private void setUp(Bundle savedInstanceState) {
+        // load config, user settings and system info
+        loadInfo();
+
+        // FRAGMENT
+
         if(savedInstanceState != null) {
             String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
             if(tag != null) {
                 fragmentCurrent = fragmentManager.getFragment(savedInstanceState, tag);
             }
-        } else {
-            // STOCK FRAGMENT
+        } else { // default is stock
             fragmentCurrent = new StockFragment();
             Bundle bundleNoAnim = new Bundle();
             bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
             fragmentCurrent.setArguments(bundleNoAnim);
-            fragmentManager.beginTransaction()
-                    .replace(
-                            R.id.linear_container_main,
-                            fragmentCurrent,
-                            Constants.UI.STOCK
-                    ).commit();
-            bottomAppBar.changeMenu(R.menu.menu_stock, CustomBottomAppBar.MENU_END, false);
+            fragmentManager.beginTransaction().replace(
+                    R.id.linear_container_main,
+                    fragmentCurrent,
+                    Constants.UI.STOCK
+            ).commit();
         }
 
-        // get shortcut action if available
+        // SHORTCUT
 
         Intent intentAction = getIntent();
         if(intentAction != null && intentAction.getAction() != null) {
