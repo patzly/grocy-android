@@ -112,7 +112,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 
-    private String itemsToDisplay = Constants.STOCK.FILTER.ALL;
+    private String itemsToDisplay;
     private String search = "";
     private int filterLocationId = -1;
     private String filterProductGroupId = "";
@@ -206,6 +206,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 ContextCompat.getColor(activity, R.color.secondary)
         );
         binding.swipeStock.setOnRefreshListener(this::refresh);
+
+        // FILTER (wrong restored state on back press if initialized globally)
+
+        itemsToDisplay = Constants.STOCK.FILTER.ALL;
 
         // CHIPS
 
