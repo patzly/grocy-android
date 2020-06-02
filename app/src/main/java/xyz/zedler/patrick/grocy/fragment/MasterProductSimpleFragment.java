@@ -690,6 +690,7 @@ public class MasterProductSimpleFragment extends Fragment {
                 case Constants.ACTION.EDIT:
                 case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH:
                     fillWithEditReferences();
+                    isFormInvalid();
                     break;
                 case Constants.ACTION.CREATE_THEN_PURCHASE:
                 case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
@@ -1267,11 +1268,15 @@ public class MasterProductSimpleFragment extends Fragment {
             isInvalid = true;
         }
 
-        if(selectedLocationId == -1
-                && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
-        ) {
-            textViewLocationLabel.setTextColor(getColor(R.color.error));
-            isInvalid = true;
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            ArrayList<Integer> locationIds = new ArrayList<>();
+            for(Location location : locations) locationIds.add(location.getId());
+            if(selectedLocationId == -1
+                    || selectedLocationId > -1 && !locationIds.contains(selectedLocationId)
+            ) {
+                textViewLocationLabel.setTextColor(getColor(R.color.error));
+                isInvalid = true;
+            }
         }
 
         if(minAmount < 0) {
