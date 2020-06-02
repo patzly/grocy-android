@@ -1358,8 +1358,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
         binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(editTextSearch);
-
-        activity.updateUI(Constants.UI.STOCK_SEARCH, TAG);
     }
 
     public void dismissSearch() {
@@ -1369,8 +1367,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterItems(itemsToDisplay);
 
         setEmptyState(Constants.STATE.NONE);
-
-        activity.updateUI(Constants.UI.STOCK_DEFAULT, TAG);
     }
 
     @NonNull

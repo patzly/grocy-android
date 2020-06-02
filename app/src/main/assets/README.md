@@ -3,7 +3,6 @@
 ## Bugs
 
 - populate default shopping list -> create new list -> delete this new list -> default list is empty
-- stock: scroll down a bit, open search and close it, scrollView jumps to top
 
 ## Improvements
 
