@@ -2,9 +2,13 @@
 
 ## Bugs
 
+- populate default shopping list -> create new list -> delete this new list -> default list is empty
+- stock: scroll down a bit, open search and close it, scrollView jumps to top
+
 ## Improvements
 
 - use server settings and configs
+- landscape one-line support in shopping lists
 
 ## Features
 
