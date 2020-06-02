@@ -234,8 +234,16 @@ public class SettingsActivity extends AppCompatActivity
 	}
 
 	private void hideDisabledFeatures() {
-		if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+		if(isFeatureDisabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
 			findViewById(R.id.linear_setting_list_indicator).setVisibility(View.GONE);
+		}
+		if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+			findViewById(R.id.linear_setting_expiring_soon_days).setVisibility(View.GONE);
+		}
+		if(isFeatureDisabled(Constants.PREF.FEATURE_SHOPPING_LIST)
+				&& isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
+		) {
+			findViewById(R.id.text_setting_stock_overview_header).setVisibility(View.GONE);
 		}
 	}
 
@@ -522,5 +530,10 @@ public class SettingsActivity extends AppCompatActivity
 						findViewById(android.R.id.content).getWindowToken(),
 						0
 				);
+	}
+
+	private boolean isFeatureDisabled(String pref) {
+		if(pref == null) return false;
+		return !sharedPrefs.getBoolean(pref, true);
 	}
 }

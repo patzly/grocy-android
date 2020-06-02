@@ -758,14 +758,15 @@ public class PurchaseFragment extends Fragment {
                 }
                 body.put("price", price);
             }
-            body.put("best_before_date", selectedBestBeforeDate);
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+                body.put("best_before_date", selectedBestBeforeDate);
+            } else {
+                body.put("best_before_date", Constants.DATE.NEVER_EXPIRES);
+            }
             if(selectedStoreId > -1) {
                 body.put("shopping_location_id", selectedStoreId);
             }
-            if(sharedPrefs.getBoolean(
-                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                    true
-            )) {
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
                 body.put("location_id", selectedLocationId);
             }
         } catch (JSONException e) {
@@ -933,18 +934,15 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
             activity.findViewById(R.id.linear_purchase_total_price).setVisibility(View.GONE);
             activity.findViewById(R.id.linear_purchase_price).setVisibility(View.GONE);
         }
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             activity.findViewById(R.id.linear_purchase_location).setVisibility(View.GONE);
+        }
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            activity.findViewById(R.id.linear_purchase_bbd).setVisibility(View.GONE);
         }
     }
 
@@ -1020,7 +1018,9 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isBestBeforeDateValid() {
-        if(selectedBestBeforeDate == null || selectedBestBeforeDate.isEmpty()) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            return true;
+        } else if(selectedBestBeforeDate == null || selectedBestBeforeDate.isEmpty()) {
             textViewBbdLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
@@ -1158,6 +1158,11 @@ public class PurchaseFragment extends Fragment {
 
     private int getColor(@ColorRes int color) {
         return ContextCompat.getColor(activity, color);
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

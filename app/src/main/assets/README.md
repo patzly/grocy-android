@@ -8,6 +8,7 @@
 
 - use server settings and configs
 - landscape one-line support in shopping lists
+- product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
 

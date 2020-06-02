@@ -450,7 +450,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 body.put("stock_entry_id", entryId);
             }
             if(stockLocationId != null && !stockLocationId.isEmpty()) {
-                body.put("location_id", stockLocationId); // TODO: not sure if it's the right key name
+                body.put("location_id", stockLocationId);
             }
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
@@ -659,18 +659,17 @@ public class ScanBatchActivity extends AppCompatActivity
     @SuppressLint("SimpleDateFormat")
     public void askNecessaryDetails() {
 
-        boolean featureFlagLocation = sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        );
-
         if(actionType.equals(Constants.ACTION.CONSUME)) {
 
             // STOCK LOCATION
             int askForStockLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, 0
             );
-            if(askForStockLocation == 0 && stockLocationId == null || !featureFlagLocation) {
+            if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    && stockLocationId == null
+            ) {
+                stockLocationId = "";
+            } else if(askForStockLocation == 0 && stockLocationId == null) {
                 stockLocationId = "";
             } else if(askForStockLocation == 2 && stockLocationId == null) {
                 showStockLocationsBottomSheet();
@@ -696,7 +695,11 @@ public class ScanBatchActivity extends AppCompatActivity
             int askForBestBeforeDate = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_BBD, 0
             );
-            if(askForBestBeforeDate == 0 && bestBeforeDate == null) {
+            if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
+                    && bestBeforeDate == null
+            ) {
+                bestBeforeDate = Constants.DATE.NEVER_EXPIRES;
+            } else if(askForBestBeforeDate == 0 && bestBeforeDate == null) {
                 if(currentDefaultBestBeforeDays == 0) {
                     if(sessionBestBeforeDates.containsKey(currentProductName)) {
                         bestBeforeDate = sessionBestBeforeDates.get(currentProductName);
@@ -728,11 +731,9 @@ public class ScanBatchActivity extends AppCompatActivity
 
             // PRICE
             int askForPrice = sharedPrefs.getInt(Constants.PREF.BATCH_CONFIG_PRICE, 0);
-            boolean featureFlagPrice = sharedPrefs.getBoolean(
-                    Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
-                    true
-            );
-            if(askForPrice == 0 && price == null || !featureFlagPrice) {
+            if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) && price == null) {
+                price = "";
+            } else if(askForPrice == 0 && price == null) {
                 price = "";  // price is never required
             } else if(askForPrice == 1 && price == null) {
                 if(sessionPrices.containsKey(currentProductName)) {
@@ -782,7 +783,9 @@ public class ScanBatchActivity extends AppCompatActivity
             int askForLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_LOCATION, 0
             );
-            if(!featureFlagLocation) {
+            if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    && locationId == null
+            ) {
                 locationId = "1";
             } else if(askForLocation == 0 && locationId == null) {
                 if(currentDefaultLocationId == -1) {
@@ -1202,6 +1205,11 @@ public class ScanBatchActivity extends AppCompatActivity
         buttonFlash.setIcon(R.drawable.ic_round_flash_on_to_off);
         buttonFlash.startIconAnimation();
         isTorchOn = false;
+    }
+
+    private boolean isFeatureDisabled(String pref) {
+        if(pref == null) return false;
+        return !sharedPrefs.getBoolean(pref, true);
     }
 
     public interface OnResponseListener {

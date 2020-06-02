@@ -54,6 +54,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     private StockItemAdapterListener listener;
     private int daysExpiringSoon;
     private String sortMode;
+    private boolean showDateTracking;
 
     public StockItemAdapter(
             Context context,
@@ -62,6 +63,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             ArrayList<String> shoppingListProductIds,
             int daysExpiringSoon,
             String sortMode,
+            boolean showDateTracking,
             StockItemAdapterListener listener
     ) {
         this.context = context;
@@ -70,6 +72,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         this.shoppingListProductIds = shoppingListProductIds;
         this.daysExpiringSoon = daysExpiringSoon;
         this.sortMode = sortMode;
+        this.showDateTracking = showDateTracking;
         this.listener = listener;
     }
 
@@ -186,7 +189,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         boolean colorDays = false;
         if(date != null) days = String.valueOf(DateUtil.getDaysFromNow(date));
 
-        if(days != null && (sortMode.equals(Constants.STOCK.SORT.BBD)
+        if(!showDateTracking) {
+            holder.linearLayoutDays.setVisibility(View.GONE);
+        } else if(days != null && (sortMode.equals(Constants.STOCK.SORT.BBD)
                 || Integer.parseInt(days) <= daysExpiringSoon
                 && !date.equals(Constants.DATE.NEVER_EXPIRES))
         ) {

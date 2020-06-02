@@ -477,10 +477,7 @@ public class ConsumeFragment extends Fragment {
         );
 
         // LOCATION
-        if(sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             selectDefaultLocation();
             loadStockLocations();
         }
@@ -598,10 +595,7 @@ public class ConsumeFragment extends Fragment {
             body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", isSpoiled);
-            if(sharedPrefs.getBoolean(
-                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                    true
-            )) {
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
                 body.put("location_id", selectedLocationId);
             }
             if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
@@ -918,10 +912,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             activity.findViewById(R.id.linear_consume_location).setVisibility(View.GONE);
         }
     }
@@ -1029,6 +1020,11 @@ public class ConsumeFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

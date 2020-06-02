@@ -151,12 +151,14 @@ public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragme
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             view.findViewById(R.id.linear_master_data_locations).setVisibility(View.GONE);
         }
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

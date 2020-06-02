@@ -246,8 +246,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 },
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
-        binding.linearStockFilterContainerTop.addView(chipExpiring);
-        binding.linearStockFilterContainerTop.addView(chipExpired);
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            binding.linearStockFilterContainerTop.addView(chipExpiring);
+            binding.linearStockFilterContainerTop.addView(chipExpired);
+        }
         binding.linearStockFilterContainerTop.addView(chipMissing);
 
         binding.recyclerStock.setLayoutManager(
@@ -433,7 +435,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(sharedPrefs.getBoolean(
                 Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
                 true
-        ) && sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+        ) && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
             downloadShoppingList();
         }
     }
@@ -847,6 +849,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         shoppingListProductIds,
                         daysExpiringSoon,
                         sortMode,
+                        isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING),
                         this
                 );
                 binding.recyclerStock.setAdapter(stockItemAdapter);
@@ -1358,6 +1361,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterItems(itemsToDisplay);
 
         setEmptyState(Constants.STATE.NONE);
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

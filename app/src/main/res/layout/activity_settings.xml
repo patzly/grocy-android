@@ -159,8 +159,9 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/text_setting_stock_overview_header"
                 style="@style/Theme.Grocy.Category"
-                android:text="Stock overview"/>
+                android:text="@string/title_stock_overview"/>
 
             <LinearLayout
                 android:id="@+id/linear_setting_expiring_soon_days"

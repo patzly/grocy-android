@@ -185,10 +185,15 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
             view.findViewById(R.id.linear_drawer_shopping_list).setVisibility(View.GONE);
             view.findViewById(R.id.divider_drawer_shopping_list).setVisibility(View.GONE);
         }
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

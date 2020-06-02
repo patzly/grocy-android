@@ -231,18 +231,15 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
     }
 
     private void hideDisabledFeatures(View view) {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
             view.findViewById(R.id.linear_batch_config_price).setVisibility(View.GONE);
         }
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             view.findViewById(R.id.linear_batch_config_location).setVisibility(View.GONE);
             view.findViewById(R.id.linear_batch_config_stock_location).setVisibility(View.GONE);
+        }
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            view.findViewById(R.id.linear_batch_config_bbd).setVisibility(View.GONE);
         }
     }
 
@@ -271,6 +268,11 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
                 Snackbar.LENGTH_SHORT
         ).show();
         dismiss();
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

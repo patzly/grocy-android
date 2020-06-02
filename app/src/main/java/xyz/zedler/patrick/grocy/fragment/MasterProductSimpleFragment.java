@@ -583,10 +583,7 @@ public class MasterProductSimpleFragment extends Fragment {
         downloadProductGroups();
         downloadQuantityUnits();
 
-        if(sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             downloadLocations();
         }
     }
@@ -1154,7 +1151,9 @@ public class MasterProductSimpleFragment extends Fragment {
             jsonObject.put("description", productDescriptionHtml);
             jsonObject.put("barcode", getBarcodes());
             jsonObject.put("min_stock_amount", minAmount);
-            jsonObject.put("default_best_before_days", bestBeforeDays);
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+                jsonObject.put("default_best_before_days", bestBeforeDays);
+            }
             jsonObject.put(
                     "product_group_id",
                     selectedProductGroupId != -1
@@ -1165,10 +1164,9 @@ public class MasterProductSimpleFragment extends Fragment {
             jsonObject.put("qu_id_stock", selectedQUStockId);
             jsonObject.put("qu_factor_purchase_to_stock", quantityUnitFactor);
 
-            if(sharedPrefs.getBoolean(
-                    Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                    true
-            ) || editProduct != null) {
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    || editProduct != null
+            ) {
                 jsonObject.put("location_id", selectedLocationId);
             } else {
                 jsonObject.put("location_id", 1);
@@ -1269,10 +1267,7 @@ public class MasterProductSimpleFragment extends Fragment {
             isInvalid = true;
         }
 
-        if(selectedLocationId == -1 && sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             textViewLocationLabel.setTextColor(getColor(R.color.error));
             isInvalid = true;
         }
@@ -1282,7 +1277,7 @@ public class MasterProductSimpleFragment extends Fragment {
             isInvalid = true;
         }
 
-        if(bestBeforeDays < -1) {
+        if(bestBeforeDays < -1 && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             textInputDays.setError(activity.getString(R.string.error_invalid_best_before_days));
             isInvalid = true;
         }
@@ -1433,13 +1428,13 @@ public class MasterProductSimpleFragment extends Fragment {
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             activity.findViewById(
                     R.id.linear_master_product_simple_location
             ).setVisibility(View.GONE);
+        }
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            activity.findViewById(R.id.linear_master_product_simple_days).setVisibility(View.GONE);
         }
     }
 
@@ -1457,6 +1452,11 @@ public class MasterProductSimpleFragment extends Fragment {
 
     private int getColor(@ColorRes int color) {
         return ContextCompat.getColor(activity, color);
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

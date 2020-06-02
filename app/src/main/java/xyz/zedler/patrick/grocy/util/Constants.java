@@ -28,11 +28,11 @@ public final class Constants {
         public final static String GROCY_VERSION = "grocy_version";
         public final static String CREDENTIALS = "credentials";
 
-        public final static String FEATURE_FLAG_SHOPPINGLIST = "feature_flag_shoppinglist";
-        public final static String FEATURE_FLAG_STOCK_PRICE_TRACKING = "feature_flag_stock_price_tracking";
-        public final static String FEATURE_FLAG_STOCK_LOCATION_TRACKING = " feature_flag_location_tracking";
-        public final static String FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING = "feature_flag_best_before_date_tracking";
-        public final static String FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS = "feature_flag_multiple_lists";
+        public final static String FEATURE_SHOPPING_LIST = "feature_shopping_list";
+        public final static String FEATURE_STOCK_PRICE_TRACKING = "feature_stock_price_tracking";
+        public final static String FEATURE_STOCK_LOCATION_TRACKING = "feature_stock_location_tracking";
+        public final static String FEATURE_STOCK_BBD_TRACKING = "feature_stock_bbd_tracking";
+        public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
 
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";

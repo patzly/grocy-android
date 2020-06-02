@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         // LOAD CONFIG
 
-        if(!isServerUrlEmpty()) loadConfig();
+        if(!isServerUrlEmpty()) loadConfig(false);
 
         // VIEWS
 
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
-            loadConfig();
+            loadConfig(true);
             setUp(null);
         } else if(requestCode == Constants.REQUEST.SCAN_BATCH
                 && resultCode == Activity.RESULT_OK
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadConfig() {
+    private void loadConfig(boolean reloadFragment) {
         request.get(
                 grocyApi.getSystemConfig(),
                 response -> {
@@ -234,33 +234,42 @@ public class MainActivity extends AppCompatActivity {
                                         jsonObject.getString("CURRENCY")
                                 )
                                 .putBoolean(
-                                        Constants.PREF.FEATURE_FLAG_SHOPPINGLIST,
+                                        Constants.PREF.FEATURE_SHOPPING_LIST,
                                         jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST")
                                 )
                                 .putBoolean(
-                                        Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
+                                        Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
                                         jsonObject.getBoolean(
                                                 "FEATURE_FLAG_STOCK_PRICE_TRACKING"
                                         )
                                 )
                                 .putBoolean(
-                                        Constants.PREF.FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS,
+                                        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
                                         jsonObject.getBoolean(
                                                 "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS"
                                         )
                                 )
                                 .putBoolean(
-                                        Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
+                                        Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
                                         jsonObject.getBoolean(
-                                        "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
+                                                "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
                                         )
-                        ).apply();
+                                )
+                                .putBoolean(
+                                        Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
+                                        jsonObject.getBoolean(
+                                                "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING"
+                                        )
+                                ).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     if(DEBUG) Log.i(
                             TAG, "downloadConfig: config = " + response
                     );
+                    if(reloadFragment) {
+                        replaceFragment(fragmentCurrent.toString(), null, false);
+                    }
                 }, error -> {}
         );
 

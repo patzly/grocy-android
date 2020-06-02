@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:singleLine="true"
-                android:text="Stock overview"
+                android:text="@string/title_stock_overview"
                 android:fontFamily="@font/roboto_mono_regular"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 

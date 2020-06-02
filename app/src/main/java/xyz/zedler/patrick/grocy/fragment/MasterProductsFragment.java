@@ -254,10 +254,7 @@ public class MasterProductsFragment extends Fragment
         downloadProductGroups();
         downloadProducts();
 
-        if(sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_STOCK_LOCATION_TRACKING,
-                true
-        )) {
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             downloadLocations();
         }
     }
@@ -622,6 +619,11 @@ public class MasterProductsFragment extends Fragment
                 },
                 error -> showErrorMessage()
         );
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

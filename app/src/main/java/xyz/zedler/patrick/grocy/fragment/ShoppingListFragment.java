@@ -1110,10 +1110,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void hideDisabledFeatures() {
-        if(!sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS,
-                true
-        )) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
             activity.findViewById(R.id.button_shopping_list_lists).setVisibility(View.GONE);
             textViewTitle.setOnClickListener(null);
         }
@@ -1180,6 +1177,11 @@ public class ShoppingListFragment extends Fragment
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
     public interface OnResponseListener {

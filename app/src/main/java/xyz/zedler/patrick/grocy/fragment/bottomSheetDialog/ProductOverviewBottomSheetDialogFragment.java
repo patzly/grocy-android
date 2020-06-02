@@ -346,7 +346,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 		// LOCATION
 		if(hasDetails()) location = productDetails.getLocation(); // refresh
-		if(location != null) {
+		if(location != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
 			itemLocation.setText(
 					activity.getString(R.string.property_location_default),
 					location.getName(),
@@ -357,15 +357,17 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		}
 
 		// BEST BEFORE
-		itemBestBefore.setText(
-				activity.getString(R.string.property_bbd_next),
-				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES)
-						? dateUtil.getLocalizedDate(bestBefore)
-						: activity.getString(R.string.date_never),
-				!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.isEmpty()
-						? dateUtil.getHumanForDaysFromNow(bestBefore)
-						: null
-		);
+		if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+			itemBestBefore.setText(
+					activity.getString(R.string.property_bbd_next),
+					!bestBefore.equals(Constants.DATE.NEVER_EXPIRES)
+							? dateUtil.getLocalizedDate(bestBefore)
+							: activity.getString(R.string.date_never),
+					!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.isEmpty()
+							? dateUtil.getHumanForDaysFromNow(bestBefore)
+							: null
+			);
+		}
 
 		if(hasDetails()) {
 			// LAST PURCHASED
@@ -397,11 +399,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
-			boolean featurePriceTracking = sharedPrefs.getBoolean(
-					Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
-					true
-			);
-			if(lastPrice != null && featurePriceTracking) {
+			if(lastPrice != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
 				itemLastPrice.setVisibility(View.VISIBLE);
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
@@ -414,7 +412,9 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 
 			// SHELF LIFE
 			int shelfLife = productDetails.getAverageShelfLifeDays();
-			if(shelfLife != 0 && shelfLife != -1) {
+			if(shelfLife != 0 && shelfLife != -1 && isFeatureEnabled(
+					Constants.PREF.FEATURE_STOCK_BBD_TRACKING
+			)) {
 				itemShelfLife.setVisibility(View.VISIBLE);
 				itemShelfLife.setText(
 						activity.getString(R.string.property_average_shelf_life),
@@ -434,10 +434,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private void loadPriceHistory(View view) {
-		if(!sharedPrefs.getBoolean(
-				Constants.PREF.FEATURE_FLAG_STOCK_PRICE_TRACKING,
-				true
-		)) {
+		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
 			return;
 		}
 		new WebRequest(activity.getRequestQueue()).get(
@@ -512,9 +509,12 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 	}
 
 	private void hideDisabledFeatures(View view) {
-		if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_FLAG_SHOPPINGLIST, true)) {
+		if(!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
 			MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
 			toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
+		}
+		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+			itemBestBefore.setVisibility(View.GONE);
 		}
 	}
 
@@ -553,6 +553,11 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 						? quantityUnit.getName()
 						: quantityUnit.getNamePlural()
 		);
+	}
+
+	private boolean isFeatureEnabled(String pref) {
+		if(pref == null) return true;
+		return sharedPrefs.getBoolean(pref, true);
 	}
 
 	@NonNull
