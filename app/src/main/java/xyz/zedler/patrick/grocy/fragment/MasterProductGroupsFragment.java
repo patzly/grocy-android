@@ -405,17 +405,13 @@ public class MasterProductGroupsFragment extends Fragment
         activity.findViewById(R.id.frame_master_product_groups_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
-
-        activity.updateUI(Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH, TAG);
     }
 
     public void dismissSearch() {
         appBarBehavior.replaceLayout(R.id.linear_master_product_groups_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
-        filterProductGroups(); // TODO: buggy animation
-
-        activity.updateUI(Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT, TAG);
+        filterProductGroups();
     }
 
     public void checkForUsage(ProductGroup productGroup) {
