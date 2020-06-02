@@ -101,7 +101,7 @@
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
-    <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help you!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
+    <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\n\nOtherwise we would be very happy about a nice review in the Play Store.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_select_product">Select a product</string>
@@ -163,8 +163,8 @@
     <string name="title_list_entry">List entry</string>
     <string name="title_edit_list_entry">Edit list entry</string>
     <string name="title_create_list_entry">Create list entry</string>
-    <string name="title_edit_shopping_list">Edit shopping list</string>
-    <string name="title_create_shopping_list">Create shopping list</string>
+    <string name="title_shopping_list_edit">Edit shopping list</string>
+    <string name="title_shopping_list_new">New shopping list</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>

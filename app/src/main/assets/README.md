@@ -2,15 +2,17 @@
 
 ## Bugs
 
+- populate default shopping list -> create new list -> delete this new list -> default list is empty
+
 ## Improvements
 
 - use server settings and configs
+- landscape one-line support in shopping lists
 
 ## Features
 
-- create, edit and delete shopping lists
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- illustrations: offline, search, error, empty
+- illustrations: offline, empty
 - master product group sheet: go to master products with this product filter applied
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution

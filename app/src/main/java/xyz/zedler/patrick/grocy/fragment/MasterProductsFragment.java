@@ -568,17 +568,13 @@ public class MasterProductsFragment extends Fragment
         activity.findViewById(R.id.frame_close_master_products_search).setOnClickListener(
                 v -> dismissSearch()
         );
-
-        activity.updateUI(Constants.UI.MASTER_PRODUCTS_SEARCH, TAG);
     }
 
     public void dismissSearch() {
         appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
-        filterProducts(); // TODO: buggy animation
-
-        activity.updateUI(Constants.UI.MASTER_PRODUCTS_DEFAULT, TAG);
+        filterProducts();
     }
 
     public void checkForStock(Product product) {

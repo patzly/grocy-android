@@ -405,17 +405,13 @@ public class MasterQuantityUnitsFragment extends Fragment
         activity.findViewById(R.id.frame_master_quantity_units_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
-
-        activity.updateUI(Constants.UI.MASTER_QUANTITY_UNITS_SEARCH, TAG);
     }
 
     public void dismissSearch() {
         appBarBehavior.replaceLayout(R.id.linear_master_quantity_units_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
-        filterQuantityUnits(); // TODO: buggy animation
-
-        activity.updateUI(Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT, TAG);
+        filterQuantityUnits();
     }
 
     public void checkForUsage(QuantityUnit quantityUnit) {

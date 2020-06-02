@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
@@ -111,47 +112,19 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(fabScroll != null) fabScroll.hide();
 		measureScrollView();
 		if(nestedScrollView != null) {
-			nestedScrollView.setOnScrollChangeListener((NestedScrollView v,
-                                                        int scrollX,
-                                                        int scrollY,
-                                                        int oldScrollX,
-                                                        int oldScrollY
-			) -> {
-				if (!isTopScroll && scrollY == 0) { // TOP
-					onTopScroll();
-				} else {
-					if (scrollY < oldScrollY) { // UP
-						storedFirstBottomScrollY = 0;
-						if (currentState != STATE_SCROLLED_UP) {
-							onScrollUp();
+			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
+					new ViewTreeObserver.OnGlobalLayoutListener() {
+						public void onGlobalLayout() {
+							nestedScrollView.scrollTo(0, 0);
+							nestedScrollView.setOnScrollChangeListener(onScrollChangeListener());
+							// Kill ViewTreeObserver
+							if(nestedScrollView.getViewTreeObserver().isAlive()) {
+								nestedScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(
+										this
+								);
+							}
 						}
-						if (scrollY < pufferSize) {
-							new Handler().postDelayed(() -> {
-								if (scrollY > 0) {
-									nestedScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-								}
-							}, 1);
-						}
-						if (scrollY < dp(topScrollLimit) && fabScroll != null && showTopScroll) {
-							if (fabScroll.isOrWillBeShown()) fabScroll.hide();
-						}
-					} else if (scrollY > oldScrollY) {
-						if(storedFirstBottomScrollY == 0) {
-							storedFirstBottomScrollY = oldScrollY;
-						}
-						int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
-								activity,
-								24
-						);
-						if (currentState != STATE_SCROLLED_DOWN && scrollY > scrollYHide) { // DOWN
-							onScrollDown();
-						}
-						if (scrollY > dp(topScrollLimit) && fabScroll != null && showTopScroll) {
-							if (fabScroll.isOrWillBeHidden()) fabScroll.show();
-						}
-					}
-				}
-			});
+					});
 		}
 		if(fabScroll != null) {
 			fabScroll.setOnClickListener(v -> {
@@ -166,12 +139,51 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(DEBUG) Log.i(TAG, "setUpScroll");
 	}
 
+	private NestedScrollView.OnScrollChangeListener onScrollChangeListener() {
+		return (NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) -> {
+			if(!isTopScroll && scrollY == 0) { // TOP
+				onTopScroll();
+			} else {
+				if(scrollY < oldScrollY) { // UP
+					storedFirstBottomScrollY = 0;
+					if(currentState != STATE_SCROLLED_UP) {
+						onScrollUp();
+					}
+					if(scrollY < pufferSize) {
+						new Handler().postDelayed(() -> {
+							if (scrollY > 0) {
+								nestedScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+							}
+						}, 1);
+					}
+					if(scrollY < dp(topScrollLimit) && fabScroll != null && showTopScroll) {
+						if (fabScroll.isOrWillBeShown()) fabScroll.hide();
+					}
+				} else if(scrollY > oldScrollY) {
+					if(storedFirstBottomScrollY == 0) {
+						storedFirstBottomScrollY = oldScrollY;
+					}
+					int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
+							activity,
+							24
+					);
+					if(currentState != STATE_SCROLLED_DOWN && scrollY > scrollYHide) { // DOWN
+						onScrollDown();
+					}
+					if(scrollY > dp(topScrollLimit) && fabScroll != null && showTopScroll) {
+						if (fabScroll.isOrWillBeHidden()) fabScroll.show();
+					}
+				}
+			}
+		};
+	}
+
 	/**
 	 * Gets called once when scrollY is 0.
 	 */
 	private void onTopScroll() {
 		isTopScroll = true;
-		if(bottomAppBar != null) {
+		if(bottomAppBar != null && !bottomAppBar.isOrWillBeShown()) {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true);
 		} else if(DEBUG) Log.e(TAG, "onTopScroll: bottomAppBar is null!");
@@ -211,7 +223,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	public void setHideOnScroll(boolean hide) {
 		hideOnScroll = hide;
 		if(bottomAppBar != null) {
-			if(!hide) {
+			if(!hide && !bottomAppBar.isOrWillBeShown()) {
 				bottomAppBar.show();
 				onChangeBottomAppBarVisibility(true);
 			}
@@ -224,30 +236,19 @@ public class BottomAppBarRefreshScrollBehavior {
 	 */
 	private void measureScrollView() {
 		if(nestedScrollView != null) {
-			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-					new ViewTreeObserver.OnGlobalLayoutListener() {
-						@Override
-						public void onGlobalLayout() {
-							int scrollViewHeight = nestedScrollView.getMeasuredHeight();
-							int scrollContentHeight = nestedScrollView.getChildAt(
-									0
-							).getHeight();
-							pufferSize = (scrollContentHeight - scrollViewHeight) / pufferDivider;
-							if(DEBUG) {
-								Log.i(TAG, "measureScrollView: viewHeight = " +
-										scrollViewHeight +
-										", contentHeight = " + scrollContentHeight
-								);
-							}
-							// Kill ViewTreeObserver
-							/*if (nestedScrollView.getViewTreeObserver().isAlive()) {
-								nestedScrollView.getViewTreeObserver()
-										.removeOnGlobalLayoutListener(
-												this
-										);
-							}*/
-						}
-					});
+			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+				int scrollViewHeight = nestedScrollView.getMeasuredHeight();
+				int scrollContentHeight = nestedScrollView.getChildAt(
+						0
+				).getHeight();
+				pufferSize = (scrollContentHeight - scrollViewHeight) / pufferDivider;
+				if(DEBUG) {
+					Log.i(TAG, "measureScrollView: viewHeight = " +
+							scrollViewHeight +
+							", contentHeight = " + scrollContentHeight
+					);
+				}
+			});
 		}
 	}
 
@@ -262,7 +263,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	}
 
 	private void onChangeBottomAppBarVisibility(boolean visible) {
-		if(activity != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+		if(activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			int dividerCurrentColor = activity.getWindow().getNavigationBarDividerColor();
 			int dividerTargetColor = ContextCompat.getColor(
 					activity, visible ? R.color.primary : R.color.stroke_secondary

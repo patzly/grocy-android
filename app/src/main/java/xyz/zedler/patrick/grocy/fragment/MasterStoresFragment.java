@@ -405,17 +405,13 @@ public class MasterStoresFragment extends Fragment
         activity.findViewById(R.id.frame_master_stores_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
-
-        activity.updateUI(Constants.UI.MASTER_STORES_SEARCH, TAG);
     }
 
     public void dismissSearch() {
         appBarBehavior.replaceLayout(R.id.linear_master_stores_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
-        filterStores(); // TODO: buggy animation
-
-        activity.updateUI(Constants.UI.MASTER_STORES_DEFAULT, TAG);
+        filterStores();
     }
 
     public void checkForUsage(Store store) {

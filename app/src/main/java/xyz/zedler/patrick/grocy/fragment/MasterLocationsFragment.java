@@ -405,17 +405,13 @@ public class MasterLocationsFragment extends Fragment
         activity.findViewById(R.id.frame_master_locations_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
-
-        activity.updateUI(Constants.UI.MASTER_LOCATIONS_SEARCH, TAG);
     }
 
     public void dismissSearch() {
         appBarBehavior.replaceLayout(R.id.linear_master_locations_app_bar_default, true);
         activity.hideKeyboard();
         search = "";
-        filterLocations(); // TODO: buggy animation
-
-        activity.updateUI(Constants.UI.MASTER_LOCATIONS_DEFAULT, TAG);
+        filterLocations();
     }
 
     public void checkForUsage(Location location) {
