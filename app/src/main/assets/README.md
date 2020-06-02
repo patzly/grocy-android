@@ -8,6 +8,7 @@
 
 - use server settings and configs
 - landscape one-line support in shopping lists
+- remove unnecessary updateUI calls in setUpSearch and dismissSearch methods
 
 ## Features
 
