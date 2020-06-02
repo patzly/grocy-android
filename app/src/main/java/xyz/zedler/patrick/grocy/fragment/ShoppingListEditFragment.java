@@ -115,11 +115,11 @@ public class ShoppingListEditFragment extends Fragment {
 
         if(action.equals(Constants.ACTION.EDIT)) {
             binding.textShoppingListEditTitle.setText(
-                    activity.getString(R.string.title_edit_shopping_list)
+                    activity.getString(R.string.title_shopping_list_edit)
             );
         } else {
             binding.textShoppingListEditTitle.setText(
-                    activity.getString(R.string.title_create_shopping_list)
+                    activity.getString(R.string.title_shopping_list_new)
             );
         }
 

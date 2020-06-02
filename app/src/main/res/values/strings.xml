@@ -163,8 +163,8 @@
     <string name="title_list_entry">List entry</string>
     <string name="title_edit_list_entry">Edit list entry</string>
     <string name="title_create_list_entry">Create list entry</string>
-    <string name="title_edit_shopping_list">Edit shopping list</string>
-    <string name="title_create_shopping_list">Create shopping list</string>
+    <string name="title_shopping_list_edit">Edit shopping list</string>
+    <string name="title_shopping_list_new">New shopping list</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>

@@ -34,7 +34,7 @@
 
     <item
         android:id="@+id/action_edit_shopping_list"
-        android:title="@string/title_edit_shopping_list"
+        android:title="@string/title_shopping_list_edit"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
