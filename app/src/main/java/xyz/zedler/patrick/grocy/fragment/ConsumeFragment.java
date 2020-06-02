@@ -944,11 +944,19 @@ public class ConsumeFragment extends Fragment {
             });
         }
         menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
-        if(menuItemOpen != null) {
+        if(menuItemOpen != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)) {
+            Drawable icon = menuItemOpen.getIcon();
+            icon.setAlpha(0);
+            menuItemOpen.setVisible(true);
             menuItemOpen.setOnMenuItemClickListener(item -> {
                 openProduct();
                 return true;
             });
+            ValueAnimator alphaAnimator = ValueAnimator.ofInt(icon.getAlpha(), 255);
+            alphaAnimator.addUpdateListener(
+                    animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
+            );
+            alphaAnimator.setDuration(200).start();
         }
     }
 

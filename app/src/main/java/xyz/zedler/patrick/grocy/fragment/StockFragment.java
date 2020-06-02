@@ -270,7 +270,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             ) {
                 StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
                 if(stockItem.getAmount() > 0
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0) {
+                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                ) {
                     underlayButtons.add(new SwipeBehavior.UnderlayButton(
                             R.drawable.ic_round_consume_product,
                             position -> performAction(
@@ -281,7 +282,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 }
                 if(stockItem.getAmount()
                         > stockItem.getAmountOpened()
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0) {
+                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                        && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                ) {
                     underlayButtons.add(new SwipeBehavior.UnderlayButton(
                             R.drawable.ic_round_open_product,
                             position -> performAction(

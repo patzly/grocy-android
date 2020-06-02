@@ -260,6 +260,12 @@ public class MainActivity extends AppCompatActivity {
                                         jsonObject.getBoolean(
                                                 "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING"
                                         )
+                                )
+                                .putBoolean(
+                                        Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
+                                        jsonObject.getBoolean(
+                                                "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
+                                        )
                                 ).apply();
                     } catch (JSONException e) {
                         e.printStackTrace();

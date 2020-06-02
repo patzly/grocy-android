@@ -32,6 +32,7 @@ public final class Constants {
         public final static String FEATURE_STOCK_PRICE_TRACKING = "feature_stock_price_tracking";
         public final static String FEATURE_STOCK_LOCATION_TRACKING = "feature_stock_location_tracking";
         public final static String FEATURE_STOCK_BBD_TRACKING = "feature_stock_bbd_tracking";
+        public final static String FEATURE_STOCK_OPENED_TRACKING = "feature_stock_opened_tracking";
         public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
 
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
