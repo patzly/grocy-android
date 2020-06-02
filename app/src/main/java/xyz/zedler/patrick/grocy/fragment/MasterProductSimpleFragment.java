@@ -1267,7 +1267,9 @@ public class MasterProductSimpleFragment extends Fragment {
             isInvalid = true;
         }
 
-        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(selectedLocationId == -1
+                && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+        ) {
             textViewLocationLabel.setTextColor(getColor(R.color.error));
             isInvalid = true;
         }
