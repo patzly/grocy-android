@@ -388,7 +388,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         new Handler().postDelayed(() -> {
             switch (state) {
                 case Constants.STATE.EMPTY:
-                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
                     binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_stock);
                     binding.linearEmpty.textEmptySubtitle.setText(R.string.error_empty_stock_sub);
                     break;
