@@ -113,7 +113,7 @@ public class ConsumeFragment extends Fragment {
     private TextView textViewLocation, textViewSpecific;
     private MaterialCheckBox checkBoxSpoiled;
     private ImageView imageViewAmount;
-    private int selectedLocationId;
+    private int selectedLocationId = -1;
     private String selectedStockEntryId;
     private double amount, maxAmount, minAmount;
 
@@ -595,7 +595,9 @@ public class ConsumeFragment extends Fragment {
             body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", isSpoiled);
-            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    && selectedLocationId != -1
+            ) {
                 body.put("location_id", selectedLocationId);
             }
             if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
@@ -669,7 +671,11 @@ public class ConsumeFragment extends Fragment {
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amount);
-            body.put("location_id", selectedLocationId);
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    && selectedLocationId != -1
+            ) {
+                body.put("location_id", selectedLocationId);
+            }
             if(selectedStockEntryId != null && !selectedStockEntryId.isEmpty()) {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
@@ -806,8 +812,13 @@ public class ConsumeFragment extends Fragment {
 
     private void selectDefaultLocation() {
         if(productDetails != null) {
-            selectedLocationId = productDetails.getLocation().getId();
-            textViewLocation.setText(productDetails.getLocation().getName());
+            if(productDetails.getLocation() != null) {
+                selectedLocationId = productDetails.getLocation().getId();
+                textViewLocation.setText(productDetails.getLocation().getName());
+            } else {
+                selectedLocationId = -1;
+                textViewLocation.setText(activity.getString(R.string.subtitle_none));
+            }
         }
     }
 
