@@ -50,6 +50,8 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_restart">Restart</string>
     <string name="action_show_extended">Show extended form</string>
     <string name="action_batch_mode">Batch mode</string>
     <string name="action_create">Create</string>
@@ -100,6 +102,7 @@
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
+    <string name="msg_restart">A restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\n\nOtherwise we would be very happy about a nice review in the Play Store.</string>
 
@@ -156,6 +159,7 @@
     <string name="title_batch_missing_exit">Back to scanner?</string>
     <string name="title_compatibility">Compatibility issues</string>
     <string name="title_logout">Logout from Grocy?</string>
+    <string name="title_restart">Restart Grocy?</string>
     <string name="title_logout_demo">Logout from demo mode?</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
@@ -282,8 +286,8 @@
     <string name="setting_dark_mode_description">Off for system dependency</string>
     <string name="setting_open_food_facts">Use Open Food Facts</string>
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
-    <string name="setting_reload_config">Reload Grocy config</string>
-    <string name="setting_reload_config_description">Restarts the app</string>
+    <string name="setting_reload_config">Reload Grocy configuration</string>
+    <string name="setting_reload_config_description">Restart required</string>
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
     <string name="setting_list_indicator">Indicate list entry</string>

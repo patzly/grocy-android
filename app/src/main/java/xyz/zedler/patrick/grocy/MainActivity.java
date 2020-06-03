@@ -58,9 +58,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -88,6 +85,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDial
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
@@ -222,130 +220,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadInfo() {
-        // GET CONFIG
-        request.get(
-                grocyApi.getSystemConfig(),
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        sharedPrefs.edit()
-                                .putString(
-                                        Constants.PREF.CURRENCY,
-                                        jsonObject.getString("CURRENCY")
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_SHOPPING_LIST,
-                                        jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST")
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
-                                        jsonObject.getBoolean(
-                                                "FEATURE_FLAG_STOCK_PRICE_TRACKING"
-                                        )
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
-                                        jsonObject.getBoolean(
-                                                "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS"
-                                        )
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
-                                        jsonObject.getBoolean(
-                                                "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
-                                        )
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
-                                        jsonObject.getBoolean(
-                                                "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING"
-                                        )
-                                )
-                                .putBoolean(
-                                        Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
-                                        jsonObject.getBoolean(
-                                                "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
-                                        )
-                                ).apply();
-                    } catch (JSONException e) {
-                        Log.e(TAG, "downloadConfig: " + e);
-                    }
-                    if(DEBUG) Log.i(TAG,"downloadConfig: config = " + response);
-                }, error -> Log.e(TAG, "downloadConfig: " + error)
-        );
-        // GET USER SETTINGS
-        request.get(
-                grocyApi.getUserSettings(),
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        sharedPrefs.edit()
-                                .putInt(
-                                        Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
-                                        jsonObject.getInt("product_presets_location_id")
-                                ).putInt(
-                                Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                                jsonObject.getInt(
-                                        "product_presets_product_group_id"
-                                )
-                        ).putInt(
-                                Constants.PREF.PRODUCT_PRESETS_QU_ID,
-                                jsonObject.getInt("product_presets_qu_id")
-                        ).putString(
-                                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                                jsonObject.getString("stock_expring_soon_days")
-                        ).putString(
-                                Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                                jsonObject.getString(
-                                        "stock_default_purchase_amount"
-                                )
-                        ).putString(
-                                Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                                jsonObject.getString(
-                                        "stock_default_consume_amount"
-                                )
-                        ).putBoolean(
-                                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                                jsonObject.getBoolean(
-                                        "show_icon_on_stock_overview_page_" +
-                                                "when_product_is_on_shopping_list"
-                                )
-                        ).putString(
-                                Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
-                                jsonObject.getString(
-                                        "recipe_ingredients_group_by_product_group"
-                                )
-                        ).apply();
-                    } catch (JSONException e) {
-                        Log.e(TAG, "downloadUserSettings: " + e);
-                    }
-                    if(DEBUG) Log.i(TAG, "downloadUserSettings: settings = " + response);
-                }, error -> Log.e(TAG, "downloadUserSettings: " + error)
-        );
-        // GET SYSTEM INFO
-        request.get(
-                grocyApi.getSystemInfo(),
-                response -> {
-                    try {
-                        sharedPrefs.edit()
-                                .putString(
-                                        Constants.PREF.GROCY_VERSION,
-                                        new JSONObject(response).getJSONObject(
-                                                "grocy_version"
-                                        ).getString("Version")
-                                ).apply();
-                        if(DEBUG) Log.i(TAG, "downloadSystemInfo: " + response);
-                    } catch (JSONException e) {
-                        Log.e(TAG, "downloadSystemInfo: " + e);
-                    }
-                }, error -> Log.e(TAG, "downloadSystemInfo: " + error)
-        );
-    }
-
     private void setUp(Bundle savedInstanceState) {
-        // load config, user settings and system info
-        loadInfo();
+        ConfigUtil.loadInfo(
+                requestQueue,
+                grocyApi,
+                sharedPrefs,
+                null,
+                null
+        );
 
         // FRAGMENT
 

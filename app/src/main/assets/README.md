@@ -2,12 +2,13 @@
 
 ## Bugs
 
+- don't clear app settings on logout
+
 ## Improvements
 
-- use server settings and configs
+- server settings for default values in Settings
 - landscape one-line support in shopping lists
 - product edit with location tracking disabled: space between barcode chips and other field
-- switch in settings for open food facts should not switch off when logging out and in
 
 ## Features
 
@@ -17,7 +18,6 @@
 - help page with note that all buttons can be long pressed to get a tip
 - translation contribution
 - extended product editing
-- edit product from product overview when opening this from e.g. PurchaseFragment
 
 # Conventions
 

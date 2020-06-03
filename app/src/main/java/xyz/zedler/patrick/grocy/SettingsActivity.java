@@ -57,11 +57,13 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -297,7 +299,14 @@ public class SettingsActivity extends AppCompatActivity
 				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
 				break;
 			case R.id.linear_setting_reload_config:
-				RestartActivity.restartApp(this);
+				IconUtil.start(this, R.id.image_setting_reload_config);
+				ConfigUtil.loadInfo(
+						requestQueue,
+						grocyApi,
+						sharedPrefs,
+						() -> showBottomSheet(new RestartBottomSheetDialogFragment(), null),
+						this::showErrorMessage
+				);
 				break;
 			case R.id.linear_setting_logout:
 				Bundle bundle = null;
@@ -411,7 +420,7 @@ public class SettingsActivity extends AppCompatActivity
 									Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
 									switchListIndicator.isChecked()
 							).apply();
-							showMessage(getString(R.string.msg_error));
+							showErrorMessage();
 							if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
@@ -436,7 +445,7 @@ public class SettingsActivity extends AppCompatActivity
 							.apply();
 				},
 				error -> {
-					showMessage(getString(R.string.msg_error));
+					showErrorMessage();
 					if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
@@ -467,7 +476,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showMessage(getString(R.string.msg_error));
+					showErrorMessage();
 					if(DEBUG) Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
@@ -498,7 +507,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showMessage(getString(R.string.msg_error));
+					showErrorMessage();
 					if(DEBUG) Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
@@ -506,6 +515,10 @@ public class SettingsActivity extends AppCompatActivity
 
 	private void showMessage(String msg) {
 		Snackbar.make(findViewById(R.id.scroll_settings), msg, Snackbar.LENGTH_SHORT).show();
+	}
+
+	private void showErrorMessage() {
+		showMessage(getString(R.string.msg_error));
 	}
 
 	private boolean isDemo() {

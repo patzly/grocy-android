@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="@string/title_logout"
+            android:text="@string/title_restart"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textAlignment="viewStart"
-                android:text="@string/msg_logout"
+                android:text="@string/msg_restart"
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
@@ -57,7 +57,7 @@
                 android:gravity="end">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_logout_cancel"
+                    android:id="@+id/button_restart_cancel"
                     style="@style/Widget.Grocy.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -66,13 +66,12 @@
                     android:text="@string/action_cancel" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_logout_logout"
+                    android:id="@+id/button_restart_restart"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:backgroundTint="@color/retro_red_bg_white"
-                    android:text="@string/action_logout" />
+                    android:text="@string/action_restart" />
 
             </LinearLayout>
 
