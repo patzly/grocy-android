@@ -186,6 +186,10 @@ public class ShoppingListItemEditFragment extends Fragment {
             activity.showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
         });
 
+        if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true)) {
+            binding.linearShoppingListItemEditShoppingList.setVisibility(View.GONE);
+        }
+
         // product
 
         textInputProduct = binding.textInputShoppingListItemEditProduct;
@@ -660,13 +664,17 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void selectShoppingList(int selectedId) {
-        this.selectedShoppingListId = selectedId;
-        TextView textView = binding.textShoppingListItemEditShoppingList;
-        ShoppingList shoppingList = getShoppingList(selectedId);
-        if(shoppingList != null) {
-            textView.setText(shoppingList.getName());
+        if(sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true)) {
+            this.selectedShoppingListId = selectedId;
+            TextView textView = binding.textShoppingListItemEditShoppingList;
+            ShoppingList shoppingList = getShoppingList(selectedId);
+            if(shoppingList != null) {
+                textView.setText(shoppingList.getName());
+            } else {
+                textView.setText(getString(R.string.subtitle_none));
+            }
         } else {
-            textView.setText(getString(R.string.subtitle_none));
+            this.selectedShoppingListId = 1;
         }
     }
 
