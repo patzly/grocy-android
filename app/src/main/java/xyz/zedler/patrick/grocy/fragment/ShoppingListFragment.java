@@ -191,8 +191,11 @@ public class ShoppingListFragment extends Fragment
         textViewBottomNotes = activity.findViewById(R.id.text_shopping_list_bottom_notes);
         swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
         scrollView = activity.findViewById(R.id.scroll_shopping_list);
+
         // retry button on offline error page
         activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> {
+            // refresh();
+            // TODO
             setError(false, false, true);
             showOffline = true;
             new PrepareOfflineData(activity, this).execute();
