@@ -90,6 +90,7 @@
                     android:id="@+id/linear_product_overview_action_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:orientation="horizontal">
 
                     <xyz.zedler.patrick.grocy.view.ActionButton
@@ -103,7 +104,6 @@
                         android:id="@+id/button_product_overview_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
                         app:icon="@drawable/ic_round_open_product"
                         app:tint="@color/icon"/>
 
