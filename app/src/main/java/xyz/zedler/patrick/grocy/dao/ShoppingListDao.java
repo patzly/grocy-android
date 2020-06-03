@@ -25,7 +25,7 @@ public interface ShoppingListDao {
     int count();
 
     @Insert
-    void insertAll(ShoppingList... shoppingLists);
+    void insertAll(List<ShoppingList> shoppingLists);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ShoppingList shoppingList);

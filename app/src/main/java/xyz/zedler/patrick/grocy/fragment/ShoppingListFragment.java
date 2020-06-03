@@ -609,13 +609,42 @@ public class ShoppingListFragment extends Fragment
         setError(true, false, true);
     }
 
+    private static class PrepareOfflineData extends AsyncTask<Void, Void, String> {
+        private WeakReference<Activity> weakActivity;
+        private AsyncResponse response;
+        private ArrayList<ShoppingListItem> shoppingListItems;
+        private ArrayList<ShoppingList> shoppingLists;
+        private ArrayList<ProductGroup> productGroups;
+        private ArrayList<QuantityUnit> quantityUnits;
+
+        public PrepareOfflineData(Activity activity, AsyncResponse response) {
+            weakActivity = new WeakReference<>(activity);
+            this.response = response;
+        }
+        @Override
+        protected String doInBackground(Void... voids) {
+            MainActivity activity = (MainActivity) weakActivity.get();
+            AppDatabase database = activity.getDatabase();
+            shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
+            shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
+            productGroups = new ArrayList<>(database.productGroupDao().getAll());
+            quantityUnits = new ArrayList<>(database.quantityUnitDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String arg) {
+            response.processFinish(shoppingListItems, shoppingLists, productGroups, quantityUnits);
+        }
+    }
+
     @Override
     public void processFinish(
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits
-    ) {
+    ) {                                                // for offline mode
         this.shoppingListItems = shoppingListItems;
         this.shoppingLists = shoppingLists;
         this.productGroups = productGroups;
@@ -644,36 +673,6 @@ public class ShoppingListFragment extends Fragment
         );
 
         filterItems(itemsToDisplay);
-    }
-
-    private static class PrepareOfflineData extends AsyncTask<Void, Void, String> {
-
-        private WeakReference<Activity> weakActivity;
-        private AsyncResponse response;
-        private ArrayList<ShoppingListItem> shoppingListItems;
-        private ArrayList<ShoppingList> shoppingLists;
-        private ArrayList<ProductGroup> productGroups;
-        private ArrayList<QuantityUnit> quantityUnits;
-
-        public PrepareOfflineData(Activity activity, AsyncResponse response) {
-            weakActivity = new WeakReference<>(activity);
-            this.response = response;
-        }
-        @Override
-        protected String doInBackground(Void... voids) {
-            MainActivity activity = (MainActivity) weakActivity.get();
-            AppDatabase database = activity.getDatabase();
-            shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
-            shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
-            productGroups = new ArrayList<>(database.productGroupDao().getAll());
-            quantityUnits = new ArrayList<>(database.quantityUnitDao().getAll());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String arg) {
-            response.processFinish(shoppingListItems, shoppingLists, productGroups, quantityUnits);
-        }
     }
 
     private void filterItems(String filter) {
@@ -1227,34 +1226,22 @@ public class ShoppingListFragment extends Fragment
             AppDatabase database = activity.getDatabase();
             ShoppingListItemDao shoppingListItemDao = database.shoppingListItemDao();
             shoppingListItemDao.deleteAll();
-            for(ShoppingListItem shoppingListItem : shoppingListItems) {
-                shoppingListItemDao.insert(shoppingListItem);
-            }
-            Log.i(TAG, "storeDataOffline: " + shoppingListItemDao.getAll());
+            shoppingListItemDao.insertAll(shoppingListItems);
 
             // shopping lists
             ShoppingListDao shoppingListDao = database.shoppingListDao();
             shoppingListDao.deleteAll();
-            for(ShoppingList shoppingList : shoppingLists) {
-                shoppingListDao.insert(shoppingList);
-            }
-            Log.i(TAG, "storeDataOffline: " + shoppingListDao.getAll());
+            shoppingListDao.insertAll(shoppingLists);
 
             // product groups
             ProductGroupDao productGroupDao = database.productGroupDao();
             productGroupDao.deleteAll();
-            for(ProductGroup productGroup : productGroups) {
-                productGroupDao.insert(productGroup);
-            }
-            Log.i(TAG, "storeDataOffline: " + productGroupDao.getAll());
+            productGroupDao.insertAll(productGroups);
 
-            // product groups
+            // quantity units
             QuantityUnitDao quantityUnitDao = database.quantityUnitDao();
             quantityUnitDao.deleteAll();
-            for(QuantityUnit quantityUnit : quantityUnits) {
-                quantityUnitDao.insert(quantityUnit);
-            }
-            Log.i(TAG, "storeDataOffline: " + quantityUnitDao.getAll());
+            quantityUnitDao.insertAll(quantityUnits);
         }).start();
     }
 

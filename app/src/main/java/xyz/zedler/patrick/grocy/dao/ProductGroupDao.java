@@ -19,7 +19,7 @@ public interface ProductGroupDao {
     int count();
 
     @Insert
-    void insertAll(ProductGroup... productGroups);
+    void insertAll(List<ProductGroup> productGroups);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ProductGroup productGroup);

@@ -23,7 +23,7 @@ public interface ShoppingListItemDao {
     int count();
 
     @Insert
-    void insertAll(ShoppingListItem... shoppingListItems);
+    void insertAll(List<ShoppingListItem> shoppingListItems);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ShoppingListItem shoppingListItem);

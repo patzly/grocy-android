@@ -19,7 +19,7 @@ public interface QuantityUnitDao {
     int count();
 
     @Insert
-    void insertAll(QuantityUnit... quantityUnits);
+    void insertAll(List<QuantityUnit> quantityUnits);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(QuantityUnit quantityUnit);
