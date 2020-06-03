@@ -1290,7 +1290,7 @@ public class ShoppingListFragment extends Fragment
                         shoppingListItem.getProduct().getName()
                 );
                 QuantityUnit quantityUnit = getQuantityUnit(
-                        shoppingListItem.getProduct().getQuIdStock()
+                        shoppingListItem.getProduct().getQuIdPurchase()
                 );
                 if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
                     bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
