@@ -366,11 +366,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
                 binding.linearError.textErrorTitle.setText(R.string.error_offline);
                 binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
                 break;
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
                 binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollStock;
