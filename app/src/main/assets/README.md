@@ -2,7 +2,6 @@
 
 ## Bugs
 
-- don't refresh on device rotation (but replace layout, so no manifest declaration)
 - shopping list amount with qu unit
 
 ## Improvements
@@ -12,6 +11,7 @@
 
 ## Features
 
+- in-store mode for shopping list with big items
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
 - illustrations: offline, empty
 - master product group sheet: go to master products with current product filter applied
