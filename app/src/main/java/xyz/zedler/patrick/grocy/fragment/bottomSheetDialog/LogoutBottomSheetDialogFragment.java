@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,9 +75,10 @@ public class LogoutBottomSheetDialogFragment extends BottomSheetDialogFragment {
         view.findViewById(R.id.button_logout_cancel).setOnClickListener(v -> dismiss());
 
         view.findViewById(R.id.button_logout_logout).setOnClickListener(v -> {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-            sharedPrefs.edit().clear().commit();
-            sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).commit();
+            PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                    .remove(Constants.PREF.SERVER_URL)
+                    .remove(Constants.PREF.API_KEY)
+                    .apply();
             RestartActivity.restartApp(activity);
         });
 
