@@ -109,7 +109,6 @@ public class ShoppingListItemEditFragment extends Fragment {
     private double amount;
     private boolean nameAutoFilled;
     private int selectedShoppingListId = -1;
-    private Product selectedProduct;
     private String action;
 
     @Override
@@ -409,9 +408,8 @@ public class ShoppingListItemEditFragment extends Fragment {
             );
             if(shoppingListItem == null) return;
             if(shoppingListItem.getProduct() != null) {
-                selectedProduct = shoppingListItem.getProduct();
                 autoCompleteTextViewProduct.setText(
-                        selectedProduct.getName()
+                        shoppingListItem.getProduct().getName()
                 );
             }
             editTextAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
