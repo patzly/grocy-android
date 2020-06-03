@@ -63,7 +63,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.DrawerItem.Icon"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_location_on" />
+                    android:src="@drawable/ic_round_place" />
 
                 <TextView
                     android:id="@+id/text_master_data_locations"

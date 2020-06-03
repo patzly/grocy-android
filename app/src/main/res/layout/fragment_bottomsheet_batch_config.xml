@@ -121,7 +121,7 @@
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_location_on"
+                    android:src="@drawable/ic_round_place"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
@@ -146,7 +146,7 @@
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_location_on"
+                    android:src="@drawable/ic_round_place"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
