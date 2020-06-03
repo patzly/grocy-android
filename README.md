@@ -53,7 +53,7 @@ However, you can use a certificate from [letsencrypt.org](https://letsencrypt.or
 
 If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
 
-## Acknowledgment
+## Acknowledgement
 
 We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
 
