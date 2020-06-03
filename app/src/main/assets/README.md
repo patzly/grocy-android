@@ -19,6 +19,14 @@
 - help page with note that buttons can be long pressed to get a tip
 - extended product editing
 
+# ROLL OUT
+
+- versionCode +1
+- version name updated?
+- latest libs?
+- changelog added?
+- DEBUG off for unneeded classes?
+
 # Conventions
 
 ## View ID naming
