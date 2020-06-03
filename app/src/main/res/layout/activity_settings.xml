@@ -251,7 +251,7 @@
                 <ImageView
                     android:id="@+id/image_setting_list_indicator"
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_shopping_list"
+                    android:src="@drawable/ic_round_shopping_list_long"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
