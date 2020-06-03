@@ -44,7 +44,7 @@
                 android:id="@+id/text_logout_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:textAlignment="viewStart"
                 android:text="@string/msg_restart"
                 android:textSize="15sp"
