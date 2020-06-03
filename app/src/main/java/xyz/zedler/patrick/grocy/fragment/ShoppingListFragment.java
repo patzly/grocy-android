@@ -846,17 +846,16 @@ public class ShoppingListFragment extends Fragment
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
+        shoppingListItem.setDone(shoppingListItem.isUndone());  // toggle state
 
         if(showOffline) {
-            new Thread(() -> activity.getDatabase().shoppingListItemDao().update(shoppingListItem))
-                    .start();
             updateDoneStatus(shoppingListItem, position);
             return;
         }
 
         JSONObject body = new JSONObject();
         try {
-            body.put("done", shoppingListItem.isUndone());
+            body.put("done", shoppingListItem.getDone());
         } catch (JSONException e) {
             if(DEBUG) Log.e(TAG, "toggleDoneStatus: " + e);
         }
@@ -872,7 +871,8 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
-        shoppingListItem.setDone(shoppingListItem.isUndone());
+        new Thread(() -> activity.getDatabase().shoppingListItemDao().update(shoppingListItem))
+                .start();
         if(!shoppingListItem.isUndone()) {
             undoneShoppingListItems.remove(shoppingListItem);
         } else {
