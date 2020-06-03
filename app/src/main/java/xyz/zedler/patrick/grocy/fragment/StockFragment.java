@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -77,6 +78,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -99,6 +101,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private WebRequest request;
     private StockItemAdapter stockItemAdapter;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
     private ArrayList<StockItem> stockItems = new ArrayList<>();
     private ArrayList<StockItem> expiringItems = new ArrayList<>();
@@ -119,6 +122,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private String sortMode;
     private int daysExpiringSoon;
     private boolean sortAscending;
+    private ValueAnimator errorAnimator;
 
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
@@ -348,8 +352,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setError(String state, boolean animated) {
-        View viewOut = binding.scrollStock;
         View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollStock;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
@@ -363,26 +367,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
                 break;
             case Constants.STATE.NONE:
-                viewOut = binding.linearError.linearError;
                 viewIn = binding.scrollStock;
+                viewOut = binding.linearError.linearError;
                 break;
         }
 
-        if(animated) {
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                View finalViewIn = viewIn;
-                View finalViewOut = viewOut;
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    finalViewIn.setAlpha(0);
-                    finalViewOut.setVisibility(View.GONE);
-                    finalViewIn.setVisibility(View.VISIBLE);
-                    finalViewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
-            }
-        } else {
-            viewOut.setVisibility(View.GONE);
-            viewIn.setVisibility(View.VISIBLE);
-        }
+        animUtil.replaceViews(viewIn, viewOut, animated);
     }
 
     private void setEmptyState(String state) {
