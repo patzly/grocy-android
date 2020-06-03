@@ -25,6 +25,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -48,6 +49,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     /**
      * First element in bottomSheet selection: NONE (id = null)
      */
+    @Ignore
     public ProductGroup(int id, String name) {
         this.id = id;
         this.name = name;
