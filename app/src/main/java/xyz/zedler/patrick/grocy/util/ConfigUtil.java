@@ -138,7 +138,6 @@ public class ConfigUtil {
                                 )
                         ).apply();
                     } catch (JSONException e) {
-                        Log.e(TAG, "downloadUserSettings: " + e);
                         try {
                             // try to get boolean from number in json
                             int stateInt = new JSONObject(response).getInt(
