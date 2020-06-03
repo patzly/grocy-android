@@ -52,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
@@ -174,10 +175,10 @@ public class SettingsActivity extends AppCompatActivity
 		);
 
 		setOnClickListeners(
-				R.id.linear_setting_dark_mode,
-				R.id.linear_setting_open_food_facts,
 				R.id.linear_setting_reload_config,
 				R.id.linear_setting_logout,
+				R.id.linear_setting_dark_mode,
+				R.id.linear_setting_open_food_facts,
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_default_amount_purchase,
@@ -185,6 +186,16 @@ public class SettingsActivity extends AppCompatActivity
 		);
 
 		// VALUES
+
+		((TextView) findViewById(R.id.text_setting_grocy_version)).setText(
+				sharedPrefs.getString(
+						Constants.PREF.GROCY_VERSION,
+						getString(R.string.date_unknown)
+				)
+		);
+		findViewById(R.id.text_setting_grocy_version_incompatible).setVisibility(
+				isVersionCompatible() ? View.GONE : View.VISIBLE
+		);
 
 		String days = sharedPrefs.getString(
 				Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
@@ -292,12 +303,6 @@ public class SettingsActivity extends AppCompatActivity
 		if(clickUtil.isDisabled()) return;
 
 		switch(v.getId()) {
-			case R.id.linear_setting_dark_mode:
-				switchDark.setChecked(!switchDark.isChecked());
-				break;
-			case R.id.linear_setting_open_food_facts:
-				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
-				break;
 			case R.id.linear_setting_reload_config:
 				IconUtil.start(this, R.id.image_setting_reload_config);
 				ConfigUtil.loadInfo(
@@ -313,6 +318,12 @@ public class SettingsActivity extends AppCompatActivity
 				if(isDemo()) bundle = new Bundle();
 				// empty bundle for indicating demo type
 				showBottomSheet(new LogoutBottomSheetDialogFragment(), bundle);
+				break;
+			case R.id.linear_setting_dark_mode:
+				switchDark.setChecked(!switchDark.isChecked());
+				break;
+			case R.id.linear_setting_open_food_facts:
+				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
 				break;
 			case R.id.linear_setting_expiring_soon_days:
 				IconUtil.start(this, R.id.image_setting_expiring_soon_days);
@@ -510,6 +521,20 @@ public class SettingsActivity extends AppCompatActivity
 					showErrorMessage();
 					if(DEBUG) Log.e(TAG, "setAmountConsume: " + error);
 				}
+		);
+	}
+
+	private boolean isVersionCompatible() {
+		ArrayList<String> supportedVersions = new ArrayList<>(
+				Arrays.asList(
+						getResources().getStringArray(R.array.compatible_grocy_versions)
+				)
+		);
+		return supportedVersions.contains(
+				sharedPrefs.getString(
+						Constants.PREF.GROCY_VERSION,
+						getString(R.string.date_unknown)
+				)
 		);
 	}
 

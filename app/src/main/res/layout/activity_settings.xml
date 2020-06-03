@@ -77,6 +77,87 @@
 
             <TextView
                 style="@style/Theme.Grocy.Category"
+                android:text="@string/category_system"/>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_settings_system"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.OverLine"
+                        android:text="@string/info_grocy_version" />
+
+                    <TextView
+                        android:id="@+id/text_setting_grocy_version"
+                        style="@style/Theme.Grocy.ListItem.Title" />
+
+                    <TextView
+                        android:id="@+id/text_setting_grocy_version_incompatible"
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/info_grocy_version_incompatible"
+                        android:textStyle="bold"
+                        android:textColor="@color/retro_red_fg"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_reload_config"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_reload_config"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_sync_anim"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_reload_config" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_reload_config_description" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_logout"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_logout"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_logout"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_logout" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_logout_description" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/Theme.Grocy.Category"
                 android:text="@string/category_general"/>
 
             <LinearLayout
@@ -131,54 +212,6 @@
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_setting_open_food_facts"
                     style="@style/Widget.Grocy.Switch"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_setting_reload_config"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_setting_reload_config"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_sync_anim"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_reload_config" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_reload_config_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_setting_logout"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_setting_logout"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_logout"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_logout" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_logout_description" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
