@@ -100,15 +100,12 @@ public class ConfigUtil {
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        prefs.edit()
-                                .putInt(
-                                        Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
-                                        jsonObject.getInt("product_presets_location_id")
-                                ).putInt(
+                        prefs.edit().putInt(
+                                Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
+                                jsonObject.getInt("product_presets_location_id")
+                        ).putInt(
                                 Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                                jsonObject.getInt(
-                                        "product_presets_product_group_id"
-                                )
+                                jsonObject.getInt("product_presets_product_group_id")
                         ).putInt(
                                 Constants.PREF.PRODUCT_PRESETS_QU_ID,
                                 jsonObject.getInt("product_presets_qu_id")
@@ -117,20 +114,10 @@ public class ConfigUtil {
                                 jsonObject.getString("stock_expring_soon_days")
                         ).putString(
                                 Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                                jsonObject.getString(
-                                        "stock_default_purchase_amount"
-                                )
+                                jsonObject.getString("stock_default_purchase_amount")
                         ).putString(
                                 Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                                jsonObject.getString(
-                                        "stock_default_consume_amount"
-                                )
-                        ).putBoolean(
-                                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                                jsonObject.getBoolean(
-                                        "show_icon_on_stock_overview_page_" +
-                                                "when_product_is_on_shopping_list"
-                                )
+                                jsonObject.getString("stock_default_consume_amount")
                         ).putString(
                                 Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
                                 jsonObject.getString(
@@ -139,6 +126,32 @@ public class ConfigUtil {
                         ).apply();
                     } catch (JSONException e) {
                         Log.e(TAG, "downloadUserSettings: " + e);
+                    }
+                    try {
+                        // try to get boolean for indicator setting – but responses can also
+                        // contain this setting as number (0 or 1)
+                        prefs.edit().putBoolean(
+                                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+                                new JSONObject(response).getBoolean(
+                                "show_icon_on_stock_overview_page_" +
+                                        "when_product_is_on_shopping_list"
+                                )
+                        ).apply();
+                    } catch (JSONException e) {
+                        Log.e(TAG, "downloadUserSettings: " + e);
+                        try {
+                            // try to get boolean from number in json
+                            int stateInt = new JSONObject(response).getInt(
+                                    "show_icon_on_stock_overview_page_" +
+                                            "when_product_is_on_shopping_list"
+                            );
+                            prefs.edit().putBoolean(
+                                    Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
+                                    stateInt == 1
+                            ).apply();
+                        } catch (JSONException e2) {
+                            Log.e(TAG, "downloadUserSettings: " + e2);
+                        }
                     }
                     if(DEBUG) Log.i(TAG, "downloadUserSettings: settings = " + response);
                 },
