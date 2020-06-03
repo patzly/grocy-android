@@ -38,6 +38,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -154,7 +155,11 @@ public class ScanBatchActivity extends AppCompatActivity
         setContentView(R.layout.activity_scan_batch);
 
         Intent intent = getIntent();
-        actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+        if(savedInstanceState == null) {
+            actionType = intent.getStringExtra(Constants.ARGUMENT.TYPE);
+        } else {
+            actionType = savedInstanceState.getString(Constants.ARGUMENT.TYPE, null);
+        }
         if(actionType == null) finish();
 
         isTorchOn = false;
@@ -257,6 +262,12 @@ public class ScanBatchActivity extends AppCompatActivity
         downloadProducts(response -> {}, error -> {});
         downloadStores(response -> {}, error -> {});
         downloadLocations(response -> {}, error -> {});
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(Constants.ARGUMENT.TYPE, actionType);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

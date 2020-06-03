@@ -122,35 +122,34 @@
 
             </FrameLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_scan_batch_type"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:minWidth="40dp"
+                app:cardBackgroundColor="#40000000"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:rippleColor="@color/highlight"
+                app:contentPaddingRight="16dp"
+                app:contentPaddingLeft="16dp">
+
+                <TextView
+                    android:id="@+id/text_scan_batch_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:background="@color/transparent"
+                    android:fontFamily="@font/roboto_mono_medium"
+                    android:textSize="15.5sp"
+                    android:textColor="@color/white"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_scan_batch_type"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:minWidth="40dp"
-            android:layout_marginTop="64dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentTop="true"
-            app:cardBackgroundColor="#40000000"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:rippleColor="@color/highlight"
-            app:contentPaddingRight="16dp"
-            app:contentPaddingLeft="16dp">
-
-        <TextView
-            android:id="@+id/text_scan_batch_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:background="@color/transparent"
-            android:fontFamily="@font/roboto_mono_medium"
-            android:textSize="15.5sp"
-            android:textColor="@color/white"/>
-
-        </com.google.android.material.card.MaterialCardView>
 
         <FrameLayout
             android:layout_width="wrap_content"
