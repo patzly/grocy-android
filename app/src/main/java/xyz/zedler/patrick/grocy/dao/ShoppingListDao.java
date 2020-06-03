@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.database;
+package xyz.zedler.patrick.grocy.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
