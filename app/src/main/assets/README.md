@@ -2,8 +2,6 @@
 
 ## Bugs
 
-- shopping list amount with qu unit
-
 ## Improvements
 
 - server settings for default values in settings
