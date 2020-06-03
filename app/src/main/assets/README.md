@@ -6,7 +6,7 @@
 
 ## Improvements
 
-- server settings for default values in Settings
+- server settings for default values in settings
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
@@ -14,10 +14,10 @@
 - grocy system info in settings
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
 - illustrations: offline, empty
-- self-signed certificates
 - master product group sheet: go to master products with current product filter applied
-- help page with note that buttons can be long pressed to get a tip
 - translation contribution
+- self-signed certificates
+- help page with note that buttons can be long pressed to get a tip
 - extended product editing
 
 # Conventions
