@@ -516,6 +516,9 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
 			itemBestBefore.setVisibility(View.GONE);
 		}
+		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)) {
+			actionButtonOpen.setVisibility(View.GONE);
+		}
 	}
 
 	private boolean hasDetails() {
