@@ -112,7 +112,7 @@
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"
-                        android:src="@drawable/ic_round_file_tree"
+                        android:src="@drawable/ic_round_account_tree"
                         android:layout_marginBottom="5dp"
                         tools:ignore="ContentDescription" />
 
@@ -465,7 +465,7 @@
                         <ImageView
                             android:id="@+id/image_master_product_simple_qu_factor"
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_file_tree"
+                            android:src="@drawable/ic_round_kitchen"
                             android:layout_marginBottom="5dp"
                             tools:ignore="ContentDescription" />
 
