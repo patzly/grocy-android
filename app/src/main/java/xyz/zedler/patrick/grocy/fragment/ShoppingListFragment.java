@@ -585,6 +585,8 @@ public class ShoppingListFragment extends Fragment
 
         storeDataOffline(allUsedProductIds);
 
+        tidyUpItems(); // only for deleting "lost" items if multiple lists feature is disabled
+
         for(Product product : products) {
             if(!shoppingListProductIds.contains(product.getId())) continue;
             for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
@@ -1133,28 +1135,7 @@ public class ShoppingListFragment extends Fragment
                         shoppingList,
                         response -> {
                             deleteShoppingList(shoppingList);
-
-                            // Tidy up lost shopping list items, which have deleted shopping lists
-                            // as an id – else they will never show up on any shopping list
-                            ArrayList<Integer> shoppingListIds = new ArrayList<>();
-                            for(ShoppingList shoppingList1 : shoppingLists) {
-                                shoppingListIds.add(shoppingList1.getId());
-                            }
-                            if(shoppingListIds.isEmpty()) return;
-                            for(ShoppingListItem shoppingListItem : shoppingListItems) {
-                                if(!shoppingListIds.contains(
-                                        shoppingListItem.getShoppingListId()
-                                )) {
-                                    request.delete(
-                                            grocyApi.getObject(
-                                                    GrocyApi.ENTITY.SHOPPING_LIST,
-                                                    shoppingListItem.getId()
-                                            ),
-                                            response1 -> {},
-                                            error -> {}
-                                    );
-                                }
-                            }
+                            tidyUpItems();
                         }
                 );
                 return true;
@@ -1221,6 +1202,33 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
+    private void tidyUpItems() {
+        // Tidy up lost shopping list items, which have deleted shopping lists
+        // as an id – else they will never show up on any shopping list
+        ArrayList<Integer> shoppingListIds = new ArrayList<>();
+        if(isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+            for(ShoppingList shoppingList1 : shoppingLists) {
+                shoppingListIds.add(shoppingList1.getId());
+            }
+        } else {
+            shoppingListIds.add(1);  // id of first and single shopping list
+        }
+
+        if(shoppingListIds.isEmpty()) return;
+        for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(!shoppingListIds.contains(shoppingListItem.getShoppingListId())) {
+                request.delete(
+                        grocyApi.getObject(
+                                GrocyApi.ENTITY.SHOPPING_LIST,
+                                shoppingListItem.getId()
+                        ),
+                        response -> {},
+                        error -> {}
+                );
+            }
+        }
+    }
+
     private void storeDataOffline(ArrayList<Integer> usedProductIds) {
         new Thread(() -> {
             // shopping list items
@@ -1282,7 +1290,7 @@ public class ShoppingListFragment extends Fragment
                         shoppingListItem.getProduct().getName()
                 );
                 QuantityUnit quantityUnit = getQuantityUnit(
-                        shoppingListItem.getProduct().getQuIdStock() // TODO: Change to QU Purchase
+                        shoppingListItem.getProduct().getQuIdStock()
                 );
                 if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
                     bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
