@@ -2,7 +2,7 @@
 
 ## Bugs
 
-- don't clear app settings on logout
+- don't refresh on device rotation (but replace layout, so no manifest declaration)
 
 ## Improvements
 
@@ -12,10 +12,12 @@
 
 ## Features
 
+- grocy system info in settings
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
 - illustrations: offline, empty
-- master product group sheet: go to master products with this product filter applied
-- help page with note that all buttons can be long pressed to get a tip
+- self-signed certificates
+- master product group sheet: go to master products with current product filter applied
+- help page with note that buttons can be long pressed to get a tip
 - translation contribution
 - extended product editing
 
