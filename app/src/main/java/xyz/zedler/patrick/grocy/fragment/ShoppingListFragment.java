@@ -67,6 +67,11 @@ import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.database.ProductGroupDao;
+import xyz.zedler.patrick.grocy.database.QuantityUnitDao;
+import xyz.zedler.patrick.grocy.database.ShoppingListDao;
+import xyz.zedler.patrick.grocy.database.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
@@ -100,6 +105,7 @@ public class ShoppingListFragment extends Fragment
     private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
     private ClickUtil clickUtil = new ClickUtil();
+    private AppDatabase database;
 
     private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
     private ArrayList<ShoppingListItem> shoppingListItems = new ArrayList<>();
@@ -114,6 +120,7 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
     private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
 
+    private boolean showOffline = false;
     private int selectedShoppingListId = 1;
     private String startupShoppingListName;
     private String itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
@@ -146,6 +153,10 @@ public class ShoppingListFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        if(getArguments() != null && getArguments().getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
+            showOffline = true;
+        }
+
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -154,6 +165,10 @@ public class ShoppingListFragment extends Fragment
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // DATABASE
+
+        database = AppDatabase.getAppDatabase(activity.getApplicationContext());
 
         // INITIALIZE VIEWS
 
@@ -179,7 +194,11 @@ public class ShoppingListFragment extends Fragment
         swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
         scrollView = activity.findViewById(R.id.scroll_shopping_list);
         // retry button on offline error page
-        activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> refresh());
+        activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> {
+            setError(false, false, true);
+            showOffline = true;
+            prepareOfflineData();
+        });
         recyclerView = activity.findViewById(R.id.recycler_shopping_list);
 
         // search
@@ -274,6 +293,7 @@ public class ShoppingListFragment extends Fragment
                             || ((ShoppingListItem) groupedListItems
                             .get(viewHolder.getAdapterPosition()))
                             .getProduct() == null
+                            || showOffline
                     ) return;
 
                     underlayButtons.add(new UnderlayButton(
@@ -306,6 +326,8 @@ public class ShoppingListFragment extends Fragment
     private void load() {
         if(activity.isOnline()) {
             download();
+        } else if(showOffline) {
+            // TODO
         } else {
             setError(true, true, false);
         }
@@ -376,7 +398,7 @@ public class ShoppingListFragment extends Fragment
         downloadQuantityUnits();
         downloadProducts();
         downloadProductGroups();
-        downloadShoppingList();
+        downloadShoppingListItems();
         downloadVolatile();
         downloadShoppingLists();
     }
@@ -433,7 +455,7 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private void downloadShoppingList() {
+    private void downloadShoppingListItems() {
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
                 TAG,
@@ -485,7 +507,6 @@ public class ShoppingListFragment extends Fragment
                             response,
                             new TypeToken<List<ShoppingList>>(){}.getType()
                     );
-
                     // set shopping list if chosen with name on fragment start
                     if(startupShoppingListName != null) {
                         for(ShoppingList shoppingList : shoppingLists) {
@@ -527,8 +548,12 @@ public class ShoppingListFragment extends Fragment
         missingShoppingListItems = new ArrayList<>();
         undoneShoppingListItems = new ArrayList<>();
         shoppingListItemsSelected = new ArrayList<>();
-        ArrayList<String> shoppingListProductIds = new ArrayList<>();
+        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
+        ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(shoppingListItem.getProductId() != null) {
+                allUsedProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
+            }
             if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
             shoppingListItemsSelected.add(shoppingListItem);
             if(missingProductIds.contains(shoppingListItem.getProductId())) {
@@ -538,7 +563,9 @@ public class ShoppingListFragment extends Fragment
             if(shoppingListItem.isUndone()) {
                 undoneShoppingListItems.add(shoppingListItem);
             }
-            shoppingListProductIds.add(shoppingListItem.getProductId());
+            if(shoppingListItem.getProductId() != null) {
+                shoppingListProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
+            }
         }
         chipMissing.setText(
                 activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
@@ -546,16 +573,19 @@ public class ShoppingListFragment extends Fragment
         chipUndone.setText(
                 activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
         );
+
+        storeDataOffline(allUsedProductIds);
+
         for(Product product : products) {
-            if(shoppingListProductIds.contains(String.valueOf(product.getId()))) {
-                for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                    if(shoppingListItem.getProductId() == null) continue;
-                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
-                        shoppingListItem.setProduct(product);
-                    }
+            if(!shoppingListProductIds.contains(product.getId())) continue;
+            for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
+                if(shoppingListItem.getProductId() == null) continue;
+                if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
+                    shoppingListItem.setProduct(product);
                 }
             }
         }
+
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         Spanned notes = shoppingList != null && shoppingList.getNotes() != null
                 ? (Spanned) TextUtil.trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
@@ -581,6 +611,56 @@ public class ShoppingListFragment extends Fragment
         setError(true, false, true);
     }
 
+    private void prepareOfflineData() {
+        shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
+
+        missingShoppingListItems = new ArrayList<>();
+        undoneShoppingListItems = new ArrayList<>();
+        shoppingListItemsSelected = new ArrayList<>();
+
+        shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
+        for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
+            shoppingListItemsSelected.add(shoppingListItem);
+            if(shoppingListItem.isUndone()) {
+                undoneShoppingListItems.add(shoppingListItem);
+            }
+            if(shoppingListItem.isMissing()) {
+                missingShoppingListItems.add(shoppingListItem);
+            }
+        }
+
+        chipMissing.setText(
+                activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
+        );
+        chipUndone.setText(
+                activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
+        );
+
+        productGroups = new ArrayList<>(database.productGroupDao().getAll());
+
+        quantityUnits = new ArrayList<>(database.quantityUnitDao().getAll());
+
+        filterItems(itemsToDisplay);
+
+
+        /*new Thread(() -> {
+            ShoppingListItemDao shoppingListItemDao = database.shoppingListItemDao();
+            shoppingListItems = new ArrayList<>(shoppingListItemDao.getAll());
+            for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
+                shoppingListItemsSelected.add(shoppingListItem);
+                if(shoppingListItem.isUndone()) {
+                    undoneShoppingListItems.add(shoppingListItem);
+                }
+                if(shoppingListItem.isMissing()) {
+                    missingShoppingListItems.add(shoppingListItem);
+                }
+            }
+            filterItems(itemsToDisplay);
+        }).start();*/
+    }
+
     private void filterItems(String filter) {
         itemsToDisplay = filter.isEmpty() ? Constants.SHOPPING_LIST.FILTER.ALL : filter;
         if(DEBUG) Log.i(
@@ -602,11 +682,9 @@ public class ShoppingListFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchItems(search);
-        } else {
-            if(displayedItems != filteredItems) {
-                displayedItems = filteredItems;
-                groupItems();
-            }
+        } else { // TODO: was war da? und warum?
+            displayedItems = filteredItems;
+            groupItems();
         }
     }
 
@@ -720,7 +798,11 @@ public class ShoppingListFragment extends Fragment
         chipMissing.changeState(false);
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-        onQueueEmpty();
+        if(showOffline) {
+            prepareOfflineData();
+        } else {
+            onQueueEmpty();
+        }
         setUpBottomMenu(); // to hide delete action if necessary
     }
 
@@ -739,6 +821,13 @@ public class ShoppingListFragment extends Fragment
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
+
+        if(showOffline) {
+            new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
+            updateDoneStatus(shoppingListItem, position);
+            return;
+        }
+
         JSONObject body = new JSONObject();
         try {
             body.put("done", shoppingListItem.isUndone());
@@ -748,39 +837,41 @@ public class ShoppingListFragment extends Fragment
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 body,
-                response -> {
-                    shoppingListItem.setDone(shoppingListItem.isUndone());
-                    if(!shoppingListItem.isUndone()) {
-                        undoneShoppingListItems.remove(shoppingListItem);
-                    } else {
-                        undoneShoppingListItems = new ArrayList<>();
-                        for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
-                            if(shoppingListItem1.getShoppingListId() != selectedShoppingListId) {
-                                continue;
-                            }
-                            if(shoppingListItem1.isUndone()) {
-                                undoneShoppingListItems.add(shoppingListItem1);
-                            }
-                        }
-                    }
-                    chipUndone.setText(
-                            activity.getString(
-                                    R.string.msg_undone_items,
-                                    undoneShoppingListItems.size()
-                            )
-                    );
-                    if(itemsToDisplay.equals(Constants.SHOPPING_LIST.FILTER.UNDONE)) {
-                        removeItemFromList(position);
-                    } else {
-                        shoppingListItemAdapter.notifyItemChanged(position);
-                        swipeBehavior.recoverLatestSwipedItem();
-                    }
-                },
+                response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "toggleDoneStatus: " + error);
                 }
         );
+    }
+
+    private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
+        shoppingListItem.setDone(shoppingListItem.isUndone());
+        if(!shoppingListItem.isUndone()) {
+            undoneShoppingListItems.remove(shoppingListItem);
+        } else {
+            undoneShoppingListItems = new ArrayList<>();
+            for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
+                if(shoppingListItem1.getShoppingListId() != selectedShoppingListId) {
+                    continue;
+                }
+                if(shoppingListItem1.isUndone()) {
+                    undoneShoppingListItems.add(shoppingListItem1);
+                }
+            }
+        }
+        chipUndone.setText(
+                activity.getString(
+                        R.string.msg_undone_items,
+                        undoneShoppingListItems.size()
+                )
+        );
+        if(itemsToDisplay.equals(Constants.SHOPPING_LIST.FILTER.UNDONE)) {
+            removeItemFromList(position);
+        } else {
+            shoppingListItemAdapter.notifyItemChanged(position);
+            swipeBehavior.recoverLatestSwipedItem();
+        }
     }
 
     public void editItem(int position) {
@@ -1104,6 +1195,52 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
+    private void storeDataOffline(ArrayList<Integer> usedProductIds) {
+        new Thread(() -> {
+            // shopping list items
+            ArrayList<ShoppingListItem> listItemsCopy = new ArrayList<>(shoppingListItems);
+            for(Product product : products) {  // fill with products
+                if(!usedProductIds.contains(product.getId())) continue;
+                for(ShoppingListItem shoppingListItem : listItemsCopy) {
+                    if(shoppingListItem.getProductId() == null) continue;
+                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
+                        shoppingListItem.setProduct(product);
+                    }
+                }
+            }
+            ShoppingListItemDao shoppingListItemDao = database.shoppingListItemDao();
+            shoppingListItemDao.deleteAll();
+            for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                shoppingListItemDao.insert(shoppingListItem);
+            }
+            Log.i(TAG, "storeDataOffline: " + shoppingListItemDao.getAll());
+
+            // shopping lists
+            ShoppingListDao shoppingListDao = database.shoppingListDao();
+            shoppingListDao.deleteAll();
+            for(ShoppingList shoppingList : shoppingLists) {
+                shoppingListDao.insert(shoppingList);
+            }
+            Log.i(TAG, "storeDataOffline: " + shoppingListDao.getAll());
+
+            // product groups
+            ProductGroupDao productGroupDao = database.productGroupDao();
+            productGroupDao.deleteAll();
+            for(ProductGroup productGroup : productGroups) {
+                productGroupDao.insert(productGroup);
+            }
+            Log.i(TAG, "storeDataOffline: " + productGroupDao.getAll());
+
+            // product groups
+            QuantityUnitDao quantityUnitDao = database.quantityUnitDao();
+            quantityUnitDao.deleteAll();
+            for(QuantityUnit quantityUnit : quantityUnits) {
+                quantityUnitDao.insert(quantityUnit);
+            }
+            Log.i(TAG, "storeDataOffline: " + quantityUnitDao.getAll());
+        }).start();
+    }
+
     @Override
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
@@ -1130,7 +1267,7 @@ public class ShoppingListFragment extends Fragment
                         shoppingListItem.getProduct().getName()
                 );
                 QuantityUnit quantityUnit = getQuantityUnit(
-                        shoppingListItem.getProduct().getQuIdStock()
+                        shoppingListItem.getProduct().getQuIdStock() // TODO: Change to QU Purchase
                 );
                 if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
                     bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());

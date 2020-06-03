@@ -100,6 +100,20 @@ public class Product implements Parcelable {
     @SerializedName("shopping_location_id")
     private String storeId;
 
+    public Product(
+            int id,
+            String name,
+            String description,
+            int quIdPurchase,
+            String productGroupId
+    ) {  // for shopping list
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quIdPurchase = quIdPurchase;
+        this.productGroupId = productGroupId;
+    }
+
     public Product(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();

@@ -224,6 +224,7 @@ public final class Constants {
         public final static String KEY = "key";
         public final static String QU_PURCHASE = "quantity_unit_purchase";
         public final static String QU_STOCK = "quantity_unit_stock";
+        public final static String SHOW_OFFLINE = "show_offline";
     }
 
     public final static class FAB {

@@ -23,28 +23,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
 
     public QuantityUnit() {}
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
-
+    @ColumnInfo(name = "name_plural")
     @SerializedName("name_plural")
     private String namePlural;
 
+    @ColumnInfo(name = "plural_forms")
     @SerializedName("plural_forms")
     private String pluralForms;
 
@@ -52,7 +59,6 @@ public class QuantityUnit implements Parcelable {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
-        rowCreatedTimestamp = parcel.readString();
         namePlural = parcel.readString();
         pluralForms = parcel.readString();
     }
@@ -62,7 +68,6 @@ public class QuantityUnit implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeString(rowCreatedTimestamp);
         dest.writeString(namePlural);
         dest.writeString(pluralForms);
     }
@@ -84,12 +89,24 @@ public class QuantityUnit implements Parcelable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNamePlural() {
@@ -98,6 +115,18 @@ public class QuantityUnit implements Parcelable {
 
     public String getNamePluralCanNull() {
         return namePlural;
+    }
+
+    public void setNamePlural(String namePlural) {
+        this.namePlural = namePlural;
+    }
+
+    public String getPluralForms() {
+        return pluralForms;
+    }
+
+    public void setPluralForms(String pluralForms) {
+        this.pluralForms = pluralForms;
     }
 
     @Override

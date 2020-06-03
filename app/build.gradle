@@ -39,4 +39,5 @@ dependencies {
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
     implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
 }

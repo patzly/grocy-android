@@ -23,19 +23,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "shopping_list_table")
 public class ShoppingList implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "notes")
     @SerializedName("description")
     private String notes;
+
+    public ShoppingList(int id, String name, String notes) {
+        this.id = id;
+        this.name = name;
+        this.notes = notes;
+    }
 
     private ShoppingList(Parcel parcel) {
         id = parcel.readInt();
@@ -87,6 +101,6 @@ public class ShoppingList implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "ShoppingList(" + name + ")";
+        return "ShoppingListEntity{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
     }
 }

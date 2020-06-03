@@ -23,22 +23,27 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "product_group_table")
 public class ProductGroup extends GroupedListItem implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
-
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
 
     /**
      * First element in bottomSheet selection: NONE (id = null)
@@ -48,11 +53,12 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         this.name = name;
     }
 
+    public ProductGroup() {}  // for Room
+
     public ProductGroup(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
-        rowCreatedTimestamp = parcel.readString();
     }
 
     @Override
@@ -60,7 +66,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeString(rowCreatedTimestamp);
     }
 
     public static final Creator<ProductGroup> CREATOR = new Creator<ProductGroup>() {
@@ -80,12 +85,24 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
