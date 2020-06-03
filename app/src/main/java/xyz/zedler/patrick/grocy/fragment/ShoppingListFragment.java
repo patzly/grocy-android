@@ -1162,6 +1162,8 @@ public class ShoppingListFragment extends Fragment
         }
         textInputLayoutSearch.requestFocus();
         activity.showKeyboard(editTextSearch);
+
+        activity.setUI(Constants.UI.SHOPPING_LIST_SEARCH);
     }
 
     public void dismissSearch() {
@@ -1169,6 +1171,8 @@ public class ShoppingListFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);
+
+        activity.setUI(Constants.UI.SHOPPING_LIST_DEFAULT);
     }
 
     private void showMessage(String msg) {

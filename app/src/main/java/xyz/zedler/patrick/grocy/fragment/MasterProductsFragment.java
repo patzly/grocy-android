@@ -565,6 +565,8 @@ public class MasterProductsFragment extends Fragment
         activity.findViewById(R.id.frame_close_master_products_search).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.setUI(Constants.UI.MASTER_PRODUCTS_SEARCH);
     }
 
     public void dismissSearch() {
@@ -572,6 +574,8 @@ public class MasterProductsFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterProducts();
+
+        activity.setUI(Constants.UI.MASTER_PRODUCTS_DEFAULT);
     }
 
     public void checkForStock(Product product) {

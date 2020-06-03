@@ -405,6 +405,8 @@ public class MasterQuantityUnitsFragment extends Fragment
         activity.findViewById(R.id.frame_master_quantity_units_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.setUI(Constants.UI.MASTER_QUANTITY_UNITS_SEARCH);
     }
 
     public void dismissSearch() {
@@ -412,6 +414,8 @@ public class MasterQuantityUnitsFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterQuantityUnits();
+
+        activity.setUI(Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT);
     }
 
     public void checkForUsage(QuantityUnit quantityUnit) {

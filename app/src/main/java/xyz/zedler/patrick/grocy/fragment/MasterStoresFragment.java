@@ -405,6 +405,8 @@ public class MasterStoresFragment extends Fragment
         activity.findViewById(R.id.frame_master_stores_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.setUI(Constants.UI.MASTER_STORES_SEARCH);
     }
 
     public void dismissSearch() {
@@ -412,6 +414,8 @@ public class MasterStoresFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterStores();
+
+        activity.setUI(Constants.UI.MASTER_STORES_DEFAULT);
     }
 
     public void checkForUsage(Store store) {

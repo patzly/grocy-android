@@ -405,6 +405,8 @@ public class MasterProductGroupsFragment extends Fragment
         activity.findViewById(R.id.frame_master_product_groups_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH);
     }
 
     public void dismissSearch() {
@@ -412,6 +414,8 @@ public class MasterProductGroupsFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterProductGroups();
+
+        activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT);
     }
 
     public void checkForUsage(ProductGroup productGroup) {

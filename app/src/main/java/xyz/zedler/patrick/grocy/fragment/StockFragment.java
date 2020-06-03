@@ -1345,6 +1345,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
         binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(editTextSearch);
+
+        activity.setUI(Constants.UI.STOCK_SEARCH);
     }
 
     public void dismissSearch() {
@@ -1354,6 +1356,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterItems(itemsToDisplay);
 
         setEmptyState(Constants.STATE.NONE);
+
+        activity.setUI(Constants.UI.STOCK_DEFAULT);
     }
 
     private boolean isFeatureEnabled(String pref) {

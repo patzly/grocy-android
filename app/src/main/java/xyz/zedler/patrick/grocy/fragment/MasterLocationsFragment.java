@@ -405,6 +405,8 @@ public class MasterLocationsFragment extends Fragment
         activity.findViewById(R.id.frame_master_locations_search_close).setOnClickListener(
                 v -> dismissSearch()
         );
+
+        activity.setUI(Constants.UI.MASTER_LOCATIONS_SEARCH);
     }
 
     public void dismissSearch() {
@@ -412,6 +414,8 @@ public class MasterLocationsFragment extends Fragment
         activity.hideKeyboard();
         search = "";
         filterLocations();
+
+        activity.setUI(Constants.UI.MASTER_LOCATIONS_DEFAULT);
     }
 
     public void checkForUsage(Location location) {

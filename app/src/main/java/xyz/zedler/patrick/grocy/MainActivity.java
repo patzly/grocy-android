@@ -290,6 +290,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setUI(String uiMode) {
+        if(DEBUG) Log.i(TAG, "setUI: " + uiMode);
+        this.uiMode = uiMode;
+    }
+
     public void updateUI(String uiMode, String origin) {
         updateUI(uiMode, true, origin);
     }
