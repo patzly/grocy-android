@@ -23,32 +23,56 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "shopping_list_item_table")
 public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
-    @SerializedName("product_id")
-    private String productId;
-
+    @ColumnInfo(name = "note")
     @SerializedName("note")
     private String note;
 
+    @ColumnInfo(name = "amount")
     @SerializedName("amount")
     private double amount;
 
+    @ColumnInfo(name = "shopping_list_id")
     @SerializedName("shopping_list_id")
     private int shoppingListId;
 
+    @ColumnInfo(name = "done")
     @SerializedName("done")
     private int done;
 
-    private Product product = null;
+    @ColumnInfo(name = "product_id")
+    @SerializedName("product_id")
+    private String productId;
 
-    private int isMissing;
+    @ColumnInfo(name = "product_name")
+    private String productName;
+
+    @ColumnInfo(name = "product_description")
+    private String productDescription;
+
+    @ColumnInfo(name = "product_group_id")
+    private String productGroupId;
+
+    @ColumnInfo(name = "product_qu_id_purchase")
+    private int productQuIdPurchase;
+
+    @ColumnInfo(name = "is_missing")
+    private int isMissing;  // needs to be integer because of min. API level
+
+    public ShoppingListItem() {}
 
     private ShoppingListItem(Parcel parcel) {
         id = parcel.readInt();
@@ -57,7 +81,10 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         amount = parcel.readDouble();
         shoppingListId = parcel.readInt();
         done = parcel.readInt();
-        //product = parcel.readParcelable(Product.class.getClassLoader());
+        productName = parcel.readString();
+        productDescription = parcel.readString();
+        productGroupId = parcel.readString();
+        productQuIdPurchase = parcel.readInt();
         isMissing = parcel.readInt();
     }
 
@@ -69,7 +96,10 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeDouble(amount);
         dest.writeInt(shoppingListId);
         dest.writeInt(done);
-        //dest.writeParcelable();
+        dest.writeString(productName);
+        dest.writeString(productDescription);
+        dest.writeString(productGroupId);
+        dest.writeInt(productQuIdPurchase);
         dest.writeInt(isMissing);
     }
 
@@ -90,44 +120,126 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getProductId() {
+        if(productId != null && productId.isEmpty()) return null;
         return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getNote() {
         return note;
     }
 
+    public void setNote(String note) {  // getter & setter seem useless,
+        this.note = note;               // but are required by Room !!!
+    }
+
     public double getAmount() {
         return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public int getShoppingListId() {
         return shoppingListId;
     }
 
+    public void setShoppingListId(int shoppingListId) {
+        this.shoppingListId = shoppingListId;
+    }
+
+    public int getDone() {
+        return done;
+    }
+
     public boolean isUndone() {
-        return done != 1;
+        return getDone() != 1;
     }
 
     public void setDone(boolean isDone) {
-        this.done = isDone ? 1 : 0;
+        setDone(isDone ? 1 : 0);
     }
 
-    public Product getProduct() {
-        return product;
+    public void setDone(int done) {
+        this.done = done;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public String getProductGroupId() {
+        return productGroupId;
+    }
+
+    public int getProductQuIdPurchase() {
+        return productQuIdPurchase;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public void setProductGroupId(String productGroupId) {
+        this.productGroupId = productGroupId;
+    }
+
+    public void setProductQuIdPurchase(int productQuIdPurchase) {
+        this.productQuIdPurchase = productQuIdPurchase;
+    }
+
+    public Product getProduct() {  // only required info for actions in shopping list
+        if(productId == null || productId.isEmpty()) return null;
+        return new Product(
+                Integer.parseInt(productId),
+                productName,
+                productDescription,
+                productQuIdPurchase,
+                productGroupId
+        );
     }
 
     public void setProduct(Product product) {
-        this.product = product;
+        if(product == null) {
+            return;
+        }
+        productName = product.getName();
+        productDescription = product.getDescription();
+        productQuIdPurchase = product.getQuIdPurchase();
+        productGroupId = product.getProductGroupId();
+    }
+
+    public int getIsMissing() {
+        return isMissing;
     }
 
     public boolean isMissing() {
-        return isMissing == 1;
+        return getIsMissing() == 1;
     }
 
     public void setIsMissing(boolean isMissing) {
-        this.isMissing = isMissing ? 1 : 0;
+        setIsMissing(isMissing ? 1 : 0);
+    }
+
+    public void setIsMissing(int isMissing) {
+        this.isMissing = isMissing;
     }
 
     @Override
