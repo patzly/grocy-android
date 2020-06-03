@@ -3,6 +3,7 @@
 ## Bugs
 
 - don't refresh on device rotation (but replace layout, so no manifest declaration)
+- shopping list amount with qu unit
 
 ## Improvements
 
