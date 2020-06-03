@@ -25,14 +25,13 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
-
-    public QuantityUnit() {}
 
     @PrimaryKey
     @ColumnInfo(name = "id")
@@ -55,6 +54,15 @@ public class QuantityUnit implements Parcelable {
     @SerializedName("plural_forms")
     private String pluralForms;
 
+    public QuantityUnit() {}
+
+    @Ignore
+    public QuantityUnit(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Ignore
     public QuantityUnit(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();

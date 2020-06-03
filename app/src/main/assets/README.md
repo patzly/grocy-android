@@ -4,7 +4,6 @@
 
 ## Improvements
 
-- server settings for default values in settings
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features

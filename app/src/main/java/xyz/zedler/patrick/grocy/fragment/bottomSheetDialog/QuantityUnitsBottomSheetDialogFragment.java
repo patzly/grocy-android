@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -51,7 +53,7 @@ public class QuantityUnitsBottomSheetDialogFragment
     private final static boolean DEBUG = false;
     private final static String TAG = "QuantityUnitsBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<QuantityUnit> quantityUnits;
     private Bundle bundle;
 
@@ -71,7 +73,7 @@ public class QuantityUnitsBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -101,20 +103,25 @@ public class QuantityUnitsBottomSheetDialogFragment
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-            assert bundle != null;
-            String type = bundle.getString(Constants.ARGUMENT.TYPE);
-            assert type != null;
-            if(type.equals(Constants.ARGUMENT.QU_PURCHASE)) {
-                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitPurchase(
-                        quantityUnits.get(position).getId()
-                );
-            } else {
-                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitStock(
-                        quantityUnits.get(position).getId()
-                );
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
+                assert bundle != null;
+                String type = bundle.getString(Constants.ARGUMENT.TYPE);
+                assert type != null;
+                if(type.equals(Constants.ARGUMENT.QU_PURCHASE)) {
+                    ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitPurchase(
+                            quantityUnits.get(position).getId()
+                    );
+                } else {
+                    ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitStock(
+                            quantityUnits.get(position).getId()
+                    );
+                }
             }
+        } else if(activity.getClass() == SettingsActivity.class) {
+            int quantityUnitId = quantityUnits.get(position).getId();
+            ((SettingsActivity) activity).setQuantityUnit(quantityUnitId);
         }
         dismiss();
     }

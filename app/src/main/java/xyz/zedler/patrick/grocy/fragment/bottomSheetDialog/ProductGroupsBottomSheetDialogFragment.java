@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -51,7 +53,7 @@ public class ProductGroupsBottomSheetDialogFragment
     private final static boolean DEBUG = false;
     private final static String TAG = "ProductGroupBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<ProductGroup> productGroups;
 
     @NonNull
@@ -70,7 +72,7 @@ public class ProductGroupsBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -100,12 +102,18 @@ public class ProductGroupsBottomSheetDialogFragment
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-            ((MasterProductSimpleFragment) currentFragment).selectProductGroup(
-                    productGroups.get(position).getId()
-            );
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
+                ((MasterProductSimpleFragment) currentFragment).selectProductGroup(
+                        productGroups.get(position).getId()
+                );
+            }
+        } else if(activity.getClass() == SettingsActivity.class) {
+            int productGroupId = productGroups.get(position).getId();
+            ((SettingsActivity) activity).setProductGroup(productGroupId);
         }
+
         dismiss();
     }
 

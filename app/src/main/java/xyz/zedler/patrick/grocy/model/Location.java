@@ -43,6 +43,11 @@ public class Location implements Parcelable {
     @SerializedName("is_freezer")
     private int isFreezer;
 
+    public Location(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Location(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();

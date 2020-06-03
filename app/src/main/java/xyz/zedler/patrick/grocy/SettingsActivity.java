@@ -47,17 +47,24 @@ import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -80,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity
 	private GrocyApi grocyApi;
 	private RequestQueue requestQueue;
 	private WebRequest request;
+	private Gson gson = new Gson();
 
 	private ArrayList<Location> locations = new ArrayList<>();
 	private ArrayList<ProductGroup> productGroups = new ArrayList<>();
@@ -93,7 +101,14 @@ public class SettingsActivity extends AppCompatActivity
 	private TextView
 			textViewExpiringSoonDays,
 			textViewAmountPurchase,
-			textViewAmountConsume;
+			textViewAmountConsume,
+			textViewDefaultLocation,
+			textViewDefaultProductGroup,
+			textViewDefaultQuantityUnit;
+
+	private int presetLocationId;
+	private int presetProductGroupId;
+	private int presetQuantityUnitId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +197,10 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_default_amount_purchase,
-				R.id.linear_setting_default_amount_consume
+				R.id.linear_setting_default_amount_consume,
+				R.id.linear_setting_default_location,
+				R.id.linear_setting_default_product_group,
+				R.id.linear_setting_default_quantity_unit
 		);
 
 		// VALUES
@@ -234,6 +252,77 @@ public class SettingsActivity extends AppCompatActivity
 						: amountConsume
 		);
 
+		presetLocationId = sharedPrefs.getInt(
+				Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
+				-1
+		);
+		textViewDefaultLocation = findViewById(R.id.text_setting_default_location);
+		if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+			textViewDefaultLocation.setText(null);
+		} else if(presetLocationId == -1) {
+			textViewDefaultLocation.setText(getString(R.string.subtitle_none));
+		} else {
+			downloadLocations(
+					() -> {
+						Location location = getLocation(presetLocationId);
+						if(location != null) {
+							textViewDefaultLocation.setText(location.getName());
+						} else {
+							textViewDefaultLocation.setText(
+									getString(R.string.subtitle_none)
+							);
+						}
+					},
+					() -> textViewDefaultLocation.setText(getString(R.string.setting_not_loaded))
+			);
+		}
+
+		presetProductGroupId = sharedPrefs.getInt(
+				Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
+				-1
+		);
+		textViewDefaultProductGroup = findViewById(R.id.text_setting_default_product_group);
+		if(presetProductGroupId == -1) {
+			textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+		} else {
+			downloadProductGroups(
+					() -> {
+						ProductGroup productGroup = getProductGroup(presetProductGroupId);
+						if(productGroup != null) {
+							textViewDefaultProductGroup.setText(productGroup.getName());
+						} else {
+							textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+						}
+					},
+					() -> textViewDefaultProductGroup.setText(
+							getString(R.string.setting_not_loaded)
+					)
+			);
+		}
+
+		presetQuantityUnitId = sharedPrefs.getInt(
+				Constants.PREF.PRODUCT_PRESETS_QU_ID,
+				-1
+		);
+		textViewDefaultQuantityUnit = findViewById(R.id.text_setting_default_quantity_unit);
+		if(presetQuantityUnitId == -1) {
+			textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+		} else {
+			downloadQuantityUnits(
+					() -> {
+						QuantityUnit quantityUnit = getQuantityUnit(presetQuantityUnitId);
+						if(quantityUnit != null) {
+							textViewDefaultQuantityUnit.setText(quantityUnit.getName());
+						} else {
+							textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+						}
+					},
+					() -> textViewDefaultQuantityUnit.setText(
+							getString(R.string.setting_not_loaded)
+					)
+			);
+		}
+
 		hideDisabledFeatures();
 	}
 
@@ -253,6 +342,9 @@ public class SettingsActivity extends AppCompatActivity
 		}
 		if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
 			findViewById(R.id.linear_setting_expiring_soon_days).setVisibility(View.GONE);
+		}
+		if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+			findViewById(R.id.linear_setting_default_location).setVisibility(View.GONE);
 		}
 		if(isFeatureDisabled(Constants.PREF.FEATURE_SHOPPING_LIST)
 				&& isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
@@ -382,6 +474,36 @@ public class SettingsActivity extends AppCompatActivity
 						bundleAmountConsume
 				);
 				break;
+			case R.id.linear_setting_default_location:
+				if(locations.isEmpty()) {
+					downloadLocations(
+							this::showLocationsBottomSheet,
+							() -> showMessage(getString(R.string.setting_not_loaded))
+					);
+				} else {
+					showLocationsBottomSheet();
+				}
+				break;
+			case R.id.linear_setting_default_product_group:
+				if(productGroups.isEmpty()) {
+					downloadProductGroups(
+							this::showProductGroupsBottomSheet,
+							() -> showMessage(getString(R.string.setting_not_loaded))
+					);
+				} else {
+					showProductGroupsBottomSheet();
+				}
+				break;
+			case R.id.linear_setting_default_quantity_unit:
+				if(quantityUnits.isEmpty()) {
+					downloadQuantityUnits(
+							this::showQuantityUnitsBottomSheet,
+							() -> showMessage(getString(R.string.setting_not_loaded))
+					);
+				} else {
+					showQuantityUnitsBottomSheet();
+				}
+				break;
 		}
 	}
 
@@ -437,6 +559,213 @@ public class SettingsActivity extends AppCompatActivity
 				);
 				break;
 		}
+	}
+
+	private void downloadLocations(
+			OnResponseListener responseListener,
+			OnErrorListener errorListener
+	) {
+		request.get(
+				grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+				response -> {
+					try {
+						locations = gson.fromJson(
+								response,
+								new TypeToken<List<Location>>(){}.getType()
+						);
+						responseListener.onResponse();
+					} catch (JsonSyntaxException e) {
+						errorListener.onError();
+					}
+				},
+				error -> errorListener.onError()
+		);
+	}
+
+	private void showLocationsBottomSheet() {
+		Bundle bundleLocations = new Bundle();
+		ArrayList<Location> tmpLocations = new ArrayList<>(locations);
+		tmpLocations.add(0, new Location(-1, getString(R.string.subtitle_none)));
+		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, tmpLocations);
+		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetLocationId);
+		showBottomSheet(new LocationsBottomSheetDialogFragment(), bundleLocations);
+	}
+
+	private Location getLocation(int id) {
+		for(Location location : locations) {
+			if(location.getId() == id) {
+				return location;
+			}
+		} return null;
+	}
+
+	public void setLocation(int locationId) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put("value", locationId);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setLocation: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID),
+				body,
+				response -> {
+					Location location = getLocation(locationId);
+					if(location == null) {
+						textViewDefaultLocation.setText(getString(R.string.subtitle_none));
+					} else {
+						textViewDefaultLocation.setText(location.getName());
+					}
+					sharedPrefs.edit().putInt(
+							Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
+							locationId
+					).apply();
+					presetLocationId = locationId;
+				},
+				error -> {
+					showErrorMessage();
+					if(DEBUG) Log.e(TAG, "setLocation: " + error);
+				}
+		);
+	}
+
+	private void downloadProductGroups(
+			OnResponseListener responseListener,
+			OnErrorListener errorListener
+	) {
+		request.get(
+				grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+				response -> {
+					try {
+						productGroups = gson.fromJson(
+								response,
+								new TypeToken<List<ProductGroup>>(){}.getType()
+						);
+						responseListener.onResponse();
+					} catch (JsonSyntaxException e) {
+						errorListener.onError();
+					}
+				},
+				error -> errorListener.onError()
+		);
+	}
+
+	private void showProductGroupsBottomSheet() {
+		Bundle bundleProductGroups = new Bundle();
+		ArrayList<ProductGroup> tmpProductGroups = new ArrayList<>(productGroups);
+		tmpProductGroups.add(0, new ProductGroup(-1, getString(R.string.subtitle_none)));
+		bundleProductGroups.putParcelableArrayList(
+				Constants.ARGUMENT.PRODUCT_GROUPS,
+				tmpProductGroups
+		);
+		bundleProductGroups.putInt(Constants.ARGUMENT.SELECTED_ID, presetProductGroupId);
+		showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundleProductGroups);
+	}
+
+	private ProductGroup getProductGroup(int id) {
+		for(ProductGroup productGroup : productGroups) {
+			if(productGroup.getId() == id) {
+				return productGroup;
+			}
+		} return null;
+	}
+
+	public void setProductGroup(int productGroupId) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put("value", productGroupId);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setProductGroup: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID),
+				body,
+				response -> {
+					ProductGroup productGroup = getProductGroup(productGroupId);
+					if(productGroup == null) {
+						textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+					} else {
+						textViewDefaultProductGroup.setText(productGroup.getName());
+					}
+					sharedPrefs.edit().putInt(
+							Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
+							productGroupId
+					).apply();
+					presetProductGroupId = productGroupId;
+				},
+				error -> {
+					showErrorMessage();
+					if(DEBUG) Log.e(TAG, "setProductGroup: " + error);
+				}
+		);
+	}
+
+	private void downloadQuantityUnits(
+			OnResponseListener responseListener,
+			OnErrorListener errorListener
+	) {
+		request.get(
+				grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
+				response -> {
+					try {
+						quantityUnits = gson.fromJson(
+								response,
+								new TypeToken<List<QuantityUnit>>(){}.getType()
+						);
+						responseListener.onResponse();
+					} catch (JsonSyntaxException e) {
+						errorListener.onError();
+					}
+				},
+				error -> errorListener.onError()
+		);
+	}
+
+	private void showQuantityUnitsBottomSheet() {
+		Bundle bundleLocations = new Bundle();
+		ArrayList<QuantityUnit> tmpQuantityUnits = new ArrayList<>(quantityUnits);
+		tmpQuantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none)));
+		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, tmpQuantityUnits);
+		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetQuantityUnitId);
+		showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundleLocations);
+	}
+
+	private QuantityUnit getQuantityUnit(int id) {
+		for(QuantityUnit quantityUnit : quantityUnits) {
+			if(quantityUnit.getId() == id) {
+				return quantityUnit;
+			}
+		} return null;
+	}
+
+	public void setQuantityUnit(int quantityUnitId) {
+		JSONObject body = new JSONObject();
+		try {
+			body.put("value", quantityUnitId);
+		} catch (JSONException e) {
+			if(DEBUG) Log.e(TAG, "setQuantityUnit: " + e);
+		}
+		request.put(
+				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_QU_ID),
+				body,
+				response -> {
+					QuantityUnit quantityUnit = getQuantityUnit(quantityUnitId);
+					if(quantityUnit == null) {
+						textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+					} else {
+						textViewDefaultQuantityUnit.setText(quantityUnit.getName());
+					}
+					sharedPrefs.edit().putInt(
+							Constants.PREF.PRODUCT_PRESETS_QU_ID,
+							quantityUnitId
+					).apply();
+					presetQuantityUnitId = quantityUnitId;
+				},
+				error -> {
+					showErrorMessage();
+					if(DEBUG) Log.e(TAG, "setQuantityUnit: " + error);
+				}
+		);
 	}
 
 	public void setExpiringSoonDays(String days) {
@@ -577,5 +906,13 @@ public class SettingsActivity extends AppCompatActivity
 	private boolean isFeatureDisabled(String pref) {
 		if(pref == null) return false;
 		return !sharedPrefs.getBoolean(pref, true);
+	}
+
+	public interface OnResponseListener {
+		void onResponse();
+	}
+
+	public interface OnErrorListener {
+		void onError();
 	}
 }
