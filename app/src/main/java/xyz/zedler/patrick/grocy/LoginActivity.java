@@ -50,9 +50,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -66,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
     private WebRequest request;
+    private RequestQueue requestQueue;
     private FragmentManager fragmentManager;
 
     private TextInputLayout textInputLayoutKey;
@@ -83,9 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // WEB REQUESTS
 
-        RequestQueue requestQueue = RequestQueueSingleton
-                .getInstance(getApplicationContext())
-                .getRequestQueue();
+        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+
         request = new WebRequest(requestQueue);
 
         // INITIALIZE VIEWS
@@ -143,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     .putString(Constants.PREF.API_KEY, "")
                     .apply();
             setResult(Activity.RESULT_OK);
-            finish();
+            loadInfoAndFinish();
         });
 
         ActionButton buttonFeedback = findViewById(R.id.button_login_feedback);
@@ -212,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                             .putString(Constants.PREF.API_KEY, key)
                             .apply();
                     setResult(Activity.RESULT_OK);
-                    finish();
+                    loadInfoAndFinish();
                 },
                 error -> {
                     Log.e(TAG, "requestLogin: VolleyError: " + error);
@@ -251,6 +253,16 @@ public class LoginActivity extends AppCompatActivity {
                         showMessage(getString(R.string.msg_error) + ": " + error);
                     }
                 }
+        );
+    }
+
+    private void loadInfoAndFinish() {
+        ConfigUtil.loadInfo(
+                requestQueue,
+                new GrocyApi(this),
+                sharedPrefs,
+                this::finish,
+                this::finish
         );
     }
 
