@@ -14,21 +14,18 @@
     <item
         android:id="@+id/action_add_missing"
         android:title="@string/action_add_missing"
-        android:icon="@drawable/ic_round_add_shopping_cart"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_clear"
         android:title="@string/action_clear_all"
-        android:icon="@drawable/ic_round_delete_sweep_anim"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_edit_notes"
         android:title="@string/action_edit_notes"
-        android:icon="@drawable/ic_round_subject_anim"
         app:showAsAction="never"
         tools:ignore="AlwaysShowAction" />
 
