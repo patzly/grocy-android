@@ -11,7 +11,6 @@
 
 ## Features
 
-- grocy system info in settings
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
 - illustrations: offline, empty
 - master product group sheet: go to master products with current product filter applied
