@@ -19,10 +19,10 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -122,7 +122,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private String sortMode;
     private int daysExpiringSoon;
     private boolean sortAscending;
-    private ValueAnimator errorAnimator;
 
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
@@ -320,6 +319,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 TAG
         );
         setArguments(null);
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // causes adapter to refresh item layout
+        binding.recyclerStock.setAdapter(stockItemAdapter);
     }
 
     private void load() {
