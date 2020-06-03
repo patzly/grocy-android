@@ -36,7 +36,6 @@ Grocy Android uses grocy's official API to provide you a beautiful interface on 
 
 Grocy Android is still under development. In the next weeks we're going to implement some more features!
 
-* Disabling of unused features with server config flags
 * Recipes
 * Meal plans
 * Extended product editing
