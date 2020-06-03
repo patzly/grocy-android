@@ -10,8 +10,7 @@
 
 - in-store mode for shopping list with big items
 - batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- illustrations: offline, empty
-- master product group sheet: go to master products with current product filter applied
+- illustrations: empty
 - translation contribution
 - self-signed certificates
 - help page with note that buttons can be long pressed to get a tip
