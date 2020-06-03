@@ -7,7 +7,6 @@
 ## Improvements
 
 - server settings for default values in Settings
-- landscape one-line support in shopping lists
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
