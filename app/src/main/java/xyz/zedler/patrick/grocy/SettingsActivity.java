@@ -19,11 +19,9 @@ package xyz.zedler.patrick.grocy;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -39,8 +37,6 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.RequestQueue;
@@ -97,7 +93,6 @@ public class SettingsActivity extends AppCompatActivity
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
 	private SwitchMaterial switchDark, switchFoodFacts, switchListIndicator;
-	private NestedScrollView nestedScrollView;
 	private TextView
 			textViewExpiringSoonDays,
 			textViewAmountPurchase,
@@ -158,8 +153,6 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.scroll_settings,
 				true
 		);
-
-		nestedScrollView = findViewById(R.id.scroll_settings);
 
 		switchDark = findViewById(R.id.switch_setting_dark_mode);
 		switchDark.setChecked(sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false));
@@ -326,16 +319,6 @@ public class SettingsActivity extends AppCompatActivity
 		hideDisabledFeatures();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		if(getIntent() != null) {
-			flashView(getIntent().getIntExtra(Constants.EXTRA.FLASH_VIEW_ID, 0));
-			getIntent().removeExtra(Constants.EXTRA.FLASH_VIEW_ID);
-		}
-	}
-
 	private void hideDisabledFeatures() {
 		if(isFeatureDisabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
 			findViewById(R.id.linear_setting_list_indicator).setVisibility(View.GONE);
@@ -363,31 +346,6 @@ public class SettingsActivity extends AppCompatActivity
 		for (int viewId : viewIds) {
 			((CompoundButton) findViewById(viewId)).setOnCheckedChangeListener(this);
 		}
-	}
-
-	private void flashView(int viewId) {
-		if(viewId == 0 || findViewById(viewId) == null) return;
-		long duration = 3000;
-		View view = findViewById(viewId);
-		nestedScrollView.requestChildFocus(view, view);
-		ValueAnimator valueAnimator = ValueAnimator.ofArgb(
-				ContextCompat.getColor(this, R.color.transparent),
-				ContextCompat.getColor(this, R.color.secondary_translucent)
-		);
-		valueAnimator.addUpdateListener(
-				animation -> view.setBackgroundTintList(
-						new ColorStateList(
-								new int[][] {new int[] {android.R.attr.state_enabled}},
-								new int[] {(int) valueAnimator.getAnimatedValue()})
-				)
-		);
-		valueAnimator.setDuration(duration / 6).setRepeatCount(5);
-		valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
-		valueAnimator.start();
-		new Handler().postDelayed(
-				() -> view.setBackgroundTintList(null),
-				duration + 100
-		);
 	}
 
 	@Override
