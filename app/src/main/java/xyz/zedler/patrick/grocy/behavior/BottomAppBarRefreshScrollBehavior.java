@@ -237,6 +237,10 @@ public class BottomAppBarRefreshScrollBehavior {
 	private void measureScrollView() {
 		if(nestedScrollView != null) {
 			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+				if(nestedScrollView == null) {
+					Log.e(TAG, "measureScrollView: scrollView is null!");
+					return;
+				}
 				int scrollViewHeight = nestedScrollView.getMeasuredHeight();
 				int scrollContentHeight = nestedScrollView.getChildAt(
 						0
