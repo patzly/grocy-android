@@ -189,9 +189,7 @@ public class ScanBatchActivity extends AppCompatActivity
 
         cardViewCount = findViewById(R.id.card_scan_batch_count);
         cardViewCount.setVisibility(
-                actionType.equals(Constants.ACTION.CONSUME)
-                        ? View.GONE
-                        : View.VISIBLE
+                actionType.equals(Constants.ACTION.CONSUME) ? View.GONE : View.VISIBLE
         );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             cardViewCount.setTooltipText(getString(R.string.tooltip_new_products_count));
@@ -211,12 +209,15 @@ public class ScanBatchActivity extends AppCompatActivity
         });
 
         cardViewType = findViewById(R.id.card_scan_batch_type);
-        cardViewType.setOnClickListener(v -> setActionType(
-                actionType.equals(Constants.ACTION.CONSUME)
-                        ? Constants.ACTION.PURCHASE
-                        : Constants.ACTION.CONSUME,
-                true
-        ));
+        cardViewType.setOnClickListener(v -> {
+            if(actionType.equals(Constants.ACTION.CONSUME)) {
+                setActionType(Constants.ACTION.OPEN, true);
+            } else if(actionType.equals(Constants.ACTION.OPEN)) {
+                setActionType(Constants.ACTION.PURCHASE, true);
+            } else {
+                setActionType(Constants.ACTION.CONSUME, true);
+            }
+        });
 
         setActionType(actionType, false);
 
@@ -419,36 +420,36 @@ public class ScanBatchActivity extends AppCompatActivity
 
         if(animated) {
             cardViewType.animate().alpha(0).setDuration(300).withEndAction(() -> {
-                if(actionType.equals(Constants.ACTION.CONSUME)) {
-                    textViewType.setText(getString(R.string.action_consume));
-                } else {
-                    textViewType.setText(getString(R.string.action_purchase));
-                }
+                updateActionText();
                 cardViewType.animate().alpha(1).setDuration(300).start();
             }).start();
         } else {
-            if(actionType.equals(Constants.ACTION.CONSUME)) {
-                textViewType.setText(getString(R.string.action_consume));
-            } else {
-                textViewType.setText(getString(R.string.action_purchase));
-            }
+            updateActionText();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if(actionType.equals(Constants.ACTION.CONSUME)) {
                 cardViewType.setTooltipText(getString(R.string.tooltip_switch_purchase));
             } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
                 cardViewType.setTooltipText(getString(R.string.tooltip_switch_consume));
             } else {
-                cardViewType.setTooltipText(null);
+                cardViewType.setTooltipText(getString(R.string.tooltip_switch_open));
             }
         }
 
         if(cardViewCount != null) cardViewCount.setVisibility(
-                actionType.equals(Constants.ACTION.CONSUME)
-                        ? View.GONE
-                        : View.VISIBLE
+                actionType.equals(Constants.ACTION.PURCHASE) ? View.VISIBLE : View.GONE
         );
+    }
+
+    private void updateActionText() {
+        if(actionType.equals(Constants.ACTION.CONSUME)) {
+            textViewType.setText(getString(R.string.action_consume));
+        } else if(actionType.equals(Constants.ACTION.OPEN)) {
+            textViewType.setText(getString(R.string.action_open));
+        } else {
+            textViewType.setText(getString(R.string.action_purchase));
+        }
     }
 
     private void consumeProduct() {
@@ -513,6 +514,72 @@ public class ScanBatchActivity extends AppCompatActivity
                         showMessage(getString(R.string.msg_error));
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                    storeResetSelectedValues();
+                    resumeScan();
+                }
+        );
+    }
+
+    private void openProduct() {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", 1);
+            if(entryId != null && !entryId.isEmpty()) {
+                body.put("stock_entry_id", entryId);
+            }
+            if(stockLocationId != null && !stockLocationId.isEmpty()) {
+                body.put("location_id", stockLocationId);
+            }
+        } catch (JSONException e) {
+            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+        }
+        request.post(
+                grocyApi.openProduct(currentProductDetails.getProduct().getId()),
+                body,
+                response -> {
+                    // UNDO OPTION
+                    String transactionId = null;
+                    try {
+                        transactionId = response.getString("transaction_id");
+                    } catch (JSONException e) {
+                        if(DEBUG) Log.e(TAG, "openProduct: " + e);
+                    }
+                    if(DEBUG) Log.i(TAG, "openProduct: opened 1");
+
+                    Snackbar snackbar = Snackbar.make(
+                            findViewById(R.id.barcode_scan_batch),
+                            getString(
+                                    R.string.msg_opened,
+                                    NumUtil.trim(1),
+                                    currentProductDetails.getQuantityUnitStock().getName(),
+                                    currentProductName
+                            ), Snackbar.LENGTH_LONG
+                    );
+
+                    if(transactionId != null) {
+                        String transId = transactionId;
+                        snackbar.setActionTextColor(
+                                ContextCompat.getColor(this, R.color.secondary)
+                        ).setAction(
+                                getString(R.string.action_undo),
+                                v -> undoTransaction(transId)
+                        );
+                    }
+                    storeResetSelectedValues();
+                    snackbar.show();
+                    resumeScan();
+                },
+                error -> {
+                    NetworkResponse networkResponse = error.networkResponse;
+                    if(networkResponse != null && networkResponse.statusCode == 400) {
+                        showMessage(getString(
+                                R.string.msg_not_in_stock,
+                                currentProductName
+                        ));
+                    } else {
+                        showMessage(getString(R.string.msg_error));
+                    }
+                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
                 }
@@ -670,8 +737,9 @@ public class ScanBatchActivity extends AppCompatActivity
     @SuppressLint("SimpleDateFormat")
     public void askNecessaryDetails() {
 
-        if(actionType.equals(Constants.ACTION.CONSUME)) {
-
+        if(actionType.equals(Constants.ACTION.CONSUME)
+                || actionType.equals(Constants.ACTION.OPEN)
+        ) {
             // STOCK LOCATION
             int askForStockLocation = sharedPrefs.getInt(
                     Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, 0
@@ -698,8 +766,11 @@ public class ScanBatchActivity extends AppCompatActivity
                 return;
             }
 
-            consumeProduct();
-
+            if(actionType.equals(Constants.ACTION.CONSUME)) {
+                consumeProduct();
+            } else {
+                openProduct();
+            }
         } else if(actionType.equals(Constants.ACTION.PURCHASE)) {
 
             // BEST BEFORE DATE
