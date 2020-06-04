@@ -1,16 +1,15 @@
-# TODO (sorted by priority)
+# TODO
 
 ## Bugs
 
 ## Improvements
 
+- empty state should show empty filter if location or product filter is active
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
 
 - in-store mode for shopping list with big items
-- batch consume: icon (like flash toggle) for opening product, default is off for each scan
-- illustrations: empty
 - translation contribution
 - self-signed certificates
 - help page with note that buttons can be long pressed to get a tip
