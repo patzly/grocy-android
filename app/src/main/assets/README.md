@@ -4,6 +4,8 @@
 
 ## Improvements
 
+- replace all `if(DEBUG) Log.e()` with log.e
+- replace all `printToStackTrace` with `log.e`
 - empty state should show empty filter if location or product filter is active
 - product edit with location tracking disabled: space between barcode chips and other field
 
