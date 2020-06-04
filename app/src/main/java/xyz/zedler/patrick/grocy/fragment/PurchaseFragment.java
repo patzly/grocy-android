@@ -119,7 +119,7 @@ public class PurchaseFragment extends Fragment {
     private TextView textViewLocationLabel, textViewBbdLabel;
     private ImageView imageViewAmount, imageViewPrice;
     private MaterialCheckBox checkBoxTotalPrice;
-    private int selectedLocationId, selectedStoreId;
+    private int selectedLocationId = -1, selectedStoreId = -1;
     private String selectedBestBeforeDate;
     private double amount, minAmount;
     private boolean nameAutoFilled;
@@ -665,6 +665,8 @@ public class PurchaseFragment extends Fragment {
         if(productDetails.getLocation() != null) {
             selectedLocationId = productDetails.getLocation().getId();
             textViewLocation.setText(productDetails.getLocation().getName());
+        } else {
+            selectedLocationId = -1;
         }
     }
 
@@ -724,6 +726,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isFormIncomplete() {
+        boolean isIncomplete = false;
         String input = autoCompleteTextViewProduct.getText().toString().trim();
         if(!productNames.isEmpty()
                 && !productNames.contains(input)
@@ -736,12 +739,17 @@ public class PurchaseFragment extends Fragment {
             activity.showBottomSheet(
                     new InputNameBottomSheetDialogFragment(), bundle
             );
-            return true;
-        } else if(productDetails == null) {
+            isIncomplete = true;
+        }
+        if(productDetails == null) {
             textInputProduct.setError(activity.getString(R.string.error_select_product));
-            return true;
-        } else return !isBestBeforeDateValid() || !isAmountValid()
-                || !isPriceValid() || !isLocationValid();
+            isIncomplete = true;
+        }
+        if(!isBestBeforeDateValid()) isIncomplete = true;
+        if(!isAmountValid()) isIncomplete = true;
+        if(!isPriceValid()) isIncomplete = true;
+        if(!isLocationValid()) isIncomplete = true;
+        return isIncomplete;
     }
 
     public void purchaseProduct() {
