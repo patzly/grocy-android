@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -119,6 +120,13 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 			return false;
 		});
 
+		if(bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
+			Menu menu = toolbar.getMenu();
+			menu.findItem(R.id.action_purchase).setVisible(false);
+			menu.findItem(R.id.action_edit).setVisible(false);
+			menu.findItem(R.id.action_delete).setVisible(false);
+		}
+
 		setData();
 
 		return view;
@@ -158,7 +166,7 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 		}
 
 		// STATUS
-		if(!shoppingListItem.isUndone()) {
+		if(shoppingListItem.getDone() == 1) {
 			itemStatus.setText(
 					activity.getString(R.string.property_status),
 					activity.getString(R.string.subtitle_done)

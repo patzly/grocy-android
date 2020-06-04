@@ -122,12 +122,14 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
     private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+    private ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
 
     private boolean showOffline = false;
     private int selectedShoppingListId = 1;
     private String startupShoppingListName;
     private String itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
     private String search = "";
+    private boolean isDataStored;
 
     private RecyclerView recyclerView;
     private SwipeBehavior swipeBehavior;
@@ -156,9 +158,7 @@ public class ShoppingListFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        if(getArguments() != null && getArguments().getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
-            showOffline = true;
-        }
+        showOffline = false;
 
         // GET PREFERENCES
 
@@ -193,14 +193,6 @@ public class ShoppingListFragment extends Fragment
         swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
         scrollView = activity.findViewById(R.id.scroll_shopping_list);
 
-        // retry button on offline error page
-        activity.findViewById(R.id.button_error_retry).setOnClickListener(v -> {
-            // refresh();
-            // TODO
-            setError(false, false, true);
-            showOffline = true;
-            new PrepareOfflineData(activity, this).execute();
-        });
         recyclerView = activity.findViewById(R.id.recycler_shopping_list);
 
         // search
@@ -311,17 +303,30 @@ public class ShoppingListFragment extends Fragment
 
         load();
 
-        // UPDATE UI
+        updateUI();
 
-        activity.updateUI(
-                Constants.UI.SHOPPING_LIST_DEFAULT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
-                TAG
-        );
         if(getArguments() != null) {
             getArguments().putBoolean(Constants.ARGUMENT.ANIMATED, true);
+        }
+    }
+
+    private void updateUI() {
+        if(!showOffline) {
+            activity.updateUI(
+                    Constants.UI.SHOPPING_LIST_DEFAULT,
+                    getArguments() == null || getArguments().getBoolean(
+                            Constants.ARGUMENT.ANIMATED, true
+                    ),
+                    TAG
+            );
+        } else {
+            activity.updateUI(
+                    Constants.UI.SHOPPING_LIST_OFFLINE,
+                    getArguments() == null || getArguments().getBoolean(
+                            Constants.ARGUMENT.ANIMATED, true
+                    ),
+                    TAG
+            );
         }
     }
 
@@ -335,29 +340,27 @@ public class ShoppingListFragment extends Fragment
     private void load() {
         if(activity.isOnline()) {
             download();
-        } else if(showOffline) {
-            // TODO
         } else {
-            setError(true, true, false);
+            showOffline = true;
+            new LoadOfflineData(activity, this).execute();
         }
     }
 
     public void refresh() {
         if(activity.isOnline()) {
-            setError(false, false, true);
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
+            if(!showOffline) {
+                showOffline = true;
+                updateUI();
+                new LoadOfflineData(activity, this).execute();
+            }
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.linear_container_main),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
-                    ).setActionTextColor(
-                            ContextCompat.getColor(activity, R.color.secondary)
-                    ).setAction(
-                            activity.getString(R.string.action_retry),
-                            v1 -> refresh()
                     )
             );
         }
@@ -525,20 +528,7 @@ public class ShoppingListFragment extends Fragment
                         }
                         startupShoppingListName = null;
                     }
-
-                    // change app bar title to shopping list name
-                    ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-                    if(shoppingList != null && !textViewTitle.getText().toString().equals(
-                            shoppingList.getName())
-                    ) {
-                        textViewTitle.animate().alpha(0).withEndAction(() -> {
-                            textViewTitle.setText(shoppingList.getName());
-                            textViewTitle.animate().alpha(1).setDuration(150).start();
-                        }).setDuration(150).start();
-                        buttonLists.animate().alpha(0).withEndAction(
-                                () -> buttonLists.animate().alpha(1).setDuration(150).start()
-                        ).setDuration(150).start();
-                    }
+                    changeAppBarTitle();
                     if(DEBUG) Log.i(
                             TAG,
                             "downloadShoppingLists: shoppingLists = " + shoppingLists
@@ -550,6 +540,10 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void onQueueEmpty() {
+        if(showOffline) {
+            showOffline = false;
+            updateUI();
+        }
         ArrayList<String> missingProductIds = new ArrayList<>();
         for(MissingItem missingItem : missingItems) {
             missingProductIds.add(String.valueOf(missingItem.getId()));
@@ -557,7 +551,7 @@ public class ShoppingListFragment extends Fragment
         missingShoppingListItems = new ArrayList<>();
         undoneShoppingListItems = new ArrayList<>();
         shoppingListItemsSelected = new ArrayList<>();
-        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
+        shoppingListProductIds = new ArrayList<>();
         ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
             if(shoppingListItem.getProductId() != null) {
@@ -569,7 +563,7 @@ public class ShoppingListFragment extends Fragment
                 shoppingListItem.setIsMissing(true);
                 missingShoppingListItems.add(shoppingListItem);
             }
-            if(shoppingListItem.isUndone()) {
+            if(shoppingListItem.getDone() == 0) {
                 undoneShoppingListItems.add(shoppingListItem);
             }
             if(shoppingListItem.getProductId() != null) {
@@ -583,46 +577,66 @@ public class ShoppingListFragment extends Fragment
                 activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
         );
 
-        storeDataOffline(allUsedProductIds);
+        if(!isDataStored) {
+            // sync modified data and store new data
+            new StoreOfflineData(
+                    activity,
+                    this,
+                    true,
+                    shoppingLists,
+                    shoppingListItems,
+                    productGroups,
+                    quantityUnits,
+                    products,
+                    allUsedProductIds
+            ).execute();
+        } else {
+            isDataStored = false;
 
-        tidyUpItems(); // only for deleting "lost" items if multiple lists feature is disabled
+            tidyUpItems(); // only for deleting "lost" items if multiple lists feature is disabled
 
-        for(Product product : products) {
-            if(!shoppingListProductIds.contains(product.getId())) continue;
-            for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                if(shoppingListItem.getProductId() == null) continue;
-                if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
-                    shoppingListItem.setProduct(product);
+            for(Product product : products) {
+                if(!shoppingListProductIds.contains(product.getId())) continue;
+                for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
+                    if(shoppingListItem.getProductId() == null) continue;
+                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
+                        shoppingListItem.setProduct(product);
+                    }
                 }
             }
-        }
 
-        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                ? (Spanned) TextUtil.trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
-                : null;
-        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-            linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
-                textViewBottomNotes.setText(notes);
-                linearLayoutBottomNotes.setVisibility(View.VISIBLE);
-                linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
-            }).setDuration(150).start();
-        } else {
-            linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
-                    linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
-            textViewBottomNotes.setText(null);
+            ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+            Spanned notes = shoppingList != null && shoppingList.getNotes() != null
+                    ? (Spanned) TextUtil
+                      .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
+                    : null;
+            if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
+                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
+                    textViewBottomNotes.setText(notes);
+                    linearLayoutBottomNotes.setVisibility(View.VISIBLE);
+                    linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
+                }).setDuration(150).start();
+            } else {
+                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
+                        linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
+                textViewBottomNotes.setText(null);
+            }
+            swipeRefreshLayout.setRefreshing(false);
+            filterItems(itemsToDisplay);
         }
-        swipeRefreshLayout.setRefreshing(false);
-        filterItems(itemsToDisplay);
     }
 
     private void onDownloadError(VolleyError error) {
         request.cancelAll(TAG);
         swipeRefreshLayout.setRefreshing(false);
-        setError(true, false, true);
+        if(!showOffline) {
+            showOffline = true;
+            updateUI();
+        }
+        new LoadOfflineData(activity, this).execute();
     }
 
-    private static class PrepareOfflineData extends AsyncTask<Void, Void, String> {
+    private static class LoadOfflineData extends AsyncTask<Void, Void, String> {
         private WeakReference<Activity> weakActivity;
         private AsyncResponse response;
         private ArrayList<ShoppingListItem> shoppingListItems;
@@ -630,10 +644,11 @@ public class ShoppingListFragment extends Fragment
         private ArrayList<ProductGroup> productGroups;
         private ArrayList<QuantityUnit> quantityUnits;
 
-        public PrepareOfflineData(Activity activity, AsyncResponse response) {
+        public LoadOfflineData(Activity activity, AsyncResponse response) {
             weakActivity = new WeakReference<>(activity);
             this.response = response;
         }
+
         @Override
         protected String doInBackground(Void... voids) {
             MainActivity activity = (MainActivity) weakActivity.get();
@@ -647,12 +662,17 @@ public class ShoppingListFragment extends Fragment
 
         @Override
         protected void onPostExecute(String arg) {
-            response.processFinish(shoppingListItems, shoppingLists, productGroups, quantityUnits);
+            response.prepareOfflineData(
+                    shoppingListItems,
+                    shoppingLists,
+                    productGroups,
+                    quantityUnits
+            );
         }
     }
 
     @Override
-    public void processFinish(
+    public void prepareOfflineData(
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
@@ -670,7 +690,7 @@ public class ShoppingListFragment extends Fragment
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
             if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
             shoppingListItemsSelected.add(shoppingListItem);
-            if(shoppingListItem.isUndone()) {
+            if(shoppingListItem.getDone() == 0) {
                 undoneShoppingListItems.add(shoppingListItem);
             }
             if(shoppingListItem.isMissing()) {
@@ -684,6 +704,7 @@ public class ShoppingListFragment extends Fragment
         chipUndone.setText(
                 activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
         );
+        changeAppBarTitle();
 
         filterItems(itemsToDisplay);
     }
@@ -808,6 +829,7 @@ public class ShoppingListFragment extends Fragment
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
         bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedShoppingListId);
+        bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, showOffline);
         activity.showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
     }
 
@@ -826,7 +848,7 @@ public class ShoppingListFragment extends Fragment
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         if(showOffline) {
-            new PrepareOfflineData(activity, this).execute();
+            new LoadOfflineData(activity, this).execute();
         } else {
             onQueueEmpty();
         }
@@ -848,7 +870,12 @@ public class ShoppingListFragment extends Fragment
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
-        shoppingListItem.setDone(shoppingListItem.isUndone());  // toggle state
+
+        if(shoppingListItem.getDoneSynced() == -1) {
+            shoppingListItem.setDoneSynced(shoppingListItem.getDone());
+        }
+
+        shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
 
         if(showOffline) {
             updateDoneStatus(shoppingListItem, position);
@@ -875,7 +902,7 @@ public class ShoppingListFragment extends Fragment
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
         new Thread(() -> activity.getDatabase().shoppingListItemDao().update(shoppingListItem))
                 .start();
-        if(!shoppingListItem.isUndone()) {
+        if(shoppingListItem.getDone() == 1) {
             undoneShoppingListItems.remove(shoppingListItem);
         } else {
             undoneShoppingListItems = new ArrayList<>();
@@ -883,7 +910,7 @@ public class ShoppingListFragment extends Fragment
                 if(shoppingListItem1.getShoppingListId() != selectedShoppingListId) {
                     continue;
                 }
-                if(shoppingListItem1.isUndone()) {
+                if(shoppingListItem1.getDone() == 0) {
                     undoneShoppingListItems.add(shoppingListItem1);
                 }
             }
@@ -942,6 +969,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     public void purchaseItem(int position) {
+        if(showOffline) return;
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         if(shoppingListItem.getProduct() == null) return;
         Bundle bundle = new Bundle();
@@ -1013,6 +1041,22 @@ public class ShoppingListFragment extends Fragment
         if(shoppingList == null) return;
         bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
         activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+    }
+
+    private void changeAppBarTitle() {
+        // change app bar title to shopping list name
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        if(shoppingList != null && !textViewTitle.getText().toString().equals(
+                shoppingList.getName())
+        ) {
+            textViewTitle.animate().alpha(0).withEndAction(() -> {
+                textViewTitle.setText(shoppingList.getName());
+                textViewTitle.animate().alpha(1).setDuration(150).start();
+            }).setDuration(150).start();
+            buttonLists.animate().alpha(0).withEndAction(
+                    () -> buttonLists.animate().alpha(1).setDuration(150).start()
+            ).setDuration(150).start();
+        }
     }
 
     public void setUpBottomMenu() {
@@ -1222,27 +1266,97 @@ public class ShoppingListFragment extends Fragment
                                 GrocyApi.ENTITY.SHOPPING_LIST,
                                 shoppingListItem.getId()
                         ),
-                        response -> {},
+                        response -> new Thread( // delete items in database too
+                                () -> activity.getDatabase()
+                                .shoppingListItemDao()
+                                .delete(shoppingListItem)
+                        ).start(),
                         error -> {}
                 );
             }
         }
     }
 
-    private void storeDataOffline(ArrayList<Integer> usedProductIds) {
-        new Thread(() -> {
+    private static class StoreOfflineData extends AsyncTask<Void, Void, String> {
+        private WeakReference<Activity> weakActivity;
+        private AsyncResponse response;
+        private boolean syncIfNecessary;
+        private ArrayList<ShoppingListItem> shoppingListItems;
+        private ArrayList<ShoppingList> shoppingLists;
+        private ArrayList<ProductGroup> productGroups;
+        private ArrayList<QuantityUnit> quantityUnits;
+        private ArrayList<Product> products;
+        private ArrayList<Integer> usedProductIds;
+        private ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
+
+        public StoreOfflineData(
+                Activity activity,
+                AsyncResponse response,
+                boolean syncIfNecessary,
+                ArrayList<ShoppingList> shoppingLists,
+                ArrayList<ShoppingListItem> shoppingListItems,
+                ArrayList<ProductGroup> productGroups,
+                ArrayList<QuantityUnit> quantityUnits,
+                ArrayList<Product> products,
+                ArrayList<Integer> usedProductIds
+        ) {
+            weakActivity = new WeakReference<>(activity);
+            this.response = response;
+            this.syncIfNecessary = syncIfNecessary;
+            this.shoppingLists = shoppingLists;
+            this.shoppingListItems = new ArrayList<>(shoppingListItems);
+            this.productGroups = productGroups;
+            this.quantityUnits = quantityUnits;
+            this.products = products;
+            this.usedProductIds = usedProductIds;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            MainActivity activity = (MainActivity) weakActivity.get();
+            AppDatabase database = activity.getDatabase();
+
+            if(syncIfNecessary) {
+                ArrayList<Integer> newItemIds = new ArrayList<>();
+                for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                    newItemIds.add(shoppingListItem.getId());
+                }
+
+                // compare new with old items and add modified to separate list
+                ArrayList<ShoppingListItem> oldItems = new ArrayList<>(
+                        database.shoppingListItemDao().getAll()
+                );
+                for(ShoppingListItem oldItem : oldItems) {
+                    if(!newItemIds.contains(oldItem.getId())) {
+                        // item already deleted on server
+                        continue;
+                    }
+                    ShoppingListItem newItem = null;
+                    for(ShoppingListItem newItemTmp : shoppingListItems) {
+                        if(newItemTmp.getId() == oldItem.getId()) {
+                            newItem = newItemTmp;
+                        }
+                    }
+                    if(newItem != null && oldItem.getDoneSynced() != -1
+                            && oldItem.getDone() != oldItem.getDoneSynced()
+                            && oldItem.getDone() != newItem.getDone()
+                    ) {
+                        itemsToSync.add(oldItem);
+                    }
+                }
+                if(!itemsToSync.isEmpty()) return null; // don't overwrite items yet
+            }
+
             // shopping list items
-            ArrayList<ShoppingListItem> listItemsCopy = new ArrayList<>(shoppingListItems);
             for(Product product : products) {  // fill with products
                 if(!usedProductIds.contains(product.getId())) continue;
-                for(ShoppingListItem shoppingListItem : listItemsCopy) {
+                for(ShoppingListItem shoppingListItem : shoppingListItems) {
                     if(shoppingListItem.getProductId() == null) continue;
                     if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
                         shoppingListItem.setProduct(product);
                     }
                 }
             }
-            AppDatabase database = activity.getDatabase();
             ShoppingListItemDao shoppingListItemDao = database.shoppingListItemDao();
             shoppingListItemDao.deleteAll();
             shoppingListItemDao.insertAll(shoppingListItems);
@@ -1261,7 +1375,83 @@ public class ShoppingListFragment extends Fragment
             QuantityUnitDao quantityUnitDao = database.quantityUnitDao();
             quantityUnitDao.deleteAll();
             quantityUnitDao.insertAll(quantityUnits);
-        }).start();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String arg) {
+            if(itemsToSync.isEmpty()) {
+                response.storedDataSuccessfully(shoppingListItems);
+            } else {
+                response.syncItems(
+                        itemsToSync,
+                        shoppingLists,
+                        shoppingListItems,
+                        productGroups,
+                        quantityUnits,
+                        products,
+                        usedProductIds
+                );
+            }
+        }
+    }
+
+    @Override
+    public void syncItems(
+            ArrayList<ShoppingListItem> itemsToSync,
+            ArrayList<ShoppingList> shoppingLists,
+            ArrayList<ShoppingListItem> shoppingListItems,
+            ArrayList<ProductGroup> productGroups,
+            ArrayList<QuantityUnit> quantityUnits,
+            ArrayList<Product> products,
+            ArrayList<Integer> usedProductIds
+    ) {
+        for(ShoppingListItem itemToSync : itemsToSync) {
+            JSONObject body = new JSONObject();
+            try {
+                body.put("done", itemToSync.getDone());
+            } catch (JSONException e) {
+                if(DEBUG) Log.e(TAG, "syncItems: " + e);
+            }
+            request.put(
+                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemToSync.getId()),
+                    TAG,
+                    body,
+                    response -> {
+                        for(ShoppingListItem shoppingListItemTmp : shoppingListItems) {
+                            if(shoppingListItemTmp.getId() == itemToSync.getId()) {
+                                shoppingListItemTmp.setDone(itemToSync.getDone());
+                            }
+                        }
+                    },
+                    error -> {
+                        request.cancelAll(TAG);
+                        showMessage("Failed to sync items"); // TODO
+                    },
+                    () -> {
+                        showMessage("Entries synced successfully");
+                        new StoreOfflineData(
+                                activity,
+                                this,
+                                false,
+                                shoppingLists,
+                                shoppingListItems,
+                                productGroups,
+                                quantityUnits,
+                                products,
+                                usedProductIds
+                        ).execute();
+                    }
+            );
+        }
+    }
+
+    @Override
+    public void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems) {
+        isDataStored = true;
+        this.shoppingListItems = shoppingListItems;
+        onQueueEmpty();
     }
 
     @Override
@@ -1303,6 +1493,7 @@ public class ShoppingListFragment extends Fragment
             }
             bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
             bundle.putInt(Constants.ARGUMENT.POSITION, position);
+            bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, showOffline);
             activity.showBottomSheet(new ShoppingListItemBottomSheetDialogFragment(), bundle);
         }
     }
@@ -1362,10 +1553,22 @@ public class ShoppingListFragment extends Fragment
 }
 
 interface AsyncResponse {
-    void processFinish(
+    void prepareOfflineData(
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits
     );
+
+    void syncItems(
+            ArrayList<ShoppingListItem> itemsToSync,
+            ArrayList<ShoppingList> shoppingLists,
+            ArrayList<ShoppingListItem> shoppingListItems,
+            ArrayList<ProductGroup> productGroups,
+            ArrayList<QuantityUnit> quantityUnits,
+            ArrayList<Product> products,
+            ArrayList<Integer> usedProductIds
+    );
+
+    void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems);
 }

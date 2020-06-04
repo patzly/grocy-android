@@ -144,6 +144,39 @@ public class WebRequest {
         );
     }
 
+    public void put(
+            String url,
+            String tag,
+            JSONObject json,
+            OnJsonResponseListener onResponse,
+            OnErrorListener onError,
+            OnEmptyQueueListener onEmptyQueue
+    ) {
+        requestQueue.add(
+                new CustomJsonObjectRequest(
+                        Request.Method.PUT,
+                        url,
+                        json,
+                        response -> {
+                            onResponse.onResponse(response);
+                            queueSize--;
+                            if(queueSize == 0) {
+                                onEmptyQueue.onEmptyQueue();
+                            }
+                        },
+                        error -> {
+                            onError.onError(error);
+                            queueSize--;
+                            if(queueSize == 0) {
+                                onEmptyQueue.onEmptyQueue();
+                            }
+                        }
+                ).setTag(tag)
+
+        );
+        queueSize++;
+    }
+
     public void delete(String url, OnResponseListener onResponse, OnErrorListener onError) {
         requestQueue.add(
                 new StringRequest(

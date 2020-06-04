@@ -97,13 +97,15 @@ public class ShoppingListsBottomSheetDialogFragment
         );
 
         ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
-        buttonNew.setVisibility(View.VISIBLE);
-        buttonNew.setOnClickListener(v -> {
-            dismiss();
-            Bundle bundle1 = new Bundle();
-            bundle1.getString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
-            activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle1, true);
-        });
+        if(!bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
+            buttonNew.setVisibility(View.VISIBLE);
+            buttonNew.setOnClickListener(v -> {
+                dismiss();
+                Bundle bundle1 = new Bundle();
+                bundle1.getString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+                activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle1, true);
+            });
+        }
 
         return view;
     }

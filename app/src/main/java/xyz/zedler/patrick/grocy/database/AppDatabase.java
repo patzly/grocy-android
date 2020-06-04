@@ -22,10 +22,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
                 ProductGroup.class,
                 QuantityUnit.class
         },
-        version = 1,
-        exportSchema = false
+        version = 5
 )
-public abstract class AppDatabase extends RoomDatabase { // TODO: set exportSchema
+public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
     public abstract ShoppingListDao shoppingListDao();
@@ -42,7 +41,7 @@ public abstract class AppDatabase extends RoomDatabase { // TODO: set exportSche
                     context.getApplicationContext(),
                     AppDatabase.class,
                     "app_database"
-            ).build();
+            ).fallbackToDestructiveMigration().build();
         }
         return INSTANCE;
     }

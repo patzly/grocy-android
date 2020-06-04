@@ -126,7 +126,7 @@
     <string name="error_bounds_min">Equal to or higher than %1$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_name_exists">Name already exists</string>
-    <string name="error_offline_subtitle">Check your connection and try again</string>
+    <string name="error_offline_subtitle">Check your connection and try again\nor open the shopping list offline</string>
     <string name="error_unknown">Uups!</string>
     <string name="error_no_grocy_instance">This is not a valid grocy instance</string>
     <string name="error_timeout">Timeout error</string>

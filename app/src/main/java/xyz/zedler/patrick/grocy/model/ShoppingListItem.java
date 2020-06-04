@@ -53,6 +53,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @SerializedName("done")
     private int done;
 
+    @ColumnInfo(name = "done_synced")
+    private int doneSynced = -1;  // state of param "done" on server during time of last sync
+
     @ColumnInfo(name = "product_id")
     @SerializedName("product_id")
     private String productId;
@@ -138,7 +141,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     }
 
     public void setNote(String note) {  // getter & setter seem useless,
-        this.note = note;               // but are required by Room !!!
+        this.note = note;               // but are required by Room
     }
 
     public double getAmount() {
@@ -165,12 +168,16 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return getDone() != 1;
     }
 
-    public void setDone(boolean isDone) {
-        setDone(isDone ? 1 : 0);
-    }
-
     public void setDone(int done) {
         this.done = done;
+    }
+
+    public int getDoneSynced() {
+        return doneSynced;
+    }
+
+    public void setDoneSynced(int doneSynced) {
+        this.doneSynced = doneSynced;
     }
 
     public String getProductName() {

@@ -371,6 +371,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
+            case Constants.UI.SHOPPING_LIST_OFFLINE:
+                scrollBehavior.setUpScroll(R.id.scroll_shopping_list);
+                scrollBehavior.setHideOnScroll(true);
+                updateBottomAppBar(
+                        Constants.FAB.POSITION.GONE, R.menu.menu_shopping_list_offline, animated,
+                        () -> {
+                            if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                                ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
+                            }
+                        }
+                );
+                break;
             case Constants.UI.SHOPPING_LIST_EDIT:
                 scrollBehavior.setUpScroll(R.id.scroll_shopping_list_edit);
                 scrollBehavior.setHideOnScroll(true);
@@ -819,6 +831,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.SHOPPING_LIST_DEFAULT:
+            case Constants.UI.SHOPPING_LIST_OFFLINE:
             case Constants.UI.CONSUME:
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
@@ -892,6 +905,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentCurrent = new StockFragment();
                 break;
             case Constants.UI.SHOPPING_LIST:
+            case Constants.UI.SHOPPING_LIST_OFFLINE:
                 fragmentCurrent = new ShoppingListFragment();
                 break;
             case Constants.UI.SHOPPING_LIST_EDIT:
