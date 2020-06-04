@@ -71,7 +71,7 @@
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_payments"
+                    android:src="@drawable/ic_round_cash_multiple"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
