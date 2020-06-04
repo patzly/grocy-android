@@ -211,7 +211,12 @@ public class ScanBatchActivity extends AppCompatActivity
         cardViewType = findViewById(R.id.card_scan_batch_type);
         cardViewType.setOnClickListener(v -> {
             if(actionType.equals(Constants.ACTION.CONSUME)) {
-                setActionType(Constants.ACTION.OPEN, true);
+                setActionType(
+                        !isFeatureDisabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                                ? Constants.ACTION.OPEN
+                                : Constants.ACTION.PURCHASE,
+                        true
+                );
             } else if(actionType.equals(Constants.ACTION.OPEN)) {
                 setActionType(Constants.ACTION.PURCHASE, true);
             } else {
