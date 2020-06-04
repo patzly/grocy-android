@@ -10,7 +10,7 @@
       android:strokeLineCap="round"/>
   <path
       android:pathData="M4.5,19h15a2,2 0,1 1,0 4h-15a2,2 0,1 1,0 -4zM10.3,7.36a1,1 0,0 0,-0.38 0.12l-6.93,4a1,1 0,0 0,-0.36 1.37l1,1.73 8.66,-5 -1,-1.73a1,1 0,0 0,-1 -0.5z"
-      android:fillColor="@color/retro_yellow"/>
+      android:fillColor="@color/retro_yellow_bg"/>
   <path
       android:pathData="M6.1,17.95l-2.08,0.32c-0.78,0.13 -1,0.9 -0.27,1.48 0.74,0.57 1.56,1.25 1.56,1.25h-1m10.9,-5.61l2.28,1.45c0.7,0.43 1.01,0.68 0.95,1.84l-0.1,2.32h1.05"
       android:strokeLineJoin="round"
