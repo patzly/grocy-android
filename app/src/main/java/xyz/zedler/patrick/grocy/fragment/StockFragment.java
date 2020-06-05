@@ -34,7 +34,6 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -107,7 +106,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private FilterChip chipExpiring;
     private FilterChip chipExpired;
     private FilterChip chipMissing;
-    private EditText editTextSearch;
     private InputChip inputChipFilterLocation;
     private InputChip inputChipFilterProductGroup;
 
@@ -204,22 +202,22 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             );
             dismissSearch();
         });
-        editTextSearch = binding.textInputStockSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.editTextStockSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchItems(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextStockSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        Editable search = binding.editTextStockSearch.getText();
+                        searchItems(search != null ? search.toString() : "");
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -411,7 +409,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // SEARCH
         search = savedInstanceState.getString("search", "");
-        editTextSearch.setText(search);
+        binding.editTextStockSearch.setText(search);
 
         // FILTERS
         updateLocationFilter(savedInstanceState.getInt("filterLocationId", -1));
@@ -1521,10 +1519,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_stock_app_bar_search, true);
-            editTextSearch.setText("");
+            binding.editTextStockSearch.setText("");
         }
         binding.textInputStockSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        activity.showKeyboard(binding.editTextStockSearch);
 
         activity.setUI(Constants.UI.STOCK_SEARCH);
     }
