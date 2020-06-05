@@ -102,25 +102,21 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ClickUtil clickUtil = new ClickUtil();
     private AnimUtil animUtil = new AnimUtil();
 
-    private ArrayList<StockItem> stockItems = new ArrayList<>();
-    private ArrayList<StockItem> expiringItems = new ArrayList<>();
-    private ArrayList<StockItem> expiredItems = new ArrayList<>();
-    private ArrayList<MissingItem> missingItems = new ArrayList<>();
-    private ArrayList<String> shoppingListProductIds = new ArrayList<>();
-    private ArrayList<StockItem> missingStockItems = new ArrayList<>();
-    private ArrayList<StockItem> filteredItems = new ArrayList<>();
-    private ArrayList<StockItem> displayedItems = new ArrayList<>();
-    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+    private ArrayList<StockItem> stockItems;
+    private ArrayList<StockItem> expiringItems;
+    private ArrayList<StockItem> expiredItems;
+    private ArrayList<MissingItem> missingItems;
+    private ArrayList<String> shoppingListProductIds;
+    private ArrayList<StockItem> missingStockItems;
+    private ArrayList<StockItem> filteredItems;
+    private ArrayList<StockItem> displayedItems;
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<Location> locations;
+    private ArrayList<ProductGroup> productGroups;
 
-    private String itemsToDisplay;
-    private String search = "";
-    private int filterLocationId = -1;
-    private String filterProductGroupId = "";
-    private String sortMode;
-    private int daysExpiringSoon;
-    private boolean sortAscending, isRestoredInstance = false;
+    private String search, itemsToDisplay, filterProductGroupId, sortMode;
+    private int filterLocationId, daysExpiringSoon;
+    private boolean sortAscending, isRestoredInstance;
 
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
@@ -163,6 +159,26 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // INITIALIZE VARIABLES
+
+        stockItems = new ArrayList<>();
+        expiringItems = new ArrayList<>();
+        expiredItems = new ArrayList<>();
+        missingItems = new ArrayList<>();
+        shoppingListProductIds = new ArrayList<>();
+        missingStockItems = new ArrayList<>();
+        filteredItems = new ArrayList<>();
+        displayedItems = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
+        locations = new ArrayList<>();
+        productGroups = new ArrayList<>();
+
+        itemsToDisplay = Constants.STOCK.FILTER.ALL;
+        search = "";
+        filterLocationId = -1;
+        filterProductGroupId = "";
+        isRestoredInstance = false;
 
         // INITIALIZE VIEWS
 
@@ -209,10 +225,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
         binding.swipeStock.setOnRefreshListener(this::refresh);
 
-        // FILTER (wrong restored state on back press if initialized globally)
-
-        itemsToDisplay = Constants.STOCK.FILTER.ALL;
-
         // CHIPS
 
         chipExpiring = new FilterChip(
@@ -251,11 +263,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
         chipMissing.setId(R.id.chip_stock_filter_missing);
+
+        // clear filter containers
+        binding.linearStockFilterContainerTop.removeAllViews();
+        binding.linearStockFilterContainerBottom.removeAllViews();
+
         if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             binding.linearStockFilterContainerTop.addView(chipExpiring);
             binding.linearStockFilterContainerTop.addView(chipExpired);
         }
         binding.linearStockFilterContainerTop.addView(chipMissing);
+
+        if(savedInstanceState == null) binding.scrollStock.scrollTo(0, 0);
 
         binding.recyclerStock.setLayoutManager(
                 new LinearLayoutManager(
@@ -328,25 +347,26 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList("stockItems", stockItems);
-        outState.putParcelableArrayList("expiringItems", expiringItems);
-        outState.putParcelableArrayList("expiredItems", expiredItems);
-        outState.putParcelableArrayList("missingItems", missingItems);
-        outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
-        outState.putParcelableArrayList("missingStockItems", missingStockItems);
-        outState.putParcelableArrayList("filteredItems", filteredItems);
-        outState.putParcelableArrayList("displayedItems", displayedItems);
-        outState.putParcelableArrayList("quantityUnits", quantityUnits);
-        outState.putParcelableArrayList("locations", locations);
-        outState.putParcelableArrayList("productGroups", productGroups);
+        if(!isHidden()) {
+            outState.putParcelableArrayList("stockItems", stockItems);
+            outState.putParcelableArrayList("expiringItems", expiringItems);
+            outState.putParcelableArrayList("expiredItems", expiredItems);
+            outState.putParcelableArrayList("missingItems", missingItems);
+            outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
+            outState.putParcelableArrayList("missingStockItems", missingStockItems);
+            outState.putParcelableArrayList("filteredItems", filteredItems);
+            outState.putParcelableArrayList("displayedItems", displayedItems);
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("productGroups", productGroups);
 
-        outState.putString("itemsToDisplay", itemsToDisplay);
-        outState.putString("search", search);
-        outState.putInt("filterLocationId", filterLocationId);
-        outState.putString("filterProductGroupId", filterProductGroupId);
+            outState.putString("itemsToDisplay", itemsToDisplay);
+            outState.putString("search", search);
+            outState.putInt("filterLocationId", filterLocationId);
+            outState.putString("filterProductGroupId", filterProductGroupId);
 
-        appBarBehavior.saveInstanceState(outState);
-
+            appBarBehavior.saveInstanceState(outState);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -366,23 +386,34 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         appBarBehavior.restoreInstanceState(savedInstanceState);
         binding.swipeStock.setRefreshing(false);
 
-        if(activity.isOnline()) {
-            // SEARCH
-            search = savedInstanceState.getString("search", "");
-            editTextSearch.setText(search);
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        editTextSearch.setText(search);
 
-            // FILTERS
-            updateLocationFilter(savedInstanceState.getInt("filterLocationId", -1));
-            updateProductGroupFilter(
-                    savedInstanceState.getString("filterProductGroupId", "")
-            );
-            isRestoredInstance = true;
-            filterItems(
-                    savedInstanceState.getString("itemsToDisplay", Constants.STOCK.FILTER.ALL)
-            );
-        } else {
-            setError(Constants.STATE.OFFLINE, false);
-        }
+        // FILTERS
+        updateLocationFilter(savedInstanceState.getInt("filterLocationId", -1));
+        updateProductGroupFilter(
+                savedInstanceState.getString("filterProductGroupId", "")
+        );
+        isRestoredInstance = true;
+        filterItems(
+                savedInstanceState.getString("itemsToDisplay", Constants.STOCK.FILTER.ALL)
+        );
+
+        chipExpiring.setText(
+                activity.getString(R.string.msg_expiring_products, expiringItems.size())
+        );
+        chipExpired.setText(
+                activity.getString(R.string.msg_expired_products, expiredItems.size())
+        );
+        chipMissing.setText(
+                activity.getString(R.string.msg_missing_products, missingItems.size())
+        );
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -765,16 +796,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } else {
             // EMPTY STATES
             if(filteredItems.isEmpty()) {
-                switch (itemsToDisplay) {
-                    case Constants.STOCK.FILTER.VOLATILE.EXPIRING:
-                    case Constants.STOCK.FILTER.VOLATILE.EXPIRED:
-                    case Constants.STOCK.FILTER.VOLATILE.MISSING:
-                        setEmptyState(Constants.STATE.NO_FILTER_RESULTS);
-                        break;
-                    default:
-                        setEmptyState(Constants.STATE.EMPTY);
-                        break;
+                String state = Constants.STATE.EMPTY;
+                if(itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.EXPIRING)
+                        || itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.EXPIRED)
+                        || itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.MISSING)
+                        || filterLocationId != -1
+                        || !filterProductGroupId.isEmpty()
+                ) {
+                    state = Constants.STATE.NO_FILTER_RESULTS;
                 }
+                setEmptyState(state);
             } else {
                 setEmptyState(Constants.STATE.NONE);
             }

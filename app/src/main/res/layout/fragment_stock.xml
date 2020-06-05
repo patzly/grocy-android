@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -126,12 +127,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingTop="8dp"
                     android:paddingBottom="100dp">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:scrollbars="none"
                         android:overScrollMode="ifContentScrolls">
 
@@ -182,8 +183,9 @@
                 android:id="@+id/linear_empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="56dp"
-                android:layout_marginBottom="?actionBarSize"
+                android:paddingTop="56dp"
+                android:paddingBottom="?actionBarSize"
+                android:clipToPadding="false"
                 layout="@layout/partial_empty"/>
 
             <include
