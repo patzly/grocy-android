@@ -2,6 +2,7 @@
 
 # Grocy Android
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7af17b33f5684b97b24fc9befdd9f901)](https://app.codacy.com/manual/patzly/grocy-android?utm_source=github.com&utm_medium=referral&utm_content=patzly/grocy-android&utm_campaign=Badge_Grade_Dashboard)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases)
 
 [Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
