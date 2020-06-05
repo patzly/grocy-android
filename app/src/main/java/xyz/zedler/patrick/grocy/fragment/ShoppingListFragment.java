@@ -121,7 +121,6 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
     private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
-    private ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
 
     private boolean showOffline = false;
     private int selectedShoppingListId = 1;
@@ -543,7 +542,7 @@ public class ShoppingListFragment extends Fragment
         missingShoppingListItems = new ArrayList<>();
         undoneShoppingListItems = new ArrayList<>();
         shoppingListItemsSelected = new ArrayList<>();
-        shoppingListProductIds = new ArrayList<>();
+        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
         ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
             if(shoppingListItem.getProductId() != null) {
@@ -722,8 +721,8 @@ public class ShoppingListFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchItems(search);
-        } else { // TODO: was war da? und warum?
-            displayedItems = filteredItems;
+        } else if(displayedItems != filteredItems) { // only update items in recycler view
+            displayedItems = filteredItems;          // if they have changed
             groupItems();
         }
     }
@@ -1242,7 +1241,7 @@ public class ShoppingListFragment extends Fragment
         // Tidy up lost shopping list items, which have deleted shopping lists
         // as an id – else they will never show up on any shopping list
         ArrayList<Integer> shoppingListIds = new ArrayList<>();
-        if(isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+        if(isFeatureEnabled()) {
             for(ShoppingList shoppingList1 : shoppingLists) {
                 shoppingListIds.add(shoppingList1.getId());
             }
@@ -1454,7 +1453,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void hideDisabledFeatures() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+        if(!isFeatureEnabled()) {
             activity.findViewById(R.id.button_shopping_list_lists).setVisibility(View.GONE);
             textViewTitle.setOnClickListener(null);
         }
@@ -1528,9 +1527,8 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
+    private boolean isFeatureEnabled() {
+        return sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
     }
 
     public interface OnResponseListener {
