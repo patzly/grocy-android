@@ -168,11 +168,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // buttons on offline error page
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
-        binding.linearError.buttonErrorShoppinglist.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, true);
-            activity.replaceFragment(Constants.UI.SHOPPING_LIST_OFFLINE, bundle, true);
-        });
 
         // search
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
