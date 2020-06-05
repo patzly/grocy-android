@@ -316,9 +316,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         activity.updateUI(
                 Constants.UI.STOCK_DEFAULT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
+                (getArguments() == null
+                        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                        && savedInstanceState == null,
                 TAG
         );
         setArguments(null);
