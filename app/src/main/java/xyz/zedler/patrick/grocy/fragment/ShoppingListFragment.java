@@ -494,7 +494,7 @@ public class ShoppingListFragment extends Fragment
                         if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadVolatile: " + e);
                     }
                 },
                 this::onDownloadError,

@@ -565,7 +565,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadVolatile: " + e);
                     }
 
                     chipExpiring.setText(
