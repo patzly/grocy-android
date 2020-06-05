@@ -730,8 +730,8 @@ public class ShoppingListFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchItems(search);
-        } else { // TODO: was war da? und warum?
-            displayedItems = filteredItems;
+        } else if(displayedItems != filteredItems) { // only update items in recycler view
+            displayedItems = filteredItems;          // if they have changed
             groupItems();
         }
     }
