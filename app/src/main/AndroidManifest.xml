@@ -24,7 +24,6 @@
 
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Grocy.BottomAppBar.SwipeToRefresh"
             android:windowSoftInputMode="adjustPan">
 

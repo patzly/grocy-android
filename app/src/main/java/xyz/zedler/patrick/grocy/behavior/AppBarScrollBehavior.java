@@ -200,7 +200,7 @@ public class AppBarScrollBehavior {
 					tintTopBars(R.color.primary);
 				}
 			}
-		} else if(DEBUG) Log.e(TAG, "setLiftOnScroll: appBarLayout is null!");
+		} else Log.e(TAG, "setLiftOnScroll: appBarLayout is null!");
 		if(DEBUG) Log.i(TAG, "setLiftOnScroll(" + lift + ")");
 	}
 
@@ -228,7 +228,7 @@ public class AppBarScrollBehavior {
 									);
 								}
 							} else {
-								if(DEBUG) Log.e(TAG, "measureScrollView: no child!");
+								Log.e(TAG, "measureScrollView: no child!");
 							}
 							// Kill ViewTreeObserver
 							if(nestedScrollView.getViewTreeObserver().isAlive()) {
@@ -338,6 +338,6 @@ public class AppBarScrollBehavior {
 				}
 				if(DEBUG) Log.i(TAG, "tintTopBars: current and target identical");
 			}
-		} else if(DEBUG) Log.e(TAG, "tintTopBars: activity or appBarLinearLayout is null!");
+		} else Log.e(TAG, "tintTopBars: activity or appBarLinearLayout is null!");
 	}
 }

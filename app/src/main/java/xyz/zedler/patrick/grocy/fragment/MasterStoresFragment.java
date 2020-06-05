@@ -249,7 +249,7 @@ public class MasterStoresFragment extends Fragment
                 error -> {
                     swipeRefreshLayout.setRefreshing(false);
                     setError(true, true);
-                    if(DEBUG) Log.e(TAG, "downloadStores: " + error);
+                    Log.e(TAG, "downloadStores: " + error);
                 }
         );
     }

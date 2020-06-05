@@ -3,13 +3,11 @@
 ## Bugs
 
 - empty state should show empty filter if location or product filter is active
-- style doesn't change on rotation! Other method is required (save instance state)
 - on emulator at startup the scrollview is not at top?!
 
 ## Improvements
 
-- replace all `if(DEBUG) Log.e()` with log.e
-- replace all `printToStackTrace` with `log.e`
+- don't reload on rotation: save and restore instance state
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features

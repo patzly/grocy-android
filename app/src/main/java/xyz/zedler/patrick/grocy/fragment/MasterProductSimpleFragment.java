@@ -997,7 +997,7 @@ public class MasterProductSimpleFragment extends Fragment {
                                     "fillWithCreateProductObject: OpenFoodFacts = " + name
                             );
                         } catch (JSONException e) {
-                            if(DEBUG) Log.e(TAG, "fillWithCreateProductObject: " + e);
+                            Log.e(TAG, "fillWithCreateProductObject: " + e);
                         }
                     },
                     error -> {},
@@ -1174,7 +1174,7 @@ public class MasterProductSimpleFragment extends Fragment {
             }
 
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveProduct: " + e);
+            Log.e(TAG, "saveProduct: " + e);
         }
         if(editProduct != null) {
             request.put(

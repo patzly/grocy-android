@@ -273,7 +273,7 @@ public class ShoppingListEditFragment extends Fragment {
         try {
             jsonObject.put("name", name);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveShoppingList: " + e);
+            Log.e(TAG, "saveShoppingList: " + e);
         }
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.SHOPPING_LIST_NAME, name);

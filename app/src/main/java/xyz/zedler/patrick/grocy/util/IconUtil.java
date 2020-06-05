@@ -50,7 +50,7 @@ public class IconUtil {
             ImageView imageView = (ImageView) view;
             start(imageView);
         } catch (ClassCastException e) {
-            if(DEBUG) Log.e(TAG, "start() requires ImageView");
+            Log.e(TAG, "start() requires ImageView");
         }
     }
 
@@ -69,7 +69,7 @@ public class IconUtil {
         try {
             ((Animatable) drawable).start();
         } catch (ClassCastException cla) {
-            if(DEBUG) Log.e(TAG, "start() requires AnimVectorDrawable");
+            Log.e(TAG, "start() requires AnimVectorDrawable");
         }
     }
 }

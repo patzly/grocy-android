@@ -115,10 +115,10 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 			text.deleteCharAt(text.length() - 1);
 			inputStream.close();
 		} catch (FileNotFoundException e) {
-			if(DEBUG) Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
+			Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
 			return null;
 		} catch (Exception e) {
-			if(DEBUG) Log.e(TAG, "readFromFile: " + e.toString());
+			Log.e(TAG, "readFromFile: " + e.toString());
 		}
 		return text.toString();
 	}

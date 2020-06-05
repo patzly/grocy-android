@@ -497,7 +497,7 @@ public class SettingsActivity extends AppCompatActivity
 				try {
 					body.put("value", switchListIndicator.isChecked());
 				} catch (JSONException e) {
-					if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + e);
+					Log.e(TAG, "onCheckedChanged: list indicator: " + e);
 				}
 				request.put(
 						grocyApi.getUserSetting(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK),
@@ -512,7 +512,7 @@ public class SettingsActivity extends AppCompatActivity
 									switchListIndicator.isChecked()
 							).apply();
 							showErrorMessage();
-							if(DEBUG) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
+							Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
 				break;
@@ -562,7 +562,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", locationId);
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setLocation: " + e);
+			Log.e(TAG, "setLocation: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID),
@@ -582,7 +582,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setLocation: " + error);
+					Log.e(TAG, "setLocation: " + error);
 				}
 		);
 	}
@@ -633,7 +633,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", productGroupId);
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setProductGroup: " + e);
+			Log.e(TAG, "setProductGroup: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID),
@@ -653,7 +653,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setProductGroup: " + error);
+					Log.e(TAG, "setProductGroup: " + error);
 				}
 		);
 	}
@@ -701,7 +701,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", quantityUnitId);
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setQuantityUnit: " + e);
+			Log.e(TAG, "setQuantityUnit: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_QU_ID),
@@ -721,7 +721,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setQuantityUnit: " + error);
+					Log.e(TAG, "setQuantityUnit: " + error);
 				}
 		);
 	}
@@ -731,7 +731,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", Integer.parseInt(days));
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + e);
+			Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
@@ -744,7 +744,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setExpiringSoonDays: " + error);
+					Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
 	}
@@ -754,7 +754,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", amount);
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setAmountPurchase: " + e);
+			Log.e(TAG, "setAmountPurchase: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
@@ -775,7 +775,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setAmountPurchase: " + error);
+					Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
 	}
@@ -785,7 +785,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", amount);
 		} catch (JSONException e) {
-			if(DEBUG) Log.e(TAG, "setAmountConsume: " + e);
+			Log.e(TAG, "setAmountConsume: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT),
@@ -806,7 +806,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					if(DEBUG) Log.e(TAG, "setAmountConsume: " + error);
+					Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
 	}

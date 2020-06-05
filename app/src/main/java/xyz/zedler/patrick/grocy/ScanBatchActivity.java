@@ -470,7 +470,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 body.put("location_id", stockLocationId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+            Log.e(TAG, "consumeProduct: " + e);
         }
         request.post(
                 grocyApi.consumeProduct(currentProductDetails.getProduct().getId()),
@@ -481,7 +481,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                        Log.e(TAG, "consumeProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
 
@@ -536,7 +536,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 body.put("location_id", stockLocationId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+            Log.e(TAG, "openProduct: " + e);
         }
         request.post(
                 grocyApi.openProduct(currentProductDetails.getProduct().getId()),
@@ -547,7 +547,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "openProduct: " + e);
+                        Log.e(TAG, "openProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "openProduct: opened 1");
 
@@ -606,7 +606,7 @@ public class ScanBatchActivity extends AppCompatActivity
             }
             body.put("location_id", locationId);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+            Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(currentProductDetails.getProduct().getId()),
@@ -617,7 +617,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if (DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+                        Log.e(TAG, "purchaseProduct: " + e);
                     }
                     if (DEBUG) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
 
@@ -1199,7 +1199,7 @@ public class ScanBatchActivity extends AppCompatActivity
             if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
             if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
-        } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");
+        } else Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     public RequestQueue getRequestQueue() {

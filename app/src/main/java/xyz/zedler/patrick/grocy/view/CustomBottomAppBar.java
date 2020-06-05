@@ -178,7 +178,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 						animateMenu(getMenu().size() - 1, null);
 						break;
 					default:
-						if(DEBUG) Log.e(TAG, "changeMenu: wrong argument: " + position);
+						Log.e(TAG, "changeMenu: wrong argument: " + position);
 				}
 			}, ICON_ANIM_DURATION);
 		} else {
@@ -211,7 +211,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 						animateMenu(getMenu().size() - 1, onChanged);
 						break;
 					default:
-						if(DEBUG) Log.e(TAG, "changeMenu: wrong argument: " + position);
+						Log.e(TAG, "changeMenu: wrong argument: " + position);
 				}
 			}, ICON_ANIM_DURATION);
 		} else {

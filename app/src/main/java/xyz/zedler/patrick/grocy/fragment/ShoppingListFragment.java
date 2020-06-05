@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -329,13 +328,6 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // causes adapter to refresh item layout
-        recyclerView.setAdapter(shoppingListItemAdapter);
-    }
-
     private void load() {
         if(activity.isOnline()) {
             download();
@@ -501,7 +493,7 @@ public class ShoppingListFragment extends Fragment
                         if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadVolatile: " + e);
                     }
                 },
                 this::onDownloadError,
@@ -885,7 +877,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("done", shoppingListItem.getDone());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "toggleDoneStatus: " + e);
+            Log.e(TAG, "toggleDoneStatus: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
@@ -949,7 +941,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("description", notesHtml);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveNotes: " + e);
+            Log.e(TAG, "saveNotes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, selectedShoppingListId),
@@ -1078,7 +1070,7 @@ public class ShoppingListFragment extends Fragment
                     try {
                         jsonObject.put("list_id", selectedShoppingListId);
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
+                        Log.e(TAG, "setUpBottomMenu: add missing: " + e);
                     }
                     request.post(
                             grocyApi.addMissingProducts(),
@@ -1194,7 +1186,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "clearShoppingList: " + e);
+            Log.e(TAG, "clearShoppingList: " + e);
         }
         request.post(
                 grocyApi.clearShoppingList(),
@@ -1216,7 +1208,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "deleteShoppingList: delete list: " + e);
+            Log.e(TAG, "deleteShoppingList: delete list: " + e);
         }
 
         request.delete(
@@ -1411,7 +1403,7 @@ public class ShoppingListFragment extends Fragment
             try {
                 body.put("done", itemToSync.getDone());
             } catch (JSONException e) {
-                if(DEBUG) Log.e(TAG, "syncItems: " + e);
+                Log.e(TAG, "syncItems: " + e);
             }
             request.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemToSync.getId()),

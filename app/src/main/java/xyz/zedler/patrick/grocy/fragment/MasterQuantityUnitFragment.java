@@ -315,7 +315,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             jsonObject.put("name_plural", editTextNamePlural.getText().toString().trim());
             jsonObject.put("description", editTextDescription.getText().toString().trim());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveQuantityUnit: " + e);
+            Log.e(TAG, "saveQuantityUnit: " + e);
         }
         if(editQuantityUnit != null) {
             request.put(

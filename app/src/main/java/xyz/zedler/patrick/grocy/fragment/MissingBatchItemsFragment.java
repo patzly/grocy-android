@@ -384,7 +384,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                 body.put("location_id", locationId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+            Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(productId),

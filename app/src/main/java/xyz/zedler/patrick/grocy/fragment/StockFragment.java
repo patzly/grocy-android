@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -108,7 +107,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ArrayList<StockItem> expiredItems = new ArrayList<>();
     private ArrayList<MissingItem> missingItems = new ArrayList<>();
     private ArrayList<String> shoppingListProductIds = new ArrayList<>();
-    private ArrayList<StockItem> missingStockItems;
+    private ArrayList<StockItem> missingStockItems = new ArrayList<>();
     private ArrayList<StockItem> filteredItems = new ArrayList<>();
     private ArrayList<StockItem> displayedItems = new ArrayList<>();
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
@@ -311,26 +310,64 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         };
         swipeBehavior.attachToRecyclerView(binding.recyclerStock);
 
-
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
         activity.updateUI(
                 Constants.UI.STOCK_DEFAULT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
+                (getArguments() == null
+                        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                        && savedInstanceState == null,
                 TAG
         );
         setArguments(null);
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // causes adapter to refresh item layout
-        binding.recyclerStock.setAdapter(stockItemAdapter);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("stockItems", stockItems);
+        outState.putParcelableArrayList("expiringItems", expiringItems);
+        outState.putParcelableArrayList("expiredItems", expiredItems);
+        outState.putParcelableArrayList("missingItems", missingItems);
+        outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
+        outState.putParcelableArrayList("missingStockItems", missingStockItems);
+        outState.putParcelableArrayList("filteredItems", filteredItems);
+        outState.putParcelableArrayList("displayedItems", displayedItems);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("productGroups", productGroups);
+
+        outState.putString("itemsToDisplay", itemsToDisplay);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        stockItems = savedInstanceState.getParcelableArrayList("stockItems");
+        expiringItems = savedInstanceState.getParcelableArrayList("expiringItems");
+        expiredItems = savedInstanceState.getParcelableArrayList("expiredItems");
+        missingItems = savedInstanceState.getParcelableArrayList("missingItems");
+        shoppingListProductIds = savedInstanceState.getStringArrayList("shoppingListProducts");
+        missingStockItems = savedInstanceState.getParcelableArrayList("missingStockItems");
+        filteredItems = savedInstanceState.getParcelableArrayList("filteredItems");
+        displayedItems = savedInstanceState.getParcelableArrayList("displayedItems");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+
+        if(activity.isOnline()) {
+            filterItems(savedInstanceState.getString(
+                    "itemsToDisplay",
+                    Constants.STOCK.FILTER.ALL)
+            );
+        } else {
+            setError(Constants.STATE.OFFLINE, false);
+        }
     }
 
     private void load() {
@@ -435,13 +472,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         downloadQuantityUnits();
         downloadLocations();
         downloadProductGroups();
-        missingStockItems = new ArrayList<>();
         downloadStock();
-        shoppingListProductIds = new ArrayList<>();
-        if(sharedPrefs.getBoolean(
-                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                true
-        ) && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
+        if(sharedPrefs.getBoolean(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK, true)
+                && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
+        ) {
             downloadShoppingList();
         }
     }
@@ -574,7 +608,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "downloadVolatile: " + e);
                     }
 
                     chipExpiring.setText(
@@ -639,6 +673,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             response,
                             new TypeToken<List<ShoppingListItem>>(){}.getType()
                     );
+                    shoppingListProductIds = new ArrayList<>();
                     if(shoppingListItems != null && !shoppingListItems.isEmpty()) {
                         for(ShoppingListItem item : shoppingListItems) {
                             if(item.getProductId() != null && !item.getProductId().isEmpty()) {
@@ -728,11 +763,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             } else {
                 setEmptyState(Constants.STATE.NONE);
             }
+
             // SORTING
-            if(displayedItems != filteredItems) {
-                displayedItems = filteredItems;
-                sortItems(sortMode, sortAscending);
-            }
+            displayedItems = filteredItems;
+            sortItems(sortMode, sortAscending);
         }
     }
 
@@ -935,7 +969,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             body.put("transaction_type", "consume");
             body.put("spoiled", spoiled);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+            Log.e(TAG, "consumeProduct: " + e);
         }
         Log.i(TAG, "consumeProduct: " + activity);
         request.post(
@@ -946,7 +980,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                        Log.e(TAG, "consumeProduct: " + e);
                     }
 
                     int index = getProductPosition(productId);
@@ -1072,7 +1106,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             double amount = 1;
             body.put("amount", amount);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+            Log.e(TAG, "openProduct: " + e);
         }
         request.post(
                 grocyApi.openProduct(productId),
@@ -1082,7 +1116,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "openProduct: " + e);
+                        Log.e(TAG, "openProduct: " + e);
                     }
 
                     int index = getProductPosition(productId);
