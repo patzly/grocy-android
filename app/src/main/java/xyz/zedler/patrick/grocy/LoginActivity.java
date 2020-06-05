@@ -273,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
             if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
             if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
-        } else if(DEBUG) Log.e(TAG, "showBottomSheet: sheet already visible");
+        } else Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     @Override

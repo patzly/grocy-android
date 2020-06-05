@@ -249,7 +249,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                 error -> {
                     swipeRefreshLayout.setRefreshing(false);
                     setError(true, true);
-                    if(DEBUG) Log.e(TAG, "downloadQuantityUnits: " + error);
+                    Log.e(TAG, "downloadQuantityUnits: " + error);
                 }
         );
     }

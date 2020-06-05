@@ -604,7 +604,7 @@ public class ConsumeFragment extends Fragment {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+            Log.e(TAG, "consumeProduct: " + e);
         }
         request.post(
                 grocyApi.consumeProduct(productDetails.getProduct().getId()),
@@ -618,7 +618,7 @@ public class ConsumeFragment extends Fragment {
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "consumeProduct: " + e);
+                        Log.e(TAG, "consumeProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "consumeProduct: consumed " + amount);
 
@@ -680,7 +680,7 @@ public class ConsumeFragment extends Fragment {
                 body.put("stock_entry_id", selectedStockEntryId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "openProduct: " + e);
+            Log.e(TAG, "openProduct: " + e);
         }
         request.post(
                 grocyApi.openProduct(productDetails.getProduct().getId()),
@@ -694,7 +694,7 @@ public class ConsumeFragment extends Fragment {
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "openProduct: " + e);
+                        Log.e(TAG, "openProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "openProduct: opened " + amount);
 
@@ -777,7 +777,7 @@ public class ConsumeFragment extends Fragment {
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "editProductBarcodes: " + e);
+            Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),

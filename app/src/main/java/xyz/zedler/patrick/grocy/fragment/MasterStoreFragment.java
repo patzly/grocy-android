@@ -297,7 +297,7 @@ public class MasterStoreFragment extends Fragment {
             jsonObject.put("name", editTextName.getText().toString().trim());
             jsonObject.put("description", editTextDescription.getText().toString().trim());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveStore: " + e);;
+            Log.e(TAG, "saveStore: " + e);;
         }
         if(editStore != null) {
             request.put(

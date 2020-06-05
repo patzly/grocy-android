@@ -778,7 +778,7 @@ public class PurchaseFragment extends Fragment {
                 body.put("location_id", selectedLocationId);
             }
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+            Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(productDetails.getProduct().getId()),
@@ -792,7 +792,7 @@ public class PurchaseFragment extends Fragment {
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "purchaseProduct: " + e);
+                        Log.e(TAG, "purchaseProduct: " + e);
                     }
                     if(DEBUG) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
 
@@ -908,7 +908,7 @@ public class PurchaseFragment extends Fragment {
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "editProductBarcodes: " + e);
+            Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),

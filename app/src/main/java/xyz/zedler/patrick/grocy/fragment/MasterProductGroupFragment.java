@@ -301,7 +301,7 @@ public class MasterProductGroupFragment extends Fragment {
             jsonObject.put("name", editTextName.getText().toString().trim());
             jsonObject.put("description", editTextDescription.getText().toString().trim());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveProductGroup: " + e);
+            Log.e(TAG, "saveProductGroup: " + e);
         }
         if(editProductGroup != null) {
             request.put(

@@ -249,7 +249,7 @@ public class MasterProductGroupsFragment extends Fragment
                 error -> {
                     swipeRefreshLayout.setRefreshing(false);
                     setError(true, true);
-                    if(DEBUG) Log.e(TAG, "downloadProductGroups: " + error);
+                    Log.e(TAG, "downloadProductGroups: " + error);
                 }
         );
     }

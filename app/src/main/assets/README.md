@@ -8,7 +8,6 @@
 ## Improvements
 
 - don't reload on rotation: save and restore instance state
-- replace all `if(DEBUG) Log.e()` with log.e
 - replace all `printToStackTrace` with `log.e`
 - product edit with location tracking disabled: space between barcode chips and other field
 

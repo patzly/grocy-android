@@ -315,7 +315,7 @@ public class MasterLocationFragment extends Fragment {
             jsonObject.put("description", editTextDescription.getText().toString().trim());
             jsonObject.put("is_freezer", checkBoxIsFreezer.isChecked());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveLocation: " + e);
+            Log.e(TAG, "saveLocation: " + e);
         }
         if(editLocation != null) {
             request.put(

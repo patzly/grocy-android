@@ -104,7 +104,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	 */
 	public void setUpScroll(@IdRes int nestedScrollViewId) {
 		if(activity == null) {
-			if(DEBUG) Log.e(TAG, "setUpScroll: activity is missing!");
+			Log.e(TAG, "setUpScroll: activity is missing!");
 			return;
 		}
 		nestedScrollView = activity.findViewById(nestedScrollViewId);
@@ -186,7 +186,7 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(bottomAppBar != null && !bottomAppBar.isOrWillBeShown()) {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true);
-		} else if(DEBUG) Log.e(TAG, "onTopScroll: bottomAppBar is null!");
+		} else Log.e(TAG, "onTopScroll: bottomAppBar is null!");
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(bottomAppBar != null) {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true);
-		} else if(DEBUG) Log.e(TAG, "onScrollUp: bottomAppBar is null!");
+		} else Log.e(TAG, "onScrollUp: bottomAppBar is null!");
 		if(DEBUG) Log.i(TAG, "onScrollUp: UP");
 	}
 
@@ -213,7 +213,7 @@ public class BottomAppBarRefreshScrollBehavior {
 				bottomAppBar.hide();
 				onChangeBottomAppBarVisibility(false);
 			}
-		} else if(DEBUG) Log.e(TAG, "onScrollDown: bottomAppBar is null!");
+		} else Log.e(TAG, "onScrollDown: bottomAppBar is null!");
 		if(DEBUG) Log.i(TAG, "onScrollDown: DOWN");
 	}
 
@@ -227,7 +227,7 @@ public class BottomAppBarRefreshScrollBehavior {
 				bottomAppBar.show();
 				onChangeBottomAppBarVisibility(true);
 			}
-		} else if(DEBUG) Log.e(TAG, "setHideOnScroll: bottomAppBar is null!");
+		} else Log.e(TAG, "setHideOnScroll: bottomAppBar is null!");
 		if(DEBUG) Log.i(TAG, "setHideOnScroll(" + hide + ")");
 	}
 
@@ -299,7 +299,7 @@ public class BottomAppBarRefreshScrollBehavior {
 				valueAnimator.setStartDelay(visible ? 0 : 100);
 				valueAnimator.setDuration(visible ? 70 : 100).start();
 			} else if(DEBUG) Log.i(TAG, "onHideBottomAppBar: current and target identical");
-		} else if(DEBUG) Log.e(TAG, "onHideBottomAppBar: activity is null!");
+		} else Log.e(TAG, "onHideBottomAppBar: activity is null!");
 	}
 
 	private void animateTopScrollTo(int targetY, long duration, TimeInterpolator interpolator) {

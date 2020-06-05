@@ -878,7 +878,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("done", shoppingListItem.getDone());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "toggleDoneStatus: " + e);
+            Log.e(TAG, "toggleDoneStatus: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
@@ -942,7 +942,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("description", notesHtml);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveNotes: " + e);
+            Log.e(TAG, "saveNotes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, selectedShoppingListId),
@@ -1071,7 +1071,7 @@ public class ShoppingListFragment extends Fragment
                     try {
                         jsonObject.put("list_id", selectedShoppingListId);
                     } catch (JSONException e) {
-                        if(DEBUG) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
+                        Log.e(TAG, "setUpBottomMenu: add missing: " + e);
                     }
                     request.post(
                             grocyApi.addMissingProducts(),
@@ -1187,7 +1187,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "clearShoppingList: " + e);
+            Log.e(TAG, "clearShoppingList: " + e);
         }
         request.post(
                 grocyApi.clearShoppingList(),
@@ -1209,7 +1209,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "deleteShoppingList: delete list: " + e);
+            Log.e(TAG, "deleteShoppingList: delete list: " + e);
         }
 
         request.delete(
@@ -1404,7 +1404,7 @@ public class ShoppingListFragment extends Fragment
             try {
                 body.put("done", itemToSync.getDone());
             } catch (JSONException e) {
-                if(DEBUG) Log.e(TAG, "syncItems: " + e);
+                Log.e(TAG, "syncItems: " + e);
             }
             request.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemToSync.getId()),

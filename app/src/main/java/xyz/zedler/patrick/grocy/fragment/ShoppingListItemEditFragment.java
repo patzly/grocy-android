@@ -540,7 +540,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             }
             jsonObject.put("note", editTextNote.getText().toString().trim());
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "saveShoppingListItem: " + e);
+            Log.e(TAG, "saveShoppingListItem: " + e);
         }
         if(action.equals(Constants.ACTION.EDIT)) {
             ShoppingListItem shoppingListItem = startupBundle.getParcelable(
@@ -626,7 +626,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            if(DEBUG) Log.e(TAG, "editProductBarcodes: " + e);
+            Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
