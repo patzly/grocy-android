@@ -878,6 +878,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case Constants.UI.MASTER_PRODUCT_SIMPLE:
+                if(fragmentCurrent.getClass() != MasterProductSimpleFragment.class) break;
                 if(((MasterProductSimpleFragment) fragmentCurrent)
                         .getIntendedAction().equals(Constants.ACTION.CREATE_THEN_PURCHASE)
                 ) {
