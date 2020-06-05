@@ -20,10 +20,12 @@ package xyz.zedler.patrick.grocy.behavior;
 */
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 
 public class AppBarBehavior {
 
@@ -31,11 +33,37 @@ public class AppBarBehavior {
 	private final static boolean DEBUG = false;
 
 	private Activity activity;
-	private View viewVisible;
+	private View viewVisible, viewInvisible;
 
 	public AppBarBehavior(Activity activity, @IdRes int layoutDefault) {
 		this.activity = activity;
 		viewVisible = activity.findViewById(layoutDefault);
+	}
+
+	public void saveInstanceState(@NonNull Bundle outState) {
+		if(viewVisible != null) {
+			outState.putInt("appBarBehavior_visible_view_id", viewVisible.getId());
+		}
+		if(viewInvisible != null) {
+			outState.putInt("appBarBehavior_invisible_view_id", viewInvisible.getId());
+		}
+	}
+
+	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
+		View viewVisible = activity.findViewById(
+				savedInstanceState.getInt("appBarBehavior_visible_view_id")
+		);
+		View viewInvisible = activity.findViewById(
+				savedInstanceState.getInt("appBarBehavior_invisible_view_id")
+		);
+		if(viewVisible != null) {
+			viewVisible.setVisibility(View.VISIBLE);
+			this.viewVisible = viewVisible;
+		}
+		if(viewInvisible != null) {
+			viewInvisible.setVisibility(View.GONE);
+			this.viewInvisible = viewInvisible;
+		}
 	}
 
 	public void replaceLayout(@IdRes int layoutNew, boolean animated) {
@@ -51,6 +79,7 @@ public class AppBarBehavior {
 							viewNew.setVisibility(View.VISIBLE);
 							viewNew.setAlpha(0);
 							viewNew.animate().alpha(1).setDuration(duration).start();
+							viewInvisible = viewVisible;
 							viewVisible = viewNew;
 						}).start();
 			} else {
