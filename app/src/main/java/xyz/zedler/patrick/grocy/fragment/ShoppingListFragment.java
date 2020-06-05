@@ -34,24 +34,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,6 +69,7 @@ import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
@@ -90,7 +85,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -108,6 +102,11 @@ public class ShoppingListFragment extends Fragment
     private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
     private ClickUtil clickUtil = new ClickUtil();
+    private FragmentShoppingListBinding binding;
+    private SwipeBehavior swipeBehavior;
+
+    private FilterChip chipUndone;
+    private FilterChip chipMissing;
 
     private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
     private ArrayList<ShoppingListItem> shoppingListItems = new ArrayList<>();
@@ -122,23 +121,12 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
     private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
 
-    private boolean showOffline = false;
     private int selectedShoppingListId = 1;
     private String startupShoppingListName;
     private String itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
     private String search = "";
     private boolean isDataStored;
-
-    private RecyclerView recyclerView;
-    private SwipeBehavior swipeBehavior;
-    private FilterChip chipUndone, chipMissing;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
-    private EditText editTextSearch;
-    private LinearLayout linearLayoutBottomNotes;
-    private NestedScrollView scrollView;
-    private TextView textViewBottomNotes, textViewTitle;
-    private ActionButton buttonLists;
+    private boolean showOffline = false;
 
     @Override
     public View onCreateView(
@@ -146,7 +134,8 @@ public class ShoppingListFragment extends Fragment
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -169,51 +158,36 @@ public class ShoppingListFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_shopping_list_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
 
         // top app bar
-        textViewTitle = activity.findViewById(R.id.text_shopping_list_title);
-        textViewTitle.setOnClickListener(
+        binding.textShoppingListTitle.setOnClickListener(
                 v -> showShoppingListsBottomSheet()
         );
-        buttonLists = activity.findViewById(R.id.button_shopping_list_lists);
-        buttonLists.setOnClickListener(
+        binding.buttonShoppingListLists.setOnClickListener(
                 v -> showShoppingListsBottomSheet()
         );
 
-        linearLayoutBottomNotes = activity.findViewById(R.id.linear_shopping_list_bottom_notes);
-        activity.findViewById(R.id.linear_shopping_list_bottom_notes_click).setOnClickListener(
-                v -> showNotesEditor()
-        );
-        textViewBottomNotes = activity.findViewById(R.id.text_shopping_list_bottom_notes);
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_shopping_list);
-        scrollView = activity.findViewById(R.id.scroll_shopping_list);
-
-        recyclerView = activity.findViewById(R.id.recycler_shopping_list);
+        binding.linearShoppingListBottomNotesClick.setOnClickListener(v -> showNotesEditor());
 
         // search
-        activity.findViewById(R.id.frame_shopping_list_search_close).setOnClickListener(
-                v -> dismissSearch()
-        );
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_shopping_list_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.frameShoppingListSearchClose.setOnClickListener(v -> dismissSearch());
+        binding.editTextShoppingListSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchItems(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextShoppingListSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        Editable search = binding.editTextShoppingListSearch.getText();
+                        searchItems(search != null ? search.toString() : "");
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -221,13 +195,13 @@ public class ShoppingListFragment extends Fragment
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeShoppingList.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeShoppingList.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeShoppingList.setOnRefreshListener(this::refresh);
 
         // CHIPS
 
@@ -251,21 +225,18 @@ public class ShoppingListFragment extends Fragment
                 },
                 () -> filterItems(Constants.SHOPPING_LIST.FILTER.ALL)
         );
-        LinearLayout chipContainer = activity.findViewById(
-                R.id.linear_shopping_list_filter_container_top
-        );
-        chipContainer.addView(chipMissing);
-        chipContainer.addView(chipUndone);
+        binding.linearShoppingListFilterContainer.addView(chipMissing);
+        binding.linearShoppingListFilterContainer.addView(chipUndone);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerShoppingList.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
                         LinearLayoutManager.VERTICAL,
                         false
                 )
         );
-        recyclerView.setItemAnimator(new ItemAnimator());
-        recyclerView.setAdapter(new StockPlaceholderAdapter());
+        binding.recyclerShoppingList.setItemAnimator(new ItemAnimator());
+        binding.recyclerShoppingList.setAdapter(new StockPlaceholderAdapter());
 
         swipeBehavior = new SwipeBehavior(activity) {
             @Override
@@ -295,7 +266,7 @@ public class ShoppingListFragment extends Fragment
                 }
             }
         };
-        swipeBehavior.attachToRecyclerView(recyclerView);
+        swipeBehavior.attachToRecyclerView(binding.recyclerShoppingList);
 
         hideDisabledFeatures();
 
@@ -341,36 +312,25 @@ public class ShoppingListFragment extends Fragment
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeShoppingList.setRefreshing(false);
             if(!showOffline) {
                 showOffline = true;
                 updateUI();
                 new LoadOfflineData(activity, this).execute();
             }
-            activity.showMessage(
-                    Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
-                            activity.getString(R.string.msg_no_connection),
-                            Snackbar.LENGTH_SHORT
-                    )
-            );
+            showMessage(activity.getString(R.string.msg_no_connection));
         }
     }
 
     private void setError(boolean isError, boolean isOffline, boolean animated) {
-        LinearLayout linearLayoutError = activity.findViewById(R.id.linear_error);
-        ImageView imageViewError = activity.findViewById(R.id.image_error);
-        TextView textViewTitle = activity.findViewById(R.id.text_error_title);
-        TextView textViewSubtitle = activity.findViewById(R.id.text_error_subtitle);
-
         if(isError) {
-            imageViewError.setImageResource(
+            binding.linearError.imageError.setImageResource(
                     isOffline
                             ? R.drawable.illustration_broccoli
                             : R.drawable.illustration_popsicle
             );
-            textViewTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
-            textViewSubtitle.setText(
+            binding.linearError.textErrorTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
+            binding.linearError.textErrorSubtitle.setText(
                     isOffline
                             ? R.string.error_offline_subtitle
                             : R.string.error_unknown_subtitle
@@ -378,8 +338,8 @@ public class ShoppingListFragment extends Fragment
         }
 
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError ? binding.scrollShoppingList : binding.linearError.linearError;
+            View viewIn = isError ? binding.linearError.linearError : binding.scrollShoppingList;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -389,15 +349,16 @@ public class ShoppingListFragment extends Fragment
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.scrollShoppingList.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
-        linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
-                linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
+        binding.swipeShoppingList.setRefreshing(true);
+        binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
+                () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
+        ).setDuration(150).start();
         downloadQuantityUnits();
         downloadProducts();
         downloadProductGroups();
@@ -602,24 +563,28 @@ public class ShoppingListFragment extends Fragment
                       .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
                     : null;
             if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    textViewBottomNotes.setText(notes);
-                    linearLayoutBottomNotes.setVisibility(View.VISIBLE);
-                    linearLayoutBottomNotes.animate().alpha(1).setDuration(150).start();
+                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(() -> {
+                    binding.textShoppingListBottomNotes.setText(notes);
+                    binding.linearShoppingListBottomNotes.setVisibility(View.VISIBLE);
+                    binding.linearShoppingListBottomNotes.animate()
+                            .alpha(1)
+                            .setDuration(150)
+                            .start();
                 }).setDuration(150).start();
             } else {
-                linearLayoutBottomNotes.animate().alpha(0).withEndAction(() ->
-                        linearLayoutBottomNotes.setVisibility(View.GONE)).setDuration(150).start();
-                textViewBottomNotes.setText(null);
+                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
+                        () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
+                ).setDuration(150).start();
+                binding.textShoppingListBottomNotes.setText(null);
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeShoppingList.setRefreshing(false);
             filterItems(itemsToDisplay);
         }
     }
 
     private void onDownloadError(VolleyError error) {
         request.cancelAll(TAG);
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipeShoppingList.setRefreshing(false);
         if(!showOffline) {
             showOffline = true;
             updateUI();
@@ -810,9 +775,9 @@ public class ShoppingListFragment extends Fragment
 
     private void refreshAdapter(ShoppingListItemAdapter adapter) {
         shoppingListItemAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerShoppingList.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerShoppingList.setAdapter(adapter);
+            binding.recyclerShoppingList.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -829,12 +794,13 @@ public class ShoppingListFragment extends Fragment
         ShoppingList shoppingList = getShoppingList(shoppingListId);
         if(shoppingList == null) return;
         selectedShoppingListId = shoppingListId;
-        textViewTitle.animate().alpha(0).withEndAction(() -> {
-            textViewTitle.setText(shoppingList.getName());
-            textViewTitle.animate().alpha(1).setDuration(150).start();
+        binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
+            binding.textShoppingListTitle.setText(shoppingList.getName());
+            binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
         }).setDuration(150).start();
-        buttonLists.animate().alpha(0).withEndAction(() ->
-                buttonLists.animate().alpha(1).setDuration(150).start()).setDuration(150).start();
+        binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
+                () -> binding.buttonShoppingListLists.animate().alpha(1).setDuration(150).start()
+        ).setDuration(150).start();
         chipMissing.changeState(false);
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
@@ -1037,15 +1003,18 @@ public class ShoppingListFragment extends Fragment
     private void changeAppBarTitle() {
         // change app bar title to shopping list name
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        if(shoppingList != null && !textViewTitle.getText().toString().equals(
+        if(shoppingList != null && !binding.textShoppingListTitle.getText().toString().equals(
                 shoppingList.getName())
         ) {
-            textViewTitle.animate().alpha(0).withEndAction(() -> {
-                textViewTitle.setText(shoppingList.getName());
-                textViewTitle.animate().alpha(1).setDuration(150).start();
+            binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
+                binding.textShoppingListTitle.setText(shoppingList.getName());
+                binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
             }).setDuration(150).start();
-            buttonLists.animate().alpha(0).withEndAction(
-                    () -> buttonLists.animate().alpha(1).setDuration(150).start()
+            binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
+                    () -> binding.buttonShoppingListLists.animate()
+                            .alpha(1)
+                            .setDuration(150)
+                            .start()
             ).setDuration(150).start();
         }
     }
@@ -1454,8 +1423,8 @@ public class ShoppingListFragment extends Fragment
 
     private void hideDisabledFeatures() {
         if(!isFeatureEnabled()) {
-            activity.findViewById(R.id.button_shopping_list_lists).setVisibility(View.GONE);
-            textViewTitle.setOnClickListener(null);
+            binding.buttonShoppingListLists.setVisibility(View.GONE);
+            binding.textShoppingListTitle.setOnClickListener(null);
         }
     }
 
@@ -1500,10 +1469,10 @@ public class ShoppingListFragment extends Fragment
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_search, true);
-            editTextSearch.setText("");
+            binding.editTextShoppingListSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        binding.textInputShoppingListSearch.requestFocus();
+        activity.showKeyboard(binding.editTextShoppingListSearch);
 
         activity.setUI(Constants.UI.SHOPPING_LIST_SEARCH);
     }
@@ -1519,11 +1488,7 @@ public class ShoppingListFragment extends Fragment
 
     private void showMessage(String msg) {
         activity.showMessage(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
     }
 

@@ -123,6 +123,7 @@
                 android:layout_marginEnd="72dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_shopping_list_search"
                     style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,6 +149,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <include
+                android:id="@+id/linear_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="56dp"
+                android:paddingBottom="?actionBarSize"
+                android:clipToPadding="false"
+                layout="@layout/partial_empty"/>
+
+            <include
+                android:id="@+id/linear_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?actionBarSize"
+                layout="@layout/partial_error"/>
+
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_shopping_list"
                 android:layout_width="match_parent"
@@ -158,17 +175,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="140dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="120dp">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:scrollbars="none"
                         android:overScrollMode="ifContentScrolls">
 
                         <LinearLayout
-                            android:id="@+id/linear_shopping_list_filter_container_top"
+                            android:id="@+id/linear_shopping_list_filter_container"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
@@ -230,8 +247,6 @@
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
-            <include layout="@layout/partial_error"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
