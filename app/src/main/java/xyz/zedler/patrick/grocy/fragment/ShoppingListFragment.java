@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -328,13 +327,6 @@ public class ShoppingListFragment extends Fragment
                     TAG
             );
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // causes adapter to refresh item layout
-        recyclerView.setAdapter(shoppingListItemAdapter);
     }
 
     private void load() {
