@@ -19,11 +19,14 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MissingItem {
+public class MissingItem implements Parcelable {
 
     @SerializedName("id")
     private int id;
@@ -36,6 +39,34 @@ public class MissingItem {
 
     @SerializedName("is_partly_in_stock")
     private int isPartlyInStock;
+
+    private MissingItem(Parcel parcel) {
+        id = parcel.readInt();
+        name = parcel.readString();
+        amountMissing = parcel.readString();
+        isPartlyInStock = parcel.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(amountMissing);
+        dest.writeInt(isPartlyInStock);
+    }
+
+    public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
+
+        @Override
+        public MissingItem createFromParcel(Parcel in) {
+            return new MissingItem(in);
+        }
+
+        @Override
+        public MissingItem[] newArray(int size) {
+            return new MissingItem[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -55,6 +86,11 @@ public class MissingItem {
 
     public int getIsPartlyInStock() {
         return isPartlyInStock;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @NonNull

@@ -107,7 +107,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ArrayList<StockItem> expiredItems = new ArrayList<>();
     private ArrayList<MissingItem> missingItems = new ArrayList<>();
     private ArrayList<String> shoppingListProductIds = new ArrayList<>();
-    private ArrayList<StockItem> missingStockItems;
+    private ArrayList<StockItem> missingStockItems = new ArrayList<>();
     private ArrayList<StockItem> filteredItems = new ArrayList<>();
     private ArrayList<StockItem> displayedItems = new ArrayList<>();
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
@@ -310,7 +310,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         };
         swipeBehavior.attachToRecyclerView(binding.recyclerStock);
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
@@ -322,6 +326,48 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 TAG
         );
         setArguments(null);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("stockItems", stockItems);
+        outState.putParcelableArrayList("expiringItems", expiringItems);
+        outState.putParcelableArrayList("expiredItems", expiredItems);
+        outState.putParcelableArrayList("missingItems", missingItems);
+        outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
+        outState.putParcelableArrayList("missingStockItems", missingStockItems);
+        outState.putParcelableArrayList("filteredItems", filteredItems);
+        outState.putParcelableArrayList("displayedItems", displayedItems);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("productGroups", productGroups);
+
+        outState.putString("itemsToDisplay", itemsToDisplay);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        stockItems = savedInstanceState.getParcelableArrayList("stockItems");
+        expiringItems = savedInstanceState.getParcelableArrayList("expiringItems");
+        expiredItems = savedInstanceState.getParcelableArrayList("expiredItems");
+        missingItems = savedInstanceState.getParcelableArrayList("missingItems");
+        shoppingListProductIds = savedInstanceState.getStringArrayList("shoppingListProducts");
+        missingStockItems = savedInstanceState.getParcelableArrayList("missingStockItems");
+        filteredItems = savedInstanceState.getParcelableArrayList("filteredItems");
+        displayedItems = savedInstanceState.getParcelableArrayList("displayedItems");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+
+        if(activity.isOnline()) {
+            filterItems(savedInstanceState.getString(
+                    "itemsToDisplay",
+                    Constants.STOCK.FILTER.ALL)
+            );
+        } else {
+            setError(Constants.STATE.OFFLINE, false);
+        }
     }
 
     private void load() {
@@ -426,13 +472,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         downloadQuantityUnits();
         downloadLocations();
         downloadProductGroups();
-        missingStockItems = new ArrayList<>();
         downloadStock();
-        shoppingListProductIds = new ArrayList<>();
-        if(sharedPrefs.getBoolean(
-                Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                true
-        ) && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
+        if(sharedPrefs.getBoolean(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK, true)
+                && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
+        ) {
             downloadShoppingList();
         }
     }
@@ -630,6 +673,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             response,
                             new TypeToken<List<ShoppingListItem>>(){}.getType()
                     );
+                    shoppingListProductIds = new ArrayList<>();
                     if(shoppingListItems != null && !shoppingListItems.isEmpty()) {
                         for(ShoppingListItem item : shoppingListItems) {
                             if(item.getProductId() != null && !item.getProductId().isEmpty()) {
@@ -719,11 +763,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             } else {
                 setEmptyState(Constants.STATE.NONE);
             }
+
             // SORTING
-            if(displayedItems != filteredItems) {
-                displayedItems = filteredItems;
-                sortItems(sortMode, sortAscending);
-            }
+            displayedItems = filteredItems;
+            sortItems(sortMode, sortAscending);
         }
     }
 
