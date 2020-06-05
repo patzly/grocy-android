@@ -40,6 +40,17 @@ public class AppBarBehavior {
 		viewVisible = activity.findViewById(layoutDefault);
 	}
 
+	public AppBarBehavior(Activity activity, @IdRes int visible, @IdRes int invisible) {
+		this.activity = activity;
+
+		viewVisible = activity.findViewById(visible);
+		viewVisible.setVisibility(View.VISIBLE);
+		viewVisible.setAlpha(1);
+
+		viewInvisible = activity.findViewById(invisible);
+		viewInvisible.setVisibility(View.GONE);
+	}
+
 	public void saveInstanceState(@NonNull Bundle outState) {
 		if(viewVisible != null) {
 			outState.putInt("appBarBehavior_visible_view_id", viewVisible.getId());
