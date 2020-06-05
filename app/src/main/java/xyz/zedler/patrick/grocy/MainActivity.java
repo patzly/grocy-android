@@ -973,8 +973,9 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         if(DEBUG) Log.i(
-                TAG,
-                "replaceFragment: replaced with " + fragmentNew + ", animated = " + animated
+                TAG, "replaceFragment: replaced " + fragmentOld
+                        + " with "+ fragmentNew
+                        + ", animated = " + animated
         );
     }
 
