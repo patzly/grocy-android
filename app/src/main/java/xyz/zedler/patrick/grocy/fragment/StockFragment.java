@@ -401,7 +401,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             binding.swipeStock.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.binding.linearContainerMain,
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -984,13 +984,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     Snackbar snackbar;
                     if(response != null && response.statusCode == 400) {
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_not_found),
                                 Snackbar.LENGTH_SHORT
                         );
                     } else {
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_error),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -1113,7 +1113,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
 
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(
                                         spoiled
                                                 ? R.string.msg_consumed_spoiled
@@ -1153,7 +1153,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                     } else {
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -1225,7 +1225,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(
                                         R.string.msg_opened,
                                         NumUtil.trim(1),
@@ -1258,7 +1258,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         if(DEBUG) Log.i(TAG, "updateOpenedStockItem: opened 1");
                     } else {
                         snackbar = Snackbar.make(
-                                activity.binding.linearContainerMain,
+                                activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
@@ -1323,7 +1323,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void showErrorMessage(VolleyError error) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.binding.linearContainerMain,
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

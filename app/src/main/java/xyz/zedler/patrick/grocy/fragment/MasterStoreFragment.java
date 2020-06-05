@@ -172,7 +172,7 @@ public class MasterStoreFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -216,7 +216,7 @@ public class MasterStoreFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
+                                    activity.findViewById(R.id.frame_main_container),
                                     activity.getString(R.string.msg_error),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
@@ -352,7 +352,7 @@ public class MasterStoreFragment extends Fragment {
                 if(product.getStoreId().equals(String.valueOf(store.getId()))) {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
+                                    activity.findViewById(R.id.frame_main_container),
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
                                             activity.getString(R.string.type_store)
@@ -381,7 +381,7 @@ public class MasterStoreFragment extends Fragment {
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

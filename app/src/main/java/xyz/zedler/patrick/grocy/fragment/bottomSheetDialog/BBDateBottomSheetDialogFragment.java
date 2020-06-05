@@ -218,7 +218,7 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private void showSnackbarMessage(String msg) {
         View view = null;
         if(activity.getClass() == MainActivity.class) {
-            view = activity.findViewById(R.id.linear_container_main);
+            view = activity.findViewById(R.id.frame_main_container);
         } else if(activity.getClass() == ScanBatchActivity.class) {
             view = activity.findViewById(R.id.barcode_scan_batch);
         }

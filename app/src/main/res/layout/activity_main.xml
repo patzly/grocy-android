@@ -7,11 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linear_container_main"
+    <FrameLayout
+        android:id="@+id/frame_main_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:layout_height="match_parent"/>
 
     <xyz.zedler.patrick.grocy.view.CustomBottomAppBar
         android:id="@+id/bottom_app_bar"

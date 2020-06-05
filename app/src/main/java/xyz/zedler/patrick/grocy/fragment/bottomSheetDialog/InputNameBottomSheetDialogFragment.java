@@ -116,7 +116,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
 
     private void dismissWithMessage(String msg) {
         Snackbar.make(
-                activity.findViewById(R.id.linear_container_main),
+                activity.findViewById(R.id.frame_main_container),
                 msg,
                 Snackbar.LENGTH_SHORT
         ).show();

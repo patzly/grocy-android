@@ -117,7 +117,7 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
     private void dismissWithMessage(String msg) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         msg,
                         Snackbar.LENGTH_SHORT
                 )

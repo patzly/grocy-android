@@ -196,7 +196,7 @@ public class MasterQuantityUnitsFragment extends Fragment
             swipeRefreshLayout.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -334,7 +334,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
@@ -425,7 +425,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.findViewById(R.id.frame_main_container),
                                 activity.getString(
                                         R.string.msg_master_delete_usage,
                                         activity.getString(R.string.type_quantity_unit)

@@ -323,7 +323,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             binding.swipeShoppingListItemEdit.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -387,7 +387,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         binding.swipeShoppingListItemEdit.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 ).setActionTextColor(
@@ -510,7 +510,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     } else {
                         activity.showMessage(
                                 Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.msg_error),
                                         Snackbar.LENGTH_SHORT
                                 )
@@ -755,7 +755,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     } else if(!productNames.isEmpty()) {
                         activity.showMessage(
                                 Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.error_invalid_product),
                                         Snackbar.LENGTH_SHORT
                                 )
@@ -792,7 +792,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             if(inputChip.getText().equals(input)) {
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.findViewById(R.id.frame_main_container),
                                 activity.getString(R.string.msg_barcode_duplicate),
                                 Snackbar.LENGTH_SHORT
                         )
@@ -828,7 +828,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

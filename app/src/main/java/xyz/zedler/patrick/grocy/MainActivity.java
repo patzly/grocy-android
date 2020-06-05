@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
             fragmentCurrent.setArguments(bundleNoAnim);
             fragmentManager.beginTransaction().replace(
-                    R.id.linear_container_main,
+                    R.id.frame_main_container,
                     fragmentCurrent,
                     Constants.UI.STOCK
             ).commit();
@@ -899,8 +899,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void replaceFragment(String newFragment, Bundle bundle, boolean animated) {
-        switch (newFragment) {
+    public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {
+        Fragment fragmentOld = fragmentCurrent;
+        switch (fragmentNew) {
             case Constants.UI.STOCK:
                 fragmentCurrent = new StockFragment();
                 break;
@@ -966,13 +967,14 @@ public class MainActivity extends AppCompatActivity {
                         (animated) ? R.anim.fade_out : R.anim.slide_no,
                         R.anim.fade_in,
                         R.anim.slide_out_down)
-                .replace(R.id.linear_container_main, fragmentCurrent, fragmentCurrent.toString())
+                .hide(fragmentOld)
+                .add(R.id.frame_main_container, fragmentCurrent, fragmentCurrent.toString())
                 .addToBackStack(fragmentCurrent.toString())
                 .commit();
 
         if(DEBUG) Log.i(
                 TAG,
-                "replaceFragment: replaced with " + newFragment + ", animated = " + animated
+                "replaceFragment: replaced with " + fragmentNew + ", animated = " + animated
         );
     }
 

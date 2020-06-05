@@ -403,7 +403,7 @@ public class PurchaseFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -486,7 +486,7 @@ public class PurchaseFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 ).setActionTextColor(
@@ -714,7 +714,7 @@ public class PurchaseFragment extends Fragment {
                     } else {
                         activity.showMessage(
                                 Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.msg_error),
                                         Snackbar.LENGTH_SHORT
                                 )
@@ -806,7 +806,7 @@ public class PurchaseFragment extends Fragment {
                     }
 
                     Snackbar snackbar = Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(
                                     R.string.msg_purchased,
                                     NumUtil.trim(amountAdded),
@@ -871,7 +871,7 @@ public class PurchaseFragment extends Fragment {
                 success -> {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.linear_container_main),
+                                    activity.findViewById(R.id.frame_main_container),
                                     activity.getString(R.string.msg_undone_transaction),
                                     Snackbar.LENGTH_SHORT
                             )
@@ -1110,7 +1110,7 @@ public class PurchaseFragment extends Fragment {
             if(inputChip.getText().equals(input)) {
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.linear_container_main),
+                                activity.findViewById(R.id.frame_main_container),
                                 activity.getString(R.string.msg_barcode_duplicate),
                                 Snackbar.LENGTH_SHORT
                         )
@@ -1157,7 +1157,7 @@ public class PurchaseFragment extends Fragment {
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

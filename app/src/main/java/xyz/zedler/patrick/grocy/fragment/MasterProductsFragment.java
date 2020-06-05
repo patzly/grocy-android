@@ -216,7 +216,7 @@ public class MasterProductsFragment extends Fragment
             swipeRefreshLayout.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -473,7 +473,7 @@ public class MasterProductsFragment extends Fragment
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
@@ -597,7 +597,7 @@ public class MasterProductsFragment extends Fragment
                     } else {
                         activity.showMessage(
                                 Snackbar.make(
-                                        activity.findViewById(R.id.linear_container_main),
+                                        activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.msg_master_delete_stock),
                                         Snackbar.LENGTH_LONG
                                 )

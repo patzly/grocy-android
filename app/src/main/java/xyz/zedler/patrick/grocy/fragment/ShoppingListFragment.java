@@ -349,7 +349,7 @@ public class ShoppingListFragment extends Fragment
             }
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.linear_container_main),
+                            activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     )
@@ -1520,7 +1520,7 @@ public class ShoppingListFragment extends Fragment
     private void showMessage(String msg) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.linear_container_main),
+                        activity.findViewById(R.id.frame_main_container),
                         msg,
                         Snackbar.LENGTH_SHORT
                 )
