@@ -101,6 +101,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private StockItemAdapter stockItemAdapter;
     private ClickUtil clickUtil = new ClickUtil();
     private AnimUtil animUtil = new AnimUtil();
+    private FragmentStockBinding binding;
+    private SwipeBehavior swipeBehavior;
+
+    private FilterChip chipExpiring;
+    private FilterChip chipExpired;
+    private FilterChip chipMissing;
+    private EditText editTextSearch;
+    private InputChip inputChipFilterLocation;
+    private InputChip inputChipFilterProductGroup;
 
     private ArrayList<StockItem> stockItems;
     private ArrayList<StockItem> expiringItems;
@@ -114,15 +123,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private ArrayList<Location> locations;
     private ArrayList<ProductGroup> productGroups;
 
-    private String search, itemsToDisplay, filterProductGroupId, sortMode;
-    private int filterLocationId, daysExpiringSoon;
-    private boolean sortAscending, isRestoredInstance;
-
-    private FragmentStockBinding binding;
-    private SwipeBehavior swipeBehavior;
-    private FilterChip chipExpiring, chipExpired, chipMissing;
-    private EditText editTextSearch;
-    private InputChip inputChipFilterLocation, inputChipFilterProductGroup;
+    private String search;
+    private String itemsToDisplay;
+    private String filterProductGroupId;
+    private String sortMode;
+    private String errorState;
+    private int filterLocationId;
+    private int daysExpiringSoon;
+    private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -175,6 +184,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         productGroups = new ArrayList<>();
 
         itemsToDisplay = Constants.STOCK.FILTER.ALL;
+        errorState = Constants.STATE.NONE;
         search = "";
         filterLocationId = -1;
         filterProductGroupId = "";
@@ -365,6 +375,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             outState.putParcelableArrayList("productGroups", productGroups);
 
             outState.putString("itemsToDisplay", itemsToDisplay);
+            outState.putString("errorState", errorState);
             outState.putString("search", search);
             outState.putInt("filterLocationId", filterLocationId);
             outState.putString("filterProductGroupId", filterProductGroupId);
@@ -375,6 +386,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE)
+                || errorState.equals(Constants.STATE.ERROR)
+        ) return;
+
         stockItems = savedInstanceState.getParcelableArrayList("stockItems");
         expiringItems = savedInstanceState.getParcelableArrayList("expiringItems");
         expiredItems = savedInstanceState.getParcelableArrayList("expiredItems");
@@ -450,6 +469,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setError(String state, boolean animated) {
+        errorState = state;
+
         View viewIn = binding.linearError.linearError;
         View viewOut = binding.scrollStock;
 

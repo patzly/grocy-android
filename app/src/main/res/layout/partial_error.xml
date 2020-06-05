@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_error"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="?actionBarSize"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:visibility="gone">
 
     <ImageView
         android:id="@+id/image_error"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         tools:ignore="ContentDescription" />
 
     <TextView

@@ -117,6 +117,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <include
+                android:id="@+id/linear_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="56dp"
+                android:paddingBottom="?actionBarSize"
+                android:clipToPadding="false"
+                layout="@layout/partial_empty"/>
+
+            <include
+                android:id="@+id/linear_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?actionBarSize"
+                layout="@layout/partial_error"/>
+
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_stock"
                 android:layout_width="match_parent"
@@ -178,19 +194,6 @@
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
-            <include
-                android:id="@+id/linear_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="56dp"
-                android:paddingBottom="?actionBarSize"
-                android:clipToPadding="false"
-                layout="@layout/partial_empty"/>
-
-            <include
-                android:id="@+id/linear_error"
-                layout="@layout/partial_error"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
