@@ -23,7 +23,9 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.FrameLayout;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
@@ -71,6 +74,25 @@ public class FilterChip extends LinearLayout {
 
         this.context = context;
         init(colorId, text, onClick, onClickAgain);
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("superState", super.onSaveInstanceState());
+        bundle.putBoolean("isActive", isActive);
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            setActive(bundle.getBoolean("isActive"));
+            state = bundle.getParcelable("superState");
+        }
+        super.onRestoreInstanceState(state);
     }
 
     private void init(@ColorRes int colorId, String text, Runnable onClick, Runnable onClickAgain) {
@@ -118,7 +140,9 @@ public class FilterChip extends LinearLayout {
 
     public void setActive(boolean active) {
         isActive = active;
+
         frameLayoutIcon.setLayoutParams(new LayoutParams(dp(isActive ? 24 : 0), dp(24)));
+        if(active) imageViewIcon.setImageResource(R.drawable.ic_round_filter_list_out_anim);
     }
 
     public void invertState() {
@@ -149,7 +173,7 @@ public class FilterChip extends LinearLayout {
                 active
                         ? R.drawable.ic_round_filter_list_in_anim
                         : R.drawable.ic_round_filter_list_out_anim
-                );
+        );
         new Handler().postDelayed(() -> {
             try {
                 ((Animatable) imageViewIcon.getDrawable()).start();
@@ -157,12 +181,6 @@ public class FilterChip extends LinearLayout {
                 Log.e(TAG, "startIconAnimation() requires AVD!");
             }
         }, active ? 100 : 0);
-    }
-
-    @Override
-    public boolean callOnClick() {
-        setActive(!isActive);
-        return super.callOnClick();
     }
 
     private int dp(int dp){
