@@ -49,23 +49,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -73,7 +70,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterProductsFragment extends Fragment
         implements MasterProductAdapter.MasterProductAdapterListener {
@@ -82,10 +78,8 @@ public class MasterProductsFragment extends Fragment
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
-    private GrocyApi grocyApi;
+    private DownloadHelper downloadHelper;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
     private SharedPreferences sharedPrefs;
     private MasterProductAdapter masterProductAdapter;
     private ClickUtil clickUtil = new ClickUtil();
@@ -93,9 +87,10 @@ public class MasterProductsFragment extends Fragment
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Product> filteredProducts = new ArrayList<>();
     private ArrayList<Product> displayedProducts = new ArrayList<>();
-    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+
+    private HashMap<Integer, Location> locations = new HashMap<>();
+    private HashMap<Integer, QuantityUnit> quantityUnits = new HashMap<>();
 
     private String search = "";
     private int filterProductGroupId = -1;
@@ -126,14 +121,14 @@ public class MasterProductsFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // PREFERENCES
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        // WEB REQUESTS
-
-        request = new WebRequest(activity.getRequestQueue());
-        grocyApi = activity.getGrocy();
+        downloadHelper = new DownloadHelper(
+                activity,
+                TAG,
+                this::onDownloadError,
+                this::onQueueEmpty
+        );
 
         // INITIALIZE VIEWS
 
@@ -184,11 +179,7 @@ public class MasterProductsFragment extends Fragment
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         recyclerView.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
+                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new MasterPlaceholderAdapter());
@@ -250,82 +241,17 @@ public class MasterProductsFragment extends Fragment
 
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
-        downloadQuantityUnits();
-        downloadProductGroups();
-        downloadProducts();
 
-        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            downloadLocations();
+        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
+        downloadHelper.downloadQuantityUnits(quantityUnits -> {
+            for (QuantityUnit q : quantityUnits) this.quantityUnits.put(q.getId(), q);
+        });
+        downloadHelper.downloadProducts(products -> this.products = products);
+        if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            downloadHelper.downloadLocations(locations -> {
+                for(Location l : locations) this.locations.put(l.getId(), l);
+            });
         }
-    }
-
-    private void downloadQuantityUnits() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
-                TAG,
-                response -> {
-                    quantityUnits = gson.fromJson(
-                            response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadLocations() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
-                TAG,
-                response -> {
-                    locations = gson.fromJson(
-                            response,
-                            new TypeToken<List<Location>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProductGroups() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                TAG,
-                response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadProductGroups: productGroups = " + productGroups
-                    );
-                    setMenuProductGroupFilters();
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProducts() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(TAG, "downloadProducts: products = " + products);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
     }
 
     private void onQueueEmpty() {
@@ -334,7 +260,6 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
         swipeRefreshLayout.setRefreshing(false);
         setError(true, true);
         if(DEBUG) Log.i(TAG, "onDownloadError: " + error);
@@ -357,11 +282,9 @@ public class MasterProductsFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchProducts(search);
-        } else {
-            if(displayedProducts != filteredProducts) {
-                displayedProducts = filteredProducts;
-                sortProducts(sortAscending);
-            }
+        } else if(displayedProducts != filteredProducts) {
+            displayedProducts = filteredProducts;
+            sortProducts(sortAscending);
         }
         if(DEBUG) Log.i(TAG, "filterProducts: filteredProducts = " + filteredProducts);
     }
@@ -445,22 +368,6 @@ public class MasterProductsFragment extends Fragment
         return -1;
     }
 
-    private QuantityUnit getQuantityUnit(int id) {
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) {
-                return quantityUnit;
-            }
-        } return null;
-    }
-
-    private Location getLocation(int id) {
-        for(Location location : locations) {
-            if(location.getId() == id) {
-                return location;
-            }
-        } return null;
-    }
-
     private ProductGroup getProductGroup(String id) {
         if(id == null || id.isEmpty()) return null;
         for(ProductGroup productGroup : productGroups) {
@@ -470,11 +377,11 @@ public class MasterProductsFragment extends Fragment
         } return null;
     }
 
-    private void showErrorMessage() {
+    private void showMessage(String message) {
         activity.showMessage(
                 Snackbar.make(
                         activity.findViewById(R.id.frame_main_container),
-                        activity.getString(R.string.msg_error),
+                        message,
                         Snackbar.LENGTH_SHORT
                 )
         );
@@ -538,9 +445,9 @@ public class MasterProductsFragment extends Fragment
 
     private void showProductSheet(Product product) {
         if(product != null) {
-            Location location = getLocation(product.getLocationId());
-            QuantityUnit quantityUnitPurchase = getQuantityUnit(product.getQuIdPurchase());
-            QuantityUnit quantityUnitStock = getQuantityUnit(product.getQuIdPurchase());
+            Location location = locations.get(product.getLocationId());
+            QuantityUnit quantityUnitPurchase = quantityUnits.get(product.getQuIdPurchase());
+            QuantityUnit quantityUnitStock = quantityUnits.get(product.getQuIdStock());
             ProductGroup productGroup = getProductGroup(product.getProductGroupId());
 
             Bundle bundle = new Bundle();
@@ -579,50 +486,30 @@ public class MasterProductsFragment extends Fragment
     }
 
     public void checkForStock(Product product) {
-        request.get(
-                grocyApi.getStockProductDetails(product.getId()),
-                response -> {
-                    ProductDetails productDetails = new Gson().fromJson(
-                            response,
-                            new TypeToken<ProductDetails>(){}.getType()
-                    );
-                    if(productDetails != null && productDetails.getStockAmount() == 0) {
-                        Bundle bundle = new Bundle();
-					    bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					    bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT);
-                        activity.showBottomSheet(
-                                new MasterDeleteBottomSheetDialogFragment(),
-                                bundle
-                        );
-                    } else {
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.frame_main_container),
-                                        activity.getString(R.string.msg_master_delete_stock),
-                                        Snackbar.LENGTH_LONG
-                                )
-                        );
-                    }
-                },
-                error -> { }
-        );
+        if(product == null) return;
+        downloadHelper.downloadProductDetails(product.getId(), productDetails -> {
+            if(productDetails != null && productDetails.getStockAmount() == 0) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT);
+                activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+            } else {
+                showMessage(activity.getString(R.string.msg_master_delete_stock));
+            }
+        }, error -> showMessage(activity.getString(R.string.msg_error)));
     }
 
     public void deleteProduct(Product product) {
-        request.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
-                response -> {
-                    int index = getProductPosition(product.getId());
-                    if(index != -1) {
-                        displayedProducts.remove(index);
-                        masterProductAdapter.notifyItemRemoved(index);
-                    } else {
-                        // product not found, fall back to complete refresh
-                        refresh();
-                    }
-                },
-                error -> showErrorMessage()
-        );
+        if(product == null) return;
+        downloadHelper.deleteProduct(product.getId(), response -> {
+            int index = getProductPosition(product.getId());
+            if(index != -1) {
+                displayedProducts.remove(index);
+                masterProductAdapter.notifyItemRemoved(index);
+            } else {
+                refresh();  // product not found, fall back to complete refresh
+            }
+        }, error -> showMessage(activity.getString(R.string.msg_error)));
     }
 
     private boolean isFeatureEnabled(String pref) {
