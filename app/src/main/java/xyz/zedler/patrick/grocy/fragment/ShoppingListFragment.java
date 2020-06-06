@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
@@ -34,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -80,6 +82,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -102,31 +105,34 @@ public class ShoppingListFragment extends Fragment
     private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
     private FragmentShoppingListBinding binding;
     private SwipeBehavior swipeBehavior;
 
     private FilterChip chipUndone;
     private FilterChip chipMissing;
 
-    private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
-    private ArrayList<ShoppingListItem> shoppingListItems = new ArrayList<>();
-    private ArrayList<ShoppingListItem> shoppingListItemsSelected = new ArrayList<>();
-    private ArrayList<MissingItem> missingItems = new ArrayList<>();
-    private ArrayList<ShoppingListItem> missingShoppingListItems = new ArrayList<>();
-    private ArrayList<ShoppingListItem> undoneShoppingListItems = new ArrayList<>();
-    private ArrayList<ShoppingListItem> filteredItems = new ArrayList<>();
-    private ArrayList<ShoppingListItem> displayedItems = new ArrayList<>();
-    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
-    private ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+    private ArrayList<ShoppingList> shoppingLists;
+    private ArrayList<ShoppingListItem> shoppingListItems;
+    private ArrayList<ShoppingListItem> shoppingListItemsSelected;
+    private ArrayList<MissingItem> missingItems;
+    private ArrayList<ShoppingListItem> missingShoppingListItems;
+    private ArrayList<ShoppingListItem> undoneShoppingListItems;
+    private ArrayList<ShoppingListItem> filteredItems;
+    private ArrayList<ShoppingListItem> displayedItems;
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<Product> products;
+    private ArrayList<ProductGroup> productGroups;
+    private ArrayList<GroupedListItem> groupedListItems;
 
-    private int selectedShoppingListId = 1;
+    private int selectedShoppingListId;
     private String startupShoppingListName;
-    private String itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-    private String search = "";
+    private String itemsToDisplay;
+    private String search;
+    private String errorState;
     private boolean isDataStored;
-    private boolean showOffline = false;
+    private boolean showOffline;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -156,17 +162,35 @@ public class ShoppingListFragment extends Fragment
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        shoppingLists = new ArrayList<>();
+        shoppingListItems = new ArrayList<>();
+        shoppingListItemsSelected = new ArrayList<>();
+        missingItems = new ArrayList<>();
+        missingShoppingListItems = new ArrayList<>();
+        undoneShoppingListItems = new ArrayList<>();
+        filteredItems = new ArrayList<>();
+        displayedItems = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
+        products = new ArrayList<>();
+        productGroups = new ArrayList<>();
+        groupedListItems = new ArrayList<>();
+
+        itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
+        selectedShoppingListId = 1;
+        search = "";
+        showOffline = false;
+        errorState = Constants.STATE.NONE;
+        isRestoredInstance = false;
+
         // INITIALIZE VIEWS
 
         binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
 
         // top app bar
-        binding.textShoppingListTitle.setOnClickListener(
-                v -> showShoppingListsBottomSheet()
-        );
-        binding.buttonShoppingListLists.setOnClickListener(
-                v -> showShoppingListsBottomSheet()
-        );
+        binding.textShoppingListTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
+        binding.buttonShoppingListLists.setOnClickListener(v -> showShoppingListsBottomSheet());
 
         binding.linearShoppingListBottomNotesClick.setOnClickListener(v -> showNotesEditor());
 
@@ -191,7 +215,11 @@ public class ShoppingListFragment extends Fragment
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_shopping_list_app_bar_default);
+        appBarBehavior = new AppBarBehavior(
+                activity,
+                R.id.linear_shopping_list_app_bar_default,
+                R.id.linear_shopping_list_app_bar_search
+        );
 
         // SWIPE REFRESH
 
@@ -215,6 +243,7 @@ public class ShoppingListFragment extends Fragment
                 },
                 () -> filterItems(Constants.SHOPPING_LIST.FILTER.ALL)
         );
+        chipMissing.setId(R.id.chip_shopping_filter_missing);
         chipUndone = new FilterChip(
                 activity,
                 R.color.retro_yellow_bg,
@@ -225,15 +254,18 @@ public class ShoppingListFragment extends Fragment
                 },
                 () -> filterItems(Constants.SHOPPING_LIST.FILTER.ALL)
         );
+        chipUndone.setId(R.id.chip_shopping_filter_undone);
+
+        // clear filter container
+        binding.linearShoppingListFilterContainer.removeAllViews();
+
         binding.linearShoppingListFilterContainer.addView(chipMissing);
         binding.linearShoppingListFilterContainer.addView(chipUndone);
 
+        if(savedInstanceState == null) binding.scrollShoppingList.scrollTo(0, 0);
+
         binding.recyclerShoppingList.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
+                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recyclerShoppingList.setItemAnimator(new ItemAnimator());
         binding.recyclerShoppingList.setAdapter(new StockPlaceholderAdapter());
@@ -270,33 +302,118 @@ public class ShoppingListFragment extends Fragment
 
         hideDisabledFeatures();
 
-        load();
-
-        updateUI();
-
-        if(getArguments() != null) {
-            getArguments().putBoolean(Constants.ARGUMENT.ANIMATED, true);
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
         }
+
+        // UPDATE UI
+
+        activity.updateUI(
+                showOffline
+                        ? Constants.UI.SHOPPING_LIST_OFFLINE
+                        : Constants.UI.SHOPPING_LIST_DEFAULT,
+                (getArguments() == null
+                        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                        && savedInstanceState == null,
+                TAG
+        );
+        setArguments(null);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("shoppingLists", shoppingLists);
+            outState.putParcelableArrayList("shoppingListItems", shoppingListItems);
+            outState.putParcelableArrayList("shoppingListItemsSelected", shoppingListItemsSelected);
+            outState.putParcelableArrayList("missingItems", missingItems);
+            outState.putParcelableArrayList("missingShoppingListItems", missingShoppingListItems);
+            outState.putParcelableArrayList("undoneShoppingListItems", undoneShoppingListItems);
+            outState.putParcelableArrayList("filteredItems", filteredItems);
+            outState.putParcelableArrayList("displayedItems", displayedItems);
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("productGroups", productGroups);
+            //outState.putParcelableArrayList("groupedListItems", groupedListItems);
+
+            outState.putString("itemsToDisplay", itemsToDisplay);
+            outState.putString("errorState", errorState);
+            outState.putString("search", search);
+            outState.putBoolean("isDataStored", isDataStored);
+            outState.putBoolean("showOffline", showOffline);
+            outState.putString("startupShoppingListName", startupShoppingListName);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE)
+                || errorState.equals(Constants.STATE.ERROR)
+        ) return;
+
+        shoppingLists = savedInstanceState.getParcelableArrayList("shoppingLists");
+        shoppingListItems = savedInstanceState.getParcelableArrayList("shoppingListItems");
+        shoppingListItemsSelected = savedInstanceState.getParcelableArrayList(
+                "shoppingListItemsSelected"
+        );
+        missingItems = savedInstanceState.getParcelableArrayList("missingItems");
+        missingShoppingListItems = savedInstanceState.getParcelableArrayList(
+                "missingShoppingListItems"
+        );
+        undoneShoppingListItems = savedInstanceState.getParcelableArrayList(
+                "undoneShoppingListItems"
+        );
+        filteredItems = savedInstanceState.getParcelableArrayList("filteredItems");
+        displayedItems = savedInstanceState.getParcelableArrayList("displayedItems");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+        products = savedInstanceState.getParcelableArrayList("products");
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+        //groupedListItems = savedInstanceState.getParcelableArrayList("groupedListItems");
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        binding.swipeShoppingList.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextShoppingListSearch.setText(search);
+
+        // FILTERS
+        isRestoredInstance = true;
+        filterItems(
+                savedInstanceState.getString("itemsToDisplay", Constants.STOCK.FILTER.ALL)
+        );
+
+        chipMissing.setText(
+                activity.getString(R.string.msg_missing_products, missingItems.size())
+        );
+        chipUndone.setText(
+                activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
+        );
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void updateUI() {
-        if(!showOffline) {
-            activity.updateUI(
-                    Constants.UI.SHOPPING_LIST_DEFAULT,
-                    getArguments() == null || getArguments().getBoolean(
-                            Constants.ARGUMENT.ANIMATED, true
-                    ),
-                    TAG
-            );
-        } else {
-            activity.updateUI(
-                    Constants.UI.SHOPPING_LIST_OFFLINE,
-                    getArguments() == null || getArguments().getBoolean(
-                            Constants.ARGUMENT.ANIMATED, true
-                    ),
-                    TAG
-            );
-        }
+        activity.updateUI(
+                showOffline
+                        ? Constants.UI.SHOPPING_LIST_OFFLINE
+                        : Constants.UI.SHOPPING_LIST_DEFAULT,
+                getArguments() == null || getArguments().getBoolean(
+                        Constants.ARGUMENT.ANIMATED, true
+                ),
+                TAG
+        );
     }
 
     private void load() {
@@ -322,35 +439,75 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean isOffline, boolean animated) {
-        if(isError) {
-            binding.linearError.imageError.setImageResource(
-                    isOffline
-                            ? R.drawable.illustration_broccoli
-                            : R.drawable.illustration_popsicle
-            );
-            binding.linearError.textErrorTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
-            binding.linearError.textErrorSubtitle.setText(
-                    isOffline
-                            ? R.string.error_offline_subtitle
-                            : R.string.error_unknown_subtitle
-            );
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollShoppingList;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollShoppingList;
+                viewOut = binding.linearError.linearError;
+                break;
         }
 
-        if(animated) {
-            View viewOut = isError ? binding.scrollShoppingList : binding.linearError.linearError;
-            View viewIn = isError ? binding.linearError.linearError : binding.scrollShoppingList;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_shopping_list);
+                    binding.linearEmpty.textEmptySubtitle.setText(
+                            R.string.error_empty_shopping_list_sub
+                    );
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.scrollShoppingList.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
