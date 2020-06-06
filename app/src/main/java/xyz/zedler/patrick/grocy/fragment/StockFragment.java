@@ -190,7 +190,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // INITIALIZE VIEWS
 
-        // buttons on offline error page
+        // button on offline error page
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         // search
@@ -289,11 +289,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(savedInstanceState == null) binding.scrollStock.scrollTo(0, 0);
 
         binding.recyclerStock.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
+                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
