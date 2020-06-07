@@ -354,7 +354,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // UPDATE UI
 
         activity.updateUI(
-                Constants.UI.STOCK_DEFAULT,
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.STOCK_DEFAULT
+                        : Constants.UI.STOCK_SEARCH,
                 (getArguments() == null
                         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                         && savedInstanceState == null,
@@ -411,6 +413,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
+        if(!appBarBehavior.isPrimaryLayout()) activity.setUI(Constants.UI.STOCK_SEARCH);
+
         binding.swipeStock.setRefreshing(false);
 
         // SEARCH

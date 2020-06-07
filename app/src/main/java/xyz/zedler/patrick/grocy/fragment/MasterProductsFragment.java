@@ -204,7 +204,7 @@ public class MasterProductsFragment extends Fragment
         // UPDATE UI
 
         activity.updateUI(
-                appBarBehavior.isPrimary()
+                appBarBehavior.isPrimaryLayout()
                         ? Constants.UI.MASTER_PRODUCTS_DEFAULT
                         : Constants.UI.MASTER_PRODUCTS_SEARCH,
                 savedInstanceState == null,
@@ -254,7 +254,7 @@ public class MasterProductsFragment extends Fragment
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
-                appBarBehavior.isPrimary()
+                appBarBehavior.isPrimaryLayout()
                         ? Constants.UI.MASTER_PRODUCTS_DEFAULT
                         : Constants.UI.MASTER_PRODUCTS_SEARCH
         );

@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,7 +58,6 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
@@ -380,7 +378,7 @@ public class ShoppingListFragment extends Fragment implements
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
-                appBarBehavior.isPrimary()
+                appBarBehavior.isPrimaryLayout()
                         ? Constants.UI.SHOPPING_LIST_DEFAULT
                         : Constants.UI.SHOPPING_LIST_SEARCH
         );

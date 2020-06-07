@@ -36,6 +36,7 @@ public class AppBarBehavior {
 
 	private Activity activity;
 	private View viewPrimary, viewSecondary;
+	private boolean isPrimary;
 
 	public AppBarBehavior(Activity activity, @IdRes int primary, @IdRes int secondary) {
 		this.activity = activity;
@@ -46,19 +47,18 @@ public class AppBarBehavior {
 
 		viewSecondary = activity.findViewById(secondary);
 		viewSecondary.setVisibility(View.GONE);
+
+		isPrimary = true;
 	}
 
 	public void saveInstanceState(@NonNull Bundle outState) {
 		if(viewPrimary != null) {
 			outState.putInt("appBarBehavior_primary_view_id", viewPrimary.getId());
-			outState.putBoolean(
-					"appBarBehavior_is_primary",
-					viewPrimary.getVisibility() == View.VISIBLE
-			);
 		}
 		if(viewSecondary != null) {
 			outState.putInt("appBarBehavior_secondary_view_id", viewSecondary.getId());
 		}
+		outState.putBoolean("appBarBehavior_is_primary", isPrimary);
 	}
 
 	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class AppBarBehavior {
 		this.viewPrimary = viewPrimary;
 		this.viewSecondary = viewSecondary;
 
-		boolean isPrimary = savedInstanceState.getBoolean(
+		isPrimary = savedInstanceState.getBoolean(
 				"appBarBehavior_is_primary",
 				true
 		);
@@ -82,7 +82,7 @@ public class AppBarBehavior {
 	}
 
 	public void switchToPrimary() {
-		if(viewPrimary.getVisibility() == View.VISIBLE) return;
+		if(isPrimary) return;
 		viewSecondary.animate()
 				.alpha(0)
 				.setDuration(ANIM_DURATION / 2)
@@ -96,7 +96,7 @@ public class AppBarBehavior {
 	}
 
 	public void switchToSecondary() {
-		if(viewSecondary.getVisibility() == View.VISIBLE) return;
+		if(!isPrimary) return;
 		viewPrimary.animate()
 				.alpha(0)
 				.setDuration(ANIM_DURATION / 2)
@@ -109,11 +109,7 @@ public class AppBarBehavior {
 		if(DEBUG) Log.i(TAG, "switch to secondary layout");
 	}
 
-	public boolean isPrimary() {
-		return viewPrimary != null && viewPrimary.getVisibility() == View.VISIBLE;
-	}
-
-	public boolean isSecondary() {
-		return viewSecondary != null && viewSecondary.getVisibility() == View.VISIBLE;
+	public boolean isPrimaryLayout() {
+		return isPrimary;
 	}
 }
