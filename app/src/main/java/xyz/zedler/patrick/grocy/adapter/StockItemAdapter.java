@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -49,8 +49,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     private Context context;
     private ArrayList<StockItem> stockItems;
-    private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<String> shoppingListProductIds;
+    private HashMap<Integer, QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
     private int daysExpiringSoon;
     private String sortMode;
@@ -59,7 +59,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public StockItemAdapter(
             Context context,
             ArrayList<StockItem> stockItems,
-            ArrayList<QuantityUnit> quantityUnits,
+            HashMap<Integer, QuantityUnit> quantityUnits,
             ArrayList<String> shoppingListProductIds,
             int daysExpiringSoon,
             String sortMode,
@@ -124,23 +124,19 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         // AMOUNT
 
-        QuantityUnit quantityUnit = new QuantityUnit();
-        for(int i = 0; i < quantityUnits.size(); i++) {
-            if(quantityUnits.get(i).getId() == stockItem.getProduct().getQuIdStock()) {
-                quantityUnit = quantityUnits.get(i);
-                break;
-            }
+        QuantityUnit quantityUnit = quantityUnits.get(stockItem.getProduct().getQuIdStock());
+
+        String unit = null;
+        if(quantityUnit != null && stockItem.getAmount() == 1) {
+            unit = quantityUnit.getName();
+        } else if (quantityUnit != null) {
+            unit = quantityUnit.getNamePlural();
         }
-
-        if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
-
         StringBuilder stringBuilderAmount = new StringBuilder(
                 context.getString(
                         R.string.subtitle_amount,
                         NumUtil.trim(stockItem.getAmount()),
-                        stockItem.getAmount() == 1
-                                ? quantityUnit.getName()
-                                : quantityUnit.getNamePlural()
+                        unit
                 )
         );
         if(stockItem.getAmountOpened() > 0) {
@@ -154,14 +150,17 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         }
         // aggregated amount
         if(stockItem.getIsAggregatedAmount() == 1) {
+            if(quantityUnit != null && stockItem.getAmountAggregated() == 1) {
+                unit = quantityUnit.getName();
+            } else if (quantityUnit != null) {
+                unit = quantityUnit.getNamePlural();
+            }
             stringBuilderAmount.append("  ∑ ");
             stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount,
                             NumUtil.trim(stockItem.getAmountAggregated()),
-                            stockItem.getAmountAggregated() == 1
-                                    ? quantityUnit.getName()
-                                    : quantityUnit.getNamePlural()
+                            unit
                     )
             );
         }

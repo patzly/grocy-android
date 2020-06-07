@@ -89,8 +89,8 @@ public class MasterProductsFragment extends Fragment
     private ArrayList<Product> displayedProducts = new ArrayList<>();
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
 
-    private HashMap<Integer, Location> locations = new HashMap<>();
-    private HashMap<Integer, QuantityUnit> quantityUnits = new HashMap<>();
+    private HashMap<Integer, Location> locations;
+    private HashMap<Integer, QuantityUnit> quantityUnits;
 
     private String search = "";
     private int filterProductGroupId = -1;
@@ -242,13 +242,18 @@ public class MasterProductsFragment extends Fragment
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
 
-        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
+        downloadHelper.downloadProductGroups(productGroups -> {
+            this.productGroups = productGroups;
+            setMenuProductGroupFilters();
+        });
         downloadHelper.downloadQuantityUnits(quantityUnits -> {
+            this.quantityUnits = new HashMap<>();
             for (QuantityUnit q : quantityUnits) this.quantityUnits.put(q.getId(), q);
         });
         downloadHelper.downloadProducts(products -> this.products = products);
         if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             downloadHelper.downloadLocations(locations -> {
+                this.locations = new HashMap<>();
                 for(Location l : locations) this.locations.put(l.getId(), l);
             });
         }
@@ -496,7 +501,7 @@ public class MasterProductsFragment extends Fragment
             } else {
                 showMessage(activity.getString(R.string.msg_master_delete_stock));
             }
-        }, error -> showMessage(activity.getString(R.string.msg_error)));
+        }, error -> showMessage(activity.getString(R.string.msg_error)), false);
     }
 
     public void deleteProduct(Product product) {
