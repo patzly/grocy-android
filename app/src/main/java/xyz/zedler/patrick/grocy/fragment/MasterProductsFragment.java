@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,9 +62,12 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
@@ -79,6 +84,7 @@ public class MasterProductsFragment extends Fragment
     private MasterProductAdapter masterProductAdapter;
     private FragmentMasterProductsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
     private InputChip inputChipFilterProductGroup;
 
@@ -86,13 +92,18 @@ public class MasterProductsFragment extends Fragment
     private ArrayList<Product> filteredProducts;
     private ArrayList<Product> displayedProducts;
     private ArrayList<ProductGroup> productGroups;
+    private ArrayList<Location> locations;
+    private ArrayList<QuantityUnit> quantityUnits;
 
-    private HashMap<Integer, Location> locations;
-    private HashMap<Integer, QuantityUnit> quantityUnits;
+    private HashMap<Integer, ProductGroup> productGroupsMap;
+    private HashMap<Integer, Location> locationsMap;
+    private HashMap<Integer, QuantityUnit> quantityUnitsMap;
 
     private String search;
+    private String errorState;
     private int filterProductGroupId;
     private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -126,9 +137,8 @@ public class MasterProductsFragment extends Fragment
         filteredProducts = new ArrayList<>();
         displayedProducts = new ArrayList<>();
         productGroups = new ArrayList<>();
-
-        locations = new HashMap<>();
-        quantityUnits = new HashMap<>();
+        locations = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
 
         search = "";
         filterProductGroupId = -1;
@@ -140,9 +150,10 @@ public class MasterProductsFragment extends Fragment
                 v -> activity.onBackPressed()
         );
         // retry button on offline error page
-        activity.findViewById(R.id.button_master_products_error_retry).setOnClickListener(
-                v -> refresh()
-        );
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+
+        // search
+        binding.frameCloseMasterProductsSearch.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterProductsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -153,7 +164,8 @@ public class MasterProductsFragment extends Fragment
         binding.editTextMasterProductsSearch.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        searchProducts(binding.editTextMasterProductsSearch.getText().toString());
+                        Editable search = binding.editTextMasterProductsSearch.getText();
+                        searchProducts(search != null ? search.toString() : "");
                         activity.hideKeyboard();
                         return true;
                     } return false;
@@ -183,22 +195,100 @@ public class MasterProductsFragment extends Fragment
         binding.recyclerMasterProducts.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterProducts.setAdapter(new MasterPlaceholderAdapter());
 
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
+
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MASTER_PRODUCTS_DEFAULT, TAG);
+        activity.updateUI(
+                appBarBehavior.isPrimary()
+                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("filteredProducts", filteredProducts);
+            outState.putParcelableArrayList("displayedProducts", displayedProducts);
+            outState.putParcelableArrayList("productGroups", productGroups);
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+
+            outState.putString("errorState", errorState);
+            outState.putString("search", search);
+            outState.putInt("filterProductGroupId", filterProductGroupId);
+            outState.putBoolean("sortAscending", sortAscending);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
+            return;
+        }
+
+        products = savedInstanceState.getParcelableArrayList("products");
+        filteredProducts = savedInstanceState.getParcelableArrayList("filteredProducts");
+        displayedProducts = savedInstanceState.getParcelableArrayList("displayedProducts");
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+
+        productGroupsMap = ArrayUtil.getProductGroupsHashMap(productGroups);
+        locationsMap = ArrayUtil.getLocationsHashMap(locations);
+        quantityUnitsMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimary()
+                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+        );
+
+        binding.swipeMasterProducts.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextMasterProductsSearch.setText(search);
+
+        // FILTERS
+        updateProductGroupFilter(
+                savedInstanceState.getInt("filterProductGroupId", -1)
+        );
+        isRestoredInstance = true;
+        filterProducts();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeMasterProducts.setRefreshing(false);
@@ -217,26 +307,75 @@ public class MasterProductsFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
-        // TODO: different errors
-        if(animated) {
-            View viewOut = isError
-                    ? binding.scrollMasterProducts
-                    : binding.linearMasterProductsError;
-            View viewIn = isError
-                    ? binding.linearMasterProductsError
-                    : binding.scrollMasterProducts;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMasterProducts;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMasterProducts;
+                viewOut = binding.linearError.linearError;
+                break;
+        }
+
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_products);
+                    binding.linearEmpty.textEmptySubtitle.setText(
+                            R.string.error_empty_products_sub
+                    );
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.scrollMasterProducts.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearMasterProductsError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -245,17 +384,18 @@ public class MasterProductsFragment extends Fragment
 
         downloadHelper.downloadProductGroups(productGroups -> {
             this.productGroups = productGroups;
+            productGroupsMap = ArrayUtil.getProductGroupsHashMap(productGroups);
             setMenuProductGroupFilters();
         });
         downloadHelper.downloadQuantityUnits(quantityUnits -> {
-            this.quantityUnits = new HashMap<>();
-            for (QuantityUnit q : quantityUnits) this.quantityUnits.put(q.getId(), q);
+            this.quantityUnits = quantityUnits;
+            quantityUnitsMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
         });
         downloadHelper.downloadProducts(products -> this.products = products);
-        if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             downloadHelper.downloadLocations(locations -> {
-                this.locations = new HashMap<>();
-                for(Location l : locations) this.locations.put(l.getId(), l);
+                this.locations = locations;
+                locationsMap = ArrayUtil.getLocationsHashMap(locations);
             });
         }
     }
@@ -267,7 +407,7 @@ public class MasterProductsFragment extends Fragment
 
     private void onDownloadError(VolleyError error) {
         binding.swipeMasterProducts.setRefreshing(false);
-        setError(true, true);
+        setError(Constants.STATE.ERROR, true);
         if(DEBUG) Log.i(TAG, "onDownloadError: " + error);
     }
 
@@ -288,9 +428,24 @@ public class MasterProductsFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchProducts(search);
-        } else if(displayedProducts != filteredProducts) {
-            displayedProducts = filteredProducts;
-            sortProducts(sortAscending);
+        } else {
+            // EMPTY STATES
+            if(filteredProducts.isEmpty()) {
+                String state = Constants.STATE.EMPTY;
+                if(filterProductGroupId != -1) {
+                    state = Constants.STATE.NO_FILTER_RESULTS;
+                }
+                setEmptyState(state);
+            } else {
+                setEmptyState(Constants.STATE.NONE);
+            }
+
+            // SORTING
+            if(displayedProducts != filteredProducts || isRestoredInstance) {
+                displayedProducts = filteredProducts;
+                sortProducts(sortAscending);
+            }
+            isRestoredInstance = false;
         }
         if(DEBUG) Log.i(TAG, "filterProducts: filteredProducts = " + filteredProducts);
     }
@@ -345,6 +500,31 @@ public class MasterProductsFragment extends Fragment
         }
     }
 
+    /**
+     * Sets the product group filter without filtering
+     */
+    private void updateProductGroupFilter(int filterProductGroupId) {
+        ProductGroup productGroup = productGroupsMap.get(filterProductGroupId);
+        if(productGroup == null) return;
+
+        this.filterProductGroupId = filterProductGroupId;
+        if(inputChipFilterProductGroup != null) {
+            inputChipFilterProductGroup.changeText(productGroup.getName());
+        } else {
+            inputChipFilterProductGroup = new InputChip(
+                    activity,
+                    productGroup.getName(),
+                    R.drawable.ic_round_category,
+                    true,
+                    () -> {
+                        this.filterProductGroupId = -1;
+                        inputChipFilterProductGroup = null;
+                        filterProducts();
+                    });
+            binding.linearMasterProductsFilterContainer.addView(inputChipFilterProductGroup);
+        }
+    }
+
     private void sortProducts(boolean ascending) {
         if(DEBUG) Log.i(TAG, "sortProducts: sort by name, ascending = " + ascending);
         sortAscending = ascending;
@@ -372,15 +552,6 @@ public class MasterProductsFragment extends Fragment
             }
         }
         return -1;
-    }
-
-    private ProductGroup getProductGroup(String id) {
-        if(id == null || id.isEmpty()) return null;
-        for(ProductGroup productGroup : productGroups) {
-            if(productGroup.getId() == Integer.parseInt(id)) {
-                return productGroup;
-            }
-        } return null;
     }
 
     private void showMessage(String message) {
@@ -451,10 +622,12 @@ public class MasterProductsFragment extends Fragment
 
     private void showProductSheet(Product product) {
         if(product != null) {
-            Location location = locations.get(product.getLocationId());
-            QuantityUnit quantityUnitPurchase = quantityUnits.get(product.getQuIdPurchase());
-            QuantityUnit quantityUnitStock = quantityUnits.get(product.getQuIdStock());
-            ProductGroup productGroup = getProductGroup(product.getProductGroupId());
+            Location location = locationsMap.get(product.getLocationId());
+            QuantityUnit quantityUnitPurchase = quantityUnitsMap.get(product.getQuIdPurchase());
+            QuantityUnit quantityUnitStock = quantityUnitsMap.get(product.getQuIdStock());
+            ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
+                    ? productGroupsMap.get(Integer.parseInt(product.getProductGroupId()))
+                    : null;
 
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
@@ -474,10 +647,6 @@ public class MasterProductsFragment extends Fragment
         }
         binding.textInputMasterProductsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterProductsSearch);
-
-        activity.findViewById(R.id.frame_close_master_products_search).setOnClickListener(
-                v -> dismissSearch()
-        );
 
         activity.setUI(Constants.UI.MASTER_PRODUCTS_SEARCH);
     }

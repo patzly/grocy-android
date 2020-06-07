@@ -114,6 +114,8 @@
     <string name="error_empty_stock_sub">Go purchase some products</string>
     <string name="error_empty_shopping_list">Empty shopping list</string>
     <string name="error_empty_shopping_list_sub">Add some products you need</string>
+    <string name="error_empty_products">No products</string>
+    <string name="error_empty_products_sub">Create some with the button below</string>
     <string name="error_search">No search results</string>
     <string name="error_search_sub">Try other terms</string>
     <string name="error_filter">Nothing to display</string>
