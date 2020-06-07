@@ -379,6 +379,12 @@ public class ShoppingListFragment extends Fragment implements
         //groupedListItems = savedInstanceState.getParcelableArrayList("groupedListItems");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimary()
+                        ? Constants.UI.SHOPPING_LIST_DEFAULT
+                        : Constants.UI.SHOPPING_LIST_SEARCH
+        );
+
         binding.swipeShoppingList.setRefreshing(false);
 
         // SEARCH
@@ -1461,7 +1467,7 @@ public class ShoppingListFragment extends Fragment implements
 
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_search, true);
+            appBarBehavior.switchToSecondary();
             binding.editTextShoppingListSearch.setText("");
         }
         binding.textInputShoppingListSearch.requestFocus();
@@ -1471,7 +1477,7 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_shopping_list_app_bar_default, true);
+        appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);
