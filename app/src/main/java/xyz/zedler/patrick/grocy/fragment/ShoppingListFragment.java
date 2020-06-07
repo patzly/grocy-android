@@ -48,7 +48,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,6 +70,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -99,6 +99,7 @@ public class ShoppingListFragment extends Fragment implements
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
+    private DownloadHelper downloadHelper;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
@@ -158,6 +159,13 @@ public class ShoppingListFragment extends Fragment implements
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // WEB REQUESTS
+
+        downloadHelper = new DownloadHelper(
+                activity,
+                TAG,
+                this::onDownloadError,
+                this::onQueueEmpty
+        );
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
@@ -516,136 +524,24 @@ public class ShoppingListFragment extends Fragment implements
         binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
                 () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
         ).setDuration(150).start();
-        downloadQuantityUnits();
-        downloadProducts();
-        downloadProductGroups();
-        downloadShoppingListItems();
-        downloadVolatile();
-        downloadShoppingLists();
-    }
-
-    private void downloadQuantityUnits() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
-                TAG,
-                response -> {
-                    quantityUnits = gson.fromJson(
-                            response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProducts() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(TAG, "downloadProducts: products = " + products);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProductGroups() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                TAG,
-                response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadProductGroups: productGroups = " + productGroups
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadShoppingListItems() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
-                TAG,
-                response -> {
-                    shoppingListItems = gson.fromJson(
-                            response,
-                            new TypeToken<List<ShoppingListItem>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG,
-                            "downloadShoppingList: shoppingListItems = " + shoppingListItems
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadVolatile() {
-        request.get(
-                grocyApi.getStockVolatile(),
-                TAG,
-                response -> {
-                    if(DEBUG) Log.i(TAG, "downloadVolatile: success");
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        // Parse third part of volatile array: missing products
-                        missingItems = gson.fromJson(
-                                jsonObject.getJSONArray("missing_products").toString(),
-                                new TypeToken<List<MissingItem>>(){}.getType()
-                        );
-                        if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
-
-                    } catch (JSONException e) {
-                        Log.e(TAG, "downloadVolatile: " + e);
+        downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
+        downloadHelper.downloadProducts(products -> this.products = products);
+        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
+        downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
+        downloadHelper.downloadShoppingLists(shoppingLists -> {
+            this.shoppingLists = shoppingLists;
+            // set shopping list if chosen with name on fragment start
+            if(startupShoppingListName != null) {
+                for(ShoppingList shoppingList : shoppingLists) {
+                    if(shoppingList.getName().equals(startupShoppingListName)) {
+                        selectedShoppingListId = shoppingList.getId();
                     }
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadShoppingLists() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
-                TAG,
-                response -> {
-                    shoppingLists = gson.fromJson(
-                            response,
-                            new TypeToken<List<ShoppingList>>(){}.getType()
-                    );
-                    // set shopping list if chosen with name on fragment start
-                    if(startupShoppingListName != null) {
-                        for(ShoppingList shoppingList : shoppingLists) {
-                            if(shoppingList.getName().equals(startupShoppingListName)) {
-                                selectedShoppingListId = shoppingList.getId();
-                            }
-                        }
-                        startupShoppingListName = null;
-                    }
-                    changeAppBarTitle();
-                    if(DEBUG) Log.i(
-                            TAG,
-                            "downloadShoppingLists: shoppingLists = " + shoppingLists
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+                }
+                startupShoppingListName = null;
+            }
+            changeAppBarTitle();
+        });
+        downloadHelper.downloadVolatile((expiring, expired, missing) -> missingItems = missing);
     }
 
     private void onQueueEmpty() {
@@ -740,7 +636,6 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
         binding.swipeShoppingList.setRefreshing(false);
         if(!showOffline) {
             showOffline = true;
@@ -1342,6 +1237,7 @@ public class ShoppingListFragment extends Fragment implements
         ShoppingListItemDao itemDao = activity.getDatabase().shoppingListItemDao();
         for(ShoppingListItem listItem : shoppingListItems) {
             if(!listIds.contains(listItem.getShoppingListId())) {
+                Log.i(TAG, "tidyUpItems: " + listItem);
                 request.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, listItem.getId()),
                         response -> new Thread(() -> itemDao.delete(listItem) // delete in db too

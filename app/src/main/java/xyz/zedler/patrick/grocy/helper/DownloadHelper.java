@@ -23,6 +23,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -310,7 +311,7 @@ public class DownloadHelper {
         downloadProductDetails(productId, onResponseListener, null, true);
     }
 
-    public void downloadShoppingList(
+    public void downloadShoppingListItems(
             OnShoppingListResponseListener onResponseListener,
             OnErrorListener onErrorListener,
             boolean enableQueue
@@ -329,10 +330,31 @@ public class DownloadHelper {
         );
     }
 
-    public void downloadShoppingList(
-            OnShoppingListResponseListener onResponseListener
+    public void downloadShoppingListItems(OnShoppingListResponseListener onResponseListener) {
+        downloadShoppingListItems(onResponseListener, null, true);
+    }
+
+    public void downloadShoppingLists(
+            OnShoppingListsResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            boolean enableQueue
     ) {
-        downloadShoppingList(onResponseListener, null, true);
+        if(enableQueue) queueSize++;
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+                response -> {
+                    Type type = new TypeToken<List<ShoppingList>>(){}.getType();
+                    ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+                    if(DEBUG) Log.i(tag, "downloadShoppingLists: " + shoppingLists);
+                    onResponseListener.onResponse(shoppingLists);
+                    if(enableQueue) checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void downloadShoppingLists(OnShoppingListsResponseListener onResponseListener) {
+        downloadShoppingLists(onResponseListener, null, true);
     }
 
     public void deleteProduct(
@@ -397,6 +419,10 @@ public class DownloadHelper {
 
     public interface OnShoppingListResponseListener {
         void onResponse(ArrayList<ShoppingListItem> arrayList);
+    }
+
+    public interface OnShoppingListsResponseListener {
+        void onResponse(ArrayList<ShoppingList> arrayList);
     }
 
     public interface OnResponseListener {
