@@ -31,24 +31,18 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +52,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -82,27 +77,22 @@ public class MasterProductsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private SharedPreferences sharedPrefs;
     private MasterProductAdapter masterProductAdapter;
+    private FragmentMasterProductsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
 
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<Product> filteredProducts = new ArrayList<>();
-    private ArrayList<Product> displayedProducts = new ArrayList<>();
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
+    private InputChip inputChipFilterProductGroup;
+
+    private ArrayList<Product> products;
+    private ArrayList<Product> filteredProducts;
+    private ArrayList<Product> displayedProducts;
+    private ArrayList<ProductGroup> productGroups;
 
     private HashMap<Integer, Location> locations;
     private HashMap<Integer, QuantityUnit> quantityUnits;
 
-    private String search = "";
-    private int filterProductGroupId = -1;
-    private boolean sortAscending = true;
-
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
-    private EditText editTextSearch;
-    private InputChip inputChipFilterProductGroup;
-    private LinearLayout linearLayoutError, linearLayoutFilterContainer;
-    private NestedScrollView scrollView;
+    private String search;
+    private int filterProductGroupId;
+    private boolean sortAscending;
 
     @Override
     public View onCreateView(
@@ -110,8 +100,8 @@ public class MasterProductsFragment extends Fragment
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_master_products, container, false);
+        binding = FragmentMasterProductsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -130,39 +120,44 @@ public class MasterProductsFragment extends Fragment
                 this::onQueueEmpty
         );
 
+        // INITIALIZE VARIABLES
+
+        products = new ArrayList<>();
+        filteredProducts = new ArrayList<>();
+        displayedProducts = new ArrayList<>();
+        productGroups = new ArrayList<>();
+
+        locations = new HashMap<>();
+        quantityUnits = new HashMap<>();
+
+        search = "";
+        filterProductGroupId = -1;
+        sortAscending = true;
+
         // INITIALIZE VIEWS
 
         activity.findViewById(R.id.frame_master_products_back).setOnClickListener(
                 v -> activity.onBackPressed()
         );
-        linearLayoutFilterContainer = activity.findViewById(
-                R.id.linear_master_products_filter_container
-        );
-        linearLayoutError = activity.findViewById(R.id.linear_master_products_error);
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_products);
-        scrollView = activity.findViewById(R.id.scroll_master_products);
         // retry button on offline error page
         activity.findViewById(R.id.button_master_products_error_retry).setOnClickListener(
                 v -> refresh()
         );
-        recyclerView = activity.findViewById(R.id.recycler_master_products);
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_master_products_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.editTextMasterProductsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchProducts(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextMasterProductsSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        searchProducts(binding.editTextMasterProductsSearch.getText().toString());
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -170,19 +165,19 @@ public class MasterProductsFragment extends Fragment
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterProducts.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterProducts.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterProducts.setOnRefreshListener(this::refresh);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerMasterProducts.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MasterPlaceholderAdapter());
+        binding.recyclerMasterProducts.setItemAnimator(new DefaultItemAnimator());
+        binding.recyclerMasterProducts.setAdapter(new MasterPlaceholderAdapter());
 
         load();
 
@@ -204,7 +199,7 @@ public class MasterProductsFragment extends Fragment
             setError(false, true);
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterProducts.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
@@ -223,8 +218,12 @@ public class MasterProductsFragment extends Fragment
     private void setError(boolean isError, boolean animated) {
         // TODO: different errors
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError
+                    ? binding.scrollMasterProducts
+                    : binding.linearMasterProductsError;
+            View viewIn = isError
+                    ? binding.linearMasterProductsError
+                    : binding.scrollMasterProducts;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -234,13 +233,13 @@ public class MasterProductsFragment extends Fragment
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.scrollMasterProducts.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearMasterProductsError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterProducts.setRefreshing(true);
 
         downloadHelper.downloadProductGroups(productGroups -> {
             this.productGroups = productGroups;
@@ -260,12 +259,12 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void onQueueEmpty() {
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipeMasterProducts.setRefreshing(false);
         filterProducts();
     }
 
     private void onDownloadError(VolleyError error) {
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipeMasterProducts.setRefreshing(false);
         setError(true, true);
         if(DEBUG) Log.i(TAG, "onDownloadError: " + error);
     }
@@ -336,7 +335,7 @@ public class MasterProductsFragment extends Fragment
                             inputChipFilterProductGroup = null;
                             filterProducts();
                         });
-                linearLayoutFilterContainer.addView(inputChipFilterProductGroup);
+                binding.linearMasterProductsFilterContainer.addView(inputChipFilterProductGroup);
             }
             filterProducts();
         } else {
@@ -353,9 +352,9 @@ public class MasterProductsFragment extends Fragment
 
     private void refreshAdapter(MasterProductAdapter adapter) {
         masterProductAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerMasterProducts.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerMasterProducts.setAdapter(adapter);
+            binding.recyclerMasterProducts.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -469,10 +468,10 @@ public class MasterProductsFragment extends Fragment
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_search, true);
-            editTextSearch.setText("");
+            binding.editTextMasterProductsSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        binding.textInputMasterProductsSearch.requestFocus();
+        activity.showKeyboard(binding.editTextMasterProductsSearch);
 
         activity.findViewById(R.id.frame_close_master_products_search).setOnClickListener(
                 v -> dismissSearch()
