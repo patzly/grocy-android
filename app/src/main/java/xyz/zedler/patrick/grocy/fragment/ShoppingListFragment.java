@@ -19,9 +19,8 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -54,27 +53,26 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
-import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
-import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
-import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
-import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
+import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -91,8 +89,10 @@ import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ShoppingListFragment extends Fragment
-        implements ShoppingListItemAdapter.ShoppingListItemAdapterListener, AsyncResponse {
+public class ShoppingListFragment extends Fragment implements
+        ShoppingListItemAdapter.ShoppingListItemAdapterListener,
+        LoadOfflineDataShoppingListHelper.AsyncResponse,
+        StoreOfflineDataShoppingListHelper.AsyncResponse {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST;
     private final static boolean DEBUG = true;
@@ -421,7 +421,7 @@ public class ShoppingListFragment extends Fragment
             download();
         } else {
             showOffline = true;
-            new LoadOfflineData(activity, this).execute();
+            new LoadOfflineDataShoppingListHelper(activity, this).execute();
         }
     }
 
@@ -433,7 +433,7 @@ public class ShoppingListFragment extends Fragment
             if(!showOffline) {
                 showOffline = true;
                 updateUI();
-                new LoadOfflineData(activity, this).execute();
+                new LoadOfflineDataShoppingListHelper(activity, this).execute();
             }
             showMessage(activity.getString(R.string.msg_no_connection));
         }
@@ -688,7 +688,7 @@ public class ShoppingListFragment extends Fragment
 
         if(!isDataStored) {
             // sync modified data and store new data
-            new StoreOfflineData(
+            new StoreOfflineDataShoppingListHelper(
                     activity,
                     this,
                     true,
@@ -746,42 +746,7 @@ public class ShoppingListFragment extends Fragment
             showOffline = true;
             updateUI();
         }
-        new LoadOfflineData(activity, this).execute();
-    }
-
-    private static class LoadOfflineData extends AsyncTask<Void, Void, String> {
-        private WeakReference<Activity> weakActivity;
-        private AsyncResponse response;
-        private ArrayList<ShoppingListItem> shoppingListItems;
-        private ArrayList<ShoppingList> shoppingLists;
-        private ArrayList<ProductGroup> productGroups;
-        private ArrayList<QuantityUnit> quantityUnits;
-
-        public LoadOfflineData(Activity activity, AsyncResponse response) {
-            weakActivity = new WeakReference<>(activity);
-            this.response = response;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            MainActivity activity = (MainActivity) weakActivity.get();
-            AppDatabase database = activity.getDatabase();
-            shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
-            shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
-            productGroups = new ArrayList<>(database.productGroupDao().getAll());
-            quantityUnits = new ArrayList<>(database.quantityUnitDao().getAll());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String arg) {
-            response.prepareOfflineData(
-                    shoppingListItems,
-                    shoppingLists,
-                    productGroups,
-                    quantityUnits
-            );
-        }
+        new LoadOfflineDataShoppingListHelper(activity, this).execute();
     }
 
     @Override
@@ -962,7 +927,7 @@ public class ShoppingListFragment extends Fragment
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         if(showOffline) {
-            new LoadOfflineData(activity, this).execute();
+            new LoadOfflineDataShoppingListHelper(activity, this).execute();
         } else {
             onQueueEmpty();
         }
@@ -1366,149 +1331,22 @@ public class ShoppingListFragment extends Fragment
     private void tidyUpItems() {
         // Tidy up lost shopping list items, which have deleted shopping lists
         // as an id – else they will never show up on any shopping list
-        ArrayList<Integer> shoppingListIds = new ArrayList<>();
+        ArrayList<Integer> listIds = new ArrayList<>();
         if(isFeatureEnabled()) {
-            for(ShoppingList shoppingList1 : shoppingLists) {
-                shoppingListIds.add(shoppingList1.getId());
-            }
+            for(ShoppingList shoppingList : shoppingLists) listIds.add(shoppingList.getId());
+            if(listIds.isEmpty()) return;  // possible if download error happened
         } else {
-            shoppingListIds.add(1);  // id of first and single shopping list
+            listIds.add(1);  // id of first and single shopping list
         }
 
-        if(shoppingListIds.isEmpty()) return;
-        for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(!shoppingListIds.contains(shoppingListItem.getShoppingListId())) {
+        ShoppingListItemDao itemDao = activity.getDatabase().shoppingListItemDao();
+        for(ShoppingListItem listItem : shoppingListItems) {
+            if(!listIds.contains(listItem.getShoppingListId())) {
                 request.delete(
-                        grocyApi.getObject(
-                                GrocyApi.ENTITY.SHOPPING_LIST,
-                                shoppingListItem.getId()
-                        ),
-                        response -> new Thread( // delete items in database too
-                                () -> activity.getDatabase()
-                                .shoppingListItemDao()
-                                .delete(shoppingListItem)
+                        grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, listItem.getId()),
+                        response -> new Thread(() -> itemDao.delete(listItem) // delete in db too
                         ).start(),
                         error -> {}
-                );
-            }
-        }
-    }
-
-    private static class StoreOfflineData extends AsyncTask<Void, Void, String> {
-        private WeakReference<Activity> weakActivity;
-        private AsyncResponse response;
-        private boolean syncIfNecessary;
-        private ArrayList<ShoppingListItem> shoppingListItems;
-        private ArrayList<ShoppingList> shoppingLists;
-        private ArrayList<ProductGroup> productGroups;
-        private ArrayList<QuantityUnit> quantityUnits;
-        private ArrayList<Product> products;
-        private ArrayList<Integer> usedProductIds;
-        private ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
-
-        public StoreOfflineData(
-                Activity activity,
-                AsyncResponse response,
-                boolean syncIfNecessary,
-                ArrayList<ShoppingList> shoppingLists,
-                ArrayList<ShoppingListItem> shoppingListItems,
-                ArrayList<ProductGroup> productGroups,
-                ArrayList<QuantityUnit> quantityUnits,
-                ArrayList<Product> products,
-                ArrayList<Integer> usedProductIds
-        ) {
-            weakActivity = new WeakReference<>(activity);
-            this.response = response;
-            this.syncIfNecessary = syncIfNecessary;
-            this.shoppingLists = shoppingLists;
-            this.shoppingListItems = new ArrayList<>(shoppingListItems);
-            this.productGroups = productGroups;
-            this.quantityUnits = quantityUnits;
-            this.products = products;
-            this.usedProductIds = usedProductIds;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            MainActivity activity = (MainActivity) weakActivity.get();
-            AppDatabase database = activity.getDatabase();
-
-            if(syncIfNecessary) {
-                ArrayList<Integer> newItemIds = new ArrayList<>();
-                for(ShoppingListItem shoppingListItem : shoppingListItems) {
-                    newItemIds.add(shoppingListItem.getId());
-                }
-
-                // compare new with old items and add modified to separate list
-                ArrayList<ShoppingListItem> oldItems = new ArrayList<>(
-                        database.shoppingListItemDao().getAll()
-                );
-                for(ShoppingListItem oldItem : oldItems) {
-                    if(!newItemIds.contains(oldItem.getId())) {
-                        // item already deleted on server
-                        continue;
-                    }
-                    ShoppingListItem newItem = null;
-                    for(ShoppingListItem newItemTmp : shoppingListItems) {
-                        if(newItemTmp.getId() == oldItem.getId()) {
-                            newItem = newItemTmp;
-                        }
-                    }
-                    if(newItem != null && oldItem.getDoneSynced() != -1
-                            && oldItem.getDone() != oldItem.getDoneSynced()
-                            && oldItem.getDone() != newItem.getDone()
-                    ) {
-                        itemsToSync.add(oldItem);
-                    }
-                }
-                if(!itemsToSync.isEmpty()) return null; // don't overwrite items yet
-            }
-
-            // shopping list items
-            for(Product product : products) {  // fill with products
-                if(!usedProductIds.contains(product.getId())) continue;
-                for(ShoppingListItem shoppingListItem : shoppingListItems) {
-                    if(shoppingListItem.getProductId() == null) continue;
-                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
-                        shoppingListItem.setProduct(product);
-                    }
-                }
-            }
-            ShoppingListItemDao shoppingListItemDao = database.shoppingListItemDao();
-            shoppingListItemDao.deleteAll();
-            shoppingListItemDao.insertAll(shoppingListItems);
-
-            // shopping lists
-            ShoppingListDao shoppingListDao = database.shoppingListDao();
-            shoppingListDao.deleteAll();
-            shoppingListDao.insertAll(shoppingLists);
-
-            // product groups
-            ProductGroupDao productGroupDao = database.productGroupDao();
-            productGroupDao.deleteAll();
-            productGroupDao.insertAll(productGroups);
-
-            // quantity units
-            QuantityUnitDao quantityUnitDao = database.quantityUnitDao();
-            quantityUnitDao.deleteAll();
-            quantityUnitDao.insertAll(quantityUnits);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String arg) {
-            if(itemsToSync.isEmpty()) {
-                response.storedDataSuccessfully(shoppingListItems);
-            } else {
-                response.syncItems(
-                        itemsToSync,
-                        shoppingLists,
-                        shoppingListItems,
-                        productGroups,
-                        quantityUnits,
-                        products,
-                        usedProductIds
                 );
             }
         }
@@ -1522,7 +1360,8 @@ public class ShoppingListFragment extends Fragment
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits,
             ArrayList<Product> products,
-            ArrayList<Integer> usedProductIds
+            ArrayList<Integer> usedProductIds,
+            HashMap<Integer, ShoppingListItem> serverItemHashMap
     ) {
         for(ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
@@ -1536,11 +1375,8 @@ public class ShoppingListFragment extends Fragment
                     TAG,
                     body,
                     response -> {
-                        for(ShoppingListItem shoppingListItemTmp : shoppingListItems) {
-                            if(shoppingListItemTmp.getId() == itemToSync.getId()) {
-                                shoppingListItemTmp.setDone(itemToSync.getDone());
-                            }
-                        }
+                        ShoppingListItem serverItem = serverItemHashMap.get(itemToSync.getId());
+                        if(serverItem != null) serverItem.setDone(itemToSync.getDone());
                     },
                     error -> {
                         request.cancelAll(TAG);
@@ -1548,7 +1384,7 @@ public class ShoppingListFragment extends Fragment
                     },
                     () -> {
                         showMessage("Entries synced successfully");
-                        new StoreOfflineData(
+                        new StoreOfflineDataShoppingListHelper(
                                 activity,
                                 this,
                                 false,
@@ -1662,25 +1498,4 @@ public class ShoppingListFragment extends Fragment
     public String toString() {
         return TAG;
     }
-}
-
-interface AsyncResponse {
-    void prepareOfflineData(
-            ArrayList<ShoppingListItem> shoppingListItems,
-            ArrayList<ShoppingList> shoppingLists,
-            ArrayList<ProductGroup> productGroups,
-            ArrayList<QuantityUnit> quantityUnits
-    );
-
-    void syncItems(
-            ArrayList<ShoppingListItem> itemsToSync,
-            ArrayList<ShoppingList> shoppingLists,
-            ArrayList<ShoppingListItem> shoppingListItems,
-            ArrayList<ProductGroup> productGroups,
-            ArrayList<QuantityUnit> quantityUnits,
-            ArrayList<Product> products,
-            ArrayList<Integer> usedProductIds
-    );
-
-    void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems);
 }

@@ -9,16 +9,22 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -207,11 +213,83 @@ public class DownloadHelper {
         downloadProducts(onResponseListener, null);
     }
 
+    public void downloadStockItems(
+            OnStockItemsResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        queueSize++;
+        request.get(
+                grocyApi.getStock(),
+                tag,
+                response -> {
+                    Type type = new TypeToken<List<StockItem>>(){}.getType();
+                    ArrayList<StockItem> stockItems = gson.fromJson(response, type);
+                    if(DEBUG) Log.i(tag, "downloadStockItems: " + stockItems);
+                    onResponseListener.onResponse(stockItems);
+                    checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void downloadStockItems(OnStockItemsResponseListener onResponseListener) {
+        downloadStockItems(onResponseListener, null);
+    }
+
+    public void downloadVolatile(
+            OnVolatileResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        queueSize++;
+        request.get(
+                grocyApi.getStockVolatile(),
+                tag,
+                response -> {
+                    if(DEBUG) Log.i(tag, "downloadVolatile: success");
+                    ArrayList<StockItem> expiringItems = new ArrayList<>();
+                    ArrayList<StockItem> expiredItems = new ArrayList<>();
+                    ArrayList<MissingItem> missingItems = new ArrayList<>();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        // Parse first part of volatile array: expiring products
+                        expiringItems = gson.fromJson(
+                                jsonObject.getJSONArray("expiring_products").toString(),
+                                new TypeToken<List<StockItem>>(){}.getType()
+                        );
+                        if(DEBUG) Log.i(tag, "downloadVolatile: expiring = " + expiringItems);
+                        // Parse second part of volatile array: expired products
+                        expiredItems = gson.fromJson(
+                                jsonObject.getJSONArray("expired_products").toString(),
+                                new TypeToken<List<StockItem>>(){}.getType()
+                        );
+                        if(DEBUG) Log.i(tag, "downloadVolatile: expired = " + expiredItems);
+                        // Parse third part of volatile array: missing products
+                        missingItems = gson.fromJson(
+                                jsonObject.getJSONArray("missing_products").toString(),
+                                new TypeToken<List<MissingItem>>(){}.getType()
+                        );
+                        if(DEBUG) Log.i(tag, "downloadVolatile: missing = " + missingItems);
+                    } catch (JSONException e) {
+                        Log.e(tag, "downloadVolatile: " + e);
+                    }
+                    onResponseListener.onResponse(expiringItems, expiredItems, missingItems);
+                    checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void downloadVolatile(OnVolatileResponseListener onResponseListener) {
+        downloadVolatile(onResponseListener, null);
+    }
+
     public void downloadProductDetails(
             int productId,
             OnProductDetailsResponseListener onResponseListener,
-            OnErrorListener onErrorListener
+            OnErrorListener onErrorListener,
+            boolean enableQueue
     ) {
+        if(enableQueue) queueSize++;
         request.get(
                 grocyApi.getStockProductDetails(productId),
                 response -> {
@@ -219,9 +297,42 @@ public class DownloadHelper {
                     ProductDetails productDetails = new Gson().fromJson(response, type);
                     if(DEBUG) Log.i(tag, "downloadProductDetails: " + productDetails);
                     onResponseListener.onResponse(productDetails);
+                    if(enableQueue) checkQueueSize();
                 },
                 error -> onError(error, onErrorListener)
         );
+    }
+
+    public void downloadProductDetails(
+            int productId,
+            OnProductDetailsResponseListener onResponseListener
+    ) {
+        downloadProductDetails(productId, onResponseListener, null, true);
+    }
+
+    public void downloadShoppingList(
+            OnShoppingListResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            boolean enableQueue
+    ) {
+        if(enableQueue) queueSize++;
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+                response -> {
+                    Type type = new TypeToken<List<ShoppingListItem>>(){}.getType();
+                    ArrayList<ShoppingListItem> listItems = new Gson().fromJson(response, type);
+                    if(DEBUG) Log.i(tag, "downloadShoppingList: " + listItems);
+                    onResponseListener.onResponse(listItems);
+                    if(enableQueue) checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void downloadShoppingList(
+            OnShoppingListResponseListener onResponseListener
+    ) {
+        downloadShoppingList(onResponseListener, null, true);
     }
 
     public void deleteProduct(
@@ -268,8 +379,24 @@ public class DownloadHelper {
         void onResponse(ArrayList<Product> arrayList);
     }
 
+    public interface OnStockItemsResponseListener {
+        void onResponse(ArrayList<StockItem> arrayList);
+    }
+
+    public interface OnVolatileResponseListener {
+        void onResponse(
+                ArrayList<StockItem> expiring,
+                ArrayList<StockItem> expired,
+                ArrayList<MissingItem> missing
+        );
+    }
+
     public interface OnProductDetailsResponseListener {
         void onResponse(ProductDetails productDetails);
+    }
+
+    public interface OnShoppingListResponseListener {
+        void onResponse(ArrayList<ShoppingListItem> arrayList);
     }
 
     public interface OnResponseListener {
