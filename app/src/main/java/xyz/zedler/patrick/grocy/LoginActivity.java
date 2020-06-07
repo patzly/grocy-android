@@ -25,10 +25,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.util.Patterns;
 import android.webkit.URLUtil;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -42,7 +42,6 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,12 +50,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.ActivityLoginBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -70,17 +69,17 @@ public class LoginActivity extends AppCompatActivity {
     private WebRequest request;
     private RequestQueue requestQueue;
     private FragmentManager fragmentManager;
-
-    private TextInputLayout textInputLayoutKey;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         credentials = getSharedPreferences(Constants.PREF.CREDENTIALS, Context.MODE_PRIVATE);
-
-        setContentView(R.layout.activity_login);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -92,54 +91,49 @@ public class LoginActivity extends AppCompatActivity {
 
         // INITIALIZE VIEWS
 
-        TextInputLayout textInputLayoutServer = findViewById(R.id.text_input_login_server);
-        EditText editTextServer = textInputLayoutServer.getEditText();
-        assert editTextServer != null;
         if(credentials.getString(Constants.PREF.SERVER_URL, null) != null) {
-            editTextServer.setText(credentials.getString(Constants.PREF.SERVER_URL, null));
+            binding.editTextLoginServer.setText(
+                    credentials.getString(Constants.PREF.SERVER_URL, null)
+            );
         }
 
-        textInputLayoutKey = findViewById(R.id.text_input_login_key);
-        EditText editTextKey = textInputLayoutKey.getEditText();
-        assert editTextKey != null;
         if(credentials.getString(Constants.PREF.API_KEY, null) != null) {
-            editTextKey.setText(credentials.getString(Constants.PREF.API_KEY, null));
+            binding.editTextLoginKey.setText(
+                    credentials.getString(Constants.PREF.API_KEY, null)
+            );
         }
 
-        findViewById(R.id.button_login_key).setOnClickListener(v -> {
-            if(editTextServer.getText().toString().isEmpty()) {
-                textInputLayoutServer.setError(getString(R.string.error_empty));
-            } else if(!URLUtil.isValidUrl(editTextServer.getText().toString())) {
-                textInputLayoutServer.setError(getString(R.string.error_invalid_url));
+        binding.buttonLoginKey.setOnClickListener(v -> {
+            if(getServer().isEmpty()) {
+                binding.textInputLoginServer.setError(getString(R.string.error_empty));
+            } else if(!URLUtil.isValidUrl(getServer())) {
+                binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
-                textInputLayoutServer.setErrorEnabled(false);
+                binding.textInputLoginServer.setErrorEnabled(false);
 
                 Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.parse(editTextServer.getText().toString() + "/manageapikeys");
+                Uri uri = Uri.parse(getServer() + "/manageapikeys");
                 browserManageKeys.setData(uri);
                 startActivity(browserManageKeys);
             }
         });
 
-        findViewById(R.id.button_login_login).setOnClickListener(v -> {
+        binding.buttonLoginLogin.setOnClickListener(v -> {
             // remove old errors
-            textInputLayoutServer.setErrorEnabled(false);
-            textInputLayoutKey.setErrorEnabled(false);
+            binding.textInputLoginServer.setErrorEnabled(false);
+            binding.textInputLoginKey.setErrorEnabled(false);
 
-            String server = editTextServer.getText()
-                    .toString()
-                    .replaceAll("/+$", "");
-            String key = editTextKey.getText().toString().trim();
+            String server = getServer();
             if(server.isEmpty()) {
-                textInputLayoutServer.setError(getString(R.string.error_empty));
+                binding.textInputLoginServer.setError(getString(R.string.error_empty));
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
-                textInputLayoutServer.setError(getString(R.string.error_invalid_url));
+                binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
-                requestLogin(server, key, true);
+                requestLogin(server, getKey(), true);
             }
         });
 
-        findViewById(R.id.button_login_demo).setOnClickListener(v -> {
+        binding.buttonLoginDemo.setOnClickListener(v -> {
             sharedPrefs.edit()
                     .putString(Constants.PREF.SERVER_URL, getString(R.string.url_grocy_demo))
                     .putString(Constants.PREF.API_KEY, "")
@@ -148,15 +142,13 @@ public class LoginActivity extends AppCompatActivity {
             loadInfoAndFinish();
         });
 
-        ActionButton buttonFeedback = findViewById(R.id.button_login_feedback);
-        buttonFeedback.setOnClickListener(v -> {
-            buttonFeedback.startIconAnimation();
+        binding.buttonLoginFeedback.setOnClickListener(v -> {
+            binding.buttonLoginFeedback.startIconAnimation();
             showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
         });
 
-        ActionButton buttonAbout = findViewById(R.id.button_login_about);
-        buttonAbout.setOnClickListener(v -> {
-            buttonAbout.startIconAnimation();
+        binding.buttonLoginAbout.setOnClickListener(v -> {
+            binding.buttonLoginAbout.startIconAnimation();
             startActivity(new Intent(this, AboutActivity.class));
         });
 
@@ -166,14 +158,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String server, String key, boolean checkVersion) {
-        deactivateLoginButton();
+        binding.buttonLoginLogin.setEnabled(false);
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
                         showMessage(getString(R.string.error_no_grocy_instance));
-                        activateLoginButton();
+                        binding.buttonLoginLogin.setEnabled(true);
                         return;
                     }
                     try {
@@ -221,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                 error -> {
                     Log.e(TAG, "requestLogin: VolleyError: " + error);
                     if(error instanceof AuthFailureError) {
-                        textInputLayoutKey.setError(getString(R.string.error_api_not_working));
+                        binding.textInputLoginKey.setError(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
                         if(error.toString().startsWith(
                                 "com.android.volley.NoConnectionError: " +
@@ -254,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         showMessage(getString(R.string.msg_error) + ": " + error);
                     }
-                    activateLoginButton();
+                    binding.buttonLoginLogin.setEnabled(true);
                 }
         );
     }
@@ -269,16 +261,16 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void deactivateLoginButton() {
-        findViewById(R.id.button_login_login).setClickable(false);
-        findViewById(R.id.button_login_login).setActivated(false);
-        findViewById(R.id.button_login_login).setAlpha(0.5f);
+    private String getServer() {
+        Editable server = binding.editTextLoginServer.getText();
+        if(server == null) return "";
+        return server.toString().replaceAll("/+$", "").trim();
     }
 
-    private void activateLoginButton() {
-        findViewById(R.id.button_login_login).setClickable(true);
-        findViewById(R.id.button_login_login).setActivated(true);
-        findViewById(R.id.button_login_login).setAlpha(1f);
+    private String getKey() {
+        Editable key = binding.editTextLoginKey.getText();
+        if(key == null) return "";
+        return key.toString().trim();
     }
 
     private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
@@ -297,10 +289,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showMessage(String text) {
-        Snackbar.make(
-                findViewById(R.id.coordinator_login_container),
-                text,
-                Snackbar.LENGTH_SHORT
-        ).show();
+        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_SHORT).show();
     }
 }
