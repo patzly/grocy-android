@@ -166,12 +166,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String server, String key, boolean checkVersion) {
+        deactivateLoginButton();
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
                         showMessage(getString(R.string.error_no_grocy_instance));
+                        activateLoginButton();
                         return;
                     }
                     try {
@@ -252,6 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         showMessage(getString(R.string.msg_error) + ": " + error);
                     }
+                    activateLoginButton();
                 }
         );
     }
@@ -264,6 +267,18 @@ public class LoginActivity extends AppCompatActivity {
                 this::finish,
                 this::finish
         );
+    }
+
+    private void deactivateLoginButton() {
+        findViewById(R.id.button_login_login).setClickable(false);
+        findViewById(R.id.button_login_login).setActivated(false);
+        findViewById(R.id.button_login_login).setAlpha(0.5f);
+    }
+
+    private void activateLoginButton() {
+        findViewById(R.id.button_login_login).setClickable(true);
+        findViewById(R.id.button_login_login).setActivated(true);
+        findViewById(R.id.button_login_login).setAlpha(1f);
     }
 
     private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
