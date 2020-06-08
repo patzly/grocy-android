@@ -204,46 +204,6 @@
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"/>
 
-                    <LinearLayout
-                        android:id="@+id/linear_shopping_list_bottom_notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <View
-                            style="@style/Theme.Grocy.Divider"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginStart="16dp"/>
-
-                        <TextView
-                            style="@style/Theme.Grocy.Category"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="0dp"
-                            android:paddingBottom="6dp"
-                            android:layout_marginStart="16dp"
-                            android:singleLine="true"
-                            android:text="@string/title_shopping_list_notes"/>
-
-                        <LinearLayout
-                            android:id="@+id/linear_shopping_list_bottom_notes_click"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="16dp"
-                            android:background="@drawable/bg_list_item">
-
-                            <TextView
-                                android:id="@+id/text_shopping_list_bottom_notes"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

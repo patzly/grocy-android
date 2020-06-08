@@ -19,11 +19,30 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-public abstract class GroupedListItem {
+import android.text.Spanned;
 
-    public static final int TYPE_HEADER = 0;
-    public static final int TYPE_ENTRY = 1;
-    public static final int TYPE_BOTTOM_NOTES = 2;
+import androidx.annotation.NonNull;
 
-    abstract public int getType();
+public class ShoppingListBottomNotes extends GroupedListItem {
+
+    private Spanned notes;
+
+    public ShoppingListBottomNotes(Spanned notes) {
+        this.notes = notes;
+    }
+
+    public Spanned getNotes() {
+        return notes;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE_BOTTOM_NOTES;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ShoppingListBottomNotes(" + notes.toString() + ')';
+    }
 }

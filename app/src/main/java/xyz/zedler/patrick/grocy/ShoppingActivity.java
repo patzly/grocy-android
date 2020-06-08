@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,9 +39,11 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 
 /*
     This file is part of Grocy Android.
@@ -81,6 +85,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private ArrayList<MissingItem> missingItems;
     private ArrayList<Product> products;
     private ArrayList<GroupedListItem> groupedListItems;
+    private HashMap<Integer, ShoppingList> shoppingListHashMap;
 
     private int selectedShoppingListId = 1;
     private boolean showOffline;
@@ -125,6 +130,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         products = new ArrayList<>();
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
+        shoppingListHashMap = new HashMap<>();
 
         // VIEWS
 
@@ -198,9 +204,6 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void downloadFull() {
         binding.swipe.setRefreshing(true);
-        /*binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-        ).setDuration(150).start();*/
         downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
         downloadHelper.downloadProducts(products -> this.products = products);
         downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
@@ -257,26 +260,6 @@ public class ShoppingActivity extends AppCompatActivity implements
                 );
             }
 
-            /*ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-            Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                    ? (Spanned) TextUtil
-                    .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
-                    : null;
-            if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    binding.textShoppingListBottomNotes.setText(notes);
-                    binding.linearShoppingListBottomNotes.setVisibility(View.VISIBLE);
-                    binding.linearShoppingListBottomNotes.animate()
-                            .alpha(1)
-                            .setDuration(150)
-                            .start();
-                }).setDuration(150).start();
-            } else {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                        () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-                ).setDuration(150).start();
-                binding.textShoppingListBottomNotes.setText(null);
-            }*/
             binding.swipe.setRefreshing(false);
             groupItems();
         }
@@ -363,6 +346,20 @@ public class ShoppingActivity extends AppCompatActivity implements
             SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
             groupedListItems.addAll(itemsOneGroup);
         }
+
+        // add bottom notes if they are not empty
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
+                ? (Spanned) TextUtil
+                .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
+                : null;
+        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
+            groupedListItems.add(
+                    new ProductGroup(-1, getString(R.string.property_notes))
+            );
+            groupedListItems.add(new ShoppingListBottomNotes(notes));
+        }
+
         refreshAdapter(
                 new ShoppingListItemSpecialAdapter(
                         this,
@@ -534,6 +531,13 @@ public class ShoppingActivity extends AppCompatActivity implements
             groupedListItems.remove(position);
             shoppingListItemAdapter.notifyItemRemoved(position);
         }
+    }
+
+    private ShoppingList getShoppingList(int shoppingListId) {
+        if(shoppingListHashMap.isEmpty()) {
+            for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
+        }
+        return shoppingListHashMap.get(shoppingListId);
     }
 
     public boolean isOnline() {

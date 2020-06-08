@@ -79,6 +79,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -125,6 +126,7 @@ public class ShoppingListFragment extends Fragment implements
     private ArrayList<Product> products;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<GroupedListItem> groupedListItems;
+    private HashMap<Integer, ShoppingList> shoppingListHashMap;
 
     private int selectedShoppingListId;
     private String startupShoppingListName;
@@ -186,6 +188,7 @@ public class ShoppingListFragment extends Fragment implements
         products = new ArrayList<>();
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
+        shoppingListHashMap = new HashMap<>();
 
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         selectedShoppingListId = 1;
@@ -201,8 +204,6 @@ public class ShoppingListFragment extends Fragment implements
         // top app bar
         binding.textShoppingListTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
         binding.buttonShoppingListLists.setOnClickListener(v -> showShoppingListsBottomSheet());
-
-        binding.linearShoppingListBottomNotesClick.setOnClickListener(v -> showNotesEditor());
 
         // search
         binding.frameShoppingListSearchClose.setOnClickListener(v -> dismissSearch());
@@ -387,6 +388,7 @@ public class ShoppingListFragment extends Fragment implements
         products = savedInstanceState.getParcelableArrayList("products");
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
         //groupedListItems = savedInstanceState.getParcelableArrayList("groupedListItems");
+        shoppingListHashMap = new HashMap<>();
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
         binding.swipeShoppingList.setRefreshing(false);
@@ -523,9 +525,6 @@ public class ShoppingListFragment extends Fragment implements
 
     private void download() {
         binding.swipeShoppingList.setRefreshing(true);
-        binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-        ).setDuration(150).start();
         downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
         downloadHelper.downloadProducts(products -> this.products = products);
         downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
@@ -609,26 +608,6 @@ public class ShoppingListFragment extends Fragment implements
                 );
             }
 
-            ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-            Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                    ? (Spanned) TextUtil
-                      .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
-                    : null;
-            if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    binding.textShoppingListBottomNotes.setText(notes);
-                    binding.linearShoppingListBottomNotes.setVisibility(View.VISIBLE);
-                    binding.linearShoppingListBottomNotes.animate()
-                            .alpha(1)
-                            .setDuration(150)
-                            .start();
-                }).setDuration(150).start();
-            } else {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                        () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-                ).setDuration(150).start();
-                binding.textShoppingListBottomNotes.setText(null);
-            }
             binding.swipeShoppingList.setRefreshing(false);
             filterItems(itemsToDisplay);
         }
@@ -779,6 +758,20 @@ public class ShoppingListFragment extends Fragment implements
             SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
             groupedListItems.addAll(itemsOneGroup);
         }
+
+        // add bottom notes if they are not empty
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
+                ? (Spanned) TextUtil
+                .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
+                : null;
+        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
+            groupedListItems.add(
+                    new ProductGroup(-1, activity.getString(R.string.property_notes))
+            );
+            groupedListItems.add(new ShoppingListBottomNotes(notes));
+        }
+
         refreshAdapter(
                 new ShoppingListItemAdapter(
                         activity,
@@ -833,12 +826,10 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     private ShoppingList getShoppingList(int shoppingListId) {
-        for(ShoppingList shoppingList : shoppingLists) {
-            if(shoppingList.getId() == shoppingListId) {
-                return shoppingList;
-            }
+        if(shoppingListHashMap.isEmpty()) {
+            for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
         }
-        return null;
+        return shoppingListHashMap.get(shoppingListId);
     }
 
     public void toggleDoneStatus(int position) {
@@ -1307,7 +1298,13 @@ public class ShoppingListFragment extends Fragment implements
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
         swipeBehavior.recoverLatestSwipedItem();
-        showItemBottomSheet(groupedListItems.get(position), position);
+
+        GroupedListItem groupedListItem = groupedListItems.get(position);
+        if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
+            showItemBottomSheet(groupedListItems.get(position), position);
+        } else {  // Click on bottom notes
+            showNotesEditor();
+        }
     }
 
     private void hideDisabledFeatures() {

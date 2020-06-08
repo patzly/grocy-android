@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -68,9 +69,9 @@ public class ShoppingListItemSpecialAdapter extends
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer, linearLayoutNote, linearLayoutNoteName;
+        private LinearLayout linearLayoutContainer, linearLayoutNote, linearLayoutBottomNotes;
         private TextView textViewName, textViewAmount, textViewGroupName, textViewNote;
-        private TextView textViewNoteName;
+        private TextView textViewNoteName, textViewBottomNotes;
         private View divider;
 
         public ViewHolder(View view) {
@@ -82,6 +83,9 @@ public class ShoppingListItemSpecialAdapter extends
             textViewAmount = view.findViewById(R.id.text_shopping_list_item_amount);
             textViewNote = view.findViewById(R.id.text_shopping_list_note);
             textViewNoteName = view.findViewById(R.id.text_shopping_list_note_as_name);
+
+            linearLayoutBottomNotes = view.findViewById(R.id.linear_shopping_list_bottom_notes);
+            textViewBottomNotes = view.findViewById(R.id.text_shopping_list_bottom_notes);
 
             textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
             divider = view.findViewById(R.id.view_shopping_list_group_divider);
@@ -96,18 +100,26 @@ public class ShoppingListItemSpecialAdapter extends
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == GroupedListItem.TYPE_HEADER) {
-            return new ViewHolder(
+        if(viewType == GroupedListItem.TYPE_HEADER) {
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
                             R.layout.row_shopping_list_group,
                             parent,
                             false
                     )
             );
-        } else {
-            return new ViewHolder(
+        } else if(viewType == GroupedListItem.TYPE_ENTRY) {
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_item_special,
+                            R.layout.row_shopping_list_item,
+                            parent,
+                            false
+                    )
+            );
+        } else {
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
+                    LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.row_shopping_list_bottom_notes,
                             parent,
                             false
                     )
@@ -127,6 +139,17 @@ public class ShoppingListItemSpecialAdapter extends
                 holder.divider.setVisibility(View.GONE);
             }
             holder.textViewGroupName.setText(((ProductGroup) groupedListItem).getName());
+            return;
+        }
+        if(type == GroupedListItem.TYPE_BOTTOM_NOTES) {
+            holder.textViewBottomNotes.setText(
+                    ((ShoppingListBottomNotes) groupedListItem).getNotes()
+            );
+            holder.linearLayoutBottomNotes.setOnClickListener(
+                    view -> listener.onItemRowClicked(holder.getAdapterPosition())
+            );
+            holder.linearLayoutBottomNotes.setClickable(false);
+            holder.linearLayoutBottomNotes.setFocusable(false);
             return;
         }
 
