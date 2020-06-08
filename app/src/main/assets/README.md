@@ -2,8 +2,7 @@
 
 ## Bugs
 
-- empty state should show empty filter if location or product filter is active
-- on emulator at startup the scrollview is not at top?!
+- fix nav bar divider in landscape after rotation in search mode
 
 ## Improvements
 
