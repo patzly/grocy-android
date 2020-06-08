@@ -64,7 +64,7 @@
             android:baselineAligned="false">
 
             <FrameLayout
-                android:id="@+id/frame_close_master_products_search"
+                android:id="@+id/frame_master_products_search_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"

@@ -146,14 +146,13 @@ public class MasterProductsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_products_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.frameMasterProductsBack.setOnClickListener(v -> activity.onBackPressed());
+
         // retry button on offline error page
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         // search
-        binding.frameCloseMasterProductsSearch.setOnClickListener(v -> dismissSearch());
+        binding.frameMasterProductsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterProductsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -294,7 +293,7 @@ public class MasterProductsFragment extends Fragment
             binding.swipeMasterProducts.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -557,7 +556,7 @@ public class MasterProductsFragment extends Fragment
     private void showMessage(String message) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         message,
                         Snackbar.LENGTH_SHORT
                 )
@@ -621,23 +620,22 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void showProductSheet(Product product) {
-        if(product != null) {
-            Location location = locationsMap.get(product.getLocationId());
-            QuantityUnit quantityUnitPurchase = quantityUnitsMap.get(product.getQuIdPurchase());
-            QuantityUnit quantityUnitStock = quantityUnitsMap.get(product.getQuIdStock());
-            ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
-                    ? productGroupsMap.get(Integer.parseInt(product.getProductGroupId()))
-                    : null;
+        if(product == null) return;
+        Location location = locationsMap.get(product.getLocationId());
+        QuantityUnit quantityUnitPurchase = quantityUnitsMap.get(product.getQuIdPurchase());
+        QuantityUnit quantityUnitStock = quantityUnitsMap.get(product.getQuIdStock());
+        ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
+                ? productGroupsMap.get(Integer.parseInt(product.getProductGroupId()))
+                : null;
 
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-            bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE, quantityUnitPurchase);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_STOCK, quantityUnitStock);
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
+        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE, quantityUnitPurchase);
+        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_STOCK, quantityUnitStock);
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
 
-            activity.showBottomSheet(new MasterProductBottomSheetDialogFragment(), bundle);
-        }
+        activity.showBottomSheet(new MasterProductBottomSheetDialogFragment(), bundle);
     }
 
     private void setUpSearch() {
