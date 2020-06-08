@@ -151,7 +151,11 @@ public class MasterLocationsFragment extends Fragment
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_master_locations_app_bar_default);
+        appBarBehavior = new AppBarBehavior(
+                activity,
+                R.id.linear_master_locations_app_bar_default,
+                R.id.linear_master_locations_app_bar_search
+        );
 
         // SWIPE REFRESH
 
@@ -393,10 +397,7 @@ public class MasterLocationsFragment extends Fragment
 
     public void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(
-                    R.id.linear_master_locations_app_bar_search,
-                    true
-            );
+            appBarBehavior.switchToSecondary();
             editTextSearch.setText("");
         }
         textInputLayoutSearch.requestFocus();
@@ -410,7 +411,7 @@ public class MasterLocationsFragment extends Fragment
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_master_locations_app_bar_default, true);
+        appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         search = "";
         filterLocations();

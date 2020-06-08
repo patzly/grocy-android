@@ -32,75 +32,88 @@ public class AppBarBehavior {
 	private final static String TAG = AppBarBehavior.class.getSimpleName();
 	private final static boolean DEBUG = false;
 
+	private static int ANIM_DURATION = 500;
+
 	private Activity activity;
-	private View viewVisible, viewInvisible;
+	private View viewPrimary, viewSecondary;
 
-	public AppBarBehavior(Activity activity, @IdRes int layoutDefault) {
-		this.activity = activity;
-		viewVisible = activity.findViewById(layoutDefault);
-	}
-
-	public AppBarBehavior(Activity activity, @IdRes int visible, @IdRes int invisible) {
+	public AppBarBehavior(Activity activity, @IdRes int primary, @IdRes int secondary) {
 		this.activity = activity;
 
-		viewVisible = activity.findViewById(visible);
-		viewVisible.setVisibility(View.VISIBLE);
-		viewVisible.setAlpha(1);
+		viewPrimary = activity.findViewById(primary);
+		viewPrimary.setVisibility(View.VISIBLE);
+		viewPrimary.setAlpha(1);
 
-		viewInvisible = activity.findViewById(invisible);
-		viewInvisible.setVisibility(View.GONE);
+		viewSecondary = activity.findViewById(secondary);
+		viewSecondary.setVisibility(View.GONE);
 	}
 
 	public void saveInstanceState(@NonNull Bundle outState) {
-		if(viewVisible != null) {
-			outState.putInt("appBarBehavior_visible_view_id", viewVisible.getId());
+		if(viewPrimary != null) {
+			outState.putInt("appBarBehavior_primary_view_id", viewPrimary.getId());
+			outState.putBoolean(
+					"appBarBehavior_is_primary",
+					viewPrimary.getVisibility() == View.VISIBLE
+			);
 		}
-		if(viewInvisible != null) {
-			outState.putInt("appBarBehavior_invisible_view_id", viewInvisible.getId());
+		if(viewSecondary != null) {
+			outState.putInt("appBarBehavior_secondary_view_id", viewSecondary.getId());
 		}
 	}
 
 	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
-		View viewVisible = activity.findViewById(
-				savedInstanceState.getInt("appBarBehavior_visible_view_id")
+		View viewPrimary = activity.findViewById(
+				savedInstanceState.getInt("appBarBehavior_primary_view_id")
 		);
-		View viewInvisible = activity.findViewById(
-				savedInstanceState.getInt("appBarBehavior_invisible_view_id")
+		View viewSecondary = activity.findViewById(
+				savedInstanceState.getInt("appBarBehavior_secondary_view_id")
 		);
-		if(viewVisible != null) {
-			viewVisible.setVisibility(View.VISIBLE);
-			this.viewVisible = viewVisible;
-		}
-		if(viewInvisible != null) {
-			viewInvisible.setVisibility(View.GONE);
-			this.viewInvisible = viewInvisible;
-		}
+
+		this.viewPrimary = viewPrimary;
+		this.viewSecondary = viewSecondary;
+
+		boolean isPrimary = savedInstanceState.getBoolean(
+				"appBarBehavior_is_primary",
+				true
+		);
+
+		if(viewPrimary != null) viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
+		if(viewSecondary != null) viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
 	}
 
-	public void replaceLayout(@IdRes int layoutNew, boolean animated) {
-		View viewNew = activity.findViewById(layoutNew);
-		if(viewNew.getVisibility() == View.GONE) {
-			if(animated) {
-				int duration = 300;
-				viewVisible.animate()
-						.alpha(0)
-						.setDuration(duration)
-						.withEndAction(() -> {
-							viewVisible.setVisibility(View.GONE);
-							viewNew.setVisibility(View.VISIBLE);
-							viewNew.setAlpha(0);
-							viewNew.animate().alpha(1).setDuration(duration).start();
-							viewInvisible = viewVisible;
-							viewVisible = viewNew;
-						}).start();
-			} else {
-				viewVisible.setVisibility(View.GONE);
-				viewNew.setVisibility(View.VISIBLE);
-				viewNew.setAlpha(1);
-			}
-			if(DEBUG) Log.i(TAG, "replaceLayout: animated = " + animated);
-		} else {
-			if(DEBUG) Log.i(TAG, "replaceLayout: layout already visible");
-		}
+	public void switchToPrimary() {
+		if(viewPrimary.getVisibility() == View.VISIBLE) return;
+		viewSecondary.animate()
+				.alpha(0)
+				.setDuration(ANIM_DURATION / 2)
+				.withEndAction(() -> {
+					viewSecondary.setVisibility(View.GONE);
+					viewPrimary.setVisibility(View.VISIBLE);
+					viewPrimary.setAlpha(0);
+					viewPrimary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
+				}).start();
+		if(DEBUG) Log.i(TAG, "switch to primary layout");
+	}
+
+	public void switchToSecondary() {
+		if(viewSecondary.getVisibility() == View.VISIBLE) return;
+		viewPrimary.animate()
+				.alpha(0)
+				.setDuration(ANIM_DURATION / 2)
+				.withEndAction(() -> {
+					viewPrimary.setVisibility(View.GONE);
+					viewSecondary.setVisibility(View.VISIBLE);
+					viewSecondary.setAlpha(0);
+					viewSecondary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
+				}).start();
+		if(DEBUG) Log.i(TAG, "switch to secondary layout");
+	}
+
+	public boolean isPrimary() {
+		return viewPrimary != null && viewPrimary.getVisibility() == View.VISIBLE;
+	}
+
+	public boolean isSecondary() {
+		return viewSecondary != null && viewSecondary.getVisibility() == View.VISIBLE;
 	}
 }

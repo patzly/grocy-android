@@ -1378,7 +1378,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_stock_app_bar_search, true);
+            appBarBehavior.switchToSecondary();
             binding.editTextStockSearch.setText("");
         }
         binding.textInputStockSearch.requestFocus();
@@ -1388,7 +1388,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_stock_app_bar_default, true);
+        appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         search = "";
         filterItems(itemsToDisplay);

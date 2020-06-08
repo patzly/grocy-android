@@ -161,7 +161,11 @@ public class MasterProductsFragment extends Fragment
 
         // APP BAR BEHAVIOR
 
-        appBarBehavior = new AppBarBehavior(activity, R.id.linear_master_products_app_bar_default);
+        appBarBehavior = new AppBarBehavior(
+                activity,
+                R.id.linear_master_products_app_bar_default,
+                R.id.linear_master_products_app_bar_search
+        );
 
         // SWIPE REFRESH
 
@@ -178,8 +182,6 @@ public class MasterProductsFragment extends Fragment
         );
         binding.recyclerMasterProducts.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterProducts.setAdapter(new MasterPlaceholderAdapter());
-
-        load();
 
         // UPDATE UI
 
@@ -467,7 +469,7 @@ public class MasterProductsFragment extends Fragment
 
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
-            appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_search, true);
+            appBarBehavior.switchToSecondary();
             binding.editTextMasterProductsSearch.setText("");
         }
         binding.textInputMasterProductsSearch.requestFocus();
@@ -481,7 +483,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     public void dismissSearch() {
-        appBarBehavior.replaceLayout(R.id.linear_master_products_app_bar_default, true);
+        appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         search = "";
         filterProducts();
