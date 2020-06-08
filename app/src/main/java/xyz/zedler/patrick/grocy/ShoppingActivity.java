@@ -169,7 +169,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         timer = new Timer();
-        if(timerTask == null) initTimerTask();
+        initTimerTask();
         timer.schedule(timerTask, 10000, 10000);
     }
 
