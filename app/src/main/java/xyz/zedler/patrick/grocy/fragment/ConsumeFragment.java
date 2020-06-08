@@ -46,7 +46,6 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -252,12 +251,23 @@ public class ConsumeFragment extends Fragment {
 
         binding.linearConsumeLocation.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_location);
-            if(productDetails != null) {
+            if(productDetails != null && !stockLocations.isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
                 activity.showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
+            } else if(productDetails != null) {
+                activity.showMessage(
+                        Snackbar.make(
+                                activity.binding.frameMainContainer,
+                                activity.getString(
+                                        R.string.msg_no_stock_locations,
+                                        productDetails.getProduct().getName()
+                                ),
+                                Snackbar.LENGTH_SHORT
+                        )
+                );
             } else {
                 // no product selected
                 binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
@@ -268,20 +278,33 @@ public class ConsumeFragment extends Fragment {
 
         binding.linearConsumeSpecific.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_specific);
-            if(productDetails != null) {
+            if(productDetails != null && !stockEntries.isEmpty()) {
                 ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
                 for(StockEntry stockEntry : stockEntries) {
                     if(stockEntry.getLocationId() == selectedLocationId) {
                         filteredStockEntries.add(stockEntry);
                     }
                 }
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(
-                        Constants.ARGUMENT.STOCK_ENTRIES,
-                        filteredStockEntries
-                );
-                bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
-                activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                if(filteredStockEntries.isEmpty()) {
+                    activity.showMessage(
+                            Snackbar.make(
+                                    activity.binding.frameMainContainer,
+                                    activity.getString(
+                                            R.string.msg_no_stock_entries,
+                                            productDetails.getProduct().getName()
+                                    ),
+                                    Snackbar.LENGTH_SHORT
+                            )
+                    );
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(
+                            Constants.ARGUMENT.STOCK_ENTRIES,
+                            filteredStockEntries
+                    );
+                    bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
+                    activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                }
             } else {
                 // no product selected
                 binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
@@ -342,6 +365,8 @@ public class ConsumeFragment extends Fragment {
         stockEntries = savedInstanceState.getParcelableArrayList("stockEntries");
 
         productNames = savedInstanceState.getStringArrayList("productNames");
+        adapterProducts = new MatchArrayAdapter(activity, productNames);
+        binding.autoCompleteConsumeProduct.setAdapter(adapterProducts);
 
         productDetails = savedInstanceState.getParcelable("productDetails");
 
@@ -474,7 +499,7 @@ public class ConsumeFragment extends Fragment {
         binding.textInputConsumeProduct.setErrorEnabled(false);
 
         // AMOUNT
-        binding.editTextConsumeAmount.setHint(
+        binding.textInputConsumeAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
                         productDetails.getQuantityUnitStock().getNamePlural()
@@ -708,8 +733,8 @@ public class ConsumeFragment extends Fragment {
                     clearAll();
                 },
                 error -> {
-                    showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                    showMessage(activity.getString(R.string.msg_error));
+                    Log.e(TAG, "consumeProduct: " + error);
                 }
         );
     }
@@ -780,8 +805,8 @@ public class ConsumeFragment extends Fragment {
                     clearAll();
                 },
                 error -> {
-                    showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
+                    showMessage(activity.getString(R.string.msg_error));
+                    Log.e(TAG, "openProduct: " + error);
                 }
         );
     }
@@ -799,7 +824,10 @@ public class ConsumeFragment extends Fragment {
                     );
                     if(DEBUG) Log.i(TAG, "undoTransaction: undone");
                 },
-                this::showErrorMessage
+                error -> {
+                    showMessage(activity.getString(R.string.msg_error));
+                    Log.e(TAG, "undoTransaction: " + error);
+                }
         );
     }
 
@@ -1083,13 +1111,9 @@ public class ConsumeFragment extends Fragment {
         }
     }
 
-    private void showErrorMessage(VolleyError error) {
+    private void showMessage(String text) {
         activity.showMessage(
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        activity.getString(R.string.msg_error),
-                        Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_SHORT)
         );
     }
 

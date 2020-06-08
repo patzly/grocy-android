@@ -8,7 +8,7 @@
 ## Improvements
 
 - save and restore instance state, migrate to view binding
---- consume                     VIEW BINDING
+--- consume                     DONE
 --- master location
 --- master locations
 --- master product group

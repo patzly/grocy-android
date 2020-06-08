@@ -86,6 +86,8 @@
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
+    <string name="msg_no_stock_locations">No stock locations for %1$s</string>
+    <string name="msg_no_stock_entries">No stock entries for %1$s</string>
     <string name="msg_error">An error occurred</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
