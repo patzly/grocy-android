@@ -91,16 +91,17 @@ public class ConsumeFragment extends Fragment {
     private GrocyApi grocyApi;
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
-    private ProductDetails productDetails;
     private Bundle startupBundle;
     private FragmentConsumeBinding binding;
 
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<StockLocation> stockLocations = new ArrayList<>();
-    private ArrayList<StockEntry> stockEntries = new ArrayList<>();
-    private ArrayList<String> productNames = new ArrayList<>();
+    private ArrayList<Product> products;
+    private ArrayList<StockLocation> stockLocations;
+    private ArrayList<StockEntry> stockEntries;
+    private ArrayList<String> productNames;
 
-    private int selectedLocationId = -1;
+    private ProductDetails productDetails;
+
+    private int selectedLocationId;
     private String selectedStockEntryId;
     private double amount;
     private double maxAmount;
@@ -133,6 +134,20 @@ public class ConsumeFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // INITIALIZE VARIABLES
+
+        products = new ArrayList<>();
+        stockLocations = new ArrayList<>();
+        stockEntries = new ArrayList<>();
+        productNames = new ArrayList<>();
+
+        productDetails = null;
+        selectedLocationId = -1;
+        selectedStockEntryId = null;
+        amount = 0;
+        maxAmount = 0;
+        minAmount = 0;
 
         // INITIALIZE VIEWS
 
@@ -213,10 +228,10 @@ public class ConsumeFragment extends Fragment {
 
         binding.buttonConsumeAmountMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_amount);
-            if(binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+            if(getAmount().isEmpty()) {
                 binding.editTextConsumeAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(binding.editTextConsumeAmount.getText().toString()) + 1;
+                double amountNew = Double.parseDouble(getAmount()) + 1;
                 if(amountNew <= maxAmount) {
                     binding.editTextConsumeAmount.setText(NumUtil.trim(amountNew));
                 }
@@ -224,9 +239,9 @@ public class ConsumeFragment extends Fragment {
         });
 
         binding.buttonConsumeAmountLess.setOnClickListener(v -> {
-            if(!binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+            if(!getAmount().isEmpty()) {
                 IconUtil.start(activity, R.id.image_consume_amount);
-                double amountNew = Double.parseDouble(binding.editTextConsumeAmount.getText().toString()) - 1;
+                double amountNew = Double.parseDouble(getAmount()) - 1;
                 if(amountNew >= minAmount) {
                     binding.editTextConsumeAmount.setText(NumUtil.trim(amountNew));
                 }
@@ -287,11 +302,62 @@ public class ConsumeFragment extends Fragment {
 
         // START
 
-        refresh();
+        if(savedInstanceState == null) {
+            refresh();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.CONSUME, TAG);
+        activity.updateUI(Constants.UI.CONSUME, savedInstanceState == null, TAG);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("stockLocations", stockLocations);
+            outState.putParcelableArrayList("stockEntries", stockEntries);
+
+            outState.putStringArrayList("productNames", productNames);
+
+            outState.putParcelable("productDetails", productDetails);
+
+            outState.putInt("selectedLocationId", selectedLocationId);
+            outState.putString("selectedStockEntryId", selectedStockEntryId);
+
+            outState.putDouble("amount", amount);
+            outState.putDouble("maxAmount", maxAmount);
+            outState.putDouble("minAmount", minAmount);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        products = savedInstanceState.getParcelableArrayList("products");
+        stockLocations = savedInstanceState.getParcelableArrayList("stockLocations");
+        stockEntries = savedInstanceState.getParcelableArrayList("stockEntries");
+
+        productNames = savedInstanceState.getStringArrayList("productNames");
+
+        productDetails = savedInstanceState.getParcelable("productDetails");
+
+        selectedLocationId = savedInstanceState.getInt("selectedLocationId");
+        selectedStockEntryId = savedInstanceState.getString("selectedStockEntryId");
+
+        amount = savedInstanceState.getDouble("amount");
+        maxAmount = savedInstanceState.getDouble("maxAmount");
+        minAmount = savedInstanceState.getDouble("minAmount");
+
+        binding.swipeConsume.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void refresh() {
@@ -419,9 +485,9 @@ public class ConsumeFragment extends Fragment {
         // leave amount empty if tare weight handling enabled
         if(!isTareWeightHandlingEnabled) {
             String defaultAmount = sharedPrefs.getString(
-                    Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-                    "1"
+                    Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT, null
             );
+            if(defaultAmount == null) defaultAmount = String.valueOf(1);
             if(defaultAmount.isEmpty()) {
                 binding.editTextConsumeAmount.setText(null);
             } else if(Double.parseDouble(defaultAmount)
@@ -439,7 +505,7 @@ public class ConsumeFragment extends Fragment {
             binding.editTextConsumeAmount.setText(null);
         }
 
-        if(binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+        if(getAmount().isEmpty()) {
             binding.editTextConsumeAmount.requestFocus();
             activity.showKeyboard(binding.editTextConsumeAmount);
         }
@@ -860,7 +926,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private boolean isAmountValid() {
-        if(!binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+        if(!getAmount().isEmpty()) {
             if(amount >= minAmount && amount <= maxAmount) {
                 binding.textInputConsumeAmount.setErrorEnabled(false);
                 return true;
@@ -1025,6 +1091,12 @@ public class ConsumeFragment extends Fragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    private String getAmount() {
+        Editable amount = binding.editTextConsumeAmount.getText();
+        if(amount == null) return "";
+        return amount.toString();
     }
 
     private boolean isFeatureEnabled(String pref) {
