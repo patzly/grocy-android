@@ -9,7 +9,7 @@
 - save and restore instance state, migrate to view binding
 --- consume                     DONE
 --- master location
---- master locations
+--- master locations            VIEW BINDING
 --- master product group
 --- master product groups
 --- master product
@@ -19,7 +19,7 @@
 --- master store
 --- master stores
 --- missing batch items
---- purchase                    VIEW BINDING
+--- purchase                    DONE
 --- shopping list edit
 --- shopping list               UNFINISHED -> offline support
 --- shopping list item edit

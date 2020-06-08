@@ -29,22 +29,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,6 +51,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterLocationAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -79,6 +74,7 @@ public class MasterLocationsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterLocationAdapter masterLocationAdapter;
+    private FragmentMasterLocationsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<Location> locations = new ArrayList<>();
@@ -89,21 +85,14 @@ public class MasterLocationsFragment extends Fragment
     private String search = "";
     private boolean sortAscending = true;
 
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
-    private EditText editTextSearch;
-    private LinearLayout linearLayoutError;
-    private NestedScrollView scrollView;
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_master_locations, container, false);
+        binding = FragmentMasterLocationsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -120,34 +109,26 @@ public class MasterLocationsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_locations_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
-        linearLayoutError = activity.findViewById(R.id.linear_master_locations_error);
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_locations);
-        scrollView = activity.findViewById(R.id.scroll_master_locations);
+        binding.frameMasterLocationsBack.setOnClickListener(v -> activity.onBackPressed());
         // retry button on offline error page
         activity.findViewById(R.id.button_master_locations_error_retry).setOnClickListener(
                 v -> refresh()
         );
-        recyclerView = activity.findViewById(R.id.recycler_master_locations);
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_master_locations_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.editTextMasterLocationsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchLocations(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextMasterLocationsSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        searchLocations(binding.editTextMasterLocationsSearch.getText().toString());
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -159,23 +140,23 @@ public class MasterLocationsFragment extends Fragment
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterLocations.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterLocations.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterLocations.setOnRefreshListener(this::refresh);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerMasterLocations.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
                         LinearLayoutManager.VERTICAL,
                         false
                 )
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MasterPlaceholderAdapter());
+        binding.recyclerMasterLocations.setItemAnimator(new DefaultItemAnimator());
+        binding.recyclerMasterLocations.setAdapter(new MasterPlaceholderAdapter());
 
         load();
 
@@ -197,7 +178,7 @@ public class MasterLocationsFragment extends Fragment
             setError(false, true);
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterLocations.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
@@ -216,8 +197,12 @@ public class MasterLocationsFragment extends Fragment
     private void setError(boolean isError, boolean animated) {
         // TODO: different errors
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError
+                    ? binding.scrollMasterLocations
+                    : binding.linearMasterLocationsError;
+            View viewIn = isError
+                    ? binding.linearMasterLocationsError
+                    : binding.scrollMasterLocations;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -227,13 +212,13 @@ public class MasterLocationsFragment extends Fragment
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.scrollMasterLocations.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearMasterLocationsError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterLocations.setRefreshing(true);
         downloadLocations();
         downloadProducts();
     }
@@ -247,11 +232,11 @@ public class MasterLocationsFragment extends Fragment
                             new TypeToken<List<Location>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterLocations.setRefreshing(false);
                     filterLocations();
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterLocations.setRefreshing(false);
                     setError(true, true);
                     Log.e(TAG, "downloadLocations: " + error);
                 }
@@ -315,9 +300,9 @@ public class MasterLocationsFragment extends Fragment
 
     private void refreshAdapter(MasterLocationAdapter adapter) {
         masterLocationAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerMasterLocations.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerMasterLocations.setAdapter(adapter);
+            binding.recyclerMasterLocations.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -398,10 +383,10 @@ public class MasterLocationsFragment extends Fragment
     public void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.switchToSecondary();
-            editTextSearch.setText("");
+            binding.editTextMasterLocationsSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        binding.textInputMasterLocationsSearch.requestFocus();
+        activity.showKeyboard(binding.editTextMasterLocationsSearch);
 
         activity.findViewById(R.id.frame_master_locations_search_close).setOnClickListener(
                 v -> dismissSearch()
