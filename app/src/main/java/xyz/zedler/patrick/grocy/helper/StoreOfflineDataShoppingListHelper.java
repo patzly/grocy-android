@@ -26,7 +26,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -72,8 +71,8 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
 
     @Override
     protected String doInBackground(Void... voids) {
-        MainActivity activity = (MainActivity) weakActivity.get();
-        AppDatabase database = activity.getDatabase();
+        Activity activity = weakActivity.get();
+        AppDatabase database = AppDatabase.getAppDatabase(activity.getApplicationContext());
 
         if(syncIfNecessary) {
             serverItemHashMap = new HashMap<>();

@@ -25,7 +25,6 @@ import android.os.AsyncTask;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -47,8 +46,8 @@ public class LoadOfflineDataShoppingListHelper extends AsyncTask<Void, Void, Str
 
     @Override
     protected String doInBackground(Void... voids) {
-        MainActivity activity = (MainActivity) weakActivity.get();
-        AppDatabase database = activity.getDatabase();
+        Activity activity = weakActivity.get();
+        AppDatabase database = AppDatabase.getAppDatabase(activity.getApplicationContext());
         shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
         shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
         productGroups = new ArrayList<>(database.productGroupDao().getAll());

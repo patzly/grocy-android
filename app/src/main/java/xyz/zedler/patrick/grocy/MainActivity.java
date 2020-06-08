@@ -62,7 +62,6 @@ import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
-import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     private ClickUtil clickUtil = new ClickUtil();
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
-    private AppDatabase database;
 
     public ActivityMainBinding binding;
     private CustomBottomAppBar bottomAppBar;
@@ -137,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
         // API
 
         grocyApi = new GrocyApi(this);
-
-        // DATABASE
-
-        database = AppDatabase.getAppDatabase(getApplicationContext());
 
         // VIEWS
 
@@ -1145,10 +1139,6 @@ public class MainActivity extends AppCompatActivity {
 
     public Fragment getCurrentFragment() {
         return fragmentCurrent;
-    }
-
-    public AppDatabase getDatabase() {
-        return database;
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

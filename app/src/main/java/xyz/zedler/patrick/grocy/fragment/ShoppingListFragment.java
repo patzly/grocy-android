@@ -47,7 +47,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +65,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
@@ -100,7 +100,7 @@ public class ShoppingListFragment extends Fragment implements
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
     private DownloadHelper downloadHelper;
-    private Gson gson = new Gson();
+    private AppDatabase database;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
@@ -166,6 +166,8 @@ public class ShoppingListFragment extends Fragment implements
                 this::onDownloadError,
                 this::onQueueEmpty
         );
+
+        database = AppDatabase.getAppDatabase(activity.getApplicationContext());
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
@@ -549,40 +551,37 @@ public class ShoppingListFragment extends Fragment implements
             showOffline = false;
             updateUI();
         }
-        ArrayList<String> missingProductIds = new ArrayList<>();
-        for(MissingItem missingItem : missingItems) {
-            missingProductIds.add(String.valueOf(missingItem.getId()));
-        }
-        missingShoppingListItems = new ArrayList<>();
-        undoneShoppingListItems = new ArrayList<>();
-        shoppingListItemsSelected = new ArrayList<>();
-        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
-        ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
-        for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(shoppingListItem.getProductId() != null) {
-                allUsedProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
-            }
-            if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
-            shoppingListItemsSelected.add(shoppingListItem);
-            if(missingProductIds.contains(shoppingListItem.getProductId())) {
-                shoppingListItem.setIsMissing(true);
-                missingShoppingListItems.add(shoppingListItem);
-            }
-            if(shoppingListItem.getDone() == 0) {
-                undoneShoppingListItems.add(shoppingListItem);
-            }
-            if(shoppingListItem.getProductId() != null) {
-                shoppingListProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
-            }
-        }
-        chipMissing.setText(
-                activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
-        );
-        chipUndone.setText(
-                activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
-        );
 
         if(!isDataStored) {
+            ArrayList<String> missingProductIds = new ArrayList<>();
+            for(MissingItem missingItem : missingItems) {
+                missingProductIds.add(String.valueOf(missingItem.getId()));
+            }
+            missingShoppingListItems = new ArrayList<>();
+            undoneShoppingListItems = new ArrayList<>();
+            shoppingListItemsSelected = new ArrayList<>();
+            ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
+            for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                if(shoppingListItem.getProductId() != null) {
+                    allUsedProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
+                }
+                if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
+                shoppingListItemsSelected.add(shoppingListItem);
+                if(missingProductIds.contains(shoppingListItem.getProductId())) {
+                    shoppingListItem.setIsMissing(true);
+                    missingShoppingListItems.add(shoppingListItem);
+                }
+                if(shoppingListItem.getDone() == 0) {
+                    undoneShoppingListItems.add(shoppingListItem);
+                }
+            }
+            chipMissing.setText(
+                    activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
+            );
+            chipUndone.setText(
+                    activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
+            );
+
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
                     activity,
@@ -600,14 +599,14 @@ public class ShoppingListFragment extends Fragment implements
 
             tidyUpItems(); // only for deleting "lost" items if multiple lists feature is disabled
 
-            for(Product product : products) {
-                if(!shoppingListProductIds.contains(product.getId())) continue;
-                for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                    if(shoppingListItem.getProductId() == null) continue;
-                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
-                        shoppingListItem.setProduct(product);
-                    }
-                }
+            // set product in shoppingListItem
+            HashMap<Integer, Product> productHashMap = new HashMap<>();
+            for(Product p : products) productHashMap.put(p.getId(), p);
+            for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
+                if(shoppingListItem.getProductId() == null) continue;
+                shoppingListItem.setProduct(
+                        productHashMap.get(Integer.parseInt(shoppingListItem.getProductId()))
+                );
             }
 
             ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
@@ -862,20 +861,20 @@ public class ShoppingListFragment extends Fragment implements
         } catch (JSONException e) {
             Log.e(TAG, "toggleDoneStatus: " + e);
         }
-        request.put(
-                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
+        downloadHelper.editShoppingListItem(
+                shoppingListItem.getId(),
                 body,
                 response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "toggleDoneStatus: " + error);
-                }
+                },
+                false
         );
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
-        new Thread(() -> activity.getDatabase().shoppingListItemDao().update(shoppingListItem))
-                .start();
+        new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
         if(shoppingListItem.getDone() == 1) {
             undoneShoppingListItems.remove(shoppingListItem);
         } else {
@@ -1040,8 +1039,9 @@ public class ShoppingListFragment extends Fragment implements
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                setUpSearch();
+                startActivity(new Intent(activity, ShoppingActivity.class));
+                /*IconUtil.start(item);
+                setUpSearch();*/
                 return true;
             });
         }
@@ -1234,7 +1234,7 @@ public class ShoppingListFragment extends Fragment implements
             listIds.add(1);  // id of first and single shopping list
         }
 
-        ShoppingListItemDao itemDao = activity.getDatabase().shoppingListItemDao();
+        ShoppingListItemDao itemDao = database.shoppingListItemDao();
         for(ShoppingListItem listItem : shoppingListItems) {
             if(!listIds.contains(listItem.getShoppingListId())) {
                 Log.i(TAG, "tidyUpItems: " + listItem);

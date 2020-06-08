@@ -369,11 +369,57 @@ public class DownloadHelper {
         );
     }
 
+    public void editShoppingListItem(
+            int shoppingListItemId,
+            JSONObject body,
+            OnJSONResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            boolean enableQueue
+    ) {
+        if(enableQueue) queueSize++;
+        request.put(
+                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItemId),
+                body,
+                response -> {
+                    onResponseListener.onResponse(response);
+                    if(enableQueue) checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void editShoppingListItem(
+            int shoppingListItemId,
+            JSONObject body,
+            OnJSONResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        editShoppingListItem(
+                shoppingListItemId,
+                body,
+                onResponseListener,
+                onErrorListener,
+                true
+        );
+    }
+
     private void checkQueueSize() {
         queueSize--;
         if(onQueueEmptyListener != null && queueSize == 0) {
             onQueueEmptyListener.execute();
         }
+    }
+
+    public boolean isQueueEmpty() {
+        return queueSize == 0;
+    }
+
+    public void resetQueueSize() {
+        queueSize = 0;
+    }
+
+    public void setOnQueueEmptyListener(OnQueueEmptyListener onQueueEmptyListener) {
+        this.onQueueEmptyListener = onQueueEmptyListener;
     }
 
     private void onError(VolleyError error, OnErrorListener onErrorListener) {
@@ -427,6 +473,10 @@ public class DownloadHelper {
 
     public interface OnResponseListener {
         void onResponse(String response);
+    }
+
+    public interface OnJSONResponseListener {
+        void onResponse(JSONObject response);
     }
 
     public interface OnErrorListener {
