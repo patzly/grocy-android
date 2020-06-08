@@ -592,7 +592,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(isFeatureEnabled(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK)
                 && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
         ) {
-            downloadHelper.downloadShoppingList(shoppingListItems -> {
+            downloadHelper.downloadShoppingListItems(shoppingListItems -> {
                 shoppingListProductIds = new ArrayList<>();
                 for(ShoppingListItem item : shoppingListItems) {
                     if(item.getProductId() != null && !item.getProductId().isEmpty()) {

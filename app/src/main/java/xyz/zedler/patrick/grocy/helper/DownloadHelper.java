@@ -13,8 +13,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -23,6 +28,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -60,6 +66,7 @@ public class DownloadHelper {
     private OnErrorListener onErrorListener;
     private OnQueueEmptyListener onQueueEmptyListener;
     private int queueSize;
+    private SimpleDateFormat dateTimeFormat;
 
     public DownloadHelper(
             Activity activity,
@@ -75,6 +82,10 @@ public class DownloadHelper {
         requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
         request = new WebRequest(requestQueue);
         grocyApi = new GrocyApi(context);
+        dateTimeFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
+        );
+        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public DownloadHelper(
@@ -82,43 +93,15 @@ public class DownloadHelper {
             String tag,
             OnQueueEmptyListener onQueueEmptyListener
     ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = null;
-        this.onQueueEmptyListener = onQueueEmptyListener;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+        this(activity, tag, null, onQueueEmptyListener);
     }
 
-    public DownloadHelper(
-            Activity activity,
-            String tag,
-            OnErrorListener onErrorListener
-    ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = onErrorListener;
-        this.onQueueEmptyListener = null;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+    public DownloadHelper(Activity activity, String tag,OnErrorListener onErrorListener) {
+        this(activity, tag, onErrorListener, null);
     }
 
-    public DownloadHelper(
-            Activity activity,
-            String tag
-    ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = null;
-        this.onQueueEmptyListener = null;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+    public DownloadHelper(Activity activity, String tag) {
+        this(activity, tag, null, null);
     }
 
     public void downloadProductGroups(
@@ -310,7 +293,7 @@ public class DownloadHelper {
         downloadProductDetails(productId, onResponseListener, null, true);
     }
 
-    public void downloadShoppingList(
+    public void downloadShoppingListItems(
             OnShoppingListResponseListener onResponseListener,
             OnErrorListener onErrorListener,
             boolean enableQueue
@@ -329,10 +312,31 @@ public class DownloadHelper {
         );
     }
 
-    public void downloadShoppingList(
-            OnShoppingListResponseListener onResponseListener
+    public void downloadShoppingListItems(OnShoppingListResponseListener onResponseListener) {
+        downloadShoppingListItems(onResponseListener, null, true);
+    }
+
+    public void downloadShoppingLists(
+            OnShoppingListsResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            boolean enableQueue
     ) {
-        downloadShoppingList(onResponseListener, null, true);
+        if(enableQueue) queueSize++;
+        request.get(
+                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+                response -> {
+                    Type type = new TypeToken<List<ShoppingList>>(){}.getType();
+                    ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+                    if(DEBUG) Log.i(tag, "downloadShoppingLists: " + shoppingLists);
+                    onResponseListener.onResponse(shoppingLists);
+                    if(enableQueue) checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void downloadShoppingLists(OnShoppingListsResponseListener onResponseListener) {
+        downloadShoppingLists(onResponseListener, null, true);
     }
 
     public void deleteProduct(
@@ -347,11 +351,78 @@ public class DownloadHelper {
         );
     }
 
+    public void editShoppingListItem(
+            int shoppingListItemId,
+            JSONObject body,
+            OnJSONResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            boolean enableQueue
+    ) {
+        if(enableQueue) queueSize++;
+        request.put(
+                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItemId),
+                body,
+                response -> {
+                    onResponseListener.onResponse(response);
+                    if(enableQueue) checkQueueSize();
+                },
+                error -> onError(error, onErrorListener)
+        );
+    }
+
+    public void editShoppingListItem(
+            int shoppingListItemId,
+            JSONObject body,
+            OnJSONResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        editShoppingListItem(
+                shoppingListItemId,
+                body,
+                onResponseListener,
+                onErrorListener,
+                true
+        );
+    }
+
+    public void getTimeDbChanged(
+            OnDateResponseListener onResponseListener,
+            OnSimpleErrorListener onErrorListener
+    ) {
+        request.get(
+                grocyApi.getDbChangedTime(),
+                response -> {
+                    try {
+                        JSONObject body = new JSONObject(response);
+                        String dateStr = body.getString("changed_time");
+                        Date date = dateTimeFormat.parse(dateStr);
+                        onResponseListener.onResponse(date);
+                    } catch (JSONException | ParseException e) {
+                        Log.e(tag, "getTimeDbChanged: " + e);
+                        onErrorListener.onError();
+                    }
+                },
+                error -> onErrorListener.onError()
+        );
+    }
+
     private void checkQueueSize() {
         queueSize--;
         if(onQueueEmptyListener != null && queueSize == 0) {
             onQueueEmptyListener.execute();
         }
+    }
+
+    public boolean isQueueEmpty() {
+        return queueSize == 0;
+    }
+
+    public void resetQueueSize() {
+        queueSize = 0;
+    }
+
+    public void setOnQueueEmptyListener(OnQueueEmptyListener onQueueEmptyListener) {
+        this.onQueueEmptyListener = onQueueEmptyListener;
     }
 
     private void onError(VolleyError error, OnErrorListener onErrorListener) {
@@ -399,12 +470,28 @@ public class DownloadHelper {
         void onResponse(ArrayList<ShoppingListItem> arrayList);
     }
 
+    public interface OnShoppingListsResponseListener {
+        void onResponse(ArrayList<ShoppingList> arrayList);
+    }
+
     public interface OnResponseListener {
         void onResponse(String response);
     }
 
+    public interface OnJSONResponseListener {
+        void onResponse(JSONObject response);
+    }
+
+    public interface OnDateResponseListener {
+        void onResponse(Date date);
+    }
+
     public interface OnErrorListener {
         void onError(VolleyError volleyError);
+    }
+
+    public interface OnSimpleErrorListener {
+        void onError();
     }
 
     public interface OnQueueEmptyListener {

@@ -12,6 +12,12 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
+        android:id="@+id/action_shopping_mode"
+        android:title="@string/action_shopping_mode"
+        app:showAsAction="never"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
         android:id="@+id/action_add_missing"
         android:title="@string/action_add_missing"
         app:showAsAction="never"

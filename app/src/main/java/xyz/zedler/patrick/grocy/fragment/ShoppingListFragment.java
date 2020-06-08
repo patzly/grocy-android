@@ -46,8 +46,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,10 +63,12 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -77,6 +77,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -97,7 +98,8 @@ public class ShoppingListFragment extends Fragment implements
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
+    private DownloadHelper downloadHelper;
+    private AppDatabase database;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
@@ -122,6 +124,7 @@ public class ShoppingListFragment extends Fragment implements
     private ArrayList<Product> products;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<GroupedListItem> groupedListItems;
+    private HashMap<Integer, ShoppingList> shoppingListHashMap;
 
     private int selectedShoppingListId;
     private String startupShoppingListName;
@@ -157,6 +160,15 @@ public class ShoppingListFragment extends Fragment implements
 
         // WEB REQUESTS
 
+        downloadHelper = new DownloadHelper(
+                activity,
+                TAG,
+                this::onDownloadError,
+                this::onQueueEmpty
+        );
+
+        database = AppDatabase.getAppDatabase(activity.getApplicationContext());
+
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
@@ -174,6 +186,7 @@ public class ShoppingListFragment extends Fragment implements
         products = new ArrayList<>();
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
+        shoppingListHashMap = new HashMap<>();
 
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         selectedShoppingListId = 1;
@@ -189,8 +202,6 @@ public class ShoppingListFragment extends Fragment implements
         // top app bar
         binding.textShoppingListTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
         binding.buttonShoppingListLists.setOnClickListener(v -> showShoppingListsBottomSheet());
-
-        binding.linearShoppingListBottomNotesClick.setOnClickListener(v -> showNotesEditor());
 
         // search
         binding.frameShoppingListSearchClose.setOnClickListener(v -> dismissSearch());
@@ -375,6 +386,7 @@ public class ShoppingListFragment extends Fragment implements
         products = savedInstanceState.getParcelableArrayList("products");
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
         //groupedListItems = savedInstanceState.getParcelableArrayList("groupedListItems");
+        shoppingListHashMap = new HashMap<>();
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
@@ -517,139 +529,24 @@ public class ShoppingListFragment extends Fragment implements
 
     private void download() {
         binding.swipeShoppingList.setRefreshing(true);
-        binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-        ).setDuration(150).start();
-        downloadQuantityUnits();
-        downloadProducts();
-        downloadProductGroups();
-        downloadShoppingListItems();
-        downloadVolatile();
-        downloadShoppingLists();
-    }
-
-    private void downloadQuantityUnits() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
-                TAG,
-                response -> {
-                    quantityUnits = gson.fromJson(
-                            response,
-                            new TypeToken<List<QuantityUnit>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProducts() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(TAG, "downloadProducts: products = " + products);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProductGroups() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                TAG,
-                response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<List<ProductGroup>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG, "downloadProductGroups: productGroups = " + productGroups
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadShoppingListItems() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
-                TAG,
-                response -> {
-                    shoppingListItems = gson.fromJson(
-                            response,
-                            new TypeToken<List<ShoppingListItem>>(){}.getType()
-                    );
-                    if(DEBUG) Log.i(
-                            TAG,
-                            "downloadShoppingList: shoppingListItems = " + shoppingListItems
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadVolatile() {
-        request.get(
-                grocyApi.getStockVolatile(),
-                TAG,
-                response -> {
-                    if(DEBUG) Log.i(TAG, "downloadVolatile: success");
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        // Parse third part of volatile array: missing products
-                        missingItems = gson.fromJson(
-                                jsonObject.getJSONArray("missing_products").toString(),
-                                new TypeToken<List<MissingItem>>(){}.getType()
-                        );
-                        if(DEBUG) Log.i(TAG, "downloadVolatile: missing = " + missingItems);
-
-                    } catch (JSONException e) {
-                        Log.e(TAG, "downloadVolatile: " + e);
+        downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
+        downloadHelper.downloadProducts(products -> this.products = products);
+        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
+        downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
+        downloadHelper.downloadShoppingLists(shoppingLists -> {
+            this.shoppingLists = shoppingLists;
+            // set shopping list if chosen with name on fragment start
+            if(startupShoppingListName != null) {
+                for(ShoppingList shoppingList : shoppingLists) {
+                    if(shoppingList.getName().equals(startupShoppingListName)) {
+                        selectedShoppingListId = shoppingList.getId();
                     }
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadShoppingLists() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
-                TAG,
-                response -> {
-                    shoppingLists = gson.fromJson(
-                            response,
-                            new TypeToken<List<ShoppingList>>(){}.getType()
-                    );
-                    // set shopping list if chosen with name on fragment start
-                    if(startupShoppingListName != null) {
-                        for(ShoppingList shoppingList : shoppingLists) {
-                            if(shoppingList.getName().equals(startupShoppingListName)) {
-                                selectedShoppingListId = shoppingList.getId();
-                            }
-                        }
-                        startupShoppingListName = null;
-                    }
-                    changeAppBarTitle();
-                    if(DEBUG) Log.i(
-                            TAG,
-                            "downloadShoppingLists: shoppingLists = " + shoppingLists
-                    );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+                }
+                startupShoppingListName = null;
+            }
+            changeAppBarTitle();
+        });
+        downloadHelper.downloadVolatile((expiring, expired, missing) -> missingItems = missing);
     }
 
     private void onQueueEmpty() {
@@ -657,40 +554,37 @@ public class ShoppingListFragment extends Fragment implements
             showOffline = false;
             updateUI();
         }
-        ArrayList<String> missingProductIds = new ArrayList<>();
-        for(MissingItem missingItem : missingItems) {
-            missingProductIds.add(String.valueOf(missingItem.getId()));
-        }
-        missingShoppingListItems = new ArrayList<>();
-        undoneShoppingListItems = new ArrayList<>();
-        shoppingListItemsSelected = new ArrayList<>();
-        ArrayList<Integer> shoppingListProductIds = new ArrayList<>();
-        ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
-        for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(shoppingListItem.getProductId() != null) {
-                allUsedProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
-            }
-            if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
-            shoppingListItemsSelected.add(shoppingListItem);
-            if(missingProductIds.contains(shoppingListItem.getProductId())) {
-                shoppingListItem.setIsMissing(true);
-                missingShoppingListItems.add(shoppingListItem);
-            }
-            if(shoppingListItem.getDone() == 0) {
-                undoneShoppingListItems.add(shoppingListItem);
-            }
-            if(shoppingListItem.getProductId() != null) {
-                shoppingListProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
-            }
-        }
-        chipMissing.setText(
-                activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
-        );
-        chipUndone.setText(
-                activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
-        );
 
         if(!isDataStored) {
+            ArrayList<String> missingProductIds = new ArrayList<>();
+            for(MissingItem missingItem : missingItems) {
+                missingProductIds.add(String.valueOf(missingItem.getId()));
+            }
+            missingShoppingListItems = new ArrayList<>();
+            undoneShoppingListItems = new ArrayList<>();
+            shoppingListItemsSelected = new ArrayList<>();
+            ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
+            for(ShoppingListItem shoppingListItem : shoppingListItems) {
+                if(shoppingListItem.getProductId() != null) {
+                    allUsedProductIds.add(Integer.parseInt(shoppingListItem.getProductId()));
+                }
+                if(shoppingListItem.getShoppingListId() != selectedShoppingListId) continue;
+                shoppingListItemsSelected.add(shoppingListItem);
+                if(missingProductIds.contains(shoppingListItem.getProductId())) {
+                    shoppingListItem.setIsMissing(true);
+                    missingShoppingListItems.add(shoppingListItem);
+                }
+                if(shoppingListItem.getDone() == 0) {
+                    undoneShoppingListItems.add(shoppingListItem);
+                }
+            }
+            chipMissing.setText(
+                    activity.getString(R.string.msg_missing_products, missingShoppingListItems.size())
+            );
+            chipUndone.setText(
+                    activity.getString(R.string.msg_undone_items, undoneShoppingListItems.size())
+            );
+
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
                     activity,
@@ -708,43 +602,22 @@ public class ShoppingListFragment extends Fragment implements
 
             tidyUpItems(); // only for deleting "lost" items if multiple lists feature is disabled
 
-            for(Product product : products) {
-                if(!shoppingListProductIds.contains(product.getId())) continue;
-                for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                    if(shoppingListItem.getProductId() == null) continue;
-                    if(String.valueOf(product.getId()).equals(shoppingListItem.getProductId())) {
-                        shoppingListItem.setProduct(product);
-                    }
-                }
+            // set product in shoppingListItem
+            HashMap<Integer, Product> productHashMap = new HashMap<>();
+            for(Product p : products) productHashMap.put(p.getId(), p);
+            for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
+                if(shoppingListItem.getProductId() == null) continue;
+                shoppingListItem.setProduct(
+                        productHashMap.get(Integer.parseInt(shoppingListItem.getProductId()))
+                );
             }
 
-            ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-            Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                    ? (Spanned) TextUtil
-                      .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
-                    : null;
-            if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(() -> {
-                    binding.textShoppingListBottomNotes.setText(notes);
-                    binding.linearShoppingListBottomNotes.setVisibility(View.VISIBLE);
-                    binding.linearShoppingListBottomNotes.animate()
-                            .alpha(1)
-                            .setDuration(150)
-                            .start();
-                }).setDuration(150).start();
-            } else {
-                binding.linearShoppingListBottomNotes.animate().alpha(0).withEndAction(
-                        () -> binding.linearShoppingListBottomNotes.setVisibility(View.GONE)
-                ).setDuration(150).start();
-                binding.textShoppingListBottomNotes.setText(null);
-            }
             binding.swipeShoppingList.setRefreshing(false);
             filterItems(itemsToDisplay);
         }
     }
 
     private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
         binding.swipeShoppingList.setRefreshing(false);
         if(!showOffline) {
             showOffline = true;
@@ -889,6 +762,20 @@ public class ShoppingListFragment extends Fragment implements
             SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
             groupedListItems.addAll(itemsOneGroup);
         }
+
+        // add bottom notes if they are not empty
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
+                ? (Spanned) TextUtil
+                .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
+                : null;
+        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
+            groupedListItems.add(
+                    new ProductGroup(-1, activity.getString(R.string.property_notes))
+            );
+            groupedListItems.add(new ShoppingListBottomNotes(notes));
+        }
+
         refreshAdapter(
                 new ShoppingListItemAdapter(
                         activity,
@@ -943,12 +830,10 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     private ShoppingList getShoppingList(int shoppingListId) {
-        for(ShoppingList shoppingList : shoppingLists) {
-            if(shoppingList.getId() == shoppingListId) {
-                return shoppingList;
-            }
+        if(shoppingListHashMap.isEmpty()) {
+            for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
         }
-        return null;
+        return shoppingListHashMap.get(shoppingListId);
     }
 
     public void toggleDoneStatus(int position) {
@@ -971,20 +856,20 @@ public class ShoppingListFragment extends Fragment implements
         } catch (JSONException e) {
             Log.e(TAG, "toggleDoneStatus: " + e);
         }
-        request.put(
-                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
+        downloadHelper.editShoppingListItem(
+                shoppingListItem.getId(),
                 body,
                 response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
                     if(DEBUG) Log.i(TAG, "toggleDoneStatus: " + error);
-                }
+                },
+                false
         );
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
-        new Thread(() -> activity.getDatabase().shoppingListItemDao().update(shoppingListItem))
-                .start();
+        new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
         if(shoppingListItem.getDone() == 1) {
             undoneShoppingListItems.remove(shoppingListItem);
         } else {
@@ -1111,6 +996,7 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     private void showNotesEditor() {
+        // TODO: Block clicks if no connection
         Bundle bundle = new Bundle();
         bundle.putString(
                 Constants.ARGUMENT.TITLE,
@@ -1151,6 +1037,14 @@ public class ShoppingListFragment extends Fragment implements
             search.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
                 setUpSearch();
+                return true;
+            });
+        }
+
+        MenuItem shoppingMode = activity.getBottomMenu().findItem(R.id.action_shopping_mode);
+        if(shoppingMode != null) {
+            shoppingMode.setOnMenuItemClickListener(item -> {
+                startActivity(new Intent(activity, ShoppingActivity.class));
                 return true;
             });
         }
@@ -1343,9 +1237,10 @@ public class ShoppingListFragment extends Fragment implements
             listIds.add(1);  // id of first and single shopping list
         }
 
-        ShoppingListItemDao itemDao = activity.getDatabase().shoppingListItemDao();
+        ShoppingListItemDao itemDao = database.shoppingListItemDao();
         for(ShoppingListItem listItem : shoppingListItems) {
             if(!listIds.contains(listItem.getShoppingListId())) {
+                Log.i(TAG, "tidyUpItems: " + listItem);
                 request.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, listItem.getId()),
                         response -> new Thread(() -> itemDao.delete(listItem) // delete in db too
@@ -1415,7 +1310,13 @@ public class ShoppingListFragment extends Fragment implements
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
         swipeBehavior.recoverLatestSwipedItem();
-        showItemBottomSheet(groupedListItems.get(position), position);
+
+        GroupedListItem groupedListItem = groupedListItems.get(position);
+        if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
+            showItemBottomSheet(groupedListItems.get(position), position);
+        } else {  // Click on bottom notes
+            showNotesEditor();
+        }
     }
 
     private void hideDisabledFeatures() {

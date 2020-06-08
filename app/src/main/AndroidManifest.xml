@@ -42,6 +42,8 @@
 
         <activity android:name=".SettingsActivity"/>
 
+        <activity android:name=".ShoppingActivity"/>
+
         <activity android:name=".FeaturesActivity"/>
 
         <activity android:name=".AboutActivity"/>

@@ -45,21 +45,22 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListItemAdapter.ViewHolder> {
+public class ShoppingListItemSpecialAdapter extends
+        RecyclerView.Adapter<ShoppingListItemSpecialAdapter.ViewHolder> {
 
-    private final static String TAG = ShoppingListItemAdapter.class.getSimpleName();
+    private final static String TAG = ShoppingListItemSpecialAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private Context context;
     private ArrayList<GroupedListItem> groupedListItems;
     private ArrayList<QuantityUnit> quantityUnits;
-    private ShoppingListItemAdapterListener listener;
+    private ShoppingListItemSpecialAdapterListener listener;
 
-    public ShoppingListItemAdapter(
+    public ShoppingListItemSpecialAdapter(
             Context context,
             ArrayList<GroupedListItem> groupedListItems,
             ArrayList<QuantityUnit> quantityUnits,
-            ShoppingListItemAdapterListener listener
+            ShoppingListItemSpecialAdapterListener listener
     ) {
         this.context = context;
         this.groupedListItems = groupedListItems;
@@ -100,7 +101,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == GroupedListItem.TYPE_HEADER) {
-            return new ViewHolder(
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
                             R.layout.row_shopping_list_group,
                             parent,
@@ -108,15 +109,15 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     )
             );
         } else if(viewType == GroupedListItem.TYPE_ENTRY) {
-            return new ViewHolder(
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_item,
+                            R.layout.row_shopping_list_item_special,
                             parent,
                             false
                     )
             );
         } else {
-            return new ViewHolder(
+            return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
                             R.layout.row_shopping_list_bottom_notes,
                             parent,
@@ -133,7 +134,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         GroupedListItem groupedListItem = groupedListItems.get(holder.getAdapterPosition());
 
         int type = getItemViewType(position);
-        if(type == GroupedListItem.TYPE_HEADER) {
+        if (type == GroupedListItem.TYPE_HEADER) {
             if(holder.getAdapterPosition() == 0) {
                 holder.divider.setVisibility(View.GONE);
             }
@@ -147,6 +148,8 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             holder.linearLayoutBottomNotes.setOnClickListener(
                     view -> listener.onItemRowClicked(holder.getAdapterPosition())
             );
+            holder.linearLayoutBottomNotes.setClickable(false);
+            holder.linearLayoutBottomNotes.setFocusable(false);
             return;
         }
 
@@ -281,7 +284,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         return groupedListItems != null ? groupedListItems.size() : 0;
     }
 
-    public interface ShoppingListItemAdapterListener {
+    public interface ShoppingListItemSpecialAdapterListener {
         void onItemRowClicked(int position);
     }
 }

@@ -169,11 +169,12 @@
                 android:id="@+id/scroll_shopping_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fillViewport="true"
                 android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="120dp">
@@ -198,51 +199,11 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_shopping_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:paddingBottom="8dp"
                         android:overScrollMode="never"
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"/>
-
-                    <LinearLayout
-                        android:id="@+id/linear_shopping_list_bottom_notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <View
-                            style="@style/Theme.Grocy.Divider"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginStart="16dp"/>
-
-                        <TextView
-                            style="@style/Theme.Grocy.Category"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="0dp"
-                            android:paddingBottom="6dp"
-                            android:layout_marginStart="16dp"
-                            android:singleLine="true"
-                            android:text="@string/title_shopping_list_notes"/>
-
-                        <LinearLayout
-                            android:id="@+id/linear_shopping_list_bottom_notes_click"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="16dp"
-                            android:background="@drawable/bg_list_item">
-
-                            <TextView
-                                android:id="@+id/text_shopping_list_bottom_notes"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
 
                 </LinearLayout>
 

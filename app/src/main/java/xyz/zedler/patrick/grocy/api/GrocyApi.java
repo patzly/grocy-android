@@ -110,6 +110,13 @@ public class GrocyApi {
         return getUrl("/system/config");
     }
 
+    /**
+     * Returns the time when the database was last changed
+     */
+    public String getDbChangedTime() {
+        return getUrl("/system/db-changed-time");
+    }
+
     // USER
 
     /**
