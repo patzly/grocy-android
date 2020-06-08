@@ -62,6 +62,7 @@
     <string name="action_discard">Discard</string>
     <string name="action_toggle_done">Toggle done</string>
     <string name="action_edit_notes">Edit notes</string>
+    <string name="action_shopping_mode">Shopping mode</string>
     <string name="action_add_missing">Add missing products</string>
     <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>

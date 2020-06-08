@@ -992,6 +992,7 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     private void showNotesEditor() {
+        // TODO: Block clicks if no connection
         Bundle bundle = new Bundle();
         bundle.putString(
                 Constants.ARGUMENT.TITLE,
@@ -1030,9 +1031,16 @@ public class ShoppingListFragment extends Fragment implements
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
+                IconUtil.start(item);
+                setUpSearch();
+                return true;
+            });
+        }
+
+        MenuItem shoppingMode = activity.getBottomMenu().findItem(R.id.action_shopping_mode);
+        if(shoppingMode != null) {
+            shoppingMode.setOnMenuItemClickListener(item -> {
                 startActivity(new Intent(activity, ShoppingActivity.class));
-                /*IconUtil.start(item);
-                setUpSearch();*/
                 return true;
             });
         }
