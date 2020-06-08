@@ -588,6 +588,6 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void showMessage(String msg) {
-        Snackbar.make(binding.scroll, msg, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.recycler, msg, Snackbar.LENGTH_SHORT).show();
     }
 }
