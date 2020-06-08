@@ -484,7 +484,8 @@ public class ShoppingActivity extends AppCompatActivity implements
                     showMessage("You're now offline");
                     showOffline = true;
                     updateDoneStatus(shoppingListItem, position);
-                }
+                },
+                false
         );
     }
 

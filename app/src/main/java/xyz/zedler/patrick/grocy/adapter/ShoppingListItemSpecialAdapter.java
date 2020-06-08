@@ -111,7 +111,7 @@ public class ShoppingListItemSpecialAdapter extends
         } else if(viewType == GroupedListItem.TYPE_ENTRY) {
             return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_item,
+                            R.layout.row_shopping_list_item_special,
                             parent,
                             false
                     )

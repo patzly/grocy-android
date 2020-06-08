@@ -77,11 +77,12 @@
                 android:id="@+id/scroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fillViewport="true"
                 android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="100dp">
@@ -89,7 +90,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:overScrollMode="never"
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"/>

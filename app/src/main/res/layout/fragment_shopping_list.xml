@@ -169,11 +169,12 @@
                 android:id="@+id/scroll_shopping_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fillViewport="true"
                 android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingTop="8dp"
                     android:paddingBottom="120dp">
@@ -198,7 +199,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_shopping_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:paddingBottom="8dp"
                         android:overScrollMode="never"
                         android:nestedScrollingEnabled="false"
