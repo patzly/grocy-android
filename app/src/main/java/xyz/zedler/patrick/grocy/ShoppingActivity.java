@@ -21,6 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,6 +92,8 @@ public class ShoppingActivity extends AppCompatActivity implements
     private int selectedShoppingListId = 1;
     private boolean showOffline;
     private boolean isDataStored;
+    private Date lastSynced;
+    private TimerTask timerTask;
 
     private ActivityShoppingBinding binding;
     private ShoppingListItemSpecialAdapter shoppingListItemAdapter;
@@ -168,14 +172,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         timer = new Timer();
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if(!downloadHelper.isQueueEmpty()) return;
-                downloadShoppingListItems();
-            }
-        };
+        if(timerTask == null) initTimerTask();
         timer.schedule(timerTask, 10000, 10000);
     }
 
@@ -183,21 +180,20 @@ public class ShoppingActivity extends AppCompatActivity implements
         if(isOnline()) {
             downloadFull();
         } else {
-            showOffline = true;
-            new LoadOfflineDataShoppingListHelper(this, this).execute();
+            loadOfflineData();
         }
     }
 
     public void refresh() {
         if(isOnline()) {
             downloadFull();
-            // TODO: Reset timer
+            timer.cancel();
+            initTimerTask();
+            timer = new Timer();
+            timer.schedule(timerTask, 10000, 10000);
         } else {
             binding.swipe.setRefreshing(false);
-            if(!showOffline) {
-                showOffline = true;
-                new LoadOfflineDataShoppingListHelper(this, this).execute();
-            }
+            loadOfflineData();
             showMessage(getString(R.string.msg_no_connection));
         }
     }
@@ -235,6 +231,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         }
 
         if(!isDataStored) {
+            lastSynced = Calendar.getInstance().getTime();
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
                     this,
@@ -267,10 +264,16 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void onDownloadError(VolleyError error) {
         binding.swipe.setRefreshing(false);
+        loadOfflineData();
+    }
+
+    private void loadOfflineData() {
         if(!showOffline) {
             showOffline = true;
+            Log.i(TAG, "loadOfflineData: " + "you are now offline");
+            new LoadOfflineDataShoppingListHelper(this, this).execute();
         }
-        new LoadOfflineDataShoppingListHelper(this, this).execute();
+        lastSynced = null;
     }
 
     @Override
@@ -470,23 +473,39 @@ public class ShoppingActivity extends AppCompatActivity implements
             return;
         }
 
-        JSONObject body = new JSONObject();
-        try {
-            body.put("done", shoppingListItem.getDone());
-        } catch (JSONException e) {
-            Log.e(TAG, "toggleDoneStatus: " + e);
-        }
-        downloadHelper.editShoppingListItem(
-                shoppingListItem.getId(),
-                body,
-                response -> updateDoneStatus(shoppingListItem, position),
-                error -> {
-                    showMessage("You're now offline");
-                    showOffline = true;
-                    updateDoneStatus(shoppingListItem, position);
-                },
-                false
-        );
+        downloadHelper.getTimeDbChanged(date -> {
+            boolean syncNeeded = this.lastSynced == null || this.lastSynced.before(date);
+            JSONObject body = new JSONObject();
+            try {
+                body.put("done", shoppingListItem.getDone());
+            } catch (JSONException e) {
+                Log.e(TAG, "toggleDoneStatus: " + e);
+            }
+            downloadHelper.editShoppingListItem(
+                    shoppingListItem.getId(),
+                    body,
+                    response -> {
+                        updateDoneStatus(shoppingListItem, position);
+                        if(syncNeeded) {
+                            downloadShoppingListItems();
+                        } else {
+                            downloadHelper.getTimeDbChanged(
+                                    date1 -> lastSynced = date1,
+                                    () -> lastSynced = Calendar.getInstance().getTime()
+                            );
+                            lastSynced = Calendar.getInstance().getTime();
+                        }
+                    },
+                    error -> {
+                        updateDoneStatus(shoppingListItem, position);
+                        loadOfflineData();
+                    },
+                    false
+            );
+        }, () -> {
+            updateDoneStatus(shoppingListItem, position);
+            loadOfflineData();
+        });
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
@@ -539,6 +558,28 @@ public class ShoppingActivity extends AppCompatActivity implements
             for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
         }
         return shoppingListHashMap.get(shoppingListId);
+    }
+
+    private void initTimerTask() {
+        if(timerTask != null) timerTask.cancel();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if(!downloadHelper.isQueueEmpty()) return;
+                downloadHelper.getTimeDbChanged(
+                        date -> {
+                            if(!isOnline()) {
+                                loadOfflineData();
+                            } else if(lastSynced == null || lastSynced.before(date)) {
+                                downloadShoppingListItems();
+                            } else {
+                                Log.i(TAG, "run: " + "skip sync of list items");
+                            }
+                        },
+                        () -> downloadShoppingListItems()
+                );
+            }
+        };
     }
 
     public boolean isOnline() {

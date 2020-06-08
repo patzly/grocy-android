@@ -13,8 +13,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -61,6 +66,7 @@ public class DownloadHelper {
     private OnErrorListener onErrorListener;
     private OnQueueEmptyListener onQueueEmptyListener;
     private int queueSize;
+    private SimpleDateFormat dateTimeFormat;
 
     public DownloadHelper(
             Activity activity,
@@ -76,6 +82,10 @@ public class DownloadHelper {
         requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
         request = new WebRequest(requestQueue);
         grocyApi = new GrocyApi(context);
+        dateTimeFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
+        );
+        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public DownloadHelper(
@@ -83,43 +93,15 @@ public class DownloadHelper {
             String tag,
             OnQueueEmptyListener onQueueEmptyListener
     ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = null;
-        this.onQueueEmptyListener = onQueueEmptyListener;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+        this(activity, tag, null, onQueueEmptyListener);
     }
 
-    public DownloadHelper(
-            Activity activity,
-            String tag,
-            OnErrorListener onErrorListener
-    ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = onErrorListener;
-        this.onQueueEmptyListener = null;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+    public DownloadHelper(Activity activity, String tag,OnErrorListener onErrorListener) {
+        this(activity, tag, onErrorListener, null);
     }
 
-    public DownloadHelper(
-            Activity activity,
-            String tag
-    ) {
-        Context context = activity.getApplicationContext();
-        this.activity = activity;
-        this.tag = tag;
-        this.onErrorListener = null;
-        this.onQueueEmptyListener = null;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
-        grocyApi = new GrocyApi(context);
+    public DownloadHelper(Activity activity, String tag) {
+        this(activity, tag, null, null);
     }
 
     public void downloadProductGroups(
@@ -403,6 +385,27 @@ public class DownloadHelper {
         );
     }
 
+    public void getTimeDbChanged(
+            OnDateResponseListener onResponseListener,
+            OnSimpleErrorListener onErrorListener
+    ) {
+        request.get(
+                grocyApi.getDbChangedTime(),
+                response -> {
+                    try {
+                        JSONObject body = new JSONObject(response);
+                        String dateStr = body.getString("changed_time");
+                        Date date = dateTimeFormat.parse(dateStr);
+                        onResponseListener.onResponse(date);
+                    } catch (JSONException | ParseException e) {
+                        Log.e(tag, "getTimeDbChanged: " + e);
+                        onErrorListener.onError();
+                    }
+                },
+                error -> onErrorListener.onError()
+        );
+    }
+
     private void checkQueueSize() {
         queueSize--;
         if(onQueueEmptyListener != null && queueSize == 0) {
@@ -479,8 +482,16 @@ public class DownloadHelper {
         void onResponse(JSONObject response);
     }
 
+    public interface OnDateResponseListener {
+        void onResponse(Date date);
+    }
+
     public interface OnErrorListener {
         void onError(VolleyError volleyError);
+    }
+
+    public interface OnSimpleErrorListener {
+        void onError();
     }
 
     public interface OnQueueEmptyListener {
