@@ -83,6 +83,7 @@ public class AppBarBehavior {
 
 	public void switchToPrimary() {
 		if(isPrimary) return;
+		isPrimary = true;
 		viewSecondary.animate()
 				.alpha(0)
 				.setDuration(ANIM_DURATION / 2)
@@ -97,6 +98,7 @@ public class AppBarBehavior {
 
 	public void switchToSecondary() {
 		if(!isPrimary) return;
+		isPrimary = false;
 		viewPrimary.animate()
 				.alpha(0)
 				.setDuration(ANIM_DURATION / 2)
