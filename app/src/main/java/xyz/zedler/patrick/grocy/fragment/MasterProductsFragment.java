@@ -186,6 +186,8 @@ public class MasterProductsFragment extends Fragment
         // UPDATE UI
 
         activity.updateUI(Constants.UI.MASTER_PRODUCTS_DEFAULT, TAG);
+
+        load();
     }
 
     private void load() {
