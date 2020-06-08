@@ -144,17 +144,26 @@ public class SortUtil {
         }
         Collections.sort(
                 itemsWithoutProduct,
-                (item1, item2) -> (ascending ? item1 : item2).getNote().compareToIgnoreCase(
-                        (ascending ? item2 : item1).getNote()
-                )
+                (item1, item2) -> {
+                    String noteA = (ascending ? item1 : item2).getNote();
+                    String noteB = (ascending ? item2 : item1).getNote();
+                    if(noteA != null && noteB != null) return noteA.compareToIgnoreCase(noteB);
+                    else if(noteA == null && noteB != null) return -1;
+                    else if(noteA != null) return 1;
+                    else return 0;
+                }
         );
         shoppingListItems.removeAll(itemsWithoutProduct);
         Collections.sort(
                 shoppingListItems,
-                (item1, item2) -> (ascending ? item1 : item2).getProduct()
-                        .getName().compareToIgnoreCase(
-                                (ascending ? item2 : item1).getProduct().getName()
-                        )
+                (item1, item2) -> {
+                    String nameA = (ascending ? item1 : item2).getProduct().getName();
+                    String nameB = (ascending ? item2 : item1).getProduct().getName();
+                    if(nameA != null && nameB != null) return nameA.compareToIgnoreCase(nameB);
+                    else if(nameA == null && nameB != null) return -1;
+                    else if(nameA != null) return 1;
+                    else return 0;
+                }
         );
         shoppingListItems.addAll(itemsWithoutProduct);
     }
