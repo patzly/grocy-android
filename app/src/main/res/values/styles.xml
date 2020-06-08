@@ -245,10 +245,10 @@
 
     <style name="Widget.Grocy.Button.UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="rippleColor">@color/highlight_on_secondary</item>
-        <item name="android:textColor">@color/on_secondary</item>
+        <item name="android:textColor">@color/button_text_color_selector</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
-        <item name="backgroundTint">@color/secondary</item>
+        <item name="backgroundTint">@color/button_bg_color_selector</item>
     </style>
 
     <style name="Widget.Grocy.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
