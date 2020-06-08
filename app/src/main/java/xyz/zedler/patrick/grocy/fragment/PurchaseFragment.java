@@ -35,9 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
@@ -46,14 +43,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -71,6 +64,7 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
@@ -92,7 +86,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class PurchaseFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.CONSUME;
+    private final static String TAG = Constants.UI.PURCHASE;
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
@@ -104,21 +98,13 @@ public class PurchaseFragment extends Fragment {
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
     private Bundle startupBundle;
+    private FragmentPurchaseBinding binding;
 
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<Store> stores = new ArrayList<>();
-    private ArrayList<String> productNames = new ArrayList<>();
+    private ArrayList<Product> products;
+    private ArrayList<Location> locations;
+    private ArrayList<Store> stores;
+    private ArrayList<String> productNames;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
-    private LinearLayout linearLayoutBarcodesContainer, linearLayoutTotalPrice;
-    private TextInputLayout textInputProduct, textInputAmount, textInputPrice;
-    private EditText editTextAmount, editTextPrice;
-    private TextView textViewLocation, textViewStore, textViewBestBeforeDate;
-    private TextView textViewLocationLabel, textViewBbdLabel;
-    private ImageView imageViewAmount, imageViewPrice;
-    private MaterialCheckBox checkBoxTotalPrice;
     private int selectedLocationId = -1, selectedStoreId = -1;
     private String selectedBestBeforeDate;
     private double amount, minAmount;
@@ -130,7 +116,8 @@ public class PurchaseFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_purchase, container, false);
+        binding = FragmentPurchaseBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -157,50 +144,44 @@ public class PurchaseFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_purchase_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.framePurchaseBack.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
 
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_purchase);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipePurchase.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipePurchase.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipePurchase.setOnRefreshListener(this::refresh);
 
         // product
 
-        textInputProduct = activity.findViewById(R.id.text_input_purchase_product);
-        textInputProduct.setErrorIconDrawable(null);
-        textInputProduct.setEndIconOnClickListener(v -> startActivityForResult(
+        binding.textInputPurchaseProduct.setErrorIconDrawable(null);
+        binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> startActivityForResult(
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
-        autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
-        assert autoCompleteTextViewProduct != null;
-        autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                IconUtil.start(activity, R.id.image_purchase_product);
+                IconUtil.start(binding.imagePurchaseProduct);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             }
         });
-        autoCompleteTextViewProduct.setOnItemClickListener(
+        binding.autoCompletePurchaseProduct.setOnItemClickListener(
                 (parent, view, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
                 )
         );
-        autoCompleteTextViewProduct.setOnEditorActionListener(
+        binding.autoCompletePurchaseProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
-                        String input = autoCompleteTextViewProduct.getText().toString().trim();
+                        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
                         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()
                                 && !nameAutoFilled
                         ) {
@@ -216,15 +197,9 @@ public class PurchaseFragment extends Fragment {
         });
         nameAutoFilled = false;
 
-        // barcodes
-
-        linearLayoutBarcodesContainer = activity.findViewById(
-                R.id.linear_purchase_barcode_container
-        );
-
         // best before date
 
-        activity.findViewById(R.id.linear_purchase_bbd).setOnClickListener(v -> {
+        binding.linearPurchaseBbd.setOnClickListener(v -> {
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(
@@ -235,19 +210,13 @@ public class PurchaseFragment extends Fragment {
                 activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             }
         });
-        textViewBestBeforeDate = activity.findViewById(R.id.text_purchase_bbd);
-        textViewBbdLabel = activity.findViewById(R.id.text_purchase_bbd_label);
 
         // amount
 
-        textInputAmount = activity.findViewById(R.id.text_input_purchase_amount);
-        imageViewAmount = activity.findViewById(R.id.image_purchase_amount);
-        editTextAmount = textInputAmount.getEditText();
-        assert editTextAmount != null;
-        editTextAmount.addTextChangedListener(new TextWatcher() {
+        binding.editTextPurchaseAmount.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
@@ -260,98 +229,103 @@ public class PurchaseFragment extends Fragment {
                 isAmountValid();
             }
         });
-        editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        binding.editTextPurchaseAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                IconUtil.start(imageViewAmount);
+                IconUtil.start(binding.imagePurchaseAmount);
                 // editTextAmount.selectAll();
             }
         });
-        editTextAmount.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                clearInputFocus();
-                return true;
-            } return false;
-        });
+        binding.editTextPurchaseAmount.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        clearInputFocus();
+                        return true;
+                    } return false;
+                });
 
-        activity.findViewById(R.id.button_purchase_amount_more).setOnClickListener(v -> {
+        binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_amount);
-            if(editTextAmount.getText().toString().isEmpty()) {
-                editTextAmount.setText(String.valueOf(1));
+            if(binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
+                binding.editTextPurchaseAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
-                editTextAmount.setText(NumUtil.trim(amountNew));
+                double amountNew = Double.parseDouble(
+                        binding.editTextPurchaseAmount.getText().toString()
+                ) + 1;
+                binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
             }
         });
 
-        activity.findViewById(R.id.button_purchase_amount_less).setOnClickListener(v -> {
-            if(!editTextAmount.getText().toString().isEmpty()) {
+        binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
+            if(!binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
                 IconUtil.start(activity, R.id.image_purchase_amount);
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
+                double amountNew = Double.parseDouble(
+                        binding.editTextPurchaseAmount.getText().toString()
+                ) - 1;
                 if(amountNew >= minAmount) {
-                    editTextAmount.setText(NumUtil.trim(amountNew));
+                    binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
                 }
             }
         });
 
         // price
 
-        textInputPrice = activity.findViewById(R.id.text_input_purchase_price);
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
         if(currency.isEmpty()) {
-            textInputPrice.setHint(getString(R.string.property_price));
+            binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
         } else {
-            textInputPrice.setHint(getString(R.string.property_price_in, currency));
+            binding.textInputPurchasePrice.setHint(getString(R.string.property_price_in, currency));
         }
-        imageViewPrice = activity.findViewById(R.id.image_purchase_price);
-        editTextPrice = textInputPrice.getEditText();
-        assert editTextPrice != null;
-        editTextPrice.addTextChangedListener(new TextWatcher() {
+        binding.editTextPurchasePrice.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {isPriceValid();}
         });
-        editTextPrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        binding.editTextPurchasePrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                IconUtil.start(imageViewPrice);
+                IconUtil.start(binding.imagePurchasePrice);
                 // editTextAmount.selectAll();
             }
         });
-        editTextPrice.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                clearInputFocus();
-                return true;
-            } return false;
-        });
+        binding.editTextPurchasePrice.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        clearInputFocus();
+                        return true;
+                    } return false;
+                });
 
-        activity.findViewById(R.id.button_purchase_price_more).setOnClickListener(v -> {
+        binding.buttonPurchasePriceMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_price);
-            if(editTextPrice.getText().toString().isEmpty()) {
-                editTextPrice.setText(NumUtil.trimPrice(1));
+            if(binding.editTextPurchasePrice.getText().toString().isEmpty()) {
+                binding.editTextPurchasePrice.setText(NumUtil.trimPrice(1));
             } else {
-                double priceNew = NumUtil.stringToDouble(editTextPrice.getText().toString()) + 1;
-                editTextPrice.setText(NumUtil.trimPrice(priceNew));
+                double priceNew = NumUtil.stringToDouble(
+                        binding.editTextPurchasePrice.getText().toString()
+                ) + 1;
+                binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
             }
         });
-        activity.findViewById(R.id.button_purchase_price_less).setOnClickListener(v -> {
-            if(!editTextPrice.getText().toString().isEmpty()) {
+        binding.buttonPurchasePriceLess.setOnClickListener(v -> {
+            if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
                 IconUtil.start(activity, R.id.image_purchase_price);
-                double priceNew = NumUtil.stringToDouble(editTextPrice.getText().toString()) - 1;
+                double priceNew = NumUtil.stringToDouble(
+                        binding.editTextPurchasePrice.getText().toString()
+                ) - 1;
                 if(priceNew >= 0) {
-                    editTextPrice.setText(NumUtil.trimPrice(priceNew));
+                    binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
                 }
             }
         });
 
-        checkBoxTotalPrice = activity.findViewById(R.id.checkbox_purchase_total_price);
-
-        linearLayoutTotalPrice = activity.findViewById(R.id.linear_purchase_total_price);
-        linearLayoutTotalPrice.setOnClickListener(
-                v -> checkBoxTotalPrice.setChecked(!checkBoxTotalPrice.isChecked())
+        binding.linearPurchaseTotalPrice.setOnClickListener(
+                v -> binding.checkboxPurchaseTotalPrice.setChecked(
+                        !binding.checkboxPurchaseTotalPrice.isChecked()
+                )
         );
 
         // store
 
-        activity.findViewById(R.id.linear_purchase_store).setOnClickListener(v -> {
+        binding.linearPurchaseStore.setOnClickListener(v -> {
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
@@ -359,14 +333,13 @@ public class PurchaseFragment extends Fragment {
                 activity.showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             }
         });
-        textViewStore = activity.findViewById(R.id.text_purchase_store);
 
         // location
 
-        activity.findViewById(R.id.linear_purchase_location).setOnClickListener(v -> {
+        binding.linearPurchaseLocation.setOnClickListener(v -> {
             if(productDetails != null) {
                 IconUtil.start(activity, R.id.image_purchase_location);
                 Bundle bundle = new Bundle();
@@ -375,11 +348,9 @@ public class PurchaseFragment extends Fragment {
                 activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             }
         });
-        textViewLocation = activity.findViewById(R.id.text_purchase_location);
-        textViewLocationLabel = activity.findViewById(R.id.text_purchase_location_label);
 
         hideDisabledFeatures();
 
@@ -400,10 +371,10 @@ public class PurchaseFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipePurchase.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -419,7 +390,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipePurchase.setRefreshing(true);
         downloadProductNames();
         downloadStores();
         downloadLocations();
@@ -436,7 +407,7 @@ public class PurchaseFragment extends Fragment {
                     );
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
-                    autoCompleteTextViewProduct.setAdapter(adapterProducts);
+                    binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
                 },
                 this::onError,
                 this::onQueueEmpty
@@ -483,10 +454,10 @@ public class PurchaseFragment extends Fragment {
     private void onError(VolleyError error) {
         Log.e(TAG, "onError: VolleyError: " + error);
         request.cancelAll(TAG);
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipePurchase.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 ).setActionTextColor(
@@ -511,7 +482,7 @@ public class PurchaseFragment extends Fragment {
                 if(product != null) {
                     loadProductDetails(product.getId());
                 } else {
-                    autoCompleteTextViewProduct.setText(
+                    binding.autoCompletePurchaseProduct.setText(
                             startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                     );
                 }
@@ -526,7 +497,7 @@ public class PurchaseFragment extends Fragment {
                 }
             }
         }
-        swipeRefreshLayout.setRefreshing(false);
+        binding.swipePurchase.setRefreshing(false);
     }
 
     @Override
@@ -549,27 +520,27 @@ public class PurchaseFragment extends Fragment {
                 .getEnableTareWeightHandling() == 1;
 
         // PRODUCT
-        autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
-        textInputProduct.setErrorEnabled(false);
+        binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
+        binding.textInputPurchaseProduct.setErrorEnabled(false);
 
         // BBD
         int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
         if(defaultBestBeforeDays < 0) {
             selectedBestBeforeDate = Constants.DATE.NEVER_EXPIRES;
-            textViewBestBeforeDate.setText(getString(R.string.subtitle_never_expires));
+            binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
         } else if (defaultBestBeforeDays == 0) {
             selectedBestBeforeDate = null;
-            textViewBestBeforeDate.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseBbd.setText(getString(R.string.subtitle_none));
         } else {
             // add default best before days to today
             selectedBestBeforeDate = DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays);
-            textViewBestBeforeDate.setText(
+            binding.textPurchaseBbd.setText(
                     dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
             );
         }
 
         // AMOUNT
-        textInputAmount.setHint(
+        binding.textInputPurchaseAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
                         productDetails.getQuantityUnitPurchase().getNamePlural()
@@ -586,7 +557,7 @@ public class PurchaseFragment extends Fragment {
             double amount = Double.parseDouble(Objects.requireNonNull(
                     startupBundle.getString(Constants.ARGUMENT.AMOUNT)
             ));
-            editTextAmount.setText(NumUtil.trim(amount));
+            binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
         } else {
             // leave amount empty if tare weight handling enabled
             if(!isTareWeightHandlingEnabled) {
@@ -595,22 +566,24 @@ public class PurchaseFragment extends Fragment {
                         "1"
                 );
                 if(defaultAmount.isEmpty()) {
-                    editTextAmount.setText(null);
+                    binding.editTextPurchaseAmount.setText(null);
                 } else {
-                    editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
+                    binding.editTextPurchaseAmount.setText(
+                            NumUtil.trim(Double.parseDouble(defaultAmount))
+                    );
                 }
             } else {
-                editTextAmount.setText(null);
+                binding.editTextPurchaseAmount.setText(null);
             }
         }
 
-        if(editTextAmount.getText().toString().isEmpty()) {
-            editTextAmount.requestFocus();
-            activity.showKeyboard(editTextAmount);
+        if(binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
+            binding.editTextPurchaseAmount.requestFocus();
+            activity.showKeyboard(binding.editTextPurchaseAmount);
         }
 
         // set icon for tare weight, else for normal amount
-        imageViewAmount.setImageResource(
+        binding.imagePurchaseAmount.setImageResource(
                 isTareWeightHandlingEnabled
                         ? R.drawable.ic_round_scale_anim
                         : R.drawable.ic_round_scatter_plot_anim
@@ -619,24 +592,24 @@ public class PurchaseFragment extends Fragment {
         // PRICE
 
         if(productDetails.getLastPrice() != null && !productDetails.getLastPrice().isEmpty()) {
-            editTextPrice.setText(
+            binding.editTextPurchasePrice.setText(
                     NumUtil.trimPrice(Double.parseDouble(productDetails.getLastPrice()))
             );
         } else {
-            editTextPrice.setText(null);
+            binding.editTextPurchasePrice.setText(null);
         }
 
-        checkBoxTotalPrice.setChecked(false);
+        binding.checkboxPurchaseTotalPrice.setChecked(false);
 
         // deactivate checkbox if tare weight handling is on
         if(isTareWeightHandlingEnabled) {
-            linearLayoutTotalPrice.setEnabled(false);
-            linearLayoutTotalPrice.setAlpha(0.5f);
-            checkBoxTotalPrice.setEnabled(false);
+            binding.linearPurchaseTotalPrice.setEnabled(false);
+            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
+            binding.checkboxPurchaseTotalPrice.setEnabled(false);
         } else {
-            linearLayoutTotalPrice.setEnabled(true);
-            linearLayoutTotalPrice.setAlpha(1.0f);
-            checkBoxTotalPrice.setEnabled(true);
+            binding.linearPurchaseTotalPrice.setEnabled(true);
+            binding.linearPurchaseTotalPrice.setAlpha(1.0f);
+            binding.checkboxPurchaseTotalPrice.setEnabled(true);
         }
 
         // STORE
@@ -650,21 +623,21 @@ public class PurchaseFragment extends Fragment {
         }
         if(storeId == null || storeId.isEmpty()) {
             selectedStoreId = -1;
-            textViewStore.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
         } else {
             selectedStoreId = Integer.parseInt(storeId);
             Store store = getStore(selectedStoreId);
             if(store != null) {
-                textViewStore.setText(store.getName());
+                binding.textPurchaseStore.setText(store.getName());
             } else {
-                textViewStore.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
             }
         }
 
         // LOCATION
         if(productDetails.getLocation() != null) {
             selectedLocationId = productDetails.getLocation().getId();
-            textViewLocation.setText(productDetails.getLocation().getName());
+            binding.textPurchaseLocation.setText(productDetails.getLocation().getName());
         } else {
             selectedLocationId = -1;
         }
@@ -672,9 +645,9 @@ public class PurchaseFragment extends Fragment {
 
     private void clearInputFocus() {
         activity.hideKeyboard();
-        textInputProduct.clearFocus();
-        textInputAmount.clearFocus();
-        textInputPrice.clearFocus();
+        binding.textInputPurchaseProduct.clearFocus();
+        binding.textInputPurchaseAmount.clearFocus();
+        binding.textInputPurchasePrice.clearFocus();
     }
 
     private void loadProductDetails(int productId) {
@@ -691,11 +664,11 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void loadProductDetailsByBarcode(String barcode) {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipePurchase.setRefreshing(true);
         request.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipePurchase.setRefreshing(false);
                     productDetails = gson.fromJson(
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
@@ -704,7 +677,7 @@ public class PurchaseFragment extends Fragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        autoCompleteTextViewProduct.setText(barcode);
+                        binding.autoCompletePurchaseProduct.setText(barcode);
                         nameAutoFilled = true;
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
@@ -712,22 +685,16 @@ public class PurchaseFragment extends Fragment {
                                 new InputBarcodeBottomSheetDialogFragment(), bundle
                         );
                     } else {
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.frame_main_container),
-                                        activity.getString(R.string.msg_error),
-                                        Snackbar.LENGTH_SHORT
-                                )
-                        );
+                        showMessage(activity.getString(R.string.msg_error));
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipePurchase.setRefreshing(false);
                 }
         );
     }
 
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
         if(!productNames.isEmpty()
                 && !productNames.contains(input)
                 && !input.isEmpty()
@@ -742,7 +709,7 @@ public class PurchaseFragment extends Fragment {
             isIncomplete = true;
         }
         if(productDetails == null) {
-            textInputProduct.setError(activity.getString(R.string.error_select_product));
+            binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             isIncomplete = true;
         }
         if(!isBestBeforeDateValid()) isIncomplete = true;
@@ -759,9 +726,11 @@ public class PurchaseFragment extends Fragment {
         try {
             body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");
-            if(!editTextPrice.getText().toString().isEmpty()) {
-                double price = NumUtil.stringToDouble(editTextPrice.getText().toString());
-                if(checkBoxTotalPrice.isChecked()) {
+            if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
+                double price = NumUtil.stringToDouble(
+                        binding.editTextPurchasePrice.getText().toString()
+                );
+                if(binding.checkboxPurchaseTotalPrice.isChecked()) {
                     price = price / amount;
                 }
                 body.put("price", price);
@@ -806,7 +775,7 @@ public class PurchaseFragment extends Fragment {
                     }
 
                     Snackbar snackbar = Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(
                                     R.string.msg_purchased,
                                     NumUtil.trim(amountAdded),
@@ -869,13 +838,7 @@ public class PurchaseFragment extends Fragment {
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    activity.showMessage(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
-                                    activity.getString(R.string.msg_undone_transaction),
-                                    Snackbar.LENGTH_SHORT
-                            )
-                    );
+                    showMessage(activity.getString(R.string.msg_undone_transaction));
                     if(DEBUG) Log.i(TAG, "undoTransaction: undone");
                 },
                 error -> showErrorMessage()
@@ -883,7 +846,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
-        if(linearLayoutBarcodesContainer.getChildCount() == 0) return;
+        if(binding.linearPurchaseBarcodeContainer.getChildCount() == 0) return;
 
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
@@ -897,8 +860,8 @@ public class PurchaseFragment extends Fragment {
             );
         }
 
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
             if(!barcodes.contains(inputChip.getText())) {
                 barcodes.add(inputChip.getText());
             }
@@ -943,14 +906,14 @@ public class PurchaseFragment extends Fragment {
 
     private void hideDisabledFeatures() {
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-            activity.findViewById(R.id.linear_purchase_total_price).setVisibility(View.GONE);
-            activity.findViewById(R.id.linear_purchase_price).setVisibility(View.GONE);
+            binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
+            binding.linearPurchasePrice.setVisibility(View.GONE);
         }
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            activity.findViewById(R.id.linear_purchase_location).setVisibility(View.GONE);
+            binding.linearPurchaseLocation.setVisibility(View.GONE);
         }
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-            activity.findViewById(R.id.linear_purchase_bbd).setVisibility(View.GONE);
+            binding.linearPurchaseBbd.setVisibility(View.GONE);
         }
     }
 
@@ -975,7 +938,9 @@ public class PurchaseFragment extends Fragment {
                             bundle
                     );
                 } else {
-                    textInputProduct.setError(activity.getString(R.string.error_select_product));
+                    binding.textInputPurchaseProduct.setError(
+                            activity.getString(R.string.error_select_product)
+                    );
                 }
                 return true;
             });
@@ -985,9 +950,9 @@ public class PurchaseFragment extends Fragment {
     public void selectBestBeforeDate(String selectedBestBeforeDate) {
         this.selectedBestBeforeDate = selectedBestBeforeDate;
         if(selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
-            textViewBestBeforeDate.setText(getString(R.string.subtitle_never_expires));
+            binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
         } else {
-            textViewBestBeforeDate.setText(
+            binding.textPurchaseBbd.setText(
                     dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
             );
         }
@@ -997,13 +962,13 @@ public class PurchaseFragment extends Fragment {
     public void selectStore(int selectedId) {
         this.selectedStoreId = selectedId;
         if(stores.isEmpty()) {
-            textViewLocation.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
         } else {
             Store store = getStore(selectedId);
             if(store != null) {
-                textViewStore.setText(store.getName());
+                binding.textPurchaseStore.setText(store.getName());
             } else {
-                textViewStore.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
                 showErrorMessage();
             }
         }
@@ -1012,13 +977,13 @@ public class PurchaseFragment extends Fragment {
     public void selectLocation(int selectedId) {
         this.selectedLocationId = selectedId;
         if(locations.isEmpty()) {
-            textViewLocation.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
         } else {
             Location location = getLocation(selectedId);
             if(location != null) {
-                textViewLocation.setText(location.getName());
+                binding.textPurchaseLocation.setText(location.getName());
             } else {
-                textViewLocation.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
                 showErrorMessage();
             }
         }
@@ -1029,31 +994,33 @@ public class PurchaseFragment extends Fragment {
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             return true;
         } else if(selectedBestBeforeDate == null || selectedBestBeforeDate.isEmpty()) {
-            textViewBbdLabel.setTextColor(getColor(R.color.error));
+            binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
-            textViewBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
+            binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
             return true;
         }
     }
 
     private boolean isLocationValid() {
         if(selectedLocationId < 0) {
-            textViewLocationLabel.setTextColor(getColor(R.color.error));
+            binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
-            textViewLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
+            binding.textPurchaseLocationLabel.setTextColor(
+                    getColor(R.color.on_background_secondary)
+            );
             return true;
         }
     }
 
     private boolean isAmountValid() {
         if(amount >= minAmount) {
-            textInputAmount.setErrorEnabled(false);
+            binding.textInputPurchaseAmount.setErrorEnabled(false);
             return true;
         } else {
             if(productDetails != null) {
-                textInputAmount.setError(
+                binding.textInputPurchaseAmount.setError(
                         activity.getString(
                                 R.string.error_bounds_min,
                                 NumUtil.trim(minAmount)
@@ -1065,13 +1032,13 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isPriceValid() {
-        if(!editTextPrice.getText().toString().isEmpty()) {
-            if(NumUtil.stringToDouble(editTextPrice.getText().toString()) >= 0) {
-                textInputPrice.setErrorEnabled(false);
+        if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
+            if(NumUtil.stringToDouble(binding.editTextPurchasePrice.getText().toString()) >= 0) {
+                binding.textInputPurchasePrice.setErrorEnabled(false);
                 return true;
             } else {
                 if(productDetails != null) {
-                    textInputPrice.setError(
+                    binding.textInputPurchasePrice.setError(
                             activity.getString(
                                     R.string.error_bounds_min,
                                     NumUtil.trim(0)
@@ -1081,7 +1048,7 @@ public class PurchaseFragment extends Fragment {
                 return false;
             }
         } else {
-            textInputPrice.setErrorEnabled(false);
+            binding.textInputPurchasePrice.setErrorEnabled(false);
             return true;
         }
     }
@@ -1103,20 +1070,14 @@ public class PurchaseFragment extends Fragment {
     }
 
     public void addInputAsBarcode() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
         if(input.isEmpty()) return;
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showMessage(
-                        Snackbar.make(
-                                activity.findViewById(R.id.frame_main_container),
-                                activity.getString(R.string.msg_barcode_duplicate),
-                                Snackbar.LENGTH_SHORT
-                        )
-                );
-                autoCompleteTextViewProduct.setText(null);
-                autoCompleteTextViewProduct.requestFocus();
+                showMessage(activity.getString(R.string.msg_barcode_duplicate));
+                binding.autoCompletePurchaseProduct.setText(null);
+                binding.autoCompletePurchaseProduct.requestFocus();
                 return;
             }
         }
@@ -1124,43 +1085,43 @@ public class PurchaseFragment extends Fragment {
                 activity, input, R.drawable.ic_round_barcode, true
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
-        linearLayoutBarcodesContainer.addView(inputChipBarcode);
-        autoCompleteTextViewProduct.setText(null);
-        autoCompleteTextViewProduct.requestFocus();
+        binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
+        binding.autoCompletePurchaseProduct.setText(null);
+        binding.autoCompletePurchaseProduct.requestFocus();
     }
 
     public void clearAll() {
         productDetails = null;
-        textInputProduct.setErrorEnabled(false);
-        autoCompleteTextViewProduct.setText(null);
-        textViewBestBeforeDate.setText(activity.getString(R.string.subtitle_none));
-        textViewBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
-        textInputAmount.setErrorEnabled(false);
-        editTextAmount.setText(null);
-        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
-        textInputPrice.setErrorEnabled(false);
-        editTextPrice.setText(null);
-        linearLayoutTotalPrice.setAlpha(1.0f);
-        linearLayoutTotalPrice.setEnabled(true);
-        checkBoxTotalPrice.setEnabled(true);
-        checkBoxTotalPrice.setChecked(false);
-        textViewStore.setText(activity.getString(R.string.subtitle_none));
-        textViewLocation.setText(activity.getString(R.string.subtitle_none));
-        textViewLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
+        binding.textInputPurchaseProduct.setErrorEnabled(false);
+        binding.autoCompletePurchaseProduct.setText(null);
+        binding.textPurchaseBbd.setText(activity.getString(R.string.subtitle_none));
+        binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
+        binding.textInputPurchaseAmount.setErrorEnabled(false);
+        binding.editTextPurchaseAmount.setText(null);
+        binding.imagePurchaseAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
+        binding.textInputPurchasePrice.setErrorEnabled(false);
+        binding.editTextPurchasePrice.setText(null);
+        binding.linearPurchaseTotalPrice.setAlpha(1.0f);
+        binding.linearPurchaseTotalPrice.setEnabled(true);
+        binding.checkboxPurchaseTotalPrice.setEnabled(true);
+        binding.checkboxPurchaseTotalPrice.setChecked(false);
+        binding.textPurchaseStore.setText(activity.getString(R.string.subtitle_none));
+        binding.textPurchaseLocation.setText(activity.getString(R.string.subtitle_none));
+        binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
         clearInputFocus();
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
+        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
+            ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
         }
         nameAutoFilled = false;
     }
 
     private void showErrorMessage() {
+        showMessage(activity.getString(R.string.msg_error));
+    }
+
+    private void showMessage(String text) {
         activity.showMessage(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        activity.getString(R.string.msg_error),
-                        Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_SHORT)
         );
     }
 

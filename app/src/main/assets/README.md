@@ -19,7 +19,7 @@
 --- master store
 --- master stores
 --- missing batch items
---- purchase
+--- purchase                    VIEW BINDING
 --- shopping list edit
 --- shopping list               UNFINISHED -> offline support
 --- shopping list item edit

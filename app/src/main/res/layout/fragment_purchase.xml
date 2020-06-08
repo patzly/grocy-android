@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="Purchase"
+                android:text="@string/action_purchase"
                 android:textAlignment="viewStart"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_regular"
@@ -100,6 +100,7 @@
                         app:helperText=" ">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/auto_complete_purchase_product"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"
@@ -186,6 +187,7 @@
                             app:helperText=" ">
 
                             <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_purchase_amount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number|numberDecimal"
@@ -248,6 +250,7 @@
                             app:helperText=" ">
 
                             <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_purchase_price"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number|numberDecimal"
