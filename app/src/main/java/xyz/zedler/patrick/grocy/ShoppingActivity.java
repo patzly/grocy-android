@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -84,7 +83,6 @@ public class ShoppingActivity extends AppCompatActivity implements
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<MissingItem> missingItems;
     private ArrayList<Product> products;
     private ArrayList<GroupedListItem> groupedListItems;
     private HashMap<Integer, ShoppingList> shoppingListHashMap;
@@ -129,7 +127,6 @@ public class ShoppingActivity extends AppCompatActivity implements
         shoppingLists = new ArrayList<>();
         shoppingListItems = new ArrayList<>();
         shoppingListItemsSelected = new ArrayList<>();
-        missingItems = new ArrayList<>();
         quantityUnits = new ArrayList<>();
         products = new ArrayList<>();
         productGroups = new ArrayList<>();
@@ -208,7 +205,6 @@ public class ShoppingActivity extends AppCompatActivity implements
             this.shoppingLists = shoppingLists;
             changeAppBarTitle();
         });
-        downloadHelper.downloadVolatile((expiring, expired, missing) -> missingItems = missing);
     }
 
     private void downloadShoppingListItems() {
