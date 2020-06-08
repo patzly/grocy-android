@@ -96,7 +96,6 @@ public class PurchaseFragment extends Fragment {
     private WebRequest request;
     private DateUtil dateUtil;
     private ArrayAdapter<String> adapterProducts;
-    private ProductDetails productDetails;
     private Bundle startupBundle;
     private FragmentPurchaseBinding binding;
 
@@ -105,9 +104,13 @@ public class PurchaseFragment extends Fragment {
     private ArrayList<Store> stores;
     private ArrayList<String> productNames;
 
-    private int selectedLocationId = -1, selectedStoreId = -1;
+    private ProductDetails productDetails;
+
+    private int selectedLocationId;
+    private int selectedStoreId;
     private String selectedBestBeforeDate;
-    private double amount, minAmount;
+    private double amount;
+    private double minAmount;
     private boolean nameAutoFilled;
 
     @Override
@@ -141,6 +144,21 @@ public class PurchaseFragment extends Fragment {
         // UTILS
 
         dateUtil = new DateUtil(activity);
+
+        // INITIALIZE VARIABLES
+
+        products = new ArrayList<>();
+        locations = new ArrayList<>();
+        stores = new ArrayList<>();
+        productNames = new ArrayList<>();
+
+        productDetails = null;
+        selectedLocationId = -1;
+        selectedStoreId = -1;
+        selectedBestBeforeDate = null;
+        amount = 0;
+        minAmount = 0;
+        nameAutoFilled = false;
 
         // INITIALIZE VIEWS
 
@@ -245,22 +263,18 @@ public class PurchaseFragment extends Fragment {
 
         binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_amount);
-            if(binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
+            if(getAmount().isEmpty()) {
                 binding.editTextPurchaseAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(
-                        binding.editTextPurchaseAmount.getText().toString()
-                ) + 1;
+                double amountNew = Double.parseDouble(getAmount()) + 1;
                 binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
             }
         });
 
         binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
-            if(!binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
+            if(!getAmount().isEmpty()) {
                 IconUtil.start(activity, R.id.image_purchase_amount);
-                double amountNew = Double.parseDouble(
-                        binding.editTextPurchaseAmount.getText().toString()
-                ) - 1;
+                double amountNew = Double.parseDouble(getAmount()) - 1;
                 if(amountNew >= minAmount) {
                     binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
                 }
@@ -270,6 +284,7 @@ public class PurchaseFragment extends Fragment {
         // price
 
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
+        assert currency != null;
         if(currency.isEmpty()) {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
         } else {
@@ -296,21 +311,17 @@ public class PurchaseFragment extends Fragment {
 
         binding.buttonPurchasePriceMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_price);
-            if(binding.editTextPurchasePrice.getText().toString().isEmpty()) {
+            if(getPrice().isEmpty()) {
                 binding.editTextPurchasePrice.setText(NumUtil.trimPrice(1));
             } else {
-                double priceNew = NumUtil.stringToDouble(
-                        binding.editTextPurchasePrice.getText().toString()
-                ) + 1;
+                double priceNew = NumUtil.stringToDouble(getPrice()) + 1;
                 binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
             }
         });
         binding.buttonPurchasePriceLess.setOnClickListener(v -> {
-            if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
+            if(!getPrice().isEmpty()) {
                 IconUtil.start(activity, R.id.image_purchase_price);
-                double priceNew = NumUtil.stringToDouble(
-                        binding.editTextPurchasePrice.getText().toString()
-                ) - 1;
+                double priceNew = NumUtil.stringToDouble(getPrice()) - 1;
                 if(priceNew >= 0) {
                     binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
                 }
@@ -356,11 +367,66 @@ public class PurchaseFragment extends Fragment {
 
         // START
 
-        refresh();
+        if(savedInstanceState == null) {
+            refresh();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.PURCHASE, TAG);
+        activity.updateUI(Constants.UI.PURCHASE, savedInstanceState == null, TAG);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("stores", stores);
+
+            outState.putStringArrayList("productNames", productNames);
+
+            outState.putParcelable("productDetails", productDetails);
+
+            outState.putInt("selectedLocationId", selectedLocationId);
+            outState.putInt("selectedStoreId", selectedStoreId);
+            outState.putString("selectedBestBeforeDate", selectedBestBeforeDate);
+
+            outState.putDouble("amount", amount);
+            outState.putDouble("minAmount", minAmount);
+            outState.putBoolean("nameAutoFilled", nameAutoFilled);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        products = savedInstanceState.getParcelableArrayList("products");
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        stores = savedInstanceState.getParcelableArrayList("stores");
+
+        productNames = savedInstanceState.getStringArrayList("productNames");
+        adapterProducts = new MatchArrayAdapter(activity, productNames);
+        binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
+
+        productDetails = savedInstanceState.getParcelable("productDetails");
+
+        selectedLocationId = savedInstanceState.getInt("selectedLocationId");
+        selectedStoreId = savedInstanceState.getInt("selectedStoreId");
+        selectedBestBeforeDate = savedInstanceState.getString("selectedBestBeforeDate");
+
+        amount = savedInstanceState.getDouble("amount");
+        minAmount = savedInstanceState.getDouble("minAmount");
+        nameAutoFilled = savedInstanceState.getBoolean("nameAutoFilled");
+
+        binding.swipePurchase.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     public void giveBundle(Bundle bundle) {
@@ -562,9 +628,9 @@ public class PurchaseFragment extends Fragment {
             // leave amount empty if tare weight handling enabled
             if(!isTareWeightHandlingEnabled) {
                 String defaultAmount = sharedPrefs.getString(
-                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-                        "1"
+                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
                 );
+                assert defaultAmount != null;
                 if(defaultAmount.isEmpty()) {
                     binding.editTextPurchaseAmount.setText(null);
                 } else {
@@ -577,7 +643,7 @@ public class PurchaseFragment extends Fragment {
             }
         }
 
-        if(binding.editTextPurchaseAmount.getText().toString().isEmpty()) {
+        if(getAmount().isEmpty()) {
             binding.editTextPurchaseAmount.requestFocus();
             activity.showKeyboard(binding.editTextPurchaseAmount);
         }
@@ -726,10 +792,8 @@ public class PurchaseFragment extends Fragment {
         try {
             body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");
-            if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
-                double price = NumUtil.stringToDouble(
-                        binding.editTextPurchasePrice.getText().toString()
-                );
+            if(!getPrice().isEmpty()) {
+                double price = NumUtil.stringToDouble(getPrice());
                 if(binding.checkboxPurchaseTotalPrice.isChecked()) {
                     price = price / amount;
                 }
@@ -1032,8 +1096,8 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isPriceValid() {
-        if(!binding.editTextPurchasePrice.getText().toString().isEmpty()) {
-            if(NumUtil.stringToDouble(binding.editTextPurchasePrice.getText().toString()) >= 0) {
+        if(!getPrice().isEmpty()) {
+            if(NumUtil.stringToDouble(getPrice()) >= 0) {
                 binding.textInputPurchasePrice.setErrorEnabled(false);
                 return true;
             } else {
@@ -1127,6 +1191,18 @@ public class PurchaseFragment extends Fragment {
 
     private int getColor(@ColorRes int color) {
         return ContextCompat.getColor(activity, color);
+    }
+
+    private String getAmount() {
+        Editable amount = binding.editTextPurchaseAmount.getText();
+        if(amount == null) return "";
+        return amount.toString();
+    }
+
+    private String getPrice() {
+        Editable price = binding.editTextPurchasePrice.getText();
+        if(price == null) return "";
+        return price.toString();
     }
 
     private boolean isFeatureEnabled(String pref) {
