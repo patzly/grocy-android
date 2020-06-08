@@ -37,9 +37,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,14 +44,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -71,6 +64,7 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
@@ -99,23 +93,18 @@ public class ConsumeFragment extends Fragment {
     private ArrayAdapter<String> adapterProducts;
     private ProductDetails productDetails;
     private Bundle startupBundle;
+    private FragmentConsumeBinding binding;
 
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<StockLocation> stockLocations = new ArrayList<>();
     private ArrayList<StockEntry> stockEntries = new ArrayList<>();
     private ArrayList<String> productNames = new ArrayList<>();
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
-    private LinearLayout linearLayoutBarcodesContainer;
-    private TextInputLayout textInputProduct, textInputAmount;
-    private EditText editTextAmount;
-    private TextView textViewLocation, textViewSpecific;
-    private MaterialCheckBox checkBoxSpoiled;
-    private ImageView imageViewAmount;
     private int selectedLocationId = -1;
     private String selectedStockEntryId;
-    private double amount, maxAmount, minAmount;
+    private double amount;
+    private double maxAmount;
+    private double minAmount;
 
     @Override
     public View onCreateView(
@@ -123,7 +112,8 @@ public class ConsumeFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_consume, container, false);
+        binding = FragmentConsumeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -146,68 +136,54 @@ public class ConsumeFragment extends Fragment {
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_consume_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.frameConsumeBack.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
 
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_consume);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeConsume.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeConsume.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeConsume.setOnRefreshListener(this::refresh);
 
         // product
 
-        textInputProduct = activity.findViewById(R.id.text_input_consume_product);
-        textInputProduct.setErrorIconDrawable(null);
-        textInputProduct.setEndIconOnClickListener(v -> startActivityForResult(
+        binding.textInputConsumeProduct.setErrorIconDrawable(null);
+        binding.textInputConsumeProduct.setEndIconOnClickListener(v -> startActivityForResult(
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
-        autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
-        assert autoCompleteTextViewProduct != null;
-        autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        binding.autoCompleteConsumeProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 IconUtil.start(activity, R.id.image_consume_product);
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             } else {
-                textInputProduct.setError(activity.getString(R.string.error_invalid_product));
+                binding.textInputConsumeProduct.setError(
+                        activity.getString(R.string.error_invalid_product)
+                );
             }
         });
-        autoCompleteTextViewProduct.setOnItemClickListener(
+        binding.autoCompleteConsumeProduct.setOnItemClickListener(
                 (parent, view, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
                 )
         );
-        autoCompleteTextViewProduct.setOnEditorActionListener(
+        binding.autoCompleteConsumeProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                        editTextAmount.requestFocus();
+                        binding.editTextConsumeAmount.requestFocus();
                         return true;
                     } return false;
         });
 
-        // barcodes
-
-        linearLayoutBarcodesContainer = activity.findViewById(
-                R.id.linear_consume_barcode_container
-        );
-
         // amount
 
-        textInputAmount = activity.findViewById(R.id.text_input_consume_amount);
-        imageViewAmount = activity.findViewById(R.id.image_consume_amount);
-        editTextAmount = textInputAmount.getEditText();
-        assert editTextAmount != null;
-        editTextAmount.addTextChangedListener(new TextWatcher() {
+        binding.editTextConsumeAmount.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
@@ -221,44 +197,45 @@ public class ConsumeFragment extends Fragment {
                 isAmountValid();
             }
         });
-        editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+        binding.editTextConsumeAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
-                IconUtil.start(imageViewAmount);
+                IconUtil.start(binding.imageConsumeAmount);
                 // editTextAmount.selectAll();
             }
         });
-        editTextAmount.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                clearInputFocus();
-                return true;
-            } return false;
-        });
+        binding.editTextConsumeAmount.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        clearInputFocus();
+                        return true;
+                    } return false;
+                });
 
-        activity.findViewById(R.id.button_consume_amount_more).setOnClickListener(v -> {
+        binding.buttonConsumeAmountMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_amount);
-            if(editTextAmount.getText().toString().isEmpty()) {
-                editTextAmount.setText(String.valueOf(1));
+            if(binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+                binding.editTextConsumeAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
+                double amountNew = Double.parseDouble(binding.editTextConsumeAmount.getText().toString()) + 1;
                 if(amountNew <= maxAmount) {
-                    editTextAmount.setText(NumUtil.trim(amountNew));
+                    binding.editTextConsumeAmount.setText(NumUtil.trim(amountNew));
                 }
             }
         });
 
-        activity.findViewById(R.id.button_consume_amount_less).setOnClickListener(v -> {
-            if(!editTextAmount.getText().toString().isEmpty()) {
+        binding.buttonConsumeAmountLess.setOnClickListener(v -> {
+            if(!binding.editTextConsumeAmount.getText().toString().isEmpty()) {
                 IconUtil.start(activity, R.id.image_consume_amount);
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
+                double amountNew = Double.parseDouble(binding.editTextConsumeAmount.getText().toString()) - 1;
                 if(amountNew >= minAmount) {
-                    editTextAmount.setText(NumUtil.trim(amountNew));
+                    binding.editTextConsumeAmount.setText(NumUtil.trim(amountNew));
                 }
             }
         });
 
         // location
 
-        activity.findViewById(R.id.linear_consume_location).setOnClickListener(v -> {
+        binding.linearConsumeLocation.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_location);
             if(productDetails != null) {
                 Bundle bundle = new Bundle();
@@ -268,14 +245,13 @@ public class ConsumeFragment extends Fragment {
                 activity.showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
             }
         });
-        textViewLocation = activity.findViewById(R.id.text_consume_location);
 
         // specific
 
-        activity.findViewById(R.id.linear_consume_specific).setOnClickListener(v -> {
+        binding.linearConsumeSpecific.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_specific);
             if(productDetails != null) {
                 ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
@@ -293,20 +269,18 @@ public class ConsumeFragment extends Fragment {
                 activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
             }
         });
-        textViewSpecific = activity.findViewById(R.id.text_consume_specific);
 
         // spoiled
 
-        checkBoxSpoiled = activity.findViewById(R.id.checkbox_consume_spoiled);
-        checkBoxSpoiled.setOnCheckedChangeListener(
+        binding.checkboxConsumeSpoiled.setOnCheckedChangeListener(
                 (buttonView, isChecked) -> IconUtil.start(activity, R.id.image_consume_spoiled)
         );
-        activity.findViewById(R.id.linear_consume_spoiled).setOnClickListener(v -> {
+        binding.linearConsumeSpoiled.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_consume_spoiled);
-            checkBoxSpoiled.setChecked(!checkBoxSpoiled.isChecked());
+            binding.checkboxConsumeSpoiled.setChecked(!binding.checkboxConsumeSpoiled.isChecked());
         });
 
         hideDisabledFeatures();
@@ -324,10 +298,10 @@ public class ConsumeFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeConsume.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -343,7 +317,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeConsume.setRefreshing(true);
         downloadProductNames();
     }
 
@@ -357,7 +331,7 @@ public class ConsumeFragment extends Fragment {
                     );
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
-                    autoCompleteTextViewProduct.setAdapter(adapterProducts);
+                    binding.autoCompleteConsumeProduct.setAdapter(adapterProducts);
 
                     // fill with product from bundle
                     String action = null;
@@ -379,12 +353,12 @@ public class ConsumeFragment extends Fragment {
                         }
                     }
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeConsume.setRefreshing(false);
                 }, error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeConsume.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_error),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
@@ -417,7 +391,7 @@ public class ConsumeFragment extends Fragment {
         if(productDetails.getStockAmount() == 0) { // check if stock is empty
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(
                                     R.string.msg_not_in_stock,
                                     productDetails.getProduct().getName()
@@ -430,11 +404,11 @@ public class ConsumeFragment extends Fragment {
         }
 
         // PRODUCT
-        autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
-        textInputProduct.setErrorEnabled(false);
+        binding.autoCompleteConsumeProduct.setText(productDetails.getProduct().getName());
+        binding.textInputConsumeProduct.setErrorEnabled(false);
 
         // AMOUNT
-        textInputAmount.setHint(
+        binding.editTextConsumeAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
                         productDetails.getQuantityUnitStock().getNamePlural()
@@ -449,28 +423,32 @@ public class ConsumeFragment extends Fragment {
                     "1"
             );
             if(defaultAmount.isEmpty()) {
-                editTextAmount.setText(null);
+                binding.editTextConsumeAmount.setText(null);
             } else if(Double.parseDouble(defaultAmount)
                     > productDetails.getStockAmount()
             ) {
-                editTextAmount.setText(NumUtil.trim(productDetails.getStockAmount()));
+                binding.editTextConsumeAmount.setText(
+                        NumUtil.trim(productDetails.getStockAmount())
+                );
             } else {
-                editTextAmount.setText(NumUtil.trim(Double.parseDouble(defaultAmount)));
+                binding.editTextConsumeAmount.setText(
+                        NumUtil.trim(Double.parseDouble(defaultAmount))
+                );
             }
         } else {
-            editTextAmount.setText(null);
+            binding.editTextConsumeAmount.setText(null);
         }
 
-        if(editTextAmount.getText().toString().isEmpty()) {
-            editTextAmount.requestFocus();
-            activity.showKeyboard(editTextAmount);
+        if(binding.editTextConsumeAmount.getText().toString().isEmpty()) {
+            binding.editTextConsumeAmount.requestFocus();
+            activity.showKeyboard(binding.editTextConsumeAmount);
         }
 
         // disable open action if needed
         setOpenEnabled(!isTareWeightHandlingEnabled);
 
         // set icon for tare weight, else for normal amount
-        imageViewAmount.setImageResource(
+        binding.imageConsumeAmount.setImageResource(
                 isTareWeightHandlingEnabled
                         ? R.drawable.ic_round_scale_anim
                         : R.drawable.ic_round_scatter_plot_anim
@@ -488,7 +466,7 @@ public class ConsumeFragment extends Fragment {
 
 
         // SPOILED
-        checkBoxSpoiled.setChecked(false);
+        binding.checkboxConsumeSpoiled.setChecked(false);
 
         // MENU
         setUpBottomMenu();
@@ -496,8 +474,8 @@ public class ConsumeFragment extends Fragment {
 
     private void clearInputFocus() {
         activity.hideKeyboard();
-        textInputProduct.clearFocus();
-        textInputAmount.clearFocus();
+        binding.textInputConsumeProduct.clearFocus();
+        binding.textInputConsumeAmount.clearFocus();
     }
 
     private void loadProductDetails(int productId) {
@@ -540,11 +518,11 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void loadProductDetailsByBarcode(String barcode) {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeConsume.setRefreshing(true);
         request.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeConsume.setRefreshing(false);
                     productDetails = gson.fromJson(
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
@@ -553,32 +531,36 @@ public class ConsumeFragment extends Fragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        autoCompleteTextViewProduct.setText(barcode);
+                        binding.autoCompleteConsumeProduct.setText(barcode);
                         activity.showBottomSheet(
                                 new InputBarcodeBottomSheetDialogFragment(), null
                         );
                     } else {
                         activity.showMessage(
                                 Snackbar.make(
-                                        activity.findViewById(R.id.frame_main_container),
+                                        activity.binding.frameMainContainer,
                                         activity.getString(R.string.msg_error),
                                         Snackbar.LENGTH_SHORT
                                 )
                         );
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeConsume.setRefreshing(false);
                 }
         );
     }
 
     private boolean isFormIncomplete() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompleteConsumeProduct.getText().toString().trim();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
-            textInputProduct.setError(activity.getString(R.string.error_invalid_product));
+            binding.textInputConsumeProduct.setError(
+                    activity.getString(R.string.error_invalid_product)
+            );
             return true;
         } else if(productDetails == null || !isAmountValid()) {
             if(productDetails == null) {
-                textInputProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputConsumeProduct.setError(
+                        activity.getString(R.string.error_select_product)
+                );
             }
             isAmountValid();
             return true;
@@ -589,7 +571,7 @@ public class ConsumeFragment extends Fragment {
 
     public void consumeProduct() {
         if(isFormIncomplete()) return;
-        boolean isSpoiled = checkBoxSpoiled.isChecked();
+        boolean isSpoiled = binding.checkboxConsumeSpoiled.isChecked();
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amount);
@@ -632,7 +614,7 @@ public class ConsumeFragment extends Fragment {
                     }
 
                     Snackbar snackbar = Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(
                                     isSpoiled
                                             ? R.string.msg_consumed_spoiled
@@ -708,7 +690,7 @@ public class ConsumeFragment extends Fragment {
                     }
 
                     Snackbar snackbar = Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(
                                     R.string.msg_opened,
                                     NumUtil.trim(amountConsumed),
@@ -744,7 +726,7 @@ public class ConsumeFragment extends Fragment {
                 success -> {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_undone_transaction),
                                     Snackbar.LENGTH_SHORT
                             )
@@ -756,7 +738,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void editProductBarcodes() {
-        if(linearLayoutBarcodesContainer.getChildCount() == 0) return;
+        if(binding.linearConsumeBarcodeContainer.getChildCount() == 0) return;
 
         String barcodesString = productDetails.getProduct().getBarcode();
         ArrayList<String> barcodes;
@@ -766,8 +748,8 @@ public class ConsumeFragment extends Fragment {
             barcodes = new ArrayList<>();
         }
 
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(int i = 0; i < binding.linearConsumeBarcodeContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) binding.linearConsumeBarcodeContainer.getChildAt(i);
             if(!barcodes.contains(inputChip.getText())) {
                 barcodes.add(inputChip.getText());
             }
@@ -814,10 +796,10 @@ public class ConsumeFragment extends Fragment {
         if(productDetails != null) {
             if(productDetails.getLocation() != null) {
                 selectedLocationId = productDetails.getLocation().getId();
-                textViewLocation.setText(productDetails.getLocation().getName());
+                binding.textConsumeLocation.setText(productDetails.getLocation().getName());
             } else {
                 selectedLocationId = -1;
-                textViewLocation.setText(activity.getString(R.string.subtitle_none));
+                binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none));
             }
         }
     }
@@ -833,13 +815,13 @@ public class ConsumeFragment extends Fragment {
                 location = stockLocation.getLocationName();
             }
         }
-        textViewLocation.setText(location);
+        binding.textConsumeLocation.setText(location);
     }
 
     public void selectStockEntry(String selectedId) {
         // stockId is a String
         this.selectedStockEntryId = selectedId;
-        textViewSpecific.setText(
+        binding.textConsumeSpecific.setText(
                 activity.getString(
                         selectedId == null
                                 ? R.string.subtitle_none
@@ -878,13 +860,13 @@ public class ConsumeFragment extends Fragment {
     }
 
     private boolean isAmountValid() {
-        if(!editTextAmount.getText().toString().isEmpty()) {
+        if(!binding.editTextConsumeAmount.getText().toString().isEmpty()) {
             if(amount >= minAmount && amount <= maxAmount) {
-                textInputAmount.setErrorEnabled(false);
+                binding.textInputConsumeAmount.setErrorEnabled(false);
                 return true;
             } else {
                 if(productDetails != null) {
-                    textInputAmount.setError(
+                    binding.textInputConsumeAmount.setError(
                             activity.getString(
                                     R.string.error_bounds_min_max,
                                     NumUtil.trim(minAmount),
@@ -895,7 +877,7 @@ public class ConsumeFragment extends Fragment {
                 return false;
             }
         } else {
-            textInputAmount.setError(
+            binding.textInputConsumeAmount.setError(
                     activity.getString(
                             R.string.error_bounds_min_max,
                             NumUtil.trim(minAmount),
@@ -924,7 +906,7 @@ public class ConsumeFragment extends Fragment {
 
     private void hideDisabledFeatures() {
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            activity.findViewById(R.id.linear_consume_location).setVisibility(View.GONE);
+            binding.linearConsumeLocation.setVisibility(View.GONE);
         }
     }
 
@@ -949,7 +931,9 @@ public class ConsumeFragment extends Fragment {
                             bundle
                     );
                 } else {
-                    textInputProduct.setError(activity.getString(R.string.error_select_product));
+                    binding.textInputConsumeProduct.setError(
+                            activity.getString(R.string.error_select_product)
+                    );
                 }
                 return true;
             });
@@ -988,20 +972,20 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void addInputAsBarcode() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompleteConsumeProduct.getText().toString().trim();
         if(input.isEmpty()) return;
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(int i = 0; i < binding.linearConsumeBarcodeContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) binding.linearConsumeBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.frame_main_container),
+                                activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_barcode_duplicate),
                                 Snackbar.LENGTH_SHORT
                         )
                 );
-                autoCompleteTextViewProduct.setText(null);
-                autoCompleteTextViewProduct.requestFocus();
+                binding.autoCompleteConsumeProduct.setText(null);
+                binding.autoCompleteConsumeProduct.requestFocus();
                 return;
             }
         }
@@ -1009,32 +993,34 @@ public class ConsumeFragment extends Fragment {
                 activity, input, R.drawable.ic_round_barcode, true
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
-        linearLayoutBarcodesContainer.addView(inputChipBarcode);
-        autoCompleteTextViewProduct.setText(null);
-        autoCompleteTextViewProduct.requestFocus();
+        binding.linearConsumeBarcodeContainer.addView(inputChipBarcode);
+        binding.autoCompleteConsumeProduct.setText(null);
+        binding.autoCompleteConsumeProduct.requestFocus();
     }
 
     public void clearAll() {
         productDetails = null;
-        textInputProduct.setErrorEnabled(false);
-        autoCompleteTextViewProduct.setText(null);
-        textInputAmount.setErrorEnabled(false);
-        textInputAmount.setHint(activity.getString(R.string.property_amount));
-        editTextAmount.setText(null);
-        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
-        textViewLocation.setText(activity.getString(R.string.subtitle_none));
-        textViewSpecific.setText(activity.getString(R.string.subtitle_none));
-        if(checkBoxSpoiled.isChecked()) checkBoxSpoiled.setChecked(false);
+        binding.textInputConsumeProduct.setErrorEnabled(false);
+        binding.autoCompleteConsumeProduct.setText(null);
+        binding.textInputConsumeAmount.setErrorEnabled(false);
+        binding.textInputConsumeAmount.setHint(activity.getString(R.string.property_amount));
+        binding.editTextConsumeAmount.setText(null);
+        binding.imageConsumeAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
+        binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none));
+        binding.textConsumeSpecific.setText(activity.getString(R.string.subtitle_none));
+        if(binding.checkboxConsumeSpoiled.isChecked()) {
+            binding.checkboxConsumeSpoiled.setChecked(false);
+        }
         clearInputFocus();
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
+        for(int i = 0; i < binding.linearConsumeBarcodeContainer.getChildCount(); i++) {
+            ((InputChip) binding.linearConsumeBarcodeContainer.getChildAt(i)).close();
         }
     }
 
     private void showErrorMessage(VolleyError error) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

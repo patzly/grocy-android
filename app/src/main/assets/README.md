@@ -7,7 +7,24 @@
 
 ## Improvements
 
-- don't reload on rotation: save and restore instance state
+- save and restore instance state, migrate to view binding
+--- consume                     VIEW BINDING
+--- master location
+--- master locations
+--- master product group
+--- master product groups
+--- master product
+--- master products             DONE
+--- master quantity unit
+--- master quantity units
+--- master store
+--- master stores
+--- missing batch items
+--- purchase
+--- shopping list edit
+--- shopping list               UNFINISHED -> offline support
+--- shopping list item edit
+--- stock                       DONE
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
