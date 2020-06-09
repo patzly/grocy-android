@@ -29,22 +29,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,6 +51,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductGroupAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -79,6 +74,7 @@ public class MasterProductGroupsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterProductGroupAdapter masterProductGroupAdapter;
+    private FragmentMasterProductGroupsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<ProductGroup> productGroups = new ArrayList<>();
@@ -89,21 +85,16 @@ public class MasterProductGroupsFragment extends Fragment
     private String search = "";
     private boolean sortAscending = true;
 
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
-    private EditText editTextSearch;
-    private LinearLayout linearLayoutError;
-    private NestedScrollView scrollView;
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_master_product_groups, container, false);
+        binding = FragmentMasterProductGroupsBinding.inflate(
+                inflater, container, false
+        );
+        return binding.getRoot();
     }
 
     @Override
@@ -120,34 +111,24 @@ public class MasterProductGroupsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_product_groups_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
-        linearLayoutError = activity.findViewById(R.id.linear_master_product_groups_error);
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_product_groups);
-        scrollView = activity.findViewById(R.id.scroll_master_product_groups);
-        // retry button on offline error page
-        activity.findViewById(R.id.button_master_product_groups_error_retry).setOnClickListener(
-                v -> refresh()
-        );
-        recyclerView = activity.findViewById(R.id.recycler_master_product_groups);
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_master_product_groups_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.frameMasterProductGroupsBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.editTextMasterProductGroupsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchProductGroups(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextMasterProductGroupsSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        searchProductGroups(
+                                binding.editTextMasterProductGroupsSearch.getText().toString()
+                        );
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -159,23 +140,23 @@ public class MasterProductGroupsFragment extends Fragment
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterProductGroups.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterProductGroups.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterProductGroups.setOnRefreshListener(this::refresh);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerMasterProductGroups.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
                         LinearLayoutManager.VERTICAL,
                         false
                 )
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MasterPlaceholderAdapter());
+        binding.recyclerMasterProductGroups.setItemAnimator(new DefaultItemAnimator());
+        binding.recyclerMasterProductGroups.setAdapter(new MasterPlaceholderAdapter());
 
         load();
 
@@ -197,10 +178,10 @@ public class MasterProductGroupsFragment extends Fragment
             setError(false, true);
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterProductGroups.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -216,8 +197,12 @@ public class MasterProductGroupsFragment extends Fragment
     private void setError(boolean isError, boolean animated) {
         // TODO: different errors
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError
+                    ? binding.scrollMasterProductGroups
+                    : binding.linearError.linearError;
+            View viewIn = isError
+                    ? binding.linearError.linearError
+                    : binding.scrollMasterProductGroups;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -227,13 +212,13 @@ public class MasterProductGroupsFragment extends Fragment
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.scrollMasterProductGroups.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterProductGroups.setRefreshing(true);
         downloadProductGroups();
         downloadProducts();
     }
@@ -246,12 +231,14 @@ public class MasterProductGroupsFragment extends Fragment
                             response,
                             new TypeToken<List<ProductGroup>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(TAG, "downloadProductGroups: productGroups = " + productGroups);
-                    swipeRefreshLayout.setRefreshing(false);
+                    if(DEBUG) Log.i(
+                            TAG, "downloadProductGroups: productGroups = " + productGroups
+                    );
+                    binding.swipeMasterProductGroups.setRefreshing(false);
                     filterProductGroups();
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterProductGroups.setRefreshing(false);
                     setError(true, true);
                     Log.e(TAG, "downloadProductGroups: " + error);
                 }
@@ -279,7 +266,9 @@ public class MasterProductGroupsFragment extends Fragment
                 sortProductGroups();
             }
         }
-        if(DEBUG) Log.i(TAG, "filterProductGroups: filteredProductGroups = " + filteredProductGroups);
+        if(DEBUG) Log.i(
+                TAG, "filterProductGroups: filteredProductGroups = " + filteredProductGroups
+        );
     }
 
     private void searchProductGroups(String search) {
@@ -315,9 +304,9 @@ public class MasterProductGroupsFragment extends Fragment
 
     private void refreshAdapter(MasterProductGroupAdapter adapter) {
         masterProductGroupAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerMasterProductGroups.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerMasterProductGroups.setAdapter(adapter);
+            binding.recyclerMasterProductGroups.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -338,7 +327,7 @@ public class MasterProductGroupsFragment extends Fragment
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
@@ -398,14 +387,12 @@ public class MasterProductGroupsFragment extends Fragment
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.switchToSecondary();
-            editTextSearch.setText("");
+            binding.editTextMasterProductGroupsSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        binding.textInputMasterProductGroupsSearch.requestFocus();
+        activity.showKeyboard(binding.editTextMasterProductGroupsSearch);
 
-        activity.findViewById(R.id.frame_master_product_groups_search_close).setOnClickListener(
-                v -> dismissSearch()
-        );
+        binding.frameMasterProductGroupsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH);
     }
@@ -426,7 +413,7 @@ public class MasterProductGroupsFragment extends Fragment
                 if(product.getProductGroupId().equals(String.valueOf(productGroup.getId()))) {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
                                             activity.getString(R.string.type_product_group)

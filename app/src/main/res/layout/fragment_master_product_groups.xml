@@ -96,6 +96,7 @@
                 android:layout_marginEnd="72dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_master_product_groups_search"
                     style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,6 +122,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <include
+                android:id="@+id/linear_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="?actionBarSize"
+                android:clipToPadding="false"
+                layout="@layout/partial_empty"/>
+
+            <include
+                android:id="@+id/linear_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?actionBarSize"
+                layout="@layout/partial_error"/>
+
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_master_product_groups"
                 android:layout_width="match_parent"
@@ -145,55 +161,6 @@
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
-            <LinearLayout
-                android:id="@+id/linear_master_product_groups_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?android:actionBarSize"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@drawable/illustration_broccoli"
-                    android:layout_marginBottom="16dp"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/text_master_product_groups_error_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:fontFamily="@font/roboto_mono_medium"
-                    android:text="Offline"
-                    android:textSize="18sp"
-                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
-
-                <TextView
-                    android:id="@+id/text_master_product_groups_error_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:text="Check your Internet connection"
-                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_master_product_groups_error_retry"
-                    style="@style/Widget.Grocy.Button.UnelevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Retry"/>
-
-
-            </LinearLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
