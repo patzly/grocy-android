@@ -18,7 +18,7 @@
 --- master quantity unit
 --- master quantity units       DONE
 --- master store
---- master stores               VIEW BINDING
+--- master stores               DONE
 --- missing batch items
 --- purchase                    DONE
 --- shopping list edit

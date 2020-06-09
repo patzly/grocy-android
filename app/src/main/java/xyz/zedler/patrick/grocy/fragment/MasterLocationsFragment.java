@@ -324,11 +324,6 @@ public class MasterLocationsFragment extends Fragment
                     binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
                     binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
                     break;
-                case Constants.STATE.NO_FILTER_RESULTS:
-                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
-                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
-                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
-                    break;
                 case Constants.STATE.NONE:
                     if(container.getVisibility() == View.GONE) return;
                     break;
