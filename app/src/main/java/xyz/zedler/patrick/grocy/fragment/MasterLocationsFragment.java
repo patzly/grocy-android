@@ -81,10 +81,10 @@ public class MasterLocationsFragment extends Fragment
     private ClickUtil clickUtil = new ClickUtil();
     private AnimUtil animUtil = new AnimUtil();
 
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<Location> filteredLocations = new ArrayList<>();
-    private ArrayList<Location> displayedLocations = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Location> locations;
+    private ArrayList<Location> filteredLocations;
+    private ArrayList<Location> displayedLocations;
+    private ArrayList<Product> products;
 
     private String search;
     private String errorState;
@@ -123,6 +123,7 @@ public class MasterLocationsFragment extends Fragment
         search = "";
         errorState = Constants.STATE.NONE;
         sortAscending = true;
+        isRestoredInstance = savedInstanceState != null;
 
         // INITIALIZE VIEWS
 
@@ -183,7 +184,7 @@ public class MasterLocationsFragment extends Fragment
         activity.updateUI(
                 appBarBehavior.isPrimaryLayout()
                         ? Constants.UI.MASTER_LOCATIONS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH,
+                        : Constants.UI.MASTER_LOCATIONS_SEARCH,
                 savedInstanceState == null,
                 TAG
         );
