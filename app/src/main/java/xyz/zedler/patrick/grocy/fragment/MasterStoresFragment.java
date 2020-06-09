@@ -110,6 +110,7 @@ public class MasterStoresFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterStoresBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.frameMasterStoresSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterStoresSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -381,8 +382,6 @@ public class MasterStoresFragment extends Fragment
         }
         binding.textInputMasterStoresSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterStoresSearch);
-
-        binding.frameMasterStoresSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_STORES_SEARCH);
     }

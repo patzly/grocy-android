@@ -200,7 +200,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // INITIALIZE VIEWS
 
-        // search
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
         binding.frameStockSearchScan.setOnClickListener(v -> {
             startActivityForResult(

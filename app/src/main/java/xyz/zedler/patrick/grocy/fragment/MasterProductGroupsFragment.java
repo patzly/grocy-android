@@ -130,6 +130,7 @@ public class MasterProductGroupsFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterProductGroupsBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.frameMasterProductGroupsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterProductGroupsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -443,7 +444,7 @@ public class MasterProductGroupsFragment extends Fragment
                 displayedProductGroups = searchedProductGroups;
                 sortProductGroups();
             }
-            if(DEBUG) Log.i(TAG, "searchProductGroups: searchedProductGroups = " + searchedProductGroups);
+            if(DEBUG) Log.i(TAG, "searchProductGroups: products = " + searchedProductGroups);
         }
     }
 
@@ -542,8 +543,6 @@ public class MasterProductGroupsFragment extends Fragment
         }
         binding.textInputMasterProductGroupsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterProductGroupsSearch);
-
-        binding.frameMasterProductGroupsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH);
     }

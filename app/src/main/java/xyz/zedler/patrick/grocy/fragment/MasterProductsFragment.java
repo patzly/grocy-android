@@ -148,8 +148,6 @@ public class MasterProductsFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterProductsBack.setOnClickListener(v -> activity.onBackPressed());
-
-        // search
         binding.frameMasterProductsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterProductsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

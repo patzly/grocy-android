@@ -128,6 +128,7 @@ public class MasterLocationsFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterLocationsBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.frameMasterLocationsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterLocationsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -522,8 +523,6 @@ public class MasterLocationsFragment extends Fragment
         }
         binding.textInputMasterLocationsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterLocationsSearch);
-
-        binding.frameMasterLocationsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_LOCATIONS_SEARCH);
     }

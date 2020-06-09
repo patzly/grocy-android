@@ -199,13 +199,11 @@ public class ShoppingListFragment extends Fragment implements
 
         // INITIALIZE VIEWS
 
-        binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
-
         // top app bar
         binding.textShoppingListTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
         binding.buttonShoppingListLists.setOnClickListener(v -> showShoppingListsBottomSheet());
 
-        // search
+        binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameShoppingListSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextShoppingListSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

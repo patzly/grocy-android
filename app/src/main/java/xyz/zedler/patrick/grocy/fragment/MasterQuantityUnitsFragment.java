@@ -130,6 +130,7 @@ public class MasterQuantityUnitsFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterQuantityUnitsBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.frameMasterQuantityUnitsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterQuantityUnitsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -526,8 +527,6 @@ public class MasterQuantityUnitsFragment extends Fragment
         }
         binding.textInputMasterQuantityUnitsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterQuantityUnitsSearch);
-
-        binding.frameMasterQuantityUnitsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_QUANTITY_UNITS_SEARCH);
     }
