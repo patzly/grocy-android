@@ -38,7 +38,7 @@
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
     <string name="action_new_issue">Open new issue on GitHub</string>
-    <string name="action_new_issue_description">Report a bug or request a feature</string>
+    <string name="action_new_issue_description">Report bugs or request a feature</string>
     <string name="action_tap_to_view">Tap to view</string>
     <string name="action_help">Help</string>
     <string name="action_get_started">Get started</string>

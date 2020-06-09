@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,6 +69,7 @@ import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductSimpleBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
@@ -98,6 +98,7 @@ public class MasterProductSimpleFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private FragmentMasterProductSimpleBinding binding;
     private ArrayAdapter<String> adapterProducts;
 
     private ArrayList<Product> products = new ArrayList<>();
@@ -152,11 +153,10 @@ public class MasterProductSimpleFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(
-                R.layout.fragment_master_product_simple,
-                container,
-                false
+        binding = FragmentMasterProductSimpleBinding.inflate(
+                inflater, container, false
         );
+        return binding.getRoot();
     }
 
     @Override
@@ -174,6 +174,28 @@ public class MasterProductSimpleFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // INITIALIZE VARIABLES
+
+        products = new ArrayList<>();
+        locations = new ArrayList<>();
+        productGroups = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
+        productNames = new ArrayList<>();
+        editProduct = null;
+        productParent = null;
+        createProductObj = null;
+
+        selectedLocationId = -1;
+        selectedQUPurchaseId = -1;
+        selectedQUStockId = -1;
+        selectedProductGroupId = -1;
+
+        productDescriptionHtml = "";
+        intendedAction = null;
+        minAmount = 0;
+        quantityUnitFactor = 1;
+        bestBeforeDays = 0;
 
         // INITIALIZE VIEWS
 
@@ -229,7 +251,7 @@ public class MasterProductSimpleFragment extends Fragment {
                         editTextBarcodes.requestFocus();
                         return true;
                     } return false;
-        });
+                });
 
         // description
 
@@ -242,9 +264,7 @@ public class MasterProductSimpleFragment extends Fragment {
             bundle.putString(Constants.ARGUMENT.HINT, "Product description");
             activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
         });
-        textViewDescription = activity.findViewById(
-                R.id.text_master_product_simple_description
-        );
+        textViewDescription = activity.findViewById(R.id.text_master_product_simple_description);
 
         // barcodes
 
@@ -527,7 +547,8 @@ public class MasterProductSimpleFragment extends Fragment {
         if(bundle == null) {
             resetAll();
         } else if(intendedAction.equals(Constants.ACTION.EDIT)
-                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {
+                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)
+        ) {
             editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
             createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
@@ -541,11 +562,88 @@ public class MasterProductSimpleFragment extends Fragment {
 
         // START
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(toString(), TAG);
+        activity.updateUI(
+                Constants.UI.MASTER_PRODUCT_SIMPLE,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("productGroups", productGroups);
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+
+            outState.putStringArrayList("productNames", productNames);
+
+            outState.putParcelable("editProduct", editProduct);
+            outState.putParcelable("productParent", productParent);
+            outState.putParcelable("createProductObj", createProductObj);
+
+            outState.putInt("selectedLocationId", selectedLocationId);
+            outState.putInt("selectedQUPurchaseId", selectedQUPurchaseId);
+            outState.putInt("selectedQUStockId", selectedQUStockId);
+            outState.putInt("selectedProductGroupId", selectedProductGroupId);
+
+            outState.putString("productDescriptionHtml", productDescriptionHtml);
+            outState.putString("intendedAction", intendedAction);
+
+            outState.putDouble("minAmount", minAmount);
+
+            outState.putInt("quantityUnitFactor", quantityUnitFactor);
+            outState.putInt("bestBeforeDays", bestBeforeDays);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        products = savedInstanceState.getParcelableArrayList("products");
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+
+        productNames = savedInstanceState.getStringArrayList("productNames");
+        adapterProducts = new MatchArrayAdapter(activity, productNames);
+        autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
+
+        editProduct = savedInstanceState.getParcelable("editProduct");
+        productParent = savedInstanceState.getParcelable("productParent");
+        createProductObj = savedInstanceState.getParcelable("createProductObj");
+
+        selectedLocationId = savedInstanceState.getInt("selectedLocationId");
+        selectedQUPurchaseId = savedInstanceState.getInt("selectedQUPurchaseId");
+        selectedQUStockId = savedInstanceState.getInt("selectedQUStockId");
+        selectedProductGroupId = savedInstanceState.getInt("selectedProductGroupId");
+
+        productDescriptionHtml = savedInstanceState.getString("productDescriptionHtml");
+        intendedAction = savedInstanceState.getString("intendedAction");
+
+        minAmount = savedInstanceState.getDouble("minAmount");
+
+        quantityUnitFactor = savedInstanceState.getInt("quantityUnitFactor");
+        bestBeforeDays = savedInstanceState.getInt("bestBeforeDays");
+
+        activity.setUI(Constants.UI.MASTER_PRODUCT_SIMPLE);
+
+        onQueueEmpty();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -676,10 +774,8 @@ public class MasterProductSimpleFragment extends Fragment {
         );
     }
 
-    @SuppressLint("LongLogTag")
     private void onQueueEmpty() {
         swipeRefreshLayout.setRefreshing(false);
-
 
         if(editProduct != null
                 || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)

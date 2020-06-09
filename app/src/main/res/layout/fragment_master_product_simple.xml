@@ -129,6 +129,7 @@
                         app:helperText=" ">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/auto_complete_master_product_simple_parent_product"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"

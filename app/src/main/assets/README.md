@@ -7,24 +7,16 @@
 
 ## Improvements
 
+- replace self-signed certificates description
 - save and restore instance state, migrate to view binding
---- consume                     DONE
 --- master location
---- master locations            DONE
 --- master product group
---- master product groups       DONE
---- master product
---- master products             DONE
 --- master quantity unit
---- master quantity units       DONE
 --- master store
---- master stores               DONE
 --- missing batch items
---- purchase                    DONE
 --- shopping list edit
 --- shopping list               UNFINISHED -> offline support
 --- shopping list item edit
---- stock                       DONE
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
