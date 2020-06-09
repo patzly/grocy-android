@@ -312,9 +312,9 @@ public class MasterLocationsFragment extends Fragment
             switch (state) {
                 case Constants.STATE.EMPTY:
                     binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
-                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_products);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_locations);
                     binding.linearEmpty.textEmptySubtitle.setText(
-                            R.string.error_empty_products_sub
+                            R.string.error_empty_locations_sub
                     );
                     break;
                 case Constants.STATE.NO_SEARCH_RESULTS:
