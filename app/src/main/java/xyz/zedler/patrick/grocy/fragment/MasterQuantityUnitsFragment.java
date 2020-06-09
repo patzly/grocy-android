@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -76,14 +79,17 @@ public class MasterQuantityUnitsFragment extends Fragment
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
     private FragmentMasterQuantityUnitsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
-    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<QuantityUnit> filteredQuantityUnits = new ArrayList<>();
-    private ArrayList<QuantityUnit> displayedQuantityUnits = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<QuantityUnit> filteredQuantityUnits;
+    private ArrayList<QuantityUnit> displayedQuantityUnits;
+    private ArrayList<Product> products;
 
-    private String search = "";
-    private boolean sortAscending = true;
+    private String search;
+    private String errorState;
+    private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -109,6 +115,18 @@ public class MasterQuantityUnitsFragment extends Fragment
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        quantityUnits = new ArrayList<>();
+        filteredQuantityUnits = new ArrayList<>();
+        displayedQuantityUnits = new ArrayList<>();
+        products = new ArrayList<>();
+
+        search = "";
+        errorState = Constants.STATE.NONE;
+        sortAscending = true;
+        isRestoredInstance = savedInstanceState != null;
+
         // INITIALIZE VIEWS
 
         binding.frameMasterQuantityUnitsBack.setOnClickListener(v -> activity.onBackPressed());
@@ -122,9 +140,8 @@ public class MasterQuantityUnitsFragment extends Fragment
         binding.editTextMasterQuantityUnitsSearch.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        searchQuantityUnits(
-                                binding.editTextMasterQuantityUnitsSearch.getText().toString()
-                        );
+                        Editable search = binding.editTextMasterQuantityUnitsSearch.getText();
+                        searchQuantityUnits(search != null ? search.toString() : "");
                         activity.hideKeyboard();
                         return true;
                     } return false;
@@ -158,24 +175,96 @@ public class MasterQuantityUnitsFragment extends Fragment
         binding.recyclerMasterQuantityUnits.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterQuantityUnits.setAdapter(new MasterPlaceholderAdapter());
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT, TAG);
+        activity.updateUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT
+                        : Constants.UI.MASTER_QUANTITY_UNITS_SEARCH,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+            outState.putParcelableArrayList("filteredQuantityUnits", filteredQuantityUnits);
+            outState.putParcelableArrayList("displayedQuantityUnits", displayedQuantityUnits);
+            outState.putParcelableArrayList("products", products);
+
+            outState.putString("search", search);
+            outState.putString("errorState", errorState);
+            outState.putBoolean("sortAscending", sortAscending);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
+            return;
+        }
+
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+        filteredQuantityUnits = savedInstanceState.getParcelableArrayList(
+                "filteredQuantityUnits"
+        );
+        displayedQuantityUnits = savedInstanceState.getParcelableArrayList(
+                "displayedQuantityUnits"
+        );
+        products = savedInstanceState.getParcelableArrayList("products");
+
+        search = savedInstanceState.getString("search");
+        errorState = savedInstanceState.getString("errorState");
+        sortAscending = savedInstanceState.getBoolean("sortAscending");
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+        );
+
+        binding.swipeMasterQuantityUnits.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextMasterQuantityUnitsSearch.setText(search);
+
+        // FILTERS
+        isRestoredInstance = true;
+        filterQuantityUnits();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeMasterQuantityUnits.setRefreshing(false);
@@ -194,28 +283,75 @@ public class MasterQuantityUnitsFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
-        // TODO: different errors
-        if(animated) {
-            View viewOut = isError
-                    ? binding.scrollMasterQuantityUnits
-                    : binding.linearError.linearError;
-            View viewIn = isError
-                    ? binding.linearError.linearError
-                    : binding.swipeMasterQuantityUnits;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMasterQuantityUnits;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMasterQuantityUnits;
+                viewOut = binding.linearError.linearError;
+                break;
+        }
+
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_qu);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_empty_qu_sub);
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.swipeMasterQuantityUnits.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearError.linearError.setVisibility(
-                    isError ? View.VISIBLE : View.GONE
-            );
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -239,7 +375,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                 },
                 error -> {
                     binding.swipeMasterQuantityUnits.setRefreshing(false);
-                    setError(true, true);
+                    setError(Constants.STATE.OFFLINE, true);
                     Log.e(TAG, "downloadQuantityUnits: " + error);
                 }
         );
@@ -261,10 +397,16 @@ public class MasterQuantityUnitsFragment extends Fragment
         if(!search.isEmpty()) { // active search
             searchQuantityUnits(search);
         } else {
-            if(displayedQuantityUnits != filteredQuantityUnits) {
+            // EMPTY STATES
+            setEmptyState(
+                    filteredQuantityUnits.isEmpty() ? Constants.STATE.EMPTY : Constants.STATE.NONE
+            );
+            // SORTING
+            if(displayedQuantityUnits != filteredQuantityUnits || isRestoredInstance) {
                 displayedQuantityUnits = filteredQuantityUnits;
                 sortQuantityUnits();
             }
+            isRestoredInstance = false;
         }
         if(DEBUG) Log.i(TAG, "filterQuantityUnits: filteredQuantityUnits = " + filteredQuantityUnits);
     }
@@ -320,16 +462,6 @@ public class MasterQuantityUnitsFragment extends Fragment
             }
         }
         return 0;
-    }
-
-    private void showErrorMessage() {
-        activity.showMessage(
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        activity.getString(R.string.msg_error),
-                        Snackbar.LENGTH_SHORT
-                )
-        );
     }
 
     private void setMenuSorting() {
@@ -441,7 +573,13 @@ public class MasterQuantityUnitsFragment extends Fragment
                         refresh();
                     }
                 },
-                error -> showErrorMessage()
+                error -> showMessage(activity.getString(R.string.msg_error))
+        );
+    }
+
+    private void showMessage(String message) {
+        activity.showMessage(
+                Snackbar.make(activity.binding.frameMainContainer, message, Snackbar.LENGTH_SHORT)
         );
     }
 

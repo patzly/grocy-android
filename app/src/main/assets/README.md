@@ -15,7 +15,7 @@
 --- master product
 --- master products             DONE
 --- master quantity unit
---- master quantity units       VIEW BINDING
+--- master quantity units       DONE
 --- master store
 --- master stores
 --- missing batch items
