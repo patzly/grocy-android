@@ -149,9 +149,6 @@ public class MasterProductsFragment extends Fragment
 
         binding.frameMasterProductsBack.setOnClickListener(v -> activity.onBackPressed());
 
-        // retry button on offline error page
-        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
-
         // search
         binding.frameMasterProductsSearchClose.setOnClickListener(v -> dismissSearch());
         binding.editTextMasterProductsSearch.addTextChangedListener(new TextWatcher() {
@@ -309,6 +306,8 @@ public class MasterProductsFragment extends Fragment
 
     private void setError(String state, boolean animated) {
         errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
         View viewOut = binding.scrollMasterProducts;
