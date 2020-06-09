@@ -30,7 +30,7 @@ import androidx.annotation.NonNull;
 public class AppBarBehavior {
 
 	private final static String TAG = AppBarBehavior.class.getSimpleName();
-	private final static boolean DEBUG = false;
+	private final static boolean DEBUG = true;
 
 	private static int ANIM_DURATION = 500;
 
@@ -59,6 +59,8 @@ public class AppBarBehavior {
 			outState.putInt("appBarBehavior_secondary_view_id", viewSecondary.getId());
 		}
 		outState.putBoolean("appBarBehavior_is_primary", isPrimary);
+
+		if(DEBUG) Log.i(TAG, "saved state");
 	}
 
 	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
@@ -79,6 +81,8 @@ public class AppBarBehavior {
 
 		if(viewPrimary != null) viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
 		if(viewSecondary != null) viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
+
+		if(DEBUG) Log.i(TAG, "restored state: isPrimary = " + isPrimary);
 	}
 
 	public void switchToPrimary() {
