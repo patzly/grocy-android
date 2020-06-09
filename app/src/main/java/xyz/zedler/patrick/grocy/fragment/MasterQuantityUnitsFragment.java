@@ -29,22 +29,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,6 +51,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterQuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -79,6 +74,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
+    private FragmentMasterQuantityUnitsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
 
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
@@ -89,21 +85,16 @@ public class MasterQuantityUnitsFragment extends Fragment
     private String search = "";
     private boolean sortAscending = true;
 
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputLayoutSearch;
-    private EditText editTextSearch;
-    private LinearLayout linearLayoutError;
-    private NestedScrollView scrollView;
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_master_quantity_units, container, false);
+        binding = FragmentMasterQuantityUnitsBinding.inflate(
+                inflater, container, false
+        );
+        return binding.getRoot();
     }
 
     @Override
@@ -120,34 +111,24 @@ public class MasterQuantityUnitsFragment extends Fragment
 
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_quantity_units_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
-        linearLayoutError = activity.findViewById(R.id.linear_master_quantity_units_error);
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_quantity_units);
-        scrollView = activity.findViewById(R.id.scroll_master_quantity_units);
-        // retry button on offline error page
-        activity.findViewById(R.id.button_master_quantity_units_error_retry).setOnClickListener(
-                v -> refresh()
-        );
-        recyclerView = activity.findViewById(R.id.recycler_master_quantity_units);
-        textInputLayoutSearch = activity.findViewById(R.id.text_input_master_quantity_units_search);
-        editTextSearch = textInputLayoutSearch.getEditText();
-        assert editTextSearch != null;
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        binding.frameMasterQuantityUnitsBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.editTextMasterQuantityUnitsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 search = s.toString();
             }
         });
-        editTextSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchQuantityUnits(editTextSearch.getText().toString());
-                activity.hideKeyboard();
-                return true;
-            } return false;
-        });
+        binding.editTextMasterQuantityUnitsSearch.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        searchQuantityUnits(
+                                binding.editTextMasterQuantityUnitsSearch.getText().toString()
+                        );
+                        activity.hideKeyboard();
+                        return true;
+                    } return false;
+                });
 
         // APP BAR BEHAVIOR
 
@@ -159,23 +140,23 @@ public class MasterQuantityUnitsFragment extends Fragment
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterQuantityUnits.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterQuantityUnits.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterQuantityUnits.setOnRefreshListener(this::refresh);
 
-        recyclerView.setLayoutManager(
+        binding.recyclerMasterQuantityUnits.setLayoutManager(
                 new LinearLayoutManager(
                         activity,
                         LinearLayoutManager.VERTICAL,
                         false
                 )
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MasterPlaceholderAdapter());
+        binding.recyclerMasterQuantityUnits.setItemAnimator(new DefaultItemAnimator());
+        binding.recyclerMasterQuantityUnits.setAdapter(new MasterPlaceholderAdapter());
 
         load();
 
@@ -197,10 +178,10 @@ public class MasterQuantityUnitsFragment extends Fragment
             setError(false, true);
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterQuantityUnits.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -216,8 +197,12 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void setError(boolean isError, boolean animated) {
         // TODO: different errors
         if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
+            View viewOut = isError
+                    ? binding.scrollMasterQuantityUnits
+                    : binding.linearError.linearError;
+            View viewIn = isError
+                    ? binding.linearError.linearError
+                    : binding.swipeMasterQuantityUnits;
             if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
                 viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
                     viewIn.setAlpha(0);
@@ -227,13 +212,15 @@ public class MasterQuantityUnitsFragment extends Fragment
                 }).start();
             }
         } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            binding.swipeMasterQuantityUnits.setVisibility(isError ? View.GONE : View.VISIBLE);
+            binding.linearError.linearError.setVisibility(
+                    isError ? View.VISIBLE : View.GONE
+            );
         }
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterQuantityUnits.setRefreshing(true);
         downloadQuantityUnits();
         downloadProducts();
     }
@@ -247,11 +234,11 @@ public class MasterQuantityUnitsFragment extends Fragment
                             new TypeToken<List<QuantityUnit>>(){}.getType()
                     );
                     if(DEBUG) Log.i(TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits);
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterQuantityUnits.setRefreshing(false);
                     filterQuantityUnits();
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterQuantityUnits.setRefreshing(false);
                     setError(true, true);
                     Log.e(TAG, "downloadQuantityUnits: " + error);
                 }
@@ -315,9 +302,9 @@ public class MasterQuantityUnitsFragment extends Fragment
 
     private void refreshAdapter(MasterQuantityUnitAdapter adapter) {
         masterQuantityUnitAdapter = adapter;
-        recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            recyclerView.setAdapter(adapter);
-            recyclerView.animate().alpha(1).setDuration(150).start();
+        binding.recyclerMasterQuantityUnits.animate().alpha(0).setDuration(150).withEndAction(() -> {
+            binding.recyclerMasterQuantityUnits.setAdapter(adapter);
+            binding.recyclerMasterQuantityUnits.animate().alpha(1).setDuration(150).start();
         }).start();
     }
 
@@ -338,7 +325,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
@@ -398,14 +385,12 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void setUpSearch() {
         if(search.isEmpty()) { // only if no search is active
             appBarBehavior.switchToSecondary();
-            editTextSearch.setText("");
+            binding.editTextMasterQuantityUnitsSearch.setText("");
         }
-        textInputLayoutSearch.requestFocus();
-        activity.showKeyboard(editTextSearch);
+        binding.textInputMasterQuantityUnitsSearch.requestFocus();
+        activity.showKeyboard(binding.editTextMasterQuantityUnitsSearch);
 
-        activity.findViewById(R.id.frame_master_quantity_units_search_close).setOnClickListener(
-                v -> dismissSearch()
-        );
+        binding.frameMasterQuantityUnitsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_QUANTITY_UNITS_SEARCH);
     }
@@ -426,7 +411,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.frame_main_container),
+                                activity.binding.frameMainContainer,
                                 activity.getString(
                                         R.string.msg_master_delete_usage,
                                         activity.getString(R.string.type_quantity_unit)
