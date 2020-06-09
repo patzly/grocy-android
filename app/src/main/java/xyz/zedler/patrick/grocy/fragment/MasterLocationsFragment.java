@@ -424,6 +424,11 @@ public class MasterLocationsFragment extends Fragment
                     searchedLocations.add(location);
                 }
             }
+            setEmptyState(
+                    searchedLocations.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedLocations != searchedLocations) {
                 displayedLocations = searchedLocations;
                 sortLocations();

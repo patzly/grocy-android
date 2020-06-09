@@ -466,6 +466,11 @@ public class MasterProductsFragment extends Fragment
                     searchedProducts.add(product);
                 }
             }
+            setEmptyState(
+                    searchedProducts.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedProducts != searchedProducts) {
                 displayedProducts = searchedProducts;
                 sortProducts(sortAscending);

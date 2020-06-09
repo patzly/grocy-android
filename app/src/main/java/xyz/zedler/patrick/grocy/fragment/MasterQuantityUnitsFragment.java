@@ -428,6 +428,11 @@ public class MasterQuantityUnitsFragment extends Fragment
                     searchedQuantityUnits.add(quantityUnit);
                 }
             }
+            setEmptyState(
+                    searchedQuantityUnits.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedQuantityUnits != searchedQuantityUnits) {
                 displayedQuantityUnits = searchedQuantityUnits;
                 sortQuantityUnits();

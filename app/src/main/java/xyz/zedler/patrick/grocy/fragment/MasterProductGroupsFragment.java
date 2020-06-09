@@ -434,6 +434,11 @@ public class MasterProductGroupsFragment extends Fragment
                     searchedProductGroups.add(productGroup);
                 }
             }
+            setEmptyState(
+                    searchedProductGroups.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedProductGroups != searchedProductGroups) {
                 displayedProductGroups = searchedProductGroups;
                 sortProductGroups();
