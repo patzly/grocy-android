@@ -141,6 +141,7 @@ public class MasterProductsFragment extends Fragment
         quantityUnits = new ArrayList<>();
 
         search = "";
+        errorState = Constants.STATE.NONE;
         filterProductGroupId = -1;
         sortAscending = true;
 
