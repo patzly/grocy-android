@@ -200,9 +200,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // INITIALIZE VIEWS
 
-        // button on offline error page
-        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
-
         // search
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
         binding.frameStockSearchScan.setOnClickListener(v -> {
@@ -478,6 +475,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void setError(String state, boolean animated) {
         errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
         View viewOut = binding.scrollStock;
