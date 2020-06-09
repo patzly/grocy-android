@@ -636,8 +636,6 @@ public class MasterProductSimpleFragment extends Fragment {
         quantityUnitFactor = savedInstanceState.getInt("quantityUnitFactor");
         bestBeforeDays = savedInstanceState.getInt("bestBeforeDays");
 
-        activity.setUI(Constants.UI.MASTER_PRODUCT_SIMPLE);
-
         onQueueEmpty();
     }
 
