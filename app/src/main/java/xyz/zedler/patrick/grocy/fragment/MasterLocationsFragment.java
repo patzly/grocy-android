@@ -229,8 +229,8 @@ public class MasterLocationsFragment extends Fragment
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
                 appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+                        ? Constants.UI.MASTER_LOCATIONS_DEFAULT
+                        : Constants.UI.MASTER_LOCATIONS_SEARCH
         );
 
         binding.swipeMasterLocations.setRefreshing(false);

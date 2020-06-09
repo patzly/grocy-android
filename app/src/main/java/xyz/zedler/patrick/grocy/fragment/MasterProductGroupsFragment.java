@@ -235,8 +235,8 @@ public class MasterProductGroupsFragment extends Fragment
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
                 appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+                        ? Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH
         );
 
         binding.swipeMasterProductGroups.setRefreshing(false);

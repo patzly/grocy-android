@@ -235,8 +235,8 @@ public class MasterQuantityUnitsFragment extends Fragment
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
                 appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+                        ? Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT
+                        : Constants.UI.MASTER_QUANTITY_UNITS_SEARCH
         );
 
         binding.swipeMasterQuantityUnits.setRefreshing(false);
