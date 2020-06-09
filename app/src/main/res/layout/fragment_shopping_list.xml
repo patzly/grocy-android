@@ -154,8 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="56dp"
-                android:paddingBottom="?actionBarSize"
-                android:clipToPadding="false"
+                android:layout_marginBottom="?actionBarSize"
                 layout="@layout/partial_empty"/>
 
             <include

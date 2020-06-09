@@ -126,8 +126,7 @@
                 android:id="@+id/linear_empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="?actionBarSize"
-                android:clipToPadding="false"
+                android:layout_marginBottom="?actionBarSize"
                 layout="@layout/partial_empty"/>
 
             <include
