@@ -20,23 +20,19 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -49,6 +45,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -66,18 +63,14 @@ public class MasterLocationFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private FragmentMasterLocationBinding binding;
 
+    private ArrayList<Location> locations;
+    private ArrayList<Product> products;
+    private ArrayList<String> locationNames;
     private Location editLocation;
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<String> locationNames = new ArrayList<>();
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputName, textInputDescription;
-    private EditText editTextName, editTextDescription;
-    private ImageView imageViewName, imageViewDescription;
-    private MaterialCheckBox checkBoxIsFreezer;
-    private boolean isRefresh = false;
+    private boolean isRefresh;
 
     @Override
     public View onCreateView(
@@ -85,7 +78,8 @@ public class MasterLocationFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_master_location, container, false);
+        binding = FragmentMasterLocationBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -100,51 +94,48 @@ public class MasterLocationFragment extends Fragment {
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        locations = new ArrayList<>();
+        products = new ArrayList<>();
+        locationNames = new ArrayList<>();
+
+        editLocation = null;
+        isRefresh = false;
+
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_location_cancel).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.frameMasterLocationCancel.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_location);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterLocation.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterLocation.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterLocation.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_location_name);
-        imageViewName = activity.findViewById(R.id.image_master_location_name);
-        editTextName = textInputName.getEditText();
-        assert editTextName != null;
-        editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewName);
+        binding.editTextMasterLocationName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+            if(hasFocus) IconUtil.start(binding.imageMasterLocationName);
         });
 
         // description
-        textInputDescription = activity.findViewById(R.id.text_input_master_location_description);
-        imageViewDescription = activity.findViewById(R.id.image_master_location_description);
-        editTextDescription = textInputDescription.getEditText();
-        assert editTextDescription != null;
-        editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewDescription);
-        });
+        binding.editTextMasterLocationDescription.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterLocationDescription);
+                });
 
         // is freezer
-        checkBoxIsFreezer = activity.findViewById(R.id.checkbox_master_location_freezer);
-        checkBoxIsFreezer.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> IconUtil.start(
-                        activity,
-                        R.id.image_master_location_freezer
-                )
+        binding.checkboxMasterLocationFreezer.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> IconUtil.start(binding.imageMasterLocationFreezer)
         );
-        activity.findViewById(R.id.linear_master_location_freezer).setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_master_location_freezer);
-            checkBoxIsFreezer.setChecked(!checkBoxIsFreezer.isChecked());
+        binding.linearMasterLocationFreezer.setOnClickListener(v -> {
+            IconUtil.start(binding.imageMasterLocationFreezer);
+            binding.checkboxMasterLocationFreezer.setChecked(
+                    !binding.checkboxMasterLocationFreezer.isChecked()
+            );
         });
 
         // BUNDLE WHEN EDIT
@@ -164,11 +155,57 @@ public class MasterLocationFragment extends Fragment {
 
         // START
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(toString(), TAG);
+        activity.updateUI(
+                Constants.UI.MASTER_LOCATION,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("products", products);
+            outState.putStringArrayList("locationNames", locationNames);
+
+            outState.putParcelable("editLocation", editLocation);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        products = savedInstanceState.getParcelableArrayList("products");
+        locationNames = savedInstanceState.getStringArrayList("locationNames");
+
+        editLocation = savedInstanceState.getParcelable("editLocation");
+
+        isRefresh = false;
+        binding.swipeMasterLocation.setRefreshing(false);
+
+        updateEditReferences();
+
+        if(isRefresh && editLocation != null) {
+            fillWithEditReferences();
+        } else {
+            resetAll();
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -184,10 +221,10 @@ public class MasterLocationFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterLocation.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -201,7 +238,7 @@ public class MasterLocationFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterLocation.setRefreshing(true);
         downloadLocations();
         downloadProducts();
     }
@@ -217,7 +254,7 @@ public class MasterLocationFragment extends Fragment {
                     SortUtil.sortLocationsByName(locations, true);
                     locationNames = getLocationNames();
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterLocation.setRefreshing(false);
 
                     updateEditReferences();
 
@@ -228,10 +265,10 @@ public class MasterLocationFragment extends Fragment {
                     }
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterLocation.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_error),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
@@ -290,20 +327,20 @@ public class MasterLocationFragment extends Fragment {
         clearInputFocusAndErrors();
         if(editLocation != null) {
             // name
-            editTextName.setText(editLocation.getName());
+            binding.editTextMasterLocationName.setText(editLocation.getName());
             // description
-            editTextDescription.setText(editLocation.getDescription());
+            binding.editTextMasterLocationDescription.setText(editLocation.getDescription());
             // is freezer
-            checkBoxIsFreezer.setChecked(editLocation.getIsFreezer() == 1);
+            binding.checkboxMasterLocationFreezer.setChecked(editLocation.getIsFreezer() == 1);
         }
     }
 
     private void clearInputFocusAndErrors() {
         activity.hideKeyboard();
-        textInputName.clearFocus();
-        textInputName.setErrorEnabled(false);
-        textInputDescription.clearFocus();
-        textInputDescription.setErrorEnabled(false);
+        binding.textInputMasterLocationName.clearFocus();
+        binding.textInputMasterLocationName.setErrorEnabled(false);
+        binding.textInputMasterLocationDescription.clearFocus();
+        binding.textInputMasterLocationDescription.setErrorEnabled(false);
     }
 
     public void saveLocation() {
@@ -311,9 +348,15 @@ public class MasterLocationFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", editTextName.getText().toString().trim());
-            jsonObject.put("description", editTextDescription.getText().toString().trim());
-            jsonObject.put("is_freezer", checkBoxIsFreezer.isChecked());
+            Editable name = binding.editTextMasterLocationName.getText();
+            Editable description = binding.editTextMasterLocationDescription.getText();
+            jsonObject.put(
+                    "name", (name != null ? name : "").toString().trim()
+            );
+            jsonObject.put(
+                    "description", (description != null ? description : "").toString().trim()
+            );
+            jsonObject.put("is_freezer", binding.checkboxMasterLocationFreezer.isChecked());
         } catch (JSONException e) {
             Log.e(TAG, "saveLocation: " + e);
         }
@@ -344,12 +387,14 @@ public class MasterLocationFragment extends Fragment {
         clearInputFocusAndErrors();
         boolean isInvalid = false;
 
-        String name = String.valueOf(editTextName.getText()).trim();
+        String name = String.valueOf(binding.editTextMasterLocationName.getText()).trim();
         if(name.isEmpty()) {
-            textInputName.setError(activity.getString(R.string.error_empty));
+            binding.textInputMasterLocationName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!locationNames.isEmpty() && locationNames.contains(name)) {
-            textInputName.setError(activity.getString(R.string.error_duplicate));
+            binding.textInputMasterLocationName.setError(
+                    activity.getString(R.string.error_duplicate)
+            );
             isInvalid = true;
         }
 
@@ -359,9 +404,9 @@ public class MasterLocationFragment extends Fragment {
     private void resetAll() {
         if(editLocation != null) return;
         clearInputFocusAndErrors();
-        editTextName.setText(null);
-        editTextDescription.setText(null);
-        checkBoxIsFreezer.setChecked(false);
+        binding.editTextMasterLocationName.setText(null);
+        binding.editTextMasterLocationDescription.setText(null);
+        binding.checkboxMasterLocationFreezer.setChecked(false);
     }
 
     public void checkForUsage(Location location) {
@@ -370,7 +415,7 @@ public class MasterLocationFragment extends Fragment {
                 if(product.getLocationId() == location.getId()) {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
                                             activity.getString(R.string.type_location)
@@ -399,7 +444,7 @@ public class MasterLocationFragment extends Fragment {
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )

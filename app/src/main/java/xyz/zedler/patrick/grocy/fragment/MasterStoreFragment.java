@@ -65,10 +65,10 @@ public class MasterStoreFragment extends Fragment {
     private WebRequest request;
     private FragmentMasterStoreBinding binding;
 
-    private Store editStore;
     private ArrayList<Store> stores;
     private ArrayList<Product> products;
     private ArrayList<String> storeNames;
+    private Store editStore;
 
     private boolean isRefresh;
 
@@ -167,7 +167,6 @@ public class MasterStoreFragment extends Fragment {
             outState.putStringArrayList("storeNames", storeNames);
 
             outState.putParcelable("editStore", editStore);
-
         }
         super.onSaveInstanceState(outState);
     }
