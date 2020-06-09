@@ -32,7 +32,7 @@ public class AppBarBehavior {
 	private final static String TAG = AppBarBehavior.class.getSimpleName();
 	private final static boolean DEBUG = true;
 
-	private static int ANIM_DURATION = 500;
+	private static int ANIM_DURATION = 300;
 
 	private Activity activity;
 	private View viewPrimary, viewSecondary;
