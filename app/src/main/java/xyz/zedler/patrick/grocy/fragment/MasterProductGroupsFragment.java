@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -76,14 +79,17 @@ public class MasterProductGroupsFragment extends Fragment
     private MasterProductGroupAdapter masterProductGroupAdapter;
     private FragmentMasterProductGroupsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
-    private ArrayList<ProductGroup> filteredProductGroups = new ArrayList<>();
-    private ArrayList<ProductGroup> displayedProductGroups = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<ProductGroup> productGroups;
+    private ArrayList<ProductGroup> filteredProductGroups;
+    private ArrayList<ProductGroup> displayedProductGroups;
+    private ArrayList<Product> products;
 
-    private String search = "";
-    private boolean sortAscending = true;
+    private String search;
+    private String errorState;
+    private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -109,6 +115,18 @@ public class MasterProductGroupsFragment extends Fragment
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        productGroups = new ArrayList<>();
+        filteredProductGroups = new ArrayList<>();
+        displayedProductGroups = new ArrayList<>();
+        products = new ArrayList<>();
+
+        search = "";
+        errorState = Constants.STATE.NONE;
+        sortAscending = true;
+        isRestoredInstance = savedInstanceState != null;
+
         // INITIALIZE VIEWS
 
         binding.frameMasterProductGroupsBack.setOnClickListener(v -> activity.onBackPressed());
@@ -122,9 +140,8 @@ public class MasterProductGroupsFragment extends Fragment
         binding.editTextMasterProductGroupsSearch.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        searchProductGroups(
-                                binding.editTextMasterProductGroupsSearch.getText().toString()
-                        );
+                        Editable search = binding.editTextMasterProductGroupsSearch.getText();
+                        searchProductGroups(search != null ? search.toString() : "");
                         activity.hideKeyboard();
                         return true;
                     } return false;
@@ -158,24 +175,96 @@ public class MasterProductGroupsFragment extends Fragment
         binding.recyclerMasterProductGroups.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterProductGroups.setAdapter(new MasterPlaceholderAdapter());
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT, TAG);
+        activity.updateUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("productGroups", productGroups);
+            outState.putParcelableArrayList("filteredProductGroups", filteredProductGroups);
+            outState.putParcelableArrayList("displayedProductGroups", displayedProductGroups);
+            outState.putParcelableArrayList("products", products);
+
+            outState.putString("search", search);
+            outState.putString("errorState", errorState);
+            outState.putBoolean("sortAscending", sortAscending);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
+            return;
+        }
+
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+        filteredProductGroups = savedInstanceState.getParcelableArrayList(
+                "filteredProductGroups"
+        );
+        displayedProductGroups = savedInstanceState.getParcelableArrayList(
+                "displayedProductGroups"
+        );
+        products = savedInstanceState.getParcelableArrayList("products");
+
+        search = savedInstanceState.getString("search");
+        errorState = savedInstanceState.getString("errorState");
+        sortAscending = savedInstanceState.getBoolean("sortAscending");
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+        );
+
+        binding.swipeMasterProductGroups.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextMasterProductGroupsSearch.setText(search);
+
+        // FILTERS
+        isRestoredInstance = true;
+        filterProductGroups();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeMasterProductGroups.setRefreshing(false);
@@ -194,26 +283,77 @@ public class MasterProductGroupsFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
-        // TODO: different errors
-        if(animated) {
-            View viewOut = isError
-                    ? binding.scrollMasterProductGroups
-                    : binding.linearError.linearError;
-            View viewIn = isError
-                    ? binding.linearError.linearError
-                    : binding.scrollMasterProductGroups;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMasterProductGroups;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMasterProductGroups;
+                viewOut = binding.linearError.linearError;
+                break;
+        }
+
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_locations);
+                    binding.linearEmpty.textEmptySubtitle.setText(
+                            R.string.error_empty_locations_sub
+                    );
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.scrollMasterProductGroups.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -239,7 +379,7 @@ public class MasterProductGroupsFragment extends Fragment
                 },
                 error -> {
                     binding.swipeMasterProductGroups.setRefreshing(false);
-                    setError(true, true);
+                    setError(Constants.STATE.OFFLINE, true);
                     Log.e(TAG, "downloadProductGroups: " + error);
                 }
         );
@@ -261,10 +401,16 @@ public class MasterProductGroupsFragment extends Fragment
         if(!search.isEmpty()) { // active search
             searchProductGroups(search);
         } else {
-            if(displayedProductGroups != filteredProductGroups) {
+            // EMPTY STATES
+            setEmptyState(
+                    filteredProductGroups.isEmpty() ? Constants.STATE.EMPTY : Constants.STATE.NONE
+            );
+            // SORTING
+            if(displayedProductGroups != filteredProductGroups || isRestoredInstance) {
                 displayedProductGroups = filteredProductGroups;
                 sortProductGroups();
             }
+            isRestoredInstance = false;
         }
         if(DEBUG) Log.i(
                 TAG, "filterProductGroups: filteredProductGroups = " + filteredProductGroups

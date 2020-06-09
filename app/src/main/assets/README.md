@@ -11,7 +11,7 @@
 --- master location
 --- master locations            DONE
 --- master product group
---- master product groups       VIEW BINDING
+--- master product groups       DONE
 --- master product
 --- master products             DONE
 --- master quantity unit
