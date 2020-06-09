@@ -3,6 +3,7 @@
 ## Bugs
 
 - fix nav bar divider in landscape after rotation in search mode
+- type search -> rotate -> dismiss search -> rotate -> search cannot be set up
 
 ## Improvements
 
