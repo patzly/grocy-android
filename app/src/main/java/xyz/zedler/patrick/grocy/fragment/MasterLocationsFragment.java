@@ -127,8 +127,6 @@ public class MasterLocationsFragment extends Fragment
         // INITIALIZE VIEWS
 
         binding.frameMasterLocationsBack.setOnClickListener(v -> activity.onBackPressed());
-        // retry button on offline error page
-        binding.buttonMasterLocationsErrorRetry.setOnClickListener(v -> refresh());
         binding.editTextMasterLocationsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -280,6 +278,8 @@ public class MasterLocationsFragment extends Fragment
 
     private void setError(String state, boolean animated) {
         errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
         View viewOut = binding.scrollMasterLocations;
