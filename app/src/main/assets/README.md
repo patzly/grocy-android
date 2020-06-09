@@ -9,7 +9,7 @@
 - save and restore instance state, migrate to view binding
 --- consume                     DONE
 --- master location
---- master locations            VIEW BINDING
+--- master locations            DONE
 --- master product group
 --- master product groups
 --- master product

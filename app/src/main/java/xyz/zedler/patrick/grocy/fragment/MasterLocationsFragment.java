@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -76,14 +79,17 @@ public class MasterLocationsFragment extends Fragment
     private MasterLocationAdapter masterLocationAdapter;
     private FragmentMasterLocationsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
     private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Location> filteredLocations = new ArrayList<>();
     private ArrayList<Location> displayedLocations = new ArrayList<>();
     private ArrayList<Product> products = new ArrayList<>();
 
-    private String search = "";
-    private boolean sortAscending = true;
+    private String search;
+    private String errorState;
+    private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -107,13 +113,22 @@ public class MasterLocationsFragment extends Fragment
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        locations = new ArrayList<>();
+        filteredLocations = new ArrayList<>();
+        displayedLocations = new ArrayList<>();
+        products = new ArrayList<>();
+
+        search = "";
+        errorState = Constants.STATE.NONE;
+        sortAscending = true;
+
         // INITIALIZE VIEWS
 
         binding.frameMasterLocationsBack.setOnClickListener(v -> activity.onBackPressed());
         // retry button on offline error page
-        activity.findViewById(R.id.button_master_locations_error_retry).setOnClickListener(
-                v -> refresh()
-        );
+        binding.buttonMasterLocationsErrorRetry.setOnClickListener(v -> refresh());
         binding.editTextMasterLocationsSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -124,7 +139,8 @@ public class MasterLocationsFragment extends Fragment
         binding.editTextMasterLocationsSearch.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        searchLocations(binding.editTextMasterLocationsSearch.getText().toString());
+                        Editable search = binding.editTextMasterLocationsSearch.getText();
+                        searchLocations(search != null ? search.toString() : "");
                         activity.hideKeyboard();
                         return true;
                     } return false;
@@ -158,30 +174,98 @@ public class MasterLocationsFragment extends Fragment
         binding.recyclerMasterLocations.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterLocations.setAdapter(new MasterPlaceholderAdapter());
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MASTER_LOCATIONS_DEFAULT, TAG);
+        activity.updateUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_LOCATIONS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("locations", locations);
+            outState.putParcelableArrayList("filteredLocations", filteredLocations);
+            outState.putParcelableArrayList("displayedLocations", displayedLocations);
+            outState.putParcelableArrayList("products", products);
+
+            outState.putString("search", search);
+            outState.putString("errorState", errorState);
+            outState.putBoolean("sortAscending", sortAscending);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
+            return;
+        }
+
+        locations = savedInstanceState.getParcelableArrayList("locations");
+        filteredLocations = savedInstanceState.getParcelableArrayList("filteredLocations");
+        displayedLocations = savedInstanceState.getParcelableArrayList("displayedLocations");
+        products = savedInstanceState.getParcelableArrayList("products");
+
+        search = savedInstanceState.getString("search");
+        errorState = savedInstanceState.getString("errorState");
+        sortAscending = savedInstanceState.getBoolean("sortAscending");
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
+                        : Constants.UI.MASTER_PRODUCTS_SEARCH
+        );
+
+        binding.swipeMasterLocations.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextMasterLocationsSearch.setText(search);
+
+        // FILTERS
+        isRestoredInstance = true;
+        filterLocations();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeMasterLocations.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -194,26 +278,75 @@ public class MasterLocationsFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
-        // TODO: different errors
-        if(animated) {
-            View viewOut = isError
-                    ? binding.scrollMasterLocations
-                    : binding.linearMasterLocationsError;
-            View viewIn = isError
-                    ? binding.linearMasterLocationsError
-                    : binding.scrollMasterLocations;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMasterLocations;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMasterLocations;
+                viewOut = binding.linearError.linearError;
+                break;
+        }
+
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_products);
+                    binding.linearEmpty.textEmptySubtitle.setText(
+                            R.string.error_empty_products_sub
+                    );
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.scrollMasterLocations.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearMasterLocationsError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -237,7 +370,7 @@ public class MasterLocationsFragment extends Fragment
                 },
                 error -> {
                     binding.swipeMasterLocations.setRefreshing(false);
-                    setError(true, true);
+                    setError(Constants.STATE.OFFLINE, true);
                     Log.e(TAG, "downloadLocations: " + error);
                 }
         );
@@ -259,10 +392,16 @@ public class MasterLocationsFragment extends Fragment
         if(!search.isEmpty()) { // active search
             searchLocations(search);
         } else {
-            if(displayedLocations != filteredLocations) {
+            // EMPTY STATES
+            setEmptyState(
+                    filteredLocations.isEmpty() ? Constants.STATE.EMPTY : Constants.STATE.NONE
+            );
+            // SORTING
+            if(displayedLocations != filteredLocations || isRestoredInstance) {
                 displayedLocations = filteredLocations;
                 sortLocations();
             }
+            isRestoredInstance = false;
         }
         if(DEBUG) Log.i(TAG, "filterLocations: filteredLocations = " + filteredLocations);
     }
@@ -318,16 +457,6 @@ public class MasterLocationsFragment extends Fragment
             }
         }
         return 0;
-    }
-
-    private void showErrorMessage() {
-        activity.showMessage(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        activity.getString(R.string.msg_error),
-                        Snackbar.LENGTH_SHORT
-                )
-        );
     }
 
     private void setMenuSorting() {
@@ -388,9 +517,7 @@ public class MasterLocationsFragment extends Fragment
         binding.textInputMasterLocationsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterLocationsSearch);
 
-        activity.findViewById(R.id.frame_master_locations_search_close).setOnClickListener(
-                v -> dismissSearch()
-        );
+        binding.frameMasterLocationsSearchClose.setOnClickListener(v -> dismissSearch());
 
         activity.setUI(Constants.UI.MASTER_LOCATIONS_SEARCH);
     }
@@ -410,7 +537,7 @@ public class MasterLocationsFragment extends Fragment
                 if(product.getLocationId() == location.getId()) {
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
                                             activity.getString(R.string.type_location)
@@ -441,7 +568,13 @@ public class MasterLocationsFragment extends Fragment
                         refresh();
                     }
                 },
-                error -> showErrorMessage()
+                error -> showMessage(activity.getString(R.string.msg_error))
+        );
+    }
+
+    private void showMessage(String message) {
+        activity.showMessage(
+                Snackbar.make(activity.binding.frameMainContainer, message, Snackbar.LENGTH_SHORT)
         );
     }
 
