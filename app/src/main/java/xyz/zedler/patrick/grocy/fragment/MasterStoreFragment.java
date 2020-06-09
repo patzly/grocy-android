@@ -20,22 +20,19 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,6 +45,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -65,17 +63,14 @@ public class MasterStoreFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private FragmentMasterStoreBinding binding;
 
     private Store editStore;
-    private ArrayList<Store> stores = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<String> storeNames = new ArrayList<>();
+    private ArrayList<Store> stores;
+    private ArrayList<Product> products;
+    private ArrayList<String> storeNames;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputName, textInputDescription;
-    private EditText editTextName, editTextDescription;
-    private ImageView imageViewName, imageViewDescription;
-    private boolean isRefresh = false;
+    private boolean isRefresh;
 
     @Override
     public View onCreateView(
@@ -83,7 +78,8 @@ public class MasterStoreFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_master_store, container, false);
+        binding = FragmentMasterStoreBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -98,39 +94,38 @@ public class MasterStoreFragment extends Fragment {
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
+        // INITIALIZE VARIABLES
+
+        stores = new ArrayList<>();
+        products = new ArrayList<>();
+        storeNames = new ArrayList<>();
+
+        editStore = null;
+        isRefresh = false;
+
         // INITIALIZE VIEWS
 
-        activity.findViewById(R.id.frame_master_store_cancel).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        binding.frameMasterStoreCancel.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_store);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterStore.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterStore.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterStore.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_store_name);
-        imageViewName = activity.findViewById(R.id.image_master_store_name);
-        editTextName = textInputName.getEditText();
-        assert editTextName != null;
-        editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewName);
+        binding.editTextMasterStoreName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+            if(hasFocus) IconUtil.start(binding.imageMasterStoreName);
         });
 
         // description
-        textInputDescription = activity.findViewById(R.id.text_input_master_store_description);
-        imageViewDescription = activity.findViewById(R.id.image_master_store_description);
-        editTextDescription = textInputDescription.getEditText();
-        assert editTextDescription != null;
-        editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewDescription);
-        });
+        binding.editTextMasterStoreDescription.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterStoreDescription);
+                });
 
         // BUNDLE WHEN EDIT
 
@@ -149,11 +144,58 @@ public class MasterStoreFragment extends Fragment {
 
         // START
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(toString(), TAG);
+        activity.updateUI(
+                Constants.UI.MASTER_STORE,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("stores", stores);
+            outState.putParcelableArrayList("products", products);
+            outState.putStringArrayList("storeNames", storeNames);
+
+            outState.putParcelable("editStore", editStore);
+
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        stores = savedInstanceState.getParcelableArrayList("stores");
+        products = savedInstanceState.getParcelableArrayList("products");
+        storeNames = savedInstanceState.getStringArrayList("storeNames");
+
+        editStore = savedInstanceState.getParcelable("editStore");
+
+        isRefresh = false;
+        binding.swipeMasterStore.setRefreshing(false);
+
+        updateEditReferences();
+
+        if(isRefresh && editStore != null) {
+            fillWithEditReferences();
+        } else {
+            resetAll();
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -169,7 +211,7 @@ public class MasterStoreFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterStore.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
@@ -186,7 +228,7 @@ public class MasterStoreFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterStore.setRefreshing(true);
         downloadStores();
         downloadProducts();
     }
@@ -202,7 +244,7 @@ public class MasterStoreFragment extends Fragment {
                     SortUtil.sortStoresByName(stores, true);
                     storeNames = getStoreNames();
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterStore.setRefreshing(false);
 
                     updateEditReferences();
 
@@ -213,7 +255,7 @@ public class MasterStoreFragment extends Fragment {
                     }
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterStore.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.frame_main_container),
@@ -275,18 +317,18 @@ public class MasterStoreFragment extends Fragment {
         clearInputFocusAndErrors();
         if(editStore != null) {
             // name
-            editTextName.setText(editStore.getName());
+            binding.editTextMasterStoreName.setText(editStore.getName());
             // description
-            editTextDescription.setText(editStore.getDescription());
+            binding.editTextMasterStoreDescription.setText(editStore.getDescription());
         }
     }
 
     private void clearInputFocusAndErrors() {
         activity.hideKeyboard();
-        textInputName.clearFocus();
-        textInputName.setErrorEnabled(false);
-        textInputDescription.clearFocus();
-        textInputDescription.setErrorEnabled(false);
+        binding.textInputMasterStoreName.clearFocus();
+        binding.textInputMasterStoreName.setErrorEnabled(false);
+        binding.textInputMasterStoreDescription.clearFocus();
+        binding.textInputMasterStoreDescription.setErrorEnabled(false);
     }
 
     public void saveStore() {
@@ -294,10 +336,14 @@ public class MasterStoreFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", editTextName.getText().toString().trim());
-            jsonObject.put("description", editTextDescription.getText().toString().trim());
+            Editable name = binding.editTextMasterStoreName.getText();
+            Editable description = binding.editTextMasterStoreDescription.getText();
+            jsonObject.put("name", (name != null ? name : "").toString().trim());
+            jsonObject.put(
+                    "description", (description != null ? description : "").toString().trim()
+            );
         } catch (JSONException e) {
-            Log.e(TAG, "saveStore: " + e);;
+            Log.e(TAG, "saveStore: " + e);
         }
         if(editStore != null) {
             request.put(
@@ -326,12 +372,12 @@ public class MasterStoreFragment extends Fragment {
         clearInputFocusAndErrors();
         boolean isInvalid = false;
 
-        String name = String.valueOf(editTextName.getText()).trim();
+        String name = String.valueOf(binding.editTextMasterStoreName.getText()).trim();
         if(name.isEmpty()) {
-            textInputName.setError(activity.getString(R.string.error_empty));
+            binding.textInputMasterStoreName.setError(activity.getString(R.string.error_empty));
             isInvalid = true;
         } else if(!storeNames.isEmpty() && storeNames.contains(name)) {
-            textInputName.setError(activity.getString(R.string.error_duplicate));
+            binding.textInputMasterStoreName.setError(activity.getString(R.string.error_duplicate));
             isInvalid = true;
         }
 
@@ -341,8 +387,8 @@ public class MasterStoreFragment extends Fragment {
     private void resetAll() {
         if(editStore != null) return;
         clearInputFocusAndErrors();
-        editTextName.setText(null);
-        editTextDescription.setText(null);
+        binding.editTextMasterStoreName.setText(null);
+        binding.editTextMasterStoreDescription.setText(null);
     }
 
     public void checkForUsage(Store store) {

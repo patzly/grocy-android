@@ -12,7 +12,6 @@
 --- master location
 --- master product group
 --- master quantity unit
---- master store
 --- missing batch items
 --- shopping list edit
 --- shopping list               UNFINISHED -> offline support
