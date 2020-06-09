@@ -173,6 +173,12 @@ public class ShoppingActivity extends AppCompatActivity implements
         timer.schedule(timerTask, 10000, 10000);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     private void load() {
         if(isOnline()) {
             downloadFull();

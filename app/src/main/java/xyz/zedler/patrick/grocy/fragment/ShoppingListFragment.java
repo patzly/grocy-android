@@ -1043,7 +1043,10 @@ public class ShoppingListFragment extends Fragment implements
         MenuItem shoppingMode = activity.getBottomMenu().findItem(R.id.action_shopping_mode);
         if(shoppingMode != null) {
             shoppingMode.setOnMenuItemClickListener(item -> {
-                startActivity(new Intent(activity, ShoppingActivity.class));
+                startActivityForResult(
+                        new Intent(activity, ShoppingActivity.class),
+                        Constants.REQUEST.SHOPPING_MODE
+                );
                 return true;
             });
         }
@@ -1315,6 +1318,14 @@ public class ShoppingListFragment extends Fragment implements
             showItemBottomSheet(groupedListItems.get(position), position);
         } else {  // Click on bottom notes
             showNotesEditor();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Constants.REQUEST.SHOPPING_MODE) {
+            refresh();
         }
     }
 
