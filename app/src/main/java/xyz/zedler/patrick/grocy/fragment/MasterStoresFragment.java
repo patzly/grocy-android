@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -76,14 +79,17 @@ public class MasterStoresFragment extends Fragment
     private MasterStoreAdapter masterStoreAdapter;
     private FragmentMasterStoresBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
+    private AnimUtil animUtil = new AnimUtil();
 
-    private ArrayList<Store> stores = new ArrayList<>();
-    private ArrayList<Store> filteredStores = new ArrayList<>();
-    private ArrayList<Store> displayedStores = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Store> stores;
+    private ArrayList<Store> filteredStores;
+    private ArrayList<Store> displayedStores;
+    private ArrayList<Product> products;
 
-    private String search = "";
-    private boolean sortAscending = true;
+    private String search;
+    private String errorState;
+    private boolean sortAscending;
+    private boolean isRestoredInstance;
 
     @Override
     public View onCreateView(
@@ -106,6 +112,18 @@ public class MasterStoresFragment extends Fragment
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+
+        // INITIALIZE VARIABLES
+
+        stores = new ArrayList<>();
+        filteredStores = new ArrayList<>();
+        displayedStores = new ArrayList<>();
+        products = new ArrayList<>();
+
+        search = "";
+        errorState = Constants.STATE.NONE;
+        sortAscending = true;
+        isRestoredInstance = savedInstanceState != null;
 
         // INITIALIZE VIEWS
 
@@ -156,24 +174,92 @@ public class MasterStoresFragment extends Fragment
         binding.recyclerMasterStores.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerMasterStores.setAdapter(new MasterPlaceholderAdapter());
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MASTER_STORES_DEFAULT, TAG);
+        activity.updateUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_STORES_DEFAULT
+                        : Constants.UI.MASTER_STORES_SEARCH,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("stores", stores);
+            outState.putParcelableArrayList("filteredStores", filteredStores);
+            outState.putParcelableArrayList("displayedStores", displayedStores);
+            outState.putParcelableArrayList("products", products);
+
+            outState.putString("search", search);
+            outState.putString("errorState", errorState);
+            outState.putBoolean("sortAscending", sortAscending);
+
+            appBarBehavior.saveInstanceState(outState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
+            return;
+        }
+
+        stores = savedInstanceState.getParcelableArrayList("stores");
+        filteredStores = savedInstanceState.getParcelableArrayList("filteredStores");
+        displayedStores = savedInstanceState.getParcelableArrayList("displayedStores");
+        products = savedInstanceState.getParcelableArrayList("products");
+
+        search = savedInstanceState.getString("search");
+        errorState = savedInstanceState.getString("errorState");
+        sortAscending = savedInstanceState.getBoolean("sortAscending");
+
+        appBarBehavior.restoreInstanceState(savedInstanceState);
+        activity.setUI(
+                appBarBehavior.isPrimaryLayout()
+                        ? Constants.UI.MASTER_STORES_DEFAULT
+                        : Constants.UI.MASTER_STORES_SEARCH
+        );
+
+        binding.swipeMasterStores.setRefreshing(false);
+
+        // SEARCH
+        search = savedInstanceState.getString("search", "");
+        binding.editTextMasterStoresSearch.setText(search);
+
+        // FILTERS
+        isRestoredInstance = true;
+        filterStores();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
         if(activity.isOnline()) {
             download();
         } else {
-            setError(true, false);
+            setError(Constants.STATE.OFFLINE, false);
         }
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            setError(false, true);
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeMasterStores.setRefreshing(false);
@@ -192,23 +278,77 @@ public class MasterStoresFragment extends Fragment
         }
     }
 
-    private void setError(boolean isError, boolean animated) {
+    private void setError(String state, boolean animated) {
+        errorState = state;
+
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
-        // TODO: different errors
-        if(animated) {
-            View viewOut = isError ? binding.scrollMasterStores : binding.linearError.linearError;
-            View viewIn = isError ? binding.linearError.linearError : binding.scrollMasterStores;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMasterStores;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                setEmptyState(Constants.STATE.NONE);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMasterStores;
+                viewOut = binding.linearError.linearError;
+                break;
+        }
+
+        animUtil.replaceViews(viewIn, viewOut, animated);
+    }
+
+    private void setEmptyState(String state) {
+        LinearLayout container = binding.linearEmpty.linearEmpty;
+        new Handler().postDelayed(() -> {
+            switch (state) {
+                case Constants.STATE.EMPTY:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_stores);
+                    binding.linearEmpty.textEmptySubtitle.setText(
+                            R.string.error_empty_stores_sub
+                    );
+                    break;
+                case Constants.STATE.NO_SEARCH_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
+                    break;
+                case Constants.STATE.NO_FILTER_RESULTS:
+                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_filter);
+                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_filter_sub);
+                    break;
+                case Constants.STATE.NONE:
+                    if(container.getVisibility() == View.GONE) return;
+                    break;
             }
+        }, 125);
+        // show new empty state with delay or hide it if NONE
+        if(state.equals(Constants.STATE.NONE)) {
+            container.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> container.setVisibility(View.GONE)
+            ).start();
         } else {
-            binding.scrollMasterStores.setVisibility(isError ? View.GONE : View.VISIBLE);
-            binding.linearError.linearError.setVisibility(isError ? View.VISIBLE : View.GONE);
+            if(container.getVisibility() == View.VISIBLE) {
+                // first hide previous empty state if needed
+                container.animate().alpha(0).setDuration(125).start();
+            }
+            new Handler().postDelayed(() -> {
+                container.setAlpha(0);
+                container.setVisibility(View.VISIBLE);
+                container.animate().alpha(1).setDuration(125).start();
+            }, 150);
         }
     }
 
@@ -232,7 +372,7 @@ public class MasterStoresFragment extends Fragment
                 },
                 error -> {
                     binding.swipeMasterStores.setRefreshing(false);
-                    setError(true, true);
+                    setError(Constants.STATE.OFFLINE, true);
                     Log.e(TAG, "downloadStores: " + error);
                 }
         );
@@ -254,10 +394,16 @@ public class MasterStoresFragment extends Fragment
         if(!search.isEmpty()) { // active search
             searchStores(search);
         } else {
-            if(displayedStores != filteredStores) {
+            // EMPTY STATES
+            setEmptyState(
+                    filteredStores.isEmpty() ? Constants.STATE.EMPTY : Constants.STATE.NONE
+            );
+            // SORTING
+            if(displayedStores != filteredStores || isRestoredInstance) {
                 displayedStores = filteredStores;
                 sortStores();
             }
+            isRestoredInstance = false;
         }
         if(DEBUG) Log.i(TAG, "filterStores: filteredStores = " + filteredStores);
     }
@@ -279,6 +425,11 @@ public class MasterStoresFragment extends Fragment
                     searchedStores.add(store);
                 }
             }
+            setEmptyState(
+                    searchedStores.isEmpty()
+                            ? Constants.STATE.NO_SEARCH_RESULTS
+                            : Constants.STATE.NONE
+            );
             if(displayedStores != searchedStores) {
                 displayedStores = searchedStores;
                 sortStores();

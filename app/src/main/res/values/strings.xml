@@ -123,6 +123,8 @@
     <string name="error_empty_locations_sub">Create some with the button below</string>
     <string name="error_empty_qu">No quantity units</string>
     <string name="error_empty_qu_sub">Create some with the button below</string>
+    <string name="error_empty_stores">No stores</string>
+    <string name="error_empty_stores_sub">Create some with the button below</string>
     <string name="error_search">No search results</string>
     <string name="error_search_sub">Try other terms</string>
     <string name="error_filter">Nothing to display</string>
