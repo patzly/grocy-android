@@ -249,5 +249,6 @@ public final class Constants {
         public final static int SCAN = 3;
         public final static int SCAN_BATCH = 4;
         public final static int SCAN_PARENT_PRODUCT = 5;
+        public final static int SHOPPING_MODE = 6;
     }
 }
