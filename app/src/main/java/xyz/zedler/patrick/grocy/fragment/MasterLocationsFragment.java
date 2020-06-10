@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +54,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.AnimUtil;
@@ -80,6 +79,7 @@ public class MasterLocationsFragment extends Fragment
     private FragmentMasterLocationsBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
     private AnimUtil animUtil = new AnimUtil();
+    private EmptyStateHelper emptyStateHelper;
 
     private ArrayList<Location> locations;
     private ArrayList<Location> filteredLocations;
@@ -99,6 +99,14 @@ public class MasterLocationsFragment extends Fragment
     ) {
         binding = FragmentMasterLocationsBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding.recyclerMasterLocations.animate().cancel();
+        emptyStateHelper.destroyInstance();
+        binding = null;
     }
 
     @Override
@@ -145,6 +153,7 @@ public class MasterLocationsFragment extends Fragment
                         return true;
                     } return false;
                 });
+        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
 
         // APP BAR BEHAVIOR
 
@@ -291,13 +300,13 @@ public class MasterLocationsFragment extends Fragment
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
                 binding.linearError.textErrorTitle.setText(R.string.error_offline);
                 binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
-                setEmptyState(Constants.STATE.NONE);
+                emptyStateHelper.clearState();
                 break;
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
                 binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
-                setEmptyState(Constants.STATE.NONE);
+                emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollMasterLocations;
@@ -306,45 +315,6 @@ public class MasterLocationsFragment extends Fragment
         }
 
         animUtil.replaceViews(viewIn, viewOut, animated);
-    }
-
-    private void setEmptyState(String state) {
-        LinearLayout container = binding.linearEmpty.linearEmpty;
-        new Handler().postDelayed(() -> {
-            switch (state) {
-                case Constants.STATE.EMPTY:
-                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_toast);
-                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_empty_locations);
-                    binding.linearEmpty.textEmptySubtitle.setText(
-                            R.string.error_empty_locations_sub
-                    );
-                    break;
-                case Constants.STATE.NO_SEARCH_RESULTS:
-                    binding.linearEmpty.imageEmpty.setImageResource(R.drawable.illustration_jar);
-                    binding.linearEmpty.textEmptyTitle.setText(R.string.error_search);
-                    binding.linearEmpty.textEmptySubtitle.setText(R.string.error_search_sub);
-                    break;
-                case Constants.STATE.NONE:
-                    if(container.getVisibility() == View.GONE) return;
-                    break;
-            }
-        }, 125);
-        // show new empty state with delay or hide it if NONE
-        if(state.equals(Constants.STATE.NONE)) {
-            container.animate().alpha(0).setDuration(125).withEndAction(
-                    () -> container.setVisibility(View.GONE)
-            ).start();
-        } else {
-            if(container.getVisibility() == View.VISIBLE) {
-                // first hide previous empty state if needed
-                container.animate().alpha(0).setDuration(125).start();
-            }
-            new Handler().postDelayed(() -> {
-                container.setAlpha(0);
-                container.setVisibility(View.VISIBLE);
-                container.animate().alpha(1).setDuration(125).start();
-            }, 150);
-        }
     }
 
     private void download() {
@@ -390,9 +360,11 @@ public class MasterLocationsFragment extends Fragment
             searchLocations(search);
         } else {
             // EMPTY STATES
-            setEmptyState(
-                    filteredLocations.isEmpty() ? Constants.STATE.EMPTY : Constants.STATE.NONE
-            );
+            if(filteredLocations.isEmpty()) {
+                emptyStateHelper.setEmpty();
+            } else {
+                emptyStateHelper.clearState();
+            }
             // SORTING
             if(displayedLocations != filteredLocations || isRestoredInstance) {
                 displayedLocations = filteredLocations;
@@ -420,11 +392,11 @@ public class MasterLocationsFragment extends Fragment
                     searchedLocations.add(location);
                 }
             }
-            setEmptyState(
-                    searchedLocations.isEmpty()
-                            ? Constants.STATE.NO_SEARCH_RESULTS
-                            : Constants.STATE.NONE
-            );
+            if(searchedLocations.isEmpty()) {
+                emptyStateHelper.setNoSearchResults();
+            } else {
+                emptyStateHelper.clearState();
+            }
             if(displayedLocations != searchedLocations) {
                 displayedLocations = searchedLocations;
                 sortLocations();

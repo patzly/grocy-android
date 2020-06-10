@@ -117,14 +117,12 @@
     <string name="error_empty_stock_sub">Go purchase some products</string>
     <string name="error_empty_shopping_list">Empty shopping list</string>
     <string name="error_empty_shopping_list_sub">Add some products you need</string>
-    <string name="error_empty_products">No products</string>
-    <string name="error_empty_products_sub">Create some with the button below</string>
+    <string name="error_empty_master_data_sub">Create some with the button below</string>
     <string name="error_empty_locations">No locations</string>
-    <string name="error_empty_locations_sub">Create some with the button below</string>
+    <string name="error_empty_product_groups">No product groups</string>
+    <string name="error_empty_products">No products</string>
     <string name="error_empty_qu">No quantity units</string>
-    <string name="error_empty_qu_sub">Create some with the button below</string>
     <string name="error_empty_stores">No stores</string>
-    <string name="error_empty_stores_sub">Create some with the button below</string>
     <string name="error_search">No search results</string>
     <string name="error_search_sub">Try other terms</string>
     <string name="error_filter">Nothing to display</string>
