@@ -7,6 +7,7 @@
 
 ## Improvements
 
+- link to grocy.info on login screen
 - replace self-signed certificates description
 - save and restore instance state, migrate to view binding
 --- master product group
