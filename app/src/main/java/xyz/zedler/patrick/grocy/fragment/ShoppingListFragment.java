@@ -351,11 +351,9 @@ public class ShoppingListFragment extends Fragment implements
             outState.putParcelableArrayList("missingShoppingListItems", missingShoppingListItems);
             outState.putParcelableArrayList("undoneShoppingListItems", undoneShoppingListItems);
             outState.putParcelableArrayList("filteredItems", filteredItems);
-            outState.putParcelableArrayList("displayedItems", displayedItems);
             outState.putParcelableArrayList("quantityUnits", quantityUnits);
             outState.putParcelableArrayList("products", products);
             outState.putParcelableArrayList("productGroups", productGroups);
-            //outState.putParcelableArrayList("groupedListItems", groupedListItems);
 
             outState.putString("itemsToDisplay", itemsToDisplay);
             outState.putString("errorState", errorState);
@@ -391,12 +389,9 @@ public class ShoppingListFragment extends Fragment implements
                 "undoneShoppingListItems"
         );
         filteredItems = savedInstanceState.getParcelableArrayList("filteredItems");
-        displayedItems = savedInstanceState.getParcelableArrayList("displayedItems");
         quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
         products = savedInstanceState.getParcelableArrayList("products");
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
-        //groupedListItems = savedInstanceState.getParcelableArrayList("groupedListItems");
-        shoppingListHashMap = new HashMap<>();
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
         activity.setUI(
