@@ -736,7 +736,11 @@ public class ShoppingListFragment extends Fragment implements
                 ? (Spanned) TextUtil
                 .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
                 : null;
-        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
+        if(shoppingList != null
+                && notes != null
+                && !notes.toString().trim().isEmpty()
+                && search.isEmpty()
+        ) {
             groupedListItems.add(
                     new ProductGroup(-1, activity.getString(R.string.property_notes))
             );
