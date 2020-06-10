@@ -661,8 +661,14 @@ public class ShoppingListFragment extends Fragment implements
         } else { // only if search contains something
             ArrayList<ShoppingListItem> searchedItems = new ArrayList<>();
             for(ShoppingListItem shoppingListItem : filteredItems) {
-                String name = shoppingListItem.getProduct().getName();
-                String description = shoppingListItem.getProduct().getDescription();
+                String name = null;
+                String description = null;
+                if(shoppingListItem.getProduct() != null) {
+                    name = shoppingListItem.getProduct().getName();
+                    description = shoppingListItem.getProduct().getDescription();
+                } else {
+                    name = shoppingListItem.getNote();
+                }
                 name = name != null ? name.toLowerCase() : "";
                 description = description != null ? description.toLowerCase() : "";
                 if(name.contains(search) || description.contains(search)) {
