@@ -990,27 +990,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dismissFragment() {
+        String tag;
         int count = fragmentManager.getBackStackEntryCount();
-        if(count >= 1) {
-            fragmentManager.popBackStackImmediate();
-            String tag;
-            if(fragmentManager.getBackStackEntryCount() == 0) {
-                tag = Constants.UI.STOCK;
-                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-            } else {
-                tag = fragmentManager.getBackStackEntryAt(
-                        fragmentManager.getBackStackEntryCount()-1
-                ).getName();
-                fragmentCurrent = fragmentManager.findFragmentByTag(tag);
-            }
-            if(fragmentCurrent != null) {
-                if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
-            } else {
-                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-                Log.e(TAG, "dismissFragment: " + tag + " not found");
-            }
+        if(count == 0) {
+            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = 0");
+            return;
+        }
+        fragmentManager.popBackStackImmediate();
+        count = fragmentManager.getBackStackEntryCount();
+        if(count == 0) {
+            tag = Constants.UI.STOCK;
+            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
         } else {
-            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
+            tag = fragmentManager.getBackStackEntryAt(
+                    fragmentManager.getBackStackEntryCount()-1
+            ).getName();
+            fragmentCurrent = fragmentManager.findFragmentByTag(tag);
+        }
+        if(fragmentCurrent == null) {
+            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
+            Log.e(TAG, "dismissFragment: " + tag + " not found");
+        } else if(DEBUG) {
+            Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
         }
         bottomAppBar.show();
     }
