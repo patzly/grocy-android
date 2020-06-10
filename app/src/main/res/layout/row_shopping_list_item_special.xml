@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linear_shopping_list_item_container"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -8,63 +9,79 @@
     android:minHeight="64dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:padding="16dp"
     android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/text_shopping_list_item_name"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:singleLine="true"
-        android:fontFamily="@font/roboto_mono_medium"
-        android:textSize="30sp"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/surface_secondary"
+        app:contentPadding="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp"
+        app:rippleColor="@color/highlight">
 
-    <TextView
-        android:id="@+id/text_shopping_list_note_as_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textStyle="italic"
-        android:visibility="gone"
-        android:fontFamily="@font/roboto_mono_medium"
-        android:textSize="30sp"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="20dp"
-        android:gravity="bottom">
-
-        <TextView
-            android:id="@+id/text_shopping_list_item_amount"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/text_shopping_list_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textSize="26sp"
+                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
-    <LinearLayout
-        android:id="@+id/linear_shopping_list_note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="20dp"
-        android:visibility="gone"
-        android:gravity="bottom">
+            <TextView
+                android:id="@+id/text_shopping_list_note_as_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_vertical"
+                android:textStyle="italic"
+                android:visibility="gone"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textSize="26sp"
+                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
-        <TextView
-            android:id="@+id/text_shopping_list_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            <TextView
+                android:id="@+id/text_shopping_list_item_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:singleLine="true" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linear_shopping_list_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:gravity="bottom">
+
+                <TextView
+                    android:id="@+id/text_shopping_list_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_mono_medium"
+                    android:textColor="@color/retro_red_fg"
+                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

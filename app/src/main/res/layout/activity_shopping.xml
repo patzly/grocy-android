@@ -3,33 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize">
 
-        <LinearLayout
-            android:id="@+id/linear_app_bar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@color/background">
+            android:background="@color/primary">
 
             <FrameLayout
-                android:id="@+id/frame_back"
+                android:id="@+id/frame_shopping_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="20dp"
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
+                android:layout_gravity="start|center_vertical"
                 android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
+                android:contentDescription="@string/action_close"
+                android:tooltipText="@string/action_close"
                 android:focusable="true"
                 tools:targetApi="o">
 
@@ -38,27 +36,19 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
+                    android:src="@drawable/ic_round_close" />
 
             </FrameLayout>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:singleLine="true"
-                android:layout_weight="1"
-                android:text="Shopping mode"
-                android:textAlignment="viewStart"
+                android:layout_gravity="center"
+                android:text="Shopping"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:menu="@menu/menu_settings"/>
-
-        </LinearLayout>
+        </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -67,15 +57,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never">
+        android:overScrollMode="ifContentScrolls"
+        android:background="@color/background_dark">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
+            android:overScrollMode="ifContentScrolls"
             android:nestedScrollingEnabled="false"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -103,7 +102,7 @@ public class ShoppingListItemSpecialAdapter extends
         if(viewType == GroupedListItem.TYPE_HEADER) {
             return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_group,
+                            R.layout.row_shopping_list_group_special,
                             parent,
                             false
                     )
@@ -119,7 +118,7 @@ public class ShoppingListItemSpecialAdapter extends
         } else {
             return new ShoppingListItemSpecialAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_bottom_notes,
+                            R.layout.row_shopping_list_bottom_notes_special,
                             parent,
                             false
                     )
@@ -209,16 +208,10 @@ public class ShoppingListItemSpecialAdapter extends
         }
 
         if(shoppingListItem.isMissing()) {
-            holder.textViewAmount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
-            );
             holder.textViewAmount.setTextColor(
                     ContextCompat.getColor(context, R.color.retro_blue_fg)
             );
         } else {
-            holder.textViewAmount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
-            );
             holder.textViewAmount.setTextColor(
                     ContextCompat.getColor(context, R.color.on_background_secondary)
             );

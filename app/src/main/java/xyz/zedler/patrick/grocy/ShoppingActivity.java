@@ -138,6 +138,8 @@ public class ShoppingActivity extends AppCompatActivity implements
         binding = ActivityShoppingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.frameShoppingClose.setOnClickListener(v -> onBackPressed());
+
         binding.swipe.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(this, R.color.surface)
         );
@@ -171,12 +173,6 @@ public class ShoppingActivity extends AppCompatActivity implements
         timer = new Timer();
         initTimerTask();
         timer.schedule(timerTask, 10000, 10000);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 
     private void load() {

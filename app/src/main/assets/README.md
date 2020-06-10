@@ -9,7 +9,6 @@
 
 - replace self-signed certificates description
 - save and restore instance state, migrate to view binding
---- master location
 --- master product group
 --- master quantity unit
 --- missing batch items

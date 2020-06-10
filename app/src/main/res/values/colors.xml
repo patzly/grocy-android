@@ -51,12 +51,14 @@
 
     <color name="secondary">@color/retro_green_bg_white</color>
     <color name="secondary_translucent">#226bad9e</color>
+    <color name="secondary_dark">@color/retro_dark</color>
     <color name="on_secondary">@color/white</color>
     <color name="highlight_on_secondary">#22ffffff</color>
 
     <!-- BACKGROUND -->
 
     <color name="background">@color/white</color>
+    <color name="background_dark">#0d000000</color>
     <color name="on_background">#000000</color>
     <color name="on_background_variant">#edeff1</color>
     <color name="on_background_secondary">@color/grey600</color>
@@ -65,6 +67,7 @@
     <!-- SURFACE -->
 
     <color name="surface">@color/white</color>
+    <color name="surface_secondary">@color/white</color>
     <color name="on_surface">@color/black</color>
     <color name="on_surface_secondary">@color/grey100</color>
     <color name="on_surface_area">@color/grey100</color>
