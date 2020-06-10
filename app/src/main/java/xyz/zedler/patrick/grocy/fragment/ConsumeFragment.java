@@ -120,6 +120,20 @@ public class ConsumeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        adapterProducts = null;
+        gson = null;
+        sharedPrefs = null;
+        activity = null;
+        startupBundle = null;
+        request = null;
+        grocyApi = null;
+        products = null;
+        stockLocations = null;
+        stockEntries = null;
+        productNames = null;
+        productDetails = null;
+        selectedStockEntryId = null;
+        Runtime.getRuntime().gc();
     }
 
     @Override
