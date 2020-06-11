@@ -20,22 +20,19 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,6 +45,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -65,17 +63,14 @@ public class MasterProductGroupFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private FragmentMasterProductGroupBinding binding;
 
+    private ArrayList<ProductGroup> productGroups;
+    private ArrayList<Product> products;
+    private ArrayList<String> productGroupNames;
     private ProductGroup editProductGroup;
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<String> productGroupNames = new ArrayList<>();
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputName, textInputDescription;
-    private EditText editTextName, editTextDescription;
-    private ImageView imageViewName, imageViewDescription;
-    private boolean isRefresh = false;
+    private boolean isRefresh;
 
     @Override
     public View onCreateView(
@@ -83,11 +78,16 @@ public class MasterProductGroupFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(
-                R.layout.fragment_master_product_group,
-                container,
-                false
+        binding = FragmentMasterProductGroupBinding.inflate(
+                inflater, container, false
         );
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -97,44 +97,44 @@ public class MasterProductGroupFragment extends Fragment {
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
-        // INITIALIZE VIEWS
+        // VARIABLES
 
-        activity.findViewById(R.id.frame_master_product_group_cancel).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        productGroups = new ArrayList<>();
+        products = new ArrayList<>();
+        productGroupNames = new ArrayList<>();
+        editProductGroup = null;
+
+        isRefresh = false;
+
+        // VIEWS
+
+        binding.frameMasterProductGroupCancel.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_product_group);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterProductGroup.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterProductGroup.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_product_group_name);
-        imageViewName = activity.findViewById(R.id.image_master_product_group_name);
-        editTextName = textInputName.getEditText();
-        assert editTextName != null;
-        editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewName);
-        });
+        binding.editTextMasterProductGroupName.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterProductGroupName);
+                });
 
         // description
-        textInputDescription = activity.findViewById(R.id.text_input_master_product_group_description);
-        imageViewDescription = activity.findViewById(R.id.image_master_product_group_description);
-        editTextDescription = textInputDescription.getEditText();
-        assert editTextDescription != null;
-        editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewDescription);
-        });
+        binding.editTextMasterProductGroupDescription.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterProductGroupDescription);
+                });
 
         // BUNDLE WHEN EDIT
 
@@ -153,11 +153,52 @@ public class MasterProductGroupFragment extends Fragment {
 
         // START
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(toString(), TAG);
+        activity.updateUI(
+                Constants.UI.MASTER_PRODUCT_GROUP,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("productGroups", productGroups);
+            outState.putParcelableArrayList("products", products);
+            outState.putStringArrayList("productGroupNames", productGroupNames);
+
+            outState.putParcelable("editProductGroup", editProductGroup);
+
+            outState.putBoolean("isRefresh", isRefresh);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+        products = savedInstanceState.getParcelableArrayList("products");
+        productGroupNames = savedInstanceState.getStringArrayList("productGroupNames");
+
+        editProductGroup = savedInstanceState.getParcelable("editProductGroup");
+
+        isRefresh = savedInstanceState.getBoolean("isRefresh");
+
+        binding.swipeMasterProductGroup.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -173,7 +214,7 @@ public class MasterProductGroupFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterProductGroup.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
@@ -190,7 +231,7 @@ public class MasterProductGroupFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterProductGroup.setRefreshing(true);
         downloadProductGroups();
         downloadProducts();
     }
@@ -206,7 +247,7 @@ public class MasterProductGroupFragment extends Fragment {
                     SortUtil.sortProductGroupsByName(productGroups, true);
                     productGroupNames = getProductGroupNames();
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterProductGroup.setRefreshing(false);
 
                     updateEditReferences();
 
@@ -217,7 +258,7 @@ public class MasterProductGroupFragment extends Fragment {
                     }
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterProductGroup.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.frame_main_container),
@@ -279,18 +320,20 @@ public class MasterProductGroupFragment extends Fragment {
         clearInputFocusAndErrors();
         if(editProductGroup != null) {
             // name
-            editTextName.setText(editProductGroup.getName());
+            binding.editTextMasterProductGroupName.setText(editProductGroup.getName());
             // description
-            editTextDescription.setText(editProductGroup.getDescription());
+            binding.editTextMasterProductGroupDescription.setText(
+                    editProductGroup.getDescription()
+            );
         }
     }
 
     private void clearInputFocusAndErrors() {
         activity.hideKeyboard();
-        textInputName.clearFocus();
-        textInputName.setErrorEnabled(false);
-        textInputDescription.clearFocus();
-        textInputDescription.setErrorEnabled(false);
+        binding.textInputMasterProductGroupName.clearFocus();
+        binding.textInputMasterProductGroupName.setErrorEnabled(false);
+        binding.textInputMasterProductGroupDescription.clearFocus();
+        binding.textInputMasterProductGroupDescription.setErrorEnabled(false);
     }
 
     public void saveProductGroup() {
@@ -298,8 +341,12 @@ public class MasterProductGroupFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", editTextName.getText().toString().trim());
-            jsonObject.put("description", editTextDescription.getText().toString().trim());
+            Editable name = binding.editTextMasterProductGroupName.getText();
+            Editable description = binding.editTextMasterProductGroupDescription.getText();
+            jsonObject.put("name", (name != null ? name : "").toString().trim());
+            jsonObject.put(
+                    "description", (description != null ? description : "").toString().trim()
+            );
         } catch (JSONException e) {
             Log.e(TAG, "saveProductGroup: " + e);
         }
@@ -333,12 +380,16 @@ public class MasterProductGroupFragment extends Fragment {
         clearInputFocusAndErrors();
         boolean isInvalid = false;
 
-        String name = String.valueOf(editTextName.getText()).trim();
+        String name = String.valueOf(binding.editTextMasterProductGroupName.getText()).trim();
         if(name.isEmpty()) {
-            textInputName.setError(activity.getString(R.string.error_empty));
+            binding.textInputMasterProductGroupName.setError(
+                    activity.getString(R.string.error_empty)
+            );
             isInvalid = true;
         } else if(!productGroupNames.isEmpty() && productGroupNames.contains(name)) {
-            textInputName.setError(activity.getString(R.string.error_duplicate));
+            binding.textInputMasterProductGroupName.setError(
+                    activity.getString(R.string.error_duplicate)
+            );
             isInvalid = true;
         }
 
@@ -348,8 +399,8 @@ public class MasterProductGroupFragment extends Fragment {
     private void resetAll() {
         if(editProductGroup != null) return;
         clearInputFocusAndErrors();
-        editTextName.setText(null);
-        editTextDescription.setText(null);
+        binding.editTextMasterProductGroupName.setText(null);
+        binding.editTextMasterProductGroupDescription.setText(null);
     }
 
     public void checkForUsage(ProductGroup productGroup) {
