@@ -448,9 +448,69 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
+    private void reset() {
+        String days = sharedPrefs.getString(
+                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                String.valueOf(5)
+        );
+        // ignore server value if not available
+        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
+                ? 5
+                : Integer.parseInt(days);
+        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
+        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
+
+        // INITIALIZE VARIABLES
+
+        stockItems = new ArrayList<>();
+        expiringItems = new ArrayList<>();
+        expiredItems = new ArrayList<>();
+        missingItems = new ArrayList<>();
+        shoppingListProductIds = new ArrayList<>();
+        missingStockItems = new ArrayList<>();
+        filteredItems = new ArrayList<>();
+        displayedItems = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
+        locations = new ArrayList<>();
+        productGroups = new ArrayList<>();
+
+        itemsToDisplay = Constants.STOCK.FILTER.ALL;
+        errorState = Constants.STATE.NONE;
+        search = "";
+        filterLocationId = -1;
+        filterProductGroupId = -1;
+        isRestoredInstance = false;
+
+        // APP BAR BEHAVIOR
+
+        appBarBehavior = new AppBarBehavior(
+                activity,
+                R.id.linear_stock_app_bar_default,
+                R.id.linear_stock_app_bar_search
+        );
+
+        emptyStateHelper.clearState();
+
+        // CHIPS
+
+        chipExpiring.setActive(false);
+        chipExpired.setActive(false);
+        chipMissing.setActive(false);
+
+        binding.scrollStock.scrollTo(0, 0);
+
+        binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
+
+        load();
+
+        // UPDATE UI
+
+        activity.updateUI(Constants.UI.STOCK_DEFAULT, true, TAG);
+    }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) reset();
     }
 
     private void load() {
