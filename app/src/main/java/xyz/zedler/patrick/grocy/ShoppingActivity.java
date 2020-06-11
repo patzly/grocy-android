@@ -24,8 +24,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +50,7 @@ import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.GroupItemsShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -59,11 +58,8 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class ShoppingActivity extends AppCompatActivity implements
         ShoppingListItemSpecialAdapter.ShoppingListItemSpecialAdapterListener,
@@ -304,66 +300,13 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void groupItems() {
-        ArrayList<ProductGroup> neededProductGroups = new ArrayList<>();
-        boolean containsUngroupedItems = false;
-        for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-            Product product = shoppingListItem.getProduct();
-            String groupId = null;
-            if(product != null) {
-                groupId = shoppingListItem.getProduct().getProductGroupId();
-            }
-            if(groupId != null && !groupId.isEmpty()) {
-                for(ProductGroup productGroup : productGroups) {
-                    if(productGroup.getId() == Integer.parseInt(groupId)
-                            && !neededProductGroups.contains(productGroup)
-                    ) {
-                        neededProductGroups.add(productGroup);
-                        break;
-                    }
-                }
-            } else if(!containsUngroupedItems) {
-                containsUngroupedItems = true;
-            }
-        }
-        SortUtil.sortProductGroupsByName(neededProductGroups, true);
-        if(containsUngroupedItems) {
-            neededProductGroups.add(new ProductGroup(
-                    -1,
-                    getString(R.string.title_shopping_list_ungrouped)
-            ));
-        }
-        groupedListItems = new ArrayList<>();
-        for(ProductGroup productGroup : neededProductGroups) {
-            groupedListItems.add(productGroup);
-            ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>();
-            for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                Product product = shoppingListItem.getProduct();
-                String groupId = null;
-                if(product != null) {
-                    groupId = product.getProductGroupId();
-                }
-                if(groupId == null || groupId.isEmpty()) groupId = "-1";
-                if(groupId.equals(String.valueOf(productGroup.getId()))) {
-                    itemsOneGroup.add(shoppingListItem);
-                }
-            }
-            SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
-            groupedListItems.addAll(itemsOneGroup);
-        }
-
-        // add bottom notes if they are not empty
-        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        Spanned notes = shoppingList != null && shoppingList.getNotes() != null
-                ? (Spanned) TextUtil
-                .trimCharSequence(Html.fromHtml(shoppingList.getNotes().trim()))
-                : null;
-        if(shoppingList != null && notes != null && !notes.toString().trim().isEmpty()) {
-            groupedListItems.add(
-                    new ProductGroup(-1, getString(R.string.property_notes))
-            );
-            groupedListItems.add(new ShoppingListBottomNotes(notes));
-        }
-
+        groupedListItems = GroupItemsShoppingListHelper.groupItems(
+                shoppingListItemsSelected,
+                productGroups,
+                shoppingLists,
+                selectedShoppingListId,
+                this
+        );
         refreshAdapter(
                 new ShoppingListItemSpecialAdapter(
                         this,
@@ -552,13 +495,6 @@ public class ShoppingActivity extends AppCompatActivity implements
             groupedListItems.remove(position);
             shoppingListItemAdapter.notifyItemRemoved(position);
         }
-    }
-
-    private ShoppingList getShoppingList(int shoppingListId) {
-        if(shoppingListHashMap.isEmpty()) {
-            for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
-        }
-        return shoppingListHashMap.get(shoppingListId);
     }
 
     private void initTimerTask() {
