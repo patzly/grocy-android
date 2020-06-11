@@ -118,12 +118,12 @@ public class MasterProductGroupsFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         productGroups = new ArrayList<>();
         filteredProductGroups = new ArrayList<>();
@@ -135,7 +135,7 @@ public class MasterProductGroupsFragment extends Fragment
         sortAscending = true;
         isRestoredInstance = savedInstanceState != null;
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
         binding.frameMasterProductGroupsBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameMasterProductGroupsSearchClose.setOnClickListener(v -> dismissSearch());
@@ -155,17 +155,14 @@ public class MasterProductGroupsFragment extends Fragment
                         return true;
                     } return false;
                 });
-        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
 
-        // APP BAR BEHAVIOR
+        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
 
         appBarBehavior = new AppBarBehavior(
                 activity,
                 R.id.linear_master_product_groups_app_bar_default,
                 R.id.linear_master_product_groups_app_bar_search
         );
-
-        // SWIPE REFRESH
 
         binding.swipeMasterProductGroups.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
