@@ -133,6 +133,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private int daysExpiringSoon;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean isFragmentFromBackground;
 
     @Override
     public View onCreateView(
@@ -310,46 +311,49 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
-        swipeBehavior = new SwipeBehavior(activity) {
-            @Override
-            public void instantiateUnderlayButton(
-                    RecyclerView.ViewHolder viewHolder,
-                    List<UnderlayButton> underlayButtons
-            ) {
-                StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
-                if(stockItem.getAmount() > 0
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
+        if(!isFragmentFromBackground) {
+            swipeBehavior = new SwipeBehavior(activity) {
+                @Override
+                public void instantiateUnderlayButton(
+                        RecyclerView.ViewHolder viewHolder,
+                        List<UnderlayButton> underlayButtons
                 ) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_consume_product,
-                            position -> performAction(
-                                    Constants.ACTION.CONSUME,
-                                    displayedItems.get(position).getProduct().getId()
-                            )
-                    ));
+                    Log.i(TAG, "instantiateUnderlayButton: ");
+                    StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
+                    if(stockItem.getAmount() > 0
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_consume_product,
+                                position -> performAction(
+                                        Constants.ACTION.CONSUME,
+                                        displayedItems.get(position).getProduct().getId()
+                                )
+                        ));
+                    }
+                    if(stockItem.getAmount()
+                            > stockItem.getAmountOpened()
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                            && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_open_product,
+                                position -> performAction(
+                                        Constants.ACTION.OPEN,
+                                        displayedItems.get(position).getProduct().getId()
+                                )
+                        ));
+                    }
+                    if(underlayButtons.isEmpty()) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_close,
+                                position -> swipeBehavior.recoverLatestSwipedItem()
+                        ));
+                    }
                 }
-                if(stockItem.getAmount()
-                        > stockItem.getAmountOpened()
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
-                        && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
-                ) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_open_product,
-                            position -> performAction(
-                                    Constants.ACTION.OPEN,
-                                    displayedItems.get(position).getProduct().getId()
-                            )
-                    ));
-                }
-                if(underlayButtons.isEmpty()) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_close,
-                            position -> swipeBehavior.recoverLatestSwipedItem()
-                    ));
-                }
-            }
-        };
-        swipeBehavior.attachToRecyclerView(binding.recyclerStock);
+            };
+            swipeBehavior.attachToRecyclerView(binding.recyclerStock);
+        }
 
         if(savedInstanceState == null) {
             load();
@@ -369,6 +373,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 TAG
         );
         setArguments(null);
+        isFragmentFromBackground = false;
     }
 
     @Override
@@ -450,7 +455,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) {
+            isFragmentFromBackground = true;
+            onActivityCreated(null);
+        }
     }
 
     private void load() {
