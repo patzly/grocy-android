@@ -96,6 +96,7 @@
                         app:helperText=" ">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_master_quantity_unit_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"
@@ -126,6 +127,7 @@
                         app:helperText=" ">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_master_quantity_unit_name_plural"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"
@@ -154,6 +156,7 @@
                         android:hint="@string/property_description">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_master_quantity_unit_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"

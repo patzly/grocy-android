@@ -20,22 +20,19 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,6 +45,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -65,16 +63,13 @@ public class MasterQuantityUnitFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private FragmentMasterQuantityUnitBinding binding;
 
-    private QuantityUnit editQuantityUnit;
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<String> quantityUnitNames = new ArrayList<>();
+    private QuantityUnit editQuantityUnit;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private TextInputLayout textInputName, textInputNamePlural, textInputDescription;
-    private EditText editTextName, editTextNamePlural, editTextDescription;
-    private ImageView imageViewName, imageViewNamePlural, imageViewDescription;
     private boolean isRefresh = false;
 
     @Override
@@ -83,7 +78,16 @@ public class MasterQuantityUnitFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_master_quantity_unit, container, false);
+        binding = FragmentMasterQuantityUnitBinding.inflate(
+                inflater, container, false
+        );
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -93,55 +97,50 @@ public class MasterQuantityUnitFragment extends Fragment {
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
-        // INITIALIZE VIEWS
+        // VARIABLES
 
-        activity.findViewById(R.id.frame_master_quantity_unit_cancel).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
+        quantityUnits = new ArrayList<>();
+        products = new ArrayList<>();
+        quantityUnitNames = new ArrayList<>();
+        editQuantityUnit = null;
+
+        isRefresh = false;
+
+        // VIEWS
+
+        binding.frameMasterQuantityUnitCancel.setOnClickListener(v -> activity.onBackPressed());
 
         // swipe refresh
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_master_quantity_unit);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMasterQuantityUnit.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMasterQuantityUnit.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMasterQuantityUnit.setOnRefreshListener(this::refresh);
 
         // name
-        textInputName = activity.findViewById(R.id.text_input_master_quantity_unit_name);
-        imageViewName = activity.findViewById(R.id.image_master_quantity_unit_name);
-        editTextName = textInputName.getEditText();
-        assert editTextName != null;
-        editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewName);
-        });
+        binding.editTextMasterQuantityUnitName.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterQuantityUnitName);
+                });
 
         // name plural
-        textInputNamePlural = activity.findViewById(
-                R.id.text_input_master_quantity_unit_name_plural
-        );
-        imageViewNamePlural = activity.findViewById(R.id.image_master_quantity_unit_name_plural);
-        editTextNamePlural = textInputNamePlural.getEditText();
-        assert editTextNamePlural != null;
-        editTextNamePlural.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewNamePlural);
-        });
+        binding.editTextMasterQuantityUnitNamePlural.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterQuantityUnitNamePlural);
+                });
 
         // description
-        textInputDescription = activity.findViewById(R.id.text_input_master_quantity_unit_description);
-        imageViewDescription = activity.findViewById(R.id.image_master_quantity_unit_description);
-        editTextDescription = textInputDescription.getEditText();
-        assert editTextDescription != null;
-        editTextDescription.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(imageViewDescription);
-        });
+        binding.editTextMasterQuantityUnitDescription.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) IconUtil.start(binding.imageMasterQuantityUnitDescription);
+                });
 
         // BUNDLE WHEN EDIT
 
@@ -160,11 +159,52 @@ public class MasterQuantityUnitFragment extends Fragment {
 
         // START
 
-        load();
+        if(savedInstanceState == null) {
+            load();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
-        activity.updateUI(toString(), TAG);
+        activity.updateUI(
+                Constants.UI.MASTER_QUANTITY_UNIT,
+                savedInstanceState == null,
+                TAG
+        );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+            outState.putParcelableArrayList("products", products);
+            outState.putStringArrayList("quantityUnitNames", quantityUnitNames);
+
+            outState.putParcelable("editQuantityUnit", editQuantityUnit);
+
+            outState.putBoolean("isRefresh", isRefresh);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
+        products = savedInstanceState.getParcelableArrayList("products");
+        quantityUnitNames = savedInstanceState.getStringArrayList("quantityUnitNames");
+
+        editQuantityUnit = savedInstanceState.getParcelable("editQuantityUnit");
+
+        isRefresh = savedInstanceState.getBoolean("isRefresh");
+
+        binding.swipeMasterQuantityUnit.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void load() {
@@ -180,7 +220,7 @@ public class MasterQuantityUnitFragment extends Fragment {
         if(activity.isOnline()) {
             download();
         } else {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeMasterQuantityUnit.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
@@ -197,7 +237,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     private void download() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMasterQuantityUnit.setRefreshing(true);
         downloadQuantityUnits();
         downloadProducts();
     }
@@ -213,7 +253,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                     SortUtil.sortQuantityUnitsByName(quantityUnits, true);
                     quantityUnitNames = getQuantityUnitNames();
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterQuantityUnit.setRefreshing(false);
 
                     updateEditReferences();
 
@@ -224,7 +264,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                     }
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMasterQuantityUnit.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
                                     activity.findViewById(R.id.frame_main_container),
@@ -288,22 +328,26 @@ public class MasterQuantityUnitFragment extends Fragment {
         clearInputFocusAndErrors();
         if(editQuantityUnit != null) {
             // name
-            editTextName.setText(editQuantityUnit.getName());
+            binding.editTextMasterQuantityUnitName.setText(editQuantityUnit.getName());
             // name (plural form)
-            editTextNamePlural.setText(editQuantityUnit.getNamePluralCanNull());
+            binding.editTextMasterQuantityUnitNamePlural.setText(
+                    editQuantityUnit.getNamePluralCanNull()
+            );
             // description
-            editTextDescription.setText(editQuantityUnit.getDescription());
+            binding.editTextMasterQuantityUnitDescription.setText(
+                    editQuantityUnit.getDescription()
+            );
         }
     }
 
     private void clearInputFocusAndErrors() {
         activity.hideKeyboard();
-        textInputName.clearFocus();
-        textInputName.setErrorEnabled(false);
-        textInputNamePlural.clearFocus();
-        textInputNamePlural.setErrorEnabled(false);
-        textInputDescription.clearFocus();
-        textInputDescription.setErrorEnabled(false);
+        binding.textInputMasterQuantityUnitName.clearFocus();
+        binding.textInputMasterQuantityUnitName.setErrorEnabled(false);
+        binding.textInputMasterQuantityUnitNamePlural.clearFocus();
+        binding.textInputMasterQuantityUnitNamePlural.setErrorEnabled(false);
+        binding.textInputMasterQuantityUnitDescription.clearFocus();
+        binding.textInputMasterQuantityUnitDescription.setErrorEnabled(false);
     }
 
     public void saveQuantityUnit() {
@@ -311,9 +355,14 @@ public class MasterQuantityUnitFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("name", editTextName.getText().toString().trim());
-            jsonObject.put("name_plural", editTextNamePlural.getText().toString().trim());
-            jsonObject.put("description", editTextDescription.getText().toString().trim());
+            Editable name = binding.editTextMasterQuantityUnitName.getText();
+            Editable plural = binding.editTextMasterQuantityUnitNamePlural.getText();
+            Editable description = binding.editTextMasterQuantityUnitDescription.getText();
+            jsonObject.put("name", (name != null ? name : "").toString().trim());
+            jsonObject.put("name_plural", (plural != null ? plural : "").toString().trim());
+            jsonObject.put(
+                    "description", (description != null ? description : "").toString().trim()
+            );
         } catch (JSONException e) {
             Log.e(TAG, "saveQuantityUnit: " + e);
         }
@@ -344,18 +393,26 @@ public class MasterQuantityUnitFragment extends Fragment {
         clearInputFocusAndErrors();
         boolean isInvalid = false;
 
-        String name = String.valueOf(editTextName.getText()).trim();
+        String name = String.valueOf(binding.editTextMasterQuantityUnitName.getText()).trim();
         if(name.isEmpty()) {
-            textInputName.setError(activity.getString(R.string.error_empty));
+            binding.textInputMasterQuantityUnitName.setError(
+                    activity.getString(R.string.error_empty)
+            );
             isInvalid = true;
         } else if(!quantityUnitNames.isEmpty() && quantityUnitNames.contains(name)) {
-            textInputName.setError(activity.getString(R.string.error_duplicate));
+            binding.textInputMasterQuantityUnitName.setError(
+                    activity.getString(R.string.error_duplicate)
+            );
             isInvalid = true;
         }
 
-        String namePlural = String.valueOf(editTextNamePlural.getText()).trim();
+        String namePlural = String.valueOf(
+                binding.editTextMasterQuantityUnitNamePlural.getText()
+        ).trim();
         if(!quantityUnitNames.isEmpty() && quantityUnitNames.contains(namePlural)) {
-            textInputNamePlural.setError(activity.getString(R.string.error_duplicate));
+            binding.textInputMasterQuantityUnitNamePlural.setError(
+                    activity.getString(R.string.error_duplicate)
+            );
             isInvalid = true;
         }
 
@@ -365,9 +422,9 @@ public class MasterQuantityUnitFragment extends Fragment {
     private void resetAll() {
         if(editQuantityUnit != null) return;
         clearInputFocusAndErrors();
-        editTextName.setText(null);
-        editTextNamePlural.setText(null);
-        editTextDescription.setText(null);
+        binding.editTextMasterQuantityUnitName.setText(null);
+        binding.editTextMasterQuantityUnitNamePlural.setText(null);
+        binding.editTextMasterQuantityUnitDescription.setText(null);
     }
 
     private void checkForUsage(QuantityUnit quantityUnit) {
