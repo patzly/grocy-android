@@ -19,10 +19,8 @@ package xyz.zedler.patrick.grocy.helper;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -32,26 +30,24 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 public class LoadOfflineDataShoppingListHelper extends AsyncTask<Void, Void, String> {
-    private WeakReference<Activity> weakActivity;
+    private AppDatabase appDatabase;
     private AsyncResponse response;
     private ArrayList<ShoppingListItem> shoppingListItems;
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
 
-    public LoadOfflineDataShoppingListHelper(Activity activity, AsyncResponse response) {
-        weakActivity = new WeakReference<>(activity);
+    public LoadOfflineDataShoppingListHelper(AppDatabase appDatabase, AsyncResponse response) {
+        this.appDatabase = appDatabase;
         this.response = response;
     }
 
     @Override
     protected String doInBackground(Void... voids) {
-        Activity activity = weakActivity.get();
-        AppDatabase database = AppDatabase.getAppDatabase(activity.getApplicationContext());
-        shoppingListItems = new ArrayList<>(database.shoppingListItemDao().getAll());
-        shoppingLists = new ArrayList<>(database.shoppingListDao().getAll());
-        productGroups = new ArrayList<>(database.productGroupDao().getAll());
-        quantityUnits = new ArrayList<>(database.quantityUnitDao().getAll());
+        shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
+        shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
+        productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
+        quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
         return null;
     }
 

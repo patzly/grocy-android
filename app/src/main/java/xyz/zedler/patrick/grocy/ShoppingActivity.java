@@ -232,7 +232,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             lastSynced = Calendar.getInstance().getTime();
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
-                    this,
+                    AppDatabase.getAppDatabase(getApplicationContext()),
                     this,
                     true,
                     shoppingLists,
@@ -269,7 +269,10 @@ public class ShoppingActivity extends AppCompatActivity implements
         if(!showOffline) {
             showOffline = true;
             Log.i(TAG, "loadOfflineData: " + "you are now offline");
-            new LoadOfflineDataShoppingListHelper(this, this).execute();
+            new LoadOfflineDataShoppingListHelper(
+                    AppDatabase.getAppDatabase(getApplicationContext()),
+                    this
+            ).execute();
         }
         lastSynced = null;
     }
@@ -393,7 +396,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         downloadHelper.setOnQueueEmptyListener(() -> {
             showMessage("Successfully synced entries");
             new StoreOfflineDataShoppingListHelper(
-                    this,
+                    AppDatabase.getAppDatabase(getApplicationContext()),
                     this,
                     false,
                     shoppingLists,
