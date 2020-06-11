@@ -19,10 +19,8 @@ package xyz.zedler.patrick.grocy.helper;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +33,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, String> {
-    private WeakReference<Activity> weakActivity;
+    private AppDatabase appDatabase;
     private AsyncResponse response;
     private boolean syncIfNecessary;
     private ArrayList<ShoppingListItem> shoppingListItems;
@@ -48,7 +46,7 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
     private HashMap<Integer, ShoppingListItem> serverItemHashMap = new HashMap<>();
 
     public StoreOfflineDataShoppingListHelper(
-            Activity activity,
+            AppDatabase appDatabase,
             AsyncResponse response,
             boolean syncIfNecessary,
             ArrayList<ShoppingList> shoppingLists,
@@ -58,7 +56,7 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
             ArrayList<Product> products,
             ArrayList<Integer> usedProductIds
     ) {
-        weakActivity = new WeakReference<>(activity);
+        this.appDatabase = appDatabase;
         this.response = response;
         this.syncIfNecessary = syncIfNecessary;
         this.shoppingLists = shoppingLists;
@@ -71,14 +69,11 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
 
     @Override
     protected String doInBackground(Void... voids) {
-        Activity activity = weakActivity.get();
-        AppDatabase database = AppDatabase.getAppDatabase(activity.getApplicationContext());
-
         if(syncIfNecessary) {
             serverItemHashMap = new HashMap<>();
             for(ShoppingListItem s : shoppingListItems) serverItemHashMap.put(s.getId(), s);
 
-            ShoppingListItemDao itemDao = database.shoppingListItemDao();
+            ShoppingListItemDao itemDao = appDatabase.shoppingListItemDao();
             ArrayList<ShoppingListItem> offlineItems = new ArrayList<>(itemDao.getAll());
 
             // compare server items with offline items and add modified to separate list
@@ -104,20 +99,20 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
             Product product = productHashMap.get(Integer.parseInt(serverItem.getProductId()));
             if(product != null) serverItem.setProduct(product);
         }
-        database.shoppingListItemDao().deleteAll();
-        database.shoppingListItemDao().insertAll(shoppingListItems);
+        appDatabase.shoppingListItemDao().deleteAll();
+        appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
 
         // shopping lists
-        database.shoppingListDao().deleteAll();
-        database.shoppingListDao().insertAll(shoppingLists);
+        appDatabase.shoppingListDao().deleteAll();
+        appDatabase.shoppingListDao().insertAll(shoppingLists);
 
         // product groups
-        database.productGroupDao().deleteAll();
-        database.productGroupDao().insertAll(productGroups);
+        appDatabase.productGroupDao().deleteAll();
+        appDatabase.productGroupDao().insertAll(productGroups);
 
         // quantity units
-        database.quantityUnitDao().deleteAll();
-        database.quantityUnitDao().insertAll(quantityUnits);
+        appDatabase.quantityUnitDao().deleteAll();
+        appDatabase.quantityUnitDao().insertAll(quantityUnits);
 
         return null;
     }

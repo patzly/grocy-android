@@ -136,6 +136,7 @@ public class ShoppingListFragment extends Fragment implements
     private boolean isDataStored;
     private boolean showOffline;
     private boolean isRestoredInstance;
+    private boolean isFragmentFromBackground;
 
     @Override
     public View onCreateView(
@@ -290,35 +291,37 @@ public class ShoppingListFragment extends Fragment implements
         binding.recyclerShoppingList.setItemAnimator(new ItemAnimator());
         binding.recyclerShoppingList.setAdapter(new StockPlaceholderAdapter());
 
-        swipeBehavior = new SwipeBehavior(activity) {
-            @Override
-            public void instantiateUnderlayButton(
-                    RecyclerView.ViewHolder viewHolder,
-                    List<UnderlayButton> underlayButtons
-            ) {
-                if(viewHolder.getItemViewType() == GroupedListItem.TYPE_ENTRY) {
+        if(!isFragmentFromBackground) {
+            swipeBehavior = new SwipeBehavior(activity) {
+                @Override
+                public void instantiateUnderlayButton(
+                        RecyclerView.ViewHolder viewHolder,
+                        List<UnderlayButton> underlayButtons
+                ) {
+                    if(viewHolder.getItemViewType() == GroupedListItem.TYPE_ENTRY) {
 
-                    underlayButtons.add(new UnderlayButton(
-                            R.drawable.ic_round_done,
-                            position -> toggleDoneStatus(position)
-                    ));
+                        underlayButtons.add(new UnderlayButton(
+                                R.drawable.ic_round_done,
+                                position -> toggleDoneStatus(position)
+                        ));
 
-                    // check if item has product or is only note
-                    if(viewHolder.getAdapterPosition() == -1
-                            || ((ShoppingListItem) groupedListItems
-                            .get(viewHolder.getAdapterPosition()))
-                            .getProduct() == null
-                            || showOffline
-                    ) return;
+                        // check if item has product or is only note
+                        if(viewHolder.getAdapterPosition() == -1
+                                || ((ShoppingListItem) groupedListItems
+                                .get(viewHolder.getAdapterPosition()))
+                                .getProduct() == null
+                                || showOffline
+                        ) return;
 
-                    underlayButtons.add(new UnderlayButton(
-                            R.drawable.ic_round_local_grocery_store,
-                            position -> purchaseItem(position)
-                    ));
+                        underlayButtons.add(new UnderlayButton(
+                                R.drawable.ic_round_local_grocery_store,
+                                position -> purchaseItem(position)
+                        ));
+                    }
                 }
-            }
-        };
-        swipeBehavior.attachToRecyclerView(binding.recyclerShoppingList);
+            };
+            swipeBehavior.attachToRecyclerView(binding.recyclerShoppingList);
+        }
 
         hideDisabledFeatures();
 
@@ -339,6 +342,7 @@ public class ShoppingListFragment extends Fragment implements
                 ), TAG
         );
         setArguments(null);
+        isFragmentFromBackground = false;
     }
 
     @Override
@@ -422,7 +426,10 @@ public class ShoppingListFragment extends Fragment implements
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) {
+            isFragmentFromBackground = true;
+            onActivityCreated(null);
+        }
     }
 
     private void updateUI() {
@@ -442,7 +449,10 @@ public class ShoppingListFragment extends Fragment implements
             download();
         } else {
             showOffline = true;
-            new LoadOfflineDataShoppingListHelper(activity, this).execute();
+            new LoadOfflineDataShoppingListHelper(
+                    AppDatabase.getAppDatabase(activity.getApplicationContext()),
+                    this
+            ).execute();
         }
     }
 
@@ -454,7 +464,10 @@ public class ShoppingListFragment extends Fragment implements
             if(!showOffline) {
                 showOffline = true;
                 updateUI();
-                new LoadOfflineDataShoppingListHelper(activity, this).execute();
+                new LoadOfflineDataShoppingListHelper(
+                        AppDatabase.getAppDatabase(activity.getApplicationContext()),
+                        this
+                ).execute();
             }
             showMessage(activity.getString(R.string.msg_no_connection));
         }
@@ -548,7 +561,7 @@ public class ShoppingListFragment extends Fragment implements
 
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
-                    activity,
+                    AppDatabase.getAppDatabase(activity.getApplicationContext()),
                     this,
                     true,
                     shoppingLists,
@@ -584,7 +597,10 @@ public class ShoppingListFragment extends Fragment implements
             showOffline = true;
             updateUI();
         }
-        new LoadOfflineDataShoppingListHelper(activity, this).execute();
+        new LoadOfflineDataShoppingListHelper(
+                AppDatabase.getAppDatabase(activity.getApplicationContext()),
+                this
+        ).execute();
     }
 
     @Override
@@ -661,7 +677,7 @@ public class ShoppingListFragment extends Fragment implements
         } else { // only if search contains something
             ArrayList<ShoppingListItem> searchedItems = new ArrayList<>();
             for(ShoppingListItem shoppingListItem : filteredItems) {
-                String name = null;
+                String name;
                 String description = null;
                 if(shoppingListItem.getProduct() != null) {
                     name = shoppingListItem.getProduct().getName();
@@ -789,7 +805,10 @@ public class ShoppingListFragment extends Fragment implements
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
         if(showOffline) {
-            new LoadOfflineDataShoppingListHelper(activity, this).execute();
+            new LoadOfflineDataShoppingListHelper(
+                    AppDatabase.getAppDatabase(activity.getApplicationContext()),
+                    this
+            ).execute();
         } else {
             onQueueEmpty();
         }
@@ -1258,7 +1277,7 @@ public class ShoppingListFragment extends Fragment implements
                     () -> {
                         showMessage("Entries synced successfully");
                         new StoreOfflineDataShoppingListHelper(
-                                activity,
+                                AppDatabase.getAppDatabase(activity.getApplicationContext()),
                                 this,
                                 false,
                                 shoppingLists,
