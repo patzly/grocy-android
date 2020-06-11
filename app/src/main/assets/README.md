@@ -20,7 +20,6 @@
 
 ## Features
 
-- in-store mode for shopping list with big items
 - translation contribution
 - self-signed certificates
 - help page with note that buttons can be long pressed to get a tip
