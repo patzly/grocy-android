@@ -133,6 +133,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private int daysExpiringSoon;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean isSetupAfterFragmentHasBecomeVisible;
 
     @Override
     public View onCreateView(
@@ -147,15 +148,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerStock.animate().cancel();
-        binding.recyclerStock.setAdapter(null);
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) emptyStateHelper.destroyInstance();
+
+        if(binding != null) {
+            binding.recyclerStock.animate().cancel();
+            binding.recyclerStock.setAdapter(null);
+            binding = null;
+        }
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -206,6 +211,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterLocationId = -1;
         filterProductGroupId = -1;
         isRestoredInstance = false;
+        isSetupAfterFragmentHasBecomeVisible = false;
 
         // INITIALIZE VIEWS
 
@@ -310,46 +316,48 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
-        swipeBehavior = new SwipeBehavior(activity) {
-            @Override
-            public void instantiateUnderlayButton(
-                    RecyclerView.ViewHolder viewHolder,
-                    List<UnderlayButton> underlayButtons
-            ) {
-                StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
-                if(stockItem.getAmount() > 0
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
+        if(!isSetupAfterFragmentHasBecomeVisible) {
+            swipeBehavior = new SwipeBehavior(activity) {
+                @Override
+                public void instantiateUnderlayButton(
+                        RecyclerView.ViewHolder viewHolder,
+                        List<UnderlayButton> underlayButtons
                 ) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_consume_product,
-                            position -> performAction(
-                                    Constants.ACTION.CONSUME,
-                                    displayedItems.get(position).getProduct().getId()
-                            )
-                    ));
+                    StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
+                    if(stockItem.getAmount() > 0
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_consume_product,
+                                position -> performAction(
+                                        Constants.ACTION.CONSUME,
+                                        displayedItems.get(position).getProduct().getId()
+                                )
+                        ));
+                    }
+                    if(stockItem.getAmount()
+                            > stockItem.getAmountOpened()
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                            && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_open_product,
+                                position -> performAction(
+                                        Constants.ACTION.OPEN,
+                                        displayedItems.get(position).getProduct().getId()
+                                )
+                        ));
+                    }
+                    if(underlayButtons.isEmpty()) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_close,
+                                position -> swipeBehavior.recoverLatestSwipedItem()
+                        ));
+                    }
                 }
-                if(stockItem.getAmount()
-                        > stockItem.getAmountOpened()
-                        && stockItem.getProduct().getEnableTareWeightHandling() == 0
-                        && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
-                ) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_open_product,
-                            position -> performAction(
-                                    Constants.ACTION.OPEN,
-                                    displayedItems.get(position).getProduct().getId()
-                            )
-                    ));
-                }
-                if(underlayButtons.isEmpty()) {
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_close,
-                            position -> swipeBehavior.recoverLatestSwipedItem()
-                    ));
-                }
-            }
-        };
-        swipeBehavior.attachToRecyclerView(binding.recyclerStock);
+            };
+            swipeBehavior.attachToRecyclerView(binding.recyclerStock);
+        }
 
         if(savedInstanceState == null) {
             load();
@@ -369,6 +377,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 TAG
         );
         setArguments(null);
+        isSetupAfterFragmentHasBecomeVisible = false;
     }
 
     @Override
@@ -448,69 +457,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         );
     }
 
-    private void reset() {
-        String days = sharedPrefs.getString(
-                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                String.valueOf(5)
-        );
-        // ignore server value if not available
-        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
-                ? 5
-                : Integer.parseInt(days);
-        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
-        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
-
-        // INITIALIZE VARIABLES
-
-        stockItems = new ArrayList<>();
-        expiringItems = new ArrayList<>();
-        expiredItems = new ArrayList<>();
-        missingItems = new ArrayList<>();
-        shoppingListProductIds = new ArrayList<>();
-        missingStockItems = new ArrayList<>();
-        filteredItems = new ArrayList<>();
-        displayedItems = new ArrayList<>();
-        quantityUnits = new ArrayList<>();
-        locations = new ArrayList<>();
-        productGroups = new ArrayList<>();
-
-        itemsToDisplay = Constants.STOCK.FILTER.ALL;
-        errorState = Constants.STATE.NONE;
-        search = "";
-        filterLocationId = -1;
-        filterProductGroupId = -1;
-        isRestoredInstance = false;
-
-        // APP BAR BEHAVIOR
-
-        appBarBehavior = new AppBarBehavior(
-                activity,
-                R.id.linear_stock_app_bar_default,
-                R.id.linear_stock_app_bar_search
-        );
-
-        emptyStateHelper.clearState();
-
-        // CHIPS
-
-        chipExpiring.setActive(false);
-        chipExpired.setActive(false);
-        chipMissing.setActive(false);
-
-        binding.scrollStock.scrollTo(0, 0);
-
-        binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
-
-        load();
-
-        // UPDATE UI
-
-        activity.updateUI(Constants.UI.STOCK_DEFAULT, true, TAG);
-    }
-
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) reset();
+        if(hidden) return;
+
+        isSetupAfterFragmentHasBecomeVisible = true;
+        onViewCreated(requireView(), null);
     }
 
     private void load() {
