@@ -87,10 +87,10 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ShoppingListFragment extends Fragment implements
-        ShoppingListItemAdapter.ShoppingListItemAdapterListener,
-        LoadOfflineDataShoppingListHelper.AsyncResponse,
-        StoreOfflineDataShoppingListHelper.AsyncResponse {
+public class ShoppingListFragment extends Fragment
+        implements ShoppingListItemAdapter.ShoppingListItemAdapterListener,
+            LoadOfflineDataShoppingListHelper.AsyncResponse,
+            StoreOfflineDataShoppingListHelper.AsyncResponse {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST;
     private final static boolean DEBUG = true;
@@ -157,8 +157,8 @@ public class ShoppingListFragment extends Fragment implements
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -424,10 +424,9 @@ public class ShoppingListFragment extends Fragment implements
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) {
-            isFragmentFromBackground = true;
-            onActivityCreated(null);
-        }
+        if(hidden) return;
+        isFragmentFromBackground = true;
+        onViewCreated(requireView(), null);
     }
 
     private void updateUI() {

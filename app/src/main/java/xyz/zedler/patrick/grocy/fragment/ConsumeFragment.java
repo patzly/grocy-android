@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -86,7 +85,7 @@ public class ConsumeFragment extends Fragment {
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
@@ -119,6 +118,7 @@ public class ConsumeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
         adapterProducts = null;
         gson = null;
@@ -133,12 +133,13 @@ public class ConsumeFragment extends Fragment {
         productNames = null;
         productDetails = null;
         selectedStockEntryId = null;
-        Runtime.getRuntime().gc();
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -153,6 +154,7 @@ public class ConsumeFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // INITIALIZE VARIABLES
 
@@ -201,7 +203,7 @@ public class ConsumeFragment extends Fragment {
             }
         });
         binding.autoCompleteConsumeProduct.setOnItemClickListener(
-                (parent, view, position, id) -> loadProductDetails(
+                (parent, itemView, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
@@ -213,7 +215,7 @@ public class ConsumeFragment extends Fragment {
                         binding.editTextConsumeAmount.requestFocus();
                         return true;
                     } return false;
-        });
+                });
 
         // amount
 
@@ -290,7 +292,9 @@ public class ConsumeFragment extends Fragment {
                 );
             } else {
                 // no product selected
-                binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputConsumeProduct.setError(
+                        activity.getString(R.string.error_select_product)
+                );
             }
         });
 
@@ -327,7 +331,9 @@ public class ConsumeFragment extends Fragment {
                 }
             } else {
                 // no product selected
-                binding.textInputConsumeProduct.setError(activity.getString(R.string.error_select_product));
+                binding.textInputConsumeProduct.setError(
+                        activity.getString(R.string.error_select_product)
+                );
             }
         });
 
@@ -363,8 +369,6 @@ public class ConsumeFragment extends Fragment {
             outState.putParcelableArrayList("stockLocations", stockLocations);
             outState.putParcelableArrayList("stockEntries", stockEntries);
 
-            outState.putStringArrayList("productNames", productNames);
-
             outState.putParcelable("productDetails", productDetails);
 
             outState.putInt("selectedLocationId", selectedLocationId);
@@ -384,14 +388,16 @@ public class ConsumeFragment extends Fragment {
         stockLocations = savedInstanceState.getParcelableArrayList("stockLocations");
         stockEntries = savedInstanceState.getParcelableArrayList("stockEntries");
 
-        productNames = savedInstanceState.getStringArrayList("productNames");
+        productNames = getProductNames();
         adapterProducts = new MatchArrayAdapter(activity, productNames);
         binding.autoCompleteConsumeProduct.setAdapter(adapterProducts);
 
         productDetails = savedInstanceState.getParcelable("productDetails");
 
         selectedLocationId = savedInstanceState.getInt("selectedLocationId");
+        selectLocation(selectedLocationId);
         selectedStockEntryId = savedInstanceState.getString("selectedStockEntryId");
+        selectStockEntry(selectedStockEntryId);
 
         amount = savedInstanceState.getDouble("amount");
         maxAmount = savedInstanceState.getDouble("maxAmount");
@@ -402,7 +408,7 @@ public class ConsumeFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void refresh() {
@@ -454,14 +460,7 @@ public class ConsumeFragment extends Fragment {
                         Product product = getProductFromName(
                                 startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                         );
-                        if(product != null) {
-                            // delay is necessary because bottom app bar maybe isn't loaded yet –
-                            // this prevents NullPointerException
-                            new Handler().postDelayed(
-                                    () -> loadProductDetails(product.getId()),
-                                    200
-                            );
-                        }
+                        if(product != null) loadProductDetails(product.getId());
                     }
 
                     binding.swipeConsume.setRefreshing(false);
@@ -920,9 +919,11 @@ public class ConsumeFragment extends Fragment {
 
     public void selectLocation(int selectedId) {
         this.selectedLocationId = selectedId;
-        String location = null;
-        if(stockLocations.isEmpty()) {
-            location = productDetails.getLocation().getName();
+        String location = activity.getString(R.string.subtitle_none);
+        if(stockLocations.isEmpty() && productDetails != null) {
+            if(productDetails.getLocation() != null) {
+                location = productDetails.getLocation().getName();
+            }
         } else {
             StockLocation stockLocation = getStockLocation(selectedId);
             if(stockLocation != null) {
@@ -942,7 +943,7 @@ public class ConsumeFragment extends Fragment {
                                 : R.string.subtitle_selected
                 )
         );
-        setAmountBounds();
+        if(productDetails != null) setAmountBounds();
     }
 
     private void setAmountBounds() {
@@ -1027,31 +1028,29 @@ public class ConsumeFragment extends Fragment {
     public void setUpBottomMenu() {
         MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
-        menuItemBatch.setOnMenuItemClickListener(item -> {
+        if(menuItemBatch != null) menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
             activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             return true;
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        if(menuItemDetails != null) {
-            menuItemDetails.setOnMenuItemClickListener(item -> {
-                IconUtil.start(menuItemDetails);
-                if(productDetails != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                    activity.showBottomSheet(
-                            new ProductOverviewBottomSheetDialogFragment(),
-                            bundle
-                    );
-                } else {
-                    binding.textInputConsumeProduct.setError(
-                            activity.getString(R.string.error_select_product)
-                    );
-                }
-                return true;
-            });
-        }
+        if(menuItemDetails != null) menuItemDetails.setOnMenuItemClickListener(item -> {
+            IconUtil.start(menuItemDetails);
+            if(productDetails != null) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+                activity.showBottomSheet(
+                        new ProductOverviewBottomSheetDialogFragment(),
+                        bundle
+                );
+            } else {
+                binding.textInputConsumeProduct.setError(
+                        activity.getString(R.string.error_select_product)
+                );
+            }
+            return true;
+        });
         menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
         if(menuItemOpen != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)) {
             Drawable icon = menuItemOpen.getIcon();
@@ -1071,18 +1070,18 @@ public class ConsumeFragment extends Fragment {
 
     private void setOpenEnabled(boolean enabled) {
         MenuItem menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
-        if(menuItemOpen != null) {
-            menuItemOpen.setEnabled(enabled);
+        if(menuItemOpen == null) return;
 
-            Drawable icon = menuItemOpen.getIcon();
-            ValueAnimator alphaAnimator = ValueAnimator.ofInt(
-                    icon.getAlpha(), enabled ? 255 : 100
-            );
-            alphaAnimator.addUpdateListener(
-                    animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
-            );
-            alphaAnimator.setDuration(200).start();
-        }
+        menuItemOpen.setEnabled(enabled);
+
+        Drawable icon = menuItemOpen.getIcon();
+        ValueAnimator alphaAnimator = ValueAnimator.ofInt(
+                icon.getAlpha(), enabled ? 255 : 100
+        );
+        alphaAnimator.addUpdateListener(
+                animation -> icon.setAlpha((int) (animation.getAnimatedValue()))
+        );
+        alphaAnimator.setDuration(200).start();
     }
 
     public void addInputAsBarcode() {
