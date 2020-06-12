@@ -84,7 +84,7 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
@@ -119,7 +119,22 @@ public class ShoppingListItemEditFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        sharedPrefs = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        adapterProducts = null;
+        startupBundle = null;
+        products = null;
+        shoppingLists = null;
+        productNames = null;
+        productDetails = null;
+        action = null;
+
+        Runtime.getRuntime().gc();
     }
 
     @Override
@@ -145,6 +160,7 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // VARIABLES
 
