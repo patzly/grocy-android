@@ -223,7 +223,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             binding.swipeMasterQuantityUnit.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -267,7 +267,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                     binding.swipeMasterQuantityUnit.setRefreshing(false);
                     activity.showMessage(
                             Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
+                                    activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_error),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
@@ -434,7 +434,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
                 activity.showMessage(
                         Snackbar.make(
-                                activity.findViewById(R.id.frame_main_container),
+                                activity.binding.frameMainContainer,
                                 activity.getString(
                                         R.string.msg_master_delete_usage,
                                         activity.getString(R.string.type_quantity_unit)
@@ -462,7 +462,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     private void showErrorMessage() {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 )
