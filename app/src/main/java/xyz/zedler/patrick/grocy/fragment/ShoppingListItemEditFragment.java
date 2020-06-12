@@ -80,7 +80,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ShoppingListItemEditFragment extends Fragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -123,8 +123,8 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -218,7 +218,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                         if(productNames.isEmpty()) downloadProductNames();
                     } });
         binding.autoCompleteShoppingListItemEditProduct.setOnItemClickListener(
-                (parent, view, position, id) -> loadProductDetails(
+                (parent, itemView, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
@@ -248,7 +248,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                         }
                         return true;
                     } return false;
-        });
+                });
         nameAutoFilled = false;
 
         // amount
@@ -287,7 +287,9 @@ public class ShoppingListItemEditFragment extends Fragment {
             if((amount != null ? amount : "").toString().isEmpty()) {
                 binding.editTextShoppingListItemEditAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(binding.editTextShoppingListItemEditAmount.getText().toString()) + 1;
+                double amountNew = Double.parseDouble(
+                        binding.editTextShoppingListItemEditAmount.getText().toString()
+                ) + 1;
                 binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(amountNew));
             }
         });
@@ -296,7 +298,9 @@ public class ShoppingListItemEditFragment extends Fragment {
             Editable amount = binding.editTextShoppingListItemEditAmount.getText();
             if(!(amount != null ? amount : "").toString().isEmpty()) {
                 IconUtil.start(binding.imageShoppingListItemEditAmount);
-                double amountNew = Double.parseDouble(binding.editTextShoppingListItemEditAmount.getText().toString()) - 1;
+                double amountNew = Double.parseDouble(
+                        binding.editTextShoppingListItemEditAmount.getText().toString()
+                ) - 1;
                 if(amountNew >= 1) {
                     binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(amountNew));
                 }
@@ -332,8 +336,8 @@ public class ShoppingListItemEditFragment extends Fragment {
 
             outState.putDouble("amount", amount);
             outState.putBoolean("nameAutoFilled", nameAutoFilled);
-            outState.putInt("selectedShoppingListId", selectedShoppingListId);
             outState.putString("action", action);
+            outState.putInt("selectedShoppingListId", selectedShoppingListId);
         }
         super.onSaveInstanceState(outState);
     }
@@ -352,8 +356,9 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         amount = savedInstanceState.getDouble("amount");
         nameAutoFilled = savedInstanceState.getBoolean("nameAutoFilled");
-        selectedShoppingListId = savedInstanceState.getInt("selectedShoppingListId");
         action = savedInstanceState.getString("action");
+        selectedShoppingListId = savedInstanceState.getInt("selectedShoppingListId");
+        selectShoppingList(selectedShoppingListId);
 
         binding.swipeShoppingListItemEdit.setRefreshing(false);
     }
@@ -463,7 +468,9 @@ public class ShoppingListItemEditFragment extends Fragment {
                         shoppingListItem.getProduct().getName()
                 );
             }
-            binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
+            binding.editTextShoppingListItemEditAmount.setText(
+                    NumUtil.trim(shoppingListItem.getAmount())
+            );
             selectShoppingList(shoppingListItem.getShoppingListId());
             binding.editTextShoppingListItemEditNote.setText(
                     TextUtil.trimCharSequence(shoppingListItem.getNote())
