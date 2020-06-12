@@ -7,11 +7,11 @@
 
 ## Improvements
 
+- replace all setError() calls with an ErrorHelper
 - Maybe a simpler solution for fragment navigation: https://github.com/Zhuinden/simple-stack/
-- A medium article about it: https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
-
+  A medium article about it:
+  https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
 - link to grocy.info on login screen
-- replace self-signed certificates description
 - save and restore instance state, migrate to view binding
 --- missing batch items
 --- shopping list edit

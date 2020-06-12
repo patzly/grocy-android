@@ -144,7 +144,7 @@
     <string name="error_timeout">Timeout error</string>
     <string name="error_failed_to_connect_to">Failed to connect to %1$s</string>
     <string name="error_handshake">Certificate missing</string>
-    <string name="error_handshake_description">%1$s requires a self-signed user certificate.\nThis is currently not supported by Grocy Android, but an implementation is planned.\nHowever, you can use a certificate from letsencrypt.org instead of self-signed certificates for encryption.</string>
+    <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate has to be signed by a trusted certificate authority (CA)\nTo meet these requirements, you can use a free certificate from letsencrypt.org for proper encryption.</string>
     <string name="error_unexpected_response_code">Unexpected response code: %1$i</string>
     <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_unknown_subtitle">An error occurred</string>
