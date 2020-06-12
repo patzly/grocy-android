@@ -46,7 +46,8 @@ Grocy Android is still under development. In the next weeks we're going to imple
 Grocy Android requires at least Android 5 Lollipop on your phone and at least grocy `2.7.0` on your server.
 
 **Self-signed certificates are not supported right now** but an implementation is planned.
-However, you can use a certificate from [letsencrypt.org](https://letsencrypt.org/) instead of self-signed certificates for `https` encryption.
+Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
+To meet these requirements, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for proper `https` encryption.
 
 ## Contribution
 
