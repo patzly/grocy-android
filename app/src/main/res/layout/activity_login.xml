@@ -125,6 +125,13 @@
                     app:icon="@drawable/ic_round_info_outline_anim"
                     app:tint="@color/icon"/>
 
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_open_in_browser_anim"
+                    app:tint="@color/icon"/>
+
             </LinearLayout>
 
         </LinearLayout>

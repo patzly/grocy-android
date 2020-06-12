@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.databinding.ActivityLoginBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private FragmentManager fragmentManager;
     private ActivityLoginBinding binding;
+    private ClickUtil clickUtil = new ClickUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         binding.buttonLoginKey.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
             if(getServer().isEmpty()) {
                 binding.textInputLoginServer.setError(getString(R.string.error_empty));
             } else if(!URLUtil.isValidUrl(getServer())) {
@@ -119,6 +122,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.buttonLoginLogin.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
+
             // remove old errors
             binding.textInputLoginServer.setErrorEnabled(false);
             binding.textInputLoginKey.setErrorEnabled(false);
@@ -134,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.buttonLoginDemo.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
             sharedPrefs.edit()
                     .putString(Constants.PREF.SERVER_URL, getString(R.string.url_grocy_demo))
                     .putString(Constants.PREF.API_KEY, "")
@@ -143,13 +149,21 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.buttonLoginFeedback.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
             binding.buttonLoginFeedback.startIconAnimation();
             showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
         });
 
         binding.buttonLoginAbout.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
             binding.buttonLoginAbout.startIconAnimation();
             startActivity(new Intent(this, AboutActivity.class));
+        });
+
+        binding.buttonLoginWebsite.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
+            binding.buttonLoginWebsite.startIconAnimation();
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
         });
 
         if(getIntent().getBooleanExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, false)) {
