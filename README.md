@@ -8,7 +8,8 @@
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
-**This app requires a running self-hosted instance of the [grocy server application](https://grocy.info/). You can try it using the demo option available on the login screen.**
+**This app requires a running self-hosted instance of the [grocy server application](https://grocy.info/).**  
+You can try it using the demo option available on the login screen.
 
 ## Downloads
 
@@ -43,9 +44,12 @@ Grocy Android is still under development. In the next weeks we're going to imple
 
 ## Compatibility
 
-Grocy Android requires at least Android 5 Lollipop on your phone and at least grocy `2.7.0` on your server.
+Grocy Android requires at least [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.
 
-**Self-signed certificates are not supported right now** but an implementation is planned.
+Until Grocy Android `v1.4.0` at least Android 5.0 Lollipop is required on your device.  
+With `v.1.5.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
+
+**Self-signed certificates are not supported right now** but an implementation is planned.  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
 To meet these requirements, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for proper `https` encryption.
 
