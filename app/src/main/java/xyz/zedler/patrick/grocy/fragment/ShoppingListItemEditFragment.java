@@ -35,9 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,8 +46,6 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -93,22 +88,18 @@ public class ShoppingListItemEditFragment extends Fragment {
     private GrocyApi grocyApi;
     private WebRequest request;
     private ArrayAdapter<String> adapterProducts;
-    private ProductDetails productDetails;
     private Bundle startupBundle;
-
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
-    private ArrayList<String> productNames = new ArrayList<>();
-
     private FragmentShoppingListItemEditBinding binding;
-    private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
-    private LinearLayout linearLayoutBarcodesContainer;
-    private TextInputLayout textInputProduct, textInputAmount;
-    private EditText editTextAmount, editTextNote;
-    private ImageView imageViewAmount;
+
+    private ArrayList<Product> products;
+    private ArrayList<ShoppingList> shoppingLists;
+    private ArrayList<String> productNames;
+
+    private ProductDetails productDetails;
+
     private double amount;
     private boolean nameAutoFilled;
-    private int selectedShoppingListId = -1;
+    private int selectedShoppingListId;
     private String action;
 
     @Override
@@ -142,18 +133,32 @@ public class ShoppingListItemEditFragment extends Fragment {
         if(startupBundle != null) {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
             if(action == null) action = Constants.ACTION.CREATE;
+        } else {
+            action = Constants.ACTION.CREATE;
         }
 
-        // GET PREFERENCES
+        // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
-        // INITIALIZE VIEWS
+        // VARIABLES
+
+        products = new ArrayList<>();
+        shoppingLists = new ArrayList<>();
+        productNames = new ArrayList<>();
+
+        productDetails = null;
+
+        amount = 0;
+        nameAutoFilled = false;
+        selectedShoppingListId = -1;
+
+        // VIEWS
 
         binding.frameShoppingListItemEditBack.setOnClickListener(v -> activity.onBackPressed());
 
@@ -198,33 +203,35 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         // product
 
-        textInputProduct = binding.textInputShoppingListItemEditProduct;
-        textInputProduct.setErrorIconDrawable(null);
-        textInputProduct.setEndIconOnClickListener(v -> startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        ));
-        autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
-        assert autoCompleteTextViewProduct != null;
-        autoCompleteTextViewProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(binding.imageShoppingListItemEditProduct);
-                // try again to download products
-                if(productNames.isEmpty()) downloadProductNames();
-            }
-        });
-        autoCompleteTextViewProduct.setOnItemClickListener(
+        binding.textInputShoppingListItemEditProduct.setErrorIconDrawable(null);
+        binding.textInputShoppingListItemEditProduct.setEndIconOnClickListener(
+                v -> startActivityForResult(
+                        new Intent(activity, ScanInputActivity.class),
+                        Constants.REQUEST.SCAN
+                )
+        );
+        binding.autoCompleteShoppingListItemEditProduct.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) {
+                        IconUtil.start(binding.imageShoppingListItemEditProduct);
+                        // try again to download products
+                        if(productNames.isEmpty()) downloadProductNames();
+                    } });
+        binding.autoCompleteShoppingListItemEditProduct.setOnItemClickListener(
                 (parent, view, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
                 )
         );
-        autoCompleteTextViewProduct.setOnEditorActionListener(
+        binding.autoCompleteShoppingListItemEditProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
-                        String input = autoCompleteTextViewProduct.getText().toString().trim();
+                        String input = binding.autoCompleteShoppingListItemEditProduct
+                                .getText()
+                                .toString()
+                                .trim();
                         if(!productNames.isEmpty() && !productNames.contains(input)
                                 && !input.isEmpty()
                                 && !nameAutoFilled
@@ -244,17 +251,9 @@ public class ShoppingListItemEditFragment extends Fragment {
         });
         nameAutoFilled = false;
 
-        // barcodes
-
-        linearLayoutBarcodesContainer = binding.linearShoppingListItemEditBarcodeContainer;
-
         // amount
 
-        textInputAmount = binding.textInputShoppingListItemEditAmount;
-        imageViewAmount = binding.imageShoppingListItemEditAmount;
-        editTextAmount = textInputAmount.getEditText();
-        assert editTextAmount != null;
-        editTextAmount.addTextChangedListener(new TextWatcher() {
+        binding.editTextShoppingListItemEditAmount.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
@@ -267,59 +266,101 @@ public class ShoppingListItemEditFragment extends Fragment {
                 isAmountValid();
             }
         });
-        editTextAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(imageViewAmount);
-                // editTextAmount.selectAll();
-            }
-        });
-        editTextAmount.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                clearInputFocus();
-                return true;
-            } return false;
-        });
+        binding.editTextShoppingListItemEditAmount.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) {
+                        IconUtil.start(binding.imageShoppingListItemEditAmount);
+                        // editTextAmount.selectAll();
+                    }
+                });
+        binding.editTextShoppingListItemEditAmount.setOnEditorActionListener(
+                (TextView v, int actionId, KeyEvent event) -> {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        clearInputFocus();
+                        return true;
+                    } return false;
+                });
 
         binding.buttonShoppingListItemEditAmountMore.setOnClickListener(v -> {
             IconUtil.start(binding.imageShoppingListItemEditAmount);
-            if(editTextAmount.getText().toString().isEmpty()) {
-                editTextAmount.setText(String.valueOf(1));
+            Editable amount = binding.editTextShoppingListItemEditAmount.getText();
+            if((amount != null ? amount : "").toString().isEmpty()) {
+                binding.editTextShoppingListItemEditAmount.setText(String.valueOf(1));
             } else {
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) + 1;
-                editTextAmount.setText(NumUtil.trim(amountNew));
+                double amountNew = Double.parseDouble(binding.editTextShoppingListItemEditAmount.getText().toString()) + 1;
+                binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(amountNew));
             }
         });
 
         binding.buttonShoppingListItemEditAmountLess.setOnClickListener(v -> {
-            if(!editTextAmount.getText().toString().isEmpty()) {
+            Editable amount = binding.editTextShoppingListItemEditAmount.getText();
+            if(!(amount != null ? amount : "").toString().isEmpty()) {
                 IconUtil.start(binding.imageShoppingListItemEditAmount);
-                double amountNew = Double.parseDouble(editTextAmount.getText().toString()) - 1;
+                double amountNew = Double.parseDouble(binding.editTextShoppingListItemEditAmount.getText().toString()) - 1;
                 if(amountNew >= 1) {
-                    editTextAmount.setText(NumUtil.trim(amountNew));
+                    binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(amountNew));
                 }
             }
         });
 
-        // note
-
-        editTextNote = binding.textInputShoppingListItemEditNote.getEditText();
-
         // START
 
-        refresh();
+        if(savedInstanceState == null) {
+            refresh();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
         activity.updateUI(
                 Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
+                savedInstanceState == null,
                 TAG
         );
-        if(getArguments() != null) {
-            getArguments().putBoolean(Constants.ARGUMENT.ANIMATED, true);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!isHidden()) {
+            outState.putParcelableArrayList("products", products);
+            outState.putParcelableArrayList("shoppingLists", shoppingLists);
+
+            outState.putStringArrayList("productNames", productNames);
+
+            outState.putParcelable("productDetails", productDetails);
+
+            outState.putDouble("amount", amount);
+            outState.putBoolean("nameAutoFilled", nameAutoFilled);
+            outState.putInt("selectedShoppingListId", selectedShoppingListId);
+            outState.putString("action", action);
         }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        products = savedInstanceState.getParcelableArrayList("products");
+        shoppingLists = savedInstanceState.getParcelableArrayList("shoppingLists");
+
+        productNames = savedInstanceState.getStringArrayList("productNames");
+        adapterProducts = new MatchArrayAdapter(activity, productNames);
+        binding.autoCompleteShoppingListItemEditProduct.setAdapter(adapterProducts);
+
+        productDetails = savedInstanceState.getParcelable("productDetails");
+
+        amount = savedInstanceState.getDouble("amount");
+        nameAutoFilled = savedInstanceState.getBoolean("nameAutoFilled");
+        selectedShoppingListId = savedInstanceState.getInt("selectedShoppingListId");
+        action = savedInstanceState.getString("action");
+
+        binding.swipeShoppingListItemEdit.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onActivityCreated(null);
     }
 
     private void refresh() {
@@ -329,7 +370,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             binding.swipeShoppingListItemEdit.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
+                            activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
                             Snackbar.LENGTH_SHORT
                     ).setActionTextColor(
@@ -361,7 +402,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     );
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
-                    autoCompleteTextViewProduct.setAdapter(adapterProducts);
+                    binding.autoCompleteShoppingListItemEditProduct.setAdapter(adapterProducts);
                 },
                 this::onError,
                 this::onQueueEmpty
@@ -393,7 +434,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         binding.swipeShoppingListItemEdit.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         activity.getString(R.string.msg_error),
                         Snackbar.LENGTH_SHORT
                 ).setActionTextColor(
@@ -418,13 +459,15 @@ public class ShoppingListItemEditFragment extends Fragment {
             );
             if(shoppingListItem == null) return;
             if(shoppingListItem.getProduct() != null) {
-                autoCompleteTextViewProduct.setText(
+                binding.autoCompleteShoppingListItemEditProduct.setText(
                         shoppingListItem.getProduct().getName()
                 );
             }
-            editTextAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
+            binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
             selectShoppingList(shoppingListItem.getShoppingListId());
-            editTextNote.setText(TextUtil.trimCharSequence(shoppingListItem.getNote()));
+            binding.editTextShoppingListItemEditNote.setText(
+                    TextUtil.trimCharSequence(shoppingListItem.getNote())
+            );
         } else if(action != null && action.equals(Constants.ACTION.CREATE)) {
             if(shoppingLists.size() >= 1) {
                 selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
@@ -436,8 +479,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     Constants.ARGUMENT.PRODUCT
             );
             if(product == null) return;
-            assert textInputProduct.getEditText() != null;
-            textInputProduct.getEditText().setText(product.getName());
+            binding.autoCompleteShoppingListItemEditProduct.setText(product.getName());
             if(shoppingLists.size() >= 1) {
                 selectShoppingList(shoppingLists.get(0).getId());
             } else {
@@ -461,11 +503,13 @@ public class ShoppingListItemEditFragment extends Fragment {
         clearInputFocus();
 
         // PRODUCT
-        autoCompleteTextViewProduct.setText(productDetails.getProduct().getName());
-        textInputProduct.setErrorEnabled(false);
+        binding.autoCompleteShoppingListItemEditProduct.setText(
+                productDetails.getProduct().getName()
+        );
+        binding.textInputShoppingListItemEditProduct.setErrorEnabled(false);
 
         // AMOUNT
-        textInputAmount.setHint(
+        binding.textInputShoppingListItemEditAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
                         productDetails.getQuantityUnitStock().getNamePlural()
@@ -475,8 +519,8 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private void clearInputFocus() {
         activity.hideKeyboard();
-        textInputProduct.clearFocus();
-        textInputAmount.clearFocus();
+        binding.textInputShoppingListItemEditProduct.clearFocus();
+        binding.textInputShoppingListItemEditAmount.clearFocus();
     }
 
     private void loadProductDetails(int productId) {
@@ -506,7 +550,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        autoCompleteTextViewProduct.setText(barcode);
+                        binding.autoCompleteShoppingListItemEditProduct.setText(barcode);
                         nameAutoFilled = true;
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
@@ -514,13 +558,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                                 new InputBarcodeBottomSheetDialogFragment(), bundle
                         );
                     } else {
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.frame_main_container),
-                                        activity.getString(R.string.msg_error),
-                                        Snackbar.LENGTH_SHORT
-                                )
-                        );
+                        showErrorMessage();
                     }
                     binding.swipeShoppingListItemEdit.setRefreshing(false);
                 }
@@ -534,17 +572,19 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try {
+            Editable amountEdit = binding.editTextShoppingListItemEditAmount.getText();
+            String amount = (amountEdit != null ? amountEdit : "").toString().trim();
             jsonObject.put("shopping_list_id", selectedShoppingListId);
-            jsonObject.put("amount", editTextAmount.getText().toString().trim());
+            jsonObject.put("amount", amount);
             Product product = getProductFromName(
-                    autoCompleteTextViewProduct.getText().toString().trim()
+                    binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim()
             );
             if(product != null) {
                 jsonObject.put("product_id", product.getId());
             } else {
                 jsonObject.put("product_id", "");
             }
-            jsonObject.put("note", editTextNote.getText().toString().trim());
+            jsonObject.put("note", amount);
         } catch (JSONException e) {
             Log.e(TAG, "saveShoppingListItem: " + e);
         }
@@ -582,12 +622,15 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     private boolean isFormIncomplete() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
-        if(linearLayoutBarcodesContainer.getChildCount() > 0 && input.isEmpty()) {
-            textInputProduct.setError(activity.getString(R.string.error_empty));
+        String input = binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim();
+        if(binding.linearShoppingListItemEditBarcodeContainer.getChildCount() > 0 && input.isEmpty()
+        ) {
+            binding.textInputShoppingListItemEditProduct.setError(
+                    activity.getString(R.string.error_empty)
+            );
             return true;
         } else {
-            textInputProduct.setErrorEnabled(false);
+            binding.textInputShoppingListItemEditProduct.setErrorEnabled(false);
         }
         if(!productNames.isEmpty()
                 && !productNames.contains(input)
@@ -597,19 +640,17 @@ public class ShoppingListItemEditFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-            activity.showBottomSheet(
-                    new InputNameBottomSheetDialogFragment(), bundle
-            );
+            activity.showBottomSheet(new InputNameBottomSheetDialogFragment(), bundle);
             return true;
         } else return !isAmountValid();
     }
 
     private void editProductBarcodes() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim();
         if(input.isEmpty()) return;
         Product product = getProductFromName(input);
         if(product == null) return;
-        if(linearLayoutBarcodesContainer.getChildCount() == 0) return;
+        if(binding.linearShoppingListItemEditBarcodeContainer.getChildCount() == 0) return;
 
         ArrayList<String> barcodes;
         if(product.getBarcode() == null || product.getBarcode().isEmpty()) {
@@ -621,8 +662,13 @@ public class ShoppingListItemEditFragment extends Fragment {
                     )
             );
         }
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(
+                int i = 0;
+                i < binding.linearShoppingListItemEditBarcodeContainer.getChildCount();
+                i++
+        ) {
+            InputChip inputChip = (InputChip) binding.linearShoppingListItemEditBarcodeContainer
+                    .getChildAt(i);
             if(!barcodes.contains(inputChip.getText())) {
                 barcodes.add(inputChip.getText());
             }
@@ -666,7 +712,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void setProductName(String productName) {
-        autoCompleteTextViewProduct.setText(productName);
+        binding.autoCompleteShoppingListItemEditProduct.setText(productName);
     }
 
     public void selectShoppingList(int selectedId) {
@@ -728,7 +774,9 @@ public class ShoppingListItemEditFragment extends Fragment {
         if(menuItemDetails != null) {
             menuItemDetails.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemDetails);
-                String input = autoCompleteTextViewProduct.getText().toString().trim();
+                String input = binding.autoCompleteShoppingListItemEditProduct.getText()
+                        .toString()
+                        .trim();
                 Bundle bundle = new Bundle();
                 if(productDetails != null && input.equals(productDetails.getProduct().getName())) {
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
@@ -759,13 +807,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                                 }
                         );
                     } else if(!productNames.isEmpty()) {
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.findViewById(R.id.frame_main_container),
-                                        activity.getString(R.string.error_invalid_product),
-                                        Snackbar.LENGTH_SHORT
-                                )
-                        );
+                        showMessage(activity.getString(R.string.error_invalid_product));
                     } else {
                         showErrorMessage();
                     }
@@ -777,10 +819,10 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private boolean isAmountValid() {
         if(amount >= 1) {
-            textInputAmount.setErrorEnabled(false);
+            binding.textInputShoppingListItemEditAmount.setErrorEnabled(false);
             return true;
         } else {
-            textInputAmount.setError(
+            binding.textInputShoppingListItemEditAmount.setError(
                     activity.getString(
                             R.string.error_bounds_min,
                             NumUtil.trim(1)
@@ -791,20 +833,19 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void addInputAsBarcode() {
-        String input = autoCompleteTextViewProduct.getText().toString().trim();
+        String input = binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim();
         if(input.isEmpty()) return;
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) linearLayoutBarcodesContainer.getChildAt(i);
+        for(
+                int i = 0;
+                i < binding.linearShoppingListItemEditBarcodeContainer.getChildCount();
+                i++
+        ) {
+            InputChip inputChip = (InputChip) binding.linearShoppingListItemEditBarcodeContainer
+                    .getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showMessage(
-                        Snackbar.make(
-                                activity.findViewById(R.id.frame_main_container),
-                                activity.getString(R.string.msg_barcode_duplicate),
-                                Snackbar.LENGTH_SHORT
-                        )
-                );
-                autoCompleteTextViewProduct.setText(null);
-                autoCompleteTextViewProduct.requestFocus();
+                showMessage(activity.getString(R.string.msg_barcode_duplicate));
+                binding.autoCompleteShoppingListItemEditProduct.setText(null);
+                binding.autoCompleteShoppingListItemEditProduct.requestFocus();
                 return;
             }
         }
@@ -812,33 +853,39 @@ public class ShoppingListItemEditFragment extends Fragment {
                 activity, input, R.drawable.ic_round_barcode, true
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
-        linearLayoutBarcodesContainer.addView(inputChipBarcode);
-        autoCompleteTextViewProduct.setText(null);
-        autoCompleteTextViewProduct.requestFocus();
+        binding.linearShoppingListItemEditBarcodeContainer.addView(inputChipBarcode);
+        binding.autoCompleteShoppingListItemEditProduct.setText(null);
+        binding.autoCompleteShoppingListItemEditProduct.requestFocus();
     }
 
     public void clearAll() {
-        textInputProduct.setErrorEnabled(false);
-        autoCompleteTextViewProduct.setText(null);
-        textInputAmount.setErrorEnabled(false);
-        editTextAmount.setText(NumUtil.trim(1));
-        imageViewAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
+        binding.textInputShoppingListItemEditProduct.setErrorEnabled(false);
+        binding.autoCompleteShoppingListItemEditProduct.setText(null);
+        binding.textInputShoppingListItemEditAmount.setErrorEnabled(false);
+        binding.editTextShoppingListItemEditAmount.setText(NumUtil.trim(1));
+        binding.imageShoppingListItemEditAmount.setImageResource(
+                R.drawable.ic_round_scatter_plot_anim
+        );
         clearInputFocus();
-        for(int i = 0; i < linearLayoutBarcodesContainer.getChildCount(); i++) {
-            ((InputChip) linearLayoutBarcodesContainer.getChildAt(i)).close();
+        for(
+                int i = 0;
+                i < binding.linearShoppingListItemEditBarcodeContainer.getChildCount();
+                i++
+        ) {
+            ((InputChip) binding.linearShoppingListItemEditBarcodeContainer.getChildAt(i)).close();
         }
         productDetails = null;
         nameAutoFilled = false;
     }
 
-    private void showErrorMessage() {
+    private void showMessage(String msg) {
         activity.showMessage(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        activity.getString(R.string.msg_error),
-                        Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
+    }
+
+    private void showErrorMessage() {
+        showMessage(activity.getString(R.string.msg_error));
     }
 
     @NonNull
