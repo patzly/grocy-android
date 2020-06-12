@@ -60,7 +60,7 @@ public class MasterLocationFragment extends Fragment {
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private FragmentMasterLocationBinding binding;
@@ -85,12 +85,23 @@ public class MasterLocationFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        locations = null;
+        products = null;
+        locationNames = null;
+        editLocation = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -99,6 +110,7 @@ public class MasterLocationFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // INITIALIZE VARIABLES
 
@@ -211,7 +223,7 @@ public class MasterLocationFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
