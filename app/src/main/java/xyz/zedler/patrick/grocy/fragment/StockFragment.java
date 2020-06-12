@@ -95,13 +95,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
     private DownloadHelper downloadHelper;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private StockItemAdapter stockItemAdapter;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
     private EmptyStateHelper emptyStateHelper;
@@ -149,13 +149,49 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     public void onDestroyView() {
         super.onDestroyView();
 
-        if(emptyStateHelper != null) emptyStateHelper.destroyInstance();
-
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
         if(binding != null) {
             binding.recyclerStock.animate().cancel();
             binding.recyclerStock.setAdapter(null);
             binding = null;
         }
+
+        activity = null;
+        sharedPrefs = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        downloadHelper = null;
+        appBarBehavior = null;
+        stockItemAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        swipeBehavior = null;
+        chipExpiring = null;
+        chipExpired = null;
+        chipMissing = null;
+        inputChipFilterLocation = null;
+        inputChipFilterProductGroup = null;
+        stockItems = null;
+        expiringItems = null;
+        expiredItems = null;
+        missingItems = null;
+        shoppingListProductIds = null;
+        missingStockItems = null;
+        filteredItems = null;
+        displayedItems = null;
+        quantityUnits = null;
+        locations = null;
+        productGroups = null;
+        search = null;
+        itemsToDisplay = null;
+        sortMode = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
@@ -164,6 +200,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
 
         // GET PREFERENCES
 
@@ -190,6 +231,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // INITIALIZE VARIABLES
 

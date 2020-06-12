@@ -134,7 +134,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         productDetails = null;
         action = null;
 
-        Runtime.getRuntime().gc();
+        System.gc();
     }
 
     @Override
