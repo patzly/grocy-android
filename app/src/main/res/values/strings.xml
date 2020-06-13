@@ -182,6 +182,7 @@
     <string name="title_create_list_entry">Create list entry</string>
     <string name="title_shopping_list_edit">Edit shopping list</string>
     <string name="title_shopping_list_new">New shopping list</string>
+    <string name="title_shopping_mode">Shopping mode</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>

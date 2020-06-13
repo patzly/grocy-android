@@ -275,6 +275,10 @@ public class MainActivity extends AppCompatActivity {
                             false
                     );
                     break;
+                case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
+                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                    startActivity(new Intent(this, ShoppingActivity.class));
+                    break;
             }
         }
     }

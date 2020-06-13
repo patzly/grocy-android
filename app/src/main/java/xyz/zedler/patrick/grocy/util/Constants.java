@@ -165,6 +165,7 @@ public final class Constants {
         public final static String PURCHASE = "xyz.zedler.patrick.grocy.action.purchase";
         public final static String SHOPPING_LIST = "xyz.zedler.patrick.grocy.action.shoppingList";
         public final static String ADD_ENTRY = "xyz.zedler.patrick.grocy.action.shoppingListEntry";
+        public final static String SHOPPING_MODE = "xyz.zedler.patrick.grocy.action.shoppingMode";
     }
 
     public final static class ARGUMENT {
