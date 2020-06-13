@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -196,15 +195,6 @@ public class ShoppingItemAdapter extends
             holder.textViewAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
         }
 
-        if(shoppingListItem.isMissing()) {
-            holder.textViewAmount.setTextColor(
-                    ContextCompat.getColor(context, R.color.retro_blue_fg)
-            );
-        } else {
-            holder.textViewAmount.setTextColor(
-                    ContextCompat.getColor(context, R.color.on_background_secondary)
-            );
-        }
         if(shoppingListItem.isUndone()) {
             holder.textViewAmount.setPaintFlags(
                     holder.textViewAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)

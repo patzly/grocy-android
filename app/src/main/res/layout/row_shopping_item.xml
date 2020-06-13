@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="@font/roboto_mono_medium"
+                android:textColor="@color/retro_blue_fg"
                 android:singleLine="true" />
 
             <TextView
