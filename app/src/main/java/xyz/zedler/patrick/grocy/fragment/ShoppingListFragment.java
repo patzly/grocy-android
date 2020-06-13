@@ -70,7 +70,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
-import xyz.zedler.patrick.grocy.helper.GroupItemsShoppingListHelper;
+import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -696,7 +696,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void groupItems() {
-        groupedListItems = GroupItemsShoppingListHelper.groupItems(
+        groupedListItems = ShoppingListHelper.groupItems(
                 displayedItems,
                 productGroups,
                 shoppingLists,
@@ -750,21 +750,11 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void changeAppBarTitle(ShoppingList shoppingList) {
-        // change app bar title to shopping list name
-        if(shoppingList == null) return;
-        if(binding.textShoppingListTitle.getText().toString().equals(shoppingList.getName())) {
-            return;
-        }
-        binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
-            binding.textShoppingListTitle.setText(shoppingList.getName());
-            binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
-        }).setDuration(150).start();
-        binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
-                () -> binding.buttonShoppingListLists.animate()
-                        .alpha(1)
-                        .setDuration(150)
-                        .start()
-        ).setDuration(150).start();
+        ShoppingListHelper.changeAppBarTitle(
+                binding.textShoppingListTitle,
+                binding.buttonShoppingListLists,
+                shoppingList
+        );
     }
 
     private void changeAppBarTitle() {
@@ -908,32 +898,8 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void removeItemFromList(int position) {
-        if(position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() > position+1
-                && groupedListItems.get(position+1).getType()
-                == GroupedListItem.TYPE_HEADER
-        ) {
-            groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
-            groupedListItems.remove(position - 1);
-            shoppingListItemAdapter.notifyItemRemoved(position - 1);
-        } else if(position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() == position+1
-        ) {
-            groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
-            groupedListItems.remove(position - 1);
-            shoppingListItemAdapter.notifyItemRemoved(position - 1);
-        } else {
-            groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
-        }
+        ShoppingListHelper.removeItemFromList(shoppingListItemAdapter, groupedListItems, position);
     }
-
 
     public void addItem() {
         Bundle bundle = new Bundle();

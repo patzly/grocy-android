@@ -22,12 +22,15 @@ package xyz.zedler.patrick.grocy.helper;
 import android.app.Activity;
 import android.text.Html;
 import android.text.Spanned;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.adapter.ShoppingItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -36,8 +39,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class GroupItemsShoppingListHelper {
+public class ShoppingListHelper {
 
     public static ArrayList<GroupedListItem> groupItems(
             ArrayList<ShoppingListItem> shoppingListItems,
@@ -102,5 +106,82 @@ public class GroupItemsShoppingListHelper {
             groupedListItems.add(new ShoppingListBottomNotes(notes));
         }
         return groupedListItems;
+    }
+
+    public static void changeAppBarTitle(
+            TextView textTitle,
+            ActionButton buttonLists,
+            ShoppingList shoppingList
+    ) {
+        // change app bar title to shopping list name
+        if(shoppingList == null) return;
+        if(textTitle.getText().toString().equals(shoppingList.getName())) return;
+        textTitle.animate().alpha(0).withEndAction(() -> {
+            textTitle.setText(shoppingList.getName());
+            textTitle.animate().alpha(1).setDuration(150).start();
+        }).setDuration(150).start();
+        buttonLists.animate().alpha(0).withEndAction(
+                () -> buttonLists.animate().alpha(1).setDuration(150).start()
+        ).setDuration(150).start();
+    }
+
+    private static void removeItemFromList(
+            ShoppingListItemAdapter shoppingListItemAdapter,
+            ShoppingItemAdapter shoppingItemAdapter,
+            ArrayList<GroupedListItem> groupedListItems,
+            int position
+    ) {
+        if(position-1 >= 0
+                && groupedListItems.get(position-1).getType()
+                == GroupedListItem.TYPE_HEADER
+                && groupedListItems.size() > position+1
+                && groupedListItems.get(position+1).getType()
+                == GroupedListItem.TYPE_HEADER
+                || position-1 >= 0
+                && groupedListItems.get(position-1).getType()
+                == GroupedListItem.TYPE_HEADER
+                && groupedListItems.size() == position+1
+        ) {
+            groupedListItems.remove(position);
+            groupedListItems.remove(position - 1);
+            if(shoppingListItemAdapter != null) {
+                shoppingListItemAdapter.notifyItemRangeRemoved(position -1, 2);
+            } else if(shoppingItemAdapter != null) {
+                shoppingItemAdapter.notifyItemRangeRemoved(position -1, 2);
+            }
+        } else {
+            groupedListItems.remove(position);
+            if(shoppingListItemAdapter != null) {
+                shoppingListItemAdapter.notifyItemRemoved(position);
+            } else if(shoppingItemAdapter != null) {
+                shoppingItemAdapter.notifyItemRemoved(position);
+            }
+        }
+    }
+
+    public static void removeItemFromList(
+            ShoppingListItemAdapter shoppingListItemAdapter,
+            ArrayList<GroupedListItem> groupedListItems,
+            int position
+    ) {
+        removeItemFromList(
+                shoppingListItemAdapter,
+                null,
+                groupedListItems,
+                position
+        );
+    }
+
+    public static void removeItemFromList(
+            ShoppingItemAdapter shoppingItemAdapter,
+            ArrayList<GroupedListItem> groupedListItems,
+            int position
+    ) {
+        removeItemFromList(
+                null,
+                shoppingItemAdapter,
+                groupedListItems,
+                position
+        );
     }
 }

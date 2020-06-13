@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.helper.GroupItemsShoppingListHelper;
+import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -321,7 +321,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void groupItems() {
-        groupedListItems = GroupItemsShoppingListHelper.groupItems(
+        groupedListItems = ShoppingListHelper.groupItems(
                 shoppingListItemsSelected,
                 productGroups,
                 shoppingLists,
@@ -488,30 +488,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void removeItemFromList(int position) {
-        if(position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() > position+1
-                && groupedListItems.get(position+1).getType()
-                == GroupedListItem.TYPE_HEADER
-        ) {
-            groupedListItems.remove(position);
-            shoppingItemAdapter.notifyItemRemoved(position);
-            groupedListItems.remove(position - 1);
-            shoppingItemAdapter.notifyItemRemoved(position - 1);
-        } else if(position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() == position+1
-        ) {
-            groupedListItems.remove(position);
-            shoppingItemAdapter.notifyItemRemoved(position);
-            groupedListItems.remove(position - 1);
-            shoppingItemAdapter.notifyItemRemoved(position - 1);
-        } else {
-            groupedListItems.remove(position);
-            shoppingItemAdapter.notifyItemRemoved(position);
-        }
+        ShoppingListHelper.removeItemFromList(shoppingItemAdapter, groupedListItems, position);
     }
 
     private void initTimerTask() {
@@ -561,19 +538,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void changeAppBarTitle(ShoppingList shoppingList) {
-        // change app bar title to shopping list name
-        if(shoppingList == null) return;
-        if(binding.textTitle.getText().toString().equals(shoppingList.getName())) return;
-        binding.textTitle.animate().alpha(0).withEndAction(() -> {
-            binding.textTitle.setText(shoppingList.getName());
-            binding.textTitle.animate().alpha(1).setDuration(150).start();
-        }).setDuration(150).start();
-        binding.buttonLists.animate().alpha(0).withEndAction(
-                () -> binding.buttonLists.animate()
-                        .alpha(1)
-                        .setDuration(150)
-                        .start()
-        ).setDuration(150).start();
+        ShoppingListHelper.changeAppBarTitle(binding.textTitle, binding.buttonLists, shoppingList);
     }
 
     private void changeAppBarTitle() {
