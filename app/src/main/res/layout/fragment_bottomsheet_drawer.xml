@@ -23,21 +23,36 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp">
 
-            <LinearLayout
-                android:id="@+id/linear_drawer_shopping_list"
-                style="@style/Theme.Grocy.DrawerItem">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_shopping_list" />
+                <LinearLayout
+                    android:id="@+id/linear_drawer_shopping_list"
+                    style="@style/Theme.Grocy.DrawerItem">
 
-                <TextView
-                    android:id="@+id/text_drawer_shopping_list"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="@string/title_shopping_list" />
+                    <ImageView
+                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_shopping_list" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_drawer_shopping_list"
+                        style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:text="@string/title_shopping_list" />
+
+                </LinearLayout>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_drawer_shopping_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_round_storefront"
+                    app:tint="@color/icon"/>
+
+            </FrameLayout>
 
             <View
                 android:id="@+id/divider_drawer_shopping_list"

@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.SettingsActivity;
+import xyz.zedler.patrick.grocy.ShoppingActivity;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -81,6 +82,11 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
         if(DEBUG) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
+
+        view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
+            startActivity(new Intent(activity, ShoppingActivity.class));
+            new Handler().postDelayed(this::dismiss, 500);
+        });
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
