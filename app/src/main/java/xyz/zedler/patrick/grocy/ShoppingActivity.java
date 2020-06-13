@@ -486,12 +486,17 @@ public class ShoppingActivity extends AppCompatActivity implements
             snackbar.show();
         } else if(removedItemsOld != null && !removedItemsOld.isEmpty()) {
             Log.i(TAG, "updateDoneStatus: " + removedItemsOld);
-            if(position <= groupedListItems.size()) {
+            if(removedItemsOld.get(0).getType() == GroupedListItem.TYPE_HEADER) {
+                int headerPosition = position - 1;
+                groupedListItems.addAll(headerPosition, removedItemsOld);
+                shoppingItemAdapter.notifyItemRangeInserted(headerPosition, removedItemsOld.size());
+            } else if(position <= groupedListItems.size()) {
+                Log.i(TAG, "updateDoneStatus: " + position);
                 groupedListItems.addAll(position, removedItemsOld);
-                shoppingItemAdapter.notifyItemInserted(position);
+                shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
             } else {
                 groupedListItems.addAll(removedItemsOld);
-                shoppingItemAdapter.notifyItemInserted(position);
+                shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
             }
         }
     }
