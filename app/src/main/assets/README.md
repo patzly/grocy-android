@@ -17,6 +17,7 @@
 --- location [x]
 --- locations [x]
 --- missing batch items [x]
+--- product group [x]
 - save and restore instance state, migrate to view binding
 --- shopping list edit
 - missing batch items empty state -> all done/purchased

@@ -60,7 +60,7 @@ public class MasterProductGroupFragment extends Fragment {
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private FragmentMasterProductGroupBinding binding;
@@ -87,12 +87,23 @@ public class MasterProductGroupFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        productGroups = null;
+        products = null;
+        productGroupNames = null;
+        editProductGroup = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -101,6 +112,7 @@ public class MasterProductGroupFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // VARIABLES
 
@@ -170,16 +182,15 @@ public class MasterProductGroupFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("productGroups", productGroups);
-            outState.putParcelableArrayList("products", products);
-            outState.putStringArrayList("productGroupNames", productGroupNames);
+        if(isHidden()) return;
 
-            outState.putParcelable("editProductGroup", editProductGroup);
+        outState.putParcelableArrayList("productGroups", productGroups);
+        outState.putParcelableArrayList("products", products);
+        outState.putStringArrayList("productGroupNames", productGroupNames);
 
-            outState.putBoolean("isRefresh", isRefresh);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putParcelable("editProductGroup", editProductGroup);
+
+        outState.putBoolean("isRefresh", isRefresh);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -198,7 +209,7 @@ public class MasterProductGroupFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
