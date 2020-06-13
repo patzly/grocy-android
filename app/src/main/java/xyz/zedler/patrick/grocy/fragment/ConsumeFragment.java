@@ -364,21 +364,20 @@ public class ConsumeFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("products", products);
-            outState.putParcelableArrayList("stockLocations", stockLocations);
-            outState.putParcelableArrayList("stockEntries", stockEntries);
+        if(isHidden()) return;
 
-            outState.putParcelable("productDetails", productDetails);
+        outState.putParcelableArrayList("products", products);
+        outState.putParcelableArrayList("stockLocations", stockLocations);
+        outState.putParcelableArrayList("stockEntries", stockEntries);
 
-            outState.putInt("selectedLocationId", selectedLocationId);
-            outState.putString("selectedStockEntryId", selectedStockEntryId);
+        outState.putParcelable("productDetails", productDetails);
 
-            outState.putDouble("amount", amount);
-            outState.putDouble("maxAmount", maxAmount);
-            outState.putDouble("minAmount", minAmount);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putInt("selectedLocationId", selectedLocationId);
+        outState.putString("selectedStockEntryId", selectedStockEntryId);
+
+        outState.putDouble("amount", amount);
+        outState.putDouble("maxAmount", maxAmount);
+        outState.putDouble("minAmount", minAmount);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
