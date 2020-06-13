@@ -10,16 +10,15 @@
   A medium article about it:
   https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
 - completed fragments
---- stock
---- shopping list item edit
---- consume
---- location
---- locations
+--- stock [x]
+--- shopping list item edit [x]
+--- shopping list [x]
+--- consume [x]
+--- location [x]
+--- locations [x]
 - save and restore instance state, migrate to view binding
 --- missing batch items
 --- shopping list edit
---- shopping list               UNFINISHED -> offline support
---- shopping list item edit
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features

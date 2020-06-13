@@ -546,6 +546,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_LOCATIONS_DEFAULT:
+            case Constants.UI.MASTER_LOCATIONS_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_master_locations);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(

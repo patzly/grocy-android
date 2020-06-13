@@ -231,19 +231,18 @@ public class MasterLocationsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(!isHidden()) {
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("filteredLocations", filteredLocations);
-            outState.putParcelableArrayList("displayedLocations", displayedLocations);
-            outState.putParcelableArrayList("products", products);
+        if(isHidden()) return;
 
-            outState.putString("search", search);
-            outState.putString("errorState", errorState);
-            outState.putBoolean("sortAscending", sortAscending);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("filteredLocations", filteredLocations);
+        outState.putParcelableArrayList("displayedLocations", displayedLocations);
+        outState.putParcelableArrayList("products", products);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
+        outState.putString("search", search);
+        outState.putString("errorState", errorState);
+        outState.putBoolean("sortAscending", sortAscending);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -265,11 +264,6 @@ public class MasterLocationsFragment extends Fragment
         sortAscending = savedInstanceState.getBoolean("sortAscending");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_LOCATIONS_DEFAULT
-                        : Constants.UI.MASTER_LOCATIONS_SEARCH
-        );
 
         binding.swipeMasterLocations.setRefreshing(false);
 
@@ -389,7 +383,7 @@ public class MasterLocationsFragment extends Fragment
             searchLocations(search);
         } else {
             // EMPTY STATES
-            if(filteredLocations.isEmpty()) {
+            if(filteredLocations.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setEmpty();
             } else {
                 emptyStateHelper.clearState();
@@ -421,7 +415,7 @@ public class MasterLocationsFragment extends Fragment
                     searchedLocations.add(location);
                 }
             }
-            if(searchedLocations.isEmpty()) {
+            if(searchedLocations.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -526,8 +520,10 @@ public class MasterLocationsFragment extends Fragment
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextMasterLocationsSearch.setText("");
         filterLocations();
+
+        emptyStateHelper.clearState();
 
         activity.setUI(Constants.UI.MASTER_LOCATIONS_DEFAULT);
     }
