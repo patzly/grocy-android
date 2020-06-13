@@ -244,13 +244,13 @@ public class MainActivity extends AppCompatActivity {
 
         // SHORTCUT
 
-        Intent intentAction = getIntent();
-        if(intentAction != null && intentAction.getAction() != null) {
+        String action = getIntent() != null ? getIntent().getAction() : null;
+        if(action != null) {
             // no animation for shortcut fragments
             Bundle bundleNoAnim = new Bundle();
             bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
 
-            switch (intentAction.getAction()) {
+            switch (action) {
                 case Constants.SHORTCUT_ACTION.CONSUME:
                     Intent intentConsume = new Intent(this, ScanBatchActivity.class);
                     intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, ShoppingActivity.class));
                     break;
             }
+            getIntent().setAction(null);
         }
     }
 
