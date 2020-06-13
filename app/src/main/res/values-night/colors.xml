@@ -21,6 +21,7 @@
     <!-- BACKGROUND -->
 
     <color name="background">#1e1f22</color>
+    <color name="background_dark">@color/background</color>
     <color name="on_background">@color/grey200</color>
     <color name="on_background_variant">#292a2e</color>
     <color name="on_background_secondary">@color/grey600</color>
@@ -29,7 +30,7 @@
     <!-- SURFACE -->
 
     <color name="surface">#303030</color>
-    <color name="surface_secondary">#2a2a2a</color>
+    <color name="surface_secondary">#2e2e2e</color>
     <color name="on_surface">#fff</color>
     <color name="on_surface_secondary">#404040</color>
     <color name="on_surface_area">#2a2a2a</color>
@@ -42,6 +43,7 @@
     <!-- HIGHLIGHT -->
 
     <color name="highlight">#11bdbdbd</color>
+    <color name="highlight_secondary">#11bdbdbd</color>
 
     <!-- STROKES -->
 

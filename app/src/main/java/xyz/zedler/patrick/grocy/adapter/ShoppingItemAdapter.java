@@ -174,7 +174,9 @@ public class ShoppingItemAdapter extends
         if(shoppingListItem.getProduct() != null) {
             QuantityUnit quantityUnit = new QuantityUnit();
             for(int i = 0; i < quantityUnits.size(); i++) {
-                if(quantityUnits.get(i).getId() == shoppingListItem.getProduct().getQuIdPurchase()) {
+                if(quantityUnits.get(i).getId()
+                        == shoppingListItem.getProduct().getQuIdPurchase()
+                ) {
                     quantityUnit = quantityUnits.get(i);
                     break;
                 }

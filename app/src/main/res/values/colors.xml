@@ -57,7 +57,7 @@
     <!-- BACKGROUND -->
 
     <color name="background">@color/white</color>
-    <color name="background_dark">#0d000000</color>
+    <color name="background_dark">#f4f4f4</color>
     <color name="on_background">#000000</color>
     <color name="on_background_variant">#edeff1</color>
     <color name="on_background_secondary">@color/grey600</color>

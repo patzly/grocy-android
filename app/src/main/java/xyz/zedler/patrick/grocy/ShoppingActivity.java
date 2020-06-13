@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -158,6 +159,20 @@ public class ShoppingActivity extends AppCompatActivity implements
         );
         binding.recycler.setItemAnimator(new ItemAnimator());
         binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
+
+        // UI
+
+        getWindow().setStatusBarColor(
+                ContextCompat.getColor(
+                        this,
+                        Build.VERSION.SDK_INT <= Build.VERSION_CODES.M
+                                ? R.color.status_bar_lollipop
+                                : R.color.primary
+                )
+        );
+        getWindow().setNavigationBarColor(
+                ContextCompat.getColor(this, R.color.background_dark)
+        );
 
         load();
     }
