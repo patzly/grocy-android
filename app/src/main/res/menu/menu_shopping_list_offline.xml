@@ -14,7 +14,7 @@
     <item
         android:id="@+id/action_shopping_mode"
         android:title="@string/action_shopping_mode"
-        android:icon="@drawable/ic_round_shopping_cart"
+        android:icon="@drawable/ic_round_storefront"
         app:showAsAction="ifRoom"
         tools:ignore="AlwaysShowAction" />
 
