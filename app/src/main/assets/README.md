@@ -11,7 +11,6 @@
 - Maybe a simpler solution for fragment navigation: https://github.com/Zhuinden/simple-stack/
   A medium article about it:
   https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
-- login landscape layout
 - completed fragments
 --- stock
 --- shopping list item edit
