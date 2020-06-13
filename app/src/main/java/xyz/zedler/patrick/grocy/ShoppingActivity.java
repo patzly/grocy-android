@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -221,6 +222,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         downloadHelper.downloadShoppingLists(shoppingLists -> {
             this.shoppingLists = shoppingLists;
             changeAppBarTitle();
+            if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
         });
     }
 
@@ -314,6 +316,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         }
 
         changeAppBarTitle();
+        if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
 
         groupItems();
     }
