@@ -2,12 +2,10 @@
 
 ## Bugs
 
-- fix nav bar divider in landscape after rotation in search mode
-- type search -> rotate -> dismiss search -> rotate -> search cannot be set up
-
 ## Improvements
 
-- replace all setError() calls with an ErrorHelper
+- turn error layout into custom view ErrorState and add view methods for control
+- turn empty state layout into custom view EmptyState and add view methods for control
 - Maybe a simpler solution for fragment navigation: https://github.com/Zhuinden/simple-stack/
   A medium article about it:
   https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
@@ -26,8 +24,8 @@
 
 ## Features
 
-- translation contribution
-- self-signed certificates
+- translation contribution: transifex like grocy
+- self-signed client certificates
 - help page with note that buttons can be long pressed to get a tip
 - extended product editing
 
