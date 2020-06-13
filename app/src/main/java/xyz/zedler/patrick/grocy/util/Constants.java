@@ -74,7 +74,8 @@ public final class Constants {
         public final static String SHOPPING_LIST_EDIT = "shopping_list_edit";
         public final static String SHOPPING_LIST_DEFAULT = "shopping_list_default";
         public final static String SHOPPING_LIST_SEARCH = "shopping_list_search";
-        public final static String SHOPPING_LIST_OFFLINE = "shopping_list_offline";
+        public final static String SHOPPING_LIST_OFFLINE_DEFAULT = "shopping_list_offline";
+        public final static String SHOPPING_LIST_OFFLINE_SEARCH = "shopping_list_offline_search";
         public final static String SHOPPING_LIST_ITEM_EDIT = "shopping_list_item_edit";
         public final static String CONSUME = "consume";
         public final static String PURCHASE = "purchase";

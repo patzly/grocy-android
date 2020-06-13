@@ -206,7 +206,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         clickUtil = new ClickUtil();
         animUtil = new AnimUtil();
 
-        // GET PREFERENCES
+        // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String days = sharedPrefs.getString(

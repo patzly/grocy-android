@@ -103,8 +103,8 @@ public class ShoppingListFragment extends Fragment
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private FragmentShoppingListBinding binding;
     private SwipeBehavior swipeBehavior;
     private EmptyStateHelper emptyStateHelper;
@@ -134,7 +134,7 @@ public class ShoppingListFragment extends Fragment
     private boolean isDataStored;
     private boolean showOffline;
     private boolean isRestoredInstance;
-    private boolean isFragmentFromBackground;
+    private boolean isSetupAfterFragmentHasBecomeVisible;
 
     @Override
     public View onCreateView(
@@ -149,11 +149,51 @@ public class ShoppingListFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerShoppingList.animate().cancel();
-        binding.buttonShoppingListLists.animate().cancel();
-        binding.textShoppingListTitle.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerShoppingList.animate().cancel();
+            binding.buttonShoppingListLists.animate().cancel();
+            binding.textShoppingListTitle.animate().cancel();
+            binding.recyclerShoppingList.setAdapter(null);
+            binding = null;
+        }
+
+        activity = null;
+        sharedPrefs = null;
+        downloadHelper = null;
+        database = null;
+        grocyApi = null;
+        request = null;
+        appBarBehavior = null;
+        shoppingListItemAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        swipeBehavior = null;
+        chipMissing = null;
+        chipUndone = null;
+        shoppingLists = null;
+        shoppingListItems = null;
+        shoppingListItemsSelected = null;
+        missingItems = null;
+        missingShoppingListItems = null;
+        undoneShoppingListItems = null;
+        filteredItems = null;
+        displayedItems = null;
+        quantityUnits = null;
+        products = null;
+        productGroups = null;
+        groupedListItems = null;
+        shoppingListHashMap = null;
+        startupShoppingListName = null;
+        itemsToDisplay = null;
+        search = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
@@ -163,11 +203,16 @@ public class ShoppingListFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // GET PREFERENCES
+        // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        // WEB REQUESTS
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
+
+        // WEB
 
         downloadHelper = new DownloadHelper(
                 activity,
@@ -198,7 +243,9 @@ public class ShoppingListFragment extends Fragment
         shoppingListHashMap = new HashMap<>();
 
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-        selectedShoppingListId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
+        selectedShoppingListId = sharedPrefs.getInt(
+                Constants.PREF.SHOPPING_LIST_LAST_ID, 1
+        );
         search = "";
         showOffline = false;
         errorState = Constants.STATE.NONE;
@@ -287,7 +334,7 @@ public class ShoppingListFragment extends Fragment
         binding.recyclerShoppingList.setItemAnimator(new ItemAnimator());
         binding.recyclerShoppingList.setAdapter(new StockPlaceholderAdapter());
 
-        if(!isFragmentFromBackground) {
+        if(!isSetupAfterFragmentHasBecomeVisible) {
             swipeBehavior = new SwipeBehavior(activity) {
                 @Override
                 public void instantiateUnderlayButton(
@@ -329,16 +376,24 @@ public class ShoppingListFragment extends Fragment
 
         // UPDATE UI
 
+        String uiMode;
+        if(appBarBehavior.isPrimaryLayout()) {
+            uiMode = showOffline
+                    ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
+                    : Constants.UI.SHOPPING_LIST_DEFAULT;
+        } else {
+            uiMode = showOffline
+                    ? Constants.UI.SHOPPING_LIST_OFFLINE_SEARCH
+                    : Constants.UI.SHOPPING_LIST_SEARCH;
+        }
         activity.updateUI(
-                showOffline
-                        ? Constants.UI.SHOPPING_LIST_OFFLINE
-                        : Constants.UI.SHOPPING_LIST_DEFAULT,
+                uiMode,
                 (getArguments() == null || getArguments().getBoolean(
                         Constants.ARGUMENT.ANIMATED, true)
                 ), TAG
         );
         setArguments(null);
-        isFragmentFromBackground = false;
+        isSetupAfterFragmentHasBecomeVisible = false;
     }
 
     @Override
@@ -351,6 +406,7 @@ public class ShoppingListFragment extends Fragment
             outState.putParcelableArrayList("missingShoppingListItems", missingShoppingListItems);
             outState.putParcelableArrayList("undoneShoppingListItems", undoneShoppingListItems);
             outState.putParcelableArrayList("filteredItems", filteredItems);
+            outState.putParcelableArrayList("displayedItems", displayedItems);
             outState.putParcelableArrayList("quantityUnits", quantityUnits);
             outState.putParcelableArrayList("products", products);
             outState.putParcelableArrayList("productGroups", productGroups);
@@ -361,6 +417,20 @@ public class ShoppingListFragment extends Fragment
             outState.putBoolean("isDataStored", isDataStored);
             outState.putBoolean("showOffline", showOffline);
             outState.putString("startupShoppingListName", startupShoppingListName);
+
+            products = new ArrayList<>();
+            productGroups = new ArrayList<>();
+            groupedListItems = new ArrayList<>();
+            shoppingListHashMap = new HashMap<>();
+
+            itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
+            selectedShoppingListId = sharedPrefs.getInt(
+                    Constants.PREF.SHOPPING_LIST_LAST_ID, 1
+            );
+            search = "";
+            showOffline = false;
+            errorState = Constants.STATE.NONE;
+            isRestoredInstance = false;
 
             appBarBehavior.saveInstanceState(outState);
         }
@@ -423,14 +493,14 @@ public class ShoppingListFragment extends Fragment
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(hidden) return;
-        isFragmentFromBackground = true;
+        isSetupAfterFragmentHasBecomeVisible = true;
         onViewCreated(requireView(), null);
     }
 
     private void updateUI() {
         activity.updateUI(
                 showOffline
-                        ? Constants.UI.SHOPPING_LIST_OFFLINE
+                        ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
                         : Constants.UI.SHOPPING_LIST_DEFAULT,
                 getArguments() == null || getArguments().getBoolean(
                         Constants.ARGUMENT.ANIMATED, true
