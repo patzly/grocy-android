@@ -26,12 +26,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
@@ -44,10 +45,10 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class ShoppingListItemSpecialAdapter extends
-        RecyclerView.Adapter<ShoppingListItemSpecialAdapter.ViewHolder> {
+public class ShoppingItemAdapter extends
+        RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder> {
 
-    private final static String TAG = ShoppingListItemSpecialAdapter.class.getSimpleName();
+    private final static String TAG = ShoppingItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
     private Context context;
@@ -55,7 +56,7 @@ public class ShoppingListItemSpecialAdapter extends
     private ArrayList<QuantityUnit> quantityUnits;
     private ShoppingListItemSpecialAdapterListener listener;
 
-    public ShoppingListItemSpecialAdapter(
+    public ShoppingItemAdapter(
             Context context,
             ArrayList<GroupedListItem> groupedListItems,
             ArrayList<QuantityUnit> quantityUnits,
@@ -68,26 +69,22 @@ public class ShoppingListItemSpecialAdapter extends
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer, linearLayoutNote, linearLayoutBottomNotes;
+        private MaterialCardView cardViewContainer;
         private TextView textViewName, textViewAmount, textViewGroupName, textViewNote;
         private TextView textViewNoteName, textViewBottomNotes;
-        private View divider;
 
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutContainer = view.findViewById(R.id.linear_shopping_list_item_container);
-            linearLayoutNote = view.findViewById(R.id.linear_shopping_list_note);
-            textViewName = view.findViewById(R.id.text_shopping_list_item_name);
-            textViewAmount = view.findViewById(R.id.text_shopping_list_item_amount);
-            textViewNote = view.findViewById(R.id.text_shopping_list_note);
-            textViewNoteName = view.findViewById(R.id.text_shopping_list_note_as_name);
+            cardViewContainer = view.findViewById(R.id.card_shopping_item_container);
+            textViewName = view.findViewById(R.id.text_shopping_item_name);
+            textViewAmount = view.findViewById(R.id.text_shopping_item_amount);
+            textViewNote = view.findViewById(R.id.text_shopping_item_note);
+            textViewNoteName = view.findViewById(R.id.text_shopping_note_as_name);
 
-            linearLayoutBottomNotes = view.findViewById(R.id.linear_shopping_list_bottom_notes);
-            textViewBottomNotes = view.findViewById(R.id.text_shopping_list_bottom_notes);
+            textViewBottomNotes = view.findViewById(R.id.text_shopping_bottom_notes);
 
-            textViewGroupName = view.findViewById(R.id.text_shopping_list_group_name);
-            divider = view.findViewById(R.id.view_shopping_list_group_divider);
+            textViewGroupName = view.findViewById(R.id.text_shopping_group_name);
         }
     }
 
@@ -100,25 +97,25 @@ public class ShoppingListItemSpecialAdapter extends
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == GroupedListItem.TYPE_HEADER) {
-            return new ShoppingListItemSpecialAdapter.ViewHolder(
+            return new ShoppingItemAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_group_special,
+                            R.layout.row_shopping_group,
                             parent,
                             false
                     )
             );
         } else if(viewType == GroupedListItem.TYPE_ENTRY) {
-            return new ShoppingListItemSpecialAdapter.ViewHolder(
+            return new ShoppingItemAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_item_special,
+                            R.layout.row_shopping_item,
                             parent,
                             false
                     )
             );
         } else {
-            return new ShoppingListItemSpecialAdapter.ViewHolder(
+            return new ShoppingItemAdapter.ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.row_shopping_list_bottom_notes_special,
+                            R.layout.row_shopping_bottom_notes,
                             parent,
                             false
                     )
@@ -134,9 +131,6 @@ public class ShoppingListItemSpecialAdapter extends
 
         int type = getItemViewType(position);
         if (type == GroupedListItem.TYPE_HEADER) {
-            if(holder.getAdapterPosition() == 0) {
-                holder.divider.setVisibility(View.GONE);
-            }
             holder.textViewGroupName.setText(((ProductGroup) groupedListItem).getName());
             return;
         }
@@ -144,11 +138,6 @@ public class ShoppingListItemSpecialAdapter extends
             holder.textViewBottomNotes.setText(
                     ((ShoppingListBottomNotes) groupedListItem).getNotes()
             );
-            holder.linearLayoutBottomNotes.setOnClickListener(
-                    view -> listener.onItemRowClicked(holder.getAdapterPosition())
-            );
-            holder.linearLayoutBottomNotes.setClickable(false);
-            holder.linearLayoutBottomNotes.setFocusable(false);
             return;
         }
 
@@ -230,7 +219,7 @@ public class ShoppingListItemSpecialAdapter extends
 
         if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().isEmpty()) {
             if(holder.textViewName.getVisibility() == View.VISIBLE) {
-                holder.linearLayoutNote.setVisibility(View.VISIBLE);
+                holder.textViewNote.setVisibility(View.VISIBLE);
                 holder.textViewNote.setText(shoppingListItem.getNote().trim());
             } else {
                 holder.textViewNoteName.setVisibility(View.VISIBLE);
@@ -238,7 +227,7 @@ public class ShoppingListItemSpecialAdapter extends
             }
         } else {
             if(holder.textViewName.getVisibility() == View.VISIBLE) {
-                holder.linearLayoutNote.setVisibility(View.GONE);
+                holder.textViewNote.setVisibility(View.GONE);
                 holder.textViewNote.setText(null);
             }
         }
@@ -266,7 +255,7 @@ public class ShoppingListItemSpecialAdapter extends
 
         // CONTAINER
 
-        holder.linearLayoutContainer.setOnClickListener(
+        holder.cardViewContainer.setOnClickListener(
                 view -> listener.onItemRowClicked(holder.getAdapterPosition())
         );
 

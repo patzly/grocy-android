@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemSpecialAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -65,7 +65,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ShoppingActivity extends AppCompatActivity implements
-        ShoppingListItemSpecialAdapter.ShoppingListItemSpecialAdapterListener,
+        ShoppingItemAdapter.ShoppingListItemSpecialAdapterListener,
         LoadOfflineDataShoppingListHelper.AsyncResponse,
         StoreOfflineDataShoppingListHelper.AsyncResponse {
 
@@ -93,7 +93,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private TimerTask timerTask;
 
     private ActivityShoppingBinding binding;
-    private ShoppingListItemSpecialAdapter shoppingListItemAdapter;
+    private ShoppingItemAdapter shoppingItemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -313,7 +313,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                 this
         );
         refreshAdapter(
-                new ShoppingListItemSpecialAdapter(
+                new ShoppingItemAdapter(
                         this,
                         groupedListItems,
                         quantityUnits,
@@ -322,8 +322,8 @@ public class ShoppingActivity extends AppCompatActivity implements
         );
     }
 
-    private void refreshAdapter(ShoppingListItemSpecialAdapter adapter) {
-        shoppingListItemAdapter = adapter;
+    private void refreshAdapter(ShoppingItemAdapter adapter) {
+        shoppingItemAdapter = adapter;
         binding.recycler.animate().alpha(0).setDuration(150).withEndAction(() -> {
             binding.recycler.setAdapter(adapter);
             binding.recycler.animate().alpha(1).setDuration(150).start();
@@ -465,21 +465,21 @@ public class ShoppingActivity extends AppCompatActivity implements
                 == GroupedListItem.TYPE_HEADER
         ) {
             groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
+            shoppingItemAdapter.notifyItemRemoved(position);
             groupedListItems.remove(position - 1);
-            shoppingListItemAdapter.notifyItemRemoved(position - 1);
+            shoppingItemAdapter.notifyItemRemoved(position - 1);
         } else if(position-1 >= 0
                 && groupedListItems.get(position-1).getType()
                 == GroupedListItem.TYPE_HEADER
                 && groupedListItems.size() == position+1
         ) {
             groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
+            shoppingItemAdapter.notifyItemRemoved(position);
             groupedListItems.remove(position - 1);
-            shoppingListItemAdapter.notifyItemRemoved(position - 1);
+            shoppingItemAdapter.notifyItemRemoved(position - 1);
         } else {
             groupedListItems.remove(position);
-            shoppingListItemAdapter.notifyItemRemoved(position);
+            shoppingItemAdapter.notifyItemRemoved(position);
         }
     }
 
