@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -406,7 +407,10 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
+        toggleDoneStatus(shoppingListItem, position);
+    }
 
+    public void toggleDoneStatus(@NonNull ShoppingListItem shoppingListItem, int position) {
         if(shoppingListItem.getDoneSynced() == -1) {
             shoppingListItem.setDoneSynced(shoppingListItem.getDone());
         }
@@ -457,6 +461,18 @@ public class ShoppingActivity extends AppCompatActivity implements
         new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
         if(shoppingListItem.getDone() == 1) {
             shoppingListItemsSelected.remove(shoppingListItem);
+            removeItemFromList(position);
+            Snackbar snackbar = Snackbar.make(
+                    binding.recycler,
+                    R.string.msg_item_marked_as_done,
+                    Snackbar.LENGTH_LONG
+            );
+            snackbar.setAction(
+                    R.string.action_undo,
+                    v -> toggleDoneStatus(shoppingListItem, position)
+            );
+            snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
+            snackbar.show();
         } else {
             shoppingListItemsSelected = new ArrayList<>();
             for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
@@ -466,9 +482,9 @@ public class ShoppingActivity extends AppCompatActivity implements
                 if(shoppingListItem1.getDone() == 0) {
                     shoppingListItemsSelected.add(shoppingListItem1);
                 }
+                groupItems();
             }
         }
-        removeItemFromList(position);
     }
 
     private void removeItemFromList(int position) {
@@ -572,7 +588,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         return shoppingListHashMap.get(shoppingListId);
     }
 
-    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+    public void showBottomSheet(@NonNull BottomSheetDialogFragment bottomSheet, Bundle bundle) {
         String tag = bottomSheet.toString();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
