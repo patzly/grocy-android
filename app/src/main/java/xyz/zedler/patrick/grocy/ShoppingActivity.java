@@ -47,7 +47,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemSpecialAdapter;
-import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
@@ -157,7 +157,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                 )
         );
         binding.recycler.setItemAnimator(new ItemAnimator());
-        binding.recycler.setAdapter(new StockPlaceholderAdapter());
+        binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
         load();
     }
