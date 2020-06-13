@@ -71,14 +71,14 @@ public class MasterLocationsFragment extends Fragment
     private final static boolean DEBUG = false;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterLocationAdapter masterLocationAdapter;
     private FragmentMasterLocationsBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private EmptyStateHelper emptyStateHelper;
 
     private ArrayList<Location> locations;
@@ -104,22 +104,51 @@ public class MasterLocationsFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerMasterLocations.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerMasterLocations.animate().cancel();
+            binding = null;
+        }
+
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        appBarBehavior = null;
+        request = null;
+        masterLocationAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        locations = null;
+        filteredLocations = null;
+        displayedLocations = null;
+        products = null;
+        search = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
 
         // WEB REQUESTS
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // INITIALIZE VARIABLES
 
@@ -202,6 +231,7 @@ public class MasterLocationsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
         if(!isHidden()) {
             outState.putParcelableArrayList("locations", locations);
             outState.putParcelableArrayList("filteredLocations", filteredLocations);
@@ -214,7 +244,6 @@ public class MasterLocationsFragment extends Fragment
 
             appBarBehavior.saveInstanceState(outState);
         }
-        super.onSaveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -255,7 +284,7 @@ public class MasterLocationsFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {

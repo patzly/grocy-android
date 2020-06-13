@@ -17,6 +17,7 @@
 --- shopping list item edit
 --- consume
 --- location
+--- locations
 - save and restore instance state, migrate to view binding
 --- missing batch items
 --- shopping list edit
