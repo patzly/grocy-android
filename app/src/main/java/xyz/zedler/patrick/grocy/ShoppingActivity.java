@@ -326,11 +326,12 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void groupItems() {
         groupedListItems = ShoppingListHelper.groupItems(
+                this,
                 shoppingListItemsSelected,
                 productGroups,
                 shoppingLists,
                 selectedShoppingListId,
-                this
+                true
         );
         refreshAdapter(
                 new ShoppingItemAdapter(

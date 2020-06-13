@@ -390,7 +390,8 @@ public class ShoppingListFragment extends Fragment
                 uiMode,
                 (getArguments() == null || getArguments().getBoolean(
                         Constants.ARGUMENT.ANIMATED, true)
-                ), TAG
+                ),
+                TAG
         );
         setArguments(null);
         isSetupAfterFragmentHasBecomeVisible = false;
@@ -398,43 +399,29 @@ public class ShoppingListFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("shoppingLists", shoppingLists);
-            outState.putParcelableArrayList("shoppingListItems", shoppingListItems);
-            outState.putParcelableArrayList("shoppingListItemsSelected", shoppingListItemsSelected);
-            outState.putParcelableArrayList("missingItems", missingItems);
-            outState.putParcelableArrayList("missingShoppingListItems", missingShoppingListItems);
-            outState.putParcelableArrayList("undoneShoppingListItems", undoneShoppingListItems);
-            outState.putParcelableArrayList("filteredItems", filteredItems);
-            outState.putParcelableArrayList("displayedItems", displayedItems);
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
-            outState.putParcelableArrayList("products", products);
-            outState.putParcelableArrayList("productGroups", productGroups);
+        if(isHidden()) return;
 
-            outState.putString("itemsToDisplay", itemsToDisplay);
-            outState.putString("errorState", errorState);
-            outState.putString("search", search);
-            outState.putBoolean("isDataStored", isDataStored);
-            outState.putBoolean("showOffline", showOffline);
-            outState.putString("startupShoppingListName", startupShoppingListName);
+        outState.putParcelableArrayList("shoppingLists", shoppingLists);
+        outState.putParcelableArrayList("shoppingListItems", shoppingListItems);
+        outState.putParcelableArrayList("shoppingListItemsSelected", shoppingListItemsSelected);
+        outState.putParcelableArrayList("missingItems", missingItems);
+        outState.putParcelableArrayList("missingShoppingListItems", missingShoppingListItems);
+        outState.putParcelableArrayList("undoneShoppingListItems", undoneShoppingListItems);
+        outState.putParcelableArrayList("filteredItems", filteredItems);
+        outState.putParcelableArrayList("displayedItems", displayedItems);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("products", products);
+        outState.putParcelableArrayList("productGroups", productGroups);
 
-            products = new ArrayList<>();
-            productGroups = new ArrayList<>();
-            groupedListItems = new ArrayList<>();
-            shoppingListHashMap = new HashMap<>();
+        outState.putString("itemsToDisplay", itemsToDisplay);
+        outState.putString("errorState", errorState);
+        outState.putString("search", search);
+        outState.putBoolean("isDataStored", isDataStored);
+        outState.putBoolean("showOffline", showOffline);
+        outState.putString("startupShoppingListName", startupShoppingListName);
+        outState.putInt("selectedShoppingListId", selectedShoppingListId);
 
-            itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-            selectedShoppingListId = sharedPrefs.getInt(
-                    Constants.PREF.SHOPPING_LIST_LAST_ID, 1
-            );
-            search = "";
-            showOffline = false;
-            errorState = Constants.STATE.NONE;
-            isRestoredInstance = false;
-
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -442,9 +429,6 @@ public class ShoppingListFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE)
-                || errorState.equals(Constants.STATE.ERROR)
-        ) return;
 
         shoppingLists = savedInstanceState.getParcelableArrayList("shoppingLists");
         shoppingListItems = savedInstanceState.getParcelableArrayList("shoppingListItems");
@@ -463,12 +447,10 @@ public class ShoppingListFragment extends Fragment
         products = savedInstanceState.getParcelableArrayList("products");
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
 
+        groupedListItems = new ArrayList<>();
+        shoppingListHashMap = new HashMap<>();
+
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.SHOPPING_LIST_DEFAULT
-                        : Constants.UI.SHOPPING_LIST_SEARCH
-        );
 
         binding.swipeShoppingList.setRefreshing(false);
 
@@ -493,6 +475,7 @@ public class ShoppingListFragment extends Fragment
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(hidden) return;
+
         isSetupAfterFragmentHasBecomeVisible = true;
         onViewCreated(requireView(), null);
     }
@@ -523,6 +506,7 @@ public class ShoppingListFragment extends Fragment
 
     public void refresh() {
         if(activity.isOnline()) {
+            setError(Constants.STATE.NONE, true);
             download();
         } else {
             binding.swipeShoppingList.setRefreshing(false);
@@ -540,6 +524,8 @@ public class ShoppingListFragment extends Fragment
 
     private void setError(String state, boolean animated) {
         errorState = state;
+
+        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
         View viewOut = binding.scrollShoppingList;
@@ -674,7 +660,7 @@ public class ShoppingListFragment extends Fragment
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits
-    ) {                                                // for offline mode
+    ) { // for offline mode
         this.shoppingListItems = shoppingListItems;
         this.shoppingLists = shoppingLists;
         this.productGroups = productGroups;
@@ -727,9 +713,26 @@ public class ShoppingListFragment extends Fragment
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchItems(search);
-        } else if(displayedItems != filteredItems) { // only update items in recycler view
-            displayedItems = filteredItems;          // if they have changed
-            groupItems();
+        } else {
+            // EMPTY STATES
+            if(filteredItems.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
+                if(itemsToDisplay.equals(Constants.SHOPPING_LIST.FILTER.MISSING)
+                        || itemsToDisplay.equals(Constants.SHOPPING_LIST.FILTER.UNDONE)
+                ) {
+                    emptyStateHelper.setNoFilterResults();
+                } else {
+                    emptyStateHelper.setEmpty();
+                }
+            } else {
+                emptyStateHelper.clearState();
+            }
+
+            // SORTING
+            if(displayedItems != filteredItems || isRestoredInstance) {
+                displayedItems = filteredItems;
+                groupItems();
+            }
+            isRestoredInstance = false;
         }
     }
 
@@ -756,6 +759,11 @@ public class ShoppingListFragment extends Fragment
                     searchedItems.add(shoppingListItem);
                 }
             }
+            if(searchedItems.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
+                emptyStateHelper.setNoSearchResults();
+            } else {
+                emptyStateHelper.clearState();
+            }
             if(displayedItems != searchedItems) {
                 displayedItems = searchedItems;
                 groupItems();
@@ -765,11 +773,14 @@ public class ShoppingListFragment extends Fragment
 
     private void groupItems() {
         groupedListItems = ShoppingListHelper.groupItems(
+                activity,
                 displayedItems,
                 productGroups,
                 shoppingLists,
                 selectedShoppingListId,
-                activity
+                !search.isEmpty() && itemsToDisplay.equals(
+                        Constants.SHOPPING_LIST.FILTER.ALL
+                )
         );
         refreshAdapter(
                 new ShoppingListItemAdapter(
@@ -783,6 +794,10 @@ public class ShoppingListFragment extends Fragment
 
     private void refreshAdapter(ShoppingListItemAdapter adapter) {
         shoppingListItemAdapter = adapter;
+        if(isRestoredInstance) {
+            binding.recyclerShoppingList.setAdapter(adapter);
+            return;
+        }
         binding.recyclerShoppingList.animate().alpha(0).setDuration(150).withEndAction(() -> {
             binding.recyclerShoppingList.setAdapter(adapter);
             binding.recyclerShoppingList.animate().alpha(1).setDuration(150).start();
@@ -878,6 +893,7 @@ public class ShoppingListFragment extends Fragment
         new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
         if(shoppingListItem.getDone() == 1) {
             undoneShoppingListItems.remove(shoppingListItem);
+            if(undoneShoppingListItems.isEmpty()) emptyStateHelper.setNoFilterResults();
         } else {
             undoneShoppingListItems = new ArrayList<>();
             for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
@@ -978,7 +994,6 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void showNotesEditor() {
-        // TODO: Block clicks if no connection
         Bundle bundle = new Bundle();
         bundle.putString(
                 Constants.ARGUMENT.TITLE,
@@ -1245,7 +1260,7 @@ public class ShoppingListFragment extends Fragment
                     },
                     error -> {
                         request.cancelAll(TAG);
-                        showMessage("Failed to sync items"); // TODO
+                        showMessage(activity.getString(R.string.msg_failed_to_sync));
                     },
                     () -> {
                         showMessage("Entries synced successfully");
@@ -1281,7 +1296,7 @@ public class ShoppingListFragment extends Fragment
         if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
             showItemBottomSheet(groupedListItems.get(position), position);
         } else {  // Click on bottom notes
-            showNotesEditor();
+            if(!showOffline) showNotesEditor();
         }
     }
 
@@ -1351,16 +1366,26 @@ public class ShoppingListFragment extends Fragment
         binding.textInputShoppingListSearch.requestFocus();
         activity.showKeyboard(binding.editTextShoppingListSearch);
 
-        activity.setUI(Constants.UI.SHOPPING_LIST_SEARCH);
+        activity.setUI(
+                showOffline
+                        ? Constants.UI.SHOPPING_LIST_OFFLINE_SEARCH
+                        : Constants.UI.SHOPPING_LIST_SEARCH
+        );
     }
 
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextShoppingListSearch.setText("");
         filterItems(itemsToDisplay);
 
-        activity.setUI(Constants.UI.SHOPPING_LIST_DEFAULT);
+        emptyStateHelper.clearState();
+
+        activity.setUI(
+                showOffline
+                        ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
+                        : Constants.UI.SHOPPING_LIST_DEFAULT
+        );
     }
 
     private void showMessage(String msg) {

@@ -641,7 +641,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
         binding.swipeStock.setRefreshing(false);
         setError(Constants.STATE.ERROR, true);
     }

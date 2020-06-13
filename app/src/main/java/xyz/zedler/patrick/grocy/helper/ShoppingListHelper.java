@@ -44,11 +44,12 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 public class ShoppingListHelper {
 
     public static ArrayList<GroupedListItem> groupItems(
+            Activity activity,
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
             int selectedShoppingListId,
-            Activity activity
+            boolean showNotes
     ) {
         HashMap<String, ProductGroup> productGroupHashMap = new HashMap<>();
         for(ProductGroup p : productGroups) productGroupHashMap.put(String.valueOf(p.getId()), p);
@@ -90,6 +91,7 @@ public class ShoppingListHelper {
             SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
             groupedListItems.addAll(itemsOneGroup);
         }
+        if(!showNotes) return groupedListItems;
         // add bottom notes if they are not empty
         HashMap<Integer, ShoppingList> shoppingListHashMap = new HashMap<>();
         for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
