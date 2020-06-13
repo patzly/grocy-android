@@ -60,7 +60,7 @@ public class AppBarBehavior {
 		}
 		outState.putBoolean("appBarBehavior_is_primary", isPrimary);
 
-		if(DEBUG) Log.i(TAG, "saved state");
+		if(DEBUG) Log.i(TAG, "saved state: isPrimary = " + isPrimary);
 	}
 
 	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
