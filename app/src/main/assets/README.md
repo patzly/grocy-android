@@ -12,9 +12,11 @@
   A medium article about it:
   https://medium.com/@Zhuinden/simplified-fragment-navigation-using-a-custom-backstack-552e06961257
 - login landscape layout
-- finished fragments
+- completed fragments
 --- stock
 --- shopping list item edit
+--- consume
+--- location
 - save and restore instance state, migrate to view binding
 --- missing batch items
 --- shopping list edit
