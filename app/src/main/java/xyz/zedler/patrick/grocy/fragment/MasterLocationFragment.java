@@ -181,11 +181,7 @@ public class MasterLocationFragment extends Fragment {
 
         // UPDATE UI
 
-        activity.updateUI(
-                Constants.UI.MASTER_LOCATION,
-                savedInstanceState == null,
-                TAG
-        );
+        activity.updateUI(Constants.UI.MASTER_LOCATION, savedInstanceState == null, TAG);
     }
 
     @Override
@@ -197,6 +193,8 @@ public class MasterLocationFragment extends Fragment {
         outState.putStringArrayList("locationNames", locationNames);
 
         outState.putParcelable("editLocation", editLocation);
+
+        outState.putBoolean("isRefresh", isRefresh);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -208,7 +206,7 @@ public class MasterLocationFragment extends Fragment {
 
         editLocation = savedInstanceState.getParcelable("editLocation");
 
-        isRefresh = false;
+        isRefresh = savedInstanceState.getBoolean("isRefresh");
         binding.swipeMasterLocation.setRefreshing(false);
 
         updateEditReferences();
