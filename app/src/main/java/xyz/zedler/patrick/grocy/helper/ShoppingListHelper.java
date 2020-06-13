@@ -143,8 +143,8 @@ public class ShoppingListHelper {
                 == GroupedListItem.TYPE_HEADER
                 && groupedListItems.size() == position+1
         ) {
-            removedItems.add(groupedListItems.get(position));
             removedItems.add(groupedListItems.get(position - 1));
+            removedItems.add(groupedListItems.get(position));
             groupedListItems.remove(position);
             groupedListItems.remove(position - 1);
             if(shoppingListItemAdapter != null) {

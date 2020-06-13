@@ -424,7 +424,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
 
         if(showOffline) {
-            updateDoneStatus(shoppingListItem, position, groupedListItems);
+            updateDoneStatus(shoppingListItem, position, removedItems);
             return;
         }
 
@@ -440,7 +440,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                     shoppingListItem.getId(),
                     body,
                     response -> {
-                        updateDoneStatus(shoppingListItem, position, groupedListItems);
+                        updateDoneStatus(shoppingListItem, position, removedItems);
                         if(syncNeeded) {
                             downloadShoppingListItems();
                         } else {
@@ -452,13 +452,13 @@ public class ShoppingActivity extends AppCompatActivity implements
                         }
                     },
                     error -> {
-                        updateDoneStatus(shoppingListItem, position, groupedListItems);
+                        updateDoneStatus(shoppingListItem, position, removedItems);
                         loadOfflineData();
                     },
                     false
             );
         }, () -> {
-            updateDoneStatus(shoppingListItem, position, groupedListItems);
+            updateDoneStatus(shoppingListItem, position, removedItems);
             loadOfflineData();
         });
     }
@@ -484,10 +484,14 @@ public class ShoppingActivity extends AppCompatActivity implements
             snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
             snackbar.show();
         } else if(removedItemsOld != null && !removedItemsOld.isEmpty()) {
-            for(GroupedListItem groupedListItem : removedItemsOld) {
-                groupedListItems.add(position, groupedListItem);
+            Log.i(TAG, "updateDoneStatus: " + removedItemsOld);
+            if(position <= groupedListItems.size()) {
+                groupedListItems.addAll(position, removedItemsOld);
+                shoppingItemAdapter.notifyItemInserted(position);
+            } else {
+                groupedListItems.addAll(removedItemsOld);
+                shoppingItemAdapter.notifyItemInserted(position);
             }
-            shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
         }
     }
 
