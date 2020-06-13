@@ -357,16 +357,18 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 				indexStart == 0 ? i < getMenu().size() : i >= 0;
 				i = (indexStart == 0) ? i + 1 : i - 1
 		) {
-			if(i >= getMenu().size() || i < 0) continue;
 			int finalI = i;
 			new Handler().postDelayed(
-					() -> animateMenuItem(
-							getMenu().getItem(finalI),
-							VISIBLE,
-							(indexStart == 0 ? finalI == getMenu().size() - 1 : finalI == 0)
-									? onAnimEnd
-									: null
-					), (long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
+					() -> {
+						if(finalI >= getMenu().size() || finalI < 0) return;
+						animateMenuItem(
+								getMenu().getItem(finalI),
+								VISIBLE,
+								(indexStart == 0 ? finalI == getMenu().size() - 1 : finalI == 0)
+										? onAnimEnd
+										: null
+						);
+					}, (long) (delayIndex * ICON_ANIM_DELAY_FACTOR * ICON_ANIM_DURATION)
 			);
 			delayIndex++;
 		}
