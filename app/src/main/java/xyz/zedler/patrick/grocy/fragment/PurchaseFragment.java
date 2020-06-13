@@ -91,7 +91,7 @@ public class PurchaseFragment extends Fragment {
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private DateUtil dateUtil;
@@ -126,11 +126,28 @@ public class PurchaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        sharedPrefs = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        dateUtil = null;
+        adapterProducts = null;
+        startupBundle = null;
+        products = null;
+        locations = null;
+        stores = null;
+        productNames = null;
+        productDetails = null;
+        selectedBestBeforeDate = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
@@ -146,6 +163,7 @@ public class PurchaseFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // UTILS
 
@@ -195,7 +213,7 @@ public class PurchaseFragment extends Fragment {
             }
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
-                (parent, view, position, id) -> loadProductDetails(
+                (parent, v, position, id) -> loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
@@ -386,24 +404,21 @@ public class PurchaseFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("products", products);
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("stores", stores);
+        if(isHidden()) return;
 
-            outState.putStringArrayList("productNames", productNames);
+        outState.putParcelableArrayList("products", products);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("stores", stores);
 
-            outState.putParcelable("productDetails", productDetails);
+        outState.putParcelable("productDetails", productDetails);
 
-            outState.putInt("selectedLocationId", selectedLocationId);
-            outState.putInt("selectedStoreId", selectedStoreId);
-            outState.putString("selectedBestBeforeDate", selectedBestBeforeDate);
+        outState.putInt("selectedLocationId", selectedLocationId);
+        outState.putInt("selectedStoreId", selectedStoreId);
+        outState.putString("selectedBestBeforeDate", selectedBestBeforeDate);
 
-            outState.putDouble("amount", amount);
-            outState.putDouble("minAmount", minAmount);
-            outState.putBoolean("nameAutoFilled", nameAutoFilled);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putDouble("amount", amount);
+        outState.putDouble("minAmount", minAmount);
+        outState.putBoolean("nameAutoFilled", nameAutoFilled);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -413,7 +428,7 @@ public class PurchaseFragment extends Fragment {
         locations = savedInstanceState.getParcelableArrayList("locations");
         stores = savedInstanceState.getParcelableArrayList("stores");
 
-        productNames = savedInstanceState.getStringArrayList("productNames");
+        productNames = getProductNames();
         adapterProducts = new MatchArrayAdapter(activity, productNames);
         binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
 
@@ -432,7 +447,7 @@ public class PurchaseFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     public void giveBundle(Bundle bundle) {

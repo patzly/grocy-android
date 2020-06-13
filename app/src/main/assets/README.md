@@ -14,6 +14,7 @@
 --- shopping list item edit [x]
 --- shopping list [x]
 --- consume [x]
+--- purchase [x]
 --- location [x]
 --- locations [x]
 --- missing batch items [x]
