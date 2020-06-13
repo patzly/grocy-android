@@ -3,6 +3,7 @@
 ## Bugs
 
 - shopping list edit after rotation showing error when try to save
+- restore sort icon
 
 ## Improvements
 
@@ -24,8 +25,12 @@
 --- product [x]
 --- quantity unit [x]
 --- store [x]
+--- shopping list edit [x]
+--- stores [x]
+--- quantity units
+--- products
+--- product groups
 - save and restore instance state, migrate to view binding
---- shopping list edit
 - missing batch items empty state -> all done/purchased
 - product edit with location tracking disabled: space between barcode chips and other field
 

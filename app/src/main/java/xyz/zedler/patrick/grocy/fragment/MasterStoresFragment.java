@@ -71,14 +71,14 @@ public class MasterStoresFragment extends Fragment
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterStoreAdapter masterStoreAdapter;
     private FragmentMasterStoresBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private EmptyStateHelper emptyStateHelper;
 
     private ArrayList<Store> stores;
@@ -104,24 +104,52 @@ public class MasterStoresFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerMasterStores.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerMasterStores.animate().cancel();
+            binding = null;
+        }
+
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        appBarBehavior = null;
+        request = null;
+        clickUtil = null;
+        animUtil = null;
+        products = null;
+        search = null;
+        errorState = null;
+        stores = null;
+        filteredStores = null;
+        displayedStores = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
+
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         stores = new ArrayList<>();
         filteredStores = new ArrayList<>();
@@ -133,7 +161,7 @@ public class MasterStoresFragment extends Fragment
         sortAscending = true;
         isRestoredInstance = savedInstanceState != null;
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
         binding.frameMasterStoresBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameMasterStoresSearchClose.setOnClickListener(v -> dismissSearch());
@@ -202,19 +230,18 @@ public class MasterStoresFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("stores", stores);
-            outState.putParcelableArrayList("filteredStores", filteredStores);
-            outState.putParcelableArrayList("displayedStores", displayedStores);
-            outState.putParcelableArrayList("products", products);
+        if(isHidden()) return;
 
-            outState.putString("search", search);
-            outState.putString("errorState", errorState);
-            outState.putBoolean("sortAscending", sortAscending);
+        outState.putParcelableArrayList("stores", stores);
+        outState.putParcelableArrayList("filteredStores", filteredStores);
+        outState.putParcelableArrayList("displayedStores", displayedStores);
+        outState.putParcelableArrayList("products", products);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putString("search", search);
+        outState.putString("errorState", errorState);
+        outState.putBoolean("sortAscending", sortAscending);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -222,9 +249,6 @@ public class MasterStoresFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
-            return;
-        }
 
         stores = savedInstanceState.getParcelableArrayList("stores");
         filteredStores = savedInstanceState.getParcelableArrayList("filteredStores");
@@ -236,11 +260,6 @@ public class MasterStoresFragment extends Fragment
         sortAscending = savedInstanceState.getBoolean("sortAscending");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_STORES_DEFAULT
-                        : Constants.UI.MASTER_STORES_SEARCH
-        );
 
         binding.swipeMasterStores.setRefreshing(false);
 
@@ -255,7 +274,7 @@ public class MasterStoresFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
@@ -360,7 +379,7 @@ public class MasterStoresFragment extends Fragment
             searchStores(search);
         } else {
             // EMPTY STATES
-            if(filteredStores.isEmpty()) {
+            if(filteredStores.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setEmpty();
             } else {
                 emptyStateHelper.clearState();
@@ -392,7 +411,7 @@ public class MasterStoresFragment extends Fragment
                     searchedStores.add(store);
                 }
             }
-            if(searchedStores.isEmpty()) {
+            if(searchedStores.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -507,8 +526,10 @@ public class MasterStoresFragment extends Fragment
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextMasterStoresSearch.setText("");
         filterStores();
+
+        emptyStateHelper.clearState();
 
         activity.setUI(Constants.UI.MASTER_STORES_DEFAULT);
     }

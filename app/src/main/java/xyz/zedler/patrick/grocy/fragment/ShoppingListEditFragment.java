@@ -162,7 +162,9 @@ public class ShoppingListEditFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 String input = s.toString().trim();
-                if(!input.isEmpty() && shoppingListNames.contains(input) && savedInstanceState == null) {
+                if(!input.isEmpty() && shoppingListNames.contains(input)
+                        && savedInstanceState == null
+                ) {
                     binding.textInputShoppingListEditName.setError(
                             activity.getString(R.string.error_name_exists)
                     );
