@@ -190,14 +190,13 @@ public class MasterLocationFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("products", products);
-            outState.putStringArrayList("locationNames", locationNames);
+        if(isHidden()) return;
 
-            outState.putParcelable("editLocation", editLocation);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("products", products);
+        outState.putStringArrayList("locationNames", locationNames);
+
+        outState.putParcelable("editLocation", editLocation);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
