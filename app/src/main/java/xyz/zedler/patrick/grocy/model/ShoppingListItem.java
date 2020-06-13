@@ -264,6 +264,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "ShoppingListItem(" + id + ")";
+        return "ShoppingListItem(" + id + ", " + productName + ")";
     }
 }
