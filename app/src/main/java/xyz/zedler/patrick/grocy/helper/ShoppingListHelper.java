@@ -125,12 +125,13 @@ public class ShoppingListHelper {
         ).setDuration(150).start();
     }
 
-    private static void removeItemFromList(
+    private static ArrayList<GroupedListItem> removeItemFromList(
             ShoppingListItemAdapter shoppingListItemAdapter,
             ShoppingItemAdapter shoppingItemAdapter,
             ArrayList<GroupedListItem> groupedListItems,
             int position
     ) {
+        ArrayList<GroupedListItem> removedItems = new ArrayList<>();
         if(position-1 >= 0
                 && groupedListItems.get(position-1).getType()
                 == GroupedListItem.TYPE_HEADER
@@ -142,6 +143,8 @@ public class ShoppingListHelper {
                 == GroupedListItem.TYPE_HEADER
                 && groupedListItems.size() == position+1
         ) {
+            removedItems.add(groupedListItems.get(position));
+            removedItems.add(groupedListItems.get(position - 1));
             groupedListItems.remove(position);
             groupedListItems.remove(position - 1);
             if(shoppingListItemAdapter != null) {
@@ -150,6 +153,7 @@ public class ShoppingListHelper {
                 shoppingItemAdapter.notifyItemRangeRemoved(position -1, 2);
             }
         } else {
+            removedItems.add(groupedListItems.get(position));
             groupedListItems.remove(position);
             if(shoppingListItemAdapter != null) {
                 shoppingListItemAdapter.notifyItemRemoved(position);
@@ -157,6 +161,7 @@ public class ShoppingListHelper {
                 shoppingItemAdapter.notifyItemRemoved(position);
             }
         }
+        return removedItems;
     }
 
     public static void removeItemFromList(
@@ -172,12 +177,12 @@ public class ShoppingListHelper {
         );
     }
 
-    public static void removeItemFromList(
+    public static ArrayList<GroupedListItem> removeItemFromList(
             ShoppingItemAdapter shoppingItemAdapter,
             ArrayList<GroupedListItem> groupedListItems,
             int position
     ) {
-        removeItemFromList(
+        return removeItemFromList(
                 null,
                 shoppingItemAdapter,
                 groupedListItems,

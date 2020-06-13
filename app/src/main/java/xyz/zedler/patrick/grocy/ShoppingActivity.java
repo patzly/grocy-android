@@ -409,10 +409,14 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
-        toggleDoneStatus(shoppingListItem, position);
+        toggleDoneStatus(shoppingListItem, position, null);
     }
 
-    public void toggleDoneStatus(@NonNull ShoppingListItem shoppingListItem, int position) {
+    public void toggleDoneStatus(
+            @NonNull ShoppingListItem shoppingListItem,
+            int position,
+            ArrayList<GroupedListItem> removedItems
+    ) {
         if(shoppingListItem.getDoneSynced() == -1) {
             shoppingListItem.setDoneSynced(shoppingListItem.getDone());
         }
@@ -420,7 +424,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
 
         if(showOffline) {
-            updateDoneStatus(shoppingListItem, position);
+            updateDoneStatus(shoppingListItem, position, groupedListItems);
             return;
         }
 
@@ -436,7 +440,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                     shoppingListItem.getId(),
                     body,
                     response -> {
-                        updateDoneStatus(shoppingListItem, position);
+                        updateDoneStatus(shoppingListItem, position, groupedListItems);
                         if(syncNeeded) {
                             downloadShoppingListItems();
                         } else {
@@ -448,22 +452,26 @@ public class ShoppingActivity extends AppCompatActivity implements
                         }
                     },
                     error -> {
-                        updateDoneStatus(shoppingListItem, position);
+                        updateDoneStatus(shoppingListItem, position, groupedListItems);
                         loadOfflineData();
                     },
                     false
             );
         }, () -> {
-            updateDoneStatus(shoppingListItem, position);
+            updateDoneStatus(shoppingListItem, position, groupedListItems);
             loadOfflineData();
         });
     }
 
-    private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
+    private void updateDoneStatus(
+            ShoppingListItem shoppingListItem,
+            int position,
+            ArrayList<GroupedListItem> removedItemsOld
+    ) {
         new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
         if(shoppingListItem.getDone() == 1) {
             shoppingListItemsSelected.remove(shoppingListItem);
-            removeItemFromList(position);
+            ArrayList<GroupedListItem> removedItemsNew = removeItemFromList(position);
             Snackbar snackbar = Snackbar.make(
                     binding.recycler,
                     R.string.msg_item_marked_as_done,
@@ -471,26 +479,24 @@ public class ShoppingActivity extends AppCompatActivity implements
             );
             snackbar.setAction(
                     R.string.action_undo,
-                    v -> toggleDoneStatus(shoppingListItem, position)
+                    v -> toggleDoneStatus(shoppingListItem, position, removedItemsNew)
             );
             snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
             snackbar.show();
-        } else {
-            shoppingListItemsSelected = new ArrayList<>();
-            for(ShoppingListItem shoppingListItem1 : shoppingListItems) {
-                if(shoppingListItem1.getShoppingListId() != selectedShoppingListId) {
-                    continue;
-                }
-                if(shoppingListItem1.getDone() == 0) {
-                    shoppingListItemsSelected.add(shoppingListItem1);
-                }
-                groupItems();
+        } else if(removedItemsOld != null && !removedItemsOld.isEmpty()) {
+            for(GroupedListItem groupedListItem : removedItemsOld) {
+                groupedListItems.add(position, groupedListItem);
             }
+            shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
         }
     }
 
-    private void removeItemFromList(int position) {
-        ShoppingListHelper.removeItemFromList(shoppingItemAdapter, groupedListItems, position);
+    private ArrayList<GroupedListItem> removeItemFromList(int position) {
+        return ShoppingListHelper.removeItemFromList(
+                shoppingItemAdapter,
+                groupedListItems,
+                position
+        );
     }
 
     private void initTimerTask() {
