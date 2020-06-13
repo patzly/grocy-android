@@ -60,7 +60,7 @@ public class MasterStoreFragment extends Fragment {
     private final static boolean DEBUG = false;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private FragmentMasterStoreBinding binding;
@@ -85,22 +85,34 @@ public class MasterStoreFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        stores = null;
+        products = null;
+        storeNames = null;
+        editStore = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         stores = new ArrayList<>();
         products = new ArrayList<>();
@@ -109,7 +121,7 @@ public class MasterStoreFragment extends Fragment {
         editStore = null;
         isRefresh = false;
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
         binding.frameMasterStoreCancel.setOnClickListener(v -> activity.onBackPressed());
 
@@ -167,14 +179,13 @@ public class MasterStoreFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("stores", stores);
-            outState.putParcelableArrayList("products", products);
-            outState.putStringArrayList("storeNames", storeNames);
+        if(isHidden()) return;
 
-            outState.putParcelable("editStore", editStore);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("stores", stores);
+        outState.putParcelableArrayList("products", products);
+        outState.putStringArrayList("storeNames", storeNames);
+
+        outState.putParcelable("editStore", editStore);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -200,7 +211,7 @@ public class MasterStoreFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
