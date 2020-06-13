@@ -43,7 +43,7 @@ public class MasterPlaceholderAdapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_products_placeholder,
+                        R.layout.row_master_placeholder,
                         parent,
                         false
                 )
