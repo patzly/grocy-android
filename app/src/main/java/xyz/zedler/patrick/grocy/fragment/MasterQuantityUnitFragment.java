@@ -60,7 +60,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private FragmentMasterQuantityUnitBinding binding;
@@ -91,7 +91,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
@@ -101,6 +101,7 @@ public class MasterQuantityUnitFragment extends Fragment {
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // VARIABLES
 
@@ -176,16 +177,15 @@ public class MasterQuantityUnitFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
-            outState.putParcelableArrayList("products", products);
-            outState.putStringArrayList("quantityUnitNames", quantityUnitNames);
+        if(isHidden()) return;
 
-            outState.putParcelable("editQuantityUnit", editQuantityUnit);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("products", products);
+        outState.putStringArrayList("quantityUnitNames", quantityUnitNames);
 
-            outState.putBoolean("isRefresh", isRefresh);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putParcelable("editQuantityUnit", editQuantityUnit);
+
+        outState.putBoolean("isRefresh", isRefresh);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -204,7 +204,7 @@ public class MasterQuantityUnitFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
