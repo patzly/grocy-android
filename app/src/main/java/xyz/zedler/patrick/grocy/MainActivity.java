@@ -521,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_PRODUCTS_DEFAULT:
+            case Constants.UI.MASTER_PRODUCTS_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_master_products);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
@@ -572,6 +573,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_STORES_DEFAULT:
+            case Constants.UI.MASTER_STORES_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_master_stores);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
@@ -597,6 +599,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT:
+            case Constants.UI.MASTER_QUANTITY_UNITS_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_master_quantity_units);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
@@ -622,6 +625,7 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT:
+            case Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_master_product_groups);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(

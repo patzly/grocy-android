@@ -71,15 +71,15 @@ public class MasterQuantityUnitsFragment extends Fragment
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
-    private FragmentMasterQuantityUnitsBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private EmptyStateHelper emptyStateHelper;
+    private FragmentMasterQuantityUnitsBinding binding;
 
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<QuantityUnit> filteredQuantityUnits;
@@ -106,22 +106,51 @@ public class MasterQuantityUnitsFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerMasterQuantityUnits.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerMasterQuantityUnits.animate().cancel();
+            binding = null;
+        }
+
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        appBarBehavior = null;
+        request = null;
+        masterQuantityUnitAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        quantityUnits = null;
+        filteredQuantityUnits = null;
+        displayedQuantityUnits = null;
+        products = null;
+        search = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
 
         // WEB REQUESTS
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // INITIALIZE VARIABLES
 
@@ -204,19 +233,18 @@ public class MasterQuantityUnitsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
-            outState.putParcelableArrayList("filteredQuantityUnits", filteredQuantityUnits);
-            outState.putParcelableArrayList("displayedQuantityUnits", displayedQuantityUnits);
-            outState.putParcelableArrayList("products", products);
+        if(isHidden()) return;
 
-            outState.putString("search", search);
-            outState.putString("errorState", errorState);
-            outState.putBoolean("sortAscending", sortAscending);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("filteredQuantityUnits", filteredQuantityUnits);
+        outState.putParcelableArrayList("displayedQuantityUnits", displayedQuantityUnits);
+        outState.putParcelableArrayList("products", products);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putString("search", search);
+        outState.putString("errorState", errorState);
+        outState.putBoolean("sortAscending", sortAscending);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -224,9 +252,6 @@ public class MasterQuantityUnitsFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
-            return;
-        }
 
         quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
         filteredQuantityUnits = savedInstanceState.getParcelableArrayList(
@@ -242,11 +267,6 @@ public class MasterQuantityUnitsFragment extends Fragment
         sortAscending = savedInstanceState.getBoolean("sortAscending");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT
-                        : Constants.UI.MASTER_QUANTITY_UNITS_SEARCH
-        );
 
         binding.swipeMasterQuantityUnits.setRefreshing(false);
 
@@ -261,7 +281,7 @@ public class MasterQuantityUnitsFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
@@ -366,7 +386,7 @@ public class MasterQuantityUnitsFragment extends Fragment
             searchQuantityUnits(search);
         } else {
             // EMPTY STATES
-            if(filteredQuantityUnits.isEmpty()) {
+            if(filteredQuantityUnits.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setEmpty();
             } else {
                 emptyStateHelper.clearState();
@@ -378,7 +398,9 @@ public class MasterQuantityUnitsFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(TAG, "filterQuantityUnits: filteredQuantityUnits = " + filteredQuantityUnits);
+        if(DEBUG) Log.i(
+                TAG, "filterQuantityUnits: filteredQuantityUnits = " + filteredQuantityUnits
+        );
     }
 
     private void searchQuantityUnits(String search) {
@@ -398,7 +420,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                     searchedQuantityUnits.add(quantityUnit);
                 }
             }
-            if(searchedQuantityUnits.isEmpty()) {
+            if(searchedQuantityUnits.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -407,7 +429,10 @@ public class MasterQuantityUnitsFragment extends Fragment
                 displayedQuantityUnits = searchedQuantityUnits;
                 sortQuantityUnits();
             }
-            if(DEBUG) Log.i(TAG, "searchQuantityUnits: searchedQuantityUnits = " + searchedQuantityUnits);
+            if(DEBUG) Log.i(
+                    TAG,
+                    "searchQuantityUnits: searchedQuantityUnits = " + searchedQuantityUnits
+            );
         }
     }
 
@@ -503,7 +528,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextMasterQuantityUnitsSearch.setText("");
         filterQuantityUnits();
 
         activity.setUI(Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT);

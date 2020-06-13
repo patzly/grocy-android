@@ -27,8 +27,8 @@
 --- store [x]
 --- shopping list edit [x]
 --- stores [x]
---- quantity units
---- products
+--- quantity units: [x]
+--- products [x]
 --- product groups
 - save and restore instance state, migrate to view binding
 - missing batch items empty state -> all done/purchased
