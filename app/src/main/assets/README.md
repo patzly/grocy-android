@@ -2,6 +2,8 @@
 
 ## Bugs
 
+- shopping list edit after rotation showing error when try to save
+
 ## Improvements
 
 - turn error layout into custom view ErrorState and add view methods for control

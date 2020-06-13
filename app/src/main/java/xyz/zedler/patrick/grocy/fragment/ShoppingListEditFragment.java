@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +36,6 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -62,17 +60,15 @@ public class ShoppingListEditFragment extends Fragment {
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
     private Bundle startupBundle;
-
-    private ArrayList<ShoppingList> shoppingLists = new ArrayList<>();
-    private ArrayList<String> shoppingListNames = new ArrayList<>();
-
     private FragmentShoppingListEditBinding binding;
-    private TextInputLayout textInputName;
-    private EditText editTextName;
+
+    private ArrayList<ShoppingList> shoppingLists;
+    private ArrayList<String> shoppingListNames;
+
     private String action;
 
     @Override
@@ -81,18 +77,25 @@ public class ShoppingListEditFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentShoppingListEditBinding.inflate(
-                inflater,
-                container,
-                false
-        );
+        binding = FragmentShoppingListEditBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        request = null;
+        startupBundle = null;
+        shoppingLists = null;
+        shoppingListNames = null;
+        action = null;
+
+        System.gc();
     }
 
     @Override
@@ -103,17 +106,24 @@ public class ShoppingListEditFragment extends Fragment {
         assert activity != null;
 
         startupBundle = getArguments();
+        action = Constants.ACTION.CREATE;
         if(startupBundle != null) {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
             if(action == null) action = Constants.ACTION.CREATE;
         }
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
-        // INITIALIZE VIEWS
+        // VARIABLES
+
+        shoppingLists = new ArrayList<>();
+        shoppingListNames = new ArrayList<>();
+
+        // VIEWS
 
         binding.frameShoppingListEditBack.setOnClickListener(v -> activity.onBackPressed());
 
@@ -141,43 +151,63 @@ public class ShoppingListEditFragment extends Fragment {
 
         // name
 
-        textInputName = binding.textInputShoppingListEditName;
-        editTextName = textInputName.getEditText();
-        assert editTextName != null;
-        editTextName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(binding.imageShoppingListEditName);
-            }
-        });
-        editTextName.addTextChangedListener(new TextWatcher() {
+        binding.editTextShoppingListEditName.setOnFocusChangeListener(
+                (View v, boolean hasFocus) -> {
+                    if(hasFocus) {
+                        IconUtil.start(binding.imageShoppingListEditName);
+                    }
+                });
+        binding.editTextShoppingListEditName.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 String input = s.toString().trim();
-                if(!input.isEmpty() && shoppingListNames.contains(input)) {
-                    textInputName.setError(activity.getString(R.string.error_name_exists));
-                } else if(textInputName.isErrorEnabled()) {
-                    textInputName.setErrorEnabled(false);
+                if(!input.isEmpty() && shoppingListNames.contains(input) && savedInstanceState == null) {
+                    binding.textInputShoppingListEditName.setError(
+                            activity.getString(R.string.error_name_exists)
+                    );
+                } else if(binding.textInputShoppingListEditName.isErrorEnabled()) {
+                    binding.textInputShoppingListEditName.setErrorEnabled(false);
                 }
             }
         });
 
         // START
 
-        refresh();
+        if(savedInstanceState == null) {
+            refresh();
+        } else {
+            restoreSavedInstanceState(savedInstanceState);
+        }
 
         // UPDATE UI
 
         activity.updateUI(
                 Constants.UI.SHOPPING_LIST_EDIT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
+                savedInstanceState == null,
                 TAG
         );
-        if(getArguments() != null) {
-            getArguments().putBoolean(Constants.ARGUMENT.ANIMATED, true);
-        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(isHidden()) return;
+
+        outState.putParcelableArrayList("shoppingLists", shoppingLists);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        shoppingLists = savedInstanceState.getParcelableArrayList("shoppingLists");
+        shoppingListNames = getShoppingListNames();
+
+        binding.swipeShoppingListEdit.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void refresh() {
@@ -258,23 +288,24 @@ public class ShoppingListEditFragment extends Fragment {
         clearInputFocus();
 
         // NAME
-        editTextName.setText(shoppingList.getName());
-        textInputName.setErrorEnabled(false);
+        binding.editTextShoppingListEditName.setText(shoppingList.getName());
+        binding.textInputShoppingListEditName.setErrorEnabled(false);
     }
 
     private void clearInputFocus() {
         activity.hideKeyboard();
-        textInputName.clearFocus();
+        binding.textInputShoppingListEditName.clearFocus();
     }
 
     private void clearErrors() {
-        textInputName.setErrorEnabled(false);
+        binding.textInputShoppingListEditName.setErrorEnabled(false);
     }
 
     public void saveItem() {
         if(isFormIncomplete()) return;
 
-        String name = editTextName.getText().toString().trim();
+        Editable nameEdit = binding.editTextShoppingListEditName.getText();
+        String name = (nameEdit != null ? nameEdit : "").toString().trim();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("name", name);
@@ -315,8 +346,11 @@ public class ShoppingListEditFragment extends Fragment {
         clearInputFocus();
         clearErrors();
 
-        if(shoppingListNames.contains(editTextName.getText().toString().trim())) {
-            textInputName.setError(activity.getString(R.string.error_name_exists));
+        Editable name = binding.editTextShoppingListEditName.getText();
+        if(shoppingListNames.contains((name != null ? name : "").toString().trim())) {
+            binding.textInputShoppingListEditName.setError(
+                    activity.getString(R.string.error_name_exists)
+            );
             return true;
         }
         return false;
@@ -359,8 +393,8 @@ public class ShoppingListEditFragment extends Fragment {
     }
 
     public void clearAll() {
-        textInputName.setErrorEnabled(false);
-        editTextName.setText(null);
+        binding.textInputShoppingListEditName.setErrorEnabled(false);
+        binding.editTextShoppingListEditName.setText(null);
     }
 
     private void showErrorMessage() {
