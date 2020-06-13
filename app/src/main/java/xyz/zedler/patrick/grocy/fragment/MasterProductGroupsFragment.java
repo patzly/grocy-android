@@ -71,14 +71,14 @@ public class MasterProductGroupsFragment extends Fragment
     private final static boolean DEBUG = true;
 
     private MainActivity activity;
-    private Gson gson = new Gson();
+    private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
     private WebRequest request;
     private MasterProductGroupAdapter masterProductGroupAdapter;
     private FragmentMasterProductGroupsBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private EmptyStateHelper emptyStateHelper;
 
     private ArrayList<ProductGroup> productGroups;
@@ -106,22 +106,51 @@ public class MasterProductGroupsFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerMasterProductGroups.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerMasterProductGroups.animate().cancel();
+            binding = null;
+        }
+
+        activity = null;
+        gson = null;
+        grocyApi = null;
+        appBarBehavior = null;
+        request = null;
+        masterProductGroupAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        productGroups = null;
+        filteredProductGroups = null;
+        displayedProductGroups = null;
+        products = null;
+        search = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
 
         // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
         // VARIABLES
 
@@ -201,19 +230,18 @@ public class MasterProductGroupsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("productGroups", productGroups);
-            outState.putParcelableArrayList("filteredProductGroups", filteredProductGroups);
-            outState.putParcelableArrayList("displayedProductGroups", displayedProductGroups);
-            outState.putParcelableArrayList("products", products);
+        if(isHidden()) return;
 
-            outState.putString("search", search);
-            outState.putString("errorState", errorState);
-            outState.putBoolean("sortAscending", sortAscending);
+        outState.putParcelableArrayList("productGroups", productGroups);
+        outState.putParcelableArrayList("filteredProductGroups", filteredProductGroups);
+        outState.putParcelableArrayList("displayedProductGroups", displayedProductGroups);
+        outState.putParcelableArrayList("products", products);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putString("search", search);
+        outState.putString("errorState", errorState);
+        outState.putBoolean("sortAscending", sortAscending);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -221,9 +249,6 @@ public class MasterProductGroupsFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
-            return;
-        }
 
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
         filteredProductGroups = savedInstanceState.getParcelableArrayList(
@@ -239,11 +264,6 @@ public class MasterProductGroupsFragment extends Fragment
         sortAscending = savedInstanceState.getBoolean("sortAscending");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH
-        );
 
         binding.swipeMasterProductGroups.setRefreshing(false);
 
@@ -258,7 +278,7 @@ public class MasterProductGroupsFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
@@ -365,7 +385,7 @@ public class MasterProductGroupsFragment extends Fragment
             searchProductGroups(search);
         } else {
             // EMPTY STATES
-            if(filteredProductGroups.isEmpty()) {
+            if(filteredProductGroups.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setEmpty();
             } else {
                 emptyStateHelper.clearState();
@@ -399,7 +419,7 @@ public class MasterProductGroupsFragment extends Fragment
                     searchedProductGroups.add(productGroup);
                 }
             }
-            if(searchedProductGroups.isEmpty()) {
+            if(searchedProductGroups.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -514,7 +534,7 @@ public class MasterProductGroupsFragment extends Fragment
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextMasterProductGroupsSearch.setText("");
         filterProductGroups();
 
         activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT);

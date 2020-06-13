@@ -144,13 +144,13 @@ public class MasterLocationsFragment extends Fragment
         clickUtil = new ClickUtil();
         animUtil = new AnimUtil();
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         locations = new ArrayList<>();
         filteredLocations = new ArrayList<>();
@@ -162,7 +162,7 @@ public class MasterLocationsFragment extends Fragment
         sortAscending = true;
         isRestoredInstance = savedInstanceState != null;
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
         binding.frameMasterLocationsBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameMasterLocationsSearchClose.setOnClickListener(v -> dismissSearch());
