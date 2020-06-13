@@ -22,24 +22,19 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,18 +52,21 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.FragmentMissingBatchItemsBinding;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class MissingBatchItemsFragment extends Fragment implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
+public class MissingBatchItemsFragment extends Fragment
+        implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
 
     private final static String TAG = Constants.UI.MISSING_BATCH_ITEMS;
     private final static boolean DEBUG = true;
@@ -76,14 +74,15 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     private MainActivity activity;
     private GrocyApi grocyApi;
     private WebRequest request;
-    private Gson gson = new Gson();
+    private Gson gson;
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private MissingBatchItemAdapter missingBatchItemAdapter;
-    private ClickUtil clickUtil = new ClickUtil();
+    private FragmentMissingBatchItemsBinding binding;
 
     private ArrayList<MissingBatchItem> missingBatchItems;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private NestedScrollView scrollView;
+    private String errorState;
 
     @Override
     public View onCreateView(
@@ -91,65 +90,93 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_missing_batch_items, container, false);
+        binding = FragmentMissingBatchItemsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if(binding != null) {
+            binding.recyclerMissingBatchItems.animate().cancel();
+            binding.recyclerMissingBatchItems.setAdapter(null);
+            binding = null;
+        }
+
+        activity = null;
+        grocyApi = null;
+        request = null;
+        gson = null;
+        clickUtil = null;
+        animUtil = null;
+        missingBatchItemAdapter = null;
+        missingBatchItems = null;
+        errorState = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // WEB REQUESTS
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
+
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
+        gson = new Gson();
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
-        activity.findViewById(R.id.frame_missing_batch_items_back).setOnClickListener(
-                v -> activity.onBackPressed()
-        );
-        swipeRefreshLayout = activity.findViewById(R.id.swipe_missing_batch_items);
-        scrollView = activity.findViewById(R.id.scroll_missing_batch_items);
-        RecyclerView recyclerView = activity.findViewById(R.id.recycler_missing_batch_items);
+        binding.frameMissingBatchItemsBack.setOnClickListener(v -> activity.onBackPressed());
 
         if(getArguments() == null ||
                 getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
         ) {
-            setError(true, false, false);
-            activity.findViewById(R.id.button_error_retry).setVisibility(View.GONE);
+            setError(Constants.STATE.ERROR, false);
+            missingBatchItems = new ArrayList<>();
         } else {
             missingBatchItems = getArguments().getParcelableArrayList(
                     Constants.ARGUMENT.BATCH_ITEMS
             );
         }
 
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
+        binding.recyclerMissingBatchItems.setLayoutManager(
+                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        missingBatchItemAdapter = new MissingBatchItemAdapter(missingBatchItems, this);
-        recyclerView.setAdapter(missingBatchItemAdapter);
+        binding.recyclerMissingBatchItems.setItemAnimator(new DefaultItemAnimator());
 
         // SWIPE REFRESH
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+        binding.swipeMissingBatchItems.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeMissingBatchItems.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        binding.swipeMissingBatchItems.setOnRefreshListener(this::refresh);
+
+        if(savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
+
+        // FILL WITH ITEMS
+
+        missingBatchItemAdapter = new MissingBatchItemAdapter(missingBatchItems, this);
+        binding.recyclerMissingBatchItems.setAdapter(missingBatchItemAdapter);
 
         // UPDATE UI
 
-        activity.updateUI(Constants.UI.MISSING_BATCH_ITEMS, TAG);
+        activity.updateUI(
+                Constants.UI.MISSING_BATCH_ITEMS,
+                savedInstanceState == null,
+                TAG
+        );
         activity.updateFab(
                 new BitmapDrawable(
                         getResources(),
@@ -164,7 +191,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                 ),
                 R.string.action_perform_purchasing_processes,
                 Constants.FAB.TAG.PURCHASE,
-                true,
+                savedInstanceState == null,
                 () -> {
                     if(activity.getCurrentFragment().getClass()== MissingBatchItemsFragment.class) {
                         ((MissingBatchItemsFragment) activity.getCurrentFragment())
@@ -172,6 +199,27 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                     }
                 }
         );
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(isHidden()) return;
+
+        outState.putString("errorState", errorState);
+    }
+
+    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+        if(isHidden()) return;
+
+        errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
+        setError(errorState, false);
+
+        binding.swipeMissingBatchItems.setRefreshing(false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     public void createdOrEditedProduct(Bundle bundle) {
@@ -225,7 +273,7 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     private void refresh() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.swipeMissingBatchItems.setRefreshing(true);
         request.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
@@ -253,10 +301,10 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
                         }
                     }
                     updateFab();
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMissingBatchItems.setRefreshing(false);
                 },
                 error -> {
-                    swipeRefreshLayout.setRefreshing(false);
+                    binding.swipeMissingBatchItems.setRefreshing(false);
                     showMessage(activity.getString(R.string.msg_error));
                 }
         );
@@ -308,19 +356,21 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
     }
 
     private void updateFab() {
-        activity.setFabIcon(
-                new BitmapDrawable(
-                        getResources(),
-                        BitmapUtil.getFromDrawableWithNumber(
-                                activity,
-                                R.drawable.ic_round_shopping_cart,
-                                getReadyPurchaseEntriesSize(),
-                                7.3f,
-                                -1.5f,
-                                8
-                        )
-                )
-        );
+        new Handler().postDelayed(() -> {
+            activity.setFabIcon(
+                    new BitmapDrawable(
+                            getResources(),
+                            BitmapUtil.getFromDrawableWithNumber(
+                                    activity,
+                                    R.drawable.ic_round_shopping_cart,
+                                    getReadyPurchaseEntriesSize(),
+                                    7.3f,
+                                    -1.5f,
+                                    8
+                            )
+                    )
+            );
+        }, 500);
     }
 
     private void doOnePurchaseRequest() {
@@ -394,47 +444,38 @@ public class MissingBatchItemsFragment extends Fragment implements MissingBatchI
         );
     }
 
-    private void setError(boolean isError, boolean isOffline, boolean animated) {
-        LinearLayout linearLayoutError = activity.findViewById(R.id.linear_error);
-        ImageView imageViewError = activity.findViewById(R.id.image_error);
-        TextView textViewTitle = activity.findViewById(R.id.text_error_title);
-        TextView textViewSubtitle = activity.findViewById(R.id.text_error_subtitle);
+    private void setError(String state, boolean animated) {
+        errorState = state;
 
-        if(isError) {
-            imageViewError.setImageResource(
-                    isOffline
-                            ? R.drawable.illustration_broccoli
-                            : R.drawable.illustration_popsicle
-            );
-            textViewTitle.setText(isOffline ? R.string.error_offline : R.string.error_unknown);
-            textViewSubtitle.setText(
-                    isOffline
-                            ? R.string.error_offline_subtitle
-                            : R.string.error_unknown_subtitle
-            );
+        binding.linearError.buttonErrorRetry.setVisibility(View.GONE);
+
+        View viewIn = binding.linearError.linearError;
+        View viewOut = binding.scrollMissingBatchItems;
+
+        switch (state) {
+            case Constants.STATE.OFFLINE:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.linearError.textErrorTitle.setText(R.string.error_offline);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                break;
+            case Constants.STATE.ERROR:
+                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                break;
+            case Constants.STATE.NONE:
+                viewIn = binding.scrollMissingBatchItems;
+                viewOut = binding.linearError.linearError;
+                break;
         }
 
-        if(animated) {
-            View viewOut = isError ? scrollView : linearLayoutError;
-            View viewIn = isError ? linearLayoutError : scrollView;
-            if(viewOut.getVisibility() == View.VISIBLE && viewIn.getVisibility() == View.GONE) {
-                viewOut.animate().alpha(0).setDuration(150).withEndAction(() -> {
-                    viewIn.setAlpha(0);
-                    viewOut.setVisibility(View.GONE);
-                    viewIn.setVisibility(View.VISIBLE);
-                    viewIn.animate().alpha(1).setDuration(150).start();
-                }).start();
-            }
-        } else {
-            scrollView.setVisibility(isError ? View.GONE : View.VISIBLE);
-            linearLayoutError.setVisibility(isError ? View.VISIBLE : View.GONE);
-        }
+        animUtil.replaceViews(viewIn, viewOut, animated);
     }
 
     private void showMessage(String msg) {
         activity.showMessage(
                 Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
+                        activity.binding.frameMainContainer,
                         msg,
                         Snackbar.LENGTH_SHORT
                 )

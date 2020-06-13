@@ -250,9 +250,6 @@ public class MasterLocationsFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
-            return;
-        }
 
         locations = savedInstanceState.getParcelableArrayList("locations");
         filteredLocations = savedInstanceState.getParcelableArrayList("filteredLocations");

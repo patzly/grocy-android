@@ -16,9 +16,10 @@
 --- consume [x]
 --- location [x]
 --- locations [x]
+--- missing batch items [x]
 - save and restore instance state, migrate to view binding
---- missing batch items
 --- shopping list edit
+- missing batch items empty state -> all done/purchased
 - product edit with location tracking disabled: space between barcode chips and other field
 
 ## Features
