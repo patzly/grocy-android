@@ -99,7 +99,7 @@
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">This product still has stock</string>
     <string name="msg_master_delete_usage">This %1$s is still in use</string>
-    <string name="msg_item_marked_as_done">Item marked as done</string>
+    <string name="msg_item_marked_as_done">Marked item as done</string>
     <string name="msg_batch_no_products">No new products have to be created</string>
     <string name="msg_batch_tare_weight">Product doesn\'t support batch mode: tare weight handling enabled</string>
     <string name="msg_purchase_transactions_done">Done purchase transactions of created products</string>
