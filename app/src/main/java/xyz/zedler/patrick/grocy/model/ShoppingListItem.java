@@ -84,6 +84,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         amount = parcel.readDouble();
         shoppingListId = parcel.readInt();
         done = parcel.readInt();
+        doneSynced = parcel.readInt();
         productName = parcel.readString();
         productDescription = parcel.readString();
         productGroupId = parcel.readString();
@@ -99,6 +100,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeDouble(amount);
         dest.writeInt(shoppingListId);
         dest.writeInt(done);
+        dest.writeInt(doneSynced);
         dest.writeString(productName);
         dest.writeString(productDescription);
         dest.writeString(productGroupId);
