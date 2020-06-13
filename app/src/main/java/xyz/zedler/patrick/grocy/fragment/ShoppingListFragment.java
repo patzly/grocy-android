@@ -734,13 +734,7 @@ public class ShoppingListFragment extends Fragment
         ShoppingList shoppingList = getShoppingList(shoppingListId);
         if(shoppingList == null) return;
         selectedShoppingListId = shoppingListId;
-        binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
-            binding.textShoppingListTitle.setText(shoppingList.getName());
-            binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
-        }).setDuration(150).start();
-        binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
-                () -> binding.buttonShoppingListLists.animate().alpha(1).setDuration(150).start()
-        ).setDuration(150).start();
+        changeAppBarTitle(shoppingList);
         chipMissing.changeState(false);
         chipUndone.changeState(false);
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
@@ -753,6 +747,29 @@ public class ShoppingListFragment extends Fragment
             onQueueEmpty();
         }
         setUpBottomMenu(); // to hide delete action if necessary
+    }
+
+    private void changeAppBarTitle(ShoppingList shoppingList) {
+        // change app bar title to shopping list name
+        if(shoppingList == null) return;
+        if(binding.textShoppingListTitle.getText().toString().equals(shoppingList.getName())) {
+            return;
+        }
+        binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
+            binding.textShoppingListTitle.setText(shoppingList.getName());
+            binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
+        }).setDuration(150).start();
+        binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
+                () -> binding.buttonShoppingListLists.animate()
+                        .alpha(1)
+                        .setDuration(150)
+                        .start()
+        ).setDuration(150).start();
+    }
+
+    private void changeAppBarTitle() {
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        changeAppBarTitle(shoppingList);
     }
 
     public void selectShoppingList(String shoppingListName) {
@@ -940,25 +957,6 @@ public class ShoppingListFragment extends Fragment
         if(shoppingList == null) return;
         bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
         activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
-    }
-
-    private void changeAppBarTitle() {
-        // change app bar title to shopping list name
-        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        if(shoppingList != null && !binding.textShoppingListTitle.getText().toString().equals(
-                shoppingList.getName())
-        ) {
-            binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
-                binding.textShoppingListTitle.setText(shoppingList.getName());
-                binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
-            }).setDuration(150).start();
-            binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
-                    () -> binding.buttonShoppingListLists.animate()
-                            .alpha(1)
-                            .setDuration(150)
-                            .start()
-            ).setDuration(150).start();
-        }
     }
 
     public void setUpBottomMenu() {

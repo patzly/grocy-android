@@ -607,7 +607,9 @@ public class ShoppingListItemEditFragment extends Fragment {
             } else {
                 jsonObject.put("product_id", "");
             }
-            jsonObject.put("note", amount);
+            Editable note = binding.editTextShoppingListItemEditNote.getText();
+            assert note != null;
+            jsonObject.put("note", note.toString().trim());
         } catch (JSONException e) {
             Log.e(TAG, "saveShoppingListItem: " + e);
         }

@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
@@ -52,7 +54,7 @@ public class ShoppingListsBottomSheetDialogFragment
     private final static boolean DEBUG = false;
     private final static String TAG = "ShoppingListsBottomSheet";
 
-    private MainActivity activity;
+    private Activity activity;
     private ArrayList<ShoppingList> shoppingLists;
 
     @NonNull
@@ -71,7 +73,7 @@ public class ShoppingListsBottomSheetDialogFragment
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
+        activity = getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -100,6 +102,8 @@ public class ShoppingListsBottomSheetDialogFragment
         if(!bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
+                if(activity.getClass() != MainActivity.class) return;
+                MainActivity activity = (MainActivity) this.activity;
                 dismiss();
                 Bundle bundle1 = new Bundle();
                 bundle1.getString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
@@ -112,15 +116,19 @@ public class ShoppingListsBottomSheetDialogFragment
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() == ShoppingListFragment.class) {
-            ((ShoppingListFragment) currentFragment).selectShoppingList(
-                    shoppingLists.get(position).getId()
-            );
-        } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
-            ((ShoppingListItemEditFragment) currentFragment).selectShoppingList(
-                    shoppingLists.get(position).getId()
-            );
+        if(activity.getClass() == MainActivity.class) {
+            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            if(currentFragment.getClass() == ShoppingListFragment.class) {
+                ((ShoppingListFragment) currentFragment).selectShoppingList(
+                        shoppingLists.get(position).getId()
+                );
+            } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
+                ((ShoppingListItemEditFragment) currentFragment).selectShoppingList(
+                        shoppingLists.get(position).getId()
+                );
+            }
+        } else if(activity.getClass() == ShoppingActivity.class) {
+            ((ShoppingActivity) activity).selectShoppingList(shoppingLists.get(position).getId());
         }
         dismiss();
     }

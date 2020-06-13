@@ -28,10 +28,12 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.VolleyError;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -49,6 +51,7 @@ import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.GroupItemsShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
@@ -135,6 +138,8 @@ public class ShoppingActivity extends AppCompatActivity implements
         setContentView(binding.getRoot());
 
         binding.frameShoppingClose.setOnClickListener(v -> onBackPressed());
+        binding.textTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
+        binding.buttonLists.setOnClickListener(v -> showShoppingListsBottomSheet());
 
         binding.swipe.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(this, R.color.surface)
@@ -384,25 +389,6 @@ public class ShoppingActivity extends AppCompatActivity implements
         toggleDoneStatus(position);
     }
 
-    private void changeAppBarTitle() {
-        // change app bar title to shopping list name
-        /*ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
-        if(shoppingList != null && !binding.textShoppingListTitle.getText().toString().equals(
-                shoppingList.getName())
-        ) {
-            binding.textShoppingListTitle.animate().alpha(0).withEndAction(() -> {
-                binding.textShoppingListTitle.setText(shoppingList.getName());
-                binding.textShoppingListTitle.animate().alpha(1).setDuration(150).start();
-            }).setDuration(150).start();
-            binding.buttonShoppingListLists.animate().alpha(0).withEndAction(
-                    () -> binding.buttonShoppingListLists.animate()
-                            .alpha(1)
-                            .setDuration(150)
-                            .start()
-            ).setDuration(150).start();
-        }*/
-    }
-
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
 
@@ -517,6 +503,68 @@ public class ShoppingActivity extends AppCompatActivity implements
                 );
             }
         };
+    }
+
+    private void showShoppingListsBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
+        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedShoppingListId);
+        bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, true);
+        showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
+    }
+
+    public void selectShoppingList(int shoppingListId) {
+        if(shoppingListId == selectedShoppingListId) return;
+        ShoppingList shoppingList = getShoppingList(shoppingListId);
+        if(shoppingList == null) return;
+        selectedShoppingListId = shoppingListId;
+        changeAppBarTitle(shoppingList);
+        if(showOffline) {
+            new LoadOfflineDataShoppingListHelper(
+                    AppDatabase.getAppDatabase(getApplicationContext()),
+                    this
+            ).execute();
+        } else {
+            onQueueEmpty();
+        }
+    }
+
+    private void changeAppBarTitle(ShoppingList shoppingList) {
+        // change app bar title to shopping list name
+        if(shoppingList == null) return;
+        if(binding.textTitle.getText().toString().equals(shoppingList.getName())) return;
+        binding.textTitle.animate().alpha(0).withEndAction(() -> {
+            binding.textTitle.setText(shoppingList.getName());
+            binding.textTitle.animate().alpha(1).setDuration(150).start();
+        }).setDuration(150).start();
+        binding.buttonLists.animate().alpha(0).withEndAction(
+                () -> binding.buttonLists.animate()
+                        .alpha(1)
+                        .setDuration(150)
+                        .start()
+        ).setDuration(150).start();
+    }
+
+    private void changeAppBarTitle() {
+        ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
+        changeAppBarTitle(shoppingList);
+    }
+
+    private ShoppingList getShoppingList(int shoppingListId) {
+        if(shoppingListHashMap.isEmpty()) {
+            for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
+        }
+        return shoppingListHashMap.get(shoppingListId);
+    }
+
+    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+        String tag = bottomSheet.toString();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null || !fragment.isVisible()) {
+            if(bundle != null) bottomSheet.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().add(bottomSheet, tag).commit();
+            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
+        } else Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     public boolean isOnline() {

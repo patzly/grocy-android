@@ -11,4 +11,11 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
+    <item
+        android:id="@+id/action_shopping_mode"
+        android:title="@string/action_shopping_mode"
+        android:icon="@drawable/ic_round_shopping_cart"
+        app:showAsAction="ifRoom"
+        tools:ignore="AlwaysShowAction" />
+
 </menu>
