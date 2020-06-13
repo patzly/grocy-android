@@ -101,11 +101,11 @@ public class MasterProductSimpleFragment extends Fragment {
     private FragmentMasterProductSimpleBinding binding;
     private ArrayAdapter<String> adapterProducts;
 
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<Location> locations = new ArrayList<>();
-    private ArrayList<ProductGroup> productGroups = new ArrayList<>();
-    private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<String> productNames = new ArrayList<>();
+    private ArrayList<Product> products;
+    private ArrayList<Location> locations;
+    private ArrayList<ProductGroup> productGroups;
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<String> productNames;
 
     private Product editProduct, productParent;
 
@@ -162,26 +162,28 @@ public class MasterProductSimpleFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         binding = null;
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        // GET PREFERENCES
+        // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        // WEB REQUESTS
+        // WEB
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         products = new ArrayList<>();
         locations = new ArrayList<>();
@@ -247,7 +249,7 @@ public class MasterProductSimpleFragment extends Fragment {
             }
         });
         autoCompleteTextViewParentProduct.setOnItemClickListener(
-                (parent, view, position, id) -> productParent = getProductFromName(
+                (parent, v, position, id) -> productParent = getProductFromName(
                         String.valueOf(parent.getItemAtPosition(position))
                 )
         );
@@ -585,32 +587,29 @@ public class MasterProductSimpleFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("products", products);
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("productGroups", productGroups);
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        if(isHidden()) return;
 
-            outState.putStringArrayList("productNames", productNames);
+        outState.putParcelableArrayList("products", products);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("productGroups", productGroups);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
 
-            outState.putParcelable("editProduct", editProduct);
-            outState.putParcelable("productParent", productParent);
-            outState.putParcelable("createProductObj", createProductObj);
+        outState.putParcelable("editProduct", editProduct);
+        outState.putParcelable("productParent", productParent);
+        outState.putParcelable("createProductObj", createProductObj);
 
-            outState.putInt("selectedLocationId", selectedLocationId);
-            outState.putInt("selectedQUPurchaseId", selectedQUPurchaseId);
-            outState.putInt("selectedQUStockId", selectedQUStockId);
-            outState.putInt("selectedProductGroupId", selectedProductGroupId);
+        outState.putInt("selectedLocationId", selectedLocationId);
+        outState.putInt("selectedQUPurchaseId", selectedQUPurchaseId);
+        outState.putInt("selectedQUStockId", selectedQUStockId);
+        outState.putInt("selectedProductGroupId", selectedProductGroupId);
 
-            outState.putString("productDescriptionHtml", productDescriptionHtml);
-            outState.putString("intendedAction", intendedAction);
+        outState.putString("productDescriptionHtml", productDescriptionHtml);
+        outState.putString("intendedAction", intendedAction);
 
-            outState.putDouble("minAmount", minAmount);
+        outState.putDouble("minAmount", minAmount);
 
-            outState.putInt("quantityUnitFactor", quantityUnitFactor);
-            outState.putInt("bestBeforeDays", bestBeforeDays);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putInt("quantityUnitFactor", quantityUnitFactor);
+        outState.putInt("bestBeforeDays", bestBeforeDays);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -621,7 +620,7 @@ public class MasterProductSimpleFragment extends Fragment {
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
         quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
 
-        productNames = savedInstanceState.getStringArrayList("productNames");
+        productNames = getProductNames();
         adapterProducts = new MatchArrayAdapter(activity, productNames);
         autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
 
@@ -647,7 +646,7 @@ public class MasterProductSimpleFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
