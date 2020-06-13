@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -101,11 +102,6 @@ public class ShoppingActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle startupBundle = getIntent().getBundleExtra(Constants.ARGUMENT.BUNDLE);
-        if(startupBundle != null) {
-            selectedShoppingListId = startupBundle.getInt(Constants.ARGUMENT.SELECTED_ID);
-        }
-
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -133,6 +129,9 @@ public class ShoppingActivity extends AppCompatActivity implements
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
         shoppingListHashMap = new HashMap<>();
+
+        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, -1);
+        if(lastId != -1) selectedShoppingListId = lastId;
 
         // VIEWS
 
@@ -223,6 +222,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         downloadHelper.downloadShoppingLists(shoppingLists -> {
             this.shoppingLists = shoppingLists;
             changeAppBarTitle();
+            if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
         });
     }
 
@@ -316,6 +316,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         }
 
         changeAppBarTitle();
+        if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
 
         groupItems();
     }
@@ -526,6 +527,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         ShoppingList shoppingList = getShoppingList(shoppingListId);
         if(shoppingList == null) return;
         selectedShoppingListId = shoppingListId;
+        sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
         changeAppBarTitle(shoppingList);
         if(showOffline) {
             new LoadOfflineDataShoppingListHelper(

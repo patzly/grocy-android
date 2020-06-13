@@ -47,6 +47,8 @@ public final class Constants {
         public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
 
+        public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+
         public final static String BATCH_CONFIG_BBD = "batch_config_bbd";
         public final static String BATCH_CONFIG_PRICE = "batch_config_price";
         public final static String BATCH_CONFIG_STORE = "batch_config_store";

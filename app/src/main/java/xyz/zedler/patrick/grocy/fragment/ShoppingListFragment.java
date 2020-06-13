@@ -200,7 +200,7 @@ public class ShoppingListFragment extends Fragment
         shoppingListHashMap = new HashMap<>();
 
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-        selectedShoppingListId = 1;
+        selectedShoppingListId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
         search = "";
         showOffline = false;
         errorState = Constants.STATE.NONE;
@@ -734,6 +734,7 @@ public class ShoppingListFragment extends Fragment
         ShoppingList shoppingList = getShoppingList(shoppingListId);
         if(shoppingList == null) return;
         selectedShoppingListId = shoppingListId;
+        sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
         changeAppBarTitle(shoppingList);
         chipMissing.changeState(false);
         chipUndone.changeState(false);
