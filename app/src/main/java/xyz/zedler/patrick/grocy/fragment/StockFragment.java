@@ -424,28 +424,27 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("stockItems", stockItems);
-            outState.putParcelableArrayList("expiringItems", expiringItems);
-            outState.putParcelableArrayList("expiredItems", expiredItems);
-            outState.putParcelableArrayList("missingItems", missingItems);
-            outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
-            outState.putParcelableArrayList("missingStockItems", missingStockItems);
-            outState.putParcelableArrayList("filteredItems", filteredItems);
-            outState.putParcelableArrayList("displayedItems", displayedItems);
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("productGroups", productGroups);
+        if(isHidden()) return;
 
-            outState.putString("itemsToDisplay", itemsToDisplay);
-            outState.putString("errorState", errorState);
-            outState.putString("search", search);
-            outState.putInt("filterLocationId", filterLocationId);
-            outState.putInt("filterProductGroupId", filterProductGroupId);
+        outState.putParcelableArrayList("stockItems", stockItems);
+        outState.putParcelableArrayList("expiringItems", expiringItems);
+        outState.putParcelableArrayList("expiredItems", expiredItems);
+        outState.putParcelableArrayList("missingItems", missingItems);
+        outState.putStringArrayList("shoppingListProducts", shoppingListProductIds);
+        outState.putParcelableArrayList("missingStockItems", missingStockItems);
+        outState.putParcelableArrayList("filteredItems", filteredItems);
+        outState.putParcelableArrayList("displayedItems", displayedItems);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("productGroups", productGroups);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putString("itemsToDisplay", itemsToDisplay);
+        outState.putString("errorState", errorState);
+        outState.putString("search", search);
+        outState.putInt("filterLocationId", filterLocationId);
+        outState.putInt("filterProductGroupId", filterProductGroupId);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -453,9 +452,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE)
-                || errorState.equals(Constants.STATE.ERROR)
-        ) return;
 
         stockItems = savedInstanceState.getParcelableArrayList("stockItems");
         expiringItems = savedInstanceState.getParcelableArrayList("expiringItems");
@@ -470,7 +466,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        if(!appBarBehavior.isPrimaryLayout()) activity.setUI(Constants.UI.STOCK_SEARCH);
 
         binding.swipeStock.setRefreshing(false);
 
@@ -699,13 +694,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             searchItems(search);
         } else {
             // EMPTY STATES
-            if(filteredItems.isEmpty()) {
+            if(filteredItems.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 if(itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.EXPIRING)
                         || itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.EXPIRED)
                         || itemsToDisplay.equals(Constants.STOCK.FILTER.VOLATILE.MISSING)
                         || filterLocationId != -1
                         || filterProductGroupId != -1
                 ) {
+                    Log.i(TAG, "filterItems: hallo");
                     emptyStateHelper.setNoFilterResults();
                 } else {
                     emptyStateHelper.setEmpty();
@@ -740,7 +736,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     searchedItems.add(stockItem);
                 }
             }
-            if(searchedItems.isEmpty()) {
+            if(searchedItems.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -1414,7 +1410,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextStockSearch.setText("");
         filterItems(itemsToDisplay);
 
         emptyStateHelper.clearState();
