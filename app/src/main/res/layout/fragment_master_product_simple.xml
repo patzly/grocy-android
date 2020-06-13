@@ -467,7 +467,7 @@
                         <ImageView
                             android:id="@+id/image_master_product_simple_qu_factor"
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_kitchen"
+                            android:src="@drawable/ic_round_factor"
                             android:layout_marginBottom="5dp"
                             tools:ignore="ContentDescription" />
 
