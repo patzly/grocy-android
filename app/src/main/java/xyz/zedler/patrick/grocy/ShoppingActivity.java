@@ -191,7 +191,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         super.onResume();
         timer = new Timer();
         initTimerTask();
-        timer.schedule(timerTask, 10000, 10000);
+        timer.schedule(timerTask, 1000, 10000);
     }
 
     private void load() {
