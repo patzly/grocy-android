@@ -131,9 +131,9 @@ public class EmptyStateHelper {
 
     private Runnable displayNoFilterResults() {
         return () -> {
-            partialEmptyBinding.imageEmpty.setImageResource(R.drawable.illustration_jar);
-            partialEmptyBinding.textEmptyTitle.setText(R.string.error_search);
-            partialEmptyBinding.textEmptySubtitle.setText(R.string.error_search_sub);
+            partialEmptyBinding.imageEmpty.setImageResource(R.drawable.illustration_coffee);
+            partialEmptyBinding.textEmptyTitle.setText(R.string.error_filter);
+            partialEmptyBinding.textEmptySubtitle.setText(R.string.error_filter_sub);
         };
     }
 
