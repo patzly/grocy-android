@@ -3,18 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:background="@color/primary">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <FrameLayout
                 android:id="@+id/frame_shopping_close"
@@ -40,15 +42,43 @@
 
             </FrameLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_gravity="center"
-                android:text="Shopping"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:shrinkColumns="0">
 
-        </FrameLayout>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/text_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@string/title_shopping_list"
+                        android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_lists"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        app:icon="@drawable/ic_round_expand_more"
+                        app:tint="@color/icon"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
