@@ -101,11 +101,6 @@ public class ShoppingActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle startupBundle = getIntent().getBundleExtra(Constants.ARGUMENT.BUNDLE);
-        if(startupBundle != null) {
-            selectedShoppingListId = startupBundle.getInt(Constants.ARGUMENT.SELECTED_ID);
-        }
-
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -133,6 +128,9 @@ public class ShoppingActivity extends AppCompatActivity implements
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
         shoppingListHashMap = new HashMap<>();
+
+        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, -1);
+        if(lastId != -1) selectedShoppingListId = lastId;
 
         // VIEWS
 
@@ -526,6 +524,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         ShoppingList shoppingList = getShoppingList(shoppingListId);
         if(shoppingList == null) return;
         selectedShoppingListId = shoppingListId;
+        sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
         changeAppBarTitle(shoppingList);
         if(showOffline) {
             new LoadOfflineDataShoppingListHelper(
