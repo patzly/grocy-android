@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="ifContentScrolls"
+        android:overScrollMode="never"
         android:background="@color/background_dark">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="ifContentScrolls"
-            android:nestedScrollingEnabled="false"
+            android:nestedScrollingEnabled="true"
             android:clipToPadding="false"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>

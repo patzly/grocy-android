@@ -285,7 +285,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void loadOfflineData() {
         if(!showOffline) {
             showOffline = true;
-            Log.i(TAG, "loadOfflineData: " + "you are now offline");
+            if(DEBUG) Log.i(TAG, "loadOfflineData: you are now offline");
             new LoadOfflineDataShoppingListHelper(
                     AppDatabase.getAppDatabase(getApplicationContext()),
                     this
@@ -300,7 +300,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits
-    ) {                                                // for offline mode
+    ) { // for offline mode
         this.shoppingListItems = shoppingListItems;
         this.shoppingLists = shoppingLists;
         this.productGroups = productGroups;
