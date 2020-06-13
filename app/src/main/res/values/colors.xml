@@ -53,7 +53,6 @@
     <color name="secondary_translucent">#226bad9e</color>
     <color name="secondary_dark">@color/retro_dark</color>
     <color name="on_secondary">@color/white</color>
-    <color name="highlight_on_secondary">#22ffffff</color>
 
     <!-- BACKGROUND -->
 
@@ -80,6 +79,8 @@
     <!-- HIGHLIGHT -->
 
     <color name="highlight">#11000000</color>
+    <color name="highlight_secondary">#04000000</color>
+    <color name="highlight_on_secondary">#22ffffff</color>
 
     <!-- ERROR -->
 
