@@ -82,8 +82,8 @@ public class MasterProductsFragment extends Fragment
     private SharedPreferences sharedPrefs;
     private MasterProductAdapter masterProductAdapter;
     private FragmentMasterProductsBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
-    private AnimUtil animUtil = new AnimUtil();
+    private ClickUtil clickUtil;
+    private AnimUtil animUtil;
     private EmptyStateHelper emptyStateHelper;
 
     private InputChip inputChipFilterProductGroup;
@@ -118,19 +118,48 @@ public class MasterProductsFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.recyclerMasterProducts.animate().cancel();
-        emptyStateHelper.destroyInstance();
-        binding = null;
+
+        if(emptyStateHelper != null) {
+            emptyStateHelper.destroyInstance();
+            emptyStateHelper = null;
+        }
+        if(binding != null) {
+            binding.recyclerMasterProducts.animate().cancel();
+            binding = null;
+        }
+
+        activity = null;
+        appBarBehavior = null;
+        masterProductAdapter = null;
+        clickUtil = null;
+        animUtil = null;
+        locations = null;
+        filteredProducts = null;
+        displayedProducts = null;
+        products = null;
+        search = null;
+        errorState = null;
+
+        System.gc();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
 
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        animUtil = new AnimUtil();
+
+        // PREFERENCES
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        // WEB
 
         downloadHelper = new DownloadHelper(
                 activity,
@@ -139,7 +168,7 @@ public class MasterProductsFragment extends Fragment
                 this::onQueueEmpty
         );
 
-        // INITIALIZE VARIABLES
+        // VARIABLES
 
         products = new ArrayList<>();
         filteredProducts = new ArrayList<>();
@@ -153,7 +182,7 @@ public class MasterProductsFragment extends Fragment
         filterProductGroupId = -1;
         sortAscending = true;
 
-        // INITIALIZE VIEWS
+        // VIEWS
 
         binding.frameMasterProductsBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameMasterProductsSearchClose.setOnClickListener(v -> dismissSearch());
@@ -218,22 +247,21 @@ public class MasterProductsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(!isHidden()) {
-            outState.putParcelableArrayList("products", products);
-            outState.putParcelableArrayList("filteredProducts", filteredProducts);
-            outState.putParcelableArrayList("displayedProducts", displayedProducts);
-            outState.putParcelableArrayList("productGroups", productGroups);
-            outState.putParcelableArrayList("locations", locations);
-            outState.putParcelableArrayList("quantityUnits", quantityUnits);
+        if(isHidden()) return;
 
-            outState.putString("errorState", errorState);
-            outState.putString("search", search);
-            outState.putInt("filterProductGroupId", filterProductGroupId);
-            outState.putBoolean("sortAscending", sortAscending);
+        outState.putParcelableArrayList("products", products);
+        outState.putParcelableArrayList("filteredProducts", filteredProducts);
+        outState.putParcelableArrayList("displayedProducts", displayedProducts);
+        outState.putParcelableArrayList("productGroups", productGroups);
+        outState.putParcelableArrayList("locations", locations);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
 
-            appBarBehavior.saveInstanceState(outState);
-        }
-        super.onSaveInstanceState(outState);
+        outState.putString("errorState", errorState);
+        outState.putString("search", search);
+        outState.putInt("filterProductGroupId", filterProductGroupId);
+        outState.putBoolean("sortAscending", sortAscending);
+
+        appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -241,9 +269,6 @@ public class MasterProductsFragment extends Fragment
 
         errorState = savedInstanceState.getString("errorState", Constants.STATE.NONE);
         setError(errorState, false);
-        if(errorState.equals(Constants.STATE.OFFLINE) || errorState.equals(Constants.STATE.ERROR)) {
-            return;
-        }
 
         products = savedInstanceState.getParcelableArrayList("products");
         filteredProducts = savedInstanceState.getParcelableArrayList("filteredProducts");
@@ -257,11 +282,6 @@ public class MasterProductsFragment extends Fragment
         quantityUnitsMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
 
         appBarBehavior.restoreInstanceState(savedInstanceState);
-        activity.setUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH
-        );
 
         binding.swipeMasterProducts.setRefreshing(false);
 
@@ -279,7 +299,7 @@ public class MasterProductsFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onActivityCreated(null);
+        if(!hidden) onViewCreated(requireView(), null);
     }
 
     private void load() {
@@ -392,14 +412,15 @@ public class MasterProductsFragment extends Fragment
             searchProducts(search);
         } else {
             // EMPTY STATES
-            if(filteredProducts.isEmpty() && filterProductGroupId != -1) {
-                emptyStateHelper.setNoFilterResults();
-            } else if(filteredProducts.isEmpty()) {
-                emptyStateHelper.setEmpty();
+            if(filteredProducts.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
+                if(filterProductGroupId != -1) {
+                    emptyStateHelper.setNoFilterResults();
+                } else {
+                    emptyStateHelper.setEmpty();
+                }
             } else {
                 emptyStateHelper.clearState();
             }
-
             // SORTING
             if(displayedProducts != filteredProducts || isRestoredInstance) {
                 displayedProducts = filteredProducts;
@@ -427,7 +448,7 @@ public class MasterProductsFragment extends Fragment
                     searchedProducts.add(product);
                 }
             }
-            if(searchedProducts.isEmpty()) {
+            if(searchedProducts.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
                 emptyStateHelper.setNoSearchResults();
             } else {
                 emptyStateHelper.clearState();
@@ -618,7 +639,7 @@ public class MasterProductsFragment extends Fragment
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
-        search = "";
+        binding.editTextMasterProductsSearch.setText("");
         filterProducts();
 
         activity.setUI(Constants.UI.MASTER_PRODUCTS_DEFAULT);
