@@ -163,8 +163,6 @@ public class ShoppingListFragment extends Fragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        showOffline = false;
-
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -1215,6 +1213,11 @@ public class ShoppingListFragment extends Fragment
         } else {  // Click on bottom notes
             showNotesEditor();
         }
+    }
+
+    public void updateConnectivity(boolean online) {
+        showOffline = online;
+        refresh();
     }
 
     @Override

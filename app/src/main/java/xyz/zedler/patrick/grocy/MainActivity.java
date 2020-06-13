@@ -23,12 +23,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,9 +88,9 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -99,9 +100,10 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
-    private WebRequest request;
     private GrocyApi grocyApi;
-    private ClickUtil clickUtil = new ClickUtil();
+    private ClickUtil clickUtil;
+    private NetUtil netUtil;
+    private BroadcastReceiver networkReceiver;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private String uiMode = Constants.UI.STOCK_DEFAULT;
 
@@ -119,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        netUtil = new NetUtil(this);
+
         // DARK MODE
 
         AppCompatDelegate.setDefaultNightMode(
@@ -127,10 +134,23 @@ public class MainActivity extends AppCompatActivity {
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
 
-        // WEB REQUESTS
+        // WEB
 
         requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
-        request = new WebRequest(requestQueue);
+
+        networkReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(fragmentCurrent == null) return;
+                if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
+                    ((ShoppingListFragment) fragmentCurrent).updateConnectivity(netUtil.isOnline());
+                }
+            }
+        };
+        registerReceiver(
+                networkReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        );
 
         // API
 
@@ -182,6 +202,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setUp(savedInstanceState);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(networkReceiver != null) unregisterReceiver(networkReceiver);
     }
 
     @Override
@@ -1062,12 +1089,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                Context.CONNECTIVITY_SERVICE
-        );
-        assert connectivityManager != null;
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+        return netUtil.isOnline();
     }
 
     public void showMessage(Snackbar snackbar) {

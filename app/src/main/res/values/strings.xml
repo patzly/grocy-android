@@ -91,6 +91,7 @@
     <string name="msg_error">An error occurred</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
+    <string name="msg_failed_to_sync">Failed to sync entries</string>
     <string name="msg_added_missing_products">Added missing products to %1$s</string>
     <string name="msg_shopping_list_cleared">%1$s cleared successfully</string>
     <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>

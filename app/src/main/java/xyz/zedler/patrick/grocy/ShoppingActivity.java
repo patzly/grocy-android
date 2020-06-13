@@ -19,10 +19,7 @@ package xyz.zedler.patrick.grocy;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,8 +53,8 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
+import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -66,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class ShoppingActivity extends AppCompatActivity implements
         ShoppingItemAdapter.ShoppingListItemSpecialAdapterListener,
@@ -73,12 +71,13 @@ public class ShoppingActivity extends AppCompatActivity implements
         StoreOfflineDataShoppingListHelper.AsyncResponse {
 
     private final static boolean DEBUG = true;
-    private final static String TAG = "ShoppingActivity";
+    private final static String TAG = ShoppingActivity.class.getSimpleName();
 
     private SharedPreferences sharedPrefs;
     private DownloadHelper downloadHelper;
     private Timer timer;
     private AppDatabase database;
+    private NetUtil netUtil;
 
     private ArrayList<ShoppingListItem> shoppingListItems;
     private ArrayList<ShoppingListItem> shoppingListItemsSelected;
@@ -105,6 +104,10 @@ public class ShoppingActivity extends AppCompatActivity implements
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // UTILS
+
+        netUtil = new NetUtil(this);
 
         // DATABASE
 
@@ -192,7 +195,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void load() {
-        if(isOnline()) {
+        if(netUtil.isOnline()) {
             downloadFull();
         } else {
             loadOfflineData();
@@ -200,7 +203,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     public void refresh() {
-        if(isOnline()) {
+        if(netUtil.isOnline()) {
             downloadFull();
             timer.cancel();
             initTimerTask();
@@ -387,9 +390,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                         ShoppingListItem serverItem = serverItemHashMap.get(itemToSync.getId());
                         if(serverItem != null) serverItem.setDone(itemToSync.getDone());
                     },
-                    error -> {
-                        showMessage("Failed to sync items"); // TODO
-                    }
+                    error -> showMessage(getString(R.string.msg_failed_to_sync))
             );
         }
     }
@@ -500,12 +501,12 @@ public class ShoppingActivity extends AppCompatActivity implements
                 if(!downloadHelper.isQueueEmpty()) return;
                 downloadHelper.getTimeDbChanged(
                         date -> {
-                            if(!isOnline()) {
+                            if(!netUtil.isOnline()) {
                                 loadOfflineData();
                             } else if(lastSynced == null || lastSynced.before(date)) {
                                 downloadShoppingListItems();
                             } else {
-                                Log.i(TAG, "run: " + "skip sync of list items");
+                                Log.i(TAG, "run: skip sync of list items");
                             }
                         },
                         () -> downloadShoppingListItems()
@@ -563,15 +564,6 @@ public class ShoppingActivity extends AppCompatActivity implements
             getSupportFragmentManager().beginTransaction().add(bottomSheet, tag).commit();
             if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
         } else Log.e(TAG, "showBottomSheet: sheet already visible");
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                Context.CONNECTIVITY_SERVICE
-        );
-        assert connectivityManager != null;
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     private void showMessage(String msg) {
