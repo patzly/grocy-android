@@ -701,7 +701,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         || filterLocationId != -1
                         || filterProductGroupId != -1
                 ) {
-                    Log.i(TAG, "filterItems: hallo");
                     emptyStateHelper.setNoFilterResults();
                 } else {
                     emptyStateHelper.setEmpty();
