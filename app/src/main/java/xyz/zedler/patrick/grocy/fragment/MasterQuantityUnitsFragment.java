@@ -466,9 +466,11 @@ public class MasterQuantityUnitsFragment extends Fragment
 
     private void setMenuSorting() {
         MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
-        itemSort.setIcon(sortAscending
-                ? R.drawable.ic_round_sort_desc_to_asc_anim
-                : R.drawable.ic_round_sort_asc_to_desc);
+        itemSort.setIcon(
+                sortAscending
+                        ? R.drawable.ic_round_sort_desc_to_asc_anim
+                        : R.drawable.ic_round_sort_asc_to_desc
+        );
         itemSort.getIcon().setAlpha(255);
         itemSort.setOnMenuItemClickListener(item -> {
             sortAscending = !sortAscending;
