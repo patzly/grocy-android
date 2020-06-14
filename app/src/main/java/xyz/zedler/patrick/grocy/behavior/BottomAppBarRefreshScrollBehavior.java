@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 
 public class BottomAppBarRefreshScrollBehavior {
 
-	private final static String TAG = "ScrollBehavior";
+	private final static String TAG = "BottomBarScrollBehavior";
 	private final static boolean DEBUG = false;
 
 	private static final int STATE_SCROLLED_DOWN = 1;

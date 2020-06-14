@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.R;
 public class AppBarScrollBehavior {
 
 	private final static boolean DEBUG = false;
-	private final static String TAG = "ScrollBehavior";
+	private final static String TAG = "AppBarScrollBehavior";
 
 	private static final int STATE_SCROLLED_DOWN = 1;
 	private static final int STATE_SCROLLED_UP = 2;
