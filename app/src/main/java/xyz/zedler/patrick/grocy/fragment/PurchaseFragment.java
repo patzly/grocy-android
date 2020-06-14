@@ -563,7 +563,9 @@ public class PurchaseFragment extends Fragment {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
         }
         if(action != null) {
-            if(action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
+            if(action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
+                    || action.equals(Constants.ACTION.EDIT_THEN_PURCHASE)
+            ) {
                 Product product = getProductFromName(
                         startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                 );

@@ -410,6 +410,10 @@ public class ConsumeFragment extends Fragment {
         if(!hidden) onViewCreated(requireView(), null);
     }
 
+    public void giveBundle(Bundle bundle) {
+        startupBundle = bundle;
+    }
+
     private void refresh() {
         if(activity.isOnline()) {
             download();
@@ -454,14 +458,16 @@ public class ConsumeFragment extends Fragment {
                     if(startupBundle != null) {
                         action = startupBundle.getString(Constants.ARGUMENT.TYPE);
                     }
-                    if(action != null && action.equals(Constants.ACTION.CONSUME_THEN_STOCK)
-                    ) {
-                        Product product = getProductFromName(
-                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                        );
-                        if(product != null) loadProductDetails(product.getId());
+                    if(action != null) {
+                        if(action.equals(Constants.ACTION.CONSUME_THEN_STOCK)
+                                || action.equals(Constants.ACTION.EDIT_THEN_CONSUME)
+                        ) {
+                            Product product = getProductFromName(
+                                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                            );
+                            if(product != null) loadProductDetails(product.getId());
+                        }
                     }
-
                     binding.swipeConsume.setRefreshing(false);
                 }, error -> {
                     binding.swipeConsume.setRefreshing(false);

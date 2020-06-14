@@ -1069,6 +1069,8 @@ public class MainActivity extends AppCompatActivity {
             if(fragmentCurrent != null) {
                 if(fragmentCurrent.getClass() == PurchaseFragment.class) {
                     ((PurchaseFragment) fragmentCurrent).giveBundle(bundle);
+                } else if(fragmentCurrent.getClass() == ConsumeFragment.class) {
+                    ((ConsumeFragment) fragmentCurrent).giveBundle(bundle);
                 } else if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
                     ((MissingBatchItemsFragment) fragmentCurrent).createdOrEditedProduct(bundle);
                 } else if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {

@@ -556,6 +556,8 @@ public class MasterProductSimpleFragment extends Fragment {
             resetAll();
         } else if(intendedAction.equals(Constants.ACTION.EDIT)
                 || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)
+                || intendedAction.equals(Constants.ACTION.EDIT_THEN_CONSUME)
+                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE)
         ) {
             editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
         } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
@@ -788,6 +790,8 @@ public class MasterProductSimpleFragment extends Fragment {
             switch (intendedAction) {
                 case Constants.ACTION.EDIT:
                 case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH:
+                case Constants.ACTION.EDIT_THEN_CONSUME:
+                case Constants.ACTION.EDIT_THEN_PURCHASE:
                     fillWithEditReferences();
                     isFormInvalid();
                     break;
@@ -1280,7 +1284,9 @@ public class MasterProductSimpleFragment extends Fragment {
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
-                        if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {
+                        if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)
+                                || intendedAction.equals(Constants.ACTION.EDIT_THEN_CONSUME)
+                                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE)) {
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                             bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());

@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -48,6 +49,8 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -214,7 +217,20 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 					dismiss();
 					return true;
 				case R.id.action_edit_product:
-					bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+					Fragment current = activity.getCurrentFragment();
+					if(current.getClass() == PurchaseFragment.class) {
+						bundle.putString(
+								Constants.ARGUMENT.TYPE,
+								Constants.ACTION.EDIT_THEN_PURCHASE
+						);
+					} else if(current.getClass() == ConsumeFragment.class) {
+						bundle.putString(
+								Constants.ARGUMENT.TYPE,
+								Constants.ACTION.EDIT_THEN_CONSUME
+						);
+					} else {
+						bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+					}
 					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
 					activity.replaceFragment(
 							Constants.UI.MASTER_PRODUCT_SIMPLE,
