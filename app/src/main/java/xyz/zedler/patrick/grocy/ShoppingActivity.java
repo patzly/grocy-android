@@ -190,9 +190,14 @@ public class ShoppingActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        int seconds = sharedPrefs.getInt(
+                Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+                10
+        );
+        if(seconds == 0) return;
         timer = new Timer();
         initTimerTask();
-        timer.schedule(timerTask, 1000, 10000);
+        timer.schedule(timerTask, 1000, seconds*1000);
     }
 
     private void load() {
@@ -207,9 +212,14 @@ public class ShoppingActivity extends AppCompatActivity implements
         if(netUtil.isOnline()) {
             downloadFull();
             timer.cancel();
+            int seconds = sharedPrefs.getInt(
+                    Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+                    10
+            );
+            if(seconds == 0) return;
             initTimerTask();
             timer = new Timer();
-            timer.schedule(timerTask, 10000, 10000);
+            timer.schedule(timerTask, seconds*1000, seconds*1000);
         } else {
             binding.swipe.setRefreshing(false);
             loadOfflineData();

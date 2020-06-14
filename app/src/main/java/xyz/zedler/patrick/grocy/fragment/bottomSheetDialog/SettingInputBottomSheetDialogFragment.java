@@ -128,6 +128,9 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
                 case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
                     activity.setAmountConsume(editText.getText().toString());
                     break;
+                case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
+                    activity.setUpdateInterval(editText.getText().toString());
+                    break;
             }
             dismiss();
         });
@@ -157,6 +160,11 @@ public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFrag
                 title = activity.getString(R.string.setting_default_amount_consume);
                 hint = activity.getString(R.string.property_amount);
                 input = bundle.getString(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT);
+                break;
+            case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
+                title = activity.getString(R.string.setting_shopping_mode_update_interval);
+                hint = activity.getString(R.string.property_seconds);
+                input = bundle.getString(Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL);
                 break;
         }
 

@@ -44,6 +44,7 @@ public final class Constants {
         public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
         public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
         public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
+        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
         public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
 

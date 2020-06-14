@@ -95,6 +95,7 @@ public class SettingsActivity extends AppCompatActivity
 	private SwitchMaterial switchDark, switchFoodFacts, switchDebug, switchListIndicator;
 	private TextView
 			textViewExpiringSoonDays,
+			textViewUpdateInterval,
 			textViewAmountPurchase,
 			textViewAmountConsume,
 			textViewDefaultLocation,
@@ -194,6 +195,7 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.linear_setting_debug,
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
+				R.id.linear_setting_shopping_mode_update_interval,
 				R.id.linear_setting_default_amount_purchase,
 				R.id.linear_setting_default_amount_consume,
 				R.id.linear_setting_default_location,
@@ -222,6 +224,17 @@ public class SettingsActivity extends AppCompatActivity
 				days == null || days.isEmpty() || days.equals("null")
 						? String.valueOf(5)
 						: days
+		);
+
+		int updateInterval = sharedPrefs.getInt(
+				Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+				10
+		);
+		textViewUpdateInterval = findViewById(R.id.text_setting_shopping_mode_update_interval);
+		textViewUpdateInterval.setText(
+				updateInterval == 0
+						? getString(R.string.setting_sync_off)
+						: String.valueOf(updateInterval)
 		);
 
 		String amountPurchase = sharedPrefs.getString(
@@ -401,6 +414,27 @@ public class SettingsActivity extends AppCompatActivity
 				break;
 			case R.id.linear_setting_list_indicator:
 				switchListIndicator.setChecked(!switchListIndicator.isChecked());
+				break;
+			case R.id.linear_setting_shopping_mode_update_interval:
+				IconUtil.start(this, R.id.image_setting_shopping_mode_update_interval);
+				Bundle bundleUpdateInterval = new Bundle();
+				bundleUpdateInterval.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL
+				);
+				bundleUpdateInterval.putString(
+						Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+						String.valueOf(
+								sharedPrefs.getInt(
+										Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+										10
+								)
+						)
+				);
+				showBottomSheet(
+						new SettingInputBottomSheetDialogFragment(),
+						bundleUpdateInterval
+				);
 				break;
 			case R.id.linear_setting_default_amount_purchase:
 				IconUtil.start(this, R.id.image_setting_default_amount_purchase);
@@ -824,6 +858,21 @@ public class SettingsActivity extends AppCompatActivity
 					Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
+	}
+
+	public void setUpdateInterval(String seconds) {
+		int secondsFormatted = seconds == null || seconds.trim().isEmpty()
+				? 0
+				: (int) Double.parseDouble(seconds);
+		textViewUpdateInterval.setText(
+				secondsFormatted == 0
+						? getString(R.string.setting_sync_off)
+						: String.valueOf(secondsFormatted)
+		);
+		sharedPrefs.edit().putInt(
+				Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
+				secondsFormatted
+		).apply();
 	}
 
 	private boolean isVersionCompatible() {

@@ -216,6 +216,7 @@
     <string name="property_note">Note</string>
     <string name="property_status">Status</string>
     <string name="property_amount">Amount</string>
+    <string name="property_seconds">Seconds</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_price">Price</string>
@@ -313,6 +314,7 @@
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
     <string name="setting_list_indicator">Indicate list entry</string>
+    <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>
     <string name="setting_list_indicator_description">Show blue dot if product is on a shopping list</string>
     <string name="setting_currency_default">USD</string>
     <string name="setting_expiring_soon_days">Expiring soon days</string>
@@ -322,6 +324,7 @@
     <string name="setting_default_product_group">Default product group</string>
     <string name="setting_default_quantity_unit">Default quantity unit</string>
     <string name="setting_empty_value">Empty</string>
+    <string name="setting_sync_off">Sync off</string>
     <string name="setting_not_loaded">Could not be loaded</string>
 
     <string name="license_author_google" translatable="false">Google</string>

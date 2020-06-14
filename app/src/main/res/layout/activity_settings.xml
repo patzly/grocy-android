@@ -301,6 +301,35 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/text_setting_shopping_list_header"
+                style="@style/Theme.Grocy.Category"
+                android:text="@string/title_shopping_list"/>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_shopping_mode_update_interval"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_shopping_mode_update_interval"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_sync_anim"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.OverLine"
+                        android:text="@string/setting_shopping_mode_update_interval" />
+
+                    <TextView
+                        android:id="@+id/text_setting_shopping_mode_update_interval"
+                        style="@style/Theme.Grocy.ListItem.Title" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
                 style="@style/Theme.Grocy.Category"
                 android:text="@string/action_purchase"/>
 
