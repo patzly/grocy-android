@@ -48,6 +48,8 @@
 
         <activity android:name=".AboutActivity"/>
 
+        <activity android:name=".HelpActivity"/>
+
         <activity android:name=".RestartActivity"/>
 
         <activity

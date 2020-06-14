@@ -1,0 +1,22 @@
+§ HELP FOR GROCY ANDROID
+–
+# Welcome to the help section!
+–
+Tap on an answer to expand it to the full length.
+Yeah tap here.
+
+Perfect!
+–
+# How do I know what something does?
+–
+Starting with Android 8 you can long press almost every clickable element without a label to see what it will do.
+–
+# My API key is invalid.
+–
+Tap CREATE KEY to open the key management page of your Grocy instance.
+Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
+–
+# I have another question.
+–
+Please go to our project page on GitHub and open a new issue with your question.
+We'll try to help you as fast as possible.

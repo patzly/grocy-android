@@ -148,6 +148,12 @@ public class LoginActivity extends AppCompatActivity {
             loadInfoAndFinish();
         });
 
+        binding.buttonLoginHelp.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
+            binding.buttonLoginHelp.startIconAnimation();
+            startActivity(new Intent(this, HelpActivity.class));
+        });
+
         binding.buttonLoginFeedback.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginFeedback.startIconAnimation();

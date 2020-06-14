@@ -206,8 +206,7 @@
 
             <LinearLayout
                 android:id="@+id/linear_help"
-                style="@style/Theme.Grocy.DrawerItem"
-                android:visibility="gone">
+                style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
                     android:id="@+id/image_help"

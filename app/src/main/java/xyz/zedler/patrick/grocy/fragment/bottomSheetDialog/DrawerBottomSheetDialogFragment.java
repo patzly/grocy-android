@@ -38,6 +38,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import xyz.zedler.patrick.grocy.HelpActivity;
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
@@ -175,7 +176,7 @@ public class DrawerBottomSheetDialogFragment
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);
-                //startActivity(new Intent(activity, HelpActivity.class));
+                startActivity(new Intent(activity, HelpActivity.class));
                 new Handler().postDelayed(this::dismiss, 500);
                 break;
         }
