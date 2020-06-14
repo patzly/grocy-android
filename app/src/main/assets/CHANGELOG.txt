@@ -1,3 +1,8 @@
+1.4.1:
+- In-App help with FAQ
+- Setting for changing update interval in shopping mode
+- Bug fixes and improvements
+
 1.4.0:
 - Full shopping list support with offline mode
 - In-store shopping mode with big UI elements
