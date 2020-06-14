@@ -429,9 +429,9 @@ public class ScanBatchActivity extends AppCompatActivity
         this.actionType = actionType;
 
         if(animated) {
-            cardViewType.animate().alpha(0).setDuration(300).withEndAction(() -> {
+            cardViewType.animate().alpha(0).setDuration(200).withEndAction(() -> {
                 updateActionText();
-                cardViewType.animate().alpha(1).setDuration(300).start();
+                cardViewType.animate().alpha(1).setDuration(200).start();
             }).start();
         } else {
             updateActionText();
