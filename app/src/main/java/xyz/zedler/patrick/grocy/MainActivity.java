@@ -95,7 +95,7 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;

@@ -1,21 +1,14 @@
 1.4.0:
-- Offline shopping lists
-- Shopping mode:
-    Big UI elements
-    Tap to mark an item as done
-    Syncs every 10 sec if online
-- Disabling of features with grocy config
-- Load Grocy config from settings
-- Error and empty state illustrations
-- Improved landscape and rotation support
-- Switch between consume, open and purchase in scan mode
-- Over 300 bug fixes and improvements
+- Full shopping list support with offline mode
+- In-store shopping mode with big elements
+- Disabling of features with Grocy config
+- Improved screen rotation support
+- Switching between consume, open and purchase in scan mode
+- Over 330 improvements and bug fixes
 
 1.3.0:
-- Get product name for barcode (enable Open Food Facts in settings)
-- Edit shopping list bottom notes
-- Toggle shopping list indicator dots in settings
-- Open new issue from feedback
+- Open Food Facts integration
+- Editable bottom notes of shopping lists
 - Dense stock overview in landscape mode
 - Proper purchase to stock amount calculation
 - Bug fixes and improvements
