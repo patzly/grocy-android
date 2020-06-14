@@ -3,11 +3,11 @@
 ## Bugs
 
 - online -> open stock -> go offline -> open shopping list -> go back -> error invisible but button clickable
-- shopping list edit after rotation showing error when try to save
 
 ## Improvements
 
 - Replace DEBUG with debug from shared prefs
+- offline indicator in shopping mode
 - turn error layout into custom view ErrorState and add view methods for control
 - turn empty state layout into custom view EmptyState and add view methods for control
 - missing batch items empty state -> all done/purchased
@@ -28,7 +28,6 @@
 - version name updated?
 - latest libs?
 - changelog added?
-- DEBUG off for unneeded classes?
 
 # Conventions
 
