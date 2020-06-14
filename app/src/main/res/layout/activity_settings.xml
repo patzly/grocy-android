@@ -77,7 +77,7 @@
 
             <TextView
                 style="@style/Theme.Grocy.Category"
-                android:text="@string/category_system"/>
+                android:text="@string/category_server"/>
 
             <LinearLayout
                 style="@style/Theme.Grocy.ListItem.TwoLine">
