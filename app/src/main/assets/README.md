@@ -4,7 +4,6 @@
 
 - in stock, swipe actions not working after fragment comes to foreground
 - clear last selected shopping list id at logout
-- in drawer store front icon not showing after going to ShoppingListFragment when offline and then back
 - in purchase and consume: after editing a product, refill the product field with this after saving or going back
 - online -> open stock -> go offline -> open shopping list -> go back -> error invisible but button clickable
 - shopping list edit after rotation showing error when try to save
