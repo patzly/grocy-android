@@ -7,6 +7,7 @@
 
 ## Improvements
 
+- Replace DEBUG with debug from shared prefs
 - turn error layout into custom view ErrorState and add view methods for control
 - turn empty state layout into custom view EmptyState and add view methods for control
 - missing batch items empty state -> all done/purchased

@@ -38,7 +38,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
@@ -56,7 +55,6 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.RequestQueue;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -95,8 +93,8 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
-    private final static boolean DEBUG = false;
 
+    public ActivityMainBinding binding;
     private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
@@ -105,13 +103,10 @@ public class MainActivity extends AppCompatActivity {
     private NetUtil netUtil;
     private BroadcastReceiver networkReceiver;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
-    private String uiMode = Constants.UI.STOCK_DEFAULT;
-
-    public ActivityMainBinding binding;
-    private CustomBottomAppBar bottomAppBar;
     private Fragment fragmentCurrent;
-    private FloatingActionButton fab;
-    private FrameLayout frameLayoutDemoIndicator;
+
+    private String uiMode = Constants.UI.STOCK_DEFAULT;
+    private boolean debug;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -161,26 +157,23 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        bottomAppBar = findViewById(R.id.bottom_app_bar);
-        fab = findViewById(R.id.fab_main);
-        frameLayoutDemoIndicator = findViewById(R.id.frame_main_demo);
-        frameLayoutDemoIndicator.setOnClickListener(
+        binding.frameMainDemo.setOnClickListener(
                 // bottomSheet only checks if bundle is != null, then it's of type demo
                 v -> showBottomSheet(new LogoutBottomSheetDialogFragment(), new Bundle())
         );
 
         // BOTTOM APP BAR
 
-        bottomAppBar.setNavigationOnClickListener(v -> {
+        binding.bottomAppBar.setNavigationOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            IconUtil.start(bottomAppBar.getNavigationIcon());
+            IconUtil.start(binding.bottomAppBar.getNavigationIcon());
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
             showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
         });
 
         scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
-        scrollBehavior.setUpBottomAppBar(bottomAppBar);
+        scrollBehavior.setUpBottomAppBar(binding.bottomAppBar);
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
 
@@ -323,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setUI(String uiMode) {
-        if(DEBUG) Log.i(TAG, "setUI: " + uiMode);
+        if(debug) Log.i(TAG, "setUI: " + uiMode);
         this.uiMode = uiMode;
     }
 
@@ -332,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(String uiMode, boolean animated, String origin) {
-        if(DEBUG) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
+        if(debug) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
 
         this.uiMode = uiMode;
 
@@ -669,7 +662,9 @@ public class MainActivity extends AppCompatActivity {
                         Constants.FAB.TAG.SAVE,
                         true,
                         () -> {
-                            if(getCurrentFragment().getClass() == MasterProductSimpleFragment.class) {
+                            if(getCurrentFragment().getClass()
+                                    == MasterProductSimpleFragment.class
+                            ) {
                                 ((MasterProductSimpleFragment) fragmentCurrent).saveProduct();
                             }
                         }
@@ -787,29 +782,29 @@ public class MainActivity extends AppCompatActivity {
     ) {
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
-                if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(
+                if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
+                binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
-                bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
+                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+                binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
-                if(fab.isOrWillBeHidden()) fab.show();
-                bottomAppBar.changeMenu(
+                if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
+                binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
                 );
-                bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-                bottomAppBar.hideNavigationIcon(animated);
+                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+                binding.bottomAppBar.hideNavigationIcon(animated);
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB.POSITION.GONE:
-                if(fab.isOrWillBeShown()) fab.hide();
-                bottomAppBar.changeMenu(
+                if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
+                binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
-                bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
+                binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
@@ -839,12 +834,12 @@ public class MainActivity extends AppCompatActivity {
             Runnable onClick
     ) {
         replaceFabIcon(icon, tag, animated);
-        fab.setOnClickListener(v -> {
-            IconUtil.start(fab.getDrawable());
+        binding.fabMain.setOnClickListener(v -> {
+            IconUtil.start(binding.fabMain.getDrawable());
             onClick.run();
         });
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            fab.setTooltipText(getString(tooltipStringId));
+            binding.fabMain.setTooltipText(getString(tooltipStringId));
         }
     }
 
@@ -876,7 +871,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MISSING_BATCH_ITEMS:
                 if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                    if(((MissingBatchItemsFragment)fragmentCurrent).getMissingBatchItemsSize() == 0) {
+                    if(((MissingBatchItemsFragment)fragmentCurrent).getMissingBatchItemsSize() == 0
+                    ) {
                         dismissFragments();
                     } else {
                         showBottomSheet(
@@ -1007,7 +1003,7 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(fragmentCurrent.toString())
                 .commit();
 
-        if(DEBUG) Log.i(
+        if(debug) Log.i(
                 TAG, "replaceFragment: replaced " + fragmentOld
                         + " with "+ fragmentNew
                         + ", animated = " + animated
@@ -1022,11 +1018,11 @@ public class MainActivity extends AppCompatActivity {
             }
             fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
 
-            if(DEBUG) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
+            if(debug) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
             Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
         }
-        bottomAppBar.show();
+        binding.bottomAppBar.show();
     }
 
     public void dismissFragment() {
@@ -1050,10 +1046,10 @@ public class MainActivity extends AppCompatActivity {
         if(fragmentCurrent == null) {
             fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
             Log.e(TAG, "dismissFragment: " + tag + " not found");
-        } else if(DEBUG) {
+        } else if(debug) {
             Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
         }
-        bottomAppBar.show();
+        binding.bottomAppBar.show();
     }
 
     public void dismissFragment(Bundle bundle) {
@@ -1084,7 +1080,7 @@ public class MainActivity extends AppCompatActivity {
                             bundle.getString(Constants.ARGUMENT.SHOPPING_LIST_NAME)
                     );
                 }
-                if(DEBUG) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
+                if(debug) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {
                 fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
                 Log.e(TAG, "dismissFragment: " + tag + " not found");
@@ -1092,7 +1088,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
         }
-        bottomAppBar.show();
+        binding.bottomAppBar.show();
     }
 
     public boolean isOnline() {
@@ -1100,7 +1096,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showMessage(Snackbar snackbar) {
-        snackbar.setAnchorView(fab.isOrWillBeShown() ? fab : bottomAppBar).show();
+        snackbar.setAnchorView(
+                binding.fabMain.isOrWillBeShown() ? binding.fabMain : binding.bottomAppBar
+        ).show();
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
@@ -1109,7 +1107,7 @@ public class MainActivity extends AppCompatActivity {
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
-            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
+            if(debug) Log.i(TAG, "showBottomSheet: " + tag);
         } else Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
@@ -1120,23 +1118,23 @@ public class MainActivity extends AppCompatActivity {
     private void showDemoIndicator(boolean animated) {
         if(uiMode.startsWith(Constants.UI.STOCK)) {
             if(animated) {
-                frameLayoutDemoIndicator.setVisibility(View.VISIBLE);
-                frameLayoutDemoIndicator.animate().alpha(1).setDuration(200).start();
+                binding.frameMainDemo.setVisibility(View.VISIBLE);
+                binding.frameMainDemo.animate().alpha(1).setDuration(200).start();
             } else {
-                frameLayoutDemoIndicator.setAlpha(1);
-                frameLayoutDemoIndicator.setVisibility(View.VISIBLE);
+                binding.frameMainDemo.setAlpha(1);
+                binding.frameMainDemo.setVisibility(View.VISIBLE);
             }
         }
     }
 
     private void hideDemoIndicator(boolean animated) {
         if(animated) {
-            frameLayoutDemoIndicator.animate().alpha(0).setDuration(200).withEndAction(
-                    () -> frameLayoutDemoIndicator.setVisibility(View.GONE)
+            binding.frameMainDemo.animate().alpha(0).setDuration(200).withEndAction(
+                    () -> binding.frameMainDemo.setVisibility(View.GONE)
             );
         } else {
-            frameLayoutDemoIndicator.setAlpha(0);
-            frameLayoutDemoIndicator.setVisibility(View.GONE);
+            binding.frameMainDemo.setAlpha(0);
+            binding.frameMainDemo.setVisibility(View.GONE);
         }
     }
 
@@ -1170,7 +1168,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Menu getBottomMenu() {
-        return bottomAppBar.getMenu();
+        return binding.bottomAppBar.getMenu();
     }
 
     public Fragment getCurrentFragment() {
@@ -1178,23 +1176,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {
-        if(!tag.equals(fab.getTag())) {
+        if(!tag.equals(binding.fabMain.getTag())) {
             if(animated) {
                 int duration = 400;
-                ValueAnimator animOut = ValueAnimator.ofInt(fab.getImageAlpha(), 0);
+                ValueAnimator animOut = ValueAnimator.ofInt(binding.fabMain.getImageAlpha(), 0);
                 animOut.addUpdateListener(
-                        animation -> fab.setImageAlpha((int) animation.getAnimatedValue())
+                        animation -> binding.fabMain.setImageAlpha(
+                                (int) animation.getAnimatedValue()
+                        )
                 );
                 animOut.setDuration(duration / 2);
                 animOut.setInterpolator(new FastOutSlowInInterpolator());
                 animOut.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        fab.setImageDrawable(icon);
-                        fab.setTag(tag);
+                        binding.fabMain.setImageDrawable(icon);
+                        binding.fabMain.setTag(tag);
                         ValueAnimator animIn = ValueAnimator.ofInt(0, 255);
                         animIn.addUpdateListener(
-                                anim -> fab.setImageAlpha((int) (anim.getAnimatedValue()))
+                                anim -> binding.fabMain.setImageAlpha(
+                                        (int) (anim.getAnimatedValue())
+                                )
                         );
                         animIn.setDuration(duration / 2);
                         animIn.setInterpolator(new FastOutSlowInInterpolator());
@@ -1203,15 +1205,15 @@ public class MainActivity extends AppCompatActivity {
                 });
                 animOut.start();
             } else {
-                fab.setImageDrawable(icon);
-                fab.setTag(tag);
+                binding.fabMain.setImageDrawable(icon);
+                binding.fabMain.setTag(tag);
             }
         } else {
-            if(DEBUG) Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
+            if(debug) Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
         }
     }
 
     public void setFabIcon(Drawable icon) {
-        fab.setImageDrawable(icon);
+        binding.fabMain.setImageDrawable(icon);
     }
 }

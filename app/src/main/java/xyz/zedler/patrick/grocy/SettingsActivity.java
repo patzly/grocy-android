@@ -92,7 +92,7 @@ public class SettingsActivity extends AppCompatActivity
 	private ClickUtil clickUtil = new ClickUtil();
 	private SharedPreferences sharedPrefs;
 	private ImageView imageViewDark;
-	private SwitchMaterial switchDark, switchFoodFacts, switchListIndicator;
+	private SwitchMaterial switchDark, switchFoodFacts, switchDebug, switchListIndicator;
 	private TextView
 			textViewExpiringSoonDays,
 			textViewAmountPurchase,
@@ -168,6 +168,9 @@ public class SettingsActivity extends AppCompatActivity
 				sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
 		);
 
+		switchDebug = findViewById(R.id.switch_setting_debug);
+		switchDebug.setChecked(sharedPrefs.getBoolean(Constants.PREF.DEBUG, false));
+
 		switchListIndicator = findViewById(R.id.switch_setting_list_indicator);
 		switchListIndicator.setChecked(
 				sharedPrefs.getBoolean(
@@ -179,6 +182,7 @@ public class SettingsActivity extends AppCompatActivity
 		setOnCheckedChangeListeners(
 				R.id.switch_setting_dark_mode,
 				R.id.switch_setting_open_food_facts,
+				R.id.switch_setting_debug,
 				R.id.switch_setting_list_indicator
 		);
 
@@ -187,6 +191,7 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.linear_setting_logout,
 				R.id.linear_setting_dark_mode,
 				R.id.linear_setting_open_food_facts,
+				R.id.linear_setting_debug,
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_default_amount_purchase,
@@ -375,6 +380,9 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_open_food_facts:
 				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
 				break;
+			case R.id.linear_setting_debug:
+				switchDebug.setChecked(!switchDebug.isChecked());
+				break;
 			case R.id.linear_setting_expiring_soon_days:
 				IconUtil.start(this, R.id.image_setting_expiring_soon_days);
 				Bundle bundleExpiringSoonDays = new Bundle();
@@ -490,6 +498,13 @@ public class SettingsActivity extends AppCompatActivity
 				sharedPrefs.edit().putBoolean(
 						Constants.PREF.FOOD_FACTS,
 						switchFoodFacts.isChecked()
+				).apply();
+				break;
+			case R.id.switch_setting_debug:
+				IconUtil.start(this, R.id.image_setting_debug);
+				sharedPrefs.edit().putBoolean(
+						Constants.PREF.DEBUG,
+						switchDebug.isChecked()
 				).apply();
 				break;
 			case R.id.switch_setting_list_indicator:

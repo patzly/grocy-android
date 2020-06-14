@@ -90,7 +90,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
     private final static String TAG = Constants.UI.STOCK;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -131,6 +130,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private int filterProductGroupId;
     private int filterLocationId;
     private int daysExpiringSoon;
+    private boolean debug;
     private boolean sortAscending;
     private boolean isRestoredInstance;
     private boolean isSetupAfterFragmentHasBecomeVisible;
@@ -209,6 +209,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         String days = sharedPrefs.getString(
                 Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
                 String.valueOf(5)
@@ -647,7 +648,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void filterItems(String filter) {
         itemsToDisplay = filter.isEmpty() ? Constants.STOCK.FILTER.ALL : filter;
-        if(DEBUG) Log.i(
+        if(debug) Log.i(
                 TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
         );
         // VOLATILE
@@ -665,7 +666,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 filteredItems = this.stockItems;
                 break;
         }
-        if(DEBUG) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
+        if(debug) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
         // LOCATION
         if(filterLocationId != -1) {
             ArrayList<StockItem> tempItems = new ArrayList<>();
@@ -719,7 +720,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void searchItems(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchItems: search = " + search);
+        if(debug) Log.i(TAG, "searchItems: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterItems(itemsToDisplay);
@@ -748,7 +749,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void filterLocation(Location location) {
         if(filterLocationId != location.getId()) { // only if not already selected
-            if(DEBUG) Log.i(TAG, "filterLocation: " + location);
+            if(debug) Log.i(TAG, "filterLocation: " + location);
             filterLocationId = location.getId();
             if(inputChipFilterLocation != null) {
                 inputChipFilterLocation.changeText(location.getName());
@@ -767,7 +768,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             }
             filterItems(itemsToDisplay);
         } else {
-            if(DEBUG) Log.i(TAG, "filterLocation: " + location + " already filtered");
+            if(debug) Log.i(TAG, "filterLocation: " + location + " already filtered");
         }
     }
 
@@ -798,7 +799,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void filterProductGroup(ProductGroup productGroup) {
         if(filterProductGroupId != productGroup.getId()) {
-            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
+            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = productGroup.getId();
             if(inputChipFilterProductGroup != null) {
                 inputChipFilterProductGroup.changeText(productGroup.getName());
@@ -817,7 +818,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             }
             filterItems(itemsToDisplay);
         } else {
-            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
+            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
         }
     }
 
@@ -847,7 +848,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void sortItems(String sortMode, boolean ascending) {
-        if(DEBUG) Log.i(TAG, "sortItems: sort by " + sortMode + ", ascending = " + ascending);
+        if(debug) Log.i(TAG, "sortItems: sort by " + sortMode + ", ascending = " + ascending);
         this.sortMode = sortMode;
         sortAscending = ascending;
         sharedPrefs.edit()
@@ -996,7 +997,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 },
                 error -> {
                     showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                    if(debug) Log.i(TAG, "consumeProduct: " + error);
                 }
         );
     }
@@ -1080,7 +1081,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                     )
                             );
                         }
-                        if(DEBUG) Log.i(
+                        if(debug) Log.i(
                                 TAG, "updateConsumedStockItem: consumed " + amountConsumed
                         );
                     } else {
@@ -1089,13 +1090,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
-                        if(DEBUG) Log.i(TAG, "updateConsumedStockItem: undone");
+                        if(debug) Log.i(TAG, "updateConsumedStockItem: undone");
                     }
                     activity.showMessage(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "updateConsumedStockItem: " + error);
+                    if(debug) Log.i(TAG, "updateConsumedStockItem: " + error);
                 }
         );
     }
@@ -1124,7 +1125,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 },
                 error -> {
                     showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
+                    if(debug) Log.i(TAG, "openProduct: " + error);
                 }
         );
     }
@@ -1187,20 +1188,20 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                     )
                             );
                         }
-                        if(DEBUG) Log.i(TAG, "updateOpenedStockItem: opened 1");
+                        if(debug) Log.i(TAG, "updateOpenedStockItem: opened 1");
                     } else {
                         snackbar = Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_undone_transaction),
                                 Snackbar.LENGTH_SHORT
                         );
-                        if(DEBUG) Log.i(TAG, "updateOpenedStockItem: undone");
+                        if(debug) Log.i(TAG, "updateOpenedStockItem: undone");
                     }
                     activity.showMessage(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
-                    if(DEBUG) Log.i(TAG, "updateOpenedStockItem: " + error);
+                    if(debug) Log.i(TAG, "updateOpenedStockItem: " + error);
                 }
         );
     }

@@ -2,7 +2,10 @@ package xyz.zedler.patrick.grocy.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -30,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -53,9 +57,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 */
 
 public class DownloadHelper {
-
-    private final static boolean DEBUG = false;
-
     private GrocyApi grocyApi;
     private WebRequest request;
     private Gson gson;
@@ -65,6 +66,7 @@ public class DownloadHelper {
 
     private String tag;
     private int queueSize;
+    private boolean debug;
 
     public DownloadHelper(
             Activity activity,
@@ -76,6 +78,8 @@ public class DownloadHelper {
         this.tag = tag;
         this.onErrorListener = onErrorListener;
         this.onQueueEmptyListener = onQueueEmptyListener;
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         gson = new Gson();
         request = new WebRequest(RequestQueueSingleton.getInstance(context).getRequestQueue());
         grocyApi = new GrocyApi(context);
@@ -112,7 +116,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<ProductGroup>>(){}.getType();
                     ArrayList<ProductGroup> productGroups = gson.fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadProductGroups: " + productGroups);
+                    if(debug) Log.i(tag, "downloadProductGroups: " + productGroups);
                     onResponseListener.onResponse(productGroups);
                     checkQueueSize();
                 },
@@ -135,7 +139,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<QuantityUnit>>(){}.getType();
                     ArrayList<QuantityUnit> quantityUnits = gson.fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadQuantityUnits: " + quantityUnits);
+                    if(debug) Log.i(tag, "downloadQuantityUnits: " + quantityUnits);
                     onResponseListener.onResponse(quantityUnits);
                     checkQueueSize();
                 },
@@ -158,7 +162,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<Location>>(){}.getType();
                     ArrayList<Location> locations = gson.fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadLocations: " + locations);
+                    if(debug) Log.i(tag, "downloadLocations: " + locations);
                     onResponseListener.onResponse(locations);
                     checkQueueSize();
                 },
@@ -181,7 +185,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<Product>>(){}.getType();
                     ArrayList<Product> products = gson.fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadProducts: " + products);
+                    if(debug) Log.i(tag, "downloadProducts: " + products);
                     onResponseListener.onResponse(products);
                     checkQueueSize();
                 },
@@ -204,7 +208,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<StockItem>>(){}.getType();
                     ArrayList<StockItem> stockItems = gson.fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadStockItems: " + stockItems);
+                    if(debug) Log.i(tag, "downloadStockItems: " + stockItems);
                     onResponseListener.onResponse(stockItems);
                     checkQueueSize();
                 },
@@ -225,7 +229,7 @@ public class DownloadHelper {
                 grocyApi.getStockVolatile(),
                 tag,
                 response -> {
-                    if(DEBUG) Log.i(tag, "downloadVolatile: success");
+                    if(debug) Log.i(tag, "downloadVolatile: success");
                     ArrayList<StockItem> expiringItems = new ArrayList<>();
                     ArrayList<StockItem> expiredItems = new ArrayList<>();
                     ArrayList<MissingItem> missingItems = new ArrayList<>();
@@ -236,19 +240,19 @@ public class DownloadHelper {
                                 jsonObject.getJSONArray("expiring_products").toString(),
                                 new TypeToken<List<StockItem>>(){}.getType()
                         );
-                        if(DEBUG) Log.i(tag, "downloadVolatile: expiring = " + expiringItems);
+                        if(debug) Log.i(tag, "downloadVolatile: expiring = " + expiringItems);
                         // Parse second part of volatile array: expired products
                         expiredItems = gson.fromJson(
                                 jsonObject.getJSONArray("expired_products").toString(),
                                 new TypeToken<List<StockItem>>(){}.getType()
                         );
-                        if(DEBUG) Log.i(tag, "downloadVolatile: expired = " + expiredItems);
+                        if(debug) Log.i(tag, "downloadVolatile: expired = " + expiredItems);
                         // Parse third part of volatile array: missing products
                         missingItems = gson.fromJson(
                                 jsonObject.getJSONArray("missing_products").toString(),
                                 new TypeToken<List<MissingItem>>(){}.getType()
                         );
-                        if(DEBUG) Log.i(tag, "downloadVolatile: missing = " + missingItems);
+                        if(debug) Log.i(tag, "downloadVolatile: missing = " + missingItems);
                     } catch (JSONException e) {
                         Log.e(tag, "downloadVolatile: " + e);
                     }
@@ -275,7 +279,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<ProductDetails>(){}.getType();
                     ProductDetails productDetails = new Gson().fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadProductDetails: " + productDetails);
+                    if(debug) Log.i(tag, "downloadProductDetails: " + productDetails);
                     onResponseListener.onResponse(productDetails);
                     if(enableQueue) checkQueueSize();
                 },
@@ -301,7 +305,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<ShoppingListItem>>(){}.getType();
                     ArrayList<ShoppingListItem> listItems = new Gson().fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadShoppingList: " + listItems);
+                    if(debug) Log.i(tag, "downloadShoppingList: " + listItems);
                     onResponseListener.onResponse(listItems);
                     if(enableQueue) checkQueueSize();
                 },
@@ -324,7 +328,7 @@ public class DownloadHelper {
                 response -> {
                     Type type = new TypeToken<List<ShoppingList>>(){}.getType();
                     ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
-                    if(DEBUG) Log.i(tag, "downloadShoppingLists: " + shoppingLists);
+                    if(debug) Log.i(tag, "downloadShoppingLists: " + shoppingLists);
                     onResponseListener.onResponse(shoppingLists);
                     if(enableQueue) checkQueueSize();
                 },
