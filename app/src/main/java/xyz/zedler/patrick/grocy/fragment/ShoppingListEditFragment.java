@@ -99,8 +99,8 @@ public class ShoppingListEditFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
         assert activity != null;
@@ -196,13 +196,14 @@ public class ShoppingListEditFragment extends Fragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("shoppingLists", shoppingLists);
+        outState.putStringArrayList("shoppingListNames", shoppingListNames);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
         if(isHidden()) return;
 
         shoppingLists = savedInstanceState.getParcelableArrayList("shoppingLists");
-        shoppingListNames = getShoppingListNames();
+        shoppingListNames = savedInstanceState.getStringArrayList("shoppingListNames");
 
         binding.swipeShoppingListEdit.setRefreshing(false);
     }
