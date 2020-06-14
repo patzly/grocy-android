@@ -779,7 +779,7 @@ public class ShoppingListFragment extends Fragment
                 productGroups,
                 shoppingLists,
                 selectedShoppingListId,
-                !search.isEmpty() && itemsToDisplay.equals(
+                search.isEmpty() && itemsToDisplay.equals(
                         Constants.SHOPPING_LIST.FILTER.ALL
                 )
         );
