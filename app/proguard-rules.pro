@@ -26,4 +26,3 @@
 -keep,allowobfuscation interface com.google.gson.annotations.SerializedName
 -renamesourcefileattribute SourceFile
 -keepattributes InnerClasses,Signature,SourceFile,LineNumberTable
--keep public class * extends android.app.Application
