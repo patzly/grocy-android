@@ -3,7 +3,6 @@
 ## Bugs
 
 - in stock, swipe actions not working after fragment comes to foreground
-- clear last selected shopping list id at logout
 - in purchase and consume: after editing a product, refill the product field with this after saving or going back
 - online -> open stock -> go offline -> open shopping list -> go back -> error invisible but button clickable
 - shopping list edit after rotation showing error when try to save

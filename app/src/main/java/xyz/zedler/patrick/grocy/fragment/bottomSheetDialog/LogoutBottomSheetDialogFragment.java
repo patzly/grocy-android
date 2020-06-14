@@ -78,6 +78,7 @@ public class LogoutBottomSheetDialogFragment extends BottomSheetDialogFragment {
             PreferenceManager.getDefaultSharedPreferences(activity).edit()
                     .remove(Constants.PREF.SERVER_URL)
                     .remove(Constants.PREF.API_KEY)
+                    .remove(Constants.PREF.SHOPPING_LIST_LAST_ID)
                     .apply();
             RestartActivity.restartApp(activity);
         });
