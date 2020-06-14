@@ -24,7 +24,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -41,13 +40,11 @@ import xyz.zedler.patrick.grocy.util.UnitUtil;
 public class InputChip extends LinearLayout {
 
     private final static String TAG = "InputChip";
-    private final static boolean DEBUG = false;
 
     private Context context;
     private LinearLayout linearLayoutThis;
     private ImageView imageViewIcon;
     private FrameLayout frameLayoutContainer, frameLayoutIcon;
-    private View viewClose;
     private TextView textView;
     private Runnable runnableOnClose;
     private int width;
@@ -110,7 +107,6 @@ public class InputChip extends LinearLayout {
         frameLayoutIcon = findViewById(R.id.frame_input_chip_icon);
         imageViewIcon = findViewById(R.id.image_input_chip_icon);
         textView = findViewById(R.id.text_input_chip);
-        viewClose = findViewById(R.id.view_input_chip_close);
         runnableOnClose = onClose;
 
         if(animate) {
@@ -121,9 +117,7 @@ public class InputChip extends LinearLayout {
         setIcon(iconRes);
         setText(text);
 
-        viewClose.setOnClickListener(v -> {
-            close();
-        });
+        findViewById(R.id.view_input_chip_close).setOnClickListener(v -> close());
     }
 
     public void setIcon(@DrawableRes int iconRes) {
@@ -198,6 +192,5 @@ public class InputChip extends LinearLayout {
 
     public void changeText(String text) {
         textView.setText(text);
-        // TODO: animate changes
     }
 }
