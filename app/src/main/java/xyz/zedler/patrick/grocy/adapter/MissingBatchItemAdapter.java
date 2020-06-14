@@ -41,7 +41,6 @@ public class MissingBatchItemAdapter
         extends RecyclerView.Adapter<MissingBatchItemAdapter.ViewHolder> {
 
     private final static String TAG = MissingBatchItemAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<MissingBatchItem> missingBatchItems;
     private MissingBatchItemAdapterListener listener;

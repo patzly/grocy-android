@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "SettingInputBottomSheet";
 
     private SettingsActivity activity;

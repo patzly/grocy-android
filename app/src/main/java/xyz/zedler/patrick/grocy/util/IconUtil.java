@@ -34,7 +34,6 @@ import androidx.annotation.IdRes;
 public class IconUtil {
 
     private final static String TAG = IconUtil.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     public static void start(Activity activity, @IdRes int viewId) {
         if(activity == null) return;

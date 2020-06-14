@@ -26,7 +26,6 @@ import xyz.zedler.patrick.grocy.R;
 public class OpenFoodFactsApi {
 
     private final static String TAG = OpenFoodFactsApi.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     public static String getUserAgent(Context context) {
         return "Grocy Android - v"

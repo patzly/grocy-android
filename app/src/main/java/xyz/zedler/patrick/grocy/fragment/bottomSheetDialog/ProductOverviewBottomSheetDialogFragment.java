@@ -71,7 +71,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "ProductBottomSheet";
 
 	private SharedPreferences sharedPrefs;

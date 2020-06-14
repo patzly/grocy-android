@@ -51,7 +51,6 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 public class ShoppingListsBottomSheetDialogFragment
         extends BottomSheetDialogFragment implements ShoppingListAdapter.ShoppingListAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "ShoppingListsBottomSheet";
 
     private Activity activity;

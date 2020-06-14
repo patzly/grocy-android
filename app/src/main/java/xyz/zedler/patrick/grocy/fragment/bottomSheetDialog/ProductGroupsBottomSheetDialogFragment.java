@@ -50,7 +50,6 @@ public class ProductGroupsBottomSheetDialogFragment
         extends BottomSheetDialogFragment
         implements ProductGroupAdapter.ProductGroupAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "ProductGroupBottomSheet";
 
     private Activity activity;

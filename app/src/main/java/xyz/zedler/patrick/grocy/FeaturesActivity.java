@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class FeaturesActivity extends AppCompatActivity {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "FeaturesActivity";
 
     private SharedPreferences sharedPrefs;

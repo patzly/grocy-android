@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 public class StoresBottomSheetDialogFragment
         extends BottomSheetDialogFragment implements StoreAdapter.StoreAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "StoresBottomSheet";
 
     private Activity activity;

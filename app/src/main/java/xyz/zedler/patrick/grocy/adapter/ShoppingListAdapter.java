@@ -38,7 +38,6 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
     private final static String TAG = ShoppingListAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<ShoppingList> shoppingLists;
     private int selectedId;

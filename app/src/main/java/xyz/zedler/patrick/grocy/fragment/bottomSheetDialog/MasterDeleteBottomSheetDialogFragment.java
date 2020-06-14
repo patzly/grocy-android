@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "MasterDeleteBottomSheet";
 
     private MainActivity activity;

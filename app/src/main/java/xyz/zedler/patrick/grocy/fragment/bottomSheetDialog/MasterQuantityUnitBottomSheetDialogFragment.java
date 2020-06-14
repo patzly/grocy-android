@@ -41,7 +41,6 @@ import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterQuantityUnitBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "MasterQuantityUnitBottomSheet";
 
 	private MainActivity activity;

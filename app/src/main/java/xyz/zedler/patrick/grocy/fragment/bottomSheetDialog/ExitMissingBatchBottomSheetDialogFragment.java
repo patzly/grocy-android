@@ -38,7 +38,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ExitMissingBatchBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "ExitMissingBatchBottomSheet";
 
     private MainActivity activity;

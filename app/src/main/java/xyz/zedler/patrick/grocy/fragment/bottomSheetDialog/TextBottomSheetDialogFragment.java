@@ -49,7 +49,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "TextBottomSheet";
 
 	@NonNull

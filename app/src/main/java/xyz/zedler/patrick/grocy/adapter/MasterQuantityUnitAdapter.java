@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuantityUnitAdapter.ViewHolder> {
 
     private final static String TAG = MasterQuantityUnitAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<QuantityUnit> quantityUnits;
     private MasterQuantityUnitAdapterListener listener;

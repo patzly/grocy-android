@@ -41,7 +41,6 @@ import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterProductGroupBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "MasterProductGroupBottomSheet";
 
 	private MainActivity activity;

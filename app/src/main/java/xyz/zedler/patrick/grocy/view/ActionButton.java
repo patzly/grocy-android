@@ -39,7 +39,6 @@ import xyz.zedler.patrick.grocy.R;
 public class ActionButton extends LinearLayout {
 
     private final static String TAG = ActionButton.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private final static float ICON_ALPHA_DISABLED = 0.5f;
 

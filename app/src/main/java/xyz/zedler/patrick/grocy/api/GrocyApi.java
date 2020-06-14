@@ -30,7 +30,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 public class GrocyApi {
 
     private final static String TAG = GrocyApi.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private SharedPreferences sharedPrefs;
     private Context context;

@@ -52,7 +52,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 public class LocationsBottomSheetDialogFragment
         extends BottomSheetDialogFragment implements LocationAdapter.LocationAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "LocationsBottomSheet";
 
     private Activity activity;

@@ -44,7 +44,6 @@ import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "ShoppingListItemBottomSheet";
 
 	private MainActivity activity;

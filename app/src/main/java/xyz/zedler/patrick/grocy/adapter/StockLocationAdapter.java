@@ -40,7 +40,6 @@ public class StockLocationAdapter
         extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
 
     private final static String TAG = StockLocationAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<StockLocation> stockLocations;
     private ProductDetails productDetails;

@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class CustomBottomAppBar extends com.google.android.material.bottomappbar.BottomAppBar {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = "CustomBottomAppBar";
 
 	public static final int MENU_START = 0, MENU_END = 1;

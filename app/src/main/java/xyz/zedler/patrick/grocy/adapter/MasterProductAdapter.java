@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.Product;
 public class MasterProductAdapter extends RecyclerView.Adapter<MasterProductAdapter.ViewHolder> {
 
     private final static String TAG = MasterProductAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<Product> products;
     private MasterProductAdapterListener listener;

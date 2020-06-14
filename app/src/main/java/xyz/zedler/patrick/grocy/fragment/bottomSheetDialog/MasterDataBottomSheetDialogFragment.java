@@ -40,9 +40,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class MasterDataBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class MasterDataBottomSheetDialogFragment
+        extends BottomSheetDialogFragment implements View.OnClickListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "MasterDataBottomSheet";
 
     private MainActivity activity;

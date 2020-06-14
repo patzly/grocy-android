@@ -51,7 +51,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "BBDateBottomSheet";
 
     private Activity activity;

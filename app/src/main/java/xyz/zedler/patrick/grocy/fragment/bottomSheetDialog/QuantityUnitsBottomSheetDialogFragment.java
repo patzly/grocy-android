@@ -50,7 +50,6 @@ public class QuantityUnitsBottomSheetDialogFragment
         extends BottomSheetDialogFragment
         implements QuantityUnitAdapter.QuantityUnitAdapterListener {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "QuantityUnitsBottomSheet";
 
     private Activity activity;

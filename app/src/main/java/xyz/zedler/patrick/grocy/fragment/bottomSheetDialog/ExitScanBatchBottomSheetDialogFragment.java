@@ -40,7 +40,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ExitScanBatchBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = false;
     private final static String TAG = "ExitScanBatchBottomSheet";
 
     private ScanBatchActivity activity;

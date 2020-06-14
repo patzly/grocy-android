@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = AboutActivity.class.getSimpleName();
 
 	private ClickUtil clickUtil = new ClickUtil();

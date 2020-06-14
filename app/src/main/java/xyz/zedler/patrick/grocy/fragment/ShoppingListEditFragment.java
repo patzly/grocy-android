@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ShoppingListEditFragment extends Fragment {
 
-    private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
+    private final static String TAG = Constants.UI.SHOPPING_LIST_EDIT;
     private final static boolean DEBUG = false;
 
     private MainActivity activity;

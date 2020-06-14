@@ -38,7 +38,6 @@ import xyz.zedler.patrick.grocy.model.Location;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
     private final static String TAG = LocationAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<Location> locations;
     private int selectedId;

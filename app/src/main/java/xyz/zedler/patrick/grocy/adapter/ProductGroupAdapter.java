@@ -38,7 +38,6 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapter.ViewHolder> {
 
     private final static String TAG = ProductGroupAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private ArrayList<ProductGroup> productGroups;
     private int selectedId;

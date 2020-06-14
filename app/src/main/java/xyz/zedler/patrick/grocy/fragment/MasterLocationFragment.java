@@ -57,7 +57,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class MasterLocationFragment extends Fragment {
 
     private final static String TAG = Constants.UI.MASTER_LOCATION;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
