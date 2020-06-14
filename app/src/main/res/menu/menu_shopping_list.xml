@@ -14,37 +14,31 @@
     <item
         android:id="@+id/action_shopping_mode"
         android:title="@string/action_shopping_mode"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_missing"
         android:title="@string/action_add_missing"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_clear"
         android:title="@string/action_clear_all"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_edit_notes"
         android:title="@string/action_edit_notes"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_edit_shopping_list"
         android:title="@string/title_shopping_list_edit"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_delete_shopping_list"
         android:title="@string/action_delete_shopping_list"
-        app:showAsAction="never"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="never" />
 
 </menu>
