@@ -4,6 +4,7 @@
 
 - shopping list edit after rotation showing error when try to save
 - restore sort icon
+- shopping list bottom notes not visible
 
 ## Improvements
 
