@@ -4,7 +4,7 @@
 - Disabled features with Grocy config
 - Improved screen rotation support
 - Switching between consume, open and purchase in scan mode
-- Over 330 improvements and bug fixes
+- Over 340 improvements and bug fixes
 
 1.3.0:
 - Open Food Facts integration
