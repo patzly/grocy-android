@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -69,7 +71,6 @@ public class MissingBatchItemsFragment extends Fragment
         implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
 
     private final static String TAG = Constants.UI.MISSING_BATCH_ITEMS;
-    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private GrocyApi grocyApi;
@@ -83,6 +84,7 @@ public class MissingBatchItemsFragment extends Fragment
     private ArrayList<MissingBatchItem> missingBatchItems;
 
     private String errorState;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -121,6 +123,9 @@ public class MissingBatchItemsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -281,7 +286,7 @@ public class MissingBatchItemsFragment extends Fragment
                             response,
                             new TypeToken<List<Product>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(TAG, "refresh: products = " + products);
+                    if(debug) Log.i(TAG, "refresh: products = " + products);
 
                     ArrayList<String> missingBatchItemsNames = new ArrayList<>();
                     for(MissingBatchItem missingBatchItem : missingBatchItems) {
@@ -434,7 +439,7 @@ public class MissingBatchItemsFragment extends Fragment
                 body.put("location_id", locationId);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "purchaseProduct: " + e);
+            if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(productId),
@@ -474,11 +479,7 @@ public class MissingBatchItemsFragment extends Fragment
 
     private void showMessage(String msg) {
         activity.showMessage(
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
     }
 
@@ -523,7 +524,10 @@ public class MissingBatchItemsFragment extends Fragment
                                 true
                         );
                     },
-                    error -> showMessage(activity.getString(R.string.msg_error))
+                    error -> {
+                        showMessage(activity.getString(R.string.msg_error));
+                        if(debug) Log.e(TAG, "onItemRowClicked: " + error);
+                    }
             );
         }
     }

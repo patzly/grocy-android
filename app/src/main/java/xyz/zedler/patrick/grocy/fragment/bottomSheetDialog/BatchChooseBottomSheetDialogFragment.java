@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -63,7 +65,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private final static boolean DEBUG = true;
     private final static String TAG = "BatchChooseBottomSheet";
 
     private GrocyApi grocyApi;
@@ -77,6 +78,8 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private ScanBatchActivity activity;
     private TextInputLayout textInputProduct;
     private MaterialAutoCompleteTextView autoCompleteTextViewProduct;
+
+    private boolean debug;
 
     @NonNull
     @Override
@@ -96,6 +99,9 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
 
         activity = (ScanBatchActivity) getActivity();
         assert activity != null;
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         if(getArguments() == null
                 || getArguments().getString(Constants.ARGUMENT.TYPE) == null
@@ -216,12 +222,14 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                             JSONObject product = jsonObject.getJSONObject("product");
                             String name = product.getString("product_name");
                             autoCompleteTextViewProduct.setText(name);
-                            if(DEBUG) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
+                            if(debug) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
                         } catch (JSONException e) {
-                            Log.e(TAG, "onCreateView: " + e);
+                            if(debug) Log.e(TAG, "onCreateView: " + e);
                         }
                     },
-                    error -> {},
+                    error -> {
+                        if(debug) Log.e(TAG, "onCreateView: can't get OpenFoodFacts product");
+                    },
                     OpenFoodFactsApi.getUserAgent(activity)
             );
         }
@@ -254,7 +262,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
             dismissWithMessage(activity.getString(R.string.msg_error));
-            Log.e(TAG, "editProductBarcodes: " + e);
+            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, selectedProduct.getId()),

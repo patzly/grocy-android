@@ -35,7 +35,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ConfigUtil {
 
     private final static String TAG = ConfigUtil.class.getSimpleName();
-    private final static boolean DEBUG = true;
 
     public static boolean isFeatureEnabled(SharedPreferences sharedPrefs, String feature) {
         if(feature == null) return true;
@@ -51,6 +50,8 @@ public class ConfigUtil {
     ) {
         WebRequest request = new WebRequest(requestQueue);
         AtomicBoolean noErrorOccurred = new AtomicBoolean(true);
+
+        boolean debug = prefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // GET CONFIG
         request.get(
@@ -99,14 +100,14 @@ public class ConfigUtil {
                                         )
                                 ).apply();
                     } catch (JSONException e) {
-                        Log.e(TAG, "downloadConfig: " + e);
+                        if(debug) Log.e(TAG, "downloadConfig: " + e);
                     }
-                    if (DEBUG) Log.i(TAG, "downloadConfig: config = " + response);
+                    if(debug) Log.i(TAG, "downloadConfig: config = " + response);
                 },
                 error -> {
                     noErrorOccurred.set(false);
                     if(onErrorAction != null) onErrorAction.run();
-                    Log.e(TAG, "downloadConfig: " + error);
+                    if(debug) Log.e(TAG, "downloadConfig: " + error);
                 },
                 () -> {
                     if(onSuccessAction != null && noErrorOccurred.get()) onSuccessAction.run();
@@ -144,7 +145,7 @@ public class ConfigUtil {
                                 )
                         ).apply();
                     } catch (JSONException e) {
-                        Log.e(TAG, "downloadUserSettings: " + e);
+                        if(debug) Log.e(TAG, "downloadUserSettings: " + e);
                     }
                     try {
                         // try to get boolean for indicator setting – but responses can also
@@ -168,15 +169,15 @@ public class ConfigUtil {
                                     stateInt == 1
                             ).apply();
                         } catch (JSONException e2) {
-                            Log.e(TAG, "downloadUserSettings: " + e2);
+                            if(debug) Log.e(TAG, "downloadUserSettings: " + e2);
                         }
                     }
-                    if(DEBUG) Log.i(TAG, "downloadUserSettings: settings = " + response);
+                    if(debug) Log.i(TAG, "downloadUserSettings: settings = " + response);
                 },
                 error -> {
                     noErrorOccurred.set(false);
                     if(onErrorAction != null) onErrorAction.run();
-                    Log.e(TAG, "downloadUserSettings: " + error);
+                    if(debug) Log.e(TAG, "downloadUserSettings: " + error);
                 },
                 () -> {
                     if(onSuccessAction != null && noErrorOccurred.get()) onSuccessAction.run();
@@ -195,15 +196,15 @@ public class ConfigUtil {
                                                 "grocy_version"
                                         ).getString("Version")
                                 ).apply();
-                        if(DEBUG) Log.i(TAG, "downloadSystemInfo: " + response);
+                        if(debug) Log.i(TAG, "downloadSystemInfo: " + response);
                     } catch (JSONException e) {
-                        Log.e(TAG, "downloadSystemInfo: " + e);
+                        if(debug) Log.e(TAG, "downloadSystemInfo: " + e);
                     }
                 },
                 error -> {
                     noErrorOccurred.set(false);
                     if(onErrorAction != null) onErrorAction.run();
-                    Log.e(TAG, "downloadSystemInfo: " + error);
+                    if(debug) Log.e(TAG, "downloadSystemInfo: " + error);
                 },
                 () -> {
                     if(onSuccessAction != null && noErrorOccurred.get()) onSuccessAction.run();

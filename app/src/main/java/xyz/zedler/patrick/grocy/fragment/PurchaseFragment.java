@@ -87,7 +87,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class PurchaseFragment extends Fragment {
 
     private final static String TAG = Constants.UI.PURCHASE;
-    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -112,6 +111,7 @@ public class PurchaseFragment extends Fragment {
     private double amount;
     private double minAmount;
     private boolean nameAutoFilled;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -158,6 +158,7 @@ public class PurchaseFragment extends Fragment {
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB REQUESTS
 
@@ -539,7 +540,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void onError(VolleyError error) {
-        Log.e(TAG, "onError: VolleyError: " + error);
+        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         request.cancelAll(TAG);
         binding.swipePurchase.setRefreshing(false);
         activity.showMessage(
@@ -832,7 +833,7 @@ public class PurchaseFragment extends Fragment {
                 body.put("location_id", selectedLocationId);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "purchaseProduct: " + e);
+            if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(productDetails.getProduct().getId()),
@@ -846,9 +847,9 @@ public class PurchaseFragment extends Fragment {
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "purchaseProduct: " + e);
+                        if(debug) Log.e(TAG, "purchaseProduct: " + e);
                     }
-                    if(DEBUG) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
+                    if(debug) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
 
                     double amountAdded;
                     if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
@@ -914,7 +915,7 @@ public class PurchaseFragment extends Fragment {
                 },
                 error -> {
                     showErrorMessage();
-                    if(DEBUG) Log.i(TAG, "purchaseProduct: " + error);
+                    if(debug) Log.i(TAG, "purchaseProduct: " + error);
                 }
         );
     }
@@ -924,7 +925,7 @@ public class PurchaseFragment extends Fragment {
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
                     showMessage(activity.getString(R.string.msg_undone_transaction));
-                    if(DEBUG) Log.i(TAG, "undoTransaction: undone");
+                    if(debug) Log.i(TAG, "undoTransaction: undone");
                 },
                 error -> showErrorMessage()
         );
@@ -951,19 +952,19 @@ public class PurchaseFragment extends Fragment {
                 barcodes.add(inputChip.getText());
             }
         }
-        if(DEBUG) Log.i(TAG, "editProductBarcodes: " + barcodes);
+        if(debug) Log.i(TAG, "editProductBarcodes: " + barcodes);
         JSONObject body = new JSONObject();
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            Log.e(TAG, "editProductBarcodes: " + e);
+            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),
                 body,
                 response -> { },
                 error -> {
-                    if(DEBUG) Log.i(TAG, "editProductBarcodes: " + error);
+                    if(debug) Log.i(TAG, "editProductBarcodes: " + error);
                 }
         );
     }

@@ -47,16 +47,18 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class DrawerBottomSheetDialogFragment
+        extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private final static String TAG = "DrawerBottomSheet";
-    private final boolean DEBUG = true;
 
     private MainActivity activity;
     private View view;
     private SharedPreferences sharedPrefs;
     private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
+
+    private boolean debug;
 
     @NonNull
     @Override
@@ -79,9 +81,10 @@ public class DrawerBottomSheetDialogFragment extends BottomSheetDialogFragment i
         assert activity != null && bundle != null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
-        if(DEBUG) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
+        if(debug) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
             startActivity(new Intent(activity, ShoppingActivity.class));

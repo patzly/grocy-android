@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ShoppingListEditFragment extends Fragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
@@ -251,8 +251,7 @@ public class ShoppingListEditFragment extends Fragment {
                     );
                     shoppingListNames = getShoppingListNames();
                     if(DEBUG) Log.i(
-                            TAG,
-                            "downloadShoppingLists: shoppingLists = " + shoppingLists
+                            TAG, "downloadShoppingLists: shoppingLists = " + shoppingLists
                     );
                     if(action.equals(Constants.ACTION.EDIT)) {
                         ShoppingList shoppingList = startupBundle.getParcelable(

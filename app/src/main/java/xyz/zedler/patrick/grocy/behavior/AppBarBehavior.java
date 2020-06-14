@@ -20,26 +20,34 @@ package xyz.zedler.patrick.grocy.behavior;
 */
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class AppBarBehavior {
 
 	private final static String TAG = AppBarBehavior.class.getSimpleName();
-	private final static boolean DEBUG = true;
 
 	private static int ANIM_DURATION = 300;
 
 	private Activity activity;
 	private View viewPrimary, viewSecondary;
 	private boolean isPrimary;
+	private boolean debug;
 
 	public AppBarBehavior(Activity activity, @IdRes int primary, @IdRes int secondary) {
 		this.activity = activity;
+
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+
 
 		viewPrimary = activity.findViewById(primary);
 		viewPrimary.setVisibility(View.VISIBLE);
@@ -60,7 +68,7 @@ public class AppBarBehavior {
 		}
 		outState.putBoolean("appBarBehavior_is_primary", isPrimary);
 
-		if(DEBUG) Log.i(TAG, "saved state: isPrimary = " + isPrimary);
+		if(debug) Log.i(TAG, "saved state: isPrimary = " + isPrimary);
 	}
 
 	public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
@@ -82,7 +90,7 @@ public class AppBarBehavior {
 		if(viewPrimary != null) viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
 		if(viewSecondary != null) viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
 
-		if(DEBUG) Log.i(TAG, "restored state: isPrimary = " + isPrimary);
+		if(debug) Log.i(TAG, "restored state: isPrimary = " + isPrimary);
 	}
 
 	public void switchToPrimary() {
@@ -97,7 +105,7 @@ public class AppBarBehavior {
 					viewPrimary.setAlpha(0);
 					viewPrimary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
 				}).start();
-		if(DEBUG) Log.i(TAG, "switch to primary layout");
+		if(debug) Log.i(TAG, "switch to primary layout");
 	}
 
 	public void switchToSecondary() {
@@ -112,7 +120,7 @@ public class AppBarBehavior {
 					viewSecondary.setAlpha(0);
 					viewSecondary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
 				}).start();
-		if(DEBUG) Log.i(TAG, "switch to secondary layout");
+		if(debug) Log.i(TAG, "switch to secondary layout");
 	}
 
 	public boolean isPrimaryLayout() {

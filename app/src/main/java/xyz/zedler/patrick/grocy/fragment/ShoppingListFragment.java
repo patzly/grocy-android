@@ -93,7 +93,6 @@ public class ShoppingListFragment extends Fragment
             StoreOfflineDataShoppingListHelper.AsyncResponse {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST;
-    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -135,6 +134,7 @@ public class ShoppingListFragment extends Fragment
     private boolean showOffline;
     private boolean isRestoredInstance;
     private boolean isSetupAfterFragmentHasBecomeVisible;
+    private boolean debug = false;
 
     @Override
     public View onCreateView(
@@ -206,6 +206,7 @@ public class ShoppingListFragment extends Fragment
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -694,7 +695,7 @@ public class ShoppingListFragment extends Fragment
 
     private void filterItems(String filter) {
         itemsToDisplay = filter.isEmpty() ? Constants.SHOPPING_LIST.FILTER.ALL : filter;
-        if(DEBUG) Log.i(
+        if(debug) Log.i(
                 TAG, "filterItems: filter = " + filter + ", display = " + itemsToDisplay
         );
         // VOLATILE
@@ -709,7 +710,7 @@ public class ShoppingListFragment extends Fragment
                 filteredItems = this.shoppingListItemsSelected;
                 break;
         }
-        if(DEBUG) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
+        if(debug) Log.i(TAG, "filterItems: filteredItems = " + filteredItems);
         // SEARCH
         if(!search.isEmpty()) { // active search
             searchItems(search);
@@ -738,7 +739,7 @@ public class ShoppingListFragment extends Fragment
 
     private void searchItems(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchItems: search = " + search);
+        if(debug) Log.i(TAG, "searchItems: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterItems(itemsToDisplay);
@@ -875,7 +876,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("done", shoppingListItem.getDone());
         } catch (JSONException e) {
-            Log.e(TAG, "toggleDoneStatus: " + e);
+            if(debug) Log.e(TAG, "toggleDoneStatus: " + e);
         }
         downloadHelper.editShoppingListItem(
                 shoppingListItem.getId(),
@@ -883,7 +884,7 @@ public class ShoppingListFragment extends Fragment
                 response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
-                    if(DEBUG) Log.i(TAG, "toggleDoneStatus: " + error);
+                    if(debug) Log.e(TAG, "toggleDoneStatus: " + error);
                 },
                 false
         );
@@ -940,7 +941,7 @@ public class ShoppingListFragment extends Fragment
         try {
             body.put("description", notesHtml);
         } catch (JSONException e) {
-            Log.e(TAG, "saveNotes: " + e);
+            if(debug) Log.e(TAG, "saveNotes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, selectedShoppingListId),
@@ -953,7 +954,7 @@ public class ShoppingListFragment extends Fragment
                 },
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
-                    if(DEBUG) Log.i(TAG, "saveNotes: " + error);
+                    if(debug) Log.e(TAG, "saveNotes: " + error);
                 }
         );
     }
@@ -977,7 +978,7 @@ public class ShoppingListFragment extends Fragment
                 response -> removeItemFromList(position),
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
-                    if(DEBUG) Log.i(TAG, "deleteItem: " + error);
+                    if(debug) Log.e(TAG, "deleteItem: " + error);
                 }
         );
     }
@@ -1040,7 +1041,7 @@ public class ShoppingListFragment extends Fragment
                     try {
                         jsonObject.put("list_id", selectedShoppingListId);
                     } catch (JSONException e) {
-                        Log.e(TAG, "setUpBottomMenu: add missing: " + e);
+                        if(debug) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
                     }
                     request.post(
                             grocyApi.addMissingProducts(),
@@ -1056,7 +1057,7 @@ public class ShoppingListFragment extends Fragment
                             },
                             error -> {
                                 showMessage(activity.getString(R.string.msg_error));
-                                Log.e(
+                                if(debug) Log.e(
                                         TAG, "setUpBottomMenu: add missing "
                                                 + shoppingList.getName()
                                                 + ": " + error
@@ -1156,7 +1157,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            Log.e(TAG, "clearShoppingList: " + e);
+            if(debug) Log.e(TAG, "clearShoppingList: " + e);
         }
         request.post(
                 grocyApi.clearShoppingList(),
@@ -1164,7 +1165,7 @@ public class ShoppingListFragment extends Fragment
                 responseListener::onResponse,
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
-                    Log.e(
+                    if(debug) Log.e(
                             TAG, "clearShoppingList: "
                                     + shoppingList.getName()
                                     + ": " + error
@@ -1178,7 +1179,7 @@ public class ShoppingListFragment extends Fragment
         try {
             jsonObject.put("list_id", selectedShoppingListId);
         } catch (JSONException e) {
-            Log.e(TAG, "deleteShoppingList: delete list: " + e);
+            if(debug) Log.e(TAG, "deleteShoppingList: delete list: " + e);
         }
 
         request.delete(
@@ -1198,7 +1199,7 @@ public class ShoppingListFragment extends Fragment
                 },
                 error -> {
                     showMessage(activity.getString(R.string.msg_error));
-                    Log.e(
+                    if(debug) Log.e(
                             TAG, "deleteShoppingList: delete "
                                     + shoppingList.getName()
                                     + ": " + error
@@ -1221,7 +1222,7 @@ public class ShoppingListFragment extends Fragment
         ShoppingListItemDao itemDao = database.shoppingListItemDao();
         for(ShoppingListItem listItem : shoppingListItems) {
             if(!listIds.contains(listItem.getShoppingListId())) {
-                Log.i(TAG, "tidyUpItems: " + listItem);
+                if(debug) Log.i(TAG, "tidyUpItems: " + listItem);
                 request.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, listItem.getId()),
                         response -> new Thread(() -> itemDao.delete(listItem) // delete in db too
@@ -1248,7 +1249,7 @@ public class ShoppingListFragment extends Fragment
             try {
                 body.put("done", itemToSync.getDone());
             } catch (JSONException e) {
-                Log.e(TAG, "syncItems: " + e);
+                if(debug) Log.e(TAG, "syncItems: " + e);
             }
             request.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemToSync.getId()),
@@ -1263,7 +1264,7 @@ public class ShoppingListFragment extends Fragment
                         showMessage(activity.getString(R.string.msg_failed_to_sync));
                     },
                     () -> {
-                        showMessage("Entries synced successfully");
+                        showMessage(activity.getString(R.string.msg_synced));
                         new StoreOfflineDataShoppingListHelper(
                                 AppDatabase.getAppDatabase(activity.getApplicationContext()),
                                 this,

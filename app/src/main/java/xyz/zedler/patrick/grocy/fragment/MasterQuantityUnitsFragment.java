@@ -68,7 +68,7 @@ public class MasterQuantityUnitsFragment extends Fragment
         implements MasterQuantityUnitAdapter.MasterQuantityUnitAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_QUANTITY_UNITS;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;

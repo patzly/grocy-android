@@ -68,7 +68,7 @@ public class MasterProductGroupsFragment extends Fragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUPS;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;

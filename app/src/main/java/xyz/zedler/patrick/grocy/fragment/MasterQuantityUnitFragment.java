@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class MasterQuantityUnitFragment extends Fragment {
 
     private final static String TAG = Constants.UI.MASTER_QUANTITY_UNIT;
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;

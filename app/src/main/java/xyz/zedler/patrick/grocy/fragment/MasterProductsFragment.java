@@ -74,7 +74,6 @@ public class MasterProductsFragment extends Fragment
         implements MasterProductAdapter.MasterProductAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCTS;
-    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private DownloadHelper downloadHelper;
@@ -104,6 +103,7 @@ public class MasterProductsFragment extends Fragment
     private int filterProductGroupId;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -158,6 +158,7 @@ public class MasterProductsFragment extends Fragment
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
 
@@ -390,7 +391,7 @@ public class MasterProductsFragment extends Fragment
     private void onDownloadError(VolleyError error) {
         binding.swipeMasterProducts.setRefreshing(false);
         setError(Constants.STATE.ERROR, true);
-        if(DEBUG) Log.i(TAG, "onDownloadError: " + error);
+        if(debug) Log.i(TAG, "onDownloadError: " + error);
     }
 
     private void filterProducts() {
@@ -428,12 +429,12 @@ public class MasterProductsFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(TAG, "filterProducts: filteredProducts = " + filteredProducts);
+        if(debug) Log.i(TAG, "filterProducts: filteredProducts = " + filteredProducts);
     }
 
     private void searchProducts(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchProducts: search = " + search);
+        if(debug) Log.i(TAG, "searchProducts: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterProducts();
@@ -457,13 +458,13 @@ public class MasterProductsFragment extends Fragment
                 displayedProducts = searchedProducts;
                 sortProducts(sortAscending);
             }
-            if(DEBUG) Log.i(TAG, "searchProducts: searchedProducts = " + searchedProducts);
+            if(debug) Log.i(TAG, "searchProducts: searchedProducts = " + searchedProducts);
         }
     }
 
     private void filterProductGroup(ProductGroup productGroup) {
         if(filterProductGroupId != productGroup.getId()) {
-            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup);
+            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup);
             filterProductGroupId = productGroup.getId();
             if(inputChipFilterProductGroup != null) {
                 inputChipFilterProductGroup.changeText(productGroup.getName());
@@ -482,7 +483,7 @@ public class MasterProductsFragment extends Fragment
             }
             filterProducts();
         } else {
-            if(DEBUG) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
+            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
         }
     }
 
@@ -512,7 +513,7 @@ public class MasterProductsFragment extends Fragment
     }
 
     private void sortProducts(boolean ascending) {
-        if(DEBUG) Log.i(TAG, "sortProducts: sort by name, ascending = " + ascending);
+        if(debug) Log.i(TAG, "sortProducts: sort by name, ascending = " + ascending);
         sortAscending = ascending;
         SortUtil.sortProductsByName(displayedProducts, ascending);
         refreshAdapter(new MasterProductAdapter(displayedProducts, this));

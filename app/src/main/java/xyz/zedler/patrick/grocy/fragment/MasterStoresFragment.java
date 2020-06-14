@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -68,7 +70,6 @@ public class MasterStoresFragment extends Fragment
         implements MasterStoreAdapter.MasterStoreAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_STORES;
-    private final static boolean DEBUG = true;
 
     private MainActivity activity;
     private Gson gson;
@@ -90,6 +91,7 @@ public class MasterStoresFragment extends Fragment
     private String errorState;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -137,6 +139,9 @@ public class MasterStoresFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -350,14 +355,14 @@ public class MasterStoresFragment extends Fragment
                             response,
                             new TypeToken<List<Store>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(TAG, "downloadStores: stores = " + stores);
+                    if(debug) Log.i(TAG, "downloadStores: stores = " + stores);
                     binding.swipeMasterStores.setRefreshing(false);
                     filterStores();
                 },
                 error -> {
                     binding.swipeMasterStores.setRefreshing(false);
                     setError(Constants.STATE.OFFLINE, true);
-                    Log.e(TAG, "downloadStores: " + error);
+                    if(debug) Log.e(TAG, "downloadStores: " + error);
                 }
         );
     }
@@ -391,12 +396,12 @@ public class MasterStoresFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(TAG, "filterStores: filteredStores = " + filteredStores);
+        if(debug) Log.i(TAG, "filterStores: filteredStores = " + filteredStores);
     }
 
     private void searchStores(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchStores: search = " + search);
+        if(debug) Log.i(TAG, "searchStores: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterStores();
@@ -420,12 +425,12 @@ public class MasterStoresFragment extends Fragment
                 displayedStores = searchedStores;
                 sortStores();
             }
-            if(DEBUG) Log.i(TAG, "searchStores: searchedStores = " + searchedStores);
+            if(debug) Log.i(TAG, "searchStores: searchedStores = " + searchedStores);
         }
     }
 
     private void sortStores() {
-        if(DEBUG) Log.i(TAG, "sortStores: sort by name, ascending = " + sortAscending);
+        if(debug) Log.i(TAG, "sortStores: sort by name, ascending = " + sortAscending);
         SortUtil.sortStoresByName(displayedStores, sortAscending);
         refreshAdapter(new MasterStoreAdapter(displayedStores, this));
     }

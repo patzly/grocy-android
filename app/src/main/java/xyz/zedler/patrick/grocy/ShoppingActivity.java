@@ -70,7 +70,6 @@ public class ShoppingActivity extends AppCompatActivity implements
         LoadOfflineDataShoppingListHelper.AsyncResponse,
         StoreOfflineDataShoppingListHelper.AsyncResponse {
 
-    private final static boolean DEBUG = true;
     private final static String TAG = ShoppingActivity.class.getSimpleName();
 
     private SharedPreferences sharedPrefs;
@@ -91,6 +90,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private int selectedShoppingListId = 1;
     private boolean showOffline;
     private boolean isDataStored;
+    private boolean debug;
     private Date lastSynced;
     private TimerTask timerTask;
 
@@ -104,6 +104,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -288,7 +289,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void loadOfflineData() {
         if(!showOffline) {
             showOffline = true;
-            if(DEBUG) Log.i(TAG, "loadOfflineData: you are now offline");
+            if(debug) Log.i(TAG, "loadOfflineData: you are now offline");
             new LoadOfflineDataShoppingListHelper(
                     AppDatabase.getAppDatabase(getApplicationContext()),
                     this
@@ -363,7 +364,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             HashMap<Integer, ShoppingListItem> serverItemHashMap
     ) {
         downloadHelper.setOnQueueEmptyListener(() -> {
-            showMessage("Successfully synced entries");
+            showMessage(getString(R.string.msg_synced));
             new StoreOfflineDataShoppingListHelper(
                     AppDatabase.getAppDatabase(getApplicationContext()),
                     this,
@@ -382,7 +383,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             try {
                 body.put("done", itemToSync.getDone());
             } catch (JSONException e) {
-                Log.e(TAG, "syncItems: " + e);
+                if(debug) Log.e(TAG, "syncItems: " + e);
             }
             downloadHelper.editShoppingListItem(
                     itemToSync.getId(),
@@ -435,7 +436,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             try {
                 body.put("done", shoppingListItem.getDone());
             } catch (JSONException e) {
-                Log.e(TAG, "toggleDoneStatus: " + e);
+                if(debug) Log.e(TAG, "toggleDoneStatus: " + e);
             }
             downloadHelper.editShoppingListItem(
                     shoppingListItem.getId(),
@@ -485,13 +486,13 @@ public class ShoppingActivity extends AppCompatActivity implements
             snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
             snackbar.show();
         } else if(removedItemsOld != null && !removedItemsOld.isEmpty()) {
-            Log.i(TAG, "updateDoneStatus: " + removedItemsOld);
+            if(debug) Log.i(TAG, "updateDoneStatus: " + removedItemsOld);
             if(removedItemsOld.get(0).getType() == GroupedListItem.TYPE_HEADER) {
                 int headerPosition = position - 1;
                 groupedListItems.addAll(headerPosition, removedItemsOld);
                 shoppingItemAdapter.notifyItemRangeInserted(headerPosition, removedItemsOld.size());
             } else if(position <= groupedListItems.size()) {
-                Log.i(TAG, "updateDoneStatus: " + position);
+                if(debug) Log.i(TAG, "updateDoneStatus: " + position);
                 groupedListItems.addAll(position, removedItemsOld);
                 shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
             } else {
@@ -522,7 +523,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                             } else if(lastSynced == null || lastSynced.before(date)) {
                                 downloadShoppingListItems();
                             } else {
-                                Log.i(TAG, "run: skip sync of list items");
+                                if(debug) Log.i(TAG, "run: skip sync of list items");
                             }
                         },
                         () -> downloadShoppingListItems()
@@ -578,8 +579,8 @@ public class ShoppingActivity extends AppCompatActivity implements
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().add(bottomSheet, tag).commit();
-            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
-        } else Log.e(TAG, "showBottomSheet: sheet already visible");
+            if(debug) Log.i(TAG, "showBottomSheet: " + tag);
+        } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     private void showMessage(String msg) {

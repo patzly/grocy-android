@@ -101,7 +101,6 @@ public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
 
     private final static String TAG = Constants.UI.BATCH_SCAN;
-    private final static boolean DEBUG = true;
 
     private ScanBatchCaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
@@ -129,8 +128,11 @@ public class ScanBatchActivity extends AppCompatActivity
     private ProductDetails currentProductDetails;
     private MissingBatchItem currentMissingBatchItem;
     private ProductType currentProductType;
-    private String currentProductName, currentDefaultStoreId, currentLastPrice;
-    private int currentDefaultBestBeforeDays = 0, currentDefaultLocationId = -1;
+    private String currentProductName;
+    private String currentDefaultStoreId;
+    private String currentLastPrice;
+    private int currentDefaultBestBeforeDays = 0;
+    private int currentDefaultLocationId = -1;
 
     private enum ProductType {
         PRODUCT, MISSING_BATCH_ITEM
@@ -147,6 +149,8 @@ public class ScanBatchActivity extends AppCompatActivity
     private Map<String, String> sessionPrices = new HashMap<>();
     private Map<String, String> sessionStoreIds = new HashMap<>();
     private Map<String, String> sessionLocationIds = new HashMap<>();
+
+    private boolean debug = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -167,6 +171,7 @@ public class ScanBatchActivity extends AppCompatActivity
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB REQUESTS
 
@@ -470,7 +475,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 body.put("location_id", stockLocationId);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "consumeProduct: " + e);
+            if(debug) Log.e(TAG, "consumeProduct: " + e);
         }
         request.post(
                 grocyApi.consumeProduct(currentProductDetails.getProduct().getId()),
@@ -481,9 +486,9 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "consumeProduct: " + e);
+                        if(debug) Log.e(TAG, "consumeProduct: " + e);
                     }
-                    if(DEBUG) Log.i(TAG, "consumeProduct: consumed 1");
+                    if(debug) Log.i(TAG, "consumeProduct: consumed 1");
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
@@ -518,7 +523,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     } else {
                         showMessage(getString(R.string.msg_error));
                     }
-                    if(DEBUG) Log.i(TAG, "consumeProduct: " + error);
+                    if(debug) Log.i(TAG, "consumeProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
                 }
@@ -536,7 +541,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 body.put("location_id", stockLocationId);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "openProduct: " + e);
+            if(debug) Log.e(TAG, "openProduct: " + e);
         }
         request.post(
                 grocyApi.openProduct(currentProductDetails.getProduct().getId()),
@@ -547,9 +552,9 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "openProduct: " + e);
+                        if(debug) Log.e(TAG, "openProduct: " + e);
                     }
-                    if(DEBUG) Log.i(TAG, "openProduct: opened 1");
+                    if(debug) Log.i(TAG, "openProduct: opened 1");
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
@@ -584,7 +589,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     } else {
                         showMessage(getString(R.string.msg_error));
                     }
-                    if(DEBUG) Log.i(TAG, "openProduct: " + error);
+                    if(debug) Log.i(TAG, "openProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
                 }
@@ -606,7 +611,7 @@ public class ScanBatchActivity extends AppCompatActivity
             }
             body.put("location_id", locationId);
         } catch (JSONException e) {
-            Log.e(TAG, "purchaseProduct: " + e);
+            if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
         request.post(
                 grocyApi.purchaseProduct(currentProductDetails.getProduct().getId()),
@@ -617,9 +622,9 @@ public class ScanBatchActivity extends AppCompatActivity
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "purchaseProduct: " + e);
+                        if(debug) Log.e(TAG, "purchaseProduct: " + e);
                     }
-                    if (DEBUG) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
+                    if(debug) Log.i(TAG, "purchaseProduct: purchased 1 in batch mode");
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
@@ -648,7 +653,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 },
                 error -> {
                     showMessage(getString(R.string.msg_error));
-                    if(DEBUG) Log.i(TAG, "purchaseProduct: " + error);
+                    if(debug) Log.i(TAG, "purchaseProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
                 }
@@ -660,10 +665,10 @@ public class ScanBatchActivity extends AppCompatActivity
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
                     showMessage(getString(R.string.msg_undone_transaction));
-                    if(DEBUG) Log.i(TAG, "undoTransaction: undone");
+                    if(debug) Log.i(TAG, "undoTransaction: undone");
                 }, error -> {
                     showMessage(getString(R.string.msg_error));
-                    if(DEBUG) Log.i(TAG, "undoTransaction: error: " + error);
+                    if(debug) Log.i(TAG, "undoTransaction: error: " + error);
                 }
         );
     }
@@ -693,7 +698,7 @@ public class ScanBatchActivity extends AppCompatActivity
         if(price != null && !price.isEmpty()) {
             missingBatchItem.setLastPrice(price);
         }
-        Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
+        if(debug) Log.i(TAG, "purchaseBatchItem: " + batchPurchaseEntry.toString());
         showMessage(
                 getString(R.string.msg_saved_purchase,
                         missingBatchItem.getProductName())
@@ -1198,8 +1203,8 @@ public class ScanBatchActivity extends AppCompatActivity
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
-            if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
-        } else Log.e(TAG, "showBottomSheet: sheet already visible");
+            if(debug) Log.i(TAG, "showBottomSheet: " + tag);
+        } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     public RequestQueue getRequestQueue() {
