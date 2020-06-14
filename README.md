@@ -25,6 +25,7 @@ You can try it using the demo option available on the login screen.
 * Shopping lists with offline support
 * In-store shopping mode (big UI elements)
 * Fast barcode scanning
+* Open Food Facts implementation
 * Open and consume with one swipe
 * Consume and purchase with app shortcuts
 * Master data editing
