@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -55,18 +54,17 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class DownloadHelper {
 
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
-    private Activity activity;
-    private String tag;
-    private RequestQueue requestQueue;
     private GrocyApi grocyApi;
     private WebRequest request;
-    private Gson gson = new Gson();
+    private Gson gson;
     private OnErrorListener onErrorListener;
     private OnQueueEmptyListener onQueueEmptyListener;
-    private int queueSize;
     private SimpleDateFormat dateTimeFormat;
+
+    private String tag;
+    private int queueSize;
 
     public DownloadHelper(
             Activity activity,
@@ -75,12 +73,11 @@ public class DownloadHelper {
             OnQueueEmptyListener onQueueEmptyListener
     ) {
         Context context = activity.getApplicationContext();
-        this.activity = activity;
         this.tag = tag;
         this.onErrorListener = onErrorListener;
         this.onQueueEmptyListener = onQueueEmptyListener;
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        request = new WebRequest(requestQueue);
+        gson = new Gson();
+        request = new WebRequest(RequestQueueSingleton.getInstance(context).getRequestQueue());
         grocyApi = new GrocyApi(context);
         dateTimeFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
