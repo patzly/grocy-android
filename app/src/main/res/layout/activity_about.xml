@@ -20,7 +20,7 @@
             android:background="@color/background">
 
             <FrameLayout
-                android:id="@+id/frame_about_back"
+                android:id="@+id/frame_about_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -28,8 +28,8 @@
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
                 android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
+                android:contentDescription="@string/action_close"
+                android:tooltipText="@string/action_close"
                 android:focusable="true"
                 tools:targetApi="o">
 
@@ -38,7 +38,7 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
+                    android:src="@drawable/ic_round_close" />
 
             </FrameLayout>
 

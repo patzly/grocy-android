@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private final static boolean DEBUG = false;
-	private final static String TAG = "AboutActivity";
+	private final static String TAG = AboutActivity.class.getSimpleName();
 
 	private ClickUtil clickUtil = new ClickUtil();
 
@@ -60,7 +60,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 		);
 		setContentView(R.layout.activity_about);
 
-		findViewById(R.id.frame_about_back).setOnClickListener(v -> {
+		findViewById(R.id.frame_about_close).setOnClickListener(v -> {
 			if(clickUtil.isDisabled()) return;
 			finish();
 		});
