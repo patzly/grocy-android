@@ -478,7 +478,7 @@ public class ShoppingListFragment extends Fragment
         if(hidden) return;
 
         isSetupAfterFragmentHasBecomeVisible = true;
-        onViewCreated(requireView(), null);
+        if(getView() != null) onViewCreated(getView(), null);
     }
 
     private void updateUI() {

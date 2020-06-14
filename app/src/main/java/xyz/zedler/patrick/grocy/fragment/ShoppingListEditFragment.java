@@ -210,7 +210,7 @@ public class ShoppingListEditFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onViewCreated(requireView(), null);
+        if(!hidden && getView() != null) onViewCreated(getView(), null);
     }
 
     private void refresh() {

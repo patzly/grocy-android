@@ -499,7 +499,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(hidden) return;
 
         isSetupAfterFragmentHasBecomeVisible = true;
-        onViewCreated(requireView(), null);
+        if(getView() != null) onViewCreated(getView(), null);
     }
 
     private void load() {

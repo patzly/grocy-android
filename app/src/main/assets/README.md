@@ -2,8 +2,6 @@
 
 ## Bugs
 
-- online -> open stock -> go offline -> open shopping list -> go back -> error invisible but button clickable
-
 ## Improvements
 
 - Replace DEBUG with debug from shared prefs

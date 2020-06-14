@@ -224,7 +224,7 @@ public class MissingBatchItemsFragment extends Fragment
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden) onViewCreated(requireView(), null);
+        if(!hidden && getView() != null) onViewCreated(getView(), null);
     }
 
     public void createdOrEditedProduct(Bundle bundle) {
