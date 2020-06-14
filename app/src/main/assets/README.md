@@ -17,7 +17,6 @@
 
 - translation contribution: transifex like grocy
 - self-signed client certificates
-- help page with note that buttons can be long pressed to get a tip
 - extended product editing
 
 # ROLL OUT
