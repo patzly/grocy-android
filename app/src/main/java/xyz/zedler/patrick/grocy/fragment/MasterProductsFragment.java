@@ -294,6 +294,7 @@ public class MasterProductsFragment extends Fragment
         updateProductGroupFilter(
                 savedInstanceState.getInt("filterProductGroupId", -1)
         );
+        sortAscending = savedInstanceState.getBoolean("sortAscending", true);
         isRestoredInstance = true;
         filterProducts();
     }
@@ -569,7 +570,7 @@ public class MasterProductsFragment extends Fragment
 
     private void setMenuSorting() {
         MenuItem sortAscending = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
-        sortAscending.setChecked(true);
+        sortAscending.setChecked(this.sortAscending);
         sortAscending.setOnMenuItemClickListener(item -> {
             item.setChecked(!item.isChecked());
             sortProducts(item.isChecked());
