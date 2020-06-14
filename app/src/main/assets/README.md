@@ -2,7 +2,6 @@
 
 ## Bugs
 
-- in stock, swipe actions not working after fragment comes to foreground
 - clear last selected shopping list id at logout
 - in drawer store front icon not showing after going to ShoppingListFragment when offline and then back
 - in purchase and consume: after editing a product, refill the product field with this after saving or going back

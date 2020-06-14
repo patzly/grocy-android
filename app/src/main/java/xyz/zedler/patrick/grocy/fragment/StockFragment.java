@@ -254,7 +254,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         filterLocationId = -1;
         filterProductGroupId = -1;
         isRestoredInstance = false;
-        isSetupAfterFragmentHasBecomeVisible = false;
 
         // INITIALIZE VIEWS
 
