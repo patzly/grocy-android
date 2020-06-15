@@ -238,7 +238,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewUpdateInterval.setText(
 				updateInterval == 0
 						? getString(R.string.setting_sync_off)
-						: String.valueOf(updateInterval)
+						: updateInterval + " " + getString(R.string.property_seconds)
 		);
 
 		String amountPurchase = sharedPrefs.getString(
