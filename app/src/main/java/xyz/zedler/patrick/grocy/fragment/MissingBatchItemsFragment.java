@@ -487,6 +487,15 @@ public class MissingBatchItemsFragment extends Fragment
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
 
+        if(position >= missingBatchItems.size()) {
+            showMessage(activity.getString(R.string.msg_error));
+            if(debug) Log.e(
+                    TAG, "onItemRowClicked: size = "
+                            + missingBatchItems.size()
+                            + ", position = " + position
+            );
+        }
+
         MissingBatchItem batchItem = missingBatchItems.get(position);
 
         Bundle bundle = new Bundle();
