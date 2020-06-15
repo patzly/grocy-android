@@ -1,5 +1,5 @@
 1.4.1:
-- In-App help with FAQ
+- In-app help with initial FAQ
 - Setting for changing update interval in shopping mode
 - Bug fixes and improvements
 
