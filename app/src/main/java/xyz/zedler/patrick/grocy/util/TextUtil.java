@@ -24,13 +24,17 @@ public class TextUtil {
     public static CharSequence trimCharSequence(CharSequence source) {
         if(source == null || source.length() == 0) return null;
         int i = 0;
-        while (i < source.length() && Character.isWhitespace(source.charAt(i))) {
-            i++;
+        try {
+            while (i < source.length() && Character.isWhitespace(source.charAt(i))) {
+                i++;
+            }
+            int j = source.length()-1;
+            while (j >= 0 && j > i && Character.isWhitespace(source.charAt(j))) {
+                j--;
+            }
+            return source.subSequence(i, j + 1);
+        } catch (StringIndexOutOfBoundsException e) {
+            return null;
         }
-        int j = source.length()-1;
-        while (j >= 0 && j > i && Character.isWhitespace(source.charAt(j))) {
-            j--;
-        }
-        return source.subSequence(i, j+1);
     }
 }

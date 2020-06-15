@@ -382,8 +382,21 @@ public class MissingBatchItemsFragment extends Fragment
             return;
         }
 
+        if(missingBatchItems.size() < 1) {
+            showMessage(activity.getString(R.string.msg_error));
+            if(debug) Log.e(TAG, "doOnePurchaseRequest: missingBatchItems are empty");
+            return;
+        }
+
         MissingBatchItem missingBatchItem = missingBatchItems.get(0);
         ArrayList<BatchPurchaseEntry> batchPurchaseEntries = missingBatchItem.getPurchaseEntries();
+
+        if(batchPurchaseEntries.size() < 1) {
+            showMessage(activity.getString(R.string.msg_error));
+            if(debug) Log.e(TAG, "doOnePurchaseRequest: batchPurchaseEntries are empty");
+            return;
+        }
+
         BatchPurchaseEntry batchPurchaseEntry = batchPurchaseEntries.get(0);
 
         purchaseProduct(
@@ -484,6 +497,16 @@ public class MissingBatchItemsFragment extends Fragment
     @Override
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
+
+        if(position >= missingBatchItems.size()) {
+            showMessage(activity.getString(R.string.msg_error));
+            if(debug) Log.e(
+                    TAG, "onItemRowClicked: size = "
+                            + missingBatchItems.size()
+                            + ", position = " + position
+            );
+            return;
+        }
 
         MissingBatchItem batchItem = missingBatchItems.get(position);
 
