@@ -112,7 +112,7 @@ public class LogActivity extends AppCompatActivity {
 	private String getLogs() {
 		StringBuilder log = new StringBuilder();
 		try {
-			Process process = Runtime.getRuntime().exec("logcat *:I -d -t 200");
+			Process process = Runtime.getRuntime().exec("logcat *:I -d -t 150");
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(process.getInputStream())
 			);
