@@ -40,17 +40,19 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class LogActivity extends AppCompatActivity {
 
-	private final static boolean DEBUG = false;
 	private final static String TAG = LogActivity.class.getSimpleName();
 
 	private ActivityLogBinding binding;
 	private ClickUtil clickUtil = new ClickUtil();
 
+	TextView textViewLog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_log);
+		binding = ActivityLogBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 
 		findViewById(R.id.frame_log_close).setOnClickListener(v -> {
 			if(clickUtil.isDisabled()) return;
@@ -60,13 +62,18 @@ public class LogActivity extends AppCompatActivity {
 		Toolbar toolbar = findViewById(R.id.toolbar_log);
 		toolbar.setOnMenuItemClickListener((MenuItem item) -> {
 			if(clickUtil.isDisabled()) return false;
-			if (item.getItemId() == R.id.action_feedback) {
-				IconUtil.start(item);
-				BottomSheetDialogFragment sheet = new FeedbackBottomSheetDialogFragment();
-				getSupportFragmentManager()
-						.beginTransaction()
-						.add(sheet, sheet.toString())
-						.commit();
+			IconUtil.start(item);
+			switch (item.getItemId()) {
+				case R.id.action_feedback:
+					BottomSheetDialogFragment sheet = new FeedbackBottomSheetDialogFragment();
+					getSupportFragmentManager()
+							.beginTransaction()
+							.add(sheet, sheet.toString())
+							.commit();
+					break;
+				case R.id.action_refresh:
+					setLog();
+					break;
 			}
 			return true;
 		});
@@ -79,11 +86,10 @@ public class LogActivity extends AppCompatActivity {
 				true
 		);
 
-		TextView textView = findViewById(R.id.text_log_logs);
-		textView.setText(getLogs());
+		setLog();
 	}
 
-	private String getLogs() {
+	private void setLog() {
 		StringBuilder log = new StringBuilder();
 		try {
 			Process process = Runtime.getRuntime().exec("logcat *:I -d -t 150");
@@ -91,9 +97,11 @@ public class LogActivity extends AppCompatActivity {
 					new InputStreamReader(process.getInputStream())
 			);
 			String line;
-			while ((line = bufferedReader.readLine()) != null) log.append(line).append('\n');
+			while ((line = bufferedReader.readLine()) != null) {
+				log.append(line).append('\n');
+			}
 			log.deleteCharAt(log.length() - 1);
-		} catch (IOException e) {}
-		return log.toString();
+		} catch (IOException ignored) {}
+		binding.textLog.setText(log.toString());
 	}
 }

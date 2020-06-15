@@ -78,11 +78,11 @@
             android:scrollbarThumbHorizontal="@drawable/shape_scrollbar_rounded">
 
             <TextView
-                android:id="@+id/text_log_logs"
+                android:id="@+id/text_log"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/on_background"
-                android:textSize="8sp"
+                android:textSize="8.5sp"
                 android:padding="16dp"
                 tools:ignore="SmallSp" />
 
