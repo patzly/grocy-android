@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_reload"
+        android:icon="@drawable/ic_round_refresh_anim"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_feedback"
         android:title="@string/action_send_feedback"
         android:icon="@drawable/ic_round_feedback_anim"

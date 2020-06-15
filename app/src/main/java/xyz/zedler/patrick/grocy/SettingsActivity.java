@@ -238,7 +238,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewUpdateInterval.setText(
 				updateInterval == 0
 						? getString(R.string.setting_sync_off)
-						: updateInterval + " " + getString(R.string.property_seconds)
+						: getString(R.string.property_sec, updateInterval)
 		);
 
 		String amountPurchase = sharedPrefs.getString(
@@ -871,7 +871,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewUpdateInterval.setText(
 				secondsFormatted == 0
 						? getString(R.string.setting_sync_off)
-						: secondsFormatted + " " + getString(R.string.property_seconds)
+						: getString(R.string.property_sec, secondsFormatted)
 		);
 		sharedPrefs.edit().putInt(
 				Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,

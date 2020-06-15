@@ -312,7 +312,7 @@
                 <ImageView
                     android:id="@+id/image_setting_shopping_mode_update_interval"
                     style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_sync_anim"
+                    android:src="@drawable/ic_round_autorenew_anim"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
@@ -331,7 +331,7 @@
 
             <TextView
                 style="@style/Theme.Grocy.Category"
-                android:text="@string/action_purchase"/>
+                android:text="@string/category_purchase_consume"/>
 
             <LinearLayout
                 android:id="@+id/linear_setting_default_amount_purchase"
@@ -356,10 +356,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <TextView
-                style="@style/Theme.Grocy.Category"
-                android:text="@string/action_consume"/>
 
             <LinearLayout
                 android:id="@+id/linear_setting_default_amount_consume"
