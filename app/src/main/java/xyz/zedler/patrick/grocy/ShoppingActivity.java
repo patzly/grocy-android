@@ -85,10 +85,13 @@ public class ShoppingActivity extends AppCompatActivity implements
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<Product> products;
     private ArrayList<GroupedListItem> groupedListItems;
+    private ArrayList<Integer> missingProductIds;
     private HashMap<Integer, ShoppingList> shoppingListHashMap;
+    private HashMap<Integer, Product> productHashMap;
 
     private int selectedShoppingListId = 1;
     private boolean showOffline;
+    private boolean productUpdateDone;
     private boolean isDataStored;
     private boolean debug;
     private Date lastSynced;
@@ -132,7 +135,9 @@ public class ShoppingActivity extends AppCompatActivity implements
         products = new ArrayList<>();
         productGroups = new ArrayList<>();
         groupedListItems = new ArrayList<>();
+        missingProductIds = new ArrayList<>();
         shoppingListHashMap = new HashMap<>();
+        productHashMap = new HashMap<>();
 
         int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, -1);
         if(lastId != -1) selectedShoppingListId = lastId;
@@ -230,7 +235,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void downloadFull() {
         binding.swipe.setRefreshing(true);
         downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
-        downloadHelper.downloadProducts(products -> this.products = products);
+        downloadOnlyProducts();
         downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
         downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
         downloadHelper.downloadShoppingLists(shoppingLists -> {
@@ -238,10 +243,30 @@ public class ShoppingActivity extends AppCompatActivity implements
             changeAppBarTitle();
             if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
         });
+        missingProductIds.clear();
+        productUpdateDone = true;
     }
 
-    private void downloadShoppingListItems() {
+    private void downloadOnlyShoppingListItems() {
         downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
+        productUpdateDone = false;
+    }
+
+    private void downloadOnlyProducts() {
+        downloadHelper.downloadProducts(products -> {
+            this.products = products;
+            productHashMap.clear();
+            for(Product p : products) productHashMap.put(p.getId(), p);
+            if(debug) Log.i(TAG, "downloadOnlyProducts: successful");
+            if(this.missingProductIds.isEmpty()) return;
+            if(debug) Log.i(TAG, "downloadOnlyProducts: missingProductIds: " + this.missingProductIds);
+            ArrayList<Integer> missingProductIds = new ArrayList<>();
+            for(int productId : this.missingProductIds) {
+                if(productHashMap.get(productId) == null) missingProductIds.add(productId);
+            }
+            this.missingProductIds = missingProductIds;
+            if(debug) Log.i(TAG, "downloadOnlyProducts: missingProductIds: " + this.missingProductIds);
+        });
     }
 
     private void onQueueEmpty() {
@@ -277,13 +302,21 @@ public class ShoppingActivity extends AppCompatActivity implements
             isDataStored = false;
 
             // set product in shoppingListItem
-            HashMap<Integer, Product> productHashMap = new HashMap<>();
-            for(Product p : products) productHashMap.put(p.getId(), p);
+            boolean missingProductIdsChanged = false;
             for(ShoppingListItem shoppingListItem : shoppingListItemsSelected) {
-                if(shoppingListItem.getProductId() == null) continue;
-                shoppingListItem.setProduct(
-                        productHashMap.get(Integer.parseInt(shoppingListItem.getProductId()))
-                );
+                String productIdStr = shoppingListItem.getProductId();
+                if(productIdStr == null || productIdStr.isEmpty()) continue;
+                int productId = Integer.parseInt(productIdStr);
+                Product product = productHashMap.get(productId);
+                if(product == null && !missingProductIds.contains(productId)) {
+                    missingProductIds.add(productId);
+                    missingProductIdsChanged = true;
+                }
+                shoppingListItem.setProduct(product);
+            }
+            if(missingProductIdsChanged && !productUpdateDone) { // entries with new products were created
+                downloadOnlyProducts(); // to display them properly, they have to be downloaded
+                return;
             }
 
             binding.swipe.setRefreshing(false);
@@ -454,7 +487,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                     response -> {
                         updateDoneStatus(shoppingListItem, position, removedItems);
                         if(syncNeeded) {
-                            downloadShoppingListItems();
+                            downloadOnlyShoppingListItems();
                         } else {
                             downloadHelper.getTimeDbChanged(
                                     date1 -> lastSynced = date1,
@@ -531,12 +564,12 @@ public class ShoppingActivity extends AppCompatActivity implements
                             if(!netUtil.isOnline()) {
                                 loadOfflineData();
                             } else if(lastSynced == null || lastSynced.before(date)) {
-                                downloadShoppingListItems();
+                                downloadOnlyShoppingListItems();
                             } else {
                                 if(debug) Log.i(TAG, "run: skip sync of list items");
                             }
                         },
-                        () -> downloadShoppingListItems()
+                        () -> downloadOnlyShoppingListItems()
                 );
             }
         };
