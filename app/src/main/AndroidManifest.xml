@@ -50,6 +50,8 @@
 
         <activity android:name=".HelpActivity"/>
 
+        <activity android:name=".LogActivity"/>
+
         <activity android:name=".RestartActivity"/>
 
         <activity

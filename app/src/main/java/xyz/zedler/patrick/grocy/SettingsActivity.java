@@ -144,6 +144,9 @@ public class SettingsActivity extends AppCompatActivity
 				case R.id.action_feedback:
 					showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
 					break;
+				case R.id.action_logs:
+					startActivity(new Intent(this, LogActivity.class));
+					break;
 			}
 			return true;
 		});
