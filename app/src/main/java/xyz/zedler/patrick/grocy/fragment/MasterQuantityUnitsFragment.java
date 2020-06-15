@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -68,7 +70,6 @@ public class MasterQuantityUnitsFragment extends Fragment
         implements MasterQuantityUnitAdapter.MasterQuantityUnitAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_QUANTITY_UNITS;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
@@ -90,6 +91,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private String errorState;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -140,6 +142,11 @@ public class MasterQuantityUnitsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -357,14 +364,14 @@ public class MasterQuantityUnitsFragment extends Fragment
                             response,
                             new TypeToken<List<QuantityUnit>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits);
+                    if(debug) Log.i(TAG, "downloadQuantityUnits: quantityUnits = " + quantityUnits);
                     binding.swipeMasterQuantityUnits.setRefreshing(false);
                     filterQuantityUnits();
                 },
                 error -> {
                     binding.swipeMasterQuantityUnits.setRefreshing(false);
                     setError(Constants.STATE.OFFLINE, true);
-                    Log.e(TAG, "downloadQuantityUnits: " + error);
+                    if(debug) Log.e(TAG, "downloadQuantityUnits: " + error);
                 }
         );
     }
@@ -398,14 +405,14 @@ public class MasterQuantityUnitsFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(
+        if(debug) Log.i(
                 TAG, "filterQuantityUnits: filteredQuantityUnits = " + filteredQuantityUnits
         );
     }
 
     private void searchQuantityUnits(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchQuantityUnits: search = " + search);
+        if(debug) Log.i(TAG, "searchQuantityUnits: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterQuantityUnits();
@@ -429,7 +436,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                 displayedQuantityUnits = searchedQuantityUnits;
                 sortQuantityUnits();
             }
-            if(DEBUG) Log.i(
+            if(debug) Log.i(
                     TAG,
                     "searchQuantityUnits: searchedQuantityUnits = " + searchedQuantityUnits
             );
@@ -437,7 +444,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     }
 
     private void sortQuantityUnits() {
-        if(DEBUG) Log.i(TAG, "sortQuantityUnits: sort by name, ascending = " + sortAscending);
+        if(debug) Log.i(TAG, "sortQuantityUnits: sort by name, ascending = " + sortAscending);
         SortUtil.sortQuantityUnitsByName(displayedQuantityUnits, sortAscending);
         refreshAdapter(new MasterQuantityUnitAdapter(displayedQuantityUnits, this));
     }

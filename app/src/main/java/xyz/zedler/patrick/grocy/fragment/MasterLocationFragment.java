@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -31,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -70,6 +72,7 @@ public class MasterLocationFragment extends Fragment {
     private Location editLocation;
 
     private boolean isRefresh;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -104,6 +107,11 @@ public class MasterLocationFragment extends Fragment {
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+        
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB REQUESTS
 
@@ -372,7 +380,7 @@ public class MasterLocationFragment extends Fragment {
             );
             jsonObject.put("is_freezer", binding.checkboxMasterLocationFreezer.isChecked());
         } catch (JSONException e) {
-            Log.e(TAG, "saveLocation: " + e);
+            if(debug) Log.e(TAG, "saveLocation: " + e);
         }
         if(editLocation != null) {
             request.put(
@@ -381,7 +389,7 @@ public class MasterLocationFragment extends Fragment {
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveLocation: " + error);
+                        if(debug) Log.e(TAG, "saveLocation: " + error);
                     }
             );
         } else {
@@ -391,7 +399,7 @@ public class MasterLocationFragment extends Fragment {
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveLocation: " + error);
+                        if(debug) Log.e(TAG, "saveLocation: " + error);
                     }
             );
         }

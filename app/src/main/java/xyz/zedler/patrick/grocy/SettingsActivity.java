@@ -104,6 +104,7 @@ public class SettingsActivity extends AppCompatActivity
 	private int presetLocationId;
 	private int presetProductGroupId;
 	private int presetQuantityUnitId;
+	private boolean debug;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,7 @@ public class SettingsActivity extends AppCompatActivity
 		// PREFERENCES
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
 		// WEB REQUESTS
 
@@ -545,7 +547,7 @@ public class SettingsActivity extends AppCompatActivity
 				try {
 					body.put("value", switchListIndicator.isChecked());
 				} catch (JSONException e) {
-					Log.e(TAG, "onCheckedChanged: list indicator: " + e);
+					if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + e);
 				}
 				request.put(
 						grocyApi.getUserSetting(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK),
@@ -560,7 +562,7 @@ public class SettingsActivity extends AppCompatActivity
 									switchListIndicator.isChecked()
 							).apply();
 							showErrorMessage();
-							Log.e(TAG, "onCheckedChanged: list indicator: " + error);
+							if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
 				break;
@@ -610,7 +612,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", locationId);
 		} catch (JSONException e) {
-			Log.e(TAG, "setLocation: " + e);
+			if(debug) Log.e(TAG, "setLocation: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID),
@@ -630,7 +632,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setLocation: " + error);
+					if(debug) Log.e(TAG, "setLocation: " + error);
 				}
 		);
 	}
@@ -681,7 +683,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", productGroupId);
 		} catch (JSONException e) {
-			Log.e(TAG, "setProductGroup: " + e);
+			if(debug) Log.e(TAG, "setProductGroup: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID),
@@ -701,7 +703,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setProductGroup: " + error);
+					if(debug) Log.e(TAG, "setProductGroup: " + error);
 				}
 		);
 	}
@@ -749,7 +751,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", quantityUnitId);
 		} catch (JSONException e) {
-			Log.e(TAG, "setQuantityUnit: " + e);
+			if(debug) Log.e(TAG, "setQuantityUnit: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_QU_ID),
@@ -769,7 +771,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setQuantityUnit: " + error);
+					if(debug) Log.e(TAG, "setQuantityUnit: " + error);
 				}
 		);
 	}
@@ -779,7 +781,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", Integer.parseInt(days));
 		} catch (JSONException e) {
-			Log.e(TAG, "setExpiringSoonDays: " + e);
+			if(debug) Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
@@ -792,7 +794,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setExpiringSoonDays: " + error);
+					if(debug) Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
 	}
@@ -802,7 +804,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", amount);
 		} catch (JSONException e) {
-			Log.e(TAG, "setAmountPurchase: " + e);
+			if(debug) Log.e(TAG, "setAmountPurchase: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
@@ -823,7 +825,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setAmountPurchase: " + error);
+					if(debug) Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
 	}
@@ -833,7 +835,7 @@ public class SettingsActivity extends AppCompatActivity
 		try {
 			body.put("value", amount);
 		} catch (JSONException e) {
-			Log.e(TAG, "setAmountConsume: " + e);
+			if(debug) Log.e(TAG, "setAmountConsume: " + e);
 		}
 		request.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT),
@@ -854,7 +856,7 @@ public class SettingsActivity extends AppCompatActivity
 				},
 				error -> {
 					showErrorMessage();
-					Log.e(TAG, "setAmountConsume: " + error);
+					if(debug) Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
 	}

@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,7 +59,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ShoppingListEditFragment extends Fragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_EDIT;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
@@ -70,6 +71,7 @@ public class ShoppingListEditFragment extends Fragment {
     private ArrayList<String> shoppingListNames;
 
     private String action;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -111,6 +113,11 @@ public class ShoppingListEditFragment extends Fragment {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
             if(action == null) action = Constants.ACTION.CREATE;
         }
+
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
 
@@ -251,7 +258,7 @@ public class ShoppingListEditFragment extends Fragment {
                             new TypeToken<List<ShoppingList>>(){}.getType()
                     );
                     shoppingListNames = getShoppingListNames();
-                    if(DEBUG) Log.i(
+                    if(debug) Log.i(
                             TAG, "downloadShoppingLists: shoppingLists = " + shoppingLists
                     );
                     if(action.equals(Constants.ACTION.EDIT)) {
@@ -269,7 +276,7 @@ public class ShoppingListEditFragment extends Fragment {
     }
 
     private void onError(VolleyError error) {
-        Log.e(TAG, "onError: VolleyError: " + error);
+        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         request.cancelAll(TAG);
         binding.swipeShoppingListEdit.setRefreshing(false);
         activity.showMessage(
@@ -312,7 +319,7 @@ public class ShoppingListEditFragment extends Fragment {
         try {
             jsonObject.put("name", name);
         } catch (JSONException e) {
-            Log.e(TAG, "saveShoppingList: " + e);
+            if(debug) Log.e(TAG, "saveShoppingList: " + e);
         }
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.SHOPPING_LIST_NAME, name);
@@ -328,7 +335,7 @@ public class ShoppingListEditFragment extends Fragment {
                     response -> activity.dismissFragment(bundle),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
                     }
             );
         } else {
@@ -338,7 +345,7 @@ public class ShoppingListEditFragment extends Fragment {
                     response -> activity.dismissFragment(bundle),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
                     }
             );
         }
@@ -386,7 +393,7 @@ public class ShoppingListEditFragment extends Fragment {
                         response -> activity.dismissFragment(),
                         error -> {
                             showErrorMessage();
-                            if(DEBUG) Log.i(TAG, "setUpMenu: deleteItem: " + error);
+                            if(debug) Log.i(TAG, "setUpMenu: deleteItem: " + error);
                         }
                 );
                 return true;

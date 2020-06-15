@@ -361,21 +361,19 @@ public class MissingBatchItemsFragment extends Fragment
     }
 
     private void updateFab() {
-        new Handler().postDelayed(() -> {
-            activity.setFabIcon(
-                    new BitmapDrawable(
-                            getResources(),
-                            BitmapUtil.getFromDrawableWithNumber(
-                                    activity,
-                                    R.drawable.ic_round_shopping_cart,
-                                    getReadyPurchaseEntriesSize(),
-                                    7.3f,
-                                    -1.5f,
-                                    8
-                            )
-                    )
-            );
-        }, 500);
+        new Handler().postDelayed(() -> activity.setFabIcon(
+                new BitmapDrawable(
+                        getResources(),
+                        BitmapUtil.getFromDrawableWithNumber(
+                                activity,
+                                R.drawable.ic_round_shopping_cart,
+                                getReadyPurchaseEntriesSize(),
+                                7.3f,
+                                -1.5f,
+                                8
+                        )
+                )
+        ), 500);
     }
 
     private void doOnePurchaseRequest() {

@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -68,7 +70,6 @@ public class MasterProductGroupsFragment extends Fragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUPS;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
@@ -90,6 +91,7 @@ public class MasterProductGroupsFragment extends Fragment
     private String errorState;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -140,6 +142,11 @@ public class MasterProductGroupsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -354,7 +361,7 @@ public class MasterProductGroupsFragment extends Fragment
                             response,
                             new TypeToken<List<ProductGroup>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(
+                    if(debug) Log.i(
                             TAG, "downloadProductGroups: productGroups = " + productGroups
                     );
                     binding.swipeMasterProductGroups.setRefreshing(false);
@@ -363,7 +370,7 @@ public class MasterProductGroupsFragment extends Fragment
                 error -> {
                     binding.swipeMasterProductGroups.setRefreshing(false);
                     setError(Constants.STATE.OFFLINE, true);
-                    Log.e(TAG, "downloadProductGroups: " + error);
+                    if(debug) Log.e(TAG, "downloadProductGroups: " + error);
                 }
         );
     }
@@ -397,14 +404,14 @@ public class MasterProductGroupsFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(
+        if(debug) Log.i(
                 TAG, "filterProductGroups: filteredProductGroups = " + filteredProductGroups
         );
     }
 
     private void searchProductGroups(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchProductGroups: search = " + search);
+        if(debug) Log.i(TAG, "searchProductGroups: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterProductGroups();
@@ -428,12 +435,12 @@ public class MasterProductGroupsFragment extends Fragment
                 displayedProductGroups = searchedProductGroups;
                 sortProductGroups();
             }
-            if(DEBUG) Log.i(TAG, "searchProductGroups: products = " + searchedProductGroups);
+            if(debug) Log.i(TAG, "searchProductGroups: products = " + searchedProductGroups);
         }
     }
 
     private void sortProductGroups() {
-        if(DEBUG) Log.i(TAG, "sortProductGroups: sort by name, ascending = " + sortAscending);
+        if(debug) Log.i(TAG, "sortProductGroups: sort by name, ascending = " + sortAscending);
         SortUtil.sortProductGroupsByName(displayedProductGroups, sortAscending);
         refreshAdapter(new MasterProductGroupAdapter(displayedProductGroups, this));
     }

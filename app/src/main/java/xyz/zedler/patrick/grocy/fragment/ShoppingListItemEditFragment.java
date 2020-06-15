@@ -80,7 +80,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class ShoppingListItemEditFragment extends Fragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -101,6 +100,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     private boolean nameAutoFilled;
     private int selectedShoppingListId;
     private String action;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -155,6 +155,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
 
@@ -439,7 +440,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                             response,
                             new TypeToken<List<ShoppingList>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(
+                    if(debug) Log.i(
                             TAG,
                             "downloadShoppingLists: shoppingLists = " + shoppingLists
                     );
@@ -450,7 +451,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     private void onError(VolleyError error) {
-        Log.e(TAG, "onError: VolleyError: " + error);
+        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         request.cancelAll(TAG);
         binding.swipeShoppingListItemEdit.setRefreshing(false);
         activity.showMessage(
@@ -622,7 +623,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             assert note != null;
             jsonObject.put("note", note.toString().trim());
         } catch (JSONException e) {
-            Log.e(TAG, "saveShoppingListItem: " + e);
+            if(debug) Log.e(TAG, "saveShoppingListItem: " + e);
         }
         if(action.equals(Constants.ACTION.EDIT)) {
             ShoppingListItem shoppingListItem = startupBundle.getParcelable(
@@ -638,7 +639,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     },
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
                     }
             );
         } else {
@@ -651,7 +652,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     },
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
                     }
             );
         }
@@ -709,19 +710,19 @@ public class ShoppingListItemEditFragment extends Fragment {
                 barcodes.add(inputChip.getText());
             }
         }
-        if(DEBUG) Log.i(TAG, "editProductBarcodes: " + barcodes);
+        if(debug) Log.i(TAG, "editProductBarcodes: " + barcodes);
         JSONObject body = new JSONObject();
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            Log.e(TAG, "editProductBarcodes: " + e);
+            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
                 body,
                 response -> { },
                 error -> {
-                    if(DEBUG) Log.i(TAG, "editProductBarcodes: " + error);
+                    if(debug) Log.i(TAG, "editProductBarcodes: " + error);
                 }
         );
     }
@@ -796,7 +797,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                             response -> activity.dismissFragment(),
                             error -> {
                                 showErrorMessage();
-                                if(DEBUG) Log.i(
+                                if(debug) Log.i(
                                         TAG,
                                         "setUpBottomMenu: deleteItem: " + error
                                 );

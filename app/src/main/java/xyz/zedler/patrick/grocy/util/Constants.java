@@ -125,9 +125,6 @@ public final class Constants {
     public final static class STATE {
         public final static String ERROR = "error";
         public final static String OFFLINE = "offline";
-        public final static String EMPTY = "empty";
-        public final static String NO_SEARCH_RESULTS = "search";
-        public final static String NO_FILTER_RESULTS = "filter";
         public final static String NONE = "none";
     }
 
@@ -141,7 +138,6 @@ public final class Constants {
 
     public final static class EXTRA {
         public final static String SCAN_RESULT = "scan_result";
-        public final static String FLASH_VIEW_ID = "flash_view_id";
         public final static String AFTER_FEATURES_ACTIVITY = "after_features_activity";
     }
 
@@ -204,7 +200,6 @@ public final class Constants {
         public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
-        public final static String SET_UP_WITH_PRODUCT_DETAILS = "set_up_with_product_details";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
         public final static String PRODUCT_ID = "product_id";
@@ -220,14 +215,12 @@ public final class Constants {
         public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
         public final static String PRICE = "price";
         public final static String AMOUNT = "amount";
-        public final static String NOTE = "note";
         public final static String TEXT = "text";
         public final static String FILE = "file";
         public final static String LINK = "link";
         public final static String HTML = "html";
         public final static String TITLE = "title";
         public final static String HINT = "hint";
-        public final static String STATUS = "status";
         public final static String CURRENCY = "currency";
         public final static String SUPPORTED_VERSIONS = "supported_versions";
         public final static String VERSION = "version";

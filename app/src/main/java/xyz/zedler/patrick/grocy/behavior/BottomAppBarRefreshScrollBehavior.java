@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -35,18 +36,19 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.IdRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 
 public class BottomAppBarRefreshScrollBehavior {
 
 	private final static String TAG = "BottomBarScrollBehavior";
-	private final static boolean DEBUG = false;
 
 	private static final int STATE_SCROLLED_DOWN = 1;
 	private static final int STATE_SCROLLED_UP = 2;
@@ -60,6 +62,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private boolean isTopScroll = false;
 	private boolean hideOnScroll = true;
 	private boolean showTopScroll = true;
+	private boolean debug;
 
 	private Activity activity;
 	private CustomBottomAppBar bottomAppBar;
@@ -69,7 +72,14 @@ public class BottomAppBarRefreshScrollBehavior {
 
 	public BottomAppBarRefreshScrollBehavior(Activity activity) {
 		this.activity = activity;
-		if(activity == null) Log.e(TAG, "constructor: activity is null!");
+
+		if(activity == null) {
+			Log.e(TAG, "constructor: activity is null!");
+			return;
+		}
+		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 	}
 
 	/**
@@ -105,7 +115,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	 */
 	public void setUpScroll(@IdRes int nestedScrollViewId) {
 		if(activity == null) {
-			Log.e(TAG, "setUpScroll: activity is null!");
+			if(debug) Log.e(TAG, "setUpScroll: activity is null!");
 			return;
 		}
 		nestedScrollView = activity.findViewById(nestedScrollViewId);
@@ -136,12 +146,12 @@ public class BottomAppBarRefreshScrollBehavior {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true, "setUpScroll");
 		}
-		if(DEBUG) Log.i(TAG, "setUpScroll with ScrollView");
+		if(debug) Log.i(TAG, "setUpScroll with ScrollView");
 	}
 
 	private NestedScrollView.OnScrollChangeListener onScrollChangeListener() {
 		return (NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) -> {
-			if(DEBUG) Log.i(
+			if(debug) Log.i(
 					TAG,
 					"onScrollChangeListener: newY = " + scrollY + ", oldY = " + oldScrollY
 			);
@@ -189,12 +199,12 @@ public class BottomAppBarRefreshScrollBehavior {
 		isTopScroll = true;
 		if(bottomAppBar != null) {
 			if(bottomAppBar.isOrWillBeShown()) {
-				if(DEBUG) Log.i(TAG, "onTopScroll: bottomAppBar already shown");
+				if(debug) Log.i(TAG, "onTopScroll: bottomAppBar already shown");
 				return;
 			}
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true, "onTopScroll");
-		} else Log.e(TAG, "onTopScroll: bottomAppBar is null!");
+		} else if(debug) Log.e(TAG, "onTopScroll: bottomAppBar is null!");
 	}
 
 	/**
@@ -205,8 +215,8 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(bottomAppBar != null) {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true, "onScrollUp");
-		} else Log.e(TAG, "onScrollUp: bottomAppBar is null!");
-		if(DEBUG) Log.i(TAG, "onScrollUp: UP");
+		} else if(debug) Log.e(TAG, "onScrollUp: bottomAppBar is null!");
+		if(debug) Log.i(TAG, "onScrollUp: UP");
 	}
 
 	/**
@@ -221,8 +231,8 @@ public class BottomAppBarRefreshScrollBehavior {
 				bottomAppBar.hide();
 				onChangeBottomAppBarVisibility(false, "onScrollDown");
 			}
-		} else Log.e(TAG, "onScrollDown: bottomAppBar is null!");
-		if(DEBUG) Log.i(TAG, "onScrollDown: DOWN");
+		} else if(debug) Log.e(TAG, "onScrollDown: bottomAppBar is null!");
+		if(debug) Log.i(TAG, "onScrollDown: DOWN");
 	}
 
 	/**
@@ -235,8 +245,8 @@ public class BottomAppBarRefreshScrollBehavior {
 				bottomAppBar.show();
 				onChangeBottomAppBarVisibility(true, "setHideOnScroll");
 			}
-		} else Log.e(TAG, "setHideOnScroll: bottomAppBar is null!");
-		if(DEBUG) Log.i(TAG, "setHideOnScroll(" + hide + ")");
+		} else if(debug) Log.e(TAG, "setHideOnScroll: bottomAppBar is null!");
+		if(debug) Log.i(TAG, "setHideOnScroll(" + hide + ")");
 	}
 
 	/**
@@ -246,7 +256,7 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(nestedScrollView != null) {
 			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
 				if(nestedScrollView == null) {
-					Log.e(TAG, "measureScrollView: scrollView is null!");
+					if(debug) Log.e(TAG, "measureScrollView: scrollView is null!");
 					return;
 				}
 				int scrollViewHeight = nestedScrollView.getMeasuredHeight();
@@ -254,7 +264,7 @@ public class BottomAppBarRefreshScrollBehavior {
 						0
 				).getHeight();
 				pufferSize = (scrollContentHeight - scrollViewHeight) / pufferDivider;
-				if(DEBUG) {
+				if(debug) {
 					Log.i(TAG, "onMeasureScrollView: viewHeight = " +
 							scrollViewHeight +
 							", contentHeight = " + scrollContentHeight
@@ -277,7 +287,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private void onChangeBottomAppBarVisibility(boolean visible, String origin) {
 		if(activity != null) {
 			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-				if(DEBUG) Log.i(TAG, "onChangeBottomAppBarVisibility: SDK below 28");
+				if(debug) Log.i(TAG, "onChangeBottomAppBarVisibility: SDK below 28");
 				return;
 			}
 			int dividerCurrentColor = activity.getWindow().getNavigationBarDividerColor();
@@ -294,7 +304,7 @@ public class BottomAppBarRefreshScrollBehavior {
 						)
 				);
 				valueAnimator.setDuration(200).start();
-			} else if(DEBUG) Log.i(TAG, "onHideBottomAppBar: current and target identical");
+			} else if(debug) Log.i(TAG, "onHideBottomAppBar: current and target identical");
 			int navBarCurrentColor = activity.getWindow().getNavigationBarColor();
 			int navBarTargetColor = ContextCompat.getColor(
 					activity, visible ? R.color.primary : R.color.background
@@ -310,12 +320,12 @@ public class BottomAppBarRefreshScrollBehavior {
 				);
 				valueAnimator.setStartDelay(visible ? 0 : 100);
 				valueAnimator.setDuration(visible ? 70 : 100).start();
-			} else if(DEBUG) Log.i(
+			} else if(debug) Log.i(
 					TAG,"onChangeBottomBarVisibility("
 							+ origin
 							+ "): current and target identical"
 			);
-		} else Log.e(TAG, "onChangeBottomBarVisibility("
+		} else if(debug) Log.e(TAG, "onChangeBottomBarVisibility("
 				+ origin
 				+ "): activity is null!"
 		);

@@ -969,9 +969,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             body.put("transaction_type", "consume");
             body.put("spoiled", spoiled);
         } catch (JSONException e) {
-            Log.e(TAG, "consumeProduct: " + e);
+            if(debug) Log.e(TAG, "consumeProduct: " + e);
         }
-        Log.i(TAG, "consumeProduct: " + activity);
         request.post(
                 grocyApi.consumeProduct(productId),
                 body,
@@ -980,7 +979,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "consumeProduct: " + e);
+                        if(debug) Log.e(TAG, "consumeProduct: " + e);
                     }
 
                     int index = getProductPosition(productId);
@@ -1106,7 +1105,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             double amount = 1;
             body.put("amount", amount);
         } catch (JSONException e) {
-            Log.e(TAG, "openProduct: " + e);
+            if(debug) Log.e(TAG, "openProduct: " + e);
         }
         request.post(
                 grocyApi.openProduct(productId),
@@ -1116,7 +1115,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     try {
                         transactionId = response.getString("transaction_id");
                     } catch (JSONException e) {
-                        Log.e(TAG, "openProduct: " + e);
+                        if(debug) Log.e(TAG, "openProduct: " + e);
                     }
 
                     int index = getProductPosition(productId);

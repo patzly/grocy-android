@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -68,7 +70,6 @@ public class MasterLocationsFragment extends Fragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_LOCATIONS;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private Gson gson;
@@ -90,6 +91,7 @@ public class MasterLocationsFragment extends Fragment
     private String errorState;
     private boolean sortAscending;
     private boolean isRestoredInstance;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -138,6 +140,11 @@ public class MasterLocationsFragment extends Fragment
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // UTILS
 
@@ -351,14 +358,14 @@ public class MasterLocationsFragment extends Fragment
                             response,
                             new TypeToken<List<Location>>(){}.getType()
                     );
-                    if(DEBUG) Log.i(TAG, "downloadLocations: locations = " + locations);
+                    if(debug) Log.i(TAG, "downloadLocations: locations = " + locations);
                     binding.swipeMasterLocations.setRefreshing(false);
                     filterLocations();
                 },
                 error -> {
                     binding.swipeMasterLocations.setRefreshing(false);
                     setError(Constants.STATE.OFFLINE, true);
-                    Log.e(TAG, "downloadLocations: " + error);
+                    if(debug) Log.e(TAG, "downloadLocations: " + error);
                 }
         );
     }
@@ -392,12 +399,12 @@ public class MasterLocationsFragment extends Fragment
             }
             isRestoredInstance = false;
         }
-        if(DEBUG) Log.i(TAG, "filterLocations: filteredLocations = " + filteredLocations);
+        if(debug) Log.i(TAG, "filterLocations: filteredLocations = " + filteredLocations);
     }
 
     private void searchLocations(String search) {
         search = search.toLowerCase();
-        if(DEBUG) Log.i(TAG, "searchLocations: search = " + search);
+        if(debug) Log.i(TAG, "searchLocations: search = " + search);
         this.search = search;
         if(search.isEmpty()) {
             filterLocations();
@@ -421,12 +428,12 @@ public class MasterLocationsFragment extends Fragment
                 displayedLocations = searchedLocations;
                 sortLocations();
             }
-            if(DEBUG) Log.i(TAG, "searchLocations: searchedLocations = " + searchedLocations);
+            if(debug) Log.i(TAG, "searchLocations: searchedLocations = " + searchedLocations);
         }
     }
 
     private void sortLocations() {
-        if(DEBUG) Log.i(TAG, "sortLocations: sort by name, ascending = " + sortAscending);
+        if(debug) Log.i(TAG, "sortLocations: sort by name, ascending = " + sortAscending);
         SortUtil.sortLocationsByName(displayedLocations, sortAscending);
         refreshAdapter(new MasterLocationAdapter(displayedLocations, this));
     }

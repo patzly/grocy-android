@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -31,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -70,6 +72,7 @@ public class MasterStoreFragment extends Fragment {
     private Store editStore;
 
     private boolean isRefresh;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -104,6 +107,11 @@ public class MasterStoreFragment extends Fragment {
 
         activity = (MainActivity) getActivity();
         assert activity != null;
+
+        // PREFERENCES
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
 
@@ -358,7 +366,7 @@ public class MasterStoreFragment extends Fragment {
                     "description", (description != null ? description : "").toString().trim()
             );
         } catch (JSONException e) {
-            Log.e(TAG, "saveStore: " + e);
+            if(debug) Log.e(TAG, "saveStore: " + e);
         }
         if(editStore != null) {
             request.put(
@@ -367,7 +375,7 @@ public class MasterStoreFragment extends Fragment {
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveStore: " + error);
+                        if(debug) Log.e(TAG, "saveStore: " + error);
                     }
             );
         } else {
@@ -377,7 +385,7 @@ public class MasterStoreFragment extends Fragment {
                     response -> activity.dismissFragment(),
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveStore: " + error);
+                        if(debug) Log.e(TAG, "saveStore: " + error);
                     }
             );
         }

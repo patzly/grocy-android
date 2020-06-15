@@ -91,7 +91,6 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 public class MasterProductSimpleFragment extends Fragment {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_SIMPLE;
-    private final static boolean DEBUG = false;
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -146,6 +145,7 @@ public class MasterProductSimpleFragment extends Fragment {
     private double minAmount;
     private int quantityUnitFactor;
     private int bestBeforeDays;
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -177,6 +177,7 @@ public class MasterProductSimpleFragment extends Fragment {
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
 
@@ -1086,12 +1087,12 @@ public class MasterProductSimpleFragment extends Fragment {
                             JSONObject product = jsonObject.getJSONObject("product");
                             String name = product.getString("product_name");
                             editTextName.setText(name);
-                            if(DEBUG) Log.i(
+                            if(debug) Log.i(
                                     TAG,
                                     "fillWithCreateProductObject: OpenFoodFacts = " + name
                             );
                         } catch (JSONException e) {
-                            Log.e(TAG, "fillWithCreateProductObject: " + e);
+                            if(debug) Log.e(TAG, "fillWithCreateProductObject: " + e);
                         }
                     },
                     error -> {},
@@ -1267,7 +1268,7 @@ public class MasterProductSimpleFragment extends Fragment {
                 jsonObject.put("location_id", 1);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "saveProduct: " + e);
+            if(debug) Log.e(TAG, "saveProduct: " + e);
         }
 
         if(editProduct != null) {
@@ -1283,7 +1284,7 @@ public class MasterProductSimpleFragment extends Fragment {
                     },
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveProduct: " + error);
+                        if(debug) Log.e(TAG, "saveProduct: " + error);
                     }
             );
         } else {
@@ -1305,13 +1306,13 @@ public class MasterProductSimpleFragment extends Fragment {
                             );
                             activity.dismissFragment(bundle);
                         } catch (JSONException e) {
-                            Log.e(TAG, "saveProduct: " + e.toString());
+                            if(debug) Log.e(TAG, "saveProduct: " + e.toString());
                             showErrorMessage();
                         }
                     },
                     error -> {
                         showErrorMessage();
-                        Log.e(TAG, "saveProduct: " + error);
+                        if(debug) Log.e(TAG, "saveProduct: " + error);
                     }
             );
         }

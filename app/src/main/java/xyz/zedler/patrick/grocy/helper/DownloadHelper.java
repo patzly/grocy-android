@@ -254,7 +254,7 @@ public class DownloadHelper {
                         );
                         if(debug) Log.i(tag, "downloadVolatile: missing = " + missingItems);
                     } catch (JSONException e) {
-                        Log.e(tag, "downloadVolatile: " + e);
+                        if(debug) Log.e(tag, "downloadVolatile: " + e);
                     }
                     onResponseListener.onResponse(expiringItems, expiredItems, missingItems);
                     checkQueueSize();
@@ -399,7 +399,7 @@ public class DownloadHelper {
                         Date date = dateTimeFormat.parse(dateStr);
                         onResponseListener.onResponse(date);
                     } catch (JSONException | ParseException e) {
-                        Log.e(tag, "getTimeDbChanged: " + e);
+                        if(debug) Log.e(tag, "getTimeDbChanged: " + e);
                         onErrorListener.onError();
                     }
                 },

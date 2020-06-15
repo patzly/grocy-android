@@ -48,7 +48,6 @@ public class AppBarBehavior {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-
 		viewPrimary = activity.findViewById(primary);
 		viewPrimary.setVisibility(View.VISIBLE);
 		viewPrimary.setAlpha(1);

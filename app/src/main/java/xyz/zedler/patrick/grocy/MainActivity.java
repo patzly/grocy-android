@@ -770,7 +770,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
                 break;
-            default: Log.e(TAG, "updateUI: no action for " + uiMode);
+            default: if(debug) Log.e(TAG, "updateUI: no action for " + uiMode);
         }
     }
 
@@ -926,7 +926,7 @@ public class MainActivity extends AppCompatActivity {
             case Constants.UI.MASTER_PRODUCT_GROUP:
                 dismissFragment();
                 break;
-            default: Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
+            default: if(debug) Log.e(TAG, "onBackPressed: missing case, UI mode = " + uiMode);
         }
     }
 
@@ -986,7 +986,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentCurrent = new MasterProductGroupFragment();
                 break;
             default:
-                Log.e(TAG, "replaceFragment: invalid argument");
+                if(debug) Log.e(TAG, "replaceFragment: invalid argument");
                 return;
         }
         if(bundle != null) {
@@ -1020,7 +1020,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(debug) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
-            Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
+            if(debug) Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
         }
         binding.bottomAppBar.show();
     }
@@ -1029,7 +1029,7 @@ public class MainActivity extends AppCompatActivity {
         String tag;
         int count = fragmentManager.getBackStackEntryCount();
         if(count == 0) {
-            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = 0");
+            if(debug) Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = 0");
             return;
         }
         fragmentManager.popBackStackImmediate();
@@ -1045,7 +1045,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(fragmentCurrent == null) {
             fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-            Log.e(TAG, "dismissFragment: " + tag + " not found");
+            if(debug) Log.e(TAG, "dismissFragment: " + tag + " not found");
         } else if(debug) {
             Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
         }
@@ -1085,10 +1085,10 @@ public class MainActivity extends AppCompatActivity {
                 if(debug) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
             } else {
                 fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-                Log.e(TAG, "dismissFragment: " + tag + " not found");
+                if(debug) Log.e(TAG, "dismissFragment: " + tag + " not found");
             }
         } else {
-            Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
+            if(debug) Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
         }
         binding.bottomAppBar.show();
     }
@@ -1110,7 +1110,7 @@ public class MainActivity extends AppCompatActivity {
             if(bundle != null) bottomSheet.setArguments(bundle);
             fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
             if(debug) Log.i(TAG, "showBottomSheet: " + tag);
-        } else Log.e(TAG, "showBottomSheet: sheet already visible");
+        } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
     public RequestQueue getRequestQueue() {
