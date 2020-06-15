@@ -866,7 +866,7 @@ public class SettingsActivity extends AppCompatActivity
 		textViewUpdateInterval.setText(
 				secondsFormatted == 0
 						? getString(R.string.setting_sync_off)
-						: String.valueOf(secondsFormatted)
+						: secondsFormatted + " " + getString(R.string.property_seconds)
 		);
 		sharedPrefs.edit().putInt(
 				Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL,
