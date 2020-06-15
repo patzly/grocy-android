@@ -19,9 +19,7 @@ package xyz.zedler.patrick.grocy;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -32,7 +30,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
@@ -63,19 +60,13 @@ public class LogActivity extends AppCompatActivity {
 		Toolbar toolbar = findViewById(R.id.toolbar_log);
 		toolbar.setOnMenuItemClickListener((MenuItem item) -> {
 			if(clickUtil.isDisabled()) return false;
-			switch (item.getItemId()) {
-				case R.id.action_feedback:
-					IconUtil.start(item);
-					BottomSheetDialogFragment sheet = new FeedbackBottomSheetDialogFragment();
-					getSupportFragmentManager()
-							.beginTransaction()
-							.add(sheet, sheet.toString())
-							.commit();
-					break;
-				case R.id.action_about:
-					IconUtil.start(item);
-					startActivity(new Intent(this, AboutActivity.class));
-					break;
+			if (item.getItemId() == R.id.action_feedback) {
+				IconUtil.start(item);
+				BottomSheetDialogFragment sheet = new FeedbackBottomSheetDialogFragment();
+				getSupportFragmentManager()
+						.beginTransaction()
+						.add(sheet, sheet.toString())
+						.commit();
 			}
 			return true;
 		});
@@ -90,23 +81,6 @@ public class LogActivity extends AppCompatActivity {
 
 		TextView textView = findViewById(R.id.text_log_logs);
 		textView.setText(getLogs());
-	}
-
-	private String[] getHelpSections() {
-		StringBuilder text = new StringBuilder();
-		try {
-			InputStream inputStream = getAssets().open("HELP.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			for(String line; (line = bufferedReader.readLine()) != null;) {
-				text.append(line).append('\n');
-			}
-			text.deleteCharAt(text.length() - 1);
-			inputStream.close();
-		} catch (Exception e) {
-			if(DEBUG) Log.e(TAG, "getHelpSections: " + e);
-		}
-		return text.toString().split("\n–\n");
 	}
 
 	private String getLogs() {
