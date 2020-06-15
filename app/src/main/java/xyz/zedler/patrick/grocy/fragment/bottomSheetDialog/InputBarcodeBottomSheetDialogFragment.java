@@ -115,7 +115,7 @@ public class InputBarcodeBottomSheetDialogFragment extends BottomSheetDialogFrag
                         null
                 );
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM);
+                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT);
                 bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
                 activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
             }

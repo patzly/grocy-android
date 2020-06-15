@@ -554,18 +554,23 @@ public class MasterProductSimpleFragment extends Fragment {
 
         if(bundle == null) {
             resetAll();
-        } else if(intendedAction.equals(Constants.ACTION.EDIT)
-                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)
-                || intendedAction.equals(Constants.ACTION.EDIT_THEN_CONSUME)
-                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE)
-        ) {
-            editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
-        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)) {
-            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
-        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)) {
-            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
-        } else if(intendedAction.equals(Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)) {
-            createProductObj = bundle.getParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT);
+        } else {
+            switch (intendedAction) {
+                case Constants.ACTION.EDIT:
+                case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH:
+                case Constants.ACTION.EDIT_THEN_CONSUME:
+                case Constants.ACTION.EDIT_THEN_PURCHASE:
+                case Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT:
+                    editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
+                    break;
+                case Constants.ACTION.CREATE:
+                case Constants.ACTION.CREATE_THEN_PURCHASE:
+                case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
+                case Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT:
+                    createProductObj = bundle.getParcelable(
+                            Constants.ARGUMENT.CREATE_PRODUCT_OBJECT
+                    );
+            }
         }
 
         hideDisabledFeatures();
@@ -782,27 +787,13 @@ public class MasterProductSimpleFragment extends Fragment {
     private void onQueueEmpty() {
         swipeRefreshLayout.setRefreshing(false);
 
-        if(editProduct != null
-                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
-                || intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
-                || intendedAction.equals(Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)
-        ) {
-            switch (intendedAction) {
-                case Constants.ACTION.EDIT:
-                case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH:
-                case Constants.ACTION.EDIT_THEN_CONSUME:
-                case Constants.ACTION.EDIT_THEN_PURCHASE:
-                    fillWithEditReferences();
-                    isFormInvalid();
-                    break;
-                case Constants.ACTION.CREATE_THEN_PURCHASE:
-                case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
-                case Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM:
-                    fillWithCreateProductObject();
-                    fillWithPresets();
-                    isFormInvalid();
-                    break;
-            }
+        if(editProduct != null) {
+            fillWithEditReferences();
+            isFormInvalid();
+        } else if(createProductObj != null) {
+            fillWithCreateProductObject();
+            fillWithPresets();
+            isFormInvalid();
         } else {
             resetAll();
             fillWithPresets();
@@ -1275,26 +1266,20 @@ public class MasterProductSimpleFragment extends Fragment {
             } else {
                 jsonObject.put("location_id", 1);
             }
-
         } catch (JSONException e) {
             Log.e(TAG, "saveProduct: " + e);
         }
+
         if(editProduct != null) {
             request.put(
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
-                        if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)
-                                || intendedAction.equals(Constants.ACTION.EDIT_THEN_CONSUME)
-                                || intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE)) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
-                            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
-                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                            activity.dismissFragment(bundle);
-                        } else {
-                            activity.dismissFragment();
-                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
+                        bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
+                        bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                        activity.dismissFragment(bundle);
                     },
                     error -> {
                         showErrorMessage();
@@ -1306,31 +1291,22 @@ public class MasterProductSimpleFragment extends Fragment {
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
                     response -> {
-                        if(intendedAction.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
-                                || intendedAction.equals(
-                                        Constants.ACTION.CREATE_THEN_PURCHASE_BATCH)
-                                || intendedAction.equals(
-                                        Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM)
-                        ) {
-                            try {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
-                                bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                                bundle.putParcelable(  // to search for old name in batch items
-                                        Constants.ARGUMENT.CREATE_PRODUCT_OBJECT,
-                                        createProductObj
-                                );
-                                bundle.putInt(
-                                        Constants.ARGUMENT.PRODUCT_ID,
-                                        response.getInt("created_object_id")
-                                );
-                                activity.dismissFragment(bundle);
-                            } catch (JSONException e) {
-                                Log.e(TAG, "saveProduct: " + e.toString());
-                                showErrorMessage();
-                            }
-                        } else {
-                            activity.dismissFragment();
+                        try {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
+                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                            bundle.putParcelable(  // to search for old name in batch items
+                                    Constants.ARGUMENT.CREATE_PRODUCT_OBJECT,
+                                    createProductObj
+                            );
+                            bundle.putInt(
+                                    Constants.ARGUMENT.PRODUCT_ID,
+                                    response.getInt("created_object_id")
+                            );
+                            activity.dismissFragment(bundle);
+                        } catch (JSONException e) {
+                            Log.e(TAG, "saveProduct: " + e.toString());
+                            showErrorMessage();
                         }
                     },
                     error -> {

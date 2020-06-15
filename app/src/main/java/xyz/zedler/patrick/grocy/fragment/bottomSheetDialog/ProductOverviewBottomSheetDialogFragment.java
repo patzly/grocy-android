@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -227,7 +228,12 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 								Constants.ARGUMENT.TYPE,
 								Constants.ACTION.EDIT_THEN_CONSUME
 						);
-					} else {
+					} else if(current.getClass() == ShoppingListItemEditFragment.class) {
+						bundle.putString(
+								Constants.ARGUMENT.TYPE,
+								Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT
+						);
+					}else {
 						bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
 					}
 					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);

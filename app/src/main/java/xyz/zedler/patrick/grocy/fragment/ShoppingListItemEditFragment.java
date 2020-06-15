@@ -255,7 +255,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             bundle.putString(
                                     Constants.ARGUMENT.TYPE,
-                                    Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM
+                                    Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT
                             );
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
                             activity.showBottomSheet(
@@ -479,7 +479,12 @@ public class ShoppingListItemEditFragment extends Fragment {
                     Constants.ARGUMENT.SHOPPING_LIST_ITEM
             );
             if(shoppingListItem == null) return;
-            if(shoppingListItem.getProduct() != null) {
+            String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+            if(productName != null) {
+                // is given after new product was created from this fragment
+                // with method (setProductName)
+                binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+            } else if(shoppingListItem.getProduct() != null) {
                 binding.autoCompleteShoppingListItemEditProduct.setText(
                         shoppingListItem.getProduct().getName()
                 );
@@ -492,6 +497,12 @@ public class ShoppingListItemEditFragment extends Fragment {
                     TextUtil.trimCharSequence(shoppingListItem.getNote())
             );
         } else if(action != null && action.equals(Constants.ACTION.CREATE)) {
+            String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+            if(productName != null) {
+                // is given after new product was created from this fragment
+                // with method (setProductName)
+                binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+            }
             if(shoppingLists.size() >= 1) {
                 selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
             } else {
@@ -737,7 +748,8 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     public void setProductName(String productName) {
-        binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+        if(startupBundle == null) return;
+        startupBundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
     }
 
     public void selectShoppingList(int selectedId) {

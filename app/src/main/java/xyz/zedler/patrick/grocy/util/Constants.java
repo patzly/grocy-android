@@ -157,10 +157,11 @@ public final class Constants {
         public final static String CREATE_FROM_STOCK = "action_create_from_stock";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
-        public final static String CREATE_THEN_SHOPPING_LIST_ITEM = "create_then_shopping_list_item";
+        public final static String CREATE_THEN_SHOPPING_LIST_ITEM_EDIT = "create_then_shopping_list_item_edit";
         public final static String EDIT_THEN_PURCHASE = "edit_then_purchase";
         public final static String EDIT_THEN_PURCHASE_BATCH = "edit_then_purchase_batch";
         public final static String EDIT_THEN_CONSUME = "edit_then_consume";
+        public final static String EDIT_THEN_SHOPPING_LIST_ITEM_EDIT = "edit_then_shopping_list_item_edit";
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
         public final static String PURCHASE_THEN_SHOPPING_LIST = "purchase_then_shopping_list";
         public final static String PURCHASE_THEN_STOCK = "purchase_then_stock";
