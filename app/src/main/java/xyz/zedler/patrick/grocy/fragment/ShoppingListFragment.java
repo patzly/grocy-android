@@ -644,11 +644,12 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void onDownloadError(VolleyError error) {
-        binding.swipeShoppingList.setRefreshing(false);
+        if(binding != null) binding.swipeShoppingList.setRefreshing(false);
         if(!showOffline) {
             showOffline = true;
             updateUI();
         }
+        if(activity == null) return;
         new LoadOfflineDataShoppingListHelper(
                 AppDatabase.getAppDatabase(activity.getApplicationContext()),
                 this
