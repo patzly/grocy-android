@@ -134,18 +134,13 @@ public class LoginActivity extends AppCompatActivity {
             } else if(!Patterns.WEB_URL.matcher(server).matches()) {
                 binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
-                requestLogin(server, getKey(), true);
+                requestLogin(server, getKey(), true, false);
             }
         });
 
         binding.buttonLoginDemo.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            sharedPrefs.edit()
-                    .putString(Constants.PREF.SERVER_URL, getString(R.string.url_grocy_demo))
-                    .putString(Constants.PREF.API_KEY, "")
-                    .apply();
-            setResult(Activity.RESULT_OK);
-            loadInfoAndFinish();
+            requestLogin(getString(R.string.url_grocy_demo), "", true, true);
         });
 
         binding.buttonLoginHelp.setOnClickListener(v -> {
@@ -177,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void requestLogin(String server, String key, boolean checkVersion) {
+    public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
         binding.buttonLoginLogin.setEnabled(false);
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
@@ -204,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                             bundle.putString(Constants.ARGUMENT.SERVER, server);
                             bundle.putString(Constants.ARGUMENT.KEY, key);
                             bundle.putString(Constants.ARGUMENT.VERSION, grocyVersion);
+                            bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo);
                             bundle.putStringArrayList(
                                     Constants.ARGUMENT.SUPPORTED_VERSIONS,
                                     supportedVersions
@@ -223,10 +219,12 @@ public class LoginActivity extends AppCompatActivity {
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
                             .apply();
-                    credentials.edit()
-                            .putString(Constants.PREF.SERVER_URL, server)
-                            .putString(Constants.PREF.API_KEY, key)
-                            .apply();
+                    if(!isDemo) {
+                        credentials.edit()
+                                .putString(Constants.PREF.SERVER_URL, server)
+                                .putString(Constants.PREF.API_KEY, key)
+                                .apply();
+                    }
                     setResult(Activity.RESULT_OK);
                     loadInfoAndFinish();
                 },

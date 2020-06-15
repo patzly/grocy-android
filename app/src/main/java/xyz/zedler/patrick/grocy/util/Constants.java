@@ -200,6 +200,7 @@ public final class Constants {
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
         public final static String PRODUCT_NAME = "product_name";
+        public final static String DEMO_CHOSEN = "demo_chosen";
         public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";

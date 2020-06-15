@@ -89,7 +89,8 @@ public class CompatibilityBottomSheetDialogFragment extends BottomSheetDialogFra
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
             String server = getArguments().getString(Constants.ARGUMENT.SERVER);
             String key = getArguments().getString(Constants.ARGUMENT.KEY);
-            ((LoginActivity) activity).requestLogin(server, key, false);
+            boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
+            ((LoginActivity) activity).requestLogin(server, key, false, isDemo);
         });
 
         return view;
