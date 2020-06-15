@@ -249,7 +249,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                                 .getText()
                                 .toString()
                                 .trim();
-                        if(!productNames.isEmpty() && !productNames.contains(input)
+                        if(!productNames.contains(input)
                                 && !input.isEmpty()
                                 && !nameAutoFilled
                         ) {
