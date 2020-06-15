@@ -1,4 +1,9 @@
+1.4.2:
+- Bug fixes and improvements
+- Logs available in setting's menu
+
 1.4.1:
+- Camera crash fixed
 - In-app help with initial FAQ
 - Setting for changing update interval in shopping mode
 - Bug fixes and improvements
