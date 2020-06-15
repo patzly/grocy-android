@@ -26,3 +26,13 @@
 -keep,allowobfuscation interface com.google.gson.annotations.SerializedName
 -renamesourcefileattribute SourceFile
 -keepattributes InnerClasses,Signature,SourceFile,LineNumberTable
+
+# For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
