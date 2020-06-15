@@ -220,6 +220,7 @@
     <string name="property_status">Status</string>
     <string name="property_amount">Amount</string>
     <string name="property_seconds">Seconds</string>
+    <string name="property_sec">%1$d seconds</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_price">Price</string>
@@ -299,6 +300,7 @@
 
     <string name="category_licenses">Open source licenses</string>
     <string name="category_general">General</string>
+    <string name="category_purchase_consume">Purchase &amp; consume</string>
     <string name="category_server">Server</string>
     <string name="category_presets">Presets for new products</string>
 
