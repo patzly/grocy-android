@@ -74,10 +74,10 @@ public class InputBarcodeBottomSheetDialogFragment extends BottomSheetDialogFrag
         MaterialButton buttonNew = view.findViewById(R.id.button_input_barcode_new);
 
         if(currentFragment.getClass() == ConsumeFragment.class) {
-            textView.setText("Link barcode to an existing product?");
+            textView.setText(activity.getString(R.string.title_link_barcode_to_existing));
             buttonNew.setVisibility(View.GONE);
         } else { // PurchaseFragment
-            textView.setText("Link barcode to an existing product or create a new product with it?");
+            textView.setText(activity.getString(R.string.title_link_barcode_or_create));
             buttonNew.setVisibility(View.VISIBLE);
         }
 

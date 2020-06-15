@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="@string/title_link_product"
+            android:text="@string/title_link_barcode"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>

@@ -169,9 +169,11 @@
     <string name="title_about">About</string>
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
-    <string name="title_link_product">Link barcode to product</string>
+    <string name="title_link_barcode">Link barcode to product</string>
     <string name="title_batch_scan_exit">Fill out the product forms?</string>
     <string name="title_batch_missing_exit">Back to scanner?</string>
+    <string name="title_link_barcode_to_existing">"Link barcode to an existing product?"</string>
+    <string name="title_link_barcode_or_create">"Link barcode to an existing product or create a new product with it?"</string>
     <string name="title_compatibility">Compatibility issues</string>
     <string name="title_logout">Logout from Grocy?</string>
     <string name="title_restart">Restart Grocy?</string>
