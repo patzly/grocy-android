@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -50,6 +52,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
 	private final static String TAG = "TextBottomSheet";
+	private boolean debug;
 
 	@NonNull
 	@Override
@@ -72,6 +75,9 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 		Context context = getContext();
 		Bundle bundle = getArguments();
 		assert context != null && bundle != null;
+
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
 		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
 		String fileLocalized = bundle.getString(Constants.ARGUMENT.FILE)
@@ -114,10 +120,10 @@ public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
 			text.deleteCharAt(text.length() - 1);
 			inputStream.close();
 		} catch (FileNotFoundException e) {
-			Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
+			if(debug) Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
 			return null;
 		} catch (Exception e) {
-			Log.e(TAG, "readFromFile: " + e.toString());
+			if(debug) Log.e(TAG, "readFromFile: " + e.toString());
 		}
 		return text.toString();
 	}

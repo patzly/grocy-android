@@ -4,7 +4,6 @@
 
 ## Improvements
 
-- Replace DEBUG with debug from shared prefs
 - offline indicator in shopping mode
 - turn error layout into custom view ErrorState and add view methods for control
 - turn empty state layout into custom view EmptyState and add view methods for control
