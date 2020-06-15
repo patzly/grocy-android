@@ -216,6 +216,8 @@ public class ShoppingItemAdapter extends
             } else {
                 holder.textViewNoteName.setVisibility(View.VISIBLE);
                 holder.textViewNoteName.setText(shoppingListItem.getNote().trim());
+                holder.textViewNote.setVisibility(View.GONE);
+                holder.textViewNote.setText(null);
             }
         } else {
             if(holder.textViewName.getVisibility() == View.VISIBLE) {
