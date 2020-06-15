@@ -669,8 +669,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         } else {
             binding.textInputShoppingListItemEditProduct.setErrorEnabled(false);
         }
-        if(!productNames.isEmpty()
-                && !productNames.contains(input)
+        if(!productNames.contains(input)
                 && !input.isEmpty()
                 && !nameAutoFilled
         ) {
