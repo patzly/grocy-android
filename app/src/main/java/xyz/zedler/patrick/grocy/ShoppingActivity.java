@@ -184,7 +184,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        timer.cancel();
+        if(timer != null) timer.cancel();
     }
 
     @Override
