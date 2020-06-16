@@ -279,6 +279,10 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
+    public void enableLoginButton() {
+        binding.buttonLoginLogin.setEnabled(true);
+    }
+
     private String getServer() {
         Editable server = binding.editTextLoginServer.getText();
         if(server == null) return "";
