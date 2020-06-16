@@ -146,7 +146,7 @@ public class MasterDataBottomSheetDialogFragment
     }
 
     private void replaceFragment(String fragmentNew) {
-        activity.replaceFragment(fragmentNew, null, true);
+        activity.replaceWithDismiss(fragmentNew, null, true);
         dismiss();
     }
 

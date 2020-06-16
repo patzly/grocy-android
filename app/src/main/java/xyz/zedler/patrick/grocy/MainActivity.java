@@ -1010,11 +1010,16 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    public void replaceWithDismiss(String fragmentNew, Bundle bundle, boolean animated) {
+        dismissFragments();
+        replaceFragment(fragmentNew, bundle, animated);
+    }
+
     public void dismissFragments() {
         int count = fragmentManager.getBackStackEntryCount();
         if(count >= 1) {
             for(int i = 0; i < count ; i++) {
-                fragmentManager.popBackStack();
+                fragmentManager.popBackStackImmediate();
             }
             fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
 
