@@ -244,13 +244,17 @@ public class ShoppingListFragment extends Fragment
         shoppingListHashMap = new HashMap<>();
 
         itemsToDisplay = Constants.SHOPPING_LIST.FILTER.ALL;
-        selectedShoppingListId = sharedPrefs.getInt(
-                Constants.PREF.SHOPPING_LIST_LAST_ID, 1
-        );
         search = "";
         showOffline = false;
         errorState = Constants.STATE.NONE;
         isRestoredInstance = false;
+        if(isFeatureMultipleListsEnabled()) {
+            selectedShoppingListId = sharedPrefs.getInt(
+                    Constants.PREF.SHOPPING_LIST_LAST_ID, 1
+            );
+        } else {
+            selectedShoppingListId = 1;
+        }
 
         // INITIALIZE VIEWS
 
@@ -1213,7 +1217,7 @@ public class ShoppingListFragment extends Fragment
         // Tidy up lost shopping list items, which have deleted shopping lists
         // as an id – else they will never show up on any shopping list
         ArrayList<Integer> listIds = new ArrayList<>();
-        if(isFeatureEnabled()) {
+        if(isFeatureMultipleListsEnabled()) {
             for(ShoppingList shoppingList : shoppingLists) listIds.add(shoppingList.getId());
             if(listIds.isEmpty()) return;  // possible if download error happened
         } else {
@@ -1316,7 +1320,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     private void hideDisabledFeatures() {
-        if(!isFeatureEnabled()) {
+        if(!isFeatureMultipleListsEnabled()) {
             binding.buttonShoppingListLists.setVisibility(View.GONE);
             binding.textShoppingListTitle.setOnClickListener(null);
         }
@@ -1396,7 +1400,7 @@ public class ShoppingListFragment extends Fragment
         );
     }
 
-    private boolean isFeatureEnabled() {
+    private boolean isFeatureMultipleListsEnabled() {
         return sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
     }
 

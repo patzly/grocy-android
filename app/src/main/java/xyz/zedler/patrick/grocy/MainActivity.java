@@ -1010,7 +1010,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    public void replaceWithDismiss(String fragmentNew, Bundle bundle, boolean animated) {
+    public void replaceAll(String fragmentNew, Bundle bundle, boolean animated) {
         dismissFragments();
         replaceFragment(fragmentNew, bundle, animated);
     }

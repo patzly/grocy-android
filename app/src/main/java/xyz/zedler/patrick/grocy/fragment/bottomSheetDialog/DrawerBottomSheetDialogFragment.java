@@ -183,7 +183,7 @@ public class DrawerBottomSheetDialogFragment
     }
 
     private void replaceFragment(String fragmentNew) {
-        activity.replaceWithDismiss(fragmentNew, null, true);
+        activity.replaceAll(fragmentNew, null, true);
         dismiss();
     }
 
