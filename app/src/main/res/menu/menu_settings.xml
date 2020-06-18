@@ -14,9 +14,4 @@
         android:title="@string/action_send_feedback"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_logs"
-        android:title="@string/title_log"
-        app:showAsAction="never"/>
-
 </menu>

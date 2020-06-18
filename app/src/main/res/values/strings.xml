@@ -169,7 +169,7 @@
     <string name="title_about">About</string>
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
-    <string name="title_log">Logs</string>
+    <string name="title_logs">Logs</string>
     <string name="title_link_barcode">Link barcode to product</string>
     <string name="title_batch_scan_exit">Fill out the product forms?</string>
     <string name="title_batch_missing_exit">Back to scanner?</string>
@@ -302,6 +302,7 @@
     <string name="category_general">General</string>
     <string name="category_purchase_consume">Purchase &amp; consume</string>
     <string name="category_server">Server</string>
+    <string name="category_debugging">Debugging</string>
     <string name="category_presets">Presets for new products</string>
 
     <string name="hint_server">Server URL</string>
@@ -312,8 +313,6 @@
     <string name="setting_dark_mode_description">Off for system dependency</string>
     <string name="setting_open_food_facts">Use Open Food Facts</string>
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
-    <string name="setting_debug">Enable logging</string>
-    <string name="setting_debug_description">For debugging purposes</string>
     <string name="setting_reload_config">Reload configuration</string>
     <string name="setting_reload_config_description">Restart required</string>
     <string name="setting_logout">Logout</string>
@@ -331,6 +330,10 @@
     <string name="setting_empty_value">Empty</string>
     <string name="setting_sync_off">Sync off</string>
     <string name="setting_not_loaded">Could not be loaded</string>
+    <string name="setting_debug">Enable logging</string>
+    <string name="setting_debug_description">Find and report errors</string>
+    <string name="setting_info_logs">Show info logs</string>
+    <string name="setting_logs_description">Display logcat of this process</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>
