@@ -1025,7 +1025,9 @@ public class MainActivity extends AppCompatActivity {
 
             if(debug) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
         } else {
-            if(debug) Log.e(TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count);
+            if(debug) Log.e(
+                    TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count
+            );
         }
         binding.bottomAppBar.show();
     }

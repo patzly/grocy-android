@@ -19,12 +19,12 @@ package xyz.zedler.patrick.grocy;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityLogBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class LogActivity extends AppCompatActivity {
@@ -45,8 +46,6 @@ public class LogActivity extends AppCompatActivity {
 	private ActivityLogBinding binding;
 	private ClickUtil clickUtil = new ClickUtil();
 
-	TextView textViewLog;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,13 +53,15 @@ public class LogActivity extends AppCompatActivity {
 		binding = ActivityLogBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
 
-		findViewById(R.id.frame_log_close).setOnClickListener(v -> {
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
+
+		binding.frameLogClose.setOnClickListener(v -> {
 			if(clickUtil.isDisabled()) return;
 			finish();
 		});
 
-		Toolbar toolbar = findViewById(R.id.toolbar_log);
-		toolbar.setOnMenuItemClickListener((MenuItem item) -> {
+		binding.toolbarLog.setOnMenuItemClickListener((MenuItem item) -> {
 			if(clickUtil.isDisabled()) return false;
 			IconUtil.start(item);
 			switch (item.getItemId()) {
@@ -72,7 +73,7 @@ public class LogActivity extends AppCompatActivity {
 							.commit();
 					break;
 				case R.id.action_refresh:
-					setLog();
+					setLog(showInfo);
 					break;
 			}
 			return true;
@@ -86,13 +87,13 @@ public class LogActivity extends AppCompatActivity {
 				true
 		);
 
-		setLog();
+		setLog(showInfo);
 	}
 
-	private void setLog() {
+	private void setLog(boolean showInfo) {
 		StringBuilder log = new StringBuilder();
 		try {
-			Process process = Runtime.getRuntime().exec("logcat *:I -d -t 150");
+			Process process = Runtime.getRuntime().exec(getLogcatCommand(showInfo));
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(process.getInputStream())
 			);
@@ -103,5 +104,17 @@ public class LogActivity extends AppCompatActivity {
 			log.deleteCharAt(log.length() - 1);
 		} catch (IOException ignored) {}
 		binding.textLog.setText(log.toString());
+	}
+
+	private String getLogcatCommand(boolean showInfo) {
+		return "logcat -d " +
+				(showInfo ? "*:I " : "*:E ") +
+				(showInfo ? "-t 150 " : "-t 300 ") +
+				"AdrenoGLES:S " +
+				"ActivityThread:S " +
+				"RenderThread:S " +
+				"Gralloc3:S " +
+				"OpenGLRenderer:S " +
+				"Choreographer:S ";
 	}
 }

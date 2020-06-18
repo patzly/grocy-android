@@ -215,34 +215,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_setting_debug"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
-
-                <ImageView
-                    android:id="@+id/image_setting_debug"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_bug_report_anim"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_debug" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_debug_description" />
-
-                </LinearLayout>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_setting_debug"
-                    style="@style/Widget.Grocy.Switch"/>
-
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/text_setting_stock_overview_header"
                 style="@style/Theme.Grocy.Category"
@@ -452,6 +424,78 @@
                     <TextView
                         android:id="@+id/text_setting_default_quantity_unit"
                         style="@style/Theme.Grocy.ListItem.Title" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/Theme.Grocy.Category"
+                android:text="@string/category_debugging"/>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_debug"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_debug"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_bug_report_anim"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_debug" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_debug_description" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_setting_debug"
+                    style="@style/Widget.Grocy.Switch"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_info_logs"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Clickable">
+
+                <LinearLayout
+                    style="@style/Theme.Grocy.ListItem.TextBox.Stretch"
+                    android:layout_marginStart="56dp">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_info_logs" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_setting_info_logs"
+                    style="@style/Widget.Grocy.Switch"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_setting_logs"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
+
+                <LinearLayout
+                    style="@style/Theme.Grocy.ListItem.TextBox"
+                    android:layout_marginStart="56dp">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/title_logs" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_logs_description" />
 
                 </LinearLayout>
 
