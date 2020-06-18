@@ -89,7 +89,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private HashMap<Integer, ShoppingList> shoppingListHashMap;
     private HashMap<Integer, Product> productHashMap;
 
-    private int selectedShoppingListId = 1;
+    private int selectedShoppingListId;
     private boolean showOffline;
     private boolean productUpdateDone;
     private boolean isDataStored;
@@ -139,8 +139,12 @@ public class ShoppingActivity extends AppCompatActivity implements
         shoppingListHashMap = new HashMap<>();
         productHashMap = new HashMap<>();
 
-        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, -1);
-        if(lastId != -1) selectedShoppingListId = lastId;
+        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
+        if(lastId != 1 && !isFeatureMultipleListsEnabled()) {
+            sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1).apply();
+            lastId = 1;
+        }
+        selectedShoppingListId = lastId;
 
         // VIEWS
 
@@ -607,6 +611,10 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void changeAppBarTitle() {
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         changeAppBarTitle(shoppingList);
+    }
+
+    private boolean isFeatureMultipleListsEnabled() {
+        return sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
     }
 
     private ShoppingList getShoppingList(int shoppingListId) {

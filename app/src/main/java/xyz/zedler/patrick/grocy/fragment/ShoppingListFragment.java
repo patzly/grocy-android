@@ -248,13 +248,12 @@ public class ShoppingListFragment extends Fragment
         showOffline = false;
         errorState = Constants.STATE.NONE;
         isRestoredInstance = false;
-        if(isFeatureMultipleListsEnabled()) {
-            selectedShoppingListId = sharedPrefs.getInt(
-                    Constants.PREF.SHOPPING_LIST_LAST_ID, 1
-            );
-        } else {
-            selectedShoppingListId = 1;
+        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
+        if(lastId != 1 && !isFeatureMultipleListsEnabled()) {
+            sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1).apply();
+            lastId = 1;
         }
+        selectedShoppingListId = lastId;
 
         // INITIALIZE VIEWS
 
@@ -814,7 +813,10 @@ public class ShoppingListFragment extends Fragment
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
         bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedShoppingListId);
-        bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, showOffline);
+        bundle.putBoolean(
+                Constants.ARGUMENT.SHOW_OFFLINE,
+                showOffline || !isFeatureMultipleListsEnabled()
+        );
         activity.showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
     }
 
