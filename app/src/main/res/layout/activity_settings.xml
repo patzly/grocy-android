@@ -301,6 +301,34 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linear_setting_keep_screen_on"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_setting_keep_screen_on"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_visibility"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_keep_screen_on" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_keep_screen_on_description" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_setting_keep_screen_on"
+                    style="@style/Widget.Grocy.Switch"/>
+
+            </LinearLayout>
+
             <TextView
                 style="@style/Theme.Grocy.Category"
                 android:text="@string/category_purchase_consume"/>

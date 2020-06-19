@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -188,6 +189,20 @@ public class ShoppingActivity extends AppCompatActivity implements
         );
 
         load();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        keepScreenOn(
+                sharedPrefs.getBoolean(Constants.PREF.KEEP_SHOPPING_SCREEN_ON, false)
+        );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        keepScreenOn(false);
     }
 
     @Override
@@ -647,5 +662,13 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void showMessage(String msg) {
         Snackbar.make(binding.recycler, msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void keepScreenOn(boolean keepOn) {
+        if(keepOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }

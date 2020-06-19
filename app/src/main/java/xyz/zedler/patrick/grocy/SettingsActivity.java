@@ -94,6 +94,7 @@ public class SettingsActivity extends AppCompatActivity
 	private SwitchMaterial
 			switchDark,
 			switchFoodFacts,
+			switchKeepScreenOn,
 			switchDebug,
 			switchListIndicator,
 			switchInfoLogs;
@@ -183,6 +184,11 @@ public class SettingsActivity extends AppCompatActivity
 				)
 		);
 
+		switchKeepScreenOn = findViewById(R.id.switch_setting_keep_screen_on);
+		switchKeepScreenOn.setChecked(
+				sharedPrefs.getBoolean(Constants.PREF.KEEP_SHOPPING_SCREEN_ON, false)
+		);
+
 		switchDebug = findViewById(R.id.switch_setting_debug);
 		switchDebug.setChecked(sharedPrefs.getBoolean(Constants.PREF.DEBUG, false));
 
@@ -195,6 +201,7 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.switch_setting_dark_mode,
 				R.id.switch_setting_open_food_facts,
 				R.id.switch_setting_list_indicator,
+				R.id.switch_setting_keep_screen_on,
 				R.id.switch_setting_debug,
 				R.id.switch_setting_info_logs
 		);
@@ -207,6 +214,7 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_shopping_mode_update_interval,
+				R.id.linear_setting_keep_screen_on,
 				R.id.linear_setting_default_amount_purchase,
 				R.id.linear_setting_default_amount_consume,
 				R.id.linear_setting_default_location,
@@ -447,6 +455,9 @@ public class SettingsActivity extends AppCompatActivity
 						bundleUpdateInterval
 				);
 				break;
+			case R.id.linear_setting_keep_screen_on:
+				switchKeepScreenOn.setChecked(!switchKeepScreenOn.isChecked());
+				break;
 			case R.id.linear_setting_default_amount_purchase:
 				IconUtil.start(this, R.id.image_setting_default_amount_purchase);
 				Bundle bundleAmountPurchase = new Bundle();
@@ -577,6 +588,12 @@ public class SettingsActivity extends AppCompatActivity
 							if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
+				break;
+			case R.id.switch_setting_keep_screen_on:
+				sharedPrefs.edit().putBoolean(
+						Constants.PREF.KEEP_SHOPPING_SCREEN_ON,
+						switchKeepScreenOn.isChecked()
+				).apply();
 				break;
 			case R.id.switch_setting_debug:
 				IconUtil.start(this, R.id.image_setting_debug);

@@ -49,6 +49,7 @@ public final class Constants {
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
 
         public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+        public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
 
         public final static String BATCH_CONFIG_BBD = "batch_config_bbd";
         public final static String BATCH_CONFIG_PRICE = "batch_config_price";

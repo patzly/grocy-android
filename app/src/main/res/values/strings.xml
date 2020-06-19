@@ -318,8 +318,10 @@
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
     <string name="setting_list_indicator">Indicate list entry</string>
-    <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>
     <string name="setting_list_indicator_description">Show blue dot if product is on a shopping list</string>
+    <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>
+    <string name="setting_keep_screen_on">Keep screen on</string>
+    <string name="setting_keep_screen_on_description">While in shopping mode</string>
     <string name="setting_currency_default">USD</string>
     <string name="setting_expiring_soon_days">Expiring soon days</string>
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
