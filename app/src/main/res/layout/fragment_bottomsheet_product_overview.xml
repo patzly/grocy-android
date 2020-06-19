@@ -104,7 +104,7 @@
                         android:id="@+id/button_product_overview_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:icon="@drawable/ic_round_open_product"
+                        app:icon="@drawable/ic_round_open"
                         app:tint="@color/icon"/>
 
                 </LinearLayout>

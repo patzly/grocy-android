@@ -21,7 +21,7 @@
     <item
         android:id="@+id/action_open"
         android:title="@string/action_open"
-        android:icon="@drawable/ic_round_open_product_menu"
+        android:icon="@drawable/ic_round_open_menu"
         app:showAsAction="always"
         android:visible="false"
         tools:ignore="AlwaysShowAction" />

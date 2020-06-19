@@ -383,7 +383,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                                R.drawable.ic_round_open_product,
+                                R.drawable.ic_round_open,
                                 position -> performAction(
                                         Constants.ACTION.OPEN,
                                         displayedItems.get(position).getProduct().getId()
