@@ -29,6 +29,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "shopping_list_item_table")
 public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
@@ -259,6 +261,24 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @Override
     public int getType() {
         return TYPE_ENTRY;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingListItem that = (ShoppingListItem) o;
+        return id == that.id &&
+                Double.compare(that.amount, amount) == 0 &&
+                shoppingListId == that.shoppingListId &&
+                done == that.done &&
+                Objects.equals(note, that.note) &&
+                Objects.equals(productId, that.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, note, amount, shoppingListId, done, productId);
     }
 
     @NonNull

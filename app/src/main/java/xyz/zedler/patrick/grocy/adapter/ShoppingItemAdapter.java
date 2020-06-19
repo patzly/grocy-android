@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -44,8 +45,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class ShoppingItemAdapter extends
-        RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder> {
+public class ShoppingItemAdapter extends RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder> {
 
     private final static String TAG = ShoppingItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
@@ -54,6 +54,67 @@ public class ShoppingItemAdapter extends
     private ArrayList<GroupedListItem> groupedListItems;
     private ArrayList<QuantityUnit> quantityUnits;
     private ShoppingListItemSpecialAdapterListener listener;
+
+    static class DiffCallback extends DiffUtil.Callback {
+
+        ArrayList<GroupedListItem> oldItems;
+        ArrayList<GroupedListItem> newItems;
+
+        public DiffCallback(
+                ArrayList<GroupedListItem> newItems,
+                ArrayList<GroupedListItem> oldItems
+        ) {
+            this.newItems = newItems;
+            this.oldItems = oldItems;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldItems.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newItems.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, false);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, true);
+        }
+
+        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
+            int oldItemType = oldItems.get(oldItemPos).getType();
+            int newItemType = newItems.get(newItemPos).getType();
+            if(oldItemType != newItemType) return false;
+            if(oldItemType == GroupedListItem.TYPE_ENTRY) {
+                ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
+                ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
+                return compareContent
+                        ? newItem.equals(oldItem)
+                        : newItem.getId() == oldItem.getId();
+            } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
+                ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
+                ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);
+                return newItem.getId() == oldItem.getId();
+            } else {
+                return true; // Bottom notes is always one item at the bottom
+            }
+        }
+    }
+
+    public void updateList(ArrayList<GroupedListItem> newList) {
+        DiffCallback diffCallback = new DiffCallback(newList, this.groupedListItems);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        groupedListItems.clear();
+        groupedListItems.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
+    }
 
     public ShoppingItemAdapter(
             Context context,

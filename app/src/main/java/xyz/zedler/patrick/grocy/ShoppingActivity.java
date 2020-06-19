@@ -123,7 +123,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                 this,
                 TAG,
                 this::onDownloadError,
-                this::onQueueEmpty
+                () -> onQueueEmpty(false)
         );
 
         // INITIALIZE VARIABLES
@@ -252,28 +252,33 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void downloadOnlyShoppingListItems() {
+        downloadHelper.setOnQueueEmptyListener(() -> {
+            onQueueEmpty(true);
+            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
+        });
         downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
         productUpdateDone = false;
     }
 
     private void downloadOnlyProducts() {
+        downloadHelper.setOnQueueEmptyListener(() -> {
+            onQueueEmpty(true);
+            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
+        });
         downloadHelper.downloadProducts(products -> {
             this.products = products;
             productHashMap.clear();
             for(Product p : products) productHashMap.put(p.getId(), p);
-            if(debug) Log.i(TAG, "downloadOnlyProducts: successful");
             if(this.missingProductIds.isEmpty()) return;
-            if(debug) Log.i(TAG, "downloadOnlyProducts: missingProductIds: " + this.missingProductIds);
             ArrayList<Integer> missingProductIds = new ArrayList<>();
             for(int productId : this.missingProductIds) {
                 if(productHashMap.get(productId) == null) missingProductIds.add(productId);
             }
             this.missingProductIds = missingProductIds;
-            if(debug) Log.i(TAG, "downloadOnlyProducts: missingProductIds: " + this.missingProductIds);
         });
     }
 
-    private void onQueueEmpty() {
+    private void onQueueEmpty(boolean onlyDeltaUpdate) {
         if(showOffline) showOffline = false;
 
         shoppingListItemsSelected = new ArrayList<>();
@@ -300,7 +305,8 @@ public class ShoppingActivity extends AppCompatActivity implements
                     productGroups,
                     quantityUnits,
                     products,
-                    allUsedProductIds
+                    allUsedProductIds,
+                    onlyDeltaUpdate
             ).execute();
         } else {
             isDataStored = false;
@@ -324,11 +330,12 @@ public class ShoppingActivity extends AppCompatActivity implements
             }
 
             binding.swipe.setRefreshing(false);
-            groupItems();
+            groupItems(onlyDeltaUpdate);
         }
     }
 
     private void onDownloadError(VolleyError error) {
+        downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
         binding.swipe.setRefreshing(false);
         loadOfflineData();
     }
@@ -369,10 +376,10 @@ public class ShoppingActivity extends AppCompatActivity implements
         changeAppBarTitle();
         if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
 
-        groupItems();
+        groupItems(false);
     }
 
-    private void groupItems() {
+    private void groupItems(boolean onlyDeltaUpdate) {
         groupedListItems = ShoppingListHelper.groupItems(
                 this,
                 shoppingListItemsSelected,
@@ -381,17 +388,16 @@ public class ShoppingActivity extends AppCompatActivity implements
                 selectedShoppingListId,
                 true
         );
-        refreshAdapter(
-                new ShoppingItemAdapter(
-                        this,
-                        groupedListItems,
-                        quantityUnits,
-                        this
-                )
+        if(onlyDeltaUpdate && shoppingItemAdapter != null) {
+            shoppingItemAdapter.updateList(groupedListItems);
+            return;
+        }
+        ShoppingItemAdapter adapter = new ShoppingItemAdapter(
+                this,
+                groupedListItems,
+                quantityUnits,
+                this
         );
-    }
-
-    private void refreshAdapter(ShoppingItemAdapter adapter) {
         shoppingItemAdapter = adapter;
         binding.recycler.animate().alpha(0).setDuration(150).withEndAction(() -> {
             binding.recycler.setAdapter(adapter);
@@ -408,7 +414,8 @@ public class ShoppingActivity extends AppCompatActivity implements
             ArrayList<QuantityUnit> quantityUnits,
             ArrayList<Product> products,
             ArrayList<Integer> usedProductIds,
-            HashMap<Integer, ShoppingListItem> serverItemHashMap
+            HashMap<Integer, ShoppingListItem> serverItemHashMap,
+            boolean onlyDeltaUpdateAdapter
     ) {
         downloadHelper.setOnQueueEmptyListener(() -> {
             showMessage(getString(R.string.msg_synced));
@@ -421,9 +428,10 @@ public class ShoppingActivity extends AppCompatActivity implements
                     productGroups,
                     quantityUnits,
                     products,
-                    usedProductIds
+                    usedProductIds,
+                    onlyDeltaUpdateAdapter
             ).execute();
-            downloadHelper.setOnQueueEmptyListener(this::onQueueEmpty);
+            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
         });
         for(ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
@@ -445,10 +453,13 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems) {
+    public void storedDataSuccessfully(
+            ArrayList<ShoppingListItem> shoppingListItems,
+            boolean onlyDeltaUpdateAdapter
+    ) {
         isDataStored = true;
         this.shoppingListItems = shoppingListItems;
-        onQueueEmpty();
+        onQueueEmpty(onlyDeltaUpdateAdapter);
     }
 
     @Override
@@ -600,7 +611,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                     this
             ).execute();
         } else {
-            onQueueEmpty();
+            onQueueEmpty(false);
         }
     }
 

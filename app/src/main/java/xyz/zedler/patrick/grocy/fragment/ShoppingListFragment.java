@@ -624,7 +624,8 @@ public class ShoppingListFragment extends Fragment
                     productGroups,
                     quantityUnits,
                     products,
-                    allUsedProductIds
+                    allUsedProductIds,
+                    false
             ).execute();
         } else {
             isDataStored = false;
@@ -1249,7 +1250,8 @@ public class ShoppingListFragment extends Fragment
             ArrayList<QuantityUnit> quantityUnits,
             ArrayList<Product> products,
             ArrayList<Integer> usedProductIds,
-            HashMap<Integer, ShoppingListItem> serverItemHashMap
+            HashMap<Integer, ShoppingListItem> serverItemHashMap,
+            boolean onlyDeltaUpdateAdapter
     ) {
         for(ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
@@ -1281,7 +1283,8 @@ public class ShoppingListFragment extends Fragment
                                 productGroups,
                                 quantityUnits,
                                 products,
-                                usedProductIds
+                                usedProductIds,
+                                false
                         ).execute();
                     }
             );
@@ -1289,7 +1292,10 @@ public class ShoppingListFragment extends Fragment
     }
 
     @Override
-    public void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems) {
+    public void storedDataSuccessfully(
+            ArrayList<ShoppingListItem> shoppingListItems,
+            boolean onlyDeltaUpdateAdapter
+    ) {
         isDataStored = true;
         this.shoppingListItems = shoppingListItems;
         onQueueEmpty();

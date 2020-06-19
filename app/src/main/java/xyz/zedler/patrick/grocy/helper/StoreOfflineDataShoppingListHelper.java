@@ -36,6 +36,7 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
     private AppDatabase appDatabase;
     private AsyncResponse response;
     private boolean syncIfNecessary;
+    private boolean onlyDeltaUpdateAdapter;
     private ArrayList<ShoppingListItem> shoppingListItems;
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
@@ -54,7 +55,8 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits,
             ArrayList<Product> products,
-            ArrayList<Integer> usedProductIds
+            ArrayList<Integer> usedProductIds,
+            boolean onlyDeltaUpdateAdapter
     ) {
         this.appDatabase = appDatabase;
         this.response = response;
@@ -65,6 +67,7 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
         this.quantityUnits = quantityUnits;
         this.products = products;
         this.usedProductIds = usedProductIds;
+        this.onlyDeltaUpdateAdapter = onlyDeltaUpdateAdapter;
     }
 
     @Override
@@ -120,7 +123,7 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
     @Override
     protected void onPostExecute(String arg) {
         if(itemsToSync.isEmpty()) {
-            response.storedDataSuccessfully(shoppingListItems);
+            response.storedDataSuccessfully(shoppingListItems, onlyDeltaUpdateAdapter);
         } else {
             response.syncItems(
                     itemsToSync,
@@ -130,7 +133,8 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
                     quantityUnits,
                     products,
                     usedProductIds,
-                    serverItemHashMap
+                    serverItemHashMap,
+                    onlyDeltaUpdateAdapter
             );
         }
     }
@@ -144,9 +148,13 @@ public class StoreOfflineDataShoppingListHelper extends AsyncTask<Void, Void, St
                 ArrayList<QuantityUnit> quantityUnits,
                 ArrayList<Product> products,
                 ArrayList<Integer> usedProductIds,
-                HashMap<Integer, ShoppingListItem> serverItemHashMap
+                HashMap<Integer, ShoppingListItem> serverItemHashMap,
+                boolean onlyDeltaUpdateAdapter
         );
 
-        void storedDataSuccessfully(ArrayList<ShoppingListItem> shoppingListItems);
+        void storedDataSuccessfully(
+                ArrayList<ShoppingListItem> shoppingListItems,
+                boolean onlyDeltaUpdateAdapter
+        );
     }
 }
