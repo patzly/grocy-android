@@ -92,7 +92,7 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String TAG = "MainActivity";
+    private final static String TAG = MainActivity.class.getSimpleName();
 
     public ActivityMainBinding binding;
     private RequestQueue requestQueue;

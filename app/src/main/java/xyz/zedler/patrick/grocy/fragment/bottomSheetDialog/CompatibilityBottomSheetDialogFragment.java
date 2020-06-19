@@ -86,7 +86,7 @@ public class CompatibilityBottomSheetDialogFragment extends BottomSheetDialogFra
 
         view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
             dismiss();
-            ((LoginActivity) activity).enableLoginButton();
+            ((LoginActivity) activity).enableLoginButtons();
         });
 
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
@@ -94,7 +94,7 @@ public class CompatibilityBottomSheetDialogFragment extends BottomSheetDialogFra
             String key = getArguments().getString(Constants.ARGUMENT.KEY);
             boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
             ((LoginActivity) activity).requestLogin(server, key, false, isDemo);
-            ((LoginActivity) activity).enableLoginButton();
+            ((LoginActivity) activity).enableLoginButtons();
             dismiss();
         });
 

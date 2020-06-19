@@ -174,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
         binding.buttonLoginLogin.setEnabled(false);
+        binding.buttonLoginDemo.setEnabled(false);
         request.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
@@ -181,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(!response.contains("grocy_version")) {
                         showMessage(getString(R.string.error_no_grocy_instance));
                         binding.buttonLoginLogin.setEnabled(true);
+                        binding.buttonLoginDemo.setEnabled(true);
                         return;
                     }
                     try {
@@ -265,6 +267,7 @@ public class LoginActivity extends AppCompatActivity {
                         showMessage(getString(R.string.msg_error) + ": " + error);
                     }
                     binding.buttonLoginLogin.setEnabled(true);
+                    binding.buttonLoginDemo.setEnabled(true);
                 }
         );
     }
@@ -279,8 +282,9 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    public void enableLoginButton() {
+    public void enableLoginButtons() {
         binding.buttonLoginLogin.setEnabled(true);
+        binding.buttonLoginDemo.setEnabled(true);
     }
 
     private String getServer() {
