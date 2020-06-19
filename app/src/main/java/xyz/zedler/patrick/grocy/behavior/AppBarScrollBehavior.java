@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.behavior;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -36,16 +35,15 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants;
 
 public class AppBarScrollBehavior {
 
-	private final static String TAG = "AppBarScrollBehavior";
+	private final static String TAG = AppBarScrollBehavior.class.getSimpleName();
+	private final static boolean DEBUG = false;
 
 	private static final int STATE_SCROLLED_DOWN = 1;
 	private static final int STATE_SCROLLED_UP = 2;
@@ -57,7 +55,6 @@ public class AppBarScrollBehavior {
 	private boolean isTopScroll = false;
 	private boolean liftOnScroll = true;
 	private boolean showNavBarDivider = true;
-	private boolean debug;
 
 	private Activity activity;
 	private AppBarLayout appBarLayout;
@@ -75,9 +72,6 @@ public class AppBarScrollBehavior {
 			boolean liftOnScroll
 	) {
 		activity = targetActivity;
-
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 		
 		this.liftOnScroll = liftOnScroll;
 		appBarLayout = activity.findViewById(appBarLayoutId);
@@ -117,7 +111,7 @@ public class AppBarScrollBehavior {
 				}
 			});
 		}
-		if(debug) Log.i(TAG, "setUpScroll: liftOnScroll = " + liftOnScroll);
+		if(DEBUG) Log.i(TAG, "setUpScroll: liftOnScroll = " + liftOnScroll);
 	}
 
 	/**
@@ -130,8 +124,8 @@ public class AppBarScrollBehavior {
 				tintTopBars(R.color.background);
 				appBarLayout.setLifted(false);
 			}
-			if(debug) Log.i(TAG, "onTopScroll: liftOnScroll = " + liftOnScroll);
-		} else if(debug) {
+			if(DEBUG) Log.i(TAG, "onTopScroll: liftOnScroll = " + liftOnScroll);
+		} else if(DEBUG) {
 			Log.e(TAG, "onTopScroll: appBarLayout is null!");
 		}
 	}
@@ -149,10 +143,10 @@ public class AppBarScrollBehavior {
 		if(appBarLayout != null) {
 			appBarLayout.setLifted(true);
 			tintTopBars(R.color.primary);
-		} else if(debug) {
+		} else if(DEBUG) {
 			Log.e(TAG, "onScrollUp: appBarLayout is null!");
 		}
-		if(debug) Log.i(TAG, "onScrollUp: UP");
+		if(DEBUG) Log.i(TAG, "onScrollUp: UP");
 	}
 
 	/**
@@ -165,10 +159,10 @@ public class AppBarScrollBehavior {
 			appBarLayout.setLifted(true);
 			tintTopBars(R.color.primary);
 			nestedScrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
-		} else if(debug) {
+		} else if(DEBUG) {
 			Log.e(TAG, "onScrollDown: appBarLayout or scrollView is null!");
 		}
-		if(debug) Log.i(TAG, "onScrollDown: DOWN");
+		if(DEBUG) Log.i(TAG, "onScrollDown: DOWN");
 	}
 
 	/**
@@ -207,8 +201,8 @@ public class AppBarScrollBehavior {
 					tintTopBars(R.color.primary);
 				}
 			}
-		} else if(debug) Log.e(TAG, "setLiftOnScroll: appBarLayout is null!");
-		if(debug) Log.i(TAG, "setLiftOnScroll(" + lift + ")");
+		} else if(DEBUG) Log.e(TAG, "setLiftOnScroll: appBarLayout is null!");
+		if(DEBUG) Log.i(TAG, "setLiftOnScroll(" + lift + ")");
 	}
 
 	/**
@@ -228,14 +222,14 @@ public class AppBarScrollBehavior {
 								showNavBarDivider = scrollViewHeight - scrollContentHeight < 0;
 								setNavBarDividerVisibility();
 								pufferSize = (scrollContentHeight-scrollViewHeight) / pufferDivider;
-								if(debug) {
+								if(DEBUG) {
 									Log.i(TAG, "measureScrollView: viewHeight = "
 											+ scrollViewHeight + ", contentHeight = "
 											+ scrollContentHeight
 									);
 								}
 							} else {
-								if(debug) Log.e(TAG, "measureScrollView: no child!");
+								if(DEBUG) Log.e(TAG, "measureScrollView: no child!");
 							}
 							// Kill ViewTreeObserver
 							if(nestedScrollView.getViewTreeObserver().isAlive()) {
@@ -261,11 +255,11 @@ public class AppBarScrollBehavior {
 				} else {
 					setNavBarDividerColor(R.color.transparent);
 				}
-				if(debug) Log.i(TAG, "setNavBarDividerVisibility(" + showNavBarDivider + ")");
+				if(DEBUG) Log.i(TAG, "setNavBarDividerVisibility(" + showNavBarDivider + ")");
 			} else {
 				setNavBarDividerColor(R.color.stroke_secondary);
 			}
-		} else if(debug) Log.wtf(TAG, "setNavBarDividerVisibility: activity is null!?");
+		} else if(DEBUG) Log.wtf(TAG, "setNavBarDividerVisibility: activity is null!?");
 	}
 
 	/**
@@ -280,7 +274,7 @@ public class AppBarScrollBehavior {
 				} else {
 					setNavBarDividerColor(R.color.transparent);
 				}
-				if(debug) Log.i(TAG, "setNavBarDividerVisibility(" + showNavBarDivider + ")");
+				if(DEBUG) Log.i(TAG, "setNavBarDividerVisibility(" + showNavBarDivider + ")");
 			} else {
 				if(landscape) {
 					setNavBarDividerColor(R.color.stroke_secondary);
@@ -288,7 +282,7 @@ public class AppBarScrollBehavior {
 					setNavBarDividerColor(R.color.transparent);
 				}
 			}
-		} else if(debug) Log.wtf(TAG, "setNavBarDividerVisibility(): activity is null!?");
+		} else if(DEBUG) Log.wtf(TAG, "setNavBarDividerVisibility(): activity is null!?");
 	}
 
 	/**
@@ -299,7 +293,7 @@ public class AppBarScrollBehavior {
 			activity.getWindow().setNavigationBarDividerColor(
 					ContextCompat.getColor(activity, color)
 			);
-		} else if(debug) Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
+		} else if(DEBUG) Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
 	}
 
 	@SuppressLint("PrivateResource")
@@ -334,7 +328,7 @@ public class AppBarScrollBehavior {
 				valueAnimator.setDuration(activity.getResources().getInteger(
 						R.integer.app_bar_elevation_anim_duration
 				)).start();
-				if(debug) Log.i(TAG, "tintTopBars: appBarLinearLayout and status bar tinted");
+				if(DEBUG) Log.i(TAG, "tintTopBars: appBarLinearLayout and status bar tinted");
 			} else {
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
 						&& appBarColor == ContextCompat.getColor(activity, R.color.white)
@@ -343,8 +337,8 @@ public class AppBarScrollBehavior {
 							ContextCompat.getColor(activity, R.color.status_bar_lollipop)
 					);
 				}
-				if(debug) Log.i(TAG, "tintTopBars: current and target identical");
+				if(DEBUG) Log.i(TAG, "tintTopBars: current and target identical");
 			}
-		} else if(debug) Log.e(TAG, "tintTopBars: activity or appBarLinearLayout is null!");
+		} else if(DEBUG) Log.e(TAG, "tintTopBars: activity or appBarLinearLayout is null!");
 	}
 }
