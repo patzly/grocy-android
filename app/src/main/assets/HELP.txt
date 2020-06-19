@@ -16,6 +16,27 @@ Starting with Android 8 you can long press almost every clickable element withou
 Tap CREATE KEY to open the key management page of your Grocy instance.
 Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
 –
+# How to consume a product?
+–
+Every time you consume something, you consume it in Grocy as well. Ways to consume a product:
+
+- Stock overview: search for the product, swipe right on it and tap the CONSUME icon.
+- Stock overview: search for the product, tap on it to open the product overview, then tap the CONSUME icon.
+- Tap the green button in stock overview to go into scan mode, make sure you are in CONSUME mode, then scan your product.
+- Tap on the CONSUME shortcut of Grocy in your app launcher (since Android 7.1) and scan your product.
+- Open the CONSUME page in the bottom drawer and fill out the form, then tap the green button.
+–
+# How to mark a product as opened?
+–
+Every time you open or broach something, you mark one of it in Grocy as open. Make sure you only open a new product if no pack of it is already opened!
+Ways to mark a product as opened:
+
+- Stock overview: search for the product, swipe right on it and tap the OPEN icon.
+- Stock overview: search for the product, tap on it to open the product overview, then tap the OPEN icon.
+- Tap the green button in stock overview to go into scan mode, tap the CONSUME label to switch to MARK AS OPENED, then scan your product.
+- Tap on the CONSUME shortcut of Grocy in your app launcher (since Android 7.1) and continue as described previously.
+- Open the CONSUME page in the bottom drawer and fill out the form, then tap the OPEN icon in the bottom bar.
+–
 # I have another question.
 –
 Please go to our project page on GitHub and open a new issue with your question.
