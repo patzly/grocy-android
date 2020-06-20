@@ -373,7 +373,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             ArrayList<ShoppingList> shoppingLists,
             ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits
-    ) { // for offline mode
+    ) {
         this.shoppingListItems = shoppingListItems;
         this.shoppingLists = shoppingLists;
         this.productGroups = productGroups;
@@ -391,7 +391,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         changeAppBarTitle();
         if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
 
-        groupItems(false);
+        groupItems(true);
     }
 
     private void groupItems(boolean onlyDeltaUpdate) {
@@ -484,14 +484,10 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     public void toggleDoneStatus(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
-        toggleDoneStatus(shoppingListItem, position, null);
+        toggleDoneStatus(shoppingListItem);
     }
 
-    public void toggleDoneStatus(
-            @NonNull ShoppingListItem shoppingListItem,
-            int position,
-            ArrayList<GroupedListItem> removedItems
-    ) {
+    public void toggleDoneStatus(@NonNull ShoppingListItem shoppingListItem) {
         if(shoppingListItem.getDoneSynced() == -1) {
             shoppingListItem.setDoneSynced(shoppingListItem.getDone());
         }
@@ -499,7 +495,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
 
         if(showOffline) {
-            updateDoneStatus(shoppingListItem, position, removedItems);
+            updateDoneStatus(shoppingListItem, true);
             return;
         }
 
@@ -515,10 +511,11 @@ public class ShoppingActivity extends AppCompatActivity implements
                     shoppingListItem.getId(),
                     body,
                     response -> {
-                        updateDoneStatus(shoppingListItem, position, removedItems);
                         if(syncNeeded) {
+                            updateDoneStatus(shoppingListItem, false);
                             downloadOnlyShoppingListItems();
                         } else {
+                            updateDoneStatus(shoppingListItem, true);
                             downloadHelper.getTimeDbChanged(
                                     date1 -> lastSynced = date1,
                                     () -> lastSynced = Calendar.getInstance().getTime()
@@ -527,60 +524,38 @@ public class ShoppingActivity extends AppCompatActivity implements
                         }
                     },
                     error -> {
-                        updateDoneStatus(shoppingListItem, position, removedItems);
+                        updateDoneStatus(shoppingListItem, false);
                         loadOfflineData();
                     },
                     false
             );
         }, () -> {
-            updateDoneStatus(shoppingListItem, position, removedItems);
+            updateDoneStatus(shoppingListItem, false);
             loadOfflineData();
         });
     }
 
-    private void updateDoneStatus(
-            ShoppingListItem shoppingListItem,
-            int position,
-            ArrayList<GroupedListItem> removedItemsOld
-    ) {
+    private void updateDoneStatus(ShoppingListItem shoppingListItem, boolean updateList) {
         new Thread(() -> database.shoppingListItemDao().update(shoppingListItem)).start();
-        if(shoppingListItem.getDone() == 1) {
-            shoppingListItemsSelected.remove(shoppingListItem);
-            ArrayList<GroupedListItem> removedItemsNew = removeItemFromList(position);
-            Snackbar snackbar = Snackbar.make(
-                    binding.recycler,
-                    R.string.msg_item_marked_as_done,
-                    Snackbar.LENGTH_LONG
-            );
-            snackbar.setAction(
-                    R.string.action_undo,
-                    v -> toggleDoneStatus(shoppingListItem, position, removedItemsNew)
-            );
-            snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
-            snackbar.show();
-        } else if(removedItemsOld != null && !removedItemsOld.isEmpty()) {
-            if(debug) Log.i(TAG, "updateDoneStatus: " + removedItemsOld);
-            if(removedItemsOld.get(0).getType() == GroupedListItem.TYPE_HEADER) {
-                int headerPosition = position - 1;
-                groupedListItems.addAll(headerPosition, removedItemsOld);
-                shoppingItemAdapter.notifyItemRangeInserted(headerPosition, removedItemsOld.size());
-            } else if(position <= groupedListItems.size()) {
-                if(debug) Log.i(TAG, "updateDoneStatus: " + position);
-                groupedListItems.addAll(position, removedItemsOld);
-                shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
+        if(updateList) {
+            if(shoppingListItem.getDone() == 1) {
+                shoppingListItemsSelected.remove(shoppingListItem);
             } else {
-                groupedListItems.addAll(removedItemsOld);
-                shoppingItemAdapter.notifyItemRangeInserted(position, removedItemsOld.size());
+                shoppingListItemsSelected.add(shoppingListItem);
             }
+            groupItems(true);
         }
-    }
-
-    private ArrayList<GroupedListItem> removeItemFromList(int position) {
-        return ShoppingListHelper.removeItemFromList(
-                shoppingItemAdapter,
-                groupedListItems,
-                position
+        Snackbar snackbar = Snackbar.make(
+                binding.recycler,
+                R.string.msg_item_marked_as_done,
+                Snackbar.LENGTH_LONG
         );
+        snackbar.setAction(
+                R.string.action_undo,
+                v -> toggleDoneStatus(shoppingListItem)
+        );
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.secondary));
+        snackbar.show();
     }
 
     private void initTimerTask() {
