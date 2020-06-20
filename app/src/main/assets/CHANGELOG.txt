@@ -1,6 +1,13 @@
-1.4.2:
+1.4.3:
+- Fix jump to top on sync in shopping mode
+- New OPEN icon
+- Improved navigation
+- Debugging tools in settings
 - Bug fixes and improvements
-- Logs available in setting's menu
+
+1.4.2:
+- Logs in settings
+- Bug fixes and improvements
 
 1.4.1:
 - Camera crash fixed
