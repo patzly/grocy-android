@@ -23,34 +23,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
+import xyz.zedler.patrick.grocy.adapter.HelpAdapter;
 import xyz.zedler.patrick.grocy.databinding.ActivityHelpBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
-import xyz.zedler.patrick.grocy.view.ExpandableCard;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -64,6 +59,9 @@ public class HelpActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		binding = ActivityHelpBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
+
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		AppCompatDelegate.setDefaultNightMode(
@@ -71,7 +69,6 @@ public class HelpActivity extends AppCompatActivity {
 						? AppCompatDelegate.MODE_NIGHT_YES
 						: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 		);
-		setContentView(R.layout.activity_help);
 
 		findViewById(R.id.frame_help_close).setOnClickListener(v -> {
 			if(clickUtil.isDisabled()) return;
@@ -98,24 +95,62 @@ public class HelpActivity extends AppCompatActivity {
 			return true;
 		});
 
-		(new AppBarScrollBehavior()).setUpScroll(
+		/*(new AppBarScrollBehavior()).setUpScroll(
 				this,
 				R.id.app_bar_help,
 				R.id.linear_help_app_bar,
 				R.id.scroll_help,
 				true
-		);
+		);*/
 
-		LinearLayout container = findViewById(R.id.linear_help_container);
+		binding.recyclerHelp.setLayoutManager(new LinearLayoutManager(this));
+		binding.recyclerHelp.setItemAnimator(new DefaultItemAnimator());
+		binding.recyclerHelp.setHasFixedSize(true);
 
 		String[] sections = getHelpSections();
 
+		ArrayList<HelpAdapter.HelpSection> helpSections = new ArrayList<>();
 		for(String section : sections) {
-			if(section.startsWith("#")) {
-				String[] h = section.split(" ");
-				container.addView(newTitle(section.substring(h[0].length() + 1)));
-			} else if(!section.startsWith("§")) {
-				container.addView(newCard(section));
+			String[] sectionParts = null;
+			String sectionId = null;
+			String header = null;
+			String body = null;
+			if(section.startsWith("id=")) {
+				sectionParts = section.split("\n", 3);
+				sectionId = sectionParts[0].substring(3);
+				header = sectionParts[1].substring(1).trim();
+				body = sectionParts[2];
+			} else if(section.startsWith("#")) {
+				sectionParts = section.split("\n", 2);
+				header = sectionParts[0].substring(1).trim();
+				body = sectionParts[1];
+			}
+			if(sectionParts == null) continue;
+
+
+			helpSections.add(new HelpAdapter.HelpSection(header, body, sectionId));
+		}
+
+		HashMap<String, String> sectionPositions = new HashMap<>();
+		for(int pos=0; pos<helpSections.size(); pos++) {
+			HelpAdapter.HelpSection helpSection = helpSections.get(pos);
+			if(helpSection.getId() == null) continue;
+			sectionPositions.put(helpSection.getId(), String.valueOf(pos));
+		}
+
+		HelpAdapter adapter = new HelpAdapter(helpSections);
+		binding.recyclerHelp.setAdapter(adapter);
+
+		// open section on startup if ID is given
+		Intent intent = getIntent();
+		String sectionId = null;
+		if(intent != null) sectionId = intent.getStringExtra(Constants.ARGUMENT.SELECTED_ID);
+		if(sectionId != null && sectionPositions.containsKey(sectionId)) {
+			String position;
+			position = sectionPositions.get(sectionId);
+			if(position != null) {
+				adapter.expandItem(Integer.parseInt(position));
+				binding.recyclerHelp.scrollToPosition(Integer.parseInt(position));
 			}
 		}
 	}
@@ -134,42 +169,6 @@ public class HelpActivity extends AppCompatActivity {
 		} catch (Exception e) {
 			if(DEBUG) Log.e(TAG, "getHelpSections: " + e);
 		}
-		return text.toString().split("\n–\n");
-	}
-
-	private TextView newTitle(String title) {
-		TextView textView = new TextView(this);
-		textView.setText(title);
-		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,17);
-		textView.setTypeface(ResourcesCompat.getFont(
-				this, R.font.roboto_mono_medium
-		));
-		textView.setTextColor(ContextCompat.getColor(this, R.color.on_background));
-		textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-		);
-		layoutParams.setMargins(
-				0,
-				UnitUtil.getDp(this, 8),
-				0,
-				UnitUtil.getDp(this, 16)
-		);
-		textView.setLayoutParams(layoutParams);
-		return textView;
-	}
-
-	private ExpandableCard newCard(String text) {
-		ExpandableCard card = new ExpandableCard(this);
-		card.setText(text);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-		);
-		layoutParams.setMargins(
-				0, 0, 0,
-				UnitUtil.getDp(this, 8)
-		);
-		card.setLayoutParams(layoutParams);
-		return card;
+		return text.toString().split("\n[-][-][-]+\n");
 	}
 }

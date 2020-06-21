@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.util.Patterns;
@@ -183,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                         showMessage(getString(R.string.error_no_grocy_instance));
                         binding.buttonLoginLogin.setEnabled(true);
                         binding.buttonLoginDemo.setEnabled(true);
+                        openHomeAssistantHelp(server);
                         return;
                     }
                     try {
@@ -234,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG, "requestLogin: VolleyError: " + error);
                     if(error instanceof AuthFailureError) {
                         binding.textInputLoginKey.setError(getString(R.string.error_api_not_working));
+                        openHomeAssistantHelp(server);
                     } else if(error instanceof NoConnectionError) {
                         if(error.toString().contains("SSLHandshakeException")) {
                             Bundle bundle = new Bundle();
@@ -277,6 +280,18 @@ public class LoginActivity extends AppCompatActivity {
                 this::finish,
                 this::finish
         );
+    }
+
+    private void openHomeAssistantHelp(String server) {
+        if(server.endsWith("_grocy")) {
+            // maybe a grocy instance on Hass.io - this doesn't work like this
+            Intent intent = new Intent(this, HelpActivity.class);
+            intent.putExtra(
+                    Constants.ARGUMENT.SELECTED_ID,
+                    "usage_with_hassio"
+            );
+            new Handler().postDelayed(() -> startActivity(intent), 200);
+        }
     }
 
     public void enableLoginButtons() {
