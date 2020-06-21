@@ -21,7 +21,7 @@ Create a new key and copy it to your clipboard, then paste it in the key field o
 In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.
 There you have to change the host port (which will be exposed) from "null" to any other number like "40" (without the quotes) in the Network section.
 Now in this app here in the field "Server URL", enter the domain or IP address of your Hass.io server together with ":<chosen port>".
-So the Server URL can look like this:
+So the Server URL can for example look like this:
 
 - http://192.168.178.123:40
 - https://myhassioserver.com:40
@@ -44,7 +44,7 @@ Every time you consume something, you consume it in Grocy as well. Ways to consu
 –
 # How to mark a product as opened?
 –
-Every time you open or broach something, you mark one of it in Grocy as open. Make sure you only open a new product if no pack of it is already opened!
+Every time you open or broach something, you mark one of it in Grocy as open.
 Ways to mark a product as opened:
 
 - Stock overview: search for the product, swipe right on it and tap the OPEN icon.
