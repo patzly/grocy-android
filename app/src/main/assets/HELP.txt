@@ -16,6 +16,22 @@ Starting with Android 8 you can long press almost every clickable element withou
 Tap CREATE KEY to open the key management page of your Grocy instance.
 Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
 –
+# How can I use this app with Hass.io?
+–
+In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.
+There you have to change the host port (which will be exposed) from "null" to any other number like "40" (without the quotes) in the Network section.
+Now in this app here in the field "Server URL", enter the domain or IP address of your Hass.io server together with ":<chosen port>".
+So the Server URL can look like this:
+
+- http://192.168.178.123:40
+- https://myhassioserver.com:40
+
+Attention! If your Hass.io server is publicly accessible, following points are important for you:
+
+- Be sure you have set up a working HTTPS certificate in the Configuration section of the Grocy Add-on.
+- Start the URL with "https://" like above.
+- Don't forget to set a strong password for all users in Grocy, because anyone has now access to your Grocy instance and it is not protected by Hass.io login anymore.
+–
 # How to consume a product?
 –
 Every time you consume something, you consume it in Grocy as well. Ways to consume a product:
