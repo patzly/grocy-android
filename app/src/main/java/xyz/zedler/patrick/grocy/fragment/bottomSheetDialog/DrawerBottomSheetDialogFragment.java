@@ -176,8 +176,10 @@ public class DrawerBottomSheetDialogFragment
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);
-                startActivity(new Intent(activity, HelpActivity.class));
-                new Handler().postDelayed(this::dismiss, 500);
+                new Handler().postDelayed(() -> {
+                    dismiss();
+                    startActivity(new Intent(activity, HelpActivity.class));
+                }, 300);
                 break;
         }
     }
