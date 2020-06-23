@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.webkit.URLUtil;
@@ -99,12 +100,30 @@ public class LoginActivity extends AppCompatActivity {
                     credentials.getString(Constants.PREF.SERVER_URL, null)
             );
         }
+        binding.editTextLoginKey.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable s) {
+                if(binding.textInputLoginKey.isErrorEnabled()) {
+                    binding.textInputLoginKey.setErrorEnabled(false);
+                }
+            }
+        });
 
         if(credentials.getString(Constants.PREF.API_KEY, null) != null) {
             binding.editTextLoginKey.setText(
                     credentials.getString(Constants.PREF.API_KEY, null)
             );
         }
+        binding.editTextLoginServer.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable s) {
+                if(binding.textInputLoginServer.isErrorEnabled()) {
+                    binding.textInputLoginServer.setErrorEnabled(false);
+                }
+            }
+        });
 
         binding.buttonLoginKey.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
@@ -181,7 +200,9 @@ public class LoginActivity extends AppCompatActivity {
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
-                        showMessage(getString(R.string.error_no_grocy_instance));
+                        binding.textInputLoginServer.setError(
+                                getString(R.string.error_not_grocy_instance)
+                        );
                         binding.buttonLoginLogin.setEnabled(true);
                         binding.buttonLoginDemo.setEnabled(true);
                         openHomeAssistantHelp(server);
@@ -255,7 +276,9 @@ public class LoginActivity extends AppCompatActivity {
                     } else if(error instanceof ServerError && error.networkResponse != null) {
                         int code = error.networkResponse.statusCode;
                         if (code == 404) {
-                            showMessage(getString(R.string.error_no_grocy_instance));
+                            binding.textInputLoginServer.setError(
+                                    getString(R.string.error_not_grocy_instance)
+                            );
                         } else {
                             showMessage(getString(R.string.error_unexpected_response_code, code));
                         }
@@ -283,7 +306,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openHomeAssistantHelp(String server) {
-        if(server.endsWith("_grocy")) {
+        if(server.endsWith("_grocy") || server.contains("hassio_ingress")) {
             // maybe a grocy instance on Hass.io - this doesn't work like this
             Intent intent = new Intent(this, HelpActivity.class);
             intent.putExtra(
