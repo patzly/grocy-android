@@ -27,6 +27,8 @@
 -renamesourcefileattribute SourceFile
 -keepattributes InnerClasses,Signature,SourceFile,LineNumberTable
 
+-keep class * extends androidx.databinding.DataBinderMapper { *; }
+
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 -keepclassmembers enum * {
     public static **[] values();
