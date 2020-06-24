@@ -52,14 +52,13 @@ public class HelpActivity extends AppCompatActivity {
 	private final static boolean DEBUG = false;
 	private final static String TAG = HelpActivity.class.getSimpleName();
 
-	private ActivityHelpBinding binding;
 	private ClickUtil clickUtil = new ClickUtil();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		binding = ActivityHelpBinding.inflate(getLayoutInflater());
+		ActivityHelpBinding binding = ActivityHelpBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
 
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

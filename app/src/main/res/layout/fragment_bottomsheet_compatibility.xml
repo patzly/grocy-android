@@ -74,7 +74,7 @@
                     android:textColor="@color/white"
                     app:backgroundTint="@color/retro_red_bg_white"
                     app:rippleColor="@color/highlight_on_secondary"
-                    android:text="Ignore" />
+                    android:text="@string/action_ignore" />
 
             </LinearLayout>
 

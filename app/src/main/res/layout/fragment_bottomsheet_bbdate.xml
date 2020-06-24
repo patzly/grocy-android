@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:textSize="16sp"
-            android:text="Best before date"
+            android:text="@string/property_bbd"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     </LinearLayout>

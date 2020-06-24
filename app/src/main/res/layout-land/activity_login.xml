@@ -74,7 +74,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:text="Create Key"/>
+                    android:text="@string/action_create_key"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_login_login"
@@ -85,7 +85,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Login" />
+                    android:text="@string/action_login" />
 
             </LinearLayout>
 
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Use demo account" />
+                android:text="@string/action_use_demo_account" />
 
         </LinearLayout>
 

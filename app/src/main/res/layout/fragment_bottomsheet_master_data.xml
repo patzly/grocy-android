@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Manage master data"
+            android:text="@string/title_manage_master_data"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -52,7 +52,7 @@
                 <TextView
                     android:id="@+id/text_master_data_products"
                     style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="Products" />
+                    android:text="@string/property_products" />
 
             </LinearLayout>
 

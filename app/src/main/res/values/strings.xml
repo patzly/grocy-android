@@ -67,6 +67,10 @@
     <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
+    <string name="action_create_key">Create key</string>
+    <string name="action_login">Login</string>
+    <string name="action_use_demo_account">Use demo account</string>
+    <string name="action_ignore">Ignore</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
     <string name="tooltip_switch_purchase">Switch to purchase mode</string>
@@ -112,6 +116,7 @@
     <string name="msg_restart">A restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
+    <string name="msg_point_at_barcode">Point your camera at a barcode</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_select_product">Select a product</string>
@@ -179,6 +184,8 @@
     <string name="title_logout">Logout from Grocy?</string>
     <string name="title_restart">Restart Grocy?</string>
     <string name="title_logout_demo">Logout from demo mode?</string>
+    <string name="title_batch_config">Batch mode configuration</string>
+    <string name="title_manage_master_data">Manage master data</string>
 
     <string name="title_stock_entry_no_specific">No specific</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
@@ -189,6 +196,7 @@
     <string name="title_shopping_list_edit">Edit shopping list</string>
     <string name="title_shopping_list_new">New shopping list</string>
     <string name="title_shopping_mode">Shopping mode</string>
+    <string name="title_products_to_create">Products to create</string>
 
     <string name="subtitle_amount">%1$s %2$s</string>
     <string name="subtitle_amount_opened">(%1$s opened)</string>
@@ -213,6 +221,7 @@
     <string name="property_name_singular">Name (singular form)</string>
     <string name="property_name_plural">Name (plural form)</string>
     <string name="property_product">Product</string>
+    <string name="property_products">Products</string>
     <string name="property_product_name">Product name</string>
     <string name="property_parent_product">Parent product</string>
     <string name="property_description">Description</string>
@@ -336,6 +345,13 @@
     <string name="setting_debug_description">Find and report errors</string>
     <string name="setting_info_logs">Show info logs</string>
     <string name="setting_logs_description">Display logcat of this process</string>
+
+    <string name="setting_ask_best_before_date">Ask for best before date</string>
+    <string name="setting_ask_price">Ask for price</string>
+    <string name="setting_ask_store">Ask for store</string>
+    <string name="setting_ask_location">Ask for location</string>
+    <string name="setting_ask_stock_location">Ask for stock location</string>
+    <string name="setting_ask_specific_item">Ask for specific item</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>

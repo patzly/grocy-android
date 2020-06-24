@@ -42,7 +42,7 @@ public class ActionButton extends LinearLayout {
 
     private final static float ICON_ALPHA_DISABLED = 0.5f;
 
-    Context context;
+    final Context context;
     ImageView imageViewIcon;
     FrameLayout frameLayoutButton;
 

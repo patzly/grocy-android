@@ -44,7 +44,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
 	private final static String TAG = AboutActivity.class.getSimpleName();
 
-	private ClickUtil clickUtil = new ClickUtil();
+	private final ClickUtil clickUtil = new ClickUtil();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

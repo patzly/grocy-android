@@ -35,12 +35,12 @@ public class AppBarBehavior {
 
 	private final static String TAG = AppBarBehavior.class.getSimpleName();
 
-	private static int ANIM_DURATION = 300;
+	private static final int ANIM_DURATION = 300;
 
-	private Activity activity;
+	private final Activity activity;
 	private View viewPrimary, viewSecondary;
 	private boolean isPrimary;
-	private boolean debug;
+	private final boolean debug;
 
 	public AppBarBehavior(Activity activity, @IdRes int primary, @IdRes int secondary) {
 		this.activity = activity;

@@ -195,7 +195,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:background="@color/transparent"
-                android:text="Point your camera at a barcode"
+                android:text="@string/msg_point_at_barcode"
                 android:textSize="15.5sp"
                 android:textColor="@color/white"/>
 

@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="Products to create"
+                android:text="@string/title_products_to_create"
                 android:textAlignment="viewStart"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_regular"

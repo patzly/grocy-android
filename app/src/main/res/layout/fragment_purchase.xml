@@ -182,7 +182,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/text_input_purchase_amount"
                             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="Amount"
+                            android:hint="@string/property_amount"
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 

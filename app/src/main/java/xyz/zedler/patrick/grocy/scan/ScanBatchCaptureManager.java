@@ -167,7 +167,7 @@ public class ScanBatchCaptureManager {
      *     which is either {@link PackageManager#PERMISSION_GRANTED}
      *     or {@link PackageManager#PERMISSION_DENIED}. Never null.
      */
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == cameraPermissionReqCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted

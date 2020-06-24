@@ -33,7 +33,7 @@
         <LinearLayout
             android:id="@+id/linear_features_text_land"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:layout_marginTop="16dp"
             android:layout_weight="1"

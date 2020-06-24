@@ -48,7 +48,6 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private ScanBatchActivity activity;
 
-    private TextInputLayout textInputPrice;
     private EditText editTextPrice;
 
     private boolean productDiscarded = false;
@@ -76,7 +75,7 @@ public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
         String price = bundle.getString(Constants.ARGUMENT.PRICE);
         String currency = bundle.getString(Constants.ARGUMENT.CURRENCY);
 
-        textInputPrice = view.findViewById(R.id.text_price);
+        TextInputLayout textInputPrice = view.findViewById(R.id.text_price);
         textInputPrice.setHint(getString(R.string.property_price_in, currency));
 
         editTextPrice = textInputPrice.getEditText();

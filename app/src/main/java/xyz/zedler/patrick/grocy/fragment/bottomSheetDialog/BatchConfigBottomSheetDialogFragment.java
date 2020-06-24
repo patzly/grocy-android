@@ -231,14 +231,14 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
     }
 
     private void hideDisabledFeatures(View view) {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+        if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
             view.findViewById(R.id.linear_batch_config_price).setVisibility(View.GONE);
         }
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             view.findViewById(R.id.linear_batch_config_location).setVisibility(View.GONE);
             view.findViewById(R.id.linear_batch_config_stock_location).setVisibility(View.GONE);
         }
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+        if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             view.findViewById(R.id.linear_batch_config_bbd).setVisibility(View.GONE);
         }
     }
@@ -270,9 +270,9 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         dismiss();
     }
 
-    private boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
+    private boolean isFeatureDisabled(String pref) {
+        if(pref == null) return false;
+        return !sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

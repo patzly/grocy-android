@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAlignment="viewStart"
-            android:text="Batch mode configuration"
+            android:text="@string/title_batch_config"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     </LinearLayout>
@@ -53,7 +53,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for best before date" />
+                        android:text="@string/setting_ask_best_before_date" />
 
                     <TextView
                         android:id="@+id/text_batch_config_bbd"
@@ -78,7 +78,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for price" />
+                        android:text="@string/setting_ask_price" />
 
                     <TextView
                         android:id="@+id/text_batch_config_price"
@@ -103,7 +103,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for store" />
+                        android:text="@string/setting_ask_store" />
 
                     <TextView
                         android:id="@+id/text_batch_config_store"
@@ -128,7 +128,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for location" />
+                        android:text="@string/setting_ask_location" />
 
                     <TextView
                         android:id="@+id/text_batch_config_location"
@@ -153,7 +153,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for stock location" />
+                        android:text="@string/setting_ask_stock_location" />
 
                     <TextView
                         android:id="@+id/text_batch_config_stock_location"
@@ -178,7 +178,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="Ask for specific item" />
+                        android:text="@string/setting_ask_specific_item" />
 
                     <TextView
                         android:id="@+id/text_batch_config_specific"
