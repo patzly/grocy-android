@@ -17,6 +17,7 @@
     <string name="action_edit_product">Edit product</string>
     <string name="action_shopping_list_add">Add to shopping list</string>
 
+    <string name="hello">Hello</string>
     <string name="action_back">Back</string>
     <string name="action_search">Search</string>
     <string name="action_check">Check</string>
