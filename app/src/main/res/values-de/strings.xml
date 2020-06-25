@@ -1,0 +1,25 @@
+<resources>
+
+    <string name="action_back">Zurück</string>
+    <string name="action_search">Suche</string>
+    <string name="action_new">Neu</string>
+    <string name="action_close">Schließen</string>
+    <string name="action_scan">Scannen</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_add">Hinzufügen</string>
+    <string name="action_help">Hilfe</string>
+    <string name="action_ascending">Aufsteigend</string>
+    <string name="action_undo">Rückgängig</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_create">Erstellen</string>
+    <string name="action_link">Verknüpfen</string>
+    <string name="action_discard">Verwerfen</string>
+    <string name="action_ignore">Ignorieren</string>
+
+    <string name="msg_no_connection">Keine Verbindung</string>
+    <string name="error_select_product">Produkt auswählen</string>
+    <string name="error_empty">Erforderlich</string>
+    <string name="error_empty_locations">Keine Standorte</string>
+    <string name="title_stock_overview">Bestand</string>
+    </resources>
