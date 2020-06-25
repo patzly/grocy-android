@@ -929,7 +929,6 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
         bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
         bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
-        bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchItems);
         showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
     }
 
@@ -1253,7 +1252,8 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
+        Object object = Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE));
+        ((InputMethodManager) object).showSoftInput(
                 editText,
                 InputMethodManager.SHOW_IMPLICIT
         );

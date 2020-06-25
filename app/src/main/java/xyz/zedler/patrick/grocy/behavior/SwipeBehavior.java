@@ -255,13 +255,12 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     private synchronized void recoverSwipedItem() {
         while (!recoverQueue.isEmpty()) {
-            int pos = recoverQueue.poll();
+            int pos = recoverQueue.remove();
             if (pos > -1) {
                 if(recyclerView.getAdapter() != null) {
                     recyclerView.getAdapter().notifyItemChanged(pos);
                 }
             }
-
         }
     }
 

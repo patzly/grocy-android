@@ -53,6 +53,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
@@ -243,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
 		textViewExpiringSoonDays.setText(
-				days == null || days.isEmpty() || days.equals("null")
+				days.isEmpty() || days.equals("null")
 						? String.valueOf(5)
 						: days
 		);
@@ -954,18 +955,19 @@ public class SettingsActivity extends AppCompatActivity
 	}
 
 	public void showKeyboard(EditText editText) {
-		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(
+		Object object = Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE));
+		((InputMethodManager) object).showSoftInput(
 				editText,
 				InputMethodManager.SHOW_IMPLICIT
 		);
 	}
 
 	public void hideKeyboard() {
-		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
-				.hideSoftInputFromWindow(
-						findViewById(android.R.id.content).getWindowToken(),
-						0
-				);
+		Object object = Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE));
+		((InputMethodManager) object).hideSoftInputFromWindow(
+				findViewById(android.R.id.content).getWindowToken(),
+				0
+		);
 	}
 
 	private boolean isFeatureDisabled(String pref) {

@@ -215,7 +215,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 String.valueOf(5)
         );
         // ignore server value if not available
-        daysExpiringSoon = days == null || days.isEmpty() || days.equals("null")
+        daysExpiringSoon = days.isEmpty() || days.equals("null")
                 ? 5
                 : Integer.parseInt(days);
         sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
@@ -1299,7 +1299,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         String sortMode = sharedPrefs.getString(
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );
-        assert sortMode != null;
         SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
         MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
         MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);

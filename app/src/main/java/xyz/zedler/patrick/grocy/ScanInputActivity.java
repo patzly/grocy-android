@@ -52,12 +52,8 @@ public class ScanInputActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_scan_input);
 
-        findViewById(R.id.button_scan_close).setOnClickListener(v -> {
-            finish();
-        });
-        findViewById(R.id.button_scan_flash).setOnClickListener(v -> {
-            switchTorch();
-        });
+        findViewById(R.id.button_scan_close).setOnClickListener(v -> finish());
+        findViewById(R.id.button_scan_flash).setOnClickListener(v -> switchTorch());
 
         barcodeScannerView = findViewById(R.id.barcode_scan);
         barcodeScannerView.setTorchOff();

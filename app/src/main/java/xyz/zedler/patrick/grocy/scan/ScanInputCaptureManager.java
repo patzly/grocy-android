@@ -207,12 +207,9 @@ public class ScanInputCaptureManager {
     }
 
     protected void closeAndFinish() {
-        if (barcodeView.getBarcodeView().isCameraClosed()) {
-            //finish();
-        } else {
+        if(!barcodeView.getBarcodeView().isCameraClosed()) {
             finishWhenClosed = true;
         }
-
         barcodeView.pause();
         inactivityTimer.cancel();
     }

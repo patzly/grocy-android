@@ -14,7 +14,7 @@ public class RequestQueueSingleton {
     private static Context ctx;
 
     private RequestQueueSingleton(Context context) {
-        ctx = context;
+        ctx = context.getApplicationContext();
         requestQueue = getRequestQueue();
     }
 
@@ -27,7 +27,7 @@ public class RequestQueueSingleton {
 
     public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            //requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+            //requestQueue = Volley.newRequestQueue(ctx);
 
             Cache cache = new DiskBasedCache(ctx.getCacheDir(), 1024 * 1024);
             BasicNetwork network = new BasicNetwork(new HurlStack());

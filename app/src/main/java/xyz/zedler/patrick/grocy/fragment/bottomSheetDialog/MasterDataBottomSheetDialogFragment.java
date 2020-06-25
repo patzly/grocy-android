@@ -156,6 +156,7 @@ public class MasterDataBottomSheetDialogFragment
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);

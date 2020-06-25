@@ -59,8 +59,6 @@ public class DrawerBottomSheetDialogFragment
     private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
 
-    private boolean debug;
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -82,7 +80,7 @@ public class DrawerBottomSheetDialogFragment
         assert activity != null && bundle != null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+        boolean debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
         if(debug) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
@@ -203,6 +201,7 @@ public class DrawerBottomSheetDialogFragment
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);

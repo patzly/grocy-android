@@ -57,7 +57,6 @@ import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
-import xyz.zedler.patrick.grocy.model.MissingBatchItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -73,7 +72,6 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
     private String barcode, batchType, buttonAction;
 
     private ArrayList<Product> products;
-    private ArrayList<MissingBatchItem> missingBatchItems;
 
     private ScanBatchActivity activity;
     private TextInputLayout textInputProduct;
@@ -108,7 +106,6 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 || getArguments().getString(Constants.ARGUMENT.BARCODE) == null
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES) == null
                 || getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS) == null
-                || getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) == null
         ) {
             dismissWithMessage(activity.getString(R.string.msg_error));
             return view;
@@ -121,7 +118,6 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 Constants.ARGUMENT.PRODUCT_NAMES
         );
         products = getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS);
-        missingBatchItems = getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
         barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
         batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
 
