@@ -46,7 +46,8 @@ Grocy Android is still under development. In the next weeks we're going to imple
 
 ## Compatibility
 
-Grocy Android requires at least [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.
+Grocy Android requires at least [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
+It is also possible to use the grocy Add-on on a Hass.io server. The In-app help explains how to do that.
 
 Until Grocy Android `v1.4.x` at least Android 5.0 Lollipop is required on your device.  
 With `v.1.5.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
