@@ -363,7 +363,7 @@
     <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
     <string name="license_xzing_android_author" translatable="false">JourneyApps</string>
 
-    <string name="url_grocy">https://grocy.info</string>
+    <string name="url_grocy" translatable="false">https://grocy.info</string>
     <string name="url_grocy_demo">https://en.demo.grocy.info</string>
     <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
     <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
