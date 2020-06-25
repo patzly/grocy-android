@@ -27,12 +27,12 @@
 
         <item
             android:id="@+id/action_purchase"
-            android:title="@string/action_purchase"
+            android:title="@string/title_purchase"
             app:showAsAction="never"/>
 
         <item
             android:id="@+id/action_consume"
-            android:title="@string/action_consume"
+            android:title="@string/title_consume"
             app:showAsAction="never"/>
 
     </group>

@@ -163,6 +163,8 @@
     <string name="type_product_group">product group</string>
 
     <string name="title_stock_overview">Stock overview</string>
+    <string name="title_purchase">Purchase</string>
+    <string name="title_consume">Consume</string>
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
     <string name="title_master_data">Master data</string>

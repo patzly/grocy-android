@@ -106,7 +106,7 @@
                     <TextView
                         android:id="@+id/text_drawer_consume"
                         style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:text="@string/action_consume" />
+                        android:text="@string/title_consume" />
 
                 </LinearLayout>
 
@@ -137,7 +137,7 @@
                     <TextView
                         android:id="@+id/text_drawer_purchase"
                         style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:text="@string/action_purchase" />
+                        android:text="@string/title_purchase" />
 
                 </LinearLayout>
 
