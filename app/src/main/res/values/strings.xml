@@ -348,7 +348,6 @@
     <string name="setting_ask_price">Ask for price</string>
     <string name="setting_ask_store">Ask for store</string>
     <string name="setting_ask_location">Ask for location</string>
-    <string name="setting_ask_stock_location">Ask for stock location</string>
     <string name="setting_ask_specific_item">Ask for specific item</string>
 
     <string name="license_author_google" translatable="false">Google</string>
