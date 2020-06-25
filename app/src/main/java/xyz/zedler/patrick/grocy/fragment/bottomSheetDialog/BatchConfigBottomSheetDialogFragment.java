@@ -73,7 +73,7 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         if(getArguments() == null
                 || getArguments().getString(Constants.ARGUMENT.TYPE) == null
         ) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
+            dismissWithMessage(activity.getString(R.string.error_undefined));
             return view;
         }
 

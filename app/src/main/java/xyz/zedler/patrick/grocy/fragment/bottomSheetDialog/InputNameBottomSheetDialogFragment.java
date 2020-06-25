@@ -68,7 +68,7 @@ public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragmen
         if(getArguments() == null
                 || getArguments().getString(Constants.ARGUMENT.PRODUCT_NAME) == null
         ) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
+            dismissWithMessage(activity.getString(R.string.error_undefined));
             return view;
         }
 

@@ -17,7 +17,6 @@
     <string name="action_edit_product">Edit product</string>
     <string name="action_shopping_list_add">Add to shopping list</string>
 
-    <string name="hello">Hello</string>
     <string name="action_back">Back</string>
     <string name="action_search">Search</string>
     <string name="action_check">Check</string>
@@ -93,7 +92,6 @@
     <string name="msg_no_connection">No connection</string>
     <string name="msg_no_stock_locations">No stock locations for %1$s</string>
     <string name="msg_no_stock_entries">No stock entries for %1$s</string>
-    <string name="msg_error">An error occurred</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
     <string name="msg_failed_to_sync">Failed to sync entries</string>
@@ -102,7 +100,6 @@
     <string name="msg_shopping_list_cleared">%1$s cleared successfully</string>
     <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
-    <string name="msg_barcode_error">An error occurred</string>
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">This product still has stock</string>
     <string name="msg_master_delete_usage">This %1$s is still in use</string>
@@ -156,7 +153,7 @@
     <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate has to be signed by a trusted certificate authority (CA)\nTo meet these requirements, you can use a free certificate from letsencrypt.org for proper encryption.</string>
     <string name="error_unexpected_response_code">Unexpected response code: %1$i</string>
     <string name="error_unexpected_response">Unexpected server response</string>
-    <string name="error_unknown_subtitle">An error occurred</string>
+    <string name="error_undefined">An error occurred</string>
 
     <string name="type_product">product</string>
     <string name="type_location">location</string>
@@ -324,7 +321,7 @@
     <string name="setting_open_food_facts">Use Open Food Facts</string>
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
     <string name="setting_reload_config">Reload configuration</string>
-    <string name="setting_reload_config_description">Restart required</string>
+    <string name="setting_reload_config_description">App restart required</string>
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
     <string name="setting_list_indicator">Indicate list entry</string>

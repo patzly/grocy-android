@@ -938,7 +938,7 @@ public class SettingsActivity extends AppCompatActivity
 	}
 
 	private void showErrorMessage() {
-		showMessage(getString(R.string.msg_error));
+		showMessage(getString(R.string.error_undefined));
 	}
 
 	private boolean isDemo() {

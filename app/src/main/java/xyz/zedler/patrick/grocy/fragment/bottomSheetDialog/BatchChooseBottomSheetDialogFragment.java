@@ -107,7 +107,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                 || getArguments().getStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES) == null
                 || getArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCTS) == null
         ) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
+            dismissWithMessage(activity.getString(R.string.error_undefined));
             return view;
         }
 
@@ -257,7 +257,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
         try {
             body.put("barcode", TextUtils.join(",", barcodes));
         } catch (JSONException e) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
+            dismissWithMessage(activity.getString(R.string.error_undefined));
             if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
         request.put(
@@ -267,7 +267,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                     activity.loadProductDetailsByBarcode(barcode);
                     dismiss();
                 },
-                error -> dismissWithMessage(activity.getString(R.string.msg_error))
+                error -> dismissWithMessage(activity.getString(R.string.error_undefined))
         );
     }
 

@@ -335,7 +335,7 @@ public class MasterProductGroupsFragment extends Fragment
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
@@ -471,7 +471,7 @@ public class MasterProductGroupsFragment extends Fragment
         activity.showMessage(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
-                        activity.getString(R.string.msg_error),
+                        activity.getString(R.string.error_undefined),
                         Snackbar.LENGTH_SHORT
                 )
         );

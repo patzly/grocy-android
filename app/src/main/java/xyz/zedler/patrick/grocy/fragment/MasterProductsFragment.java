@@ -351,7 +351,7 @@ public class MasterProductsFragment extends Fragment
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
@@ -658,7 +658,7 @@ public class MasterProductsFragment extends Fragment
             } else {
                 showMessage(activity.getString(R.string.msg_master_delete_stock));
             }
-        }, error -> showMessage(activity.getString(R.string.msg_error)), false);
+        }, error -> showMessage(activity.getString(R.string.error_undefined)), false);
     }
 
     public void deleteProduct(Product product) {
@@ -671,7 +671,7 @@ public class MasterProductsFragment extends Fragment
             } else {
                 refresh();  // product not found, fall back to complete refresh
             }
-        }, error -> showMessage(activity.getString(R.string.msg_error)));
+        }, error -> showMessage(activity.getString(R.string.error_undefined)));
     }
 
     private boolean isFeatureEnabled(String pref) {

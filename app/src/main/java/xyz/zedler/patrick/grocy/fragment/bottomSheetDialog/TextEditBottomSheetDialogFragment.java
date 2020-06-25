@@ -72,7 +72,7 @@ public class TextEditBottomSheetDialogFragment extends BottomSheetDialogFragment
         if(getArguments() == null
                 || getArguments().getString(Constants.ARGUMENT.TITLE) == null
         ) {
-            dismissWithMessage(activity.getString(R.string.msg_error));
+            dismissWithMessage(activity.getString(R.string.error_undefined));
             return view;
         }
 

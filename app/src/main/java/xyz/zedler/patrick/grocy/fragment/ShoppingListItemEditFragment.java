@@ -457,7 +457,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         activity.showMessage(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
-                        activity.getString(R.string.msg_error),
+                        activity.getString(R.string.error_undefined),
                         Snackbar.LENGTH_SHORT
                 ).setActionTextColor(
                         ContextCompat.getColor(activity, R.color.secondary)
@@ -922,7 +922,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     private void showErrorMessage() {
-        showMessage(activity.getString(R.string.msg_error));
+        showMessage(activity.getString(R.string.error_undefined));
     }
 
     @NonNull

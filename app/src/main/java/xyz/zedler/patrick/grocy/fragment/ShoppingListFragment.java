@@ -544,7 +544,7 @@ public class ShoppingListFragment extends Fragment
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
@@ -891,7 +891,7 @@ public class ShoppingListFragment extends Fragment
                 body,
                 response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "toggleDoneStatus: " + error);
                 },
                 false
@@ -961,7 +961,7 @@ public class ShoppingListFragment extends Fragment
                     onQueueEmpty();
                 },
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "saveNotes: " + error);
                 }
         );
@@ -985,7 +985,7 @@ public class ShoppingListFragment extends Fragment
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 response -> removeItemFromList(position),
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "deleteItem: " + error);
                 }
         );
@@ -1064,7 +1064,7 @@ public class ShoppingListFragment extends Fragment
                                 refresh();
                             },
                             error -> {
-                                showMessage(activity.getString(R.string.msg_error));
+                                showMessage(activity.getString(R.string.error_undefined));
                                 if(debug) Log.e(
                                         TAG, "setUpBottomMenu: add missing "
                                                 + shoppingList.getName()
@@ -1073,7 +1073,7 @@ public class ShoppingListFragment extends Fragment
                             }
                     );
                 } else {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                 }
                 return true;
             });
@@ -1093,7 +1093,7 @@ public class ShoppingListFragment extends Fragment
                 IconUtil.start(item);
                 ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
                 if(shoppingList == null) {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
                 clearShoppingList(
@@ -1119,7 +1119,7 @@ public class ShoppingListFragment extends Fragment
             editShoppingList.setOnMenuItemClickListener(item -> {
                 ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
                 if(shoppingList == null) {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
                 Bundle bundle = new Bundle();
@@ -1142,7 +1142,7 @@ public class ShoppingListFragment extends Fragment
             deleteShoppingList.setOnMenuItemClickListener(item -> {
                 ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
                 if(shoppingList == null) {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
                 clearShoppingList(
@@ -1172,7 +1172,7 @@ public class ShoppingListFragment extends Fragment
                 jsonObject,
                 responseListener::onResponse,
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(
                             TAG, "clearShoppingList: "
                                     + shoppingList.getName()
@@ -1206,7 +1206,7 @@ public class ShoppingListFragment extends Fragment
                     selectShoppingList(1);
                 },
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(
                             TAG, "deleteShoppingList: delete "
                                     + shoppingList.getName()

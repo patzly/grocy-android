@@ -68,7 +68,7 @@ public class ExitScanBatchBottomSheetDialogFragment extends BottomSheetDialogFra
             dismiss();
             Snackbar.make(
                     view,
-                    activity.getString(R.string.msg_error),
+                    activity.getString(R.string.error_undefined),
                     Snackbar.LENGTH_SHORT
             ).show();
         }

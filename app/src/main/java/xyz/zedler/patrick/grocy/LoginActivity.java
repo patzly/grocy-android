@@ -287,7 +287,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else if(error instanceof TimeoutError) {
                         showMessage(getString(R.string.error_timeout));
                     } else {
-                        showMessage(getString(R.string.msg_error) + ": " + error);
+                        showMessage(getString(R.string.error_undefined) + ": " + error);
                     }
                     binding.buttonLoginLogin.setEnabled(true);
                     binding.buttonLoginDemo.setEnabled(true);

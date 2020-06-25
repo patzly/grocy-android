@@ -310,7 +310,7 @@ public class MissingBatchItemsFragment extends Fragment
                 },
                 error -> {
                     binding.swipeMissingBatchItems.setRefreshing(false);
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                 }
         );
     }
@@ -383,7 +383,7 @@ public class MissingBatchItemsFragment extends Fragment
         }
 
         if(missingBatchItems.size() < 1) {
-            showMessage(activity.getString(R.string.msg_error));
+            showMessage(activity.getString(R.string.error_undefined));
             if(debug) Log.e(TAG, "doOnePurchaseRequest: missingBatchItems are empty");
             return;
         }
@@ -392,7 +392,7 @@ public class MissingBatchItemsFragment extends Fragment
         ArrayList<BatchPurchaseEntry> batchPurchaseEntries = missingBatchItem.getPurchaseEntries();
 
         if(batchPurchaseEntries.size() < 1) {
-            showMessage(activity.getString(R.string.msg_error));
+            showMessage(activity.getString(R.string.error_undefined));
             if(debug) Log.e(TAG, "doOnePurchaseRequest: batchPurchaseEntries are empty");
             return;
         }
@@ -420,7 +420,7 @@ public class MissingBatchItemsFragment extends Fragment
                         doOnePurchaseRequest();
                     }
                 },
-                error -> showMessage(activity.getString(R.string.msg_error))
+                error -> showMessage(activity.getString(R.string.error_undefined))
         );
     }
 
@@ -477,7 +477,7 @@ public class MissingBatchItemsFragment extends Fragment
             case Constants.STATE.ERROR:
                 binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
                 binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_unknown_subtitle);
+                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollMissingBatchItems;
@@ -499,7 +499,7 @@ public class MissingBatchItemsFragment extends Fragment
         if(clickUtil.isDisabled()) return;
 
         if(position >= missingBatchItems.size()) {
-            showMessage(activity.getString(R.string.msg_error));
+            showMessage(activity.getString(R.string.error_undefined));
             if(debug) Log.e(
                     TAG, "onItemRowClicked: size = "
                             + missingBatchItems.size()
@@ -546,7 +546,7 @@ public class MissingBatchItemsFragment extends Fragment
                         );
                     },
                     error -> {
-                        showMessage(activity.getString(R.string.msg_error));
+                        showMessage(activity.getString(R.string.error_undefined));
                         if(debug) Log.e(TAG, "onItemRowClicked: " + error);
                     }
             );

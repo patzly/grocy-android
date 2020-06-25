@@ -151,7 +151,7 @@ public class BBDateBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 if(date != null) calendar.setTime(date);
             } catch (ParseException e) {
                 fillForm(null);
-                showSnackbarMessage(activity.getString(R.string.msg_error));
+                showSnackbarMessage(activity.getString(R.string.error_undefined));
                 return;
             }
             datePicker.setEnabled(true);

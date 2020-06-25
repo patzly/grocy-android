@@ -475,7 +475,7 @@ public class ConsumeFragment extends Fragment {
                     activity.showMessage(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
-                                    activity.getString(R.string.msg_error),
+                                    activity.getString(R.string.error_undefined),
                                     Snackbar.LENGTH_SHORT
                             ).setActionTextColor(
                                     ContextCompat.getColor(activity, R.color.secondary)
@@ -655,7 +655,7 @@ public class ConsumeFragment extends Fragment {
                         activity.showMessage(
                                 Snackbar.make(
                                         activity.binding.frameMainContainer,
-                                        activity.getString(R.string.msg_error),
+                                        activity.getString(R.string.error_undefined),
                                         Snackbar.LENGTH_SHORT
                                 )
                         );
@@ -758,7 +758,7 @@ public class ConsumeFragment extends Fragment {
                     clearAll();
                 },
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "consumeProduct: " + error);
                 }
         );
@@ -830,7 +830,7 @@ public class ConsumeFragment extends Fragment {
                     clearAll();
                 },
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "openProduct: " + error);
                 }
         );
@@ -850,7 +850,7 @@ public class ConsumeFragment extends Fragment {
                     if(debug) Log.i(TAG, "undoTransaction: undone");
                 },
                 error -> {
-                    showMessage(activity.getString(R.string.msg_error));
+                    showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "undoTransaction: " + error);
                 }
         );

@@ -412,13 +412,13 @@ public class ScanBatchActivity extends AppCompatActivity
                             downloadProducts(
                                     response1 -> showChooseBottomSheet(barcode),
                                     error1 -> {
-                                        showMessage(getString(R.string.msg_error));
+                                        showMessage(getString(R.string.error_undefined));
                                         resumeScan();
                                     }
                             );
                         }
                     } else {
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.error_undefined));
                         resumeScan();
                     }
                 }
@@ -521,7 +521,7 @@ public class ScanBatchActivity extends AppCompatActivity
                                 currentProductName
                         ));
                     } else {
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.error_undefined));
                     }
                     if(debug) Log.i(TAG, "consumeProduct: " + error);
                     storeResetSelectedValues();
@@ -587,7 +587,7 @@ public class ScanBatchActivity extends AppCompatActivity
                                 currentProductName
                         ));
                     } else {
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.error_undefined));
                     }
                     if(debug) Log.i(TAG, "openProduct: " + error);
                     storeResetSelectedValues();
@@ -652,7 +652,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     resumeScan();
                 },
                 error -> {
-                    showMessage(getString(R.string.msg_error));
+                    showMessage(getString(R.string.error_undefined));
                     if(debug) Log.i(TAG, "purchaseProduct: " + error);
                     storeResetSelectedValues();
                     resumeScan();
@@ -667,7 +667,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     showMessage(getString(R.string.msg_undone_transaction));
                     if(debug) Log.i(TAG, "undoTransaction: undone");
                 }, error -> {
-                    showMessage(getString(R.string.msg_error));
+                    showMessage(getString(R.string.error_undefined));
                     if(debug) Log.i(TAG, "undoTransaction: error: " + error);
                 }
         );
@@ -956,7 +956,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     response -> showStoresBottomSheet(false),
                     error -> {
                         discardCurrentProduct();
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.error_undefined));
                     }
             );
             return;
@@ -981,12 +981,12 @@ public class ScanBatchActivity extends AppCompatActivity
                     response -> showLocationsBottomSheet(false),
                     error -> {
                         discardCurrentProduct();
-                        showMessage(getString(R.string.msg_error));
+                        showMessage(getString(R.string.error_undefined));
                     }
             );
             return;
         } else if(locations.isEmpty()) {
-            showMessage(getString(R.string.msg_error));
+            showMessage(getString(R.string.error_undefined));
             discardCurrentProduct();
             return;
         }
@@ -1039,7 +1039,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, entryId);
                     showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
                 },
-                error -> showMessage(getString(R.string.msg_error))
+                error -> showMessage(getString(R.string.error_undefined))
         );
     }
 
@@ -1073,7 +1073,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, currentProductDetails);
                     showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
                 },
-                error -> showMessage(getString(R.string.msg_error))
+                error -> showMessage(getString(R.string.error_undefined))
         );
     }
 
@@ -1116,7 +1116,7 @@ public class ScanBatchActivity extends AppCompatActivity
             }
         }
         if(missingBatchItem == null) {
-            showMessage(getString(R.string.msg_error));
+            showMessage(getString(R.string.error_undefined));
             return;
         }
 
