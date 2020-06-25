@@ -57,7 +57,6 @@
     <string name="action_show_extended">Show extended form</string>
     <string name="action_batch_mode">Batch mode</string>
     <string name="action_create">Create</string>
-    <string name="action_create_purchase">Create and purchase product</string>
     <string name="action_link">Link</string>
     <string name="action_open_forms">Open forms</string>
     <string name="action_open_scanner">Open scanner</string>
@@ -178,8 +177,8 @@
     <string name="title_link_barcode">Link barcode to product</string>
     <string name="title_batch_scan_exit">Fill out the product forms?</string>
     <string name="title_batch_missing_exit">Back to scanner?</string>
-    <string name="title_link_barcode_to_existing">"Link barcode to an existing product?"</string>
-    <string name="title_link_barcode_or_create">"Link barcode to an existing product or create a new product with it?"</string>
+    <string name="title_link_barcode_to_existing">Link barcode to an existing product?</string>
+    <string name="title_link_barcode_or_create">Link barcode to an existing product or create a new product with it?</string>
     <string name="title_compatibility">Compatibility issues</string>
     <string name="title_logout">Logout from Grocy?</string>
     <string name="title_restart">Restart Grocy?</string>
