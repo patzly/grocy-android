@@ -6,9 +6,10 @@
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
     <!-- This is an action – in English, it contains a verb.
-     The string is visible after clicking long on the action button in purchase screen -->
+     The string is visible after clicking long on the action button in purchase screen for example. -->
     <string name="action_purchase">Purchase</string>
-    <!-- This is an action – in English, it contains a verb. -->
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
     <string name="action_consume">Consume</string>
     <!-- This is an action – in English, it contains a verb. -->
     <string name="action_consume_all">Consume all</string>
@@ -22,8 +23,10 @@
 
     <string name="action_back">Back</string>
     <string name="action_search">Search</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_next">Next</string>
     <string name="action_new">New</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Previous</string>
     <string name="action_send_feedback">Send feedback</string>
     <string name="action_reset">Reset</string>
@@ -36,7 +39,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_add">Add</string>
     <string name="action_clear">Clear</string>
-    <string name="action_clear_all">Clear all</string>
+    <string name="action_clear_shopping_list">Clear all</string>
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
     <string name="action_new_issue">Open new issue on GitHub</string>
