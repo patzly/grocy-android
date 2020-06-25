@@ -114,7 +114,15 @@
     <string name="error_handshake">Fehlendes Zertifikat</string>
     <string name="error_undefined">Ein Fehler ist aufgetreten</string>
 
+    <string name="type_product">Produkt</string>
+    <string name="type_location">Standort</string>
+    <string name="type_store">Geschäft</string>
+    <string name="type_quantity_unit">Mengeneinheit</string>
+    <string name="type_product_group">Produktgruppe</string>
+
     <string name="title_stock_overview">Bestand</string>
+    <string name="title_purchase">Einkauf</string>
+    <string name="title_consume">Verbrauch</string>
     <string name="title_product_overview">Produktübersicht</string>
     <string name="title_product">Produkt</string>
     <string name="title_master_data">Stammdaten</string>
@@ -140,6 +148,20 @@
     <string name="property_note">Notiz</string>
     <string name="property_amount">Menge</string>
     <string name="property_price">Preis</string>
+    <string name="property_quantity_unit">Mengeneinheit</string>
+    <string name="property_quantity_units">Mengeneinheiten</string>
+    <string name="property_qu_purchase">Mengeneinheit Einkauf</string>
+    <string name="property_qu_stock">Mengeneinheit Bestand</string>
+    <string name="property_qu_factor">Faktor Einkauf zu Bestand</string>
+    <string name="property_barcode">Barcode</string>
+    <string name="property_barcodes">Barcodes</string>
+    <string name="property_bbd">Mindesthaltbarkeitsdatum</string>
+    <string name="property_bbd_next">Nächstes Mindesthaltbarkeitsdatum</string>
+    <string name="property_location">Standort</string>
+    <string name="property_store">Geschäft</string>
+    <string name="property_stores">Geschäfte</string>
+    <string name="property_shopping_list">Einkaufsliste</string>
+    <string name="property_shopping_lists">Einkaufslisten</string>
     <string name="property_opened">geöffnet</string>
     <string name="property_not_opened">nicht geöffnet</string>
     <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
