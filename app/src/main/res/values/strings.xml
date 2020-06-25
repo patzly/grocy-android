@@ -39,7 +39,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_add">Add</string>
     <string name="action_clear">Clear</string>
-    <string name="action_clear_shopping_list">Clear all</string>
+    <string name="action_clear_shopping_list">Clear shopping list</string>
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
     <string name="action_new_issue">Open new issue on GitHub</string>
