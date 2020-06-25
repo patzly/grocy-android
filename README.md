@@ -9,6 +9,7 @@
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
 **This app requires a running self-hosted instance of the [grocy server application](https://grocy.info/).**  
+It is a **companion** app, therefore it **cannot run standalone** or manage products itself.  
 You can try it using the demo option available on the login screen.
 
 ## Downloads
