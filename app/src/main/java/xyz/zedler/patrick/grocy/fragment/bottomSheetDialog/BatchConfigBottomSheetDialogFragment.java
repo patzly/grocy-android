@@ -78,13 +78,16 @@ public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragm
         }
 
         String batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
+        assert batchType != null;
+        if(batchType.equals(Constants.ACTION.OPEN)) {
+            batchType = Constants.ACTION.CONSUME;
+        }
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         // BEST BEFORE DATE
         textViewBestBeforeDate = view.findViewById(R.id.text_batch_config_bbd);
         LinearLayout linearLayoutBestBeforeDate = view.findViewById(R.id.linear_batch_config_bbd);
-        assert batchType != null;
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutBestBeforeDate.setOnClickListener(v -> {
                 int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD);
