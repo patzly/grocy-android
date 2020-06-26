@@ -294,4 +294,22 @@
     <string name="setting_ask_specific_item">Nach Bestandseintrag fragen</string>
 
     <string name="url_grocy_demo">https://de.demo.grocy.info</string>
+    <string name="help_general_header">Wie weiß ich, was ein Button in der App macht?</string>
+    <string name="help_general_body">Ab Android 8 können Sie fast jedes klickbare Element ohne einen Schriftzug lange drücken, damit Sie sehen, welche Aktion ausgeführt wird.</string>
+    <string name="help_homeassistant_header">Wie kann ich diese App mit Hass.io benutzen?</string>
+    <string name="help_homeassistant_body" >
+        Öffnen Sie im Supervisor von Hass.io den Tab \"Konfiguration\" im Grocy Add-on.\n
+        Ändern Sie den Host Port (welcher offengelegt wird) von \"null\" zu einer Zahl, z.B. \"40\" (ohne Anführungszeichen) im Netzwerk Abschnitt.\n
+        Geben Sie nun hier in dieser App im Feld \"Server URL\" die Domain oder IP Adresse von Ihrem Hass.io Server zusammen mit \":\" und der gewählten Portnummer ein.\n
+        Die Server URL kann nun wie folgt aussehen:\n\n
+
+        - http://192.168.178.123:40\n
+        - https://myhassioserver.com:40\n\n
+
+        Achtung! Wenn Ihr Hass.io Server öffentlich zugänglich ist, müssen Sie folgende Punkte beachten:\n\n
+
+        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
+        - Beginnen Sie die URL mit \"https://\" wie im Beispiel oben.\n
+        - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
+    </string>
     </resources>
