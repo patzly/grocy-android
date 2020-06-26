@@ -196,6 +196,9 @@
     <string name="title_batch_config">Stapelmodus Konfiguration</string>
     <string name="title_manage_master_data">Stammdaten verwalten</string>
 
+    <string name="title_spoiled">Verdorben</string>
+    <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
+    <string name="title_is_total_price">Ist Gesamtpreis</string>
     <string name="title_stock_entry_no_specific">Kein bestimmter Eintrag</string>
     <string name="title_shopping_list_ungrouped">Ungruppiert</string>
     <string name="title_list_entry">Listeneintrag</string>
