@@ -43,7 +43,6 @@ Grocy Android is still under development. In the next weeks we're going to imple
 * Recipes
 * Meal plans
 * Extended product editing
-* App translations
 
 ## Compatibility
 
