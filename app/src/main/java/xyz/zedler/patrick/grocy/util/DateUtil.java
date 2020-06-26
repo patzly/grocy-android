@@ -130,7 +130,7 @@ public class DateUtil {
                     if(days < 60) {
                         return context.getString(
                                 R.string.date_from_now,
-                                context.getString(R.string.date_month)
+                                context.getString(R.string.date_month_one)
                         );
                     } else {
                         if(days < 365) {
@@ -145,7 +145,7 @@ public class DateUtil {
                             if(days < 700) { // how many days do you understand as two years?
                                 return context.getString(
                                         R.string.date_from_now,
-                                        context.getString(R.string.date_year)
+                                        context.getString(R.string.date_year_one)
                                 );
                             } else {
                                 return context.getString(
@@ -173,7 +173,7 @@ public class DateUtil {
                     if(days > -60) {
                         return context.getString(
                                 R.string.date_ago,
-                                context.getString(R.string.date_month)
+                                context.getString(R.string.date_month_one)
                         );
                     } else {
                         if(days > -365) {
@@ -188,7 +188,7 @@ public class DateUtil {
                             if(days > -700) {
                                 return context.getString(
                                         R.string.date_ago,
-                                        context.getString(R.string.date_year)
+                                        context.getString(R.string.date_year_one)
                                 );
                             } else {
                                 return context.getString(

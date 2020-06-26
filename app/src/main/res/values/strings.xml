@@ -240,8 +240,10 @@
     <!-- %1$d is a number (amount of seconds) -->
     <string name="property_seconds_num">%1$d seconds</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
     <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_price">Price</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
     <string name="property_price_in">Price in %1$s</string>
     <string name="property_quantity_unit">Quantity unit</string>
     <string name="property_quantity_units">Quantity units</string>
@@ -266,7 +268,6 @@
     <string name="property_shopping_list">Shopping list</string>
     <string name="property_shopping_lists">Shopping lists</string>
     <string name="property_last_purchased">Last purchased</string>
-    <string name="property_purchased">Purchased</string>
     <string name="property_last_used">Last used</string>
     <string name="property_last_price">Last price</string>
     <string name="property_average_shelf_life">Average shelf life</string>
@@ -278,22 +279,29 @@
     <string name="property_not_opened">not opened</string>
     <string name="property_is_freezer">Is freezer</string>
 
+    <!-- %1$s is a time span e.g. one month, two days -->
     <string name="date_ago">%1$s ago</string>
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>
     <string name="date_tomorrow">Tomorrow</string>
+    <!-- %1$s is a time span e.g. one month, two days -->
     <string name="date_from_now">%1$s from now</string>
-    <string name="date_days">%1$d days</string>
-    <string name="date_month">A month</string>
-    <string name="date_months">%1$d months</string>
-    <string name="date_year">A year</string>
-    <string name="date_years">%1$d years</string>
+    <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unknown</string>
     <string name="date_unlimited">Unlimited</string>
     <string name="date_never">Never</string>
+    <!-- This string should contain the singular form of "day" -->
     <string name="date_day_one">1 day</string>
+    <!-- This string should contain the singular form of "month" -->
     <string name="date_month_one">1 month</string>
+    <!-- This string should contain the singular form of "year" -->
     <string name="date_year_one">1 year</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <string name="date_days">%1$d days</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <string name="date_months">%1$d months</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <string name="date_years">%1$d years</string>
 
     <string name="info_acknowledgement">We\'d like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
     <string name="info_intro">Replay intro</string>
@@ -379,9 +387,13 @@
     <string name="url_gson" translatable="false">https://github.com/google/gson</string>
     <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
 
+    <!-- Strings for HelpActivity -->
+
     <string name="help_general_header">How do I know what something does?</string>
     <string name="help_general_body">Starting with Android 8 you can long press almost every clickable element without a label to see what it will do.</string>
     <string name="help_key_invalid_header">My API key is invalid.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_key_invalid_body">
         Tap CREATE KEY to open the key management page of your Grocy instance.\n
         Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.\n\n
@@ -389,6 +401,8 @@
         If you use Hass.io with the Grocy Add-on, read the next section.
     </string>
     <string name="help_homeassistant_header">How can I use this app with Hass.io?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_homeassistant_body" >
         In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.\n
         Change the host port (which will be exposed) from \"null\" to any other number like \"40\" (without the quotes) in the Network section.\n
@@ -405,6 +419,8 @@
         - Set a strong password for all users in Grocy (default is \"admin\"), because anyone has now access to your Grocy instance and it is not protected by Hass.io login anymore.
     </string>
     <string name="help_consume_header">How to consume a product?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_consume_body">
         Every time you consume something, you consume it in Grocy as well.\n
         Ways to consume a product:\n\n
@@ -416,6 +432,8 @@
         - Open the CONSUME page in the bottom drawer and fill out the form, then tap the green button.
     </string>
     <string name="help_open_header">How to mark a product as opened?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_open_body">
         Every time you open or broach something, you mark one of it in Grocy as open.\n
         Ways to mark a product as opened:\n\n
@@ -427,6 +445,8 @@
         - Open the CONSUME page in the bottom drawer and fill out the form, then tap the OPEN icon in the bottom bar.
     </string>
     <string name="help_other_question_header">I have another question.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_other_question_body">
         Please go to our project page on GitHub and open a new issue with your question.\n
         We will try to help you as fast as possible.
