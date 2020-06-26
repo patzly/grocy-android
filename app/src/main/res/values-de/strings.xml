@@ -109,6 +109,8 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_deleted">%1$s erfolgreich gelöscht</string>
     <string name="msg_barcode_duplicate">Barcode existiert bereits</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">%1$s \"%2$s\" löschen?</string>
     <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
@@ -120,6 +122,7 @@
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung irgorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
     <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
     <string name="msg_logout_demo">Sie verwenden die Demo-Instanz auf <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt.</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
+    <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration des Servers anzuwenden.</string>
     <string name="msg_features">Intro erneut starten in \"Über\"</string>
     <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
     <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
@@ -161,15 +164,11 @@
     <!-- %1$s is a server URL -->
     <string name="error_failed_to_connect_to">Verbindung mit %1$s fehlgeschlagen</string>
     <string name="error_handshake">Fehlendes Zertifikat</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$s benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server Zertifikat muss von einer öffentlichen Stelle (CA) zertifiziert worden sein.\nUm diese Anforderungen zu erfüllen, können Sie ein kostenloses Zertifikat von letsencrypt.org für die Verschlüsselung verweden.</string>
     <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$i</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
     <string name="error_undefined">Ein Fehler ist aufgetreten</string>
-
-    <string name="type_product">Produkt</string>
-    <string name="type_location">Standort</string>
-    <string name="type_store">Geschäft</string>
-    <string name="type_quantity_unit">Mengeneinheit</string>
-    <string name="type_product_group">Produktgruppe</string>
 
     <string name="title_stock_overview">Bestand</string>
     <string name="title_purchase">Einkauf</string>
@@ -197,7 +196,14 @@
     <string name="title_batch_config">Stapelmodus Konfiguration</string>
     <string name="title_manage_master_data">Stammdaten verwalten</string>
 
+    <string name="title_spoiled">Verdorben</string>
+    <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
+    <string name="title_is_total_price">Ist Gesamtpreis</string>
+    <string name="title_stock_entry_no_specific">Kein bestimmter Eintrag</string>
     <string name="title_shopping_list_ungrouped">Ungruppiert</string>
+    <string name="title_list_entry">Listeneintrag</string>
+    <string name="title_edit_list_entry">Listeneintrag bearbeiten</string>
+    <string name="title_create_list_entry">Listeneintrag erstellen</string>
     <string name="title_shopping_list_edit">Einkaufszettel bearbeiten</string>
     <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
     <string name="title_shopping_mode">Einkaufsmodus</string>
@@ -210,11 +216,20 @@
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Wo %1$s Bestand hat</string>
     <string name="subtitle_default">Standard</string>
+    <string name="subtitle_none_selected">Nichts ausgewählt</string>
+    <string name="subtitle_no_name">Kein Name</string>
+    <string name="subtitle_no_notes">Keine Notizen</string>
+
     <string name="subtitle_done">Erledigt</string>
     <string name="subtitle_undone">Unerledigt</string>
     <string name="subtitle_never_expires">Läuft nie ab</string>
     <string name="subtitle_selected">Ausgewählt</string>
     <string name="subtitle_stock_entry_no_specific">Zuerst ablaufende zuerst, dann First In - First Out</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">Eingekauft: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">MHD: %1$s; Menge: %2$s; %3$s</string>
+
     <string name="description_batch_choose_link">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll.</string>
     <string name="description_batch_choose_create">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll oder erstellen Sie ein neues Produkt.</string>
     <string name="description_scan_batch_exit">Es wurden neue Produkte erstellt, aber sie wurden noch nicht an den Server gesendet, weil erforderliche Details fehlen. Die Produkt-Formulare öffnen?</string>
@@ -276,13 +291,9 @@
     <string name="property_not_opened">nicht geöffnet</string>
     <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
 
-    <!-- %1$s is a time span e.g. one month, two days -->
-    <string name="date_ago">vor %1$s</string>
     <string name="date_yesterday">Gestern</string>
     <string name="date_today">Heute</string>
     <string name="date_tomorrow">Morgen</string>
-    <!-- %1$s is a time span e.g. one month, two days -->
-    <string name="date_from_now">in %1$s</string>
     <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unbekannt</string>
     <string name="date_unlimited">Unbegrenzt</string>
@@ -295,6 +306,41 @@
     <string name="date_year_one">1 Jahr</string>
     <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
     <string name="date_days">%1$d Tagen</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <string name="date_months">%1$d Monate</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <string name="date_years">%1$d Jahre</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_from_now">In %1$d Tagen</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_from_now">In einem Monat</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_from_now">In %1$d Monaten</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_from_now">In einem Jahr</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_from_now">In %1$d Jahren</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_ago">Vor %1$d Tagen</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_ago">Vor einem Monat</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_ago">Vor %1$d Monaten</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_ago">Vor einem Jahr</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_ago">Vor %1$d Jahren</string>
+
     <string name="info_acknowledgement">Wir danken Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
     <string name="info_intro">Intro erneut abspielen</string>
     <string name="info_intro_description">Features vorführen</string>
@@ -391,7 +437,31 @@
         - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
     </string>
     <string name="help_consume_header">Wie verbrauche ich ein Produkt?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_consume_body">
+        Jedes Mal, wenn Sie etwas verbrauchen, verbrauchen Sie es in Grocy auch.\n
+        Wege, um ein Produkt zu verbrauchen:\n\n
+
+        - Bestand: Suchen Sie nach dem Produkt, nach rechts wischen und auf das VERBRAUCHEN Symbol tippen.\n
+        - Bestand: Suchen Sie nach dem Produkt, klicken auf es, um die Produktübersicht zu öffnen, dann auf das VERBRAUCHEN Symbol tippen.\n
+        - Drücken Sie im Bestand den grünen Button, um in den Stapelmodus zu gelangen, stellen Sie sicher, dass der Modus \"Verbrauchen\" ist und scannen Sie Ihr Produkt.\n
+        - Drücken Sie auf die VERBRAUCHEN Verknüpfung von Grocy in Ihrem App Launcher (seit Android 7.1) und scannen Sie Ihr Produkt.\n
+        - Öffnen Sie die Seite \"Verbrauch\" im Hauptmenü und füllen Sie das Formular aus. Drücken Sie dann den grünen Button.
+    </string>
     <string name="help_open_header">Wie markiere ich ein Produkt als geöffnet?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_open_body">
+        Jedes Mal, wenn Sie etwas öffnen oder anbrechen, markieren Sie es in Grocy als geöffnet.\n
+        Wege, um ein Produkt als geöffnet zu markieren:\n\n
+
+        - Bestand: Suchen Sie nach dem Produkt, nach rechts wischen und auf das ÖFFNEN Symbol tippen.\n
+        - Bestand: Suchen Sie nach dem Produkt, klicken auf es, um die Produktübersicht zu öffnen, dann auf das ÖFFNEN Symbol tippen.\n
+        - Drücken Sie im Bestand den grünen Button, um in den Stapelmodus zu gelangen, drücken Sie die Modus-Taste, damit der Modus \"Als geöffnet markieren\" ist und scannen Sie Ihr Produkt.\n
+        - Drücken Sie auf die VERBRAUCHEN Verknüpfung von Grocy in Ihrem App Launcher (seit Android 7.1) und fahren Sie wie gerade eben fort.\n
+        - Öffnen Sie die Seite \"Verbrauch\" im Hauptmenü und füllen Sie das Formular aus. Drücken Sie dann das ÖFFNEN Symbol unten in der Leiste.
+    </string>
     <string name="help_other_question_header">Ich habe eine andere Frage.</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
     Then you can translate by replacing one sentence by its translation and so on. -->
