@@ -545,7 +545,7 @@ public class MasterLocationsFragment extends Fragment
                                     activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.type_location)
+                                            activity.getString(R.string.property_location)
                                     ),
                                     Snackbar.LENGTH_LONG
                             )

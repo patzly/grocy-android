@@ -213,7 +213,7 @@
                         <TextView
                             android:id="@+id/text_consume_location"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 
@@ -238,7 +238,7 @@
                         <TextView
                             android:id="@+id/text_consume_specific"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none" />
+                            android:text="@string/subtitle_none_selected" />
 
                     </LinearLayout>
 

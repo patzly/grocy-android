@@ -514,7 +514,7 @@ public class PurchaseFragment extends Fragment {
                     // Insert NONE as first element
                     stores.add(
                             0,
-                            new Store(-1, activity.getString(R.string.subtitle_none))
+                            new Store(-1, activity.getString(R.string.subtitle_none_selected))
                     );
                 },
                 this::onError,
@@ -619,7 +619,7 @@ public class PurchaseFragment extends Fragment {
             binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
         } else if (defaultBestBeforeDays == 0) {
             selectedBestBeforeDate = null;
-            binding.textPurchaseBbd.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
         } else {
             // add default best before days to today
             selectedBestBeforeDate = DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays);
@@ -711,14 +711,14 @@ public class PurchaseFragment extends Fragment {
         }
         if(storeId == null || storeId.isEmpty()) {
             selectedStoreId = -1;
-            binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
         } else {
             selectedStoreId = Integer.parseInt(storeId);
             Store store = getStore(selectedStoreId);
             if(store != null) {
                 binding.textPurchaseStore.setText(store.getName());
             } else {
-                binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
             }
         }
 
@@ -1048,13 +1048,13 @@ public class PurchaseFragment extends Fragment {
     public void selectStore(int selectedId) {
         this.selectedStoreId = selectedId;
         if(stores.isEmpty()) {
-            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
         } else {
             Store store = getStore(selectedId);
             if(store != null) {
                 binding.textPurchaseStore.setText(store.getName());
             } else {
-                binding.textPurchaseStore.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
                 showErrorMessage();
             }
         }
@@ -1063,13 +1063,13 @@ public class PurchaseFragment extends Fragment {
     public void selectLocation(int selectedId) {
         this.selectedLocationId = selectedId;
         if(locations.isEmpty()) {
-            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
+            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
         } else {
             Location location = getLocation(selectedId);
             if(location != null) {
                 binding.textPurchaseLocation.setText(location.getName());
             } else {
-                binding.textPurchaseLocation.setText(getString(R.string.subtitle_none));
+                binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
                 showErrorMessage();
             }
         }
@@ -1180,7 +1180,7 @@ public class PurchaseFragment extends Fragment {
         productDetails = null;
         binding.textInputPurchaseProduct.setErrorEnabled(false);
         binding.autoCompletePurchaseProduct.setText(null);
-        binding.textPurchaseBbd.setText(activity.getString(R.string.subtitle_none));
+        binding.textPurchaseBbd.setText(activity.getString(R.string.subtitle_none_selected));
         binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
         binding.textInputPurchaseAmount.setErrorEnabled(false);
         binding.editTextPurchaseAmount.setText(null);
@@ -1191,8 +1191,8 @@ public class PurchaseFragment extends Fragment {
         binding.linearPurchaseTotalPrice.setEnabled(true);
         binding.checkboxPurchaseTotalPrice.setEnabled(true);
         binding.checkboxPurchaseTotalPrice.setChecked(false);
-        binding.textPurchaseStore.setText(activity.getString(R.string.subtitle_none));
-        binding.textPurchaseLocation.setText(activity.getString(R.string.subtitle_none));
+        binding.textPurchaseStore.setText(activity.getString(R.string.subtitle_none_selected));
+        binding.textPurchaseLocation.setText(activity.getString(R.string.subtitle_none_selected));
         binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
         clearInputFocus();
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {

@@ -561,7 +561,7 @@ public class MasterProductGroupsFragment extends Fragment
                                     activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.type_product_group)
+                                            activity.getString(R.string.property_product_group)
                                     ),
                                     Snackbar.LENGTH_LONG
                             )

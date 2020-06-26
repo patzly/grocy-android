@@ -294,7 +294,7 @@ public class SettingsActivity extends AppCompatActivity
 		if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
 			textViewDefaultLocation.setText(null);
 		} else if(presetLocationId == -1) {
-			textViewDefaultLocation.setText(getString(R.string.subtitle_none));
+			textViewDefaultLocation.setText(getString(R.string.subtitle_none_selected));
 		} else {
 			downloadLocations(
 					() -> {
@@ -303,7 +303,7 @@ public class SettingsActivity extends AppCompatActivity
 							textViewDefaultLocation.setText(location.getName());
 						} else {
 							textViewDefaultLocation.setText(
-									getString(R.string.subtitle_none)
+									getString(R.string.subtitle_none_selected)
 							);
 						}
 					},
@@ -317,7 +317,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 		textViewDefaultProductGroup = findViewById(R.id.text_setting_default_product_group);
 		if(presetProductGroupId == -1) {
-			textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+			textViewDefaultProductGroup.setText(getString(R.string.subtitle_none_selected));
 		} else {
 			downloadProductGroups(
 					() -> {
@@ -325,7 +325,7 @@ public class SettingsActivity extends AppCompatActivity
 						if(productGroup != null) {
 							textViewDefaultProductGroup.setText(productGroup.getName());
 						} else {
-							textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+							textViewDefaultProductGroup.setText(getString(R.string.subtitle_none_selected));
 						}
 					},
 					() -> textViewDefaultProductGroup.setText(
@@ -340,7 +340,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 		textViewDefaultQuantityUnit = findViewById(R.id.text_setting_default_quantity_unit);
 		if(presetQuantityUnitId == -1) {
-			textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+			textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none_selected));
 		} else {
 			downloadQuantityUnits(
 					() -> {
@@ -348,7 +348,7 @@ public class SettingsActivity extends AppCompatActivity
 						if(quantityUnit != null) {
 							textViewDefaultQuantityUnit.setText(quantityUnit.getName());
 						} else {
-							textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+							textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none_selected));
 						}
 					},
 					() -> textViewDefaultQuantityUnit.setText(
@@ -636,7 +636,7 @@ public class SettingsActivity extends AppCompatActivity
 	private void showLocationsBottomSheet() {
 		Bundle bundleLocations = new Bundle();
 		ArrayList<Location> tmpLocations = new ArrayList<>(locations);
-		tmpLocations.add(0, new Location(-1, getString(R.string.subtitle_none)));
+		tmpLocations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, tmpLocations);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetLocationId);
 		showBottomSheet(new LocationsBottomSheetDialogFragment(), bundleLocations);
@@ -663,7 +663,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					Location location = getLocation(locationId);
 					if(location == null) {
-						textViewDefaultLocation.setText(getString(R.string.subtitle_none));
+						textViewDefaultLocation.setText(getString(R.string.subtitle_none_selected));
 					} else {
 						textViewDefaultLocation.setText(location.getName());
 					}
@@ -704,7 +704,7 @@ public class SettingsActivity extends AppCompatActivity
 	private void showProductGroupsBottomSheet() {
 		Bundle bundleProductGroups = new Bundle();
 		ArrayList<ProductGroup> tmpProductGroups = new ArrayList<>(productGroups);
-		tmpProductGroups.add(0, new ProductGroup(-1, getString(R.string.subtitle_none)));
+		tmpProductGroups.add(0, new ProductGroup(-1, getString(R.string.subtitle_none_selected)));
 		bundleProductGroups.putParcelableArrayList(
 				Constants.ARGUMENT.PRODUCT_GROUPS,
 				tmpProductGroups
@@ -734,7 +734,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					ProductGroup productGroup = getProductGroup(productGroupId);
 					if(productGroup == null) {
-						textViewDefaultProductGroup.setText(getString(R.string.subtitle_none));
+						textViewDefaultProductGroup.setText(getString(R.string.subtitle_none_selected));
 					} else {
 						textViewDefaultProductGroup.setText(productGroup.getName());
 					}
@@ -775,7 +775,7 @@ public class SettingsActivity extends AppCompatActivity
 	private void showQuantityUnitsBottomSheet() {
 		Bundle bundleLocations = new Bundle();
 		ArrayList<QuantityUnit> tmpQuantityUnits = new ArrayList<>(quantityUnits);
-		tmpQuantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none)));
+		tmpQuantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, tmpQuantityUnits);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetQuantityUnitId);
 		showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundleLocations);
@@ -802,7 +802,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					QuantityUnit quantityUnit = getQuantityUnit(quantityUnitId);
 					if(quantityUnit == null) {
-						textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none));
+						textViewDefaultQuantityUnit.setText(getString(R.string.subtitle_none_selected));
 					} else {
 						textViewDefaultQuantityUnit.setText(quantityUnit.getName());
 					}

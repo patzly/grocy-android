@@ -553,7 +553,7 @@ public class MasterStoresFragment extends Fragment
                                     activity.binding.frameMainContainer,
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.type_store)
+                                            activity.getString(R.string.property_store)
                                     ),
                                     Snackbar.LENGTH_LONG
                             )

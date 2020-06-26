@@ -92,35 +92,35 @@ public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFrag
                 case Constants.ARGUMENT.LOCATION:
                     location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
                     if(location != null) {
-                        textType = activity.getString(R.string.type_location);
+                        textType = activity.getString(R.string.property_location);
                         textName = location.getName();
                     }
                     break;
                 case Constants.ARGUMENT.STORE:
                     store = bundle.getParcelable(Constants.ARGUMENT.STORE);
                     if(store != null) {
-                        textType = activity.getString(R.string.type_store);
+                        textType = activity.getString(R.string.property_store);
                         textName = store.getName();
                     }
                     break;
                 case Constants.ARGUMENT.QUANTITY_UNIT:
                     quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
                     if(quantityUnit != null) {
-                        textType = activity.getString(R.string.type_quantity_unit);
+                        textType = activity.getString(R.string.property_quantity_unit);
                         textName = quantityUnit.getName();
                     }
                     break;
                 case Constants.ARGUMENT.PRODUCT_GROUP:
                     productGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
                     if(productGroup != null) {
-                        textType = activity.getString(R.string.type_product_group);
+                        textType = activity.getString(R.string.property_product_group);
                         textName = productGroup.getName();
                     }
                     break;
                 default:
                     product = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
                     if(product != null) {
-                        textType = activity.getString(R.string.type_product);
+                        textType = activity.getString(R.string.property_product);
                         textName = product.getName();
                     }
             }

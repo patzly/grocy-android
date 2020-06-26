@@ -555,7 +555,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                                 activity.binding.frameMainContainer,
                                 activity.getString(
                                         R.string.msg_master_delete_usage,
-                                        activity.getString(R.string.type_quantity_unit)
+                                        activity.getString(R.string.property_quantity_unit)
                                 ),
                                 Snackbar.LENGTH_LONG
                         )

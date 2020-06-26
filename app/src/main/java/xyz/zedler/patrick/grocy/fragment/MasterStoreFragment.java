@@ -424,7 +424,7 @@ public class MasterStoreFragment extends Fragment {
                                     activity.findViewById(R.id.frame_main_container),
                                     activity.getString(
                                             R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.type_store)
+                                            activity.getString(R.string.property_store)
                                     ),
                                     Snackbar.LENGTH_LONG
                             )

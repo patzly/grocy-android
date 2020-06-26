@@ -760,7 +760,7 @@ public class ShoppingListItemEditFragment extends Fragment {
             if(shoppingList != null) {
                 textView.setText(shoppingList.getName());
             } else {
-                textView.setText(getString(R.string.subtitle_none));
+                textView.setText(getString(R.string.subtitle_none_selected));
             }
         } else {
             this.selectedShoppingListId = 1;

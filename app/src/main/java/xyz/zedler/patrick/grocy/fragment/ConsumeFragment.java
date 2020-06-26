@@ -918,14 +918,14 @@ public class ConsumeFragment extends Fragment {
                 binding.textConsumeLocation.setText(productDetails.getLocation().getName());
             } else {
                 selectedLocationId = -1;
-                binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none));
+                binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none_selected));
             }
         }
     }
 
     public void selectLocation(int selectedId) {
         this.selectedLocationId = selectedId;
-        String location = activity.getString(R.string.subtitle_none);
+        String location = activity.getString(R.string.subtitle_none_selected);
         if(stockLocations.isEmpty() && productDetails != null) {
             if(productDetails.getLocation() != null) {
                 location = productDetails.getLocation().getName();
@@ -945,7 +945,7 @@ public class ConsumeFragment extends Fragment {
         binding.textConsumeSpecific.setText(
                 activity.getString(
                         selectedId == null
-                                ? R.string.subtitle_none
+                                ? R.string.subtitle_none_selected
                                 : R.string.subtitle_selected
                 )
         );
@@ -1125,8 +1125,8 @@ public class ConsumeFragment extends Fragment {
         binding.textInputConsumeAmount.setHint(activity.getString(R.string.property_amount));
         binding.editTextConsumeAmount.setText(null);
         binding.imageConsumeAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
-        binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none));
-        binding.textConsumeSpecific.setText(activity.getString(R.string.subtitle_none));
+        binding.textConsumeLocation.setText(activity.getString(R.string.subtitle_none_selected));
+        binding.textConsumeSpecific.setText(activity.getString(R.string.subtitle_none_selected));
         if(binding.checkboxConsumeSpoiled.isChecked()) {
             binding.checkboxConsumeSpoiled.setChecked(false);
         }

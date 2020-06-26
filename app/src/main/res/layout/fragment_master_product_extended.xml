@@ -212,7 +212,7 @@
                         <TextView
                             android:id="@+id/text_master_product_edit_location"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 
@@ -237,7 +237,7 @@
                         <TextView
                             android:id="@+id/text_master_product_edit_store"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 
@@ -618,7 +618,7 @@
                         <TextView
                             android:id="@+id/text_consume_location"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 
@@ -643,7 +643,7 @@
                         <TextView
                             android:id="@+id/text_master_product_edit_quantity_unit_purchase"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 
@@ -664,7 +664,7 @@
                         <TextView
                             android:id="@+id/text_master_product_edit_quantity_unit_stock"
                             style="@style/Theme.Grocy.ListItem.Title"
-                            android:text="@string/subtitle_none"/>
+                            android:text="@string/subtitle_none_selected"/>
 
                     </LinearLayout>
 

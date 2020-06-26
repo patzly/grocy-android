@@ -114,6 +114,7 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">This product still has stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
@@ -174,12 +175,6 @@
     <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_undefined">An error occurred</string>
 
-    <string name="type_product">product</string>
-    <string name="type_location">location</string>
-    <string name="type_store">store</string>
-    <string name="type_quantity_unit">quantity unit</string>
-    <string name="type_product_group">product group</string>
-
     <string name="title_stock_overview">Stock overview</string>
     <string name="title_purchase">Purchase</string>
     <string name="title_consume">Consume</string>
@@ -206,7 +201,7 @@
     <string name="title_batch_config">Batch mode configuration</string>
     <string name="title_manage_master_data">Manage master data</string>
 
-    <string name="title_stock_entry_no_specific">No specific</string>
+    <string name="title_stock_entry_no_specific">No specific entry</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_list_entry">List entry</string>
     <string name="title_edit_list_entry">Edit list entry</string>
@@ -223,13 +218,18 @@
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
-    <string name="subtitle_none">None</string>
+    <string name="subtitle_none_selected">None selected</string>
+    <string name="subtitle_no_name">No name</string>
+    <string name="subtitle_no_notes">No notes</string>
+
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
     <string name="subtitle_never_expires">Never expires</string>
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
+    <!-- %1$s is a purchase date -->
     <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>

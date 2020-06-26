@@ -744,7 +744,7 @@ public class MasterProductSimpleFragment extends Fragment {
                     // Insert NONE as first element
                     productGroups.add(
                             0,
-                            new ProductGroup(-1, activity.getString(R.string.subtitle_none))
+                            new ProductGroup(-1, activity.getString(R.string.subtitle_none_selected))
                     );
                 },
                 this::onDownloadError,
@@ -838,7 +838,7 @@ public class MasterProductSimpleFragment extends Fragment {
 
     public void editDescription(String descriptionHtml, String description) {
         if(description == null || descriptionHtml == null || description.trim().isEmpty()) {
-            textViewDescription.setText(activity.getString(R.string.subtitle_none));
+            textViewDescription.setText(activity.getString(R.string.subtitle_none_selected));
             productDescriptionHtml = "";
         } else {
             description = description.trim();
@@ -855,7 +855,7 @@ public class MasterProductSimpleFragment extends Fragment {
         selectedLocationId = selectedId;
         String locationText = null;
         if(locations.isEmpty()) {
-            locationText = activity.getString(R.string.subtitle_none);
+            locationText = activity.getString(R.string.subtitle_none_selected);
         } else {
             Location location = getLocation(selectedId);
             if(location != null) {
@@ -879,13 +879,13 @@ public class MasterProductSimpleFragment extends Fragment {
         selectedProductGroupId = selectedId;
         String productGroupText;
         if(productGroups.isEmpty()) {
-            productGroupText = activity.getString(R.string.subtitle_none);
+            productGroupText = activity.getString(R.string.subtitle_none_selected);
         } else {
             ProductGroup productGroup = getProductGroup(selectedId);
             if(productGroup != null) {
                 productGroupText = productGroup.getName();
             } else {
-                productGroupText = activity.getString(R.string.subtitle_none);
+                productGroupText = activity.getString(R.string.subtitle_none_selected);
             }
         }
         textViewProductGroup.setText(productGroupText);
@@ -915,7 +915,7 @@ public class MasterProductSimpleFragment extends Fragment {
         selectedQUPurchaseId = selectedId;
         String quantityUnitText = null;
         if(quantityUnits.isEmpty()) {
-            quantityUnitText = activity.getString(R.string.subtitle_none);
+            quantityUnitText = activity.getString(R.string.subtitle_none_selected);
         } else {
             QuantityUnit quantityUnit = getQuantityUnit(selectedId);
             if(quantityUnit != null) {
@@ -933,7 +933,7 @@ public class MasterProductSimpleFragment extends Fragment {
         selectedQUStockId = selectedId;
         String quantityUnitText = null;
         if(quantityUnits.isEmpty()) {
-            quantityUnitText = activity.getString(R.string.subtitle_none);
+            quantityUnitText = activity.getString(R.string.subtitle_none_selected);
         } else {
             QuantityUnit quantityUnit = getQuantityUnit(selectedId);
             if(quantityUnit != null) {
@@ -1425,7 +1425,7 @@ public class MasterProductSimpleFragment extends Fragment {
         editTextBarcodes.setText(null);
 
 
-        textViewLocation.setText(R.string.subtitle_none);
+        textViewLocation.setText(R.string.subtitle_none_selected);
         selectedLocationId = -1;
 
         if(createProductObj != null && createProductObj.getDefaultLocationId() != null) {
@@ -1440,13 +1440,13 @@ public class MasterProductSimpleFragment extends Fragment {
             editTextDays.setText(String.valueOf(0));
         }
 
-        textViewProductGroup.setText(R.string.subtitle_none);
+        textViewProductGroup.setText(R.string.subtitle_none_selected);
         selectedProductGroupId = -1;
 
-        textViewQUPurchase.setText(R.string.subtitle_none);
+        textViewQUPurchase.setText(R.string.subtitle_none_selected);
         selectedQUPurchaseId = -1;
 
-        textViewQUStock.setText(R.string.subtitle_none);
+        textViewQUStock.setText(R.string.subtitle_none_selected);
         selectedQUStockId = -1;
 
         editTextQUFactor.setText(String.valueOf(1));
