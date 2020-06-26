@@ -201,9 +201,9 @@
     <string name="title_is_total_price">Ist Gesamtpreis</string>
     <string name="title_stock_entry_no_specific">Kein bestimmter Eintrag</string>
     <string name="title_shopping_list_ungrouped">Ungruppiert</string>
-    <string name="title_list_entry">Listeneintrag</string>
-    <string name="title_edit_list_entry">Listeneintrag bearbeiten</string>
-    <string name="title_create_list_entry">Listeneintrag erstellen</string>
+    <string name="title_list_entry">Eintrag</string>
+    <string name="title_edit_list_entry">Eintrag bearbeiten</string>
+    <string name="title_create_list_entry">Eintrag erstellen</string>
     <string name="title_shopping_list_edit">Einkaufszettel bearbeiten</string>
     <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
     <string name="title_shopping_mode">Einkaufsmodus</string>
@@ -432,7 +432,7 @@
 
         Achtung! Wenn Ihr Hass.io Server öffentlich zugänglich ist, müssen Sie folgende Punkte beachten:\n\n
 
-        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
+        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
         - Beginnen Sie die URL mit \"https://\" wie im Beispiel oben.\n
         - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
     </string>
