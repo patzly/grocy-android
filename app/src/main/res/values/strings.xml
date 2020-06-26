@@ -95,6 +95,7 @@
     <string name="msg_purchased_no_amount">Purchased %1$s</string>
     <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
+    <!-- %1$s is a product name -->
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
     <string name="msg_no_stock_locations">No stock locations for %1$s</string>
@@ -196,7 +197,6 @@
 
     <string name="title_stock_entry_no_specific">No specific</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
-    <string name="title_shopping_list_notes">Notes</string>
     <string name="title_list_entry">List entry</string>
     <string name="title_edit_list_entry">Edit list entry</string>
     <string name="title_create_list_entry">Create list entry</string>
@@ -236,7 +236,8 @@
     <string name="property_status">Status</string>
     <string name="property_amount">Amount</string>
     <string name="property_seconds">Seconds</string>
-    <string name="property_sec">%1$d seconds</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d seconds</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
     <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_price">Price</string>
