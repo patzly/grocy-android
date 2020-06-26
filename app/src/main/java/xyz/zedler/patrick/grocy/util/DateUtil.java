@@ -122,38 +122,23 @@ public class DateUtil {
                 return context.getString(R.string.date_tomorrow);
             } else {
                 if(days < 30) {
-                    return context.getString(
-                            R.string.date_from_now,
-                            context.getString(R.string.date_days, days)
-                    );
+                    return context.getString(R.string.date_days_from_now, days);
                 } else {
                     if(days < 60) {
-                        return context.getString(
-                                R.string.date_from_now,
-                                context.getString(R.string.date_month_one)
-                        );
+                        return context.getString(R.string.date_month_from_now);
                     } else {
                         if(days < 365) {
                             return context.getString(
-                                    R.string.date_from_now,
-                                    context.getString(
-                                            R.string.date_months,
-                                            days / 30
-                                    )
+                                    R.string.date_months_from_now,
+                                    days / 30
                             );
                         } else {
                             if(days < 700) { // how many days do you understand as two years?
-                                return context.getString(
-                                        R.string.date_from_now,
-                                        context.getString(R.string.date_year_one)
-                                );
+                                return context.getString(R.string.date_year_from_now);
                             } else {
                                 return context.getString(
-                                        R.string.date_from_now,
-                                        context.getString(
-                                                R.string.date_years,
-                                                days / 365
-                                        )
+                                        R.string.date_years_from_now,
+                                        days / 365
                                 );
                             }
                         }
@@ -165,38 +150,23 @@ public class DateUtil {
                 return context.getString(R.string.date_yesterday);
             } else {
                 if(days > -30) {
-                    return context.getString(
-                            R.string.date_ago,
-                            context.getString(R.string.date_days, -1 * days)
-                    );
+                    return context.getString(R.string.date_days_ago, -1 * days);
                 } else {
                     if(days > -60) {
-                        return context.getString(
-                                R.string.date_ago,
-                                context.getString(R.string.date_month_one)
-                        );
+                        return context.getString(R.string.date_month_ago);
                     } else {
                         if(days > -365) {
                             return context.getString(
-                                    R.string.date_ago,
-                                    context.getString(
-                                            R.string.date_months,
-                                            days / 30 * -1
-                                    )
+                                    R.string.date_months_ago,
+                                    days / 30 * -1
                             );
                         } else {
                             if(days > -700) {
-                                return context.getString(
-                                        R.string.date_ago,
-                                        context.getString(R.string.date_year_one)
-                                );
+                                return context.getString(R.string.date_year_ago);
                             } else {
                                 return context.getString(
-                                        R.string.date_ago,
-                                        context.getString(
-                                                R.string.date_years,
-                                                days / 365 * -1
-                                        )
+                                        R.string.date_years_ago,
+                                        days / 365 * -1
                                 );
                             }
                         }
