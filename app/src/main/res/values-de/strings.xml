@@ -10,9 +10,13 @@
     <string name="action_consume_all">Alles verbrauchen</string>
 
     <string name="action_consume_one_spoiled">Verbrauche 1 als verdorben</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">Verbrauche 1 %1$s %2$s</string>
     <string name="action_open">Als geöffnet markieren</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">Öffne 1 %1$s %2$s</string>
     <string name="action_edit_product">Produkt bearbeiten</string>
-    <string name="action_shopping_list_add">Zur Einkaufsliste hinzufügen</string>
+    <string name="action_shopping_list_add">Zum Einkaufszettel hinzufügen</string>
 
     <string name="action_back">Zurück</string>
     <string name="action_search">Suche</string>
@@ -31,7 +35,7 @@
     <string name="action_cancel">Abbrechen</string>
     <string name="action_add">Hinzufügen</string>
     <string name="action_clear">Leeren</string>
-    <string name="action_clear_shopping_list">Einkaufsliste leeren</string>
+    <string name="action_clear_shopping_list">Einkaufszettel leeren</string>
     <string name="action_rate">Auf Google Play bewerten</string>
     <string name="action_rate_description">Die Entwicklung unterstützen</string>
     <string name="action_new_issue">Neues Issue auf GitHub öffnen</string>
@@ -41,7 +45,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_sort">Sortierung</string>
     <string name="action_undo">Rückgängig</string>
-    <string name="action_retry">Erneut versuchen</string>
+    <string name="action_retry">Wiederholen</string>
     <string name="action_edit">Bearbeiten</string>
     <string name="action_delete">Löschen</string>
     <string name="action_save">Speichern</string>
@@ -58,7 +62,7 @@
     <string name="action_edit_notes">Notizen bearbeiten</string>
     <string name="action_shopping_mode">Einkaufsmodus</string>
     <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
-    <string name="action_delete_shopping_list">Einkaufsliste löschen</string>
+    <string name="action_delete_shopping_list">Einkaufszettel löschen</string>
     <string name="action_discard_products">Produkte verwerfen</string>
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
     <string name="action_create_key">Schlüssel erstellen</string>
@@ -72,6 +76,16 @@
     <string name="tooltip_switch_open">Zum Öffnen-Modus wechseln</string>
     <string name="tooltip_demo">Sie sind im Demo-Modus.</string>
 
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">%1$d laufen bald ab</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">%1$d abgelaufen</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">%1$d unter Mindestbestand</string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d unerledigt</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">%1$s ist nicht im Bestand</string>
     <string name="msg_no_connection">Keine Verbindung</string>
     <string name="msg_not_found">Produkt nicht gefunden</string>
     <string name="msg_undone_transaction">Transaktion rückgängig machen</string>
@@ -79,9 +93,15 @@
     <string name="msg_synced">Einträge erfolgreich synchronisiert</string>
     <string name="msg_barcode_duplicate">Barcode existiert bereits</string>
     <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
+    <string name="msg_item_marked_as_done">Eintrag wurde als erledigt markiert</string>
+    <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
+    <string name="msg_batch_tare_weight">Produkt unterstützt Stapelmodus nicht: Taragewichtbehandlung aktiviert</string>
+    <string name="msg_no_purchase_transactions">Keine anstehenden Einkaufstransaktionen</string>
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung irgorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
+    <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
     <string name="msg_logout_demo">Sie verwenden die Demo-Instanz auf <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt.</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
     <string name="msg_features">Intro erneut starten in \"Über\"</string>
+    <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
     <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
 
     <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
@@ -89,7 +109,7 @@
     <string name="error_empty">Erforderlich</string>
     <string name="error_empty_stock">Nichts im Bestand</string>
     <string name="error_empty_stock_sub">Kaufen Sie einige Produkte</string>
-    <string name="error_empty_shopping_list">Leere Einkaufsliste</string>
+    <string name="error_empty_shopping_list">Leerer Einkaufszettel</string>
     <string name="error_empty_shopping_list_sub">Fügen Sie Produkte hinzu, die Sie benötigen</string>
     <string name="error_empty_master_data_sub">Erstellen Sie welche mit dem Button unten</string>
     <string name="error_empty_locations">Keine Standorte</string>
@@ -109,9 +129,13 @@
     <string name="error_invalid_factor">Ungültiger Faktor</string>
     <string name="error_offline">Offline</string>
     <string name="error_name_exists">Name existiert bereits</string>
+    <string name="error_offline_subtitle">Überprüfen Sie die Verbindungen und versuchen Sie es erneut</string>
     <string name="error_unknown">Uups!</string>
+    <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
     <string name="error_timeout">Zeitüberschreitungsfehler</string>
     <string name="error_handshake">Fehlendes Zertifikat</string>
+    <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$i</string>
+    <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
     <string name="error_undefined">Ein Fehler ist aufgetreten</string>
 
     <string name="type_product">Produkt</string>
@@ -127,7 +151,7 @@
     <string name="title_product">Produkt</string>
     <string name="title_master_data">Stammdaten</string>
     <string name="title_stock_entries">Bestandseinträge</string>
-    <string name="title_shopping_list">Einkaufsliste</string>
+    <string name="title_shopping_list">Einkaufszettel</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Einstellungen</string>
     <string name="title_about">Über</string>
@@ -137,6 +161,24 @@
     <string name="title_link_barcode">Barcode mit Produkt verknüpfen</string>
     <string name="title_batch_scan_exit">Produktformulare ausfüllen?</string>
     <string name="title_batch_missing_exit">Zurück zum Scanner?</string>
+    <string name="title_compatibility">Kompatibilitätsprobleme</string>
+    <string name="title_logout">Von Grocy abmelden?</string>
+    <string name="title_restart">Grocy neustarten?</string>
+    <string name="title_logout_demo">Vom Demo-Modus abmelden?</string>
+    <string name="title_batch_config">Stapelmodus Konfiguration</string>
+    <string name="title_manage_master_data">Stammdaten verwalten</string>
+
+    <string name="title_shopping_list_ungrouped">Ungruppiert</string>
+    <string name="title_shopping_list_edit">Einkaufszettel bearbeiten</string>
+    <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
+    <string name="title_shopping_mode">Einkaufsmodus</string>
+    <string name="title_products_to_create">Zu erstellende Produkte</string>
+
+    <string name="subtitle_default">Standard</string>
+    <string name="subtitle_done">Erledigt</string>
+    <string name="subtitle_undone">Unerledigt</string>
+    <string name="subtitle_never_expires">Läuft nie ab</string>
+    <string name="subtitle_selected">Ausgewählt</string>
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (Singular)</string>
     <string name="property_name_plural">Name (Plural)</string>
@@ -146,7 +188,10 @@
     <string name="property_parent_product">Übergeordnetes Produkt</string>
     <string name="property_description">Beschreibung</string>
     <string name="property_note">Notiz</string>
+    <string name="property_status">Status</string>
     <string name="property_amount">Menge</string>
+    <string name="property_seconds">Sekunden</string>
+    <string name="property_amount_min_stock">Mindestbestand</string>
     <string name="property_price">Preis</string>
     <string name="property_quantity_unit">Mengeneinheit</string>
     <string name="property_quantity_units">Mengeneinheiten</string>
@@ -157,11 +202,25 @@
     <string name="property_barcodes">Barcodes</string>
     <string name="property_bbd">Mindesthaltbarkeitsdatum</string>
     <string name="property_bbd_next">Nächstes Mindesthaltbarkeitsdatum</string>
+    <string name="property_bb_days">Haltbarkeit in Tagen</string>
+    <string name="property_bb_days_default">Standard Haltbarkeit in Tagen</string>
     <string name="property_location">Standort</string>
+    <string name="property_location_default">Standard Standort</string>
+    <string name="property_locations">Standorte</string>
     <string name="property_store">Geschäft</string>
+    <string name="property_store_unknown">Unbekanntes Geschäft</string>
+    <string name="property_store_default">Standard Geschäft</string>
     <string name="property_stores">Geschäfte</string>
-    <string name="property_shopping_list">Einkaufsliste</string>
-    <string name="property_shopping_lists">Einkaufslisten</string>
+    <string name="property_shopping_list">Einkaufszettel</string>
+    <string name="property_shopping_lists">Einkaufszettel</string>
+    <string name="property_last_purchased">Zuletzt gekauft</string>
+    <string name="property_last_used">Zuletzt benutzt</string>
+    <string name="property_last_price">Letzter Preis</string>
+    <string name="property_average_shelf_life">Durchschnittliche Haltbarkeit</string>
+    <string name="property_spoil_rate">Verderblichkeitsrate</string>
+    <string name="property_price_history">Preisentwicklung</string>
+    <string name="property_product_group">Produktgruppe</string>
+    <string name="property_product_groups">Produktgruppen</string>
     <string name="property_opened">geöffnet</string>
     <string name="property_not_opened">nicht geöffnet</string>
     <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
@@ -174,6 +233,9 @@
     <string name="date_never">Nie</string>
     <string name="info_acknowledgement">Wir danken Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
     <string name="info_intro">Intro erneut abspielen</string>
+    <string name="info_intro_description">Features vorführen</string>
+    <string name="info_material_components_built_with">Erstellt mit</string>
+    <string name="info_material_components">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy Version</string>
     <string name="info_grocy_version_incompatible">Nicht unterstützt</string>
@@ -184,7 +246,13 @@
     <string name="info_github_description">Quellcode</string>
 
     <string name="feature_1_title">Grocy für Android</string>
+    <string name="feature_1_description">selbst gehostete Lebensmittelverwaltung für Ihr Zuhause</string>
     <string name="feature_2_title">Intuitives Design</string>
+    <string name="feature_2_description">Öffnen und konsumieren Sie mit einer Geste</string>
+    <string name="feature_3_title">Leistungsfähige Stapelverarbeitung</string>
+    <string name="feature_3_description">Scannen Sie Ihren gesamten Einkauf in Sekunden</string>
+
+    <string name="category_licenses">Open Source Lizenzen</string>
     <string name="category_general">Allgemein</string>
     <string name="category_purchase_consume">Einkauf &amp; Verbrauch</string>
     <string name="category_server">Server</string>
@@ -192,6 +260,7 @@
     <string name="category_presets">Vorgaben für neue Produkte</string>
 
     <string name="hint_server">Server URL</string>
+    <string name="hint_key">Gültiger API Schlüssel</string>
     <string name="hint_message">Email schreiben</string>
 
     <string name="setting_dark_mode">Dunkles Theme erzwingen</string>
@@ -202,7 +271,7 @@
     <string name="setting_reload_config_description">Neustart der App erforderlich</string>
     <string name="setting_logout">Abmelden</string>
     <string name="setting_logout_description">Zur Anmeldeseite zurückkehren</string>
-    <string name="setting_list_indicator_description">Blauen Punkt anzeigen, wenn Produkt auf einer Einkaufsliste steht</string>
+    <string name="setting_list_indicator_description">Blauen Punkt anzeigen, wenn Produkt auf einem Einkaufszettel steht</string>
     <string name="setting_shopping_mode_update_interval">Einkaufsmodus Update Intervall</string>
     <string name="setting_keep_screen_on">Bildschirm an lassen</string>
     <string name="setting_keep_screen_on_description">Wenn im Shoppingmodus</string>
@@ -210,9 +279,6 @@
     <string name="setting_expiring_soon_days">\"Bald ablaufend\"-Tage</string>
     <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
     <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
-    <string name="setting_default_location">Standard-Standort</string>
-    <string name="setting_default_product_group">Standard-Produktgruppe</string>
-    <string name="setting_default_quantity_unit">Standard-Mengeneinheit</string>
     <string name="setting_empty_value">Leer</string>
     <string name="setting_sync_off">Synchonisation aus</string>
     <string name="setting_not_loaded">Konnte nicht geladen werden</string>
