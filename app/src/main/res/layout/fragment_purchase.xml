@@ -296,7 +296,7 @@
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="Is total price" />
+                        android:text="@string/title_is_total_price" />
 
                     <com.google.android.material.checkbox.MaterialCheckBox
                         android:id="@+id/checkbox_purchase_total_price"

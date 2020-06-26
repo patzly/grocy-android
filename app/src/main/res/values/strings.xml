@@ -201,6 +201,9 @@
     <string name="title_batch_config">Batch mode configuration</string>
     <string name="title_manage_master_data">Manage master data</string>
 
+    <string name="title_spoiled">Spoiled</string>
+    <string name="title_use_specific">Use specific stock item</string>
+    <string name="title_is_total_price">Is total price</string>
     <string name="title_stock_entry_no_specific">No specific entry</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_list_entry">List entry</string>
