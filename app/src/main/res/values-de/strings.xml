@@ -288,13 +288,9 @@
     <string name="property_not_opened">nicht geöffnet</string>
     <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
 
-    <!-- %1$s is a time span e.g. one month, two days -->
-    <string name="date_ago">vor %1$s</string>
     <string name="date_yesterday">Gestern</string>
     <string name="date_today">Heute</string>
     <string name="date_tomorrow">Morgen</string>
-    <!-- %1$s is a time span e.g. one month, two days -->
-    <string name="date_from_now">in %1$s</string>
     <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unbekannt</string>
     <string name="date_unlimited">Unbegrenzt</string>
@@ -311,6 +307,36 @@
     <string name="date_months">%1$d Monate</string>
     <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
     <string name="date_years">%1$d Jahre</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_from_now">In %1$d Tagen</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_from_now">In einem Monat</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_from_now">In %1$d Monaten</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_from_now">In einem Jahr</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_from_now">In %1$d Jahren</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_ago">Vor %1$d Tagen</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_ago">Vor einem Monat</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_ago">Vor %1$d Monaten</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_ago">Vor einem Jahr</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_ago">Vor %1$d Jahren</string>
 
     <string name="info_acknowledgement">Wir danken Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
     <string name="info_intro">Intro erneut abspielen</string>
