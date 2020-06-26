@@ -82,20 +82,40 @@
     <string name="msg_expired_products">%1$d abgelaufen</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d unter Mindestbestand</string>
+    <string name="msg_consumed">%1$s %2$s %3$s aus dem Bestand entfernt</string>
+    <string name="msg_consumed_spoiled">%1$s %2$s %3$s als verdorben aus dem Bestand entfernt</string>
+    <string name="msg_opened">%1$s %2$s %3$s als geöffnet markiert</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d unerledigt</string>
     <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">Einkauf von %1$s wurde gespeichert</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
+    <!-- %1$s is a product name -->
     <string name="msg_not_in_stock">%1$s ist nicht im Bestand</string>
     <string name="msg_no_connection">Keine Verbindung</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">Keine Standorte wo %1$s verfügbar ist</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">Keine Bestandseinträge für %1$s</string>
     <string name="msg_not_found">Produkt nicht gefunden</string>
     <string name="msg_undone_transaction">Transaktion rückgängig machen</string>
     <string name="msg_failed_to_sync">Synchronisation von Einträgen fehlgeschlagen</string>
     <string name="msg_synced">Einträge erfolgreich synchronisiert</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">Fehlende Produkte zu %1$s hinzugefügt</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">%1$s erfolgreich geleert</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">%1$s erfolgreich gelöscht</string>
     <string name="msg_barcode_duplicate">Barcode existiert bereits</string>
     <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
     <string name="msg_item_marked_as_done">Eintrag wurde als erledigt markiert</string>
     <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <string name="msg_batch_tare_weight">Produkt unterstützt Stapelmodus nicht: Taragewichtbehandlung aktiviert</string>
+    <string name="msg_purchase_transactions_done">Einkaufstransaktionen für erstellte Produkte erledigt</string>
     <string name="msg_no_purchase_transactions">Keine anstehenden Einkaufstransaktionen</string>
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung irgorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
     <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
@@ -126,13 +146,20 @@
     <string name="error_invalid_product">Ungültiges Produkt</string>
     <string name="error_invalid_url">Ungültige URL</string>
     <string name="error_invalid_amount">Ungültige Menge</string>
+    <string name="error_invalid_best_before_days">-1 für \"läuft nie ab\" benutzen</string>
     <string name="error_invalid_factor">Ungültiger Faktor</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">Zwischen %1$s und %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">Größer oder gleich %1$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_name_exists">Name existiert bereits</string>
     <string name="error_offline_subtitle">Überprüfen Sie die Verbindungen und versuchen Sie es erneut</string>
     <string name="error_unknown">Uups!</string>
     <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
     <string name="error_timeout">Zeitüberschreitungsfehler</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">Verbindung mit %1$s fehlgeschlagen</string>
     <string name="error_handshake">Fehlendes Zertifikat</string>
     <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$i</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
@@ -161,6 +188,8 @@
     <string name="title_link_barcode">Barcode mit Produkt verknüpfen</string>
     <string name="title_batch_scan_exit">Produktformulare ausfüllen?</string>
     <string name="title_batch_missing_exit">Zurück zum Scanner?</string>
+    <string name="title_link_barcode_to_existing">Barcode mit vorhandenem Produkt verknüpfen?</string>
+    <string name="title_link_barcode_or_create">Barcode mit vorhandenem Produkt verknüpfen oder ein neues Produkt mit ihm erstellen?</string>
     <string name="title_compatibility">Kompatibilitätsprobleme</string>
     <string name="title_logout">Von Grocy abmelden?</string>
     <string name="title_restart">Grocy neustarten?</string>
@@ -174,11 +203,25 @@
     <string name="title_shopping_mode">Einkaufsmodus</string>
     <string name="title_products_to_create">Zu erstellende Produkte</string>
 
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s %2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(%1$s geöffnet)</string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">Wo %1$s Bestand hat</string>
     <string name="subtitle_default">Standard</string>
     <string name="subtitle_done">Erledigt</string>
     <string name="subtitle_undone">Unerledigt</string>
     <string name="subtitle_never_expires">Läuft nie ab</string>
     <string name="subtitle_selected">Ausgewählt</string>
+    <string name="subtitle_stock_entry_no_specific">Zuerst ablaufende zuerst, dann First In - First Out</string>
+    <string name="description_batch_choose_link">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll.</string>
+    <string name="description_batch_choose_create">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll oder erstellen Sie ein neues Produkt.</string>
+    <string name="description_scan_batch_exit">Es wurden neue Produkte erstellt, aber sie wurden noch nicht an den Server gesendet, weil erforderliche Details fehlen. Die Produkt-Formulare öffnen?</string>
+    <string name="description_missing_batch_exit">Einige Einkaufstransaktionen wurden noch nicht ausgeführt. Möchten Sie diese verwerfen oder zum Scanner zurückkehren?</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">Neues Produkt mit dem Namen \"%1$s\" erstellen?</string>
+
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (Singular)</string>
     <string name="property_name_plural">Name (Plural)</string>
@@ -191,8 +234,14 @@
     <string name="property_status">Status</string>
     <string name="property_amount">Menge</string>
     <string name="property_seconds">Sekunden</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d Sekunden</string>
     <string name="property_amount_min_stock">Mindestbestand</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">Menge in %1$s</string>
     <string name="property_price">Preis</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">Preis in %1$s</string>
     <string name="property_quantity_unit">Mengeneinheit</string>
     <string name="property_quantity_units">Mengeneinheiten</string>
     <string name="property_qu_purchase">Mengeneinheit Einkauf</string>
@@ -204,8 +253,10 @@
     <string name="property_bbd_next">Nächstes Mindesthaltbarkeitsdatum</string>
     <string name="property_bb_days">Haltbarkeit in Tagen</string>
     <string name="property_bb_days_default">Standard Haltbarkeit in Tagen</string>
+    <string name="property_bb_days_default_opened">Standard Haltbarkeit in Tagen nach dem Öffnen</string>
     <string name="property_location">Standort</string>
     <string name="property_location_default">Standard Standort</string>
+    <string name="property_notes">Notizen</string>
     <string name="property_locations">Standorte</string>
     <string name="property_store">Geschäft</string>
     <string name="property_store_unknown">Unbekanntes Geschäft</string>
@@ -225,12 +276,25 @@
     <string name="property_not_opened">nicht geöffnet</string>
     <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
 
+    <!-- %1$s is a time span e.g. one month, two days -->
+    <string name="date_ago">vor %1$s</string>
     <string name="date_yesterday">Gestern</string>
     <string name="date_today">Heute</string>
     <string name="date_tomorrow">Morgen</string>
+    <!-- %1$s is a time span e.g. one month, two days -->
+    <string name="date_from_now">in %1$s</string>
+    <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unbekannt</string>
     <string name="date_unlimited">Unbegrenzt</string>
     <string name="date_never">Nie</string>
+    <!-- This string should contain the singular form of "day" -->
+    <string name="date_day_one">1 Tag</string>
+    <!-- This string should contain the singular form of "month" -->
+    <string name="date_month_one">1 Monat</string>
+    <!-- This string should contain the singular form of "year" -->
+    <string name="date_year_one">1 Jahr</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <string name="date_days">%1$d Tagen</string>
     <string name="info_acknowledgement">Wir danken Bernd Bestel, ohne dessen Arbeit diese App nie möglich gewesen wäre.</string>
     <string name="info_intro">Intro erneut abspielen</string>
     <string name="info_intro_description">Features vorführen</string>
@@ -271,6 +335,7 @@
     <string name="setting_reload_config_description">Neustart der App erforderlich</string>
     <string name="setting_logout">Abmelden</string>
     <string name="setting_logout_description">Zur Anmeldeseite zurückkehren</string>
+    <string name="setting_list_indicator">Auf Einkaufszetteleintrag hinweisen</string>
     <string name="setting_list_indicator_description">Blauen Punkt anzeigen, wenn Produkt auf einem Einkaufszettel steht</string>
     <string name="setting_shopping_mode_update_interval">Einkaufsmodus Update Intervall</string>
     <string name="setting_keep_screen_on">Bildschirm an lassen</string>
@@ -294,9 +359,22 @@
     <string name="setting_ask_specific_item">Nach Bestandseintrag fragen</string>
 
     <string name="url_grocy_demo">https://de.demo.grocy.info</string>
+    <!-- Strings for HelpActivity -->
+
     <string name="help_general_header">Wie weiß ich, was ein Button in der App macht?</string>
     <string name="help_general_body">Ab Android 8 können Sie fast jedes klickbare Element ohne einen Schriftzug lange drücken, damit Sie sehen, welche Aktion ausgeführt wird.</string>
+    <string name="help_key_invalid_header">Mein API Schlüssel ist ungültig.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_key_invalid_body">
+        Drücken Sie SCHLÜSSEL ERSTELLEN, um die Seite der Schlüsselverwaltung auf Ihrer Grocy Instanz aufzurufen.\n
+        Erstellen Sie einen neuen Schlüssel und kopieren Sie ihn in die Zwischenablage, dann fügen sie ihn in dem API Schlüssel Feld in Grocy Android ein und versuchen es erneut.\n\n
+
+        Wenn Sie Hass.io mit dem Grocy Add-on benutzen, lesen Sie die nächtste Frage.
+    </string>
     <string name="help_homeassistant_header">Wie kann ich diese App mit Hass.io benutzen?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
     <string name="help_homeassistant_body" >
         Öffnen Sie im Supervisor von Hass.io den Tab \"Konfiguration\" im Grocy Add-on.\n
         Ändern Sie den Host Port (welcher offengelegt wird) von \"null\" zu einer Zahl, z.B. \"40\" (ohne Anführungszeichen) im Netzwerk Abschnitt.\n
@@ -312,4 +390,14 @@
         - Beginnen Sie die URL mit \"https://\" wie im Beispiel oben.\n
         - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
     </string>
-    </resources>
+    <string name="help_consume_header">Wie verbrauche ich ein Produkt?</string>
+    <string name="help_open_header">Wie markiere ich ein Produkt als geöffnet?</string>
+    <string name="help_other_question_header">Ich habe eine andere Frage.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_other_question_body">
+        Bitte gehen Sie auf unsere Projektseite auf GitHub und öffnen ein neues Issue mit Ihrer Frage.\n
+        Wir werden Ihnen so schnell wie möglich helfen.
+    </string>
+
+</resources>
