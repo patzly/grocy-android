@@ -312,25 +312,35 @@
     <string name="date_months">%1$d months</string>
     <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
     <string name="date_years">%1$d years</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_days_from_now">%1$d days from now</string>
-    <!-- This string should contain the singular form of "month" -->
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_month_from_now">One month from now</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_months_from_now">%1$d months from now</string>
-    <!-- This string should contain the singular form of "year" -->
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_year_from_now">One year from now</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_years_from_now">%1$d years from now</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_days_ago">%1$d days ago</string>
-    <!-- This string should contain the singular form of "month" -->
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_month_ago">One month ago</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_months_ago">%1$d months ago</string>
-    <!-- This string should contain the singular form of "year" -->
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_year_ago">One year ago</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_years_ago">%1$d years ago</string>
 
     <string name="info_acknowledgement">We\'d like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
