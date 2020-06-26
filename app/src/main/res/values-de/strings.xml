@@ -432,7 +432,7 @@
 
         Achtung! Wenn Ihr Hass.io Server öffentlich zugänglich ist, müssen Sie folgende Punkte beachten:\n\n
 
-        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
+        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
         - Beginnen Sie die URL mit \"https://\" wie im Beispiel oben.\n
         - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
     </string>
