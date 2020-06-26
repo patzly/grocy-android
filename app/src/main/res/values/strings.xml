@@ -15,8 +15,10 @@
     <string name="action_consume_all">Consume all</string>
 
     <string name="action_consume_one_spoiled">Consume 1 as spoiled</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
     <string name="action_consume_one">Consume 1 %1$s of %2$s</string>
     <string name="action_open">Mark as opened</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
     <string name="action_open_one">Open 1 %1$s of %2$s</string>
     <string name="action_edit_product">Edit product</string>
     <string name="action_shopping_list_add">Add to shopping list</string>
@@ -79,12 +81,16 @@
     <string name="tooltip_switch_open">Switch to open mode</string>
     <string name="tooltip_demo">Your\'re in demo mode</string>
 
+    <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiring soon</string>
+    <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d expired</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d below min. stock amount</string>
     <string name="msg_consumed">Consumed %1$s %2$s of %3$s</string>
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
+    <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d undone</string>
     <string name="msg_purchased_no_amount">Purchased %1$s</string>
     <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
@@ -336,9 +342,6 @@
     <string name="setting_expiring_soon_days">Expiring soon days</string>
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
     <string name="setting_default_amount_consume">Default amount for consume</string>
-    <string name="setting_default_location">Default location</string>
-    <string name="setting_default_product_group">Default product group</string>
-    <string name="setting_default_quantity_unit">Default quantity unit</string>
     <string name="setting_empty_value">Empty</string>
     <string name="setting_sync_off">Sync off</string>
     <string name="setting_not_loaded">Could not be loaded</string>

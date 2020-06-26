@@ -399,7 +399,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="@string/setting_default_location" />
+                        android:text="@string/property_location" />
 
                     <TextView
                         android:id="@+id/text_setting_default_location"
@@ -423,7 +423,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="@string/setting_default_product_group" />
+                        android:text="@string/property_product_group" />
 
                     <TextView
                         android:id="@+id/text_setting_default_product_group"
@@ -447,7 +447,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.OverLine"
-                        android:text="@string/setting_default_quantity_unit" />
+                        android:text="@string/property_quantity_unit" />
 
                     <TextView
                         android:id="@+id/text_setting_default_quantity_unit"
