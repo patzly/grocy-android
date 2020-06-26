@@ -311,7 +311,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, HelpActivity.class);
             intent.putExtra(
                     Constants.ARGUMENT.SELECTED_ID,
-                    "usage_with_hassio"
+                    R.string.help_homeassistant_header
             );
             new Handler().postDelayed(() -> startActivity(intent), 200);
         }

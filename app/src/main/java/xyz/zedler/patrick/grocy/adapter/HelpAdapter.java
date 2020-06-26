@@ -42,9 +42,9 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
     public static class HelpSection {
         private String header;
         private String body;
-        private String id;
+        private int id;
 
-        public HelpSection(String header, String body, String id) {
+        public HelpSection(String header, String body, int id) {
             this.header = header;
             this.body = body;
             this.id = id;
@@ -58,7 +58,7 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
             return body;
         }
 
-        public String getId() {
+        public int getId() {
             return id;
         }
     }

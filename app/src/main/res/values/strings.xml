@@ -158,6 +158,7 @@
     <string name="error_timeout">Timeout error</string>
     <string name="error_failed_to_connect_to">Failed to connect to %1$s</string>
     <string name="error_handshake">Certificate missing</string>
+    <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate has to be signed by a trusted certificate authority (CA)\nTo meet these requirements, you can use a free certificate from letsencrypt.org for proper encryption.</string>
     <string name="error_unexpected_response_code">Unexpected response code: %1$i</string>
     <string name="error_unexpected_response">Unexpected server response</string>
@@ -377,5 +378,58 @@
     <string name="url_volley" translatable="false">https://github.com/google/volley</string>
     <string name="url_gson" translatable="false">https://github.com/google/gson</string>
     <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+
+    <string name="help_general_header">How do I know what something does?</string>
+    <string name="help_general_body">Starting with Android 8 you can long press almost every clickable element without a label to see what it will do.</string>
+    <string name="help_key_invalid_header">My API key is invalid.</string>
+    <string name="help_key_invalid_body">
+        Tap CREATE KEY to open the key management page of your Grocy instance.\n
+        Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.\n\n
+
+        If you use Hass.io with the Grocy Add-on, read the next section.
+    </string>
+    <string name="help_homeassistant_header">How can I use this app with Hass.io?</string>
+    <string name="help_homeassistant_body" >
+        In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.\n
+        Change the host port (which will be exposed) from \"null\" to any other number like \"40\" (without the quotes) in the Network section.\n
+        Now in this app here in the field \"Server URL\", enter the domain or IP address of your Hass.io server together with \":\" and the chosen port number.\n
+        So the Server URL can look like this:\n\n
+
+        - http://192.168.178.123:40\n
+        - https://myhassioserver.com:40\n\n
+
+        Attention! If your Hass.io server is publicly accessible, following points are important for you:\n\n
+
+        - Make sure that you have set up a working HTTPS certificate in the Configuration section of the Grocy Add-on.\n
+        - Start the URL with \"https://\" like above.\n
+        - Set a strong password for all users in Grocy (default is \"admin\"), because anyone has now access to your Grocy instance and it is not protected by Hass.io login anymore.
+    </string>
+    <string name="help_consume_header">How to consume a product?</string>
+    <string name="help_consume_body">
+        Every time you consume something, you consume it in Grocy as well.\n
+        Ways to consume a product:\n\n
+
+        - Stock overview: search for the product, swipe right on it and tap the CONSUME icon.\n
+        - Stock overview: search for the product, tap on it to open the product overview, then tap the CONSUME icon.\n
+        - Tap the green button in stock overview to go into scan mode, make sure you are in CONSUME mode, then scan your product.\n
+        - Tap on the CONSUME shortcut of Grocy in your app launcher (since Android 7.1) and scan your product.\n
+        - Open the CONSUME page in the bottom drawer and fill out the form, then tap the green button.
+    </string>
+    <string name="help_open_header">How to mark a product as opened?</string>
+    <string name="help_open_body">
+        Every time you open or broach something, you mark one of it in Grocy as open.\n
+        Ways to mark a product as opened:\n\n
+
+        - Stock overview: search for the product, swipe right on it and tap the OPEN icon.\n
+        - Stock overview: search for the product, tap on it to open the product overview, then tap the OPEN icon.\n
+        - Tap the green button in stock overview to go into scan mode, tap the CONSUME label to switch to MARK AS OPENED, then scan your product.\n
+        - Tap on the CONSUME shortcut of Grocy in your app launcher (since Android 7.1) and continue as described previously.\n
+        - Open the CONSUME page in the bottom drawer and fill out the form, then tap the OPEN icon in the bottom bar.
+    </string>
+    <string name="help_other_question_header">I have another question.</string>
+    <string name="help_other_question_body">
+        Please go to our project page on GitHub and open a new issue with your question.\n
+        We will try to help you as fast as possible.
+    </string>
 
 </resources>

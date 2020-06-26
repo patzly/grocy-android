@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,9 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -106,34 +102,11 @@ public class HelpActivity extends AppCompatActivity {
 		binding.recyclerHelp.setItemAnimator(new DefaultItemAnimator());
 		binding.recyclerHelp.setHasFixedSize(true);
 
-		String[] sections = getHelpSections();
+		ArrayList<HelpAdapter.HelpSection> helpSections = getHelpSections();
 
-		ArrayList<HelpAdapter.HelpSection> helpSections = new ArrayList<>();
-		for(String section : sections) {
-			String[] sectionParts = null;
-			String sectionId = null;
-			String header = null;
-			String body = null;
-			if(section.startsWith("id=")) {
-				sectionParts = section.split("\n", 3);
-				sectionId = sectionParts[0].substring(3);
-				header = sectionParts[1].substring(1).trim();
-				body = sectionParts[2];
-			} else if(section.startsWith("#")) {
-				sectionParts = section.split("\n", 2);
-				header = sectionParts[0].substring(1).trim();
-				body = sectionParts[1];
-			}
-			if(sectionParts == null) continue;
-
-
-			helpSections.add(new HelpAdapter.HelpSection(header, body, sectionId));
-		}
-
-		HashMap<String, String> sectionPositions = new HashMap<>();
+		HashMap<Integer, String> sectionPositions = new HashMap<>();
 		for(int pos=0; pos<helpSections.size(); pos++) {
 			HelpAdapter.HelpSection helpSection = helpSections.get(pos);
-			if(helpSection.getId() == null) continue;
 			sectionPositions.put(helpSection.getId(), String.valueOf(pos));
 		}
 
@@ -144,9 +117,9 @@ public class HelpActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		String sectionId = null;
 		if(intent != null) sectionId = intent.getStringExtra(Constants.ARGUMENT.SELECTED_ID);
-		if(sectionId != null && sectionPositions.containsKey(sectionId)) {
+		if(sectionId != null && sectionPositions.containsKey(Integer.parseInt(sectionId))) {
 			String position;
-			position = sectionPositions.get(sectionId);
+			position = sectionPositions.get(Integer.parseInt(sectionId));
 			if(position != null) {
 				adapter.expandItem(Integer.parseInt(position));
 				binding.recyclerHelp.scrollToPosition(Integer.parseInt(position));
@@ -154,20 +127,41 @@ public class HelpActivity extends AppCompatActivity {
 		}
 	}
 
-	private String[] getHelpSections() {
-		StringBuilder text = new StringBuilder();
-		try {
-			InputStream inputStream = getAssets().open("HELP.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			for(String line; (line = bufferedReader.readLine()) != null;) {
-				text.append(line).append('\n');
+	private ArrayList<HelpAdapter.HelpSection> getHelpSections() {
+		ArrayList<HelpAdapter.HelpSection> helpSections = new ArrayList<>();
+		for(int i=0; i<=5; i++) {
+			int headerRes = 0;
+			int bodyRes = 0;
+			switch(i) {
+				case 0:
+					headerRes = R.string.help_general_header;
+					bodyRes = R.string.help_general_body;
+					break;
+				case 1:
+					headerRes = R.string.help_key_invalid_header;
+					bodyRes = R.string.help_key_invalid_body;
+					break;
+				case 2:
+					headerRes = R.string.help_homeassistant_header;
+					bodyRes = R.string.help_homeassistant_body;
+					break;
+				case 3:
+					headerRes = R.string.help_consume_header;
+					bodyRes = R.string.help_consume_body;
+					break;
+				case 4:
+					headerRes = R.string.help_open_header;
+					bodyRes = R.string.help_open_body;
+					break;
+				case 5:
+					headerRes = R.string.help_other_question_header;
+					bodyRes = R.string.help_other_question_body;
+					break;
 			}
-			text.deleteCharAt(text.length() - 1);
-			inputStream.close();
-		} catch (Exception e) {
-			if(DEBUG) Log.e(TAG, "getHelpSections: " + e);
+			String header = getString(headerRes);
+			String body = getString(bodyRes);
+			helpSections.add(new HelpAdapter.HelpSection(header, body, headerRes));
 		}
-		return text.toString().split("\n[-][-][-]+\n");
+		return helpSections;
 	}
 }
