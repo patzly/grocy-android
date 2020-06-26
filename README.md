@@ -61,6 +61,10 @@ To meet these requirements, you can use a free certificate from [letsencrypt.org
 
 If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
 
+Like the grocy project, Grocy Android can be translated, too. The first language is English, but we also maintain the German translation because it is our mother tongue.
+You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
+Translations which reached a completion level of 80 % will be included in releases.
+
 ## Acknowledgement
 
 We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
