@@ -92,24 +92,31 @@
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d undone</string>
-    <string name="msg_purchased_no_amount">Purchased %1$s</string>
+    <!-- %1$s is a product name -->
     <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
     <!-- %1$s is a product name -->
     <string name="msg_not_in_stock">%1$s is not in stock</string>
     <string name="msg_no_connection">No connection</string>
+    <!-- %1$s is a product name -->
     <string name="msg_no_stock_locations">No stock locations for %1$s</string>
+    <!-- %1$s is a product name -->
     <string name="msg_no_stock_entries">No stock entries for %1$s</string>
     <string name="msg_not_found">Product not found</string>
     <string name="msg_undone_transaction">Undone transaction</string>
     <string name="msg_failed_to_sync">Failed to sync entries</string>
     <string name="msg_synced">Entries synced successfully</string>
+    <!-- %1$s is a shopping list name -->
     <string name="msg_added_missing_products">Added missing products to %1$s</string>
+    <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_cleared">%1$s cleared successfully</string>
+    <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
     <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">This product still has stock</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">This %1$s is still in use</string>
     <string name="msg_item_marked_as_done">Marked item as done</string>
     <string name="msg_batch_no_products">No new products have to be created</string>
@@ -119,7 +126,7 @@
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
-    <string name="msg_restart">A restart is required to apply the current Grocy configuration properly.</string>
+    <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
@@ -148,7 +155,9 @@
     <string name="error_invalid_amount">Invalid amount</string>
     <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
     <string name="error_invalid_factor">Invalid factor</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
     <string name="error_bounds_min_max">Between %1$s and %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
     <string name="error_bounds_min">Equal to or higher than %1$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_name_exists">Name already exists</string>
@@ -156,6 +165,7 @@
     <string name="error_unknown">Uups!</string>
     <string name="error_not_grocy_instance">Not a valid grocy instance</string>
     <string name="error_timeout">Timeout error</string>
+    <!-- %1$s is a server URL -->
     <string name="error_failed_to_connect_to">Failed to connect to %1$s</string>
     <string name="error_handshake">Certificate missing</string>
     <!-- %1$s is an URL -->
@@ -206,8 +216,11 @@
     <string name="title_shopping_mode">Shopping mode</string>
     <string name="title_products_to_create">Products to create</string>
 
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
     <string name="subtitle_amount_opened">(%1$s opened)</string>
+    <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
     <string name="subtitle_none">None</string>
@@ -223,6 +236,7 @@
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
     <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>
     <string name="description_missing_batch_exit">Some purchase transactions have not yet been sent to the server. Discard them or go back to the scanner?</string>
+    <!-- %1$s is a product name -->
     <string name="description_input_name">Create new product with the name \"%1$s\"?</string>
 
     <string name="property_name">Name</string>
