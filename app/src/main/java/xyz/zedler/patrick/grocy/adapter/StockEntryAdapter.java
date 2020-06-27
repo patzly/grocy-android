@@ -106,6 +106,8 @@ public class StockEntryAdapter
             );
             if(selectedId == null || selectedId.isEmpty()) {
                 holder.imageViewSelected.setVisibility(View.VISIBLE);
+            } else {
+                holder.imageViewSelected.setVisibility(View.INVISIBLE);
             }
         } else {
             DateUtil dateUtil = new DateUtil(context);
@@ -144,6 +146,8 @@ public class StockEntryAdapter
             // SELECTED
             if(stockEntry.getStockId().equals(selectedId)) {
                 holder.imageViewSelected.setVisibility(View.VISIBLE);
+            } else {
+                holder.imageViewSelected.setVisibility(View.INVISIBLE);
             }
         }
 

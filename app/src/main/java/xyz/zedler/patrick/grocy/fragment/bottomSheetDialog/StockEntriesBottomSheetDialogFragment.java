@@ -78,6 +78,9 @@ public class StockEntriesBottomSheetDialogFragment
         stockEntries = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES);
         String selectedStockId = bundle.getString(Constants.ARGUMENT.SELECTED_ID);
 
+        // Add entry for automatic selection
+        stockEntries.add(0, new StockEntry(-1, null));
+
         MaterialButton button = view.findViewById(R.id.button_stock_entries_discard);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);

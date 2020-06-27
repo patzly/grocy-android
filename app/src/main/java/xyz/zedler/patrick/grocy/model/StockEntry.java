@@ -65,6 +65,11 @@ public class StockEntry implements Parcelable {
         stockId = null;
     }
 
+    public StockEntry(int id, String stockId) {
+        this.id = id;
+        this.stockId = stockId;
+    }
+
     private StockEntry(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();

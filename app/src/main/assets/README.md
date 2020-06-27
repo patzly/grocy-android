@@ -13,7 +13,6 @@
 
 ## Features
 
-- translation contribution: transifex like grocy
 - self-signed client certificates
 - extended product editing
 
