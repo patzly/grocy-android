@@ -457,6 +457,7 @@ public class ShoppingListFragment extends Fragment
         appBarBehavior.restoreInstanceState(savedInstanceState);
 
         binding.swipeShoppingList.setRefreshing(false);
+        showOffline = savedInstanceState.getBoolean("showOffline");
 
         // SEARCH
         search = savedInstanceState.getString("search", "");
@@ -1019,6 +1020,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     public void setUpBottomMenu() {
+        if(activity == null) return; // Fixes crash on theme change
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search != null) {
             search.setOnMenuItemClickListener(item -> {
@@ -1315,7 +1317,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     public void updateConnectivity(boolean online) {
-        showOffline = online;
+        if(!online == showOffline) return;
         refresh();
     }
 
