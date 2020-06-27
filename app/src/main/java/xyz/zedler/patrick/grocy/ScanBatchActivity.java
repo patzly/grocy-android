@@ -1231,6 +1231,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void setEntryId(String entryId) {
+        if(entryId == null) entryId = "";
         this.entryId = entryId;
     }
 
