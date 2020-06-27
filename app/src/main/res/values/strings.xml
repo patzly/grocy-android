@@ -222,9 +222,7 @@
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
     <string name="subtitle_none_selected">None selected</string>
-    <string name="subtitle_no_name">No name</string>
-    <string name="subtitle_no_notes">No notes</string>
-
+    <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
     <string name="subtitle_never_expires">Never expires</string>

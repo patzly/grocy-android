@@ -163,7 +163,7 @@
                             android:id="@+id/text_master_product_simple_description"
                             style="@style/Theme.Grocy.ListItem.Title"
                             android:singleLine="true"
-                            android:text="@string/subtitle_none_selected"/>
+                            android:text="@string/subtitle_empty"/>
 
                     </LinearLayout>
 

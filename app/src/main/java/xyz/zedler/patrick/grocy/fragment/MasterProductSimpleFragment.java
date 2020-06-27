@@ -838,7 +838,7 @@ public class MasterProductSimpleFragment extends Fragment {
 
     public void editDescription(String descriptionHtml, String description) {
         if(description == null || descriptionHtml == null || description.trim().isEmpty()) {
-            textViewDescription.setText(activity.getString(R.string.subtitle_none_selected));
+            textViewDescription.setText(activity.getString(R.string.subtitle_empty));
             productDescriptionHtml = "";
         } else {
             description = description.trim();

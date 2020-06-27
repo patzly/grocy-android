@@ -138,7 +138,7 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 		} else {
 			itemName.setText(
 					activity.getString(R.string.property_name),
-					activity.getString(R.string.subtitle_no_name)
+					activity.getString(R.string.subtitle_empty)
 			);
 		}
 
@@ -160,7 +160,7 @@ public class ShoppingListItemBottomSheetDialogFragment extends BottomSheetDialog
 			itemNote.setSingleLine(true);
 			itemNote.setText(
 					activity.getString(R.string.property_note),
-					activity.getString(R.string.subtitle_no_notes)
+					activity.getString(R.string.subtitle_empty)
 			);
 		}
 
