@@ -551,11 +551,13 @@ public class ShoppingActivity extends AppCompatActivity implements
             }
             groupItems(true);
         }
-        Snackbar snackbar = Snackbar.make(
-                binding.recycler,
-                R.string.msg_item_marked_as_done,
-                Snackbar.LENGTH_LONG
-        );
+        int msg;
+        if(shoppingListItem.getDone() == 1) {
+            msg = R.string.msg_item_marked_as_done;
+        } else {
+            msg = R.string.msg_item_marked_as_undone;
+        }
+        Snackbar snackbar = Snackbar.make(binding.recycler, msg, Snackbar.LENGTH_LONG);
         snackbar.setAction(
                 R.string.action_undo,
                 v -> toggleDoneStatus(shoppingListItem)
