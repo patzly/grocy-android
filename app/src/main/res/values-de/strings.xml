@@ -114,7 +114,7 @@
     <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
-    <string name="msg_item_marked_as_done">Eintrag wurde als erledigt markiert</string>
+    <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
     <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
     <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <string name="msg_batch_tare_weight">Produkt unterstützt Stapelmodus nicht: Taragewichtbehandlung aktiviert</string>
