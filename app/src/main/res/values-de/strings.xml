@@ -380,7 +380,7 @@
     <string name="setting_reload_config_description">Neustart der App erforderlich</string>
     <string name="setting_logout">Abmelden</string>
     <string name="setting_logout_description">Zur Anmeldeseite zurückkehren</string>
-    <string name="setting_list_indicator">Auf Einkaufszettel-Eintrag hinweisen</string>
+    <string name="setting_list_indicator">Produkt markieren</string>
     <string name="setting_list_indicator_description">Blauen Punkt anzeigen, wenn Produkt auf einem Einkaufszettel steht</string>
     <string name="setting_shopping_mode_update_interval">Einkaufsmodus Update Intervall</string>
     <string name="setting_keep_screen_on">Bildschirm an lassen</string>
