@@ -1012,7 +1012,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceAll(String fragmentNew, Bundle bundle, boolean animated) {
         dismissFragments();
-        replaceFragment(fragmentNew, bundle, animated);
+        new Handler().postDelayed(
+                () -> replaceFragment(fragmentNew, bundle, animated),
+                getResources().getInteger(R.integer.default_anim_duration)
+        );
     }
 
     public void dismissFragments() {
