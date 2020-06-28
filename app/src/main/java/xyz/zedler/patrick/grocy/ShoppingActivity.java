@@ -23,11 +23,13 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -294,7 +296,10 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     private void onQueueEmpty(boolean onlyDeltaUpdate) {
-        if(showOffline) showOffline = false;
+        if(showOffline) {
+            showOffline = false;
+            appBarOfflineInfo(false);
+        }
 
         shoppingListItemsSelected = new ArrayList<>();
         ArrayList<Integer> allUsedProductIds = new ArrayList<>();  // for database preparing
@@ -358,6 +363,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void loadOfflineData() {
         if(!showOffline) {
             showOffline = true;
+            appBarOfflineInfo(true);
             if(debug) Log.i(TAG, "loadOfflineData: you are now offline");
             new LoadOfflineDataShoppingListHelper(
                     AppDatabase.getAppDatabase(getApplicationContext()),
@@ -612,6 +618,42 @@ public class ShoppingActivity extends AppCompatActivity implements
     private void changeAppBarTitle() {
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         changeAppBarTitle(shoppingList);
+    }
+
+    private void appBarOfflineInfo(boolean visible) {
+        boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
+        if(visible == currentState) return;
+        if(visible) {
+            binding.linearOfflineError.setAlpha(0);
+            binding.linearOfflineError.setVisibility(View.VISIBLE);
+            binding.linearOfflineError.animate().alpha(1).setDuration(125).withEndAction(
+                    () -> updateScrollViewHeight(true)
+            ).start();
+        } else {
+            binding.linearOfflineError.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> {
+                        binding.linearOfflineError.setVisibility(View.GONE);
+                        updateScrollViewHeight(false);
+                    }
+            ).start();
+        }
+    }
+
+    private void updateScrollViewHeight(boolean visible) {
+        // get actionbar height
+        int actionBarHeight = 0;
+        TypedValue typedValue = new TypedValue();
+        if(getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(
+                    typedValue.data,
+                    getResources().getDisplayMetrics()
+            );
+        }
+        if(visible) actionBarHeight += binding.linearOfflineError.getHeight();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams)
+                binding.linearScroll.getLayoutParams();
+        layoutParams.setMargins(0, actionBarHeight, 0, 0);
+        binding.linearScroll.setLayoutParams(layoutParams);
     }
 
     private boolean isFeatureMultipleListsEnabled() {

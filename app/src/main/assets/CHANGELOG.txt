@@ -1,6 +1,7 @@
 1.4.3:
 - Our app is now translatable: Visit us on GitHub for more info
 - Added German language
+- Offline indicator in shopping mode
 - Bug fixes and improvements
 
 1.4.2:

@@ -9,98 +9,131 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:actionBarSize"
         android:background="@color/primary">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/frame_shopping_close"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:layout_gravity="start|center_vertical"
-                android:gravity="center"
-                android:contentDescription="@string/action_close"
-                android:tooltipText="@string/action_close"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_close" />
-
-            </FrameLayout>
-
-            <TableLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
                 android:gravity="center_vertical"
-                android:shrinkColumns="0">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <TableRow
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:id="@+id/frame_shopping_close"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="?attr/actionBarItemBackground"
+                    android:clickable="true"
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="center"
+                    android:contentDescription="@string/action_close"
+                    android:tooltipText="@string/action_close"
+                    android:focusable="true"
+                    tools:targetApi="o">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_close" />
+
+                </FrameLayout>
+
+                <TableLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    tools:ignore="UselessParent">
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:shrinkColumns="0">
 
-                    <TextView
-                        android:id="@+id/text_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="@string/title_shopping_list"
-                        android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:ignore="UselessParent">
 
-                    <xyz.zedler.patrick.grocy.view.ActionButton
-                        android:id="@+id/button_lists"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        app:icon="@drawable/ic_round_expand_more"
-                        app:tint="@color/icon"/>
+                        <TextView
+                            android:id="@+id/text_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="@string/title_shopping_list"
+                            android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-                </TableRow>
+                        <xyz.zedler.patrick.grocy.view.ActionButton
+                            android:id="@+id/button_lists"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            app:icon="@drawable/ic_round_expand_more"
+                            app:tint="@color/icon"/>
 
-            </TableLayout>
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_offline_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/retro_red_bg_black"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="@string/error_offline"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+    <LinearLayout
+        android:id="@+id/linear_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never"
-        android:background="@color/background_dark">
+        android:layout_marginTop="?android:actionBarSize">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="ifContentScrolls"
-            android:nestedScrollingEnabled="true"
-            android:clipToPadding="false"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"/>
+            android:overScrollMode="never"
+            android:background="@color/background_dark">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="ifContentScrolls"
+                android:nestedScrollingEnabled="true"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
