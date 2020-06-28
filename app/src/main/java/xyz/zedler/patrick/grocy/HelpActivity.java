@@ -159,7 +159,7 @@ public class HelpActivity extends AppCompatActivity {
 					break;
 			}
 			String header = getString(headerRes);
-			String body = getString(bodyRes);
+			String body = getString(bodyRes).replaceAll("\n[ ]+", "\n");
 			helpSections.add(new HelpAdapter.HelpSection(header, body, headerRes));
 		}
 		return helpSections;
