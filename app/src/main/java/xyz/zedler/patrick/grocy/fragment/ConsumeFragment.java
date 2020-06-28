@@ -580,11 +580,13 @@ public class ConsumeFragment extends Fragment {
         selectStockEntry(null);
         loadStockEntries();
 
-
         // SPOILED
         binding.checkboxConsumeSpoiled.setChecked(false);
 
-        // MENU
+        // mark fields with invalid or missing content as invalid
+        isFormIncomplete();
+
+        // update actions (e.g. hide open action if necessary)
         setUpBottomMenu();
     }
 

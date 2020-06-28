@@ -729,6 +729,9 @@ public class PurchaseFragment extends Fragment {
         } else {
             selectedLocationId = -1;
         }
+
+        // mark fields with invalid or missing content as invalid
+        isFormIncomplete();
     }
 
     private void clearInputFocus() {
