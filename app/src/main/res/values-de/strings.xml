@@ -114,7 +114,8 @@
     <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
-    <string name="msg_item_marked_as_done">Eintrag wurde als erledigt markiert</string>
+    <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
+    <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
     <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <string name="msg_batch_tare_weight">Produkt unterstützt Stapelmodus nicht: Taragewichtbehandlung aktiviert</string>
     <string name="msg_purchase_transactions_done">Einkaufstransaktionen für erstellte Produkte erledigt</string>
@@ -217,9 +218,7 @@
     <string name="subtitle_stock_locations">Wo %1$s Bestand hat</string>
     <string name="subtitle_default">Standard</string>
     <string name="subtitle_none_selected">Nichts ausgewählt</string>
-    <string name="subtitle_no_name">Kein Name</string>
-    <string name="subtitle_no_notes">Keine Notizen</string>
-
+    <string name="subtitle_empty">Leer</string>
     <string name="subtitle_done">Erledigt</string>
     <string name="subtitle_undone">Unerledigt</string>
     <string name="subtitle_never_expires">Läuft nie ab</string>
