@@ -67,6 +67,7 @@
     <string name="action_edit_notes">Edit notes</string>
     <string name="action_shopping_mode">Shopping mode</string>
     <string name="action_add_missing">Add missing products</string>
+    <string name="action_purchase_all_items">Purchase all items</string>
     <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
@@ -303,7 +304,6 @@
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>
     <string name="date_tomorrow">Tomorrow</string>
-    <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unknown</string>
     <string name="date_unlimited">Unlimited</string>
     <string name="date_never">Never</string>
@@ -354,7 +354,7 @@
     <string name="info_intro">Replay intro</string>
     <string name="info_intro_description">Showcasing features</string>
     <string name="info_material_components_built_with">Built with</string>
-    <string name="info_material_components">Material Components</string>
+    <string name="info_material_components" translatable="false">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy version</string>
     <string name="info_grocy_version_incompatible">Not supported</string>
