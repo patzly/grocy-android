@@ -462,7 +462,8 @@ Façons de marquer un produit comme ouvert:\n\n
     <string name="help_other_question_header">J\'ai encore une question.</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
     Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_other_question_body">Veuillez vous rendre sur notre page de projet sur GitHub et ouvrir un nouveau problème avec votre question.\n
+    <string name="help_other_question_body">
+Veuillez vous rendre sur notre page de projet sur GitHub et ouvrir un nouveau problème avec votre question.\n
 Nous essaierons de vous aider le plus rapidement possible.</string>
 
 </resources>
