@@ -188,6 +188,17 @@ public class WebRequest {
         );
     }
 
+    public void delete(String url, String tag, OnResponseListener onResponse, OnErrorListener onError) {
+        requestQueue.add(
+                new StringRequest(
+                        Request.Method.DELETE,
+                        url,
+                        onResponse::onResponse,
+                        onError::onError
+                ).setTag(tag)
+        );
+    }
+
     public int getQueueSize() {
         return this.queueSize;
     }

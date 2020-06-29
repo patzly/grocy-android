@@ -65,6 +65,7 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
@@ -1098,18 +1099,9 @@ public class ShoppingListFragment extends Fragment
                     showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
-                clearShoppingList(
-                        shoppingList,
-                        response -> {
-                            showMessage(
-                                    activity.getString(
-                                            R.string.msg_shopping_list_cleared,
-                                            shoppingList.getName()
-                                    )
-                            );
-                            // reload now empty list
-                            refresh();
-                        });
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
+                activity.showBottomSheet(new ShoppingListClearBottomSheetDialogFragment(), bundle);
                 return true;
             });
         }
@@ -1147,7 +1139,7 @@ public class ShoppingListFragment extends Fragment
                     showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
-                clearShoppingList(
+                clearAllItems(
                         shoppingList,
                         response -> {
                             deleteShoppingList(shoppingList);
@@ -1159,7 +1151,7 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    private void clearShoppingList(
+    public void clearAllItems(
             ShoppingList shoppingList,
             OnResponseListener responseListener
     ) {
@@ -1182,6 +1174,30 @@ public class ShoppingListFragment extends Fragment
                     );
                 }
         );
+    }
+
+    public void clearDoneItems(ShoppingList shoppingList) {
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                () -> {
+                    showMessage(
+                            activity.getString(
+                                    R.string.msg_shopping_list_cleared,
+                                    shoppingList.getName()
+                            )
+                    );
+                    refresh();
+                },
+                volleyError -> {
+                    showMessage(activity.getString(R.string.error_undefined));
+                    refresh();
+                }
+        );
+        for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(shoppingListItem.getShoppingListId() != shoppingList.getId()) continue;
+            if(shoppingListItem.getDone() == 0) continue;
+            queue.append(dlHelper.deleteShoppingListItem(shoppingListItem.getId()));
+        }
+        queue.start();
     }
 
     private void deleteShoppingList(ShoppingList shoppingList) {

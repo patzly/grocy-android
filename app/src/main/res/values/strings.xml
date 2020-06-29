@@ -74,6 +74,10 @@
     <string name="action_login">Login</string>
     <string name="action_use_demo_account">Use demo account</string>
     <string name="action_ignore">Ignore</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">All</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">Done</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
     <string name="tooltip_switch_purchase">Switch to purchase mode</string>
@@ -240,6 +244,7 @@
     <string name="description_missing_batch_exit">Some purchase transactions have not yet been sent to the server. Discard them or go back to the scanner?</string>
     <!-- %1$s is a product name -->
     <string name="description_input_name">Create new product with the name \"%1$s\"?</string>
+    <string name="description_clear_shopping_list">Do you want to clear all or only done items?</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
