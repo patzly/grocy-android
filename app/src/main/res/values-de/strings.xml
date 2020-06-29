@@ -62,6 +62,7 @@
     <string name="action_edit_notes">Notizen bearbeiten</string>
     <string name="action_shopping_mode">Einkaufsmodus</string>
     <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
+    <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
     <string name="action_delete_shopping_list">Einkaufszettel löschen</string>
     <string name="action_discard_products">Produkte verwerfen</string>
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
@@ -298,7 +299,6 @@
     <string name="date_yesterday">Gestern</string>
     <string name="date_today">Heute</string>
     <string name="date_tomorrow">Morgen</string>
-    <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unbekannt</string>
     <string name="date_unlimited">Unbegrenzt</string>
     <string name="date_never">Nie</string>
@@ -349,7 +349,6 @@
     <string name="info_intro">Intro erneut abspielen</string>
     <string name="info_intro_description">Features vorführen</string>
     <string name="info_material_components_built_with">Erstellt mit</string>
-    <string name="info_material_components">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy Version</string>
     <string name="info_grocy_version_incompatible">Nicht unterstützt</string>
