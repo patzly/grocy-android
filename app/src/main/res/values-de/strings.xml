@@ -62,6 +62,7 @@
     <string name="action_edit_notes">Notizen bearbeiten</string>
     <string name="action_shopping_mode">Einkaufsmodus</string>
     <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
+    <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
     <string name="action_delete_shopping_list">Einkaufszettel löschen</string>
     <string name="action_discard_products">Produkte verwerfen</string>
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
@@ -69,6 +70,10 @@
     <string name="action_login">Anmelden</string>
     <string name="action_use_demo_account">Demo-Account probieren</string>
     <string name="action_ignore">Ignorieren</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">Alle</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">Erledigte</string>
 
     <string name="tooltip_new_products_count">Anzahl neuer Produkte</string>
     <string name="tooltip_switch_purchase">Zum Einkaufsmodus wechseln</string>
@@ -235,6 +240,7 @@
     <string name="description_missing_batch_exit">Einige Einkaufstransaktionen wurden noch nicht ausgeführt. Möchten Sie diese verwerfen oder zum Scanner zurückkehren?</string>
     <!-- %1$s is a product name -->
     <string name="description_input_name">Neues Produkt mit dem Namen \"%1$s\" erstellen?</string>
+    <string name="description_clear_shopping_list">Möchten Sie alle oder nur erledigte Einträge löschen?</string>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (Singular)</string>
@@ -293,7 +299,6 @@
     <string name="date_yesterday">Gestern</string>
     <string name="date_today">Heute</string>
     <string name="date_tomorrow">Morgen</string>
-    <!-- %1$s is a number like 0, 2, 3, 4 -->
     <string name="date_unknown">Unbekannt</string>
     <string name="date_unlimited">Unbegrenzt</string>
     <string name="date_never">Nie</string>
@@ -344,7 +349,6 @@
     <string name="info_intro">Intro erneut abspielen</string>
     <string name="info_intro_description">Features vorführen</string>
     <string name="info_material_components_built_with">Erstellt mit</string>
-    <string name="info_material_components">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy Version</string>
     <string name="info_grocy_version_incompatible">Nicht unterstützt</string>
@@ -385,7 +389,6 @@
     <string name="setting_shopping_mode_update_interval">Einkaufsmodus Update Intervall</string>
     <string name="setting_keep_screen_on">Bildschirm an lassen</string>
     <string name="setting_keep_screen_on_description">Wenn im Shoppingmodus</string>
-    <string name="setting_currency_default">EUR</string>
     <string name="setting_expiring_soon_days">\"Bald ablaufend\"-Tage</string>
     <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
     <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
