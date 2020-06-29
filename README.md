@@ -49,8 +49,8 @@ Grocy Android is still under development. In the next weeks we're going to imple
 Grocy Android requires at least [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
 It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server. Our In-app help explains how to do that.
 
-Until Grocy Android `v1.4.x` at least Android 5.0 Lollipop is required on your device.  
-With `v.1.5.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
+Until Grocy Android `v1.x.x` at least Android 5.0 Lollipop is required on your device.  
+With `v.2.0.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
 
 **Self-signed certificates are not supported right now** but an implementation is planned.  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
