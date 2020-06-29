@@ -439,7 +439,8 @@ Attention! Si votre serveur Hass.io est accessible au public, les points suivant
     <string name="help_consume_header">Comment consommer un produit?</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
     Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_consume_body">Chaque fois que vous consommez quelque chose, vous le consommez également dans Grocy.\n
+    <string name="help_consume_body">
+Chaque fois que vous consommez quelque chose, vous le consommez également dans Grocy.\n
 Façons de consommer un produit:\n\n
 
 - Aperçu des stocks: recherchez le produit, faites-le glisser vers la droite et appuyez sur l\'icône CONSOMMER.\n
