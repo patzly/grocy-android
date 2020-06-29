@@ -395,7 +395,6 @@
     <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>
     <string name="setting_keep_screen_on">Keep screen on</string>
     <string name="setting_keep_screen_on_description">While in shopping mode</string>
-    <string name="setting_currency_default">USD</string>
     <string name="setting_expiring_soon_days">Expiring soon days</string>
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
     <string name="setting_default_amount_consume">Default amount for consume</string>

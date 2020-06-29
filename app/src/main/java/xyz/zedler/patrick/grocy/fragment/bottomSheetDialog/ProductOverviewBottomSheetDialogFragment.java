@@ -426,7 +426,7 @@ public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogF
 						activity.getString(R.string.property_last_price),
 						lastPrice + " " + sharedPrefs.getString(
 								Constants.PREF.CURRENCY,
-								activity.getString(R.string.setting_currency_default)
+								""
 						), null
 				);
 			}
