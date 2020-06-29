@@ -76,7 +76,7 @@ public class ShoppingActivity extends AppCompatActivity implements
     private final static String TAG = ShoppingActivity.class.getSimpleName();
 
     private SharedPreferences sharedPrefs;
-    private DownloadHelper downloadHelper;
+    private DownloadHelper dlHelper;
     private Timer timer;
     private AppDatabase database;
     private NetUtil netUtil;
@@ -122,12 +122,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         // WEB
 
-        downloadHelper = new DownloadHelper(
-                this,
-                TAG,
-                this::onDownloadError,
-                () -> onQueueEmpty(false)
-        );
+        dlHelper = new DownloadHelper(this, TAG);
 
         // INITIALIZE VARIABLES
 
@@ -255,34 +250,32 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void downloadFull() {
         binding.swipe.setRefreshing(true);
-        downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
-        downloadOnlyProducts();
-        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
-        downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
-        downloadHelper.downloadShoppingLists(shoppingLists -> {
-            this.shoppingLists = shoppingLists;
-            changeAppBarTitle();
-            if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
-        });
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                () -> onQueueEmpty(false),
+                this::onDownloadError
+        );
+        queue.append(
+                dlHelper.getShoppingLists(listItems -> this.shoppingLists = listItems),
+                dlHelper.getShoppingListItems(listItems -> this.shoppingListItems = listItems),
+                dlHelper.getProductGroups(listItems -> this.productGroups = listItems),
+                dlHelper.getQuantityUnits(listItems -> this.quantityUnits = listItems),
+                dlHelper.getProducts(listItems -> this.products = listItems)
+        );
+        queue.start();
         missingProductIds.clear();
         productUpdateDone = true;
     }
 
     private void downloadOnlyShoppingListItems() {
-        downloadHelper.setOnQueueEmptyListener(() -> {
+        dlHelper.getShoppingListItems(listItems -> {
+            this.shoppingListItems = listItems;
             onQueueEmpty(true);
-            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
-        });
-        downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
+        }).perform();
         productUpdateDone = false;
     }
 
     private void downloadOnlyProducts() {
-        downloadHelper.setOnQueueEmptyListener(() -> {
-            onQueueEmpty(true);
-            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
-        });
-        downloadHelper.downloadProducts(products -> {
+        dlHelper.getProducts(products -> {
             this.products = products;
             productHashMap.clear();
             for(Product p : products) productHashMap.put(p.getId(), p);
@@ -292,7 +285,8 @@ public class ShoppingActivity extends AppCompatActivity implements
                 if(productHashMap.get(productId) == null) missingProductIds.add(productId);
             }
             this.missingProductIds = missingProductIds;
-        });
+            onQueueEmpty(true);
+        }).perform();
     }
 
     private void onQueueEmpty(boolean onlyDeltaUpdate) {
@@ -314,6 +308,12 @@ public class ShoppingActivity extends AppCompatActivity implements
         }
 
         if(!isDataStored) {
+            // update action bar
+            if(!onlyDeltaUpdate) {
+                changeAppBarTitle();
+                if(shoppingLists.size() == 1) binding.buttonLists.setVisibility(View.GONE);
+            }
+
             lastSynced = Calendar.getInstance().getTime();
             // sync modified data and store new data
             new StoreOfflineDataShoppingListHelper(
@@ -354,8 +354,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         }
     }
 
-    private void onDownloadError(VolleyError error) {
-        downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
+    private void onDownloadError(VolleyError ignored) {
         binding.swipe.setRefreshing(false);
         loadOfflineData();
     }
@@ -438,22 +437,24 @@ public class ShoppingActivity extends AppCompatActivity implements
             HashMap<Integer, ShoppingListItem> serverItemHashMap,
             boolean onlyDeltaUpdateAdapter
     ) {
-        downloadHelper.setOnQueueEmptyListener(() -> {
-            showMessage(getString(R.string.msg_synced));
-            new StoreOfflineDataShoppingListHelper(
-                    AppDatabase.getAppDatabase(getApplicationContext()),
-                    this,
-                    false,
-                    shoppingLists,
-                    shoppingListItems,
-                    productGroups,
-                    quantityUnits,
-                    products,
-                    usedProductIds,
-                    onlyDeltaUpdateAdapter
-            ).execute();
-            downloadHelper.setOnQueueEmptyListener(() -> onQueueEmpty(false));
-        });
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                () -> {
+                    showMessage(getString(R.string.msg_synced));
+                    new StoreOfflineDataShoppingListHelper(
+                            AppDatabase.getAppDatabase(getApplicationContext()),
+                            this,
+                            false,
+                            shoppingLists,
+                            shoppingListItems,
+                            productGroups,
+                            quantityUnits,
+                            products,
+                            usedProductIds,
+                            onlyDeltaUpdateAdapter
+                    ).execute();
+                },
+                error -> showMessage(getString(R.string.msg_failed_to_sync)
+        ));
         for(ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
             try {
@@ -461,14 +462,17 @@ public class ShoppingActivity extends AppCompatActivity implements
             } catch (JSONException e) {
                 if(debug) Log.e(TAG, "syncItems: " + e);
             }
-            downloadHelper.editShoppingListItem(
-                    itemToSync.getId(),
-                    body,
-                    response -> {
-                        ShoppingListItem serverItem = serverItemHashMap.get(itemToSync.getId());
-                        if(serverItem != null) serverItem.setDone(itemToSync.getDone());
-                    },
-                    error -> showMessage(getString(R.string.msg_failed_to_sync))
+            queue.append(
+                    dlHelper.editShoppingListItem(
+                            itemToSync.getId(),
+                            body,
+                            response -> {
+                                ShoppingListItem serverItem = serverItemHashMap.get(
+                                        itemToSync.getId()
+                                );
+                                if(serverItem != null) serverItem.setDone(itemToSync.getDone());
+                            }
+                    )
             );
         }
     }
@@ -505,7 +509,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             return;
         }
 
-        downloadHelper.getTimeDbChanged(date -> {
+        dlHelper.getTimeDbChanged(date -> {
             boolean syncNeeded = this.lastSynced == null || this.lastSynced.before(date);
             JSONObject body = new JSONObject();
             try {
@@ -513,7 +517,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             } catch (JSONException e) {
                 if(debug) Log.e(TAG, "toggleDoneStatus: " + e);
             }
-            downloadHelper.editShoppingListItem(
+            dlHelper.editShoppingListItem(
                     shoppingListItem.getId(),
                     body,
                     response -> {
@@ -522,7 +526,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                             downloadOnlyShoppingListItems();
                         } else {
                             updateDoneStatus(shoppingListItem, true);
-                            downloadHelper.getTimeDbChanged(
+                            dlHelper.getTimeDbChanged(
                                     date1 -> lastSynced = date1,
                                     () -> lastSynced = Calendar.getInstance().getTime()
                             );
@@ -532,9 +536,8 @@ public class ShoppingActivity extends AppCompatActivity implements
                     error -> {
                         updateDoneStatus(shoppingListItem, false);
                         loadOfflineData();
-                    },
-                    false
-            );
+                    }
+            ).perform();
         }, () -> {
             updateDoneStatus(shoppingListItem, false);
             loadOfflineData();
@@ -571,8 +574,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(!downloadHelper.isQueueEmpty()) return;
-                downloadHelper.getTimeDbChanged(
+                dlHelper.getTimeDbChanged(
                         date -> {
                             if(!netUtil.isOnline()) {
                                 loadOfflineData();

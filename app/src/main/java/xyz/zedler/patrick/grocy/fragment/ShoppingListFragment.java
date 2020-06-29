@@ -97,7 +97,7 @@ public class ShoppingListFragment extends Fragment
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private DownloadHelper downloadHelper;
+    private DownloadHelper dlHelper;
     private AppDatabase database;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
@@ -165,7 +165,7 @@ public class ShoppingListFragment extends Fragment
 
         activity = null;
         sharedPrefs = null;
-        downloadHelper = null;
+        dlHelper = null;
         database = null;
         grocyApi = null;
         request = null;
@@ -216,12 +216,7 @@ public class ShoppingListFragment extends Fragment
 
         // WEB
 
-        downloadHelper = new DownloadHelper(
-                activity,
-                TAG,
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+        dlHelper = new DownloadHelper(activity, TAG);
 
         database = AppDatabase.getAppDatabase(activity.getApplicationContext());
 
@@ -560,12 +555,33 @@ public class ShoppingListFragment extends Fragment
 
     private void download() {
         binding.swipeShoppingList.setRefreshing(true);
-        downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
-        downloadHelper.downloadProducts(products -> this.products = products);
-        downloadHelper.downloadProductGroups(productGroups -> this.productGroups = productGroups);
-        downloadHelper.downloadShoppingListItems(listItems -> this.shoppingListItems = listItems);
-        downloadHelper.downloadShoppingLists(shoppingLists -> {
-            this.shoppingLists = shoppingLists;
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                this::onQueueEmpty,
+                this::onDownloadError
+        );
+        queue.append(
+                dlHelper.getShoppingLists(listItems -> this.shoppingLists = listItems),
+                dlHelper.getShoppingListItems(listItems -> this.shoppingListItems = listItems),
+                dlHelper.getProductGroups(listItems -> this.productGroups = listItems),
+                dlHelper.getQuantityUnits(listItems -> this.quantityUnits = listItems),
+                dlHelper.getProducts(listItems -> {
+                    this.products = listItems;
+                    Log.i(TAG, "download: " + this.products);
+                }),
+                dlHelper.getVolatile((expiring, expired, missing) -> missingItems = missing)
+        );
+        queue.start();
+    }
+
+    private void onQueueEmpty() {
+        if(showOffline) {
+            showOffline = false;
+            updateUI();
+        }
+
+        Log.i(TAG, "onQueueEmpty: " + products);
+
+        if(!isDataStored) {
             // set shopping list if chosen with name on fragment start
             if(startupShoppingListName != null) {
                 for(ShoppingList shoppingList : shoppingLists) {
@@ -576,17 +592,7 @@ public class ShoppingListFragment extends Fragment
                 startupShoppingListName = null;
             }
             changeAppBarTitle();
-        });
-        downloadHelper.downloadVolatile((expiring, expired, missing) -> missingItems = missing);
-    }
 
-    private void onQueueEmpty() {
-        if(showOffline) {
-            showOffline = false;
-            updateUI();
-        }
-
-        if(!isDataStored) {
             ArrayList<String> missingProductIds = new ArrayList<>();
             for(MissingItem missingItem : missingItems) {
                 missingProductIds.add(String.valueOf(missingItem.getId()));
@@ -649,7 +655,7 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    private void onDownloadError(VolleyError error) {
+    private void onDownloadError(VolleyError ignored) {
         if(binding != null) binding.swipeShoppingList.setRefreshing(false);
         if(activity == null) return;
         if(!showOffline) {
@@ -888,16 +894,15 @@ public class ShoppingListFragment extends Fragment
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "toggleDoneStatus: " + e);
         }
-        downloadHelper.editShoppingListItem(
+        dlHelper.editShoppingListItem(
                 shoppingListItem.getId(),
                 body,
                 response -> updateDoneStatus(shoppingListItem, position),
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "toggleDoneStatus: " + error);
-                },
-                false
-        );
+                }
+        ).perform();
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
@@ -1141,7 +1146,7 @@ public class ShoppingListFragment extends Fragment
                 }
                 clearAllItems(
                         shoppingList,
-                        response -> {
+                        () -> {
                             deleteShoppingList(shoppingList);
                             tidyUpItems();
                         }
@@ -1164,7 +1169,7 @@ public class ShoppingListFragment extends Fragment
         request.post(
                 grocyApi.clearShoppingList(),
                 jsonObject,
-                responseListener::onResponse,
+                response -> responseListener.onResponse(),
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(
@@ -1271,6 +1276,24 @@ public class ShoppingListFragment extends Fragment
             HashMap<Integer, ShoppingListItem> serverItemHashMap,
             boolean onlyDeltaUpdateAdapter
     ) {
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                () -> {
+                    showMessage(getString(R.string.msg_synced));
+                    new StoreOfflineDataShoppingListHelper(
+                            AppDatabase.getAppDatabase(activity.getApplicationContext()),
+                            this,
+                            false,
+                            shoppingLists,
+                            shoppingListItems,
+                            productGroups,
+                            quantityUnits,
+                            products,
+                            usedProductIds,
+                            onlyDeltaUpdateAdapter
+                    ).execute();
+                },
+                error -> showMessage(getString(R.string.msg_failed_to_sync)
+                ));
         for(ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
             try {
@@ -1278,33 +1301,17 @@ public class ShoppingListFragment extends Fragment
             } catch (JSONException e) {
                 if(debug) Log.e(TAG, "syncItems: " + e);
             }
-            request.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemToSync.getId()),
-                    TAG,
-                    body,
-                    response -> {
-                        ShoppingListItem serverItem = serverItemHashMap.get(itemToSync.getId());
-                        if(serverItem != null) serverItem.setDone(itemToSync.getDone());
-                    },
-                    error -> {
-                        request.cancelAll(TAG);
-                        showMessage(activity.getString(R.string.msg_failed_to_sync));
-                    },
-                    () -> {
-                        showMessage(activity.getString(R.string.msg_synced));
-                        new StoreOfflineDataShoppingListHelper(
-                                AppDatabase.getAppDatabase(activity.getApplicationContext()),
-                                this,
-                                false,
-                                shoppingLists,
-                                shoppingListItems,
-                                productGroups,
-                                quantityUnits,
-                                products,
-                                usedProductIds,
-                                false
-                        ).execute();
-                    }
+            queue.append(
+                    dlHelper.editShoppingListItem(
+                            itemToSync.getId(),
+                            body,
+                            response -> {
+                                ShoppingListItem serverItem = serverItemHashMap.get(
+                                        itemToSync.getId()
+                                );
+                                if(serverItem != null) serverItem.setDone(itemToSync.getDone());
+                            }
+                    )
             );
         }
     }
@@ -1431,7 +1438,7 @@ public class ShoppingListFragment extends Fragment
     }
 
     public interface OnResponseListener {
-        void onResponse(JSONObject response);
+        void onResponse();
     }
 
     @NonNull

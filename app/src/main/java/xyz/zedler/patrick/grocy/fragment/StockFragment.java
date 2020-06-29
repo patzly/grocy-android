@@ -93,7 +93,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private DownloadHelper downloadHelper;
+    private DownloadHelper dlHelper;
     private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
@@ -164,7 +164,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         gson = null;
         grocyApi = null;
         request = null;
-        downloadHelper = null;
+        dlHelper = null;
         appBarBehavior = null;
         stockItemAdapter = null;
         clickUtil = null;
@@ -223,12 +223,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         // WEB REQUESTS
 
-        downloadHelper = new DownloadHelper(
-                activity,
-                TAG,
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+        dlHelper = new DownloadHelper(activity, TAG);
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
@@ -565,60 +560,65 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.swipeStock.setRefreshing(true);
         AtomicBoolean stockItemsDownloaded = new AtomicBoolean(false);
         AtomicBoolean volatileItemsDownloaded = new AtomicBoolean(false);
-        downloadHelper.downloadQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits);
-        downloadHelper.downloadLocations(locations -> {
-            this.locations = locations;
-            setMenuLocationFilters();
-        });
-        downloadHelper.downloadProductGroups(productGroups -> {
-            this.productGroups = productGroups;
-            setMenuProductGroupFilters();
-        });
-        downloadHelper.downloadStockItems(stockItems -> {
-            this.stockItems = stockItems;
-
-            missingStockItems = new ArrayList<>();
-            for(StockItem stockItem : stockItems) {
-                if(stockItem.getProduct().getMinStockAmount() > 0
-                        && stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()
-                ) {
-                    missingStockItems.add(stockItem);
-                }
-            }
-            stockItemsDownloaded.set(true);
-            if(volatileItemsDownloaded.get()) downloadMissingItemDetails();
-        });
-        downloadHelper.downloadVolatile((expiring, expired, missing) -> {
-            expiringItems = expiring;
-            expiredItems = expired;
-            missingItems = missing;
-            chipExpiring.setText(
-                    activity.getString(R.string.msg_expiring_products, expiring.size())
-            );
-            chipExpired.setText(
-                    activity.getString(R.string.msg_expired_products, expired.size())
-            );
-            chipMissing.setText(
-                    activity.getString(R.string.msg_missing_products, missing.size())
-            );
-            volatileItemsDownloaded.set(true);
-            if(stockItemsDownloaded.get()) downloadMissingItemDetails();
-        });
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        queue.append(
+                dlHelper.getQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits),
+                dlHelper.getLocations(locations -> {
+                    this.locations = locations;
+                    setMenuLocationFilters();
+                }),
+                dlHelper.getProductGroups(productGroups -> {
+                    this.productGroups = productGroups;
+                    setMenuProductGroupFilters();
+                }),
+                dlHelper.getStockItems(stockItems -> {
+                    this.stockItems = stockItems;
+                    missingStockItems = new ArrayList<>();
+                    for(StockItem stockItem : stockItems) {
+                        if(stockItem.getProduct().getMinStockAmount() > 0
+                                && stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()
+                        ) {
+                            missingStockItems.add(stockItem);
+                        }
+                    }
+                    stockItemsDownloaded.set(true);
+                    if(volatileItemsDownloaded.get()) downloadMissingItemDetails(queue);
+                }),
+                dlHelper.getVolatile((expiring, expired, missing) -> {
+                    expiringItems = expiring;
+                    expiredItems = expired;
+                    missingItems = missing;
+                    chipExpiring.setText(
+                            activity.getString(R.string.msg_expiring_products, expiring.size())
+                    );
+                    chipExpired.setText(
+                            activity.getString(R.string.msg_expired_products, expired.size())
+                    );
+                    chipMissing.setText(
+                            activity.getString(R.string.msg_missing_products, missing.size())
+                    );
+                    volatileItemsDownloaded.set(true);
+                    if(stockItemsDownloaded.get()) downloadMissingItemDetails(queue);
+                })
+        );
         if(isFeatureEnabled(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK)
                 && isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
         ) {
-            downloadHelper.downloadShoppingListItems(shoppingListItems -> {
-                shoppingListProductIds = new ArrayList<>();
-                for(ShoppingListItem item : shoppingListItems) {
-                    if(item.getProductId() != null && !item.getProductId().isEmpty()) {
-                        shoppingListProductIds.add(item.getProductId());
-                    }
-                }
-            });
+            queue.append(
+                    dlHelper.getShoppingListItems(shoppingListItems -> {
+                        shoppingListProductIds = new ArrayList<>();
+                        for(ShoppingListItem item : shoppingListItems) {
+                            if(item.getProductId() != null && !item.getProductId().isEmpty()) {
+                                shoppingListProductIds.add(item.getProductId());
+                            }
+                        }
+                    })
+            );
         }
+        queue.start();
     }
 
-    private void downloadMissingItemDetails() {
+    private void downloadMissingItemDetails(DownloadHelper.Queue queue) {
         HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
         for(StockItem s : stockItems) stockItemHashMap.put(s.getProductId(), s);
 
@@ -627,11 +627,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             if(missingItem.getIsPartlyInStock() == 1) continue;
             if(stockItemHashMap.get(missingItem.getId()) != null) continue;
 
-            downloadHelper.downloadProductDetails(missingItem.getId(), productDetails -> {
-                StockItem stockItem = new StockItem(productDetails);
-                stockItems.add(stockItem);
-                missingStockItems.add(stockItem);
-            });
+            queue.append(
+                    dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
+                        StockItem stockItem = new StockItem(productDetails);
+                        stockItems.add(stockItem);
+                        missingStockItems.add(stockItem);
+                    })
+            ).start();
         }
     }
 

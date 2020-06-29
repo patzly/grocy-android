@@ -76,7 +76,7 @@ public class MasterProductsFragment extends Fragment
     private final static String TAG = Constants.UI.MASTER_PRODUCTS;
 
     private MainActivity activity;
-    private DownloadHelper downloadHelper;
+    private DownloadHelper dlHelper;
     private AppBarBehavior appBarBehavior;
     private SharedPreferences sharedPrefs;
     private MasterProductAdapter masterProductAdapter;
@@ -162,12 +162,7 @@ public class MasterProductsFragment extends Fragment
 
         // WEB
 
-        downloadHelper = new DownloadHelper(
-                activity,
-                TAG,
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+        dlHelper = new DownloadHelper(activity, TAG);
 
         // VARIABLES
 
@@ -365,23 +360,28 @@ public class MasterProductsFragment extends Fragment
 
     private void download() {
         binding.swipeMasterProducts.setRefreshing(true);
-
-        downloadHelper.downloadProductGroups(productGroups -> {
-            this.productGroups = productGroups;
-            productGroupsMap = ArrayUtil.getProductGroupsHashMap(productGroups);
-            setMenuProductGroupFilters();
-        });
-        downloadHelper.downloadQuantityUnits(quantityUnits -> {
-            this.quantityUnits = quantityUnits;
-            quantityUnitsMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-        });
-        downloadHelper.downloadProducts(products -> this.products = products);
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        queue.append(
+                dlHelper.getProductGroups(productGroups -> {
+                    this.productGroups = productGroups;
+                    productGroupsMap = ArrayUtil.getProductGroupsHashMap(productGroups);
+                    setMenuProductGroupFilters();
+                }),
+                dlHelper.getQuantityUnits(quantityUnits -> {
+                    this.quantityUnits = quantityUnits;
+                    quantityUnitsMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
+                }),
+                dlHelper.getProducts(products -> this.products = products)
+        );
         if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            downloadHelper.downloadLocations(locations -> {
-                this.locations = locations;
-                locationsMap = ArrayUtil.getLocationsHashMap(locations);
-            });
+            queue.append(
+                    dlHelper.getLocations(locations -> {
+                        this.locations = locations;
+                        locationsMap = ArrayUtil.getLocationsHashMap(locations);
+                    })
+            );
         }
+        queue.start();
     }
 
     private void onQueueEmpty() {
@@ -649,7 +649,7 @@ public class MasterProductsFragment extends Fragment
 
     public void checkForStock(Product product) {
         if(product == null) return;
-        downloadHelper.downloadProductDetails(product.getId(), productDetails -> {
+        dlHelper.getProductDetails(product.getId(), productDetails -> {
             if(productDetails != null && productDetails.getStockAmount() == 0) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
@@ -658,12 +658,12 @@ public class MasterProductsFragment extends Fragment
             } else {
                 showMessage(activity.getString(R.string.msg_master_delete_stock));
             }
-        }, error -> showMessage(activity.getString(R.string.error_undefined)), false);
+        }, error -> showMessage(activity.getString(R.string.error_undefined))).perform();
     }
 
     public void deleteProduct(Product product) {
         if(product == null) return;
-        downloadHelper.deleteProduct(product.getId(), response -> {
+        dlHelper.deleteProduct(product.getId(), response -> {
             int index = getProductPosition(product.getId());
             if(index != -1) {
                 displayedProducts.remove(index);
