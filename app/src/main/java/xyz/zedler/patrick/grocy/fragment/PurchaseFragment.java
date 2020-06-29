@@ -55,7 +55,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.MainActivity;
@@ -71,6 +70,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetD
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -93,6 +93,7 @@ public class PurchaseFragment extends Fragment {
     private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
+    private DownloadHelper dlHelper;
     private DateUtil dateUtil;
     private ArrayAdapter<String> adapterProducts;
     private Bundle startupBundle;
@@ -133,6 +134,7 @@ public class PurchaseFragment extends Fragment {
         gson = null;
         grocyApi = null;
         request = null;
+        dlHelper = null;
         dateUtil = null;
         adapterProducts = null;
         startupBundle = null;
@@ -165,6 +167,7 @@ public class PurchaseFragment extends Fragment {
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
+        dlHelper = new DownloadHelper(activity, TAG);
 
         // UTILS
 
@@ -207,11 +210,16 @@ public class PurchaseFragment extends Fragment {
                 Constants.REQUEST.SCAN
         ));
         binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(binding.imagePurchaseProduct);
-                // try again to download products
-                if(productNames.isEmpty()) downloadProductNames();
-            }
+            if(!hasFocus) return;
+            IconUtil.start(binding.imagePurchaseProduct);
+            if(!productNames.isEmpty()) return;
+            // try again to download products
+            dlHelper.getProducts(products -> {
+                this.products = products;
+                productNames = getProductNames();
+                adapterProducts = new MatchArrayAdapter(activity, productNames);
+                binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
+            }).perform();
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
                 (parent, v, position, id) -> loadProductDetails(
@@ -478,69 +486,32 @@ public class PurchaseFragment extends Fragment {
 
     private void download() {
         binding.swipePurchase.setRefreshing(true);
-        downloadProductNames();
-        downloadStores();
-        downloadLocations();
-    }
-
-    private void downloadProductNames() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onError);
+        queue.append(
+                dlHelper.getProducts(products -> {
+                    this.products = products;
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-                },
-                this::onError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadStores() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.STORES),
-                TAG,
-                response -> {
-                    stores = gson.fromJson(
-                            response,
-                            new TypeToken<List<Store>>(){}.getType()
-                    );
-                    SortUtil.sortStoresByName(stores, true);
+                }),
+                dlHelper.getLocations(locations -> { // TODO: Download only if feature is enabled
+                    this.locations = locations;
+                    SortUtil.sortLocationsByName(this.locations, true);
+                }),
+                dlHelper.getStores(stores -> {
+                    this.stores = stores;
+                    SortUtil.sortStoresByName(this.stores, true);
                     // Insert NONE as first element
                     stores.add(
                             0,
                             new Store(-1, activity.getString(R.string.subtitle_none_selected))
                     );
-                },
-                this::onError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadLocations() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
-                TAG,
-                response -> {
-                    locations = gson.fromJson(
-                            response,
-                            new TypeToken<List<Location>>(){}.getType()
-                    );
-                    SortUtil.sortLocationsByName(locations, true);
-                },
-                this::onError,
-                this::onQueueEmpty
-        );
+                })
+        ).start();
     }
 
     private void onError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        request.cancelAll(TAG);
         binding.swipePurchase.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(

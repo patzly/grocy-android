@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.databinding.ActivityLoginBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -297,7 +298,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loadInfoAndFinish() {
         ConfigUtil.loadInfo(
-                requestQueue,
+                new DownloadHelper(this, TAG),
                 new GrocyApi(this),
                 sharedPrefs,
                 this::finish,

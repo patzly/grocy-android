@@ -64,6 +64,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -397,7 +398,7 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_reload_config:
 				IconUtil.start(this, R.id.image_setting_reload_config);
 				ConfigUtil.loadInfo(
-						requestQueue,
+						new DownloadHelper(this, TAG),
 						grocyApi,
 						sharedPrefs,
 						() -> showBottomSheet(new RestartBottomSheetDialogFragment(), null),

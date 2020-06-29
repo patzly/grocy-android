@@ -54,7 +54,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.MainActivity;
 import xyz.zedler.patrick.grocy.R;
@@ -66,6 +65,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -86,6 +86,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     private Gson gson;
     private GrocyApi grocyApi;
     private WebRequest request;
+    private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
     private Bundle startupBundle;
     private FragmentShoppingListItemEditBinding binding;
@@ -126,6 +127,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         gson = null;
         grocyApi = null;
         request = null;
+        dlHelper = null;
         adapterProducts = null;
         startupBundle = null;
         products = null;
@@ -162,6 +164,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
+        dlHelper = new DownloadHelper(activity, TAG);
 
         // VARIABLES
 
@@ -229,11 +232,19 @@ public class ShoppingListItemEditFragment extends Fragment {
         );
         binding.autoCompleteShoppingListItemEditProduct.setOnFocusChangeListener(
                 (View v, boolean hasFocus) -> {
-                    if(hasFocus) {
-                        IconUtil.start(binding.imageShoppingListItemEditProduct);
-                        // try again to download products
-                        if(productNames.isEmpty()) downloadProductNames();
-                    } });
+                    if(!hasFocus) return;
+                    IconUtil.start(binding.imageShoppingListItemEditProduct);
+                    if(!productNames.isEmpty()) return;
+                    // try again to download products
+                    dlHelper.getProducts(products -> {
+                        this.products = products;
+                        productNames = getProductNames();
+                        adapterProducts = new MatchArrayAdapter(activity, productNames);
+                        binding.autoCompleteShoppingListItemEditProduct.setAdapter(
+                                adapterProducts
+                        );
+                    }).perform();
+                });
         binding.autoCompleteShoppingListItemEditProduct.setOnItemClickListener(
                 (parent, itemView, position, id) -> loadProductDetails(
                         getProductFromName(
@@ -409,45 +420,16 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private void download() {
         binding.swipeShoppingListItemEdit.setRefreshing(true);
-        downloadProductNames();
-        downloadShoppingLists();
-    }
-
-    private void downloadProductNames() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onError);
+        queue.append(
+                dlHelper.getProducts(products -> {
+                    this.products = products;
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     binding.autoCompleteShoppingListItemEditProduct.setAdapter(adapterProducts);
-                },
-                this::onError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadShoppingLists() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
-                TAG,
-                response -> {
-                    shoppingLists = gson.fromJson(
-                            response,
-                            new TypeToken<List<ShoppingList>>(){}.getType()
-                    );
-                    if(debug) Log.i(
-                            TAG,
-                            "downloadShoppingLists: shoppingLists = " + shoppingLists
-                    );
-                },
-                this::onError,
-                this::onQueueEmpty
-        );
+                }),
+                dlHelper.getShoppingLists(shoppingLists -> this.shoppingLists = shoppingLists)
+        ).start();
     }
 
     private void onError(VolleyError error) {

@@ -75,6 +75,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -97,6 +98,7 @@ public class MasterProductSimpleFragment extends Fragment {
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentMasterProductSimpleBinding binding;
     private ArrayAdapter<String> adapterProducts;
 
@@ -164,6 +166,7 @@ public class MasterProductSimpleFragment extends Fragment {
         super.onDestroyView();
 
         binding = null;
+        dlHelper = null;
         System.gc();
     }
 
@@ -180,6 +183,8 @@ public class MasterProductSimpleFragment extends Fragment {
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB
+
+        dlHelper = new DownloadHelper(activity, TAG);
 
         request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
@@ -244,10 +249,14 @@ public class MasterProductSimpleFragment extends Fragment {
                 (MaterialAutoCompleteTextView) textInputParentProduct.getEditText();
         assert autoCompleteTextViewParentProduct != null;
         autoCompleteTextViewParentProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                // try again to download products
-                if(productNames.isEmpty()) downloadProducts();
-            }
+            if(!hasFocus || !productNames.isEmpty()) return;
+            // try again to download products
+            dlHelper.getProducts(products -> {
+                this.products = products;
+                productNames = getProductNames();
+                adapterProducts = new MatchArrayAdapter(activity, productNames);
+                autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
+            }).perform();
         });
         autoCompleteTextViewParentProduct.setOnItemClickListener(
                 (parent, v, position, id) -> productParent = getProductFromName(
@@ -688,88 +697,44 @@ public class MasterProductSimpleFragment extends Fragment {
     private void download() {
         swipeRefreshLayout.setRefreshing(true);
 
-        downloadProducts();
-        downloadProductGroups();
-        downloadQuantityUnits();
-
-        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            downloadLocations();
-        }
-    }
-
-    private void downloadProducts() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                TAG,
-                response -> {
-                    products = gson.fromJson(
-                            response,
-                            new TypeToken<List<Product>>(){}.getType()
-                    );
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        queue.append(
+                dlHelper.getProducts(products -> {
+                    this.products = products;
                     productNames = getProductNames();
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadLocations() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
-                TAG,
-                response -> {
-                    locations = gson.fromJson(
-                            response,
-                            new TypeToken<ArrayList<Location>>(){}.getType()
-                    );
-                    SortUtil.sortLocationsByName(locations, true);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
-    }
-
-    private void downloadProductGroups() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                TAG,
-                response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<ArrayList<ProductGroup>>(){}.getType()
-                    );
-                    SortUtil.sortProductGroupsByName(productGroups, true);
+                }),
+                dlHelper.getProductGroups(productGroups -> {
+                    this.productGroups = productGroups;
+                    SortUtil.sortProductGroupsByName(this.productGroups, true);
                     // Insert NONE as first element
                     productGroups.add(
                             0,
-                            new ProductGroup(-1, activity.getString(R.string.subtitle_none_selected))
+                            new ProductGroup(
+                                    -1,
+                                    activity.getString(R.string.subtitle_none_selected)
+                            )
                     );
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
+                }),
+                dlHelper.getQuantityUnits(quantityUnits -> {
+                    this.quantityUnits = quantityUnits;
+                    SortUtil.sortQuantityUnitsByName(this.quantityUnits, true);
+                })
         );
-    }
-
-    private void downloadQuantityUnits() {
-        request.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
-                TAG,
-                response -> {
-                    quantityUnits = gson.fromJson(
-                            response,
-                            new TypeToken<ArrayList<QuantityUnit>>(){}.getType()
-                    );
-                    SortUtil.sortQuantityUnitsByName(quantityUnits, true);
-                },
-                this::onDownloadError,
-                this::onQueueEmpty
-        );
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            queue.append(
+                    dlHelper.getLocations(locations -> {
+                        this.locations = locations;
+                        SortUtil.sortLocationsByName(this.locations, true);
+                    })
+            );
+        }
+        queue.start();
     }
 
     private void onDownloadError(VolleyError error) {
-        request.cancelAll(TAG);
+        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         swipeRefreshLayout.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(

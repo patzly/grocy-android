@@ -82,6 +82,7 @@ import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUp(Bundle savedInstanceState) {
         ConfigUtil.loadInfo(
-                requestQueue,
+                new DownloadHelper(this, TAG),
                 grocyApi,
                 sharedPrefs,
                 null,

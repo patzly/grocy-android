@@ -13,7 +13,6 @@ import java.util.Map;
 public class WebRequest {
 
     private RequestQueue requestQueue;
-    private int queueSize = 0;
 
     public WebRequest(RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
@@ -23,41 +22,20 @@ public class WebRequest {
             String url,
             String tag,
             OnResponseListener onResponse,
-            OnErrorListener onError,
-            OnEmptyQueueListener onEmptyQueue
+            OnErrorListener onError
     ) {
-        requestQueue.add(
-                new StringRequest(
-                        Request.Method.GET,
-                        url,
-                        response -> {
-                            onResponse.onResponse(response);
-                            queueSize--;
-                            if(queueSize == 0) {
-                                onEmptyQueue.onEmptyQueue();
-                            }
-                        },
-                        error -> {
-                            onError.onError(error);
-                            queueSize--;
-                            if(queueSize == 0) {
-                                onEmptyQueue.onEmptyQueue();
-                            }
-                        }
-                ).setTag(tag)
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                onResponse::onResponse,
+                onError::onError
         );
-        queueSize++;
+        if(tag != null) stringRequest.setTag(tag);
+        requestQueue.add(stringRequest);
     }
 
     public void get(String url, OnResponseListener onResponse, OnErrorListener onError) {
-        requestQueue.add(
-                new StringRequest(
-                        Request.Method.GET,
-                        url,
-                        onResponse::onResponse,
-                        onError::onError
-                )
-        );
+        get(url, null, onResponse, onError);
     }
 
     public void get(
@@ -81,22 +59,6 @@ public class WebRequest {
                     }
                 }
         );
-    }
-
-    public void get(String url, String tag, OnResponseListener onResponse, OnErrorListener onError) {
-        requestQueue.add(
-                new StringRequest(
-                        Request.Method.GET,
-                        url,
-                        onResponse::onResponse,
-                        onError::onError
-                ).setTag(tag)
-        );
-    }
-
-    public void cancelAll(String tag) {
-        this.queueSize = 0; // TODO: Unclear with tag
-        requestQueue.cancelAll(tag);
     }
 
     public void post(
@@ -144,63 +106,28 @@ public class WebRequest {
         );
     }
 
-    public void put(
+    public void delete(
             String url,
             String tag,
-            JSONObject json,
-            OnJsonResponseListener onResponse,
-            OnErrorListener onError,
-            OnEmptyQueueListener onEmptyQueue
+            OnResponseListener onResponse,
+            OnErrorListener onError
     ) {
-        requestQueue.add(
-                new CustomJsonObjectRequest(
-                        Request.Method.PUT,
-                        url,
-                        json,
-                        response -> {
-                            onResponse.onResponse(response);
-                            queueSize--;
-                            if(queueSize == 0) {
-                                onEmptyQueue.onEmptyQueue();
-                            }
-                        },
-                        error -> {
-                            onError.onError(error);
-                            queueSize--;
-                            if(queueSize == 0) {
-                                onEmptyQueue.onEmptyQueue();
-                            }
-                        }
-                ).setTag(tag)
-
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                onResponse::onResponse,
+                onError::onError
         );
-        queueSize++;
+        if(tag != null) stringRequest.setTag(tag);
+        requestQueue.add(stringRequest);
     }
 
     public void delete(String url, OnResponseListener onResponse, OnErrorListener onError) {
-        requestQueue.add(
-                new StringRequest(
-                        Request.Method.DELETE,
-                        url,
-                        onResponse::onResponse,
-                        onError::onError
-                )
-        );
+        delete(url, null, onResponse, onError);
     }
 
-    public void delete(String url, String tag, OnResponseListener onResponse, OnErrorListener onError) {
-        requestQueue.add(
-                new StringRequest(
-                        Request.Method.DELETE,
-                        url,
-                        onResponse::onResponse,
-                        onError::onError
-                ).setTag(tag)
-        );
-    }
-
-    public int getQueueSize() {
-        return this.queueSize;
+    public void cancelAll(String tag) {
+        requestQueue.cancelAll(tag);
     }
 
     public interface OnResponseListener {
@@ -213,9 +140,5 @@ public class WebRequest {
 
     public interface OnErrorListener {
         void onError(VolleyError error);
-    }
-
-    public interface OnEmptyQueueListener {
-        void onEmptyQueue();
     }
 }

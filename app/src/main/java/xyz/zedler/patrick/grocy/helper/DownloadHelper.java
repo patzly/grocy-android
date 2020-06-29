@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
@@ -436,6 +437,42 @@ public class DownloadHelper {
         return getShoppingLists(onResponseListener, null);
     }
 
+    public QueueItem getStores(
+            OnStoresResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                request.get(
+                        grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<List<Store>>(){}.getType();
+                            ArrayList<Store> stores = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download Stores: " + stores);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(stores);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getStores(OnStoresResponseListener onResponseListener) {
+        return getStores(onResponseListener, null);
+    }
+
     public void deleteProduct(
             int productId,
             OnResponseListener onResponseListener,
@@ -543,6 +580,45 @@ public class DownloadHelper {
         );
     }
 
+    public QueueItem getStringData(
+            String url,
+            OnResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                request.get(
+                        url,
+                        uuid,
+                        response -> {
+                            if(debug) Log.i(
+                                    tag,
+                                    "download StringData from " + url + " : " + response
+                            );
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(response);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(debug) Log.e(tag, "download StringData: " + error);
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getStringData(String url, OnResponseListener onResponseListener) {
+        return getStringData(url, onResponseListener, null);
+    }
+
     public class Queue {
         private ArrayList<QueueItem> queueItems;
         private OnQueueEmptyListener onQueueEmptyListener;
@@ -647,6 +723,10 @@ public class DownloadHelper {
 
     public interface OnShoppingListsResponseListener {
         void onResponse(ArrayList<ShoppingList> arrayList);
+    }
+
+    public interface OnStoresResponseListener {
+        void onResponse(ArrayList<Store> arrayList);
     }
 
     public interface OnResponseListener {
