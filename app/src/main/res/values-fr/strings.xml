@@ -89,7 +89,7 @@
     <string name="msg_missing_products">%1$d en dessous de min. montant du stock</string>
     <string name="msg_consumed">Consommé %1$s %2$s de %3$s</string>
     <string name="msg_consumed_spoiled">Consommé %1$s %2$s de %3$s comme abimé</string>
-    <string name="msg_opened">Marquer %1$s%2$sde %3$s comme ouvert</string>
+    <string name="msg_opened">Marquer %1$s %2$s de %3$s comme ouvert</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d défait</string>
     <!-- %1$s is a product name -->
