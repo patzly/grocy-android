@@ -316,7 +316,7 @@
     <string name="date_years">%1$d années</string>
     <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$djours à partir de maintenant</string>
+    <string name="date_days_from_now">%1$d jours à partir de maintenant</string>
     <!-- This string should contain the singular form of "month".
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_month_from_now">Dans un mois</string>
