@@ -125,7 +125,7 @@
     <string name="msg_batch_tare_weight">Le produit ne prend pas en charge le mode batch: la gestion du poids à vide est activée</string>
     <string name="msg_purchase_transactions_done">Transactions d\'achat terminées des produits créés</string>
     <string name="msg_no_purchase_transactions">Aucune transaction d\'achat en attente</string>
-    <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur:%2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
+    <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
     <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
     <string name="msg_logout_demo">Vous exécutez l\'instance de démonstration grocy de <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications ici n\'est enregistrée!\nIls restent publics jusqu\'à ce que le serveur les écrase automatiquement.</b>\n\nSur l\'écran de connexion, vous pouvez entrer votre propre adresse de serveur.</string>
     <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle de Grocy.</string>
