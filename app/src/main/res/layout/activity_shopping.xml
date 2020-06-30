@@ -94,13 +94,17 @@
                 android:orientation="horizontal"
                 android:background="@color/retro_red_bg_black"
                 android:gravity="center"
+                android:alpha="0.9"
                 android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/roboto_mono_medium"
                     android:textColor="@color/black"
+                    android:textSize="14sp"
                     android:text="@string/error_offline"/>
 
             </LinearLayout>
