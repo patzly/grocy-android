@@ -84,7 +84,7 @@
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d va bientôt expirer</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$dexpiré</string>
+    <string name="msg_expired_products">%1$d expiré</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$den dessous de min. montant du stock</string>
     <string name="msg_consumed">Consommé %1$s %2$s de %3$s</string>
