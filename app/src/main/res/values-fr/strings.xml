@@ -82,14 +82,14 @@
     <string name="tooltip_demo">Vous êtes en mode démo</string>
 
     <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$dva bientôt expirer</string>
+    <string name="msg_expiring_products">%1$d va bientôt expirer</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$dexpiré</string>
+    <string name="msg_expired_products">%1$d expiré</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">%1$den dessous de min. montant du stock</string>
+    <string name="msg_missing_products">%1$d en dessous de min. montant du stock</string>
     <string name="msg_consumed">Consommé %1$s %2$s de %3$s</string>
-    <string name="msg_consumed_spoiled">Consommé %1$s%2$s de %3$s comme abimé</string>
-    <string name="msg_opened">Marquer %1$s%2$sde %3$s comme ouvert</string>
+    <string name="msg_consumed_spoiled">Consommé %1$s %2$s de %3$s comme abimé</string>
+    <string name="msg_opened">Marquer %1$s %2$s de %3$s comme ouvert</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d défait</string>
     <!-- %1$s is a product name -->
@@ -112,7 +112,7 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_cleared">%1$s effacé avec succès</string>
     <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_deleted">%1$ssupprimé avec succès</string>
+    <string name="msg_shopping_list_deleted">%1$s supprimé avec succès</string>
     <string name="msg_barcode_duplicate">Le code-barres existe déjà</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Supprimer %1$s \"%2$s\"?</string>
@@ -125,7 +125,7 @@
     <string name="msg_batch_tare_weight">Le produit ne prend pas en charge le mode batch: la gestion du poids à vide est activée</string>
     <string name="msg_purchase_transactions_done">Transactions d\'achat terminées des produits créés</string>
     <string name="msg_no_purchase_transactions">Aucune transaction d\'achat en attente</string>
-    <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur:%2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
+    <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
     <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
     <string name="msg_logout_demo">Vous exécutez l\'instance de démonstration grocy de <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications ici n\'est enregistrée!\nIls restent publics jusqu\'à ce que le serveur les écrase automatiquement.</b>\n\nSur l\'écran de connexion, vous pouvez entrer votre propre adresse de serveur.</string>
     <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle de Grocy.</string>
@@ -316,7 +316,7 @@
     <string name="date_years">%1$d années</string>
     <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$djours à partir de maintenant</string>
+    <string name="date_days_from_now">%1$d jours à partir de maintenant</string>
     <!-- This string should contain the singular form of "month".
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_month_from_now">Dans un mois</string>
@@ -343,7 +343,7 @@
     <string name="date_year_ago">Il y a un an</string>
     <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_ago">%1$dannées avant</string>
+    <string name="date_years_ago">%1$d années avant</string>
 
     <string name="info_acknowledgement">Nous tenons à remercier Bernd Bestel, sans le grand travail duquel cette application n\'aurait jamais été possible.</string>
     <string name="info_intro">Rejouer l\'intro</string>
@@ -406,6 +406,8 @@
     <string name="setting_ask_location">Demandez l\'emplacement</string>
     <string name="setting_ask_specific_item">Demander un article spécifique</string>
 
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
     <!-- Strings for HelpActivity -->
 
