@@ -270,7 +270,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         dlHelper.getShoppingListItems(listItems -> {
             this.shoppingListItems = listItems;
             onQueueEmpty(true);
-        }).perform();
+        }, this::onDownloadError).perform();
         productUpdateDone = false;
     }
 
