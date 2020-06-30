@@ -112,7 +112,7 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_cleared">%1$s effacé avec succès</string>
     <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_deleted">%1$ssupprimé avec succès</string>
+    <string name="msg_shopping_list_deleted">%1$s supprimé avec succès</string>
     <string name="msg_barcode_duplicate">Le code-barres existe déjà</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Supprimer %1$s \"%2$s\"?</string>
