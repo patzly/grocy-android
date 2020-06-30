@@ -82,7 +82,7 @@
     <string name="tooltip_demo">Vous êtes en mode démo</string>
 
     <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$dva bientôt expirer</string>
+    <string name="msg_expiring_products">%1$d va bientôt expirer</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$dexpiré</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -406,6 +406,8 @@
     <string name="setting_ask_location">Demandez l\'emplacement</string>
     <string name="setting_ask_specific_item">Demander un article spécifique</string>
 
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
     <!-- Strings for HelpActivity -->
 
