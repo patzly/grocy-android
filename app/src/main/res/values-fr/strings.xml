@@ -406,7 +406,7 @@
     <string name="setting_ask_location">Demandez l\'emplacement</string>
     <string name="setting_ask_specific_item">Demander un article spécifique</string>
 
-    <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+    <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
     <!-- Strings for HelpActivity -->
 
     <string name="help_general_header">Comment savoir ce que fait quelque chose?</string>
