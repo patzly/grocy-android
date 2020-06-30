@@ -1,10 +1,9 @@
 1.5.0:
-- Our app is now translatable: Visit us on GitHub for info
-- Added French language (thanks prohand!)
-- Added German language
+- Our app is now translatable: Visit us on GitHub for more information
+- French translation (thanks prohand!)
+- German translation
 - Offline indicator in shopping mode
 - Clear only done items in shopping list
-- Improved navigation
 - Bug fixes and improvements
 
 1.4.2:
