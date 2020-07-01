@@ -274,7 +274,7 @@
     <string name="property_bb_days">À consommer de préférence avant</string>
     <string name="property_bb_days_default">Jours de péremption par défaut</string>
     <string name="property_bb_days_default_opened">Meilleur jour par défaut avant ouverture</string>
-    <string name="property_location">NotesEmplacement</string>
+    <string name="property_location">Emplacement</string>
     <string name="property_location_default">Emplacement par défaut</string>
     <string name="property_notes">Notes</string>
     <string name="property_locations">Emplacements</string>
@@ -331,7 +331,7 @@
     <string name="date_years_from_now">%1$d il y a des années</string>
     <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">%1$djours avant</string>
+    <string name="date_days_ago">%1$d jours avant</string>
     <!-- This string should contain the singular form of "month".
     It stands alone, so it can be capitalized at the beginning (if necessary). -->
     <string name="date_month_ago">Il y a un mois</string>
