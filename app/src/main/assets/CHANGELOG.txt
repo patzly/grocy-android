@@ -1,3 +1,7 @@
+1.5.1:
+- Bug fixes and improvements
+- Updated translations
+
 1.5.0:
 - Our app is now translatable: Visit us on GitHub for more information
 - French translation (thanks prohand!)
