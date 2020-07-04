@@ -68,6 +68,7 @@
     <string name="action_shopping_mode">Shopping mode</string>
     <string name="action_add_missing">Add missing products</string>
     <string name="action_purchase_all_items">Purchase all items</string>
+    <string name="action_skip_entry">Skip entry</string>
     <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
@@ -219,6 +220,7 @@
     <string name="title_shopping_list_new">New shopping list</string>
     <string name="title_shopping_mode">Shopping mode</string>
     <string name="title_products_to_create">Products to create</string>
+    <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -238,6 +240,8 @@
     <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Entry %1$d of %2$d</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>

@@ -77,6 +77,49 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/linear_purchase_batch_mode_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/linear_purchase_batch_mode_info"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+
+                        <ImageView
+                            android:id="@+id/image_purchase_batch"
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:src="@drawable/ic_round_shopping_list_long"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.OverLine"
+                                android:text="@string/title_batch_mode_shopping_list" />
+
+                            <TextView
+                                android:id="@+id/text_purchase_batch"
+                                style="@style/Theme.Grocy.ListItem.Title" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/linear_purchase_shopping_list_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/row_shopping_list_item" />
+
+                    <View
+                        android:id="@+id/divider_drawer_shopping_list"
+                        style="@style/Theme.Grocy.Divider"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     style="@style/Theme.Grocy.ListItem.TwoLine"
                     android:paddingTop="8dp"
                     android:paddingBottom="0dp">

@@ -85,6 +85,7 @@ import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
@@ -1083,6 +1084,26 @@ public class ShoppingListFragment extends Fragment
                 } else {
                     showMessage(activity.getString(R.string.error_undefined));
                 }
+                return true;
+            });
+        }
+
+        MenuItem purchaseItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
+        if(purchaseItems != null) {
+            purchaseItems.setOnMenuItemClickListener(item -> {
+                if(shoppingListItemsSelected.isEmpty()) {
+                    showMessage(activity.getString(R.string.error_empty_shopping_list));
+                    return true;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString(
+                        Constants.ARGUMENT.TYPE,
+                        Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
+                );
+                ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
+                SortUtil.sortShoppingListItemsByName(listItems, true);
+                bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LIST_ITEMS, listItems);
+                activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
                 return true;
             });
         }

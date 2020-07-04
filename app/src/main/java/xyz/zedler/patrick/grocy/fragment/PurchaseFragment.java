@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
@@ -74,6 +75,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -103,15 +105,16 @@ public class PurchaseFragment extends Fragment {
     private ArrayList<Location> locations;
     private ArrayList<Store> stores;
     private ArrayList<String> productNames;
+    private ArrayList<QuantityUnit> quantityUnits;
 
     private ProductDetails productDetails;
 
     private int selectedLocationId;
     private int selectedStoreId;
+    private int shoppingListItemPos;
     private String selectedBestBeforeDate;
     private double amount;
     private double minAmount;
-    private boolean nameAutoFilled;
     private boolean debug;
 
     @Override
@@ -142,6 +145,7 @@ public class PurchaseFragment extends Fragment {
         locations = null;
         stores = null;
         productNames = null;
+        quantityUnits = null;
         productDetails = null;
         selectedBestBeforeDate = null;
 
@@ -179,6 +183,7 @@ public class PurchaseFragment extends Fragment {
         locations = new ArrayList<>();
         stores = new ArrayList<>();
         productNames = new ArrayList<>();
+        quantityUnits = new ArrayList<>();
 
         productDetails = null;
         selectedLocationId = -1;
@@ -186,7 +191,7 @@ public class PurchaseFragment extends Fragment {
         selectedBestBeforeDate = null;
         amount = 0;
         minAmount = 0;
-        nameAutoFilled = false;
+        shoppingListItemPos = 0;
 
         // INITIALIZE VIEWS
 
@@ -217,7 +222,7 @@ public class PurchaseFragment extends Fragment {
             dlHelper.getProducts(products -> {
                 this.products = products;
                 productNames = getProductNames();
-                adapterProducts = new MatchArrayAdapter(activity, productNames);
+                adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
                 binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
             }).perform();
         });
@@ -233,9 +238,7 @@ public class PurchaseFragment extends Fragment {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
                         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()
-                                && !nameAutoFilled
-                        ) {
+                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
@@ -246,7 +249,6 @@ public class PurchaseFragment extends Fragment {
                         return true;
                     } return false;
         });
-        nameAutoFilled = false;
 
         // best before date
 
@@ -397,6 +399,18 @@ public class PurchaseFragment extends Fragment {
 
         hideDisabledFeatures();
 
+        // show or hide shopping list item section
+        if(startupBundle != null) {
+            String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
+            if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
+                binding.linearPurchaseBatchModeSection.setVisibility(View.VISIBLE);
+            } else {
+                binding.linearPurchaseBatchModeSection.setVisibility(View.GONE);
+            }
+        } else {
+            binding.linearPurchaseBatchModeSection.setVisibility(View.GONE);
+        }
+
         // START
 
         if(savedInstanceState == null) {
@@ -417,16 +431,17 @@ public class PurchaseFragment extends Fragment {
         outState.putParcelableArrayList("products", products);
         outState.putParcelableArrayList("locations", locations);
         outState.putParcelableArrayList("stores", stores);
+        outState.putParcelableArrayList("quantityUnits", quantityUnits);
 
         outState.putParcelable("productDetails", productDetails);
 
         outState.putInt("selectedLocationId", selectedLocationId);
         outState.putInt("selectedStoreId", selectedStoreId);
+        outState.putInt("shoppingListItemPos", shoppingListItemPos);
         outState.putString("selectedBestBeforeDate", selectedBestBeforeDate);
 
         outState.putDouble("amount", amount);
         outState.putDouble("minAmount", minAmount);
-        outState.putBoolean("nameAutoFilled", nameAutoFilled);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -435,20 +450,23 @@ public class PurchaseFragment extends Fragment {
         products = savedInstanceState.getParcelableArrayList("products");
         locations = savedInstanceState.getParcelableArrayList("locations");
         stores = savedInstanceState.getParcelableArrayList("stores");
+        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
 
         productNames = getProductNames();
-        adapterProducts = new MatchArrayAdapter(activity, productNames);
+        adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
         binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
 
         productDetails = savedInstanceState.getParcelable("productDetails");
 
         selectedLocationId = savedInstanceState.getInt("selectedLocationId");
         selectedStoreId = savedInstanceState.getInt("selectedStoreId");
+        shoppingListItemPos = savedInstanceState.getInt("currentShoppingListItem");
         selectedBestBeforeDate = savedInstanceState.getString("selectedBestBeforeDate");
 
         amount = savedInstanceState.getDouble("amount");
         minAmount = savedInstanceState.getDouble("minAmount");
-        nameAutoFilled = savedInstanceState.getBoolean("nameAutoFilled");
+
+        fillWithShoppingListItem();
 
         binding.swipePurchase.setRefreshing(false);
     }
@@ -491,12 +509,8 @@ public class PurchaseFragment extends Fragment {
                 dlHelper.getProducts(products -> {
                     this.products = products;
                     productNames = getProductNames();
-                    adapterProducts = new MatchArrayAdapter(activity, productNames);
+                    adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
                     binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-                }),
-                dlHelper.getLocations(locations -> { // TODO: Download only if feature is enabled
-                    this.locations = locations;
-                    SortUtil.sortLocationsByName(this.locations, true);
                 }),
                 dlHelper.getStores(stores -> {
                     this.stores = stores;
@@ -507,7 +521,26 @@ public class PurchaseFragment extends Fragment {
                             new Store(-1, activity.getString(R.string.subtitle_none_selected))
                     );
                 })
-        ).start();
+        );
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            queue.append(
+                    dlHelper.getLocations(locations -> {
+                        this.locations = locations;
+                        SortUtil.sortLocationsByName(this.locations, true);
+                    })
+            );
+        }
+        // only load quantity units if shopping list items have to be displayed
+        if(startupBundle != null) {
+            String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
+            if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
+                queue.append(
+                        dlHelper.getQuantityUnits(quUnits -> this.quantityUnits = quUnits)
+                );
+            }
+        }
+
+        queue.start();
     }
 
     private void onError(VolleyError error) {
@@ -533,31 +566,67 @@ public class PurchaseFragment extends Fragment {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
         }
         if(action != null) {
-            if(action.equals(Constants.ACTION.CREATE_THEN_PURCHASE)
-                    || action.equals(Constants.ACTION.EDIT_THEN_PURCHASE)
-            ) {
-                Product product = getProductFromName(
-                        startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                );
-                if(product != null) {
-                    loadProductDetails(product.getId());
-                } else {
-                    binding.autoCompletePurchaseProduct.setText(
+            Product product;
+            switch (action) {
+                case Constants.ACTION.CREATE_THEN_PURCHASE:
+                case Constants.ACTION.EDIT_THEN_PURCHASE:
+                    product = getProductFromName(
                             startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
                     );
-                }
-            } else if(action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)
-                    || action.equals(Constants.ACTION.PURCHASE_THEN_STOCK)
-            ) {
-                Product product = getProductFromName(
-                        startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                );
-                if(product != null) {
-                    loadProductDetails(product.getId());
-                }
+                    if(product != null) {
+                        loadProductDetails(product.getId());
+                    } else {
+                        binding.autoCompletePurchaseProduct.setText(
+                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                        );
+                    }
+                    break;
+                case Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST:
+                case Constants.ACTION.PURCHASE_THEN_STOCK:
+                    product = getProductFromName(
+                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                    );
+                    if(product != null) {
+                        loadProductDetails(product.getId());
+                    }
+                    break;
+                case Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST:
+                    fillWithShoppingListItem();
+                    break;
             }
         }
         binding.swipePurchase.setRefreshing(false);
+    }
+
+    private void fillWithShoppingListItem() {
+        if(startupBundle == null) return;
+        String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
+        if(type == null || !type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) return;
+        ArrayList<ShoppingListItem> listItems = startupBundle.getParcelableArrayList(
+                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
+        );
+        if(listItems == null) return;
+        if(shoppingListItemPos+1 > listItems.size()) return;
+        ShoppingListItem listItem = listItems.get(shoppingListItemPos);
+        if(listItem == null) return;
+
+        binding.textPurchaseBatch.setText(activity.getString(
+                R.string.subtitle_entry_num_of_num,
+                shoppingListItemPos+1,
+                listItems.size()
+        ));
+        ShoppingListItemAdapter.fillShoppingListItem(
+                activity,
+                listItem,
+                binding.linearPurchaseShoppingListItem,
+                quantityUnits
+        );
+        startupBundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(listItem.getAmount()));
+        if(listItem.getProductId() != null) {
+            loadProductDetails(Integer.parseInt(listItem.getProductId()));
+        } else {
+            fillAmount(false);
+        }
     }
 
     @Override
@@ -571,8 +640,6 @@ public class PurchaseFragment extends Fragment {
 
     @SuppressLint("SimpleDateFormat")
     private void fillWithProductDetails() {
-        nameAutoFilled = true;
-
         clearInputFocus();
 
         boolean isTareWeightHandlingEnabled = productDetails
@@ -600,53 +667,8 @@ public class PurchaseFragment extends Fragment {
         }
 
         // AMOUNT
-        binding.textInputPurchaseAmount.setHint(
-                activity.getString(
-                        R.string.property_amount_in,
-                        productDetails.getQuantityUnitPurchase().getNamePlural()
-                )
-        );
-        if(!isTareWeightHandlingEnabled) {
-            minAmount = 1;
-        } else {
-            minAmount = productDetails.getProduct().getTareWeight()
-                    + productDetails.getStockAmount();
-        }
 
-        if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
-            double amount = Double.parseDouble(Objects.requireNonNull(
-                    startupBundle.getString(Constants.ARGUMENT.AMOUNT)
-            ));
-            binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
-        } else {
-            // leave amount empty if tare weight handling enabled
-            if(!isTareWeightHandlingEnabled) {
-                String defaultAmount = sharedPrefs.getString(
-                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
-                );
-                if(defaultAmount.isEmpty()) {
-                    binding.editTextPurchaseAmount.setText(null);
-                } else {
-                    binding.editTextPurchaseAmount.setText(
-                            NumUtil.trim(Double.parseDouble(defaultAmount))
-                    );
-                }
-            } else {
-                binding.editTextPurchaseAmount.setText(null);
-            }
-        }
-
-        if(getAmount().isEmpty()) {
-            binding.editTextPurchaseAmount.requestFocus();
-            activity.showKeyboard(binding.editTextPurchaseAmount);
-        }
-
-        // set icon for tare weight, else for normal amount
-        binding.imagePurchaseAmount.setImageResource(
-                isTareWeightHandlingEnabled
-                        ? R.drawable.ic_round_scale_anim
-                        : R.drawable.ic_round_scatter_plot_anim
-        );
+        fillAmount(isTareWeightHandlingEnabled);
 
         // PRICE
 
@@ -705,6 +727,60 @@ public class PurchaseFragment extends Fragment {
         isFormIncomplete();
     }
 
+    private void fillAmount(boolean isTareWeightHandlingEnabled) {
+        if(productDetails != null) {
+            binding.textInputPurchaseAmount.setHint(
+                    activity.getString(
+                            R.string.property_amount_in,
+                            productDetails.getQuantityUnitPurchase().getNamePlural()
+                    )
+            );
+        } else {
+            binding.textInputPurchaseAmount.setHint(activity.getString(R.string.property_amount));
+        }
+        if(!isTareWeightHandlingEnabled || productDetails == null) {
+            minAmount = 1;
+        } else {
+            minAmount = productDetails.getProduct().getTareWeight();
+            minAmount += productDetails.getStockAmount();
+        }
+
+        if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
+            double amount = Double.parseDouble(Objects.requireNonNull(
+                    startupBundle.getString(Constants.ARGUMENT.AMOUNT)
+            ));
+            binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
+        } else {
+            // leave amount empty if tare weight handling enabled
+            if(!isTareWeightHandlingEnabled) {
+                String defaultAmount = sharedPrefs.getString(
+                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
+                );
+                if(defaultAmount.isEmpty()) {
+                    binding.editTextPurchaseAmount.setText(null);
+                } else {
+                    binding.editTextPurchaseAmount.setText(
+                            NumUtil.trim(Double.parseDouble(defaultAmount))
+                    );
+                }
+            } else {
+                binding.editTextPurchaseAmount.setText(null);
+            }
+        }
+
+        if(getAmount().isEmpty()) {
+            binding.editTextPurchaseAmount.requestFocus();
+            activity.showKeyboard(binding.editTextPurchaseAmount);
+        }
+
+        // set icon for tare weight, else for normal amount
+        binding.imagePurchaseAmount.setImageResource(
+                isTareWeightHandlingEnabled
+                        ? R.drawable.ic_round_scale_anim
+                        : R.drawable.ic_round_scatter_plot_anim
+        );
+    }
+
     private void clearInputFocus() {
         activity.hideKeyboard();
         binding.textInputPurchaseProduct.clearFocus();
@@ -740,7 +816,6 @@ public class PurchaseFragment extends Fragment {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         binding.autoCompletePurchaseProduct.setText(barcode);
-                        nameAutoFilled = true;
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
                         activity.showBottomSheet(
@@ -757,11 +832,7 @@ public class PurchaseFragment extends Fragment {
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-        if(!productNames.isEmpty()
-                && !productNames.contains(input)
-                && !input.isEmpty()
-                && !nameAutoFilled
-        ) {
+        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
@@ -862,30 +933,62 @@ public class PurchaseFragment extends Fragment {
                         action = startupBundle.getString(Constants.ARGUMENT.TYPE);
                     }
                     if(action != null) {
-                        if(action.equals(Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST)) {
-                            // delete entry from shopping list
-                            ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                                    Constants.ARGUMENT.SHOPPING_LIST_ITEM
-                            );
-                            assert shoppingListItem != null;
-                            request.delete(
-                                    grocyApi.getObject(
-                                            GrocyApi.ENTITY.SHOPPING_LIST,
-                                            shoppingListItem.getId()
-                                    ),
-                                    response1 -> activity.dismissFragment(),
-                                    error -> activity.dismissFragment()
-                            );
-                            return;
-                        } else if(action.equals(Constants.ACTION.PURCHASE_THEN_STOCK)) {
-                            activity.dismissFragment();
-                            return;
+                        switch (action) {
+                            case Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST:
+                                // delete entry from shopping list
+                                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
+                                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
+                                );
+                                assert shoppingListItem != null;
+                                request.delete(
+                                        grocyApi.getObject(
+                                                GrocyApi.ENTITY.SHOPPING_LIST,
+                                                shoppingListItem.getId()
+                                        ),
+                                        response1 -> activity.dismissFragment(),
+                                        error -> activity.dismissFragment()
+                                );
+                                return;
+                            case Constants.ACTION.PURCHASE_THEN_STOCK:
+                                activity.dismissFragment();
+                                return;
+                            case Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST:
+                                ArrayList<ShoppingListItem> listItems = startupBundle
+                                        .getParcelableArrayList(
+                                        Constants.ARGUMENT.SHOPPING_LIST_ITEMS
+                                );
+                                assert listItems != null;
+                                ShoppingListItem listItem = listItems.get(shoppingListItemPos);
+                                request.delete(
+                                        grocyApi.getObject(
+                                                GrocyApi.ENTITY.SHOPPING_LIST,
+                                                listItem.getId()
+                                        ),
+                                        response1 -> {
+                                            shoppingListItemPos += 1;
+                                            if(shoppingListItemPos + 1 > listItems.size()) {
+                                                activity.dismissFragment();
+                                                return;
+                                            }
+                                            clearAll();
+                                            fillWithShoppingListItem();
+                                        },
+                                        error -> {
+                                            shoppingListItemPos += 1;
+                                            if(shoppingListItemPos + 1 > listItems.size()) {
+                                                activity.dismissFragment();
+                                                return;
+                                            }
+                                            clearAll();
+                                            fillWithShoppingListItem();
+                                        }
+                                );
+                            default:
+                                clearAll();
                         }
+                    } else {
+                        clearAll();
                     }
-
-                    // CLEAR USER INPUT
-                    nameAutoFilled = false;
-                    clearAll();
                 },
                 error -> {
                     showErrorMessage();
@@ -895,6 +998,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void undoTransaction(String transactionId) {
+        if(binding == null || activity != null && activity.isDestroyed()) return;
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
@@ -978,7 +1082,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemBatch, menuItemDetails;
+        MenuItem menuItemBatch, menuItemDetails, menuItemSkipItem;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
         menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
@@ -1004,6 +1108,32 @@ public class PurchaseFragment extends Fragment {
                 }
                 return true;
             });
+        }
+        menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
+        if(menuItemSkipItem != null) {
+            String action = null;
+            if(startupBundle != null) action = startupBundle.getString(Constants.ARGUMENT.TYPE);
+            if(action != null && action.equals(
+                    Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
+            )) {
+                menuItemSkipItem.setVisible(true);
+                menuItemSkipItem.setOnMenuItemClickListener(item -> {
+                    IconUtil.start(menuItemSkipItem);
+                    ArrayList<ShoppingListItem> listItems = startupBundle
+                            .getParcelableArrayList(
+                                    Constants.ARGUMENT.SHOPPING_LIST_ITEMS
+                            );
+                    assert listItems != null;
+                    shoppingListItemPos += 1;
+                    if(shoppingListItemPos + 1 > listItems.size()) {
+                        activity.dismissFragment();
+                        return true;
+                    }
+                    clearAll();
+                    fillWithShoppingListItem();
+                    return true;
+                });
+            }
         }
     }
 
@@ -1063,7 +1193,9 @@ public class PurchaseFragment extends Fragment {
     }
 
     private boolean isLocationValid() {
-        if(selectedLocationId < 0) {
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            return true;
+        } else if(selectedLocationId < 0) {
             binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
@@ -1172,7 +1304,6 @@ public class PurchaseFragment extends Fragment {
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
         }
-        nameAutoFilled = false;
     }
 
     private void showErrorMessage() {

@@ -18,4 +18,12 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
+    <item
+        android:id="@+id/action_shopping_list_item_skip"
+        android:title="@string/action_skip_entry"
+        android:icon="@drawable/ic_round_arrow_back"
+        android:visible="false"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
 </menu>

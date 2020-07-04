@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -283,5 +284,130 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     public interface ShoppingListItemAdapterListener {
         void onItemRowClicked(int position);
+    }
+
+    // Only for PurchaseFragment
+    public static void fillShoppingListItem(
+            Context context,
+            ShoppingListItem listItem,
+            RowShoppingListItemBinding binding,
+            ArrayList<QuantityUnit> quantityUnits
+    ) {
+
+        // NAME
+
+        Product product = listItem.getProduct();
+        if(product != null) {
+            binding.textShoppingListItemName.setText(product.getName());
+            binding.textShoppingListItemName.setVisibility(View.VISIBLE);
+        } else {
+            binding.textShoppingListItemName.setText(null);
+            binding.textShoppingListItemName.setVisibility(View.GONE);
+        }
+        if(listItem.isUndone()) {
+            binding.textShoppingListItemName.setPaintFlags(
+                    binding.textShoppingListItemName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+            );
+        } else {
+            binding.textShoppingListItemName.setPaintFlags(
+                    binding.textShoppingListItemName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+            );
+        }
+
+        // NOTE AS NAME
+
+        if(binding.textShoppingListItemName.getVisibility() == View.VISIBLE) {
+            binding.textShoppingListNoteAsName.setVisibility(View.GONE);
+            binding.textShoppingListNoteAsName.setText(null);
+        }
+
+        // AMOUNT
+
+        if(listItem.getProduct() != null) {
+            QuantityUnit quantityUnit = new QuantityUnit();
+            for(int i = 0; i < quantityUnits.size(); i++) {
+                if(quantityUnits.get(i).getId() == listItem.getProduct().getQuIdPurchase()) {
+                    quantityUnit = quantityUnits.get(i);
+                    break;
+                }
+            }
+
+            if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
+
+            binding.textShoppingListItemAmount.setText(
+                    context.getString(
+                            R.string.subtitle_amount,
+                            NumUtil.trim(listItem.getAmount()),
+                            listItem.getAmount() == 1
+                                    ? quantityUnit.getName()
+                                    : quantityUnit.getNamePlural()
+                    )
+            );
+        } else {
+            binding.textShoppingListItemAmount.setText(NumUtil.trim(listItem.getAmount()));
+        }
+
+        if(listItem.isMissing()) {
+            binding.textShoppingListItemAmount.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
+            );
+            binding.textShoppingListItemAmount.setTextColor(
+                    ContextCompat.getColor(context, R.color.retro_blue_fg)
+            );
+        } else {
+            binding.textShoppingListItemAmount.setTypeface(
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
+            );
+            binding.textShoppingListItemAmount.setTextColor(
+                    ContextCompat.getColor(context, R.color.on_background_secondary)
+            );
+        }
+        if(listItem.isUndone()) {
+            binding.textShoppingListItemAmount.setPaintFlags(
+                    binding.textShoppingListItemAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+            );
+        } else {
+            binding.textShoppingListItemAmount.setPaintFlags(
+                    binding.textShoppingListItemAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+            );
+        }
+
+        // NOTE
+
+        if(listItem.getNote() != null && !listItem.getNote().isEmpty()) {
+            if(binding.textShoppingListItemName.getVisibility() == View.VISIBLE) {
+                binding.linearShoppingListNote.setVisibility(View.VISIBLE);
+                binding.textShoppingListNote.setText(listItem.getNote().trim());
+            } else {
+                binding.textShoppingListNoteAsName.setVisibility(View.VISIBLE);
+                binding.textShoppingListNoteAsName.setText(listItem.getNote().trim());
+            }
+        } else {
+            if(binding.textShoppingListItemName.getVisibility() == View.VISIBLE) {
+                binding.linearShoppingListNote.setVisibility(View.GONE);
+                binding.textShoppingListNote.setText(null);
+            }
+        }
+        if(binding.textShoppingListNoteAsName.getVisibility() == View.VISIBLE) {
+            if(listItem.isUndone()) {
+                binding.textShoppingListNoteAsName.setPaintFlags(
+                        binding.textShoppingListNoteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+                );
+            } else {
+                binding.textShoppingListNoteAsName.setPaintFlags(
+                        binding.textShoppingListNoteAsName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                );
+            }
+        } else {
+            if(listItem.isUndone()) {
+                binding.textShoppingListNote.setPaintFlags(
+                        binding.textShoppingListNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+                );
+            } else {
+                binding.textShoppingListNote.setPaintFlags(
+                        binding.textShoppingListNote.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                );
+            }
+        }
     }
 }

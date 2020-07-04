@@ -839,6 +839,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void undoTransaction(String transactionId) {
+        if(binding == null || activity != null && activity.isDestroyed()) return;
         request.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {

@@ -162,6 +162,7 @@ public final class Constants {
         public final static String EDIT_THEN_SHOPPING_LIST_ITEM_EDIT = "edit_then_shopping_list_item_edit";
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
         public final static String PURCHASE_THEN_SHOPPING_LIST = "purchase_then_shopping_list";
+        public final static String PURCHASE_MULTI_THEN_SHOPPING_LIST = "purchase_multi_then_shopping_list"; // purchase multi shopping list items
         public final static String PURCHASE_THEN_STOCK = "purchase_then_stock";
         public final static String CONSUME_THEN_STOCK = "consume_then_stock";
     }
@@ -209,6 +210,7 @@ public final class Constants {
         public final static String CURRENT_FRAGMENT = "current_fragment";
         public final static String BARCODE = "barcode";
         public final static String SHOPPING_LIST_ITEM = "shopping_list_item";
+        public final static String SHOPPING_LIST_ITEMS = "shopping_list_items";
         public final static String BARCODES = "barcodes";
         public final static String CREATE_PRODUCT_OBJECT = "create_product_object";
         public final static String BATCH_ITEMS = "batch_items";
