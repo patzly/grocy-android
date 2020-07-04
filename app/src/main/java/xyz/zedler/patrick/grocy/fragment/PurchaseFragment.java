@@ -599,15 +599,9 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void fillWithShoppingListItem() {
-        if(startupBundle == null) return;
-        String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
-        if(type == null || !type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) return;
-        ArrayList<ShoppingListItem> listItems = startupBundle.getParcelableArrayList(
-                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
-        );
+        ArrayList<ShoppingListItem> listItems = getShoppingListItems();
         if(listItems == null) return;
-        if(shoppingListItemPos+1 > listItems.size()) return;
-        ShoppingListItem listItem = listItems.get(shoppingListItemPos);
+        ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
         if(listItem == null) return;
 
         binding.textPurchaseBatch.setText(activity.getString(
@@ -627,6 +621,22 @@ public class PurchaseFragment extends Fragment {
         } else {
             fillAmount(false);
         }
+    }
+
+    private ArrayList<ShoppingListItem> getShoppingListItems() {
+        if(startupBundle == null) return null;
+        String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
+        if(type == null || !type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
+            return null;
+        }
+        return startupBundle.getParcelableArrayList(
+                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
+        );
+    }
+
+    private ShoppingListItem getCurrentShoppingListItem(ArrayList<ShoppingListItem> listItems) {
+        if(shoppingListItemPos+1 > listItems.size()) return null;
+        return listItems.get(shoppingListItemPos);
     }
 
     @Override
@@ -953,12 +963,10 @@ public class PurchaseFragment extends Fragment {
                                 activity.dismissFragment();
                                 return;
                             case Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST:
-                                ArrayList<ShoppingListItem> listItems = startupBundle
-                                        .getParcelableArrayList(
-                                        Constants.ARGUMENT.SHOPPING_LIST_ITEMS
-                                );
+                                ArrayList<ShoppingListItem> listItems = getShoppingListItems();
                                 assert listItems != null;
-                                ShoppingListItem listItem = listItems.get(shoppingListItemPos);
+                                ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
+                                assert listItem != null;
                                 request.delete(
                                         grocyApi.getObject(
                                                 GrocyApi.ENTITY.SHOPPING_LIST,
