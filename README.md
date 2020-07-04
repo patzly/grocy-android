@@ -52,7 +52,7 @@ It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assi
 Until Grocy Android `v1.x.x` at least Android 5.0 Lollipop is required on your device.  
 With `v.2.0.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
 
-**Self-signed certificates are not supported right now** but an implementation is planned.  
+**Self-signed certificates are not supported at the moment** but an implementation is planned.  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
 To meet these requirements, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for proper `https` encryption.
 
@@ -60,9 +60,11 @@ To meet these requirements, you can use a free certificate from [letsencrypt.org
 
 If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
 
-Like the grocy project, Grocy Android can be translated, too. The first language is English, but we also maintain the German translation because it is our mother tongue.
+Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
-Translations which reached a completion level of 80 % will be included in releases.
+Translations which reached a completion level of 80% will be included in releases.
+
+- French by [prohand](https://github.com/prohand)
 
 ## Acknowledgement
 
@@ -75,5 +77,5 @@ Copyright &copy; 2020 Patrick Zedler & Dominic Zedler. All rights reserved.
 [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
 
 > Grocy Android is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
+>
 > Grocy Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
