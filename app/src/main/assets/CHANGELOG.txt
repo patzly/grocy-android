@@ -1,4 +1,5 @@
-1.5.1:
+1.6.0:
+- Purchase all items in shopping list
 - Bug fixes and improvements
 - Updated translations
 

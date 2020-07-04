@@ -587,7 +587,7 @@ public class ShoppingListFragment extends Fragment
             if(startupShoppingListName != null) {
                 for(ShoppingList shoppingList : shoppingLists) {
                     if(shoppingList.getName().equals(startupShoppingListName)) {
-                        selectedShoppingListId = shoppingList.getId();
+                        selectShoppingList(shoppingList.getId());
                     }
                 }
                 startupShoppingListName = null;
