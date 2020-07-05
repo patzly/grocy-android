@@ -25,7 +25,6 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -39,14 +38,11 @@ import androidx.annotation.MenuRes;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.util.UnitUtil;
@@ -60,7 +56,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	private static final int ENTER_ANIMATION_DURATION = 225;
 	private static final int EXIT_ANIMATION_DURATION = 175;
 	private static final int INVISIBLE = 0, VISIBLE = 1;
-	private static final boolean USE_ACCURATE_CRADLE_ANIMATION = true;
 	private static final int ICON_ANIM_DURATION = 200;
 	private static final double ICON_ANIM_DELAY_FACTOR = 0.7;
 
@@ -71,8 +66,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 
 	private Runnable runnableOnShow;
 	private Runnable runnableOnHide;
-
-	private ArrayList<Handler> handlers = new ArrayList<>();
 
 	public CustomBottomAppBar(Context context) {
 		super(context);
@@ -92,7 +85,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 				ENTER_ANIMATION_DURATION,
 				AnimationUtils.LINEAR_OUT_SLOW_IN_INTERPOLATOR
 		);
-		if(isFabVisibleOrWillBeShown()) setCradleVisibility(true);
 		if(runnableOnShow != null) runnableOnShow.run();
 	}
 
@@ -101,7 +93,7 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	 */
 	public void hide() {
 		MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-		int addOffset = Build.VERSION.SDK_INT == 27 ? 0 : UnitUtil.getDp(getContext(), 10);
+		int addOffset = /*Build.VERSION.SDK_INT == 27 ? 0 :*/ UnitUtil.getDp(getContext(), 10);
 		isOrWillBeShown = false;
 		animateTo(
 				getMeasuredHeight()
@@ -110,7 +102,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 				EXIT_ANIMATION_DURATION,
 				AnimationUtils.FAST_OUT_LINEAR_IN_INTERPOLATOR
 		);
-		if(isFabVisibleOrWillBeShown()) setCradleVisibility(false);
 		if(runnableOnHide != null) runnableOnHide.run();
 	}
 
@@ -286,49 +277,6 @@ public class CustomBottomAppBar extends com.google.android.material.bottomappbar
 	 */
 	public boolean isNavigationIconVisible() {
 		return getNavigationIcon() != null;
-	}
-
-	private void setCradleVisibility(boolean visible) {
-		if(USE_ACCURATE_CRADLE_ANIMATION) {
-			ValueAnimator valueAnimator = ValueAnimator.ofFloat(
-					getCradleVerticalOffset(),
-					(visible) ? 0 : 120
-			);
-			valueAnimator.addUpdateListener(
-					animation -> setCradleVerticalOffset((Float) animation.getAnimatedValue())
-			);
-			valueAnimator.setInterpolator(
-					(visible) ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator()
-			);
-			valueAnimator.setStartDelay((visible) ? 25 : 40); // ENTER | EXIT
-			valueAnimator.setDuration((visible) ? 100 : 70).start(); // ENTER | EXIT
-		} else {
-			final int duration = (visible) ? 100 : 100; // ENTER | EXIT
-			final int delay = (visible) ? 0 : 50; // ENTER | EXIT
-			final int fps = 50;
-			final double frameDuration = 1000f / fps;
-			final int frames = (int) Math.round(duration / frameDuration);
-
-			new Handler().postDelayed(() -> {
-				final float currentOffset = getCradleVerticalOffset();
-				final float targetOffset = (visible) ? 0 : 120; // ENTER | EXIT
-				final float distance = currentOffset - targetOffset;
-				final float step = (distance * -1) / frames;
-
-				for(int i = 0; i < handlers.size(); i++) {
-					handlers.get(i).removeCallbacksAndMessages(null);
-				}
-				handlers.clear();
-				for(int i = 0; i <= frames; i++) {
-					int finalI = i;
-					handlers.add(i, new Handler());
-					handlers.get(i).postDelayed(
-							() -> setCradleVerticalOffset(currentOffset + finalI * step),
-							i * Math.round(frameDuration)
-					);
-				}
-			}, delay);
-		}
 	}
 
 	private void animateTo(int targetY, long duration, TimeInterpolator interpolator) {
