@@ -52,8 +52,6 @@
 
         <activity android:name=".LogActivity"/>
 
-        <activity android:name=".RestartActivity"/>
-
         <activity
             android:name=".ScanInputActivity"
             android:stateNotNeeded="true"

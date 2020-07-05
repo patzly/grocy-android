@@ -32,7 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.RestartActivity;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 
 public class RestartBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -62,7 +62,7 @@ public class RestartBottomSheetDialogFragment extends BottomSheetDialogFragment 
         view.findViewById(R.id.button_restart_cancel).setOnClickListener(v -> dismiss());
 
         view.findViewById(R.id.button_restart_restart).setOnClickListener(
-                v -> RestartActivity.restartApp(activity)
+                v -> RestartUtil.restartApp(activity)
         );
 
         return view;

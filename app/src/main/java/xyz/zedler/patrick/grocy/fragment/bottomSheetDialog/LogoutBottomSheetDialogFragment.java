@@ -35,8 +35,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.RestartActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 
 public class LogoutBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -79,8 +79,8 @@ public class LogoutBottomSheetDialogFragment extends BottomSheetDialogFragment {
                     .remove(Constants.PREF.SERVER_URL)
                     .remove(Constants.PREF.API_KEY)
                     .remove(Constants.PREF.SHOPPING_LIST_LAST_ID)
-                    .apply();
-            RestartActivity.restartApp(activity);
+                    .commit();
+            RestartUtil.restartApp(activity);
         });
 
         return view;
