@@ -46,11 +46,8 @@ Grocy Android is still under development. In the next weeks we're going to imple
 
 ## Compatibility
 
-Grocy Android requires at least [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
+Grocy Android requires at least Android 5.0 Lollipop on your device and [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
 It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server. Our In-app help explains how to do that.
-
-Until Grocy Android `v1.x.x` at least Android 5.0 Lollipop is required on your device.  
-With `v.2.0.0` we'll have to lift the minimum Android version to 6.0 Marshmallow due to efficient RAM management.
 
 **Self-signed certificates are not supported at the moment** but an implementation is planned.  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
@@ -63,6 +60,8 @@ If you run into a bug or miss a feature, feel free to give feedback in the app, 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
 Translations which reached a completion level of 80% will be included in releases.
+
+Completed translations:
 
 - French by [prohand](https://github.com/prohand)
 
