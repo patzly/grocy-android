@@ -172,7 +172,7 @@
     <string name="error_handshake">Certificat manquant</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s nécessite un certificat qui n\'est pas connu ou approuvé par Android. \nLe certificat du serveur doit être signé par une autorité de certification (CA) de confiance\nPour répondre à ces exigences, vous pouvez utiliser un certificat gratuit de letsencrypt.org pour un chiffrement approprié.</string>
-    <string name="error_unexpected_response_code">Code de réponse inattendu: %1$i</string>
+    <string name="error_unexpected_response_code">Code de réponse inattendu: %1$d</string>
     <string name="error_unexpected_response">Réponse inattendue du serveur</string>
     <string name="error_undefined">Une erreur est survenue</string>
 

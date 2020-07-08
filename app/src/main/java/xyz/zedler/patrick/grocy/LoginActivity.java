@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.webkit.URLUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
     private WebRequest request;
-    private RequestQueue requestQueue;
     private FragmentManager fragmentManager;
     private ActivityLoginBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
@@ -90,7 +88,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // WEB REQUESTS
 
-        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+        RequestQueue requestQueue = RequestQueueSingleton.getInstance(
+                getApplicationContext()
+        ).getRequestQueue();
 
         request = new WebRequest(requestQueue);
 
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
             String server = getServer();
             if(server.isEmpty()) {
                 binding.textInputLoginServer.setError(getString(R.string.error_empty));
-            } else if(!Patterns.WEB_URL.matcher(server).matches()) {
+            } else if(!URLUtil.isNetworkUrl(server)) {
                 binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
                 requestLogin(server, getKey(), true, false);
@@ -271,6 +271,10 @@ public class LoginActivity extends AppCompatActivity {
                                     getString(R.string.error_handshake_description, server)
                             );
                             showBottomSheet(new MessageBottomSheetDialogFragment(), bundle);
+                        } else if(error.toString().contains("Invalid host")) {
+                            binding.textInputLoginServer.setError(
+                                    getString(R.string.error_invalid_url)
+                            );
                         } else {
                             showMessage(getString(R.string.error_failed_to_connect_to, server));
                         }

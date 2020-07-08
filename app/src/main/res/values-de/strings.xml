@@ -172,7 +172,7 @@
     <string name="error_handshake">Fehlendes Zertifikat</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server Zertifikat muss von einer öffentlichen Stelle (CA) zertifiziert worden sein.\nUm diese Anforderungen zu erfüllen, können Sie ein kostenloses Zertifikat von letsencrypt.org für die Verschlüsselung verweden.</string>
-    <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$i</string>
+    <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$d</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
     <string name="error_undefined">Ein Fehler ist aufgetreten</string>
 
