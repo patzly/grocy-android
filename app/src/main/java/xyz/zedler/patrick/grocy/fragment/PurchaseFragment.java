@@ -464,7 +464,7 @@ public class PurchaseFragment extends Fragment {
 
         selectedLocationId = savedInstanceState.getInt("selectedLocationId");
         selectedStoreId = savedInstanceState.getInt("selectedStoreId");
-        shoppingListItemPos = savedInstanceState.getInt("currentShoppingListItem");
+        shoppingListItemPos = savedInstanceState.getInt("shoppingListItemPos");
         selectedBestBeforeDate = savedInstanceState.getString("selectedBestBeforeDate");
 
         amount = savedInstanceState.getDouble("amount");
