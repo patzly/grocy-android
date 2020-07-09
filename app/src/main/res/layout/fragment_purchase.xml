@@ -83,9 +83,7 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <LinearLayout
-                        android:id="@+id/linear_purchase_batch_mode_info"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable">
+                    <LinearLayout style="@style/Theme.Grocy.ListItem.TwoLine.Icon">
 
                         <ImageView
                             android:id="@+id/image_purchase_batch"

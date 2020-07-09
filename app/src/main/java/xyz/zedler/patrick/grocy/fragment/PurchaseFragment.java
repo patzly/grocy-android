@@ -197,6 +197,10 @@ public class PurchaseFragment extends Fragment {
 
         binding.framePurchaseBack.setOnClickListener(v -> activity.onBackPressed());
 
+        binding.linearPurchaseShoppingListItem.linearShoppingListItemContainer.setBackground(
+                ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
+        );
+
         // swipe refresh
 
         binding.swipePurchase.setProgressBackgroundColorSchemeColor(
