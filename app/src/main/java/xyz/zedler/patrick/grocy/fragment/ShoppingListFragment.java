@@ -135,7 +135,6 @@ public class ShoppingListFragment extends Fragment
     private boolean isDataStored;
     private boolean showOffline;
     private boolean isRestoredInstance;
-    private boolean isSetupAfterFragmentHasBecomeVisible;
     private boolean debug = false;
 
     @Override
@@ -335,7 +334,7 @@ public class ShoppingListFragment extends Fragment
         binding.recyclerShoppingList.setItemAnimator(new ItemAnimator());
         binding.recyclerShoppingList.setAdapter(new StockPlaceholderAdapter());
 
-        if(!isSetupAfterFragmentHasBecomeVisible) {
+        if(swipeBehavior == null) {
             swipeBehavior = new SwipeBehavior(activity) {
                 @Override
                 public void instantiateUnderlayButton(
@@ -395,7 +394,6 @@ public class ShoppingListFragment extends Fragment
                 TAG
         );
         setArguments(null);
-        isSetupAfterFragmentHasBecomeVisible = false;
     }
 
     @Override
@@ -478,7 +476,6 @@ public class ShoppingListFragment extends Fragment
     public void onHiddenChanged(boolean hidden) {
         if(hidden) return;
 
-        isSetupAfterFragmentHasBecomeVisible = true;
         if(getView() != null) onViewCreated(getView(), null);
     }
 
