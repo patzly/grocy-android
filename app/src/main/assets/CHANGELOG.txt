@@ -1,8 +1,8 @@
 1.6.0:
 - Purchase all items in shopping list
 - Fixed sync bug in shopping list
-- Other bug fixes and improvements
 - Updated translations
+- Bug fixes and improvements
 
 1.5.0:
 - Our app is now translatable: Visit us on GitHub for more information
