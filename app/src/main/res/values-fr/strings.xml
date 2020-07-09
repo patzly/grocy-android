@@ -172,7 +172,7 @@
     <string name="error_handshake">Certificat manquant</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s nécessite un certificat qui n\'est pas connu ou approuvé par Android. \nLe certificat du serveur doit être signé par une autorité de certification (CA) de confiance\nPour répondre à ces exigences, vous pouvez utiliser un certificat gratuit de letsencrypt.org pour un chiffrement approprié.</string>
-    <string name="error_unexpected_response_code">Code de réponse inattendu: %1$i</string>
+    <string name="error_unexpected_response_code">Code de réponse inattendu: %1$d</string>
     <string name="error_unexpected_response">Réponse inattendue du serveur</string>
     <string name="error_undefined">Une erreur est survenue</string>
 
@@ -214,7 +214,6 @@
     <string name="title_shopping_list_new">Nouvelle liste de courses</string>
     <string name="title_shopping_mode">Mode d\'achat</string>
     <string name="title_products_to_create">Produits à créer</string>
-
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
     <!-- %1$s is a number like 1, 2, 3 -->
@@ -233,7 +232,6 @@
     <string name="subtitle_stock_entry_name">Acheté: %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">À consommer de préférence avant: %1$s ; quantité: %2$s; %3$s</string>
-
     <string name="description_batch_choose_link">Choisissez le produit auquel le code-barres sera lié.</string>
     <string name="description_batch_choose_create">Choisissez le produit auquel le code-barres sera lié ou créez-en un nouveau.</string>
     <string name="description_scan_batch_exit">De nouveaux produits ont été créés, mais ils n\'ont pas encore été envoyés au serveur car les détails requis manquent. Ouvrir les formulaires produits?</string>
