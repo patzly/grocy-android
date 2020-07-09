@@ -14,14 +14,14 @@
     <item
         android:id="@+id/action_product_overview"
         android:title="@string/title_product_overview"
-        android:icon="@drawable/ic_round_info_outline_anim"
+        android:icon="@drawable/ic_round_info_outline_anim_menu"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_shopping_list_item_skip"
         android:title="@string/action_skip_entry"
-        android:icon="@drawable/ic_round_arrow_back"
+        android:icon="@drawable/ic_round_skip_next_anim_menu"
         android:visible="false"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
