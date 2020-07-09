@@ -63,6 +63,7 @@
     <string name="action_shopping_mode">Einkaufsmodus</string>
     <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
     <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
+    <string name="action_skip_entry">Eintrag überspringen</string>
     <string name="action_delete_shopping_list">Einkaufszettel löschen</string>
     <string name="action_discard_products">Produkte verwerfen</string>
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
@@ -214,6 +215,7 @@
     <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
     <string name="title_shopping_mode">Einkaufsmodus</string>
     <string name="title_products_to_create">Zu erstellende Produkte</string>
+    <string name="title_batch_mode_shopping_list">Einkaufszettel Stapelmodus</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -233,6 +235,8 @@
     <string name="subtitle_stock_entry_name">Eingekauft: %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">MHD: %1$s; Menge: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Eintrag %1$d von %2$d</string>
 
     <string name="description_batch_choose_link">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll.</string>
     <string name="description_batch_choose_create">Wählen Sie das Produkt aus, das mit dem Barcode verknüpft werden soll oder erstellen Sie ein neues Produkt.</string>
@@ -406,6 +410,8 @@
     <string name="setting_ask_location">Nach Standort fragen</string>
     <string name="setting_ask_specific_item">Nach Bestandseintrag fragen</string>
 
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://de.demo.grocy.info</string>
     <!-- Strings for HelpActivity -->
 
