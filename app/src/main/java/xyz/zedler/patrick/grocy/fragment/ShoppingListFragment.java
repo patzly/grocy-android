@@ -565,10 +565,7 @@ public class ShoppingListFragment extends Fragment
                 dlHelper.getShoppingListItems(listItems -> this.shoppingListItems = listItems),
                 dlHelper.getProductGroups(listItems -> this.productGroups = listItems),
                 dlHelper.getQuantityUnits(listItems -> this.quantityUnits = listItems),
-                dlHelper.getProducts(listItems -> {
-                    this.products = listItems;
-                    Log.i(TAG, "download: " + this.products);
-                }),
+                dlHelper.getProducts(listItems -> this.products = listItems),
                 dlHelper.getVolatile((expiring, expired, missing) -> missingItems = missing)
         );
         queue.start();
@@ -579,8 +576,6 @@ public class ShoppingListFragment extends Fragment
             showOffline = false;
             updateUI();
         }
-
-        Log.i(TAG, "onQueueEmpty: " + products);
 
         if(!isDataStored) {
             // set shopping list if chosen with name on fragment start
@@ -1335,6 +1330,7 @@ public class ShoppingListFragment extends Fragment
                     )
             );
         }
+        queue.start();
     }
 
     @Override
