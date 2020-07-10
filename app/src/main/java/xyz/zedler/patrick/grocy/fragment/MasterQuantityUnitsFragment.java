@@ -39,6 +39,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -191,6 +192,17 @@ public class MasterQuantityUnitsFragment extends Fragment
                         return true;
                     } return false;
                 });
+        binding.editTextMasterQuantityUnitsSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                Editable search = binding.editTextMasterQuantityUnitsSearch.getText();
+                searchQuantityUnits(search != null ? search.toString() : "");
+            }
+        });
         emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
 
         // APP BAR BEHAVIOR
@@ -326,7 +338,7 @@ public class MasterQuantityUnitsFragment extends Fragment
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
-        View viewOut = binding.scrollMasterQuantityUnits;
+        View viewOut = binding.recyclerMasterQuantityUnits;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
@@ -342,7 +354,7 @@ public class MasterQuantityUnitsFragment extends Fragment
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
-                viewIn = binding.scrollMasterQuantityUnits;
+                viewIn = binding.recyclerMasterQuantityUnits;
                 viewOut = binding.linearError.linearError;
                 break;
         }
@@ -446,15 +458,25 @@ public class MasterQuantityUnitsFragment extends Fragment
     private void sortQuantityUnits() {
         if(debug) Log.i(TAG, "sortQuantityUnits: sort by name, ascending = " + sortAscending);
         SortUtil.sortQuantityUnitsByName(displayedQuantityUnits, sortAscending);
-        refreshAdapter(new MasterQuantityUnitAdapter(displayedQuantityUnits, this));
+        refreshAdapter();
     }
 
-    private void refreshAdapter(MasterQuantityUnitAdapter adapter) {
-        masterQuantityUnitAdapter = adapter;
-        binding.recyclerMasterQuantityUnits.animate().alpha(0).setDuration(150).withEndAction(() -> {
-            binding.recyclerMasterQuantityUnits.setAdapter(adapter);
-            binding.recyclerMasterQuantityUnits.animate().alpha(1).setDuration(150).start();
-        }).start();
+    @SuppressWarnings({"rawtypes"})
+    private void refreshAdapter() {
+        RecyclerView.Adapter adapterCurrent = binding.recyclerMasterQuantityUnits.getAdapter();
+        if(adapterCurrent != null && adapterCurrent.getClass() != MasterQuantityUnitAdapter.class) {
+            masterQuantityUnitAdapter = new MasterQuantityUnitAdapter(
+                    displayedQuantityUnits,
+                    this
+            );
+            RecyclerView recyclerView = binding.recyclerMasterQuantityUnits;
+            recyclerView.animate().alpha(0).setDuration(150).withEndAction(() -> {
+                        recyclerView.setAdapter(masterQuantityUnitAdapter);
+                        recyclerView.animate().alpha(1).setDuration(150).start();
+            }).start();
+        } else {
+            masterQuantityUnitAdapter.updateData(displayedQuantityUnits);
+        }
     }
 
     /**

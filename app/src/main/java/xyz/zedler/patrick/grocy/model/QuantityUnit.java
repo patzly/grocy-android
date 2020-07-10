@@ -30,6 +30,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
 
@@ -140,6 +142,23 @@ public class QuantityUnit implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuantityUnit that = (QuantityUnit) o;
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(namePlural, that.namePlural) &&
+                Objects.equals(pluralForms, that.pluralForms);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, namePlural, pluralForms);
     }
 
     @NonNull

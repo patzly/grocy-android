@@ -1241,7 +1241,8 @@ public class MasterProductSimpleFragment extends Fragment {
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
-                        Bundle bundle = new Bundle();
+                        Bundle bundle = getArguments();
+                        if(bundle == null) bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                         bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
@@ -1258,7 +1259,8 @@ public class MasterProductSimpleFragment extends Fragment {
                     jsonObject,
                     response -> {
                         try {
-                            Bundle bundle = new Bundle();
+                            Bundle bundle = getArguments();
+                            if(bundle == null) bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                             bundle.putParcelable(  // to search for old name in batch items

@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.UI.MASTER_QUANTITY_UNITS_DEFAULT:
             case Constants.UI.MASTER_QUANTITY_UNITS_SEARCH:
-                scrollBehavior.setUpScroll(R.id.scroll_master_quantity_units);
+                scrollBehavior.setUpScroll(R.id.recycler_master_quantity_units);
                 scrollBehavior.setHideOnScroll(true);
                 updateBottomAppBar(
                         Constants.FAB.POSITION.CENTER,

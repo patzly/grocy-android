@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuanti
             ArrayList<QuantityUnit> quantityUnits,
             MasterQuantityUnitAdapterListener listener
     ) {
-        this.quantityUnits = quantityUnits;
+        this.quantityUnits = new ArrayList<>(quantityUnits);
         this.listener = listener;
     }
 
@@ -97,5 +98,57 @@ public class MasterQuantityUnitAdapter extends RecyclerView.Adapter<MasterQuanti
 
     public interface MasterQuantityUnitAdapterListener {
         void onItemRowClicked(int position);
+    }
+
+    public void updateData(ArrayList<QuantityUnit> newQuantityUnits) {
+        DiffCallback diffCallback = new DiffCallback(
+                newQuantityUnits,
+                this.quantityUnits
+        );
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.quantityUnits.clear();
+        this.quantityUnits.addAll(newQuantityUnits);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    static class DiffCallback extends DiffUtil.Callback {
+        ArrayList<QuantityUnit> oldItems;
+        ArrayList<QuantityUnit> newItems;
+
+        public DiffCallback(
+                ArrayList<QuantityUnit> newItems,
+                ArrayList<QuantityUnit> oldItems
+        ) {
+            this.newItems = newItems;
+            this.oldItems = oldItems;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldItems.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newItems.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, false);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, true);
+        }
+
+        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
+            QuantityUnit newItem = newItems.get(newItemPos);
+            QuantityUnit oldItem = oldItems.get(oldItemPos);
+            return compareContent
+                    ? newItem.equals(oldItem)
+                    : newItem.getId() == oldItem.getId();
+        }
     }
 }
