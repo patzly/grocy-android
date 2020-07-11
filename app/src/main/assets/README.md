@@ -10,6 +10,14 @@
 - replace all getObject (from Id) with global HashMaps and fill them once if they are empty
 - product edit with location tracking disabled: space between barcode chips and other field
 
+Von den fragments die showMessage methods auf activity.showMessage umstellen, weil da noch die AnchorView gesetzt wird.
+Ich habe irgendwann mal showMessage mit einer eigenen Snackbar method gemacht
+
+Alle button Höhen anpassen auf match_parent und formatierung anschauen bei langen Strings
+Bei Batch Scanner Best before Date bottom sheet wird "speichern" umgebrochen
+
+Im Product overview bottom sheet wird zB. "5 Packungen (2 geöff..." angezeigt, Umbruch nötig
+
 ## Features
 
 - self-signed client certificates
