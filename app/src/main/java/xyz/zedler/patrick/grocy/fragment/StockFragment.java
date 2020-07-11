@@ -133,7 +133,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private boolean debug;
     private boolean sortAscending;
     private boolean isRestoredInstance;
-    private boolean isSetupAfterFragmentHasBecomeVisible;
 
     @Override
     public View onCreateView(
@@ -214,6 +213,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
                 String.valueOf(5)
         );
+        if(days == null) days = String.valueOf(5);
         // ignore server value if not available
         daysExpiringSoon = days.isEmpty() || days.equals("null")
                 ? 5
@@ -353,7 +353,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
-        if(!isSetupAfterFragmentHasBecomeVisible) {
+        if(swipeBehavior == null) {
             swipeBehavior = new SwipeBehavior(activity) {
                 @Override
                 public void instantiateUnderlayButton(
@@ -414,7 +414,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 TAG
         );
         setArguments(null);
-        isSetupAfterFragmentHasBecomeVisible = false;
     }
 
     @Override
@@ -492,8 +491,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(hidden) return;
-
-        isSetupAfterFragmentHasBecomeVisible = true;
         if(getView() != null) onViewCreated(getView(), null);
     }
 
@@ -619,6 +616,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void downloadMissingItemDetails(DownloadHelper.Queue queue) {
+        if(stockItems == null || missingItems == null || queue == null || dlHelper == null) return;
+
         HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
         for(StockItem s : stockItems) stockItemHashMap.put(s.getProductId(), s);
 
@@ -1264,37 +1263,37 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void setMenuLocationFilters() {
+        if(activity == null || locations == null) return;
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
-        if(menuItem != null) {
-            SubMenu menuLocations = menuItem.getSubMenu();
-            menuLocations.clear();
-            SortUtil.sortLocationsByName(locations, true);
-            for(Location location : locations) {
-                menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
-                    //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                    filterLocation(location);
-                    return true;
-                });
-            }
-            menuItem.setVisible(!locations.isEmpty());
+        if(menuItem == null) return;
+        SubMenu menuLocations = menuItem.getSubMenu();
+        menuLocations.clear();
+        SortUtil.sortLocationsByName(locations, true);
+        for(Location location : locations) {
+            menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
+                //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                filterLocation(location);
+                return true;
+            });
         }
+        menuItem.setVisible(!locations.isEmpty());
     }
 
     private void setMenuProductGroupFilters() {
+        if(activity == null || productGroups == null) return;
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_product_group);
-        if(menuItem != null) {
-            SubMenu menuProductGroups = menuItem.getSubMenu();
-            menuProductGroups.clear();
-            SortUtil.sortProductGroupsByName(productGroups, true);
-            for(ProductGroup productGroup : productGroups) {
-                menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
-                    //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
-                    filterProductGroup(productGroup);
-                    return true;
-                });
-            }
-            menuItem.setVisible(!productGroups.isEmpty());
+        if(menuItem == null) return;
+        SubMenu menuProductGroups = menuItem.getSubMenu();
+        menuProductGroups.clear();
+        SortUtil.sortProductGroupsByName(productGroups, true);
+        for(ProductGroup productGroup : productGroups) {
+            menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
+                //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
+                filterProductGroup(productGroup);
+                return true;
+            });
         }
+        menuItem.setVisible(!productGroups.isEmpty());
     }
 
     private void setMenuSorting() {
@@ -1305,6 +1304,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
         MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
         MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
+        if(sortMode == null) sortMode = Constants.STOCK.SORT.NAME;
         switch (sortMode) {
             case Constants.STOCK.SORT.NAME:
                 sortName.setChecked(true);
@@ -1363,9 +1363,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     @Override
     public void onItemRowClicked(int position) {
-        if(clickUtil.isDisabled()) return;
+        if(clickUtil != null && clickUtil.isDisabled()) return;
         // STOCK ITEM CLICK
-        swipeBehavior.recoverLatestSwipedItem();
+        if(swipeBehavior != null) swipeBehavior.recoverLatestSwipedItem();
         showProductOverview(displayedItems.get(position));
     }
 
