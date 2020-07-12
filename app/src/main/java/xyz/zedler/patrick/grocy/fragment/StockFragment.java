@@ -1266,11 +1266,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void setMenuLocationFilters() {
         if(activity == null || locations == null) return;
+
+        SortUtil.sortLocationsByName(locations, true);
+
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
         if(menuItem == null) return;
+        menuItem.setVisible(!locations.isEmpty());
+
         SubMenu menuLocations = menuItem.getSubMenu();
+        if(menuLocations == null) return;
         menuLocations.clear();
-        SortUtil.sortLocationsByName(locations, true);
         for(Location location : locations) {
             menuLocations.add(location.getName()).setOnMenuItemClickListener(item -> {
                 //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;
@@ -1278,7 +1283,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 return true;
             });
         }
-        menuItem.setVisible(!locations.isEmpty());
     }
 
     private void setMenuProductGroupFilters() {
