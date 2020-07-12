@@ -526,6 +526,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void setError(String state, boolean animated) {
         errorState = state;
 
+        if(binding == null) return;
+
         binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
         View viewIn = binding.linearError.linearError;
@@ -550,7 +552,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 break;
         }
 
-        animUtil.replaceViews(viewIn, viewOut, animated);
+        if(animUtil != null) animUtil.replaceViews(viewIn, viewOut, animated);
     }
 
     private void download() {
@@ -642,7 +644,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void onDownloadError(VolleyError error) {
-        binding.swipeStock.setRefreshing(false);
+        if(binding != null) binding.swipeStock.setRefreshing(false);
         setError(Constants.STATE.ERROR, true);
     }
 

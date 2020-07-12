@@ -55,6 +55,7 @@ public class EmptyStateHelper {
     }
 
     public void clearState() {
+        if(partialEmptyBinding == null) return;
         // hide container
         partialEmptyBinding.linearEmpty.animate().alpha(0).setDuration(125).withEndAction(
                 () -> partialEmptyBinding.linearEmpty.setVisibility(View.GONE)
