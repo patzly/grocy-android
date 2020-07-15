@@ -162,6 +162,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                         // name from list is name of batchItem product
                         activity.addBatchItemBarcode(barcode, inputText);
                     }
+                    dismiss();
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
                 }
