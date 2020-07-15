@@ -1,3 +1,6 @@
+1.6.1:
+- Bug fixes and improvements
+
 1.6.0:
 - Purchase all items in shopping list
 - Fixed sync bug in shopping list
