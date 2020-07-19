@@ -157,6 +157,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             binding.recyclerStock.setAdapter(null);
             binding = null;
         }
+        if(dlHelper != null) {
+            dlHelper.close();
+            dlHelper = null;
+        }
 
         activity = null;
         sharedPrefs = null;
