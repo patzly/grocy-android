@@ -1,5 +1,7 @@
-1.6.1:
+1.7.0:
 - Swedish translation (thanks contributors!)
+- Front camera setting (e.g. for tablets)
+- Removed shopping list shortcut due to shortcut limit in most launchers
 - Bug fixes and improvements
 
 1.6.0:
