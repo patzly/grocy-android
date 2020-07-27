@@ -27,7 +27,7 @@
 
     </shortcut>
 
-    <shortcut
+    <!--<shortcut
         android:shortcutId="shortcut_shopping_list"
         android:shortcutShortLabel="@string/title_shopping_list"
         android:icon="@mipmap/ic_shopping_list">
@@ -37,7 +37,7 @@
             android:targetPackage="xyz.zedler.patrick.grocy"
             android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>
+    </shortcut>-->
 
     <shortcut
         android:shortcutId="shortcut_consume"
