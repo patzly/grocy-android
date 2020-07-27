@@ -29,13 +29,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -100,21 +98,13 @@ public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment
 			);
 		});
 
-		TextInputLayout textInputLayoutFeedback = view.findViewById(R.id.text_input_feedback);
-		EditText editText = textInputLayoutFeedback.getEditText();
-		assert editText != null;
-		editText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-			if(hasFocus) IconUtil.start(view, R.id.image_feedback_box);
-		});
-
-		view.findViewById(R.id.button_feedback_send).setOnClickListener(v -> {
+		view.findViewById(R.id.linear_feedback_email).setOnClickListener(v -> {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(
 					Uri.parse(
 							"mailto:"
 									+ getString(R.string.app_mail)
 									+ "?subject=" + Uri.encode("Feedback@Grocy")
-									+ "&body=" + Uri.encode(editText.getText().toString())
 					)
 			);
 			startActivity(Intent.createChooser(intent, getString(R.string.action_send_feedback)));

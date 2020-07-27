@@ -378,7 +378,6 @@
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Giltig API-nyckel</string>
-    <string name="hint_message">Skriv e-post</string>
 
     <string name="setting_dark_mode">Tvinga mörkt läge</string>
     <string name="setting_dark_mode_description">Av för att använda systemets inställning</string>

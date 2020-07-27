@@ -38,6 +38,8 @@
     <string name="action_clear_shopping_list">Einkaufszettel leeren</string>
     <string name="action_rate">Auf Google Play bewerten</string>
     <string name="action_rate_description">Die Entwicklung unterstützen</string>
+    <string name="action_email">Email senden</string>
+    <string name="action_email_description">Entwickler kontaktieren</string>
     <string name="action_new_issue">Neues Issue auf GitHub öffnen</string>
     <string name="action_new_issue_description">Bugs melden oder einen Vorschlag machen</string>
     <string name="action_get_started">Loslegen</string>
@@ -378,7 +380,6 @@
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Gültiger API Schlüssel</string>
-    <string name="hint_message">Email schreiben</string>
 
     <string name="setting_dark_mode">Dunkles Theme erzwingen</string>
     <string name="setting_dark_mode_description">Aus für Systemabhängigkeit</string>
