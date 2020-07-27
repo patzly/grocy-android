@@ -56,6 +56,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -234,6 +235,11 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setTorchListener(this);
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(
+                sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+        );
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
 
         findViewById(R.id.button_scan_batch_config).setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;

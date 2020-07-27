@@ -384,6 +384,8 @@
     <string name="setting_dark_mode_description">Aus für Systemabhängigkeit</string>
     <string name="setting_open_food_facts">Open Food Facts benutzen</string>
     <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
+    <string name="setting_use_front_cam">Selfie-Kamera nutzen</string>
+    <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
     <string name="setting_reload_config">Konfiguration neu laden</string>
     <string name="setting_reload_config_description">Neustart der App erforderlich</string>
     <string name="setting_logout">Abmelden</string>

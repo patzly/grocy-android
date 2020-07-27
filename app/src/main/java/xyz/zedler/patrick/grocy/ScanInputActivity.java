@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -28,9 +29,11 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -52,12 +55,20 @@ public class ScanInputActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_scan_input);
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         findViewById(R.id.button_scan_close).setOnClickListener(v -> finish());
         findViewById(R.id.button_scan_flash).setOnClickListener(v -> switchTorch());
 
         barcodeScannerView = findViewById(R.id.barcode_scan);
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setTorchListener(this);
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(
+                sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+        );
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+
         isTorchOn = false;
 
         actionButtonFlash = findViewById(R.id.button_scan_flash);

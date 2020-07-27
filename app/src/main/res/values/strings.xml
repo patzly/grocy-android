@@ -390,6 +390,8 @@
     <string name="setting_dark_mode_description">Off for system dependency</string>
     <string name="setting_open_food_facts">Use Open Food Facts</string>
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
+    <string name="setting_use_front_cam">Use front camera</string>
+    <string name="setting_use_front_cam_description">For barcode scanning</string>
     <string name="setting_reload_config">Reload configuration</string>
     <string name="setting_reload_config_description">App restart required</string>
     <string name="setting_logout">Logout</string>
