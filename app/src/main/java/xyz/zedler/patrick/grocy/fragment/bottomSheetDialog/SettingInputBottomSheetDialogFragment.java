@@ -36,7 +36,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.SettingsActivity;
+import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 

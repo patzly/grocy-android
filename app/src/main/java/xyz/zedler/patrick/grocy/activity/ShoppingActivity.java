@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ShoppingItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;

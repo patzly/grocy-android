@@ -35,7 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.LoginActivity;
+import xyz.zedler.patrick.grocy.activity.LoginActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 
