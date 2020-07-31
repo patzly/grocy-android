@@ -112,17 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
-
-        // UTILS
-
-        clickUtil = new ClickUtil();
-        netUtil = new NetUtil(this);
 
         // DARK MODE
 
@@ -131,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
                         ? AppCompatDelegate.MODE_NIGHT_YES
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
+
+        super.onCreate(savedInstanceState);
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        netUtil = new NetUtil(this);
 
         // WEB
 
