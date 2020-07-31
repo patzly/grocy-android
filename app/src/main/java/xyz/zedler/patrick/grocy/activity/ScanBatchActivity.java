@@ -550,7 +550,7 @@ public class ScanBatchActivity extends AppCompatActivity
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "openProduct: " + e);
         }
-        request.post(
+        if(request != null && grocyApi != null) request.post(
                 grocyApi.openProduct(currentProductDetails.getProduct().getId()),
                 body,
                 response -> {
