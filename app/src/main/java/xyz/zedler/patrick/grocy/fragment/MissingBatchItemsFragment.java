@@ -406,8 +406,9 @@ public class MissingBatchItemsFragment extends Fragment
                 batchPurchaseEntry.getPrice(),
                 batchPurchaseEntry.getBestBeforeDate(),
                 response -> {
+                    if(batchPurchaseEntries.isEmpty()) return;
                     batchPurchaseEntries.remove(0);
-                    if(batchPurchaseEntries.isEmpty()) {
+                    if(batchPurchaseEntries.isEmpty() && !missingBatchItems.isEmpty()) {
                         missingBatchItems.remove(0);
                         missingBatchItemAdapter.notifyItemRemoved(0);
                     }
