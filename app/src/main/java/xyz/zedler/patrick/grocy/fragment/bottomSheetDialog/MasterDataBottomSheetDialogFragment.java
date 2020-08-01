@@ -33,15 +33,14 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDataBottomSheetDialogFragment
-        extends BottomSheetDialogFragment implements View.OnClickListener {
+        extends CustomBottomSheetDialogFragment implements View.OnClickListener {
 
     private final static String TAG = "MasterDataBottomSheet";
 

@@ -34,21 +34,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class StoresBottomSheetDialogFragment
-        extends BottomSheetDialogFragment implements StoreAdapter.StoreAdapterListener {
+public class StoresBottomSheetDialogFragment extends CustomBottomSheetDialogFragment
+        implements StoreAdapter.StoreAdapterListener {
 
     private final static String TAG = "StoresBottomSheet";
 

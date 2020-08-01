@@ -31,7 +31,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -40,7 +39,7 @@ import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class SettingInputBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class SettingInputBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "SettingInputBottomSheet";
 

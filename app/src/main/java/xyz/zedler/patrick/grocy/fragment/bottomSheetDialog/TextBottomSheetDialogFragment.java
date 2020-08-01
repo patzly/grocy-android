@@ -37,7 +37,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -49,7 +48,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class TextBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class TextBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
 	private final static String TAG = "TextBottomSheet";
 	private boolean debug;

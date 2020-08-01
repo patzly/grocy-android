@@ -1,4 +1,5 @@
 1.7.1:
+- Fix height of bottom sheets in landscape mode
 - Bug fixes and improvements
 
 1.7.0:
