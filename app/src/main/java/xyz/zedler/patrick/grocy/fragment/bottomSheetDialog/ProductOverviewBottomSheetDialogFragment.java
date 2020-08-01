@@ -84,6 +84,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 	private ActionButton actionButtonConsume, actionButtonOpen;
 	private boolean showActions = false;
 	private BezierCurveChart priceHistory;
+	private WebRequest request;
 	private ListItem
 			itemAmount,
 			itemLocation,
@@ -137,6 +138,10 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 				product = stockItem.getProduct();
 			}
 		}
+
+		// WEB REQUESTS
+
+		request = new WebRequest(activity.getRequestQueue());
 
 		// VIEWS
 
@@ -320,25 +325,21 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 
 		// LOAD DETAILS
 
-		if(activity.isOnline()) {
-			// TODO: global queue
-			if(!hasDetails()) {
-				new WebRequest(activity.getRequestQueue()).get(
-						activity.getGrocy().getStockProductDetails(product.getId()),
-						response -> {
-							Type listType = new TypeToken<ProductDetails>(){}.getType();
-							productDetails = new Gson().fromJson(response, listType);
-							stockItem = new StockItem(productDetails);
-							refreshButtonStates(true);
-							refreshItems();
-							loadPriceHistory(view);
-						},
-						error -> { }
-				);
-			} else {
-				loadPriceHistory(view);
-			}
-
+		if(activity.isOnline() && !hasDetails()) {
+			request.get(
+					activity.getGrocy().getStockProductDetails(product.getId()),
+					response -> {
+						Type listType = new TypeToken<ProductDetails>(){}.getType();
+						productDetails = new Gson().fromJson(response, listType);
+						stockItem = new StockItem(productDetails);
+						refreshButtonStates(true);
+						refreshItems();
+						loadPriceHistory(view);
+					},
+					error -> { }
+			);
+		} else if(activity.isOnline() && hasDetails()) {
+			loadPriceHistory(view);
 		}
 
 		hideDisabledFeatures(view);
@@ -457,7 +458,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
 			return;
 		}
-		new WebRequest(activity.getRequestQueue()).get(
+		request.get(
 				activity.getGrocy().getPriceHistory(product.getId()),
 				response -> {
 					Type listType = new TypeToken<ArrayList<PriceHistoryEntry>>(){}.getType();
