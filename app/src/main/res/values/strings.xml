@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">Grocy</string>
-    <string name="app_version" translatable="false">1.6.0</string>
+    <string name="app_version" translatable="false">1.7.0</string>
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
@@ -43,6 +43,8 @@
     <string name="action_clear_shopping_list">Clear shopping list</string>
     <string name="action_rate">Rate on Google Play</string>
     <string name="action_rate_description">Support the development</string>
+    <string name="action_email">Send email</string>
+    <string name="action_email_description">Contact the developers</string>
     <string name="action_new_issue">Open new issue on GitHub</string>
     <string name="action_new_issue_description">Report bugs or request a feature</string>
     <string name="action_get_started">Get started</string>
@@ -384,12 +386,13 @@
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Valid API key</string>
-    <string name="hint_message">Write email</string>
 
     <string name="setting_dark_mode">Force dark mode</string>
     <string name="setting_dark_mode_description">Off for system dependency</string>
     <string name="setting_open_food_facts">Use Open Food Facts</string>
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
+    <string name="setting_use_front_cam">Use front camera</string>
+    <string name="setting_use_front_cam_description">For barcode scanning</string>
     <string name="setting_reload_config">Reload configuration</string>
     <string name="setting_reload_config_description">App restart required</string>
     <string name="setting_logout">Logout</string>

@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.ActivityLoginBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
@@ -311,7 +312,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openHomeAssistantHelp(String server) {
-        if(server.endsWith("_grocy") || server.contains("hassio_ingress")) {
+        if(server.endsWith("_grocy")
+                || server.contains("hassio_ingress")
+                || server.contains("hassio/ingress")
+        ) {
             // maybe a grocy instance on Hass.io - this doesn't work like this
             Intent intent = new Intent(this, HelpActivity.class);
             intent.putExtra(

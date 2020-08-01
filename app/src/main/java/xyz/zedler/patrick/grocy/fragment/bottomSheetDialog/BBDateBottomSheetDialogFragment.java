@@ -43,9 +43,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import xyz.zedler.patrick.grocy.MainActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanBatchActivity;
+import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 

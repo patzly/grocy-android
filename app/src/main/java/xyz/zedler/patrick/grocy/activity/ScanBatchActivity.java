@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -56,6 +56,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
@@ -234,6 +236,11 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeScannerView = findViewById(R.id.barcode_scan_batch);
         barcodeScannerView.setTorchOff();
         barcodeScannerView.setTorchListener(this);
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(
+                sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+        );
+        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
 
         findViewById(R.id.button_scan_batch_config).setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
@@ -543,7 +550,7 @@ public class ScanBatchActivity extends AppCompatActivity
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "openProduct: " + e);
         }
-        request.post(
+        if(request != null && grocyApi != null) request.post(
                 grocyApi.openProduct(currentProductDetails.getProduct().getId()),
                 body,
                 response -> {

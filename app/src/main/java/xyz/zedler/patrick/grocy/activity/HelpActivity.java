@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.HelpAdapter;
 import xyz.zedler.patrick.grocy.databinding.ActivityHelpBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;

@@ -55,9 +55,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import xyz.zedler.patrick.grocy.MainActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanInputActivity;
+import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
@@ -434,6 +434,7 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private void onError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
+        if(request == null || binding == null || activity == null) return;
         request.cancelAll(TAG);
         binding.swipeShoppingListItemEdit.setRefreshing(false);
         activity.showMessage(

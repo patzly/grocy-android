@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -55,6 +55,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
@@ -96,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity
 	private SwitchMaterial
 			switchDark,
 			switchFoodFacts,
+			switchFrontCam,
 			switchKeepScreenOn,
 			switchDebug,
 			switchListIndicator,
@@ -178,6 +180,11 @@ public class SettingsActivity extends AppCompatActivity
 				sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
 		);
 
+		switchFrontCam = findViewById(R.id.switch_setting_use_front_cam);
+		switchFrontCam.setChecked(
+				sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false)
+		);
+
 		switchListIndicator = findViewById(R.id.switch_setting_list_indicator);
 		switchListIndicator.setChecked(
 				sharedPrefs.getBoolean(
@@ -202,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity
 		setOnCheckedChangeListeners(
 				R.id.switch_setting_dark_mode,
 				R.id.switch_setting_open_food_facts,
+				R.id.switch_setting_use_front_cam,
 				R.id.switch_setting_list_indicator,
 				R.id.switch_setting_keep_screen_on,
 				R.id.switch_setting_debug,
@@ -213,6 +221,7 @@ public class SettingsActivity extends AppCompatActivity
 				R.id.linear_setting_logout,
 				R.id.linear_setting_dark_mode,
 				R.id.linear_setting_open_food_facts,
+				R.id.linear_setting_use_front_cam,
 				R.id.linear_setting_list_indicator,
 				R.id.linear_setting_expiring_soon_days,
 				R.id.linear_setting_shopping_mode_update_interval,
@@ -417,6 +426,9 @@ public class SettingsActivity extends AppCompatActivity
 			case R.id.linear_setting_open_food_facts:
 				switchFoodFacts.setChecked(!switchFoodFacts.isChecked());
 				break;
+			case R.id.linear_setting_use_front_cam:
+				switchFrontCam.setChecked(!switchFrontCam.isChecked());
+				break;
 			case R.id.linear_setting_expiring_soon_days:
 				IconUtil.start(this, R.id.image_setting_expiring_soon_days);
 				Bundle bundleExpiringSoonDays = new Bundle();
@@ -565,6 +577,12 @@ public class SettingsActivity extends AppCompatActivity
 				sharedPrefs.edit().putBoolean(
 						Constants.PREF.FOOD_FACTS,
 						switchFoodFacts.isChecked()
+				).apply();
+				break;
+			case R.id.switch_setting_use_front_cam:
+				sharedPrefs.edit().putBoolean(
+						Constants.PREF.USE_FRONT_CAM,
+						switchFrontCam.isChecked()
 				).apply();
 				break;
 			case R.id.switch_setting_list_indicator:

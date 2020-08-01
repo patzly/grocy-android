@@ -38,9 +38,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.MainActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ShoppingActivity;
+import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;

@@ -11,7 +11,7 @@
         <intent
             android:action="xyz.zedler.patrick.grocy.action.shoppingMode"
             android:targetPackage="xyz.zedler.patrick.grocy"
-            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+            android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
     </shortcut>
 
@@ -23,11 +23,11 @@
         <intent
             android:action="xyz.zedler.patrick.grocy.action.shoppingListEntry"
             android:targetPackage="xyz.zedler.patrick.grocy"
-            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+            android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
     </shortcut>
 
-    <shortcut
+    <!--<shortcut
         android:shortcutId="shortcut_shopping_list"
         android:shortcutShortLabel="@string/title_shopping_list"
         android:icon="@mipmap/ic_shopping_list">
@@ -35,9 +35,9 @@
         <intent
             android:action="xyz.zedler.patrick.grocy.action.shoppingList"
             android:targetPackage="xyz.zedler.patrick.grocy"
-            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+            android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>
+    </shortcut>-->
 
     <shortcut
         android:shortcutId="shortcut_consume"
@@ -47,7 +47,7 @@
         <intent
             android:action="xyz.zedler.patrick.grocy.action.consume"
             android:targetPackage="xyz.zedler.patrick.grocy"
-            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+            android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
     </shortcut>
 
@@ -59,7 +59,7 @@
         <intent
             android:action="xyz.zedler.patrick.grocy.action.purchase"
             android:targetPackage="xyz.zedler.patrick.grocy"
-            android:targetClass="xyz.zedler.patrick.grocy.MainActivity" />
+            android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
     </shortcut>
 

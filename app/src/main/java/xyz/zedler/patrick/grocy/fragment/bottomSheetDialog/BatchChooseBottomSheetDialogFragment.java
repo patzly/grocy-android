@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.ScanBatchActivity;
+import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
@@ -162,6 +162,7 @@ public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragm
                         // name from list is name of batchItem product
                         activity.addBatchItemBarcode(barcode, inputText);
                     }
+                    dismiss();
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
                 }

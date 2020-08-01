@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="16dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="8dp"
             android:gravity="center_horizontal">
 
             <TextView
@@ -94,43 +94,29 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine"
-                android:paddingTop="2dp"
-                android:paddingBottom="0dp">
+                android:id="@+id/linear_feedback_email"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
+                android:background="@drawable/bg_list_item_surface">
 
                 <ImageView
-                    android:id="@+id/image_feedback_box"
-                    style="@style/Theme.Grocy.ListItem.Icon.Top"
-                    android:layout_marginTop="24sp"
-                    android:src="@drawable/ic_round_insert_comment_anim"
+                    android:id="@+id/image_feedback_email"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_email"
                     tools:ignore="ContentDescription" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_feedback"
-                    style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxBackgroundColor="@color/on_surface_secondary"
-                    android:hint="@string/hint_message">
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textLongMessage|textAutoCorrect|textMultiLine|text|textCapSentences|textAutoComplete"
-                        android:textColor="@color/on_background" />
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/action_email" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/action_email_description" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_feedback_send"
-                style="@style/Widget.Grocy.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:text="@string/action_send" />
 
         </LinearLayout>
 

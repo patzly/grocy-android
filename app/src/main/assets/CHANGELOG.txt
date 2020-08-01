@@ -1,3 +1,13 @@
+1.7.1:
+- Bug fixes and improvements
+
+1.7.0:
+- Swedish translation (thanks contributors!)
+- Front camera setting (e.g. for tablets)
+- Improved feedback
+- Removed shopping list shortcut due to shortcut limit in most launchers
+- Bug fixes and improvements
+
 1.6.0:
 - Purchase all items in shopping list
 - Fixed sync bug in shopping list

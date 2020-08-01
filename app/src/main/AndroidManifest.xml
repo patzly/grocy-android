@@ -23,7 +23,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/Theme.Grocy.BottomAppBar.SwipeToRefresh"
             android:windowSoftInputMode="adjustPan">
 
@@ -38,28 +38,28 @@
 
         </activity>
 
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
 
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".activity.SettingsActivity"/>
 
-        <activity android:name=".ShoppingActivity"/>
+        <activity android:name=".activity.ShoppingActivity"/>
 
-        <activity android:name=".FeaturesActivity"/>
+        <activity android:name=".activity.FeaturesActivity"/>
 
-        <activity android:name=".AboutActivity"/>
+        <activity android:name=".activity.AboutActivity"/>
 
-        <activity android:name=".HelpActivity"/>
+        <activity android:name=".activity.HelpActivity"/>
 
-        <activity android:name=".LogActivity"/>
+        <activity android:name=".activity.LogActivity"/>
 
         <activity
-            android:name=".ScanInputActivity"
+            android:name=".activity.ScanInputActivity"
             android:stateNotNeeded="true"
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name=".ScanBatchActivity"
+            android:name=".activity.ScanBatchActivity"
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />
 

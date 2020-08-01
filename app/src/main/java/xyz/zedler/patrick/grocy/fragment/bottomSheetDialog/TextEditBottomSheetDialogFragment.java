@@ -37,7 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
-import xyz.zedler.patrick.grocy.MainActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;

@@ -66,6 +66,7 @@ public class DownloadHelper {
     private Gson gson;
     private SimpleDateFormat dateTimeFormat;
 
+    private ArrayList<Queue> queueArrayList;
     private String tag;
     private boolean debug;
 
@@ -81,6 +82,14 @@ public class DownloadHelper {
                 "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
         );
         dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        queueArrayList = new ArrayList<>();
+    }
+
+    public void close() {
+        if(queueArrayList == null || request == null) return;
+        for(Queue queue : queueArrayList) {
+            queue.reset();
+        }
     }
 
     public QueueItem getProductGroups(
@@ -671,7 +680,9 @@ public class DownloadHelper {
             OnQueueEmptyListener onQueueEmptyListener,
             OnErrorListener onErrorListener
     ) {
-        return new Queue(onQueueEmptyListener, onErrorListener);
+        Queue queue = new Queue(onQueueEmptyListener, onErrorListener);
+        queueArrayList.add(queue);
+        return queue;
     }
 
     public abstract static class QueueItem {

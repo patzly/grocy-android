@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy;
+package xyz.zedler.patrick.grocy.activity;
 
 /*
     This file is part of Grocy Android.
@@ -59,6 +59,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
@@ -111,25 +112,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-        // UTILS
-
-        clickUtil = new ClickUtil();
-        netUtil = new NetUtil(this);
-
         // DARK MODE
 
+        // this has to be placed before super.onCreate(savedInstanceState);
+        // https://stackoverflow.com/a/53356918
         AppCompatDelegate.setDefaultNightMode(
                 sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false)
                         ? AppCompatDelegate.MODE_NIGHT_YES
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
+
+        super.onCreate(savedInstanceState);
+
+        // UTILS
+
+        clickUtil = new ClickUtil();
+        netUtil = new NetUtil(this);
 
         // WEB
 

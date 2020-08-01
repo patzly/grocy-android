@@ -48,7 +48,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.MainActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterQuantityUnitAdapter;

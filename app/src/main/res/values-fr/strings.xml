@@ -372,7 +372,6 @@
 
     <string name="hint_server">URL du serveur</string>
     <string name="hint_key">Clé API valide</string>
-    <string name="hint_message">Écrire un email</string>
 
     <string name="setting_dark_mode">Forcer le mode sombre</string>
     <string name="setting_dark_mode_description">Désactivé pour la dépendance système</string>

@@ -60,6 +60,7 @@ public final class Constants {
 
         public final static String DARK_MODE = "force_dark_mode";
         public final static String FOOD_FACTS = "use_open_food_facts";
+        public final static String USE_FRONT_CAM = "use_front_camera";
         public final static String DEBUG = "debug";
         public final static String SHOW_INFO_LOGS = "info_logs";
 
