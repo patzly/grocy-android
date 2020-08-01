@@ -1,3 +1,6 @@
+1.7.1:
+- Bug fixes and improvements
+
 1.7.0:
 - Swedish translation (thanks contributors!)
 - Front camera setting (e.g. for tablets)
