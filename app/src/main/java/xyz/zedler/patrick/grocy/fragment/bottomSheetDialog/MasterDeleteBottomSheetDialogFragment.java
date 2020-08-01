@@ -30,15 +30,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
@@ -51,7 +50,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class MasterDeleteBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class MasterDeleteBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "MasterDeleteBottomSheet";
 

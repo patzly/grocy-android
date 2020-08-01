@@ -39,7 +39,6 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -62,7 +61,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class BatchChooseBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "BatchChooseBottomSheet";
 

@@ -33,12 +33,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class FeedbackBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class FeedbackBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
 	private final static String TAG = "FeedbackBottomSheet";
 

@@ -34,12 +34,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
@@ -48,8 +47,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class ShoppingListsBottomSheetDialogFragment
-        extends BottomSheetDialogFragment implements ShoppingListAdapter.ShoppingListAdapterListener {
+public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDialogFragment
+        implements ShoppingListAdapter.ShoppingListAdapterListener {
 
     private final static String TAG = "ShoppingListsBottomSheet";
 

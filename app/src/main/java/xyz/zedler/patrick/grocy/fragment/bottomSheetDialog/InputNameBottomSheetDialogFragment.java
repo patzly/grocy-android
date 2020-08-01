@@ -30,17 +30,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class InputNameBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class InputNameBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "InputNameBottomSheet";
 

@@ -34,13 +34,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
@@ -50,7 +49,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class LocationsBottomSheetDialogFragment
-        extends BottomSheetDialogFragment implements LocationAdapter.LocationAdapterListener {
+        extends CustomBottomSheetDialogFragment implements LocationAdapter.LocationAdapterListener {
 
     private final static String TAG = "LocationsBottomSheet";
 

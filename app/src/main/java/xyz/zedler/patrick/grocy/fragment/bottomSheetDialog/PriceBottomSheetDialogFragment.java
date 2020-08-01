@@ -34,7 +34,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
@@ -42,7 +41,7 @@ import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class PriceBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class PriceBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "PriceBottomSheet";
 

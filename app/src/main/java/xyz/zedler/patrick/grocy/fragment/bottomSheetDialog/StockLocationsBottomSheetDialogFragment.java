@@ -34,13 +34,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
@@ -48,8 +47,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class StockLocationsBottomSheetDialogFragment
-        extends BottomSheetDialogFragment
+public class StockLocationsBottomSheetDialogFragment extends CustomBottomSheetDialogFragment
         implements StockLocationAdapter.StockLocationAdapterListener {
 
     private final static String TAG = "StockLocationsBottomSheet";

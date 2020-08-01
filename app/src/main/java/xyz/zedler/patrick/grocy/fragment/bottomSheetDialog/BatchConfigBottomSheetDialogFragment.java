@@ -34,14 +34,13 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BatchConfigBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "BatchConfigBottomSheet";
 

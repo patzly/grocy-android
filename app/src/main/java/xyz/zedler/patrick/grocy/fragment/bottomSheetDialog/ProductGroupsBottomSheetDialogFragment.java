@@ -34,12 +34,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
 import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
@@ -47,7 +46,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ProductGroupsBottomSheetDialogFragment
-        extends BottomSheetDialogFragment
+        extends CustomBottomSheetDialogFragment
         implements ProductGroupAdapter.ProductGroupAdapterListener {
 
     private final static String TAG = "ProductGroupBottomSheet";

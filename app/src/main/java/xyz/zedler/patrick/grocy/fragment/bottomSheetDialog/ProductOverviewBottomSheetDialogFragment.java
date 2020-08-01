@@ -38,7 +38,6 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,8 +46,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
@@ -70,7 +69,7 @@ import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ProductOverviewBottomSheetDialogFragment extends BottomSheetDialogFragment {
+public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
 	private final static String TAG = "ProductBottomSheet";
 
