@@ -148,53 +148,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     public void onDestroyView() {
         super.onDestroyView();
 
-        if(emptyStateHelper != null) {
-            emptyStateHelper.destroyInstance();
-            emptyStateHelper = null;
-        }
+        if(emptyStateHelper != null) emptyStateHelper.destroyInstance();
         if(binding != null) {
             binding.recyclerStock.animate().cancel();
             binding.recyclerStock.setAdapter(null);
             binding = null;
         }
-        if(dlHelper != null) {
-            dlHelper.close();
-            dlHelper = null;
-        }
-
-        activity = null;
-        sharedPrefs = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        dlHelper = null;
-        appBarBehavior = null;
-        stockItemAdapter = null;
-        clickUtil = null;
-        animUtil = null;
-        swipeBehavior = null;
-        chipExpiring = null;
-        chipExpired = null;
-        chipMissing = null;
-        inputChipFilterLocation = null;
-        inputChipFilterProductGroup = null;
-        stockItems = null;
-        expiringItems = null;
-        expiredItems = null;
-        missingItems = null;
-        shoppingListProductIds = null;
-        missingStockItems = null;
-        filteredItems = null;
-        displayedItems = null;
-        quantityUnits = null;
-        locations = null;
-        productGroups = null;
-        search = null;
-        itemsToDisplay = null;
-        sortMode = null;
-        errorState = null;
-
-        System.gc();
+        if(dlHelper != null) dlHelper.close();
     }
 
     @Override
@@ -1311,6 +1271,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME
         );
         SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
+        if(menuSort == null) return;
+
         MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
         MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
         MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
