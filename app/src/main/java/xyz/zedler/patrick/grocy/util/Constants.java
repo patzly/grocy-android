@@ -57,6 +57,7 @@ public final class Constants {
         public final static String BATCH_CONFIG_LOCATION = "batch_config_location";
         public final static String BATCH_CONFIG_STOCK_LOCATION = "batch_config_stock_location";
         public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
+        public final static String BATCH_CONFIG_CONSUME_ALL = "batch_config_consume_all";
 
         public final static String DARK_MODE = "force_dark_mode";
         public final static String FOOD_FACTS = "use_open_food_facts";

@@ -1,4 +1,5 @@
 1.7.1:
+- Consume all in batch mode
 - Fix height of bottom sheets in landscape mode
 - Bug fixes and improvements
 

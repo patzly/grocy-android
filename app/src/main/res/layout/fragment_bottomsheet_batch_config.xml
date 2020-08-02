@@ -189,6 +189,30 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linear_batch_config_consume_all"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:background="@drawable/bg_list_item_surface">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_consume_product"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_consume_all" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_batch_config_consume_all"
+                    style="@style/Widget.Grocy.Switch"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

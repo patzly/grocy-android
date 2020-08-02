@@ -418,6 +418,7 @@
     <string name="setting_ask_store">Ask for store</string>
     <string name="setting_ask_location">Ask for location</string>
     <string name="setting_ask_specific_item">Ask for specific item</string>
+    <string name="setting_consume_all">Consume all items of a product</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>
