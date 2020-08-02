@@ -155,14 +155,20 @@ public class HelpActivity extends AppCompatActivity {
 					bodyRes = R.string.help_open_body;
 					break;
 				case 5:
-					headerRes = R.string.help_other_question_header;
-					bodyRes = R.string.help_other_question_body;
+					headerRes = R.string.help_selfie_camera_header;
+					bodyRes = R.string.help_selfie_camera_body;
 					break;
 			}
-			String header = getString(headerRes);
 			String body = getString(bodyRes).replaceAll("\n[ ]+", "\n");
-			helpSections.add(new HelpAdapter.HelpSection(header, body, headerRes));
+			helpSections.add(new HelpAdapter.HelpSection(getString(headerRes), body, headerRes));
 		}
+
+		// add last question (separate for easy appending of new sections above)
+		int headerRes = R.string.help_other_question_header;
+		int bodyRes = R.string.help_other_question_body;
+		String body = getString(bodyRes).replaceAll("\n[ ]+", "\n");
+		helpSections.add(new HelpAdapter.HelpSection(getString(headerRes), body, headerRes));
+
 		return helpSections;
 	}
 }

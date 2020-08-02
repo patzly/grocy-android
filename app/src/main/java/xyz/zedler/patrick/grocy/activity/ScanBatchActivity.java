@@ -501,7 +501,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         if(debug) Log.e(TAG, "consumeProduct: " + e);
                     }
-                    if(debug) Log.i(TAG, "consumeProduct: consumed 1");
+                    if(debug) Log.i(TAG, "consumeProduct: consumed " + NumUtil.trim(amount));
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
