@@ -1,4 +1,5 @@
 1.7.1:
+- Consume & purchase partial amount
 - Consume all in batch mode
 - Fix animation of product overview bottom sheet
 - Fix height of bottom sheets in landscape mode

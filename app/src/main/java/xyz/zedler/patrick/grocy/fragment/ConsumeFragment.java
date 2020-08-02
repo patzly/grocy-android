@@ -534,9 +534,7 @@ public class ConsumeFragment extends Fragment {
             if(defaultAmount == null) defaultAmount = String.valueOf(1);
             if(defaultAmount.isEmpty()) {
                 binding.editTextConsumeAmount.setText(null);
-            } else if(Double.parseDouble(defaultAmount)
-                    > productDetails.getStockAmount()
-            ) {
+            } else if(Double.parseDouble(defaultAmount) > productDetails.getStockAmount()) {
                 binding.editTextConsumeAmount.setText(
                         NumUtil.trim(productDetails.getStockAmount())
                 );
@@ -950,17 +948,12 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void setAmountBounds() {
-        if(selectedStockEntryId == null) {
-            // called from fillWithProductDetails
-            maxAmount = productDetails.getStockAmount();
-        } else {
-            StockEntry stockEntry = getStockEntry(selectedStockEntryId);
-            if(stockEntry != null) {
-                maxAmount = stockEntry.getAmount();
-            }
-        }
         if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
-            minAmount = 1;
+            if(productDetails.getProduct().getAllowPartialUnitsInStock() == 0) {
+                minAmount = 1;
+            } else {
+                minAmount = 0.01; // this is the same behavior as the grocy web server
+            }
             if(selectedStockEntryId == null) {
                 // called from fillWithProductDetails
                 maxAmount = productDetails.getStockAmount();
@@ -968,6 +961,8 @@ public class ConsumeFragment extends Fragment {
                 StockEntry stockEntry = getStockEntry(selectedStockEntryId);
                 if(stockEntry != null) {
                     maxAmount = stockEntry.getAmount();
+                } else {
+                    maxAmount = 0;
                 }
             }
         } else {
@@ -980,8 +975,18 @@ public class ConsumeFragment extends Fragment {
     private boolean isAmountValid() {
         if(!getAmount().isEmpty()) {
             if(amount >= minAmount && amount <= maxAmount) {
-                binding.textInputConsumeAmount.setErrorEnabled(false);
-                return true;
+                if(productDetails != null
+                        && amount % 1 != 0 // partial amount, has to be allowed in product master
+                        && productDetails.getProduct().getAllowPartialUnitsInStock() == 0
+                ) {
+                    binding.textInputConsumeAmount.setError(
+                            activity.getString(R.string.error_invalid_amount)
+                    );
+                    return false;
+                } else {
+                    binding.textInputConsumeAmount.setErrorEnabled(false);
+                    return true;
+                }
             } else {
                 if(productDetails != null) {
                     binding.textInputConsumeAmount.setError(
