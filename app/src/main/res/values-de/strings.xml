@@ -474,6 +474,13 @@
         - Drücken Sie auf die VERBRAUCHEN Verknüpfung von Grocy in Ihrem App Launcher (seit Android 7.1) und fahren Sie wie gerade eben fort.\n
         - Öffnen Sie die Seite \"Verbrauch\" im Hauptmenü und füllen Sie das Formular aus. Drücken Sie dann das ÖFFNEN Symbol unten in der Leiste.
     </string>
+    <string name="help_selfie_camera_header">Warum sind meine Barcodes unlesbar wenn ich die Selfie-Kamera benutze?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_selfie_camera_body">
+        Die meisten Geräte haben eine vordere Kamera mit einem unveränderbaren Fokus für die normale Entfernung zwischen Ihren Augen und dem Gerät.\n
+        Mit dieser Entfernung ist die Bildauflösung für den Scan-Algorithmus manchmal zu niedrig.
+    </string>
     <string name="help_other_question_header">Ich habe eine andere Frage.</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
     Then you can translate by replacing one sentence by its translation and so on. -->
