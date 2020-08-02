@@ -25,12 +25,12 @@ public class NumUtil {
 
     public static String trim(double value) {
         DecimalFormat decimalFormat = new DecimalFormat("###.##");
-        return decimalFormat.format(value);
+        return decimalFormat.format(value).replace(",", ".");
     }
 
     public static String trimPrice(double value) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        return decimalFormat.format(value);
+        return decimalFormat.format(value).replace(",", ".");
     }
 
     public static String formatPrice(String value) {
