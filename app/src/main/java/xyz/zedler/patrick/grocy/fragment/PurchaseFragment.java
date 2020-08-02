@@ -662,6 +662,7 @@ public class PurchaseFragment extends Fragment {
 
         // PRODUCT
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
+        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
         binding.textInputPurchaseProduct.setErrorEnabled(false);
 
         // BBD

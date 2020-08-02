@@ -118,23 +118,7 @@ public class ConsumeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        adapterProducts = null;
-        gson = null;
-        sharedPrefs = null;
-        activity = null;
-        startupBundle = null;
-        request = null;
-        grocyApi = null;
-        products = null;
-        stockLocations = null;
-        stockEntries = null;
-        productNames = null;
-        productDetails = null;
-        selectedStockEntryId = null;
-
-        System.gc();
     }
 
     @Override
@@ -198,9 +182,12 @@ public class ConsumeFragment extends Fragment {
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             } else {
-                binding.textInputConsumeProduct.setError(
-                        activity.getString(R.string.error_invalid_product)
-                );
+                String input = binding.autoCompleteConsumeProduct.getText().toString();
+                if(!productNames.isEmpty() && !productNames.contains(input)) {
+                    binding.textInputConsumeProduct.setError(
+                            activity.getString(R.string.error_invalid_product)
+                    );
+                }
             }
         });
         binding.autoCompleteConsumeProduct.setOnItemClickListener(
@@ -213,6 +200,12 @@ public class ConsumeFragment extends Fragment {
         binding.autoCompleteConsumeProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                        String input = binding.autoCompleteConsumeProduct.getText().toString();
+                        input = input.trim();
+                        if(!productNames.isEmpty() && productNames.contains(input)) {
+                            Product product = getProductFromName(input);
+                            if(product != null) loadProductDetails(product.getId());
+                        }
                         binding.editTextConsumeAmount.requestFocus();
                         return true;
                     } return false;
@@ -521,6 +514,7 @@ public class ConsumeFragment extends Fragment {
 
         // PRODUCT
         binding.autoCompleteConsumeProduct.setText(productDetails.getProduct().getName());
+        binding.autoCompleteConsumeProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
         binding.textInputConsumeProduct.setErrorEnabled(false);
 
         // AMOUNT
