@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -28,6 +29,8 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -392,7 +395,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 
 		if(hasDetails()) {
 			// LAST PURCHASED
-			itemLastPurchased.setVisibility(View.VISIBLE);
 			String lastPurchased = productDetails.getLastPurchased();
 			itemLastPurchased.setText(
 					activity.getString(R.string.property_last_purchased),
@@ -406,7 +408,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			);
 
 			// LAST USED
-			itemLastUsed.setVisibility(View.VISIBLE);
 			String lastUsed = productDetails.getLastUsed();
 			itemLastUsed.setText(
 					activity.getString(R.string.property_last_used),
@@ -421,7 +422,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
 			if(lastPrice != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-				itemLastPrice.setVisibility(View.VISIBLE);
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
 						lastPrice + " " + sharedPrefs.getString(
@@ -436,7 +436,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			if(shelfLife != 0 && shelfLife != -1 && isFeatureEnabled(
 					Constants.PREF.FEATURE_STOCK_BBD_TRACKING
 			)) {
-				itemShelfLife.setVisibility(View.VISIBLE);
 				itemShelfLife.setText(
 						activity.getString(R.string.property_average_shelf_life),
 						dateUtil.getHumanFromDays(shelfLife),
@@ -445,7 +444,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			}
 
 			// SPOIL RATE
-			itemSpoilRate.setVisibility(View.VISIBLE);
 			itemSpoilRate.setText(
 					activity.getString(R.string.property_spoil_rate),
 					NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",
@@ -496,17 +494,44 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 						));
 					}
 					priceHistory.init(curveLists, dates);
-
-					LinearLayout priceHistory = view.findViewById(
-							R.id.linear_product_overview_price_history
-					);
-					priceHistory.setVisibility(View.VISIBLE);
-					priceHistory.setAlpha(0);
-					priceHistory.animate().setDuration(400).alpha(1).start();
-
-
+					animateLinearPriceHistory(view);
 				},
 				error -> { }
+		);
+	}
+
+	private void animateLinearPriceHistory(View view) {
+		LinearLayout linearPriceHistory = view.findViewById(
+				R.id.linear_product_overview_price_history
+		);
+		linearPriceHistory.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+		int height = linearPriceHistory.getMeasuredHeight();
+		linearPriceHistory.getLayoutParams().height = 0;
+		linearPriceHistory.requestLayout();
+		linearPriceHistory.setAlpha(0);
+		linearPriceHistory.setVisibility(View.VISIBLE);
+		linearPriceHistory.animate().alpha(1).setDuration(600).setStartDelay(100).start();
+		linearPriceHistory.getViewTreeObserver().addOnGlobalLayoutListener(
+				new ViewTreeObserver.OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						ValueAnimator heightAnimator = ValueAnimator.ofInt(0, height);
+						heightAnimator.addUpdateListener(animation -> {
+							linearPriceHistory.getLayoutParams().height = (int) animation
+									.getAnimatedValue();
+							linearPriceHistory.requestLayout();
+						});
+						heightAnimator.setDuration(800).setInterpolator(
+								new DecelerateInterpolator()
+						);
+						heightAnimator.start();
+						if (linearPriceHistory.getViewTreeObserver().isAlive()) {
+							linearPriceHistory.getViewTreeObserver().removeOnGlobalLayoutListener(
+									this
+							);
+						}
+					}
+				}
 		);
 	}
 
