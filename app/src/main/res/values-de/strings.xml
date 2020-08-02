@@ -38,6 +38,8 @@
     <string name="action_clear_shopping_list">Einkaufszettel leeren</string>
     <string name="action_rate">Auf Google Play bewerten</string>
     <string name="action_rate_description">Die Entwicklung unterstützen</string>
+    <string name="action_email">Email senden</string>
+    <string name="action_email_description">Entwickler kontaktieren</string>
     <string name="action_new_issue">Neues Issue auf GitHub öffnen</string>
     <string name="action_new_issue_description">Bugs melden oder einen Vorschlag machen</string>
     <string name="action_get_started">Loslegen</string>
@@ -378,12 +380,13 @@
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Gültiger API Schlüssel</string>
-    <string name="hint_message">Email schreiben</string>
 
     <string name="setting_dark_mode">Dunkles Theme erzwingen</string>
     <string name="setting_dark_mode_description">Aus für Systemabhängigkeit</string>
     <string name="setting_open_food_facts">Open Food Facts benutzen</string>
     <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
+    <string name="setting_use_front_cam">Selfie-Kamera nutzen</string>
+    <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
     <string name="setting_reload_config">Konfiguration neu laden</string>
     <string name="setting_reload_config_description">Neustart der App erforderlich</string>
     <string name="setting_logout">Abmelden</string>
@@ -409,6 +412,7 @@
     <string name="setting_ask_store">Nach Geschäft fragen</string>
     <string name="setting_ask_location">Nach Standort fragen</string>
     <string name="setting_ask_specific_item">Nach Bestandseintrag fragen</string>
+    <string name="setting_consume_all">Alle Artikel eines Produkts verbrauchen</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
