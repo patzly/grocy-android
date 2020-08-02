@@ -412,6 +412,7 @@
     <string name="setting_ask_store">Nach Geschäft fragen</string>
     <string name="setting_ask_location">Nach Standort fragen</string>
     <string name="setting_ask_specific_item">Nach Bestandseintrag fragen</string>
+    <string name="setting_consume_all">Alle Artikel eines Produkts verbrauchen</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
