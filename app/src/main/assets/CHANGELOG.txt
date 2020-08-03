@@ -1,9 +1,11 @@
-1.7.1:
+1.8.0:
 - Consume & purchase partial amount
 - Consume all in batch mode
+- Offline indicator in shopping list
 - Fixed expiring items filter in stock overview
 - Fixed animation of product overview bottom sheet
 - Fixed height of bottom sheets in landscape mode
+- Updated translations
 - Bug fixes and improvements
 
 1.7.0:

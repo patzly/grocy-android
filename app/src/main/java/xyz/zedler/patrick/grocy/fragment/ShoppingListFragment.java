@@ -37,6 +37,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -53,8 +54,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
@@ -71,8 +72,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
+import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.StoreOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -461,6 +462,7 @@ public class ShoppingListFragment extends Fragment implements
             download();
         } else {
             showOffline = true;
+            appBarOfflineInfo(true);
             new LoadOfflineDataShoppingListHelper(
                     AppDatabase.getAppDatabase(activity.getApplicationContext()),
                     this
@@ -476,6 +478,7 @@ public class ShoppingListFragment extends Fragment implements
             binding.swipeShoppingList.setRefreshing(false);
             if(!showOffline) {
                 showOffline = true;
+                appBarOfflineInfo(true);
                 updateUI();
                 new LoadOfflineDataShoppingListHelper(
                         AppDatabase.getAppDatabase(activity.getApplicationContext()),
@@ -536,6 +539,7 @@ public class ShoppingListFragment extends Fragment implements
     private void onQueueEmpty() {
         if(showOffline) {
             showOffline = false;
+            appBarOfflineInfo(false);
             updateUI();
         }
 
@@ -618,6 +622,7 @@ public class ShoppingListFragment extends Fragment implements
         if(activity == null) return;
         if(!showOffline) {
             showOffline = true;
+            appBarOfflineInfo(true);
             updateUI();
         }
         new LoadOfflineDataShoppingListHelper(
@@ -1404,6 +1409,39 @@ public class ShoppingListFragment extends Fragment implements
                         ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
                         : Constants.UI.SHOPPING_LIST_DEFAULT
         );
+    }
+
+    private void appBarOfflineInfo(boolean visible) {
+        boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
+        if(visible == currentState) return;
+        if(visible) {
+            binding.linearOfflineError.setAlpha(0);
+            binding.linearOfflineError.setVisibility(View.VISIBLE);
+            binding.linearOfflineError.animate().alpha(1).setDuration(125).withEndAction(
+                    () -> updateScrollViewHeight(true)
+            ).start();
+        } else {
+            binding.linearOfflineError.animate().alpha(0).setDuration(125).withEndAction(
+                    () -> {
+                        binding.linearOfflineError.setVisibility(View.GONE);
+                        updateScrollViewHeight(false);
+                    }
+            ).start();
+        }
+    }
+
+    private void updateScrollViewHeight(boolean visible) {
+        // get offline indicator height
+        int offlineIndicatorHeight;
+        if(visible) {
+            offlineIndicatorHeight = binding.linearOfflineError.getHeight();
+        } else {
+            offlineIndicatorHeight = 0;
+        }
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams)
+                binding.scrollShoppingList.getLayoutParams();
+        layoutParams.setMargins(0, offlineIndicatorHeight, 0, 0);
+        binding.scrollShoppingList.setLayoutParams(layoutParams);
     }
 
     private void showMessage(String msg) {
