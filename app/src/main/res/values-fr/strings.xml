@@ -38,6 +38,7 @@
     <string name="action_clear_shopping_list">Effacer la liste de courses</string>
     <string name="action_rate">Notez sur Google Play</string>
     <string name="action_rate_description">Soutenir le développement</string>
+    <string name="action_email">Test string</string>
     <string name="action_new_issue">Ouvrir un nouveau ticket sur GitHub</string>
     <string name="action_new_issue_description">Signaler des bugs ou demander une fonctionnalité</string>
     <string name="action_get_started">Commencer</string>
