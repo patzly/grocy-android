@@ -80,6 +80,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -521,6 +522,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void download() {
         binding.swipeStock.setRefreshing(true);
+        if(expiringItems == null) {
+            expiringItems = new ArrayList<>();
+        } else {
+            expiringItems.clear();
+        }
         AtomicBoolean stockItemsDownloaded = new AtomicBoolean(false);
         AtomicBoolean volatileItemsDownloaded = new AtomicBoolean(false);
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
@@ -536,23 +542,43 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 }),
                 dlHelper.getStockItems(stockItems -> {
                     this.stockItems = stockItems;
-                    missingStockItems = new ArrayList<>();
+                    if(missingStockItems == null) {
+                        missingStockItems = new ArrayList<>();
+                    } else {
+                        missingStockItems.clear();
+                    }
                     for(StockItem stockItem : stockItems) {
-                        if(stockItem.getProduct().getMinStockAmount() > 0
-                                && stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()
-                        ) {
-                            missingStockItems.add(stockItem);
+                        if(stockItem.getProduct().getMinStockAmount() > 0) {
+                            if(stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()) {
+                                missingStockItems.add(stockItem);
+                            }
+                        }
+                        if(DateUtil.getDaysFromNow(stockItem.getBestBeforeDate()) == 0) {
+                            // these stockItems are not in volatile items (API bug?)
+                            if(!expiringItems.contains(stockItem)) {
+                                expiringItems.add(stockItem);
+                            }
                         }
                     }
+                    // update of chip is necessary because number of items maybe has changed
+                    // (if this lambda function was executed after the one of getVolatile)
+                    chipExpiring.setText(
+                            activity.getString(R.string.msg_expiring_products, expiringItems.size())
+                    );
                     stockItemsDownloaded.set(true);
                     if(volatileItemsDownloaded.get()) downloadMissingItemDetails(queue);
                 }),
                 dlHelper.getVolatile((expiring, expired, missing) -> {
-                    expiringItems = expiring;
+                    for(StockItem stockItem : expiring) {
+                        // checking is necessary because same item can already be added above
+                        if(!expiringItems.contains(stockItem)) {
+                            expiringItems.add(stockItem);
+                        }
+                    }
                     expiredItems = expired;
                     missingItems = missing;
                     chipExpiring.setText(
-                            activity.getString(R.string.msg_expiring_products, expiring.size())
+                            activity.getString(R.string.msg_expiring_products, expiringItems.size())
                     );
                     chipExpired.setText(
                             activity.getString(R.string.msg_expired_products, expired.size())
