@@ -1,9 +1,9 @@
 1.7.1:
 - Consume & purchase partial amount
 - Consume all in batch mode
-- Fix expiring items filter in stock overview
-- Fix animation of product overview bottom sheet
-- Fix height of bottom sheets in landscape mode
+- Fixed expiring items filter in stock overview
+- Fixed animation of product overview bottom sheet
+- Fixed height of bottom sheets in landscape mode
 - Bug fixes and improvements
 
 1.7.0:
