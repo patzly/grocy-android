@@ -1,0 +1,492 @@
+<resources>
+
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in purchase screen for example. -->
+    <string name="action_purchase">Kopen</string>
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
+    <string name="action_consume">Consumeren</string>
+    <!-- This is an action – in English, it contains a verb. -->
+    <string name="action_consume_all">Alles consumeren</string>
+
+    <string name="action_consume_one_spoiled">Consumeer 1 als verspild</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">Consumeer 1 %1$s %2$s</string>
+    <string name="action_open">Markeer als geopend</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">Open 1 %1$s %2$s</string>
+    <string name="action_edit_product">Product bewerken</string>
+    <string name="action_shopping_list_add">Aan boodschappenlijst toevoegen</string>
+
+    <string name="action_back">Terug</string>
+    <string name="action_search">Zoek</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_next">Volgende</string>
+    <string name="action_new">Nieuw</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_prev">Vorige</string>
+    <string name="action_send_feedback">Feedback versturen</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_reload">Opnieuw inladen</string>
+    <string name="action_top_scroll">Naar boven scrollen</string>
+    <string name="action_send">Versturen</string>
+    <string name="action_close">Sluiten</string>
+    <string name="action_scan">Scannen</string>
+    <string name="action_cancel">Annuleren</string>
+    <string name="action_add">Toevoegen</string>
+    <string name="action_clear">Leegmaken</string>
+    <string name="action_clear_shopping_list">Boodschappenlijst leegmaken</string>
+    <string name="action_rate">Beoordeel op Google Play</string>
+    <string name="action_rate_description">Support de ontwikkelaars</string>
+    <string name="action_email">Email versturen</string>
+    <string name="action_email_description">Neem contact met de ontwikkelaars</string>
+    <string name="action_new_issue">Open een nieuw issue op GitHub</string>
+    <string name="action_new_issue_description">Bugs melden of functieverzoek aanvragen</string>
+    <string name="action_get_started">Beginnen</string>
+    <string name="action_ascending">Oplopend</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_sort">Sorteren</string>
+    <string name="action_undo">Annuleren</string>
+    <string name="action_retry">Opnieuw proberen</string>
+    <string name="action_edit">Wijzigen</string>
+    <string name="action_delete">Verwijderen</string>
+    <string name="action_save">Opslaan</string>
+    <string name="action_logout">Uitloggen</string>
+    <string name="action_restart">Herstarten</string>
+    <string name="action_show_extended">Uitgebreid formulier weergeven</string>
+    <string name="action_batch_mode">Batchmodus</string>
+    <string name="action_create">Aanmaken</string>
+    <string name="action_link">Linken</string>
+    <string name="action_open_forms">Open formulier</string>
+    <string name="action_open_scanner">Open scanner</string>
+    <string name="action_discard">Verwerp</string>
+    <string name="action_toggle_done">Verander status</string>
+    <string name="action_edit_notes">Notitie bewerken</string>
+    <string name="action_shopping_mode">Inkoopmodus</string>
+    <string name="action_add_missing">Missende producten toevoegen</string>
+    <string name="action_purchase_all_items">Koop alle items</string>
+    <string name="action_skip_entry">Invoer overslaan</string>
+    <string name="action_delete_shopping_list">Boodschappenlijst verwijderen</string>
+    <string name="action_discard_products">Product weggooien</string>
+    <string name="action_perform_purchasing_processes">Voer inkooptransacties uit voor gecreëerde producten</string>
+    <string name="action_create_key">Sleutel aanmaken</string>
+    <string name="action_login">Inloggen</string>
+    <string name="action_use_demo_account">Demo-account proberen</string>
+    <string name="action_ignore">Negeer</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">Alle</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">Afgerond</string>
+
+    <string name="tooltip_new_products_count">Aantal nieuwe producten</string>
+    <string name="tooltip_switch_purchase">Schakel over naar aankoopmodus</string>
+    <string name="tooltip_switch_consume">Schakel over naar de consumeermodus</string>
+    <string name="tooltip_switch_open">Schakel over naar de openmodus</string>
+    <string name="tooltip_demo">Je bent in demomodus.</string>
+
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">%1$d verloopt binnenkort</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">%1$d verlopen</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">%1$d minder dan minimale voorraad</string>
+    <string name="msg_consumed">Geconsumeerd %1$s %2$s van %3$s</string>
+    <string name="msg_consumed_spoiled">Geconsumeerd %1$s %2$s van %3$s als verspild</string>
+    <string name="msg_opened">%1$s %2$s van %3$s gemarkeerd als geopend</string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d nog niet gedaan</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">Aankoop %1$s wordt opgeslagen</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">%1$s %2$s van %3$s aan voorraad toegevoegd</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">%1$s niet in voorraad gevonden</string>
+    <string name="msg_no_connection">Geen verbinding</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">Geen voorraad locatie voor %1$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">Geen voorraad aanwezig voor %1$s</string>
+    <string name="msg_not_found">Product niet gevonden</string>
+    <string name="msg_undone_transaction">Transactie annuleren</string>
+    <string name="msg_failed_to_sync">Synchronisatie van de invoer is mislukt</string>
+    <string name="msg_synced">Invoer is succesvol gesynchroniseerd</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">Missende producten toevoegen aan %1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">%1$s succesvol geleegd</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">%1$s succesvol verwijderd</string>
+    <string name="msg_barcode_duplicate">Streepjescode bestaat al</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">Verwijder %1$s \"%2$s\"?</string>
+    <string name="msg_master_delete_stock">Dit product heeft nog voorraad</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
+    <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
+    <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
+    <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
+    <string name="msg_batch_tare_weight">Product ondersteunt geen batchmodus: tarragewichtverwerking ingeschakeld</string>
+    <string name="msg_purchase_transactions_done">Aankooptransacties van aangemaakte producten gedaan</string>
+    <string name="msg_no_purchase_transactions">Geen lopende aankooptransacties</string>
+    <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
+    <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
+    <string name="msg_logout_demo">Je maakt momenteel gebruik van de demo op <u>https://grocy.info</u>.  <b>Daar worden geen wijzigingen opgeslagen! Ze blijven openbaar totdat de server ze automatisch overschrijft.</b>  Op het login-scherm kun je je eigen serveradres invoeren.</string>
+    <string name="msg_restart">Herstart de app om de nieuwe Grocy configuratie in te laden.</string>
+    <string name="msg_features">Start de intro opnieuw in \"Over\"</string>
+    <string name="msg_feedback">Heb je wensen, vragen of fouten gevonden? Neem contact met ons op, wij helpen je graag. Anders zouden we het heel fijn vinden als je een leuke recensie achter laat in de Play Store.</string>
+    <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
+
+    <string name="error_api_not_working">API sleutel werkt niet</string>
+    <string name="error_select_product">Selecteer een product</string>
+    <string name="error_empty">Verplicht</string>
+    <string name="error_empty_stock">Voorraad is leeg</string>
+    <string name="error_empty_stock_sub">Koop een aantal producten</string>
+    <string name="error_empty_shopping_list">Je boodschappenlijst is leeg</string>
+    <string name="error_empty_shopping_list_sub">Voeg een aantal producten toe die je nodig hebt</string>
+    <string name="error_empty_master_data_sub">Maak een aantal aan via de onderstaande knop</string>
+    <string name="error_empty_locations">Geen locaties</string>
+    <string name="error_empty_product_groups">Geen productgroepen</string>
+    <string name="error_empty_products">Geen producten</string>
+    <string name="error_empty_qu">Geen eenheden</string>
+    <string name="error_empty_stores">Geen winkels</string>
+    <string name="error_search">Geen zoekresultaten</string>
+    <string name="error_search_sub">Probeer andere termen</string>
+    <string name="error_filter">Niets om te laten zien</string>
+    <string name="error_filter_sub">Probeer andere filters</string>
+    <string name="error_duplicate">Bestaat al</string>
+    <string name="error_parent">Kan geen \"parent\" zijn van zichzelf</string>
+    <string name="error_invalid_product">Ongeldig product</string>
+    <string name="error_invalid_url">Ongeldige URL</string>
+    <string name="error_invalid_amount">Ongeldige hoeveelheid</string>
+    <string name="error_invalid_best_before_days">Gebruik -1 om nooit te laten vervallen</string>
+    <string name="error_invalid_factor">Ongeldige factor</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">Tussen %1$s en %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">Groter of gelijk aan %1$s</string>
+    <string name="error_offline">Offline</string>
+    <string name="error_name_exists">Name bestaat al</string>
+    <string name="error_offline_subtitle">Controleer je verbinding en probeer nogmaals</string>
+    <string name="error_unknown">Oeps!</string>
+    <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
+    <string name="error_timeout">Timeout fout</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">Verbinding met %1$s mislukt</string>
+    <string name="error_handshake">Centificaat ontbreekt</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$s heeft een certificaat dat niet wordt herkend door Android.\nHet servercertificaat moet worden ondertekend door een vertrouwde certificeringsinstantie (CA)\nOm aan deze vereisten te voldoen, kunt u een gratis certificaat aanmaken via letsencrypt.org</string>
+    <string name="error_unexpected_response_code">Onverwachte reactie met code: %1$d</string>
+    <string name="error_unexpected_response">Onverwachte reactie van server</string>
+    <string name="error_undefined">Er is een fout opgetreden</string>
+
+    <string name="title_stock_overview">Voorraad</string>
+    <string name="title_purchase">Koop</string>
+    <string name="title_consume">Consumeer</string>
+    <string name="title_product_overview">Productoverzicht</string>
+    <string name="title_product">Product</string>
+    <string name="title_master_data">Masterdata</string>
+    <string name="title_stock_entries">Voorraadvermeldingen</string>
+    <string name="title_shopping_list">Boodschappenlijst</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_settings">Instellingen</string>
+    <string name="title_about">Over</string>
+    <string name="title_info">Informatie</string>
+    <string name="title_help">Help</string>
+    <string name="title_logs">Logs</string>
+    <string name="title_link_barcode">Link streepjescode aan product</string>
+    <string name="title_batch_scan_exit">Productformulier invullen?</string>
+    <string name="title_batch_missing_exit">Terug naar de scanner?</string>
+    <string name="title_link_barcode_to_existing">Link streepjescode aan een bestaand product?</string>
+    <string name="title_link_barcode_or_create">Link streepjescode aan een bestaand product of maak een nieuw product aan?</string>
+    <string name="title_compatibility">Compatibiliteitsproblemen</string>
+    <string name="title_logout">Uitloggen van Grocy?</string>
+    <string name="title_restart">Grocy herstarten?</string>
+    <string name="title_logout_demo">Demomodus uitloggen?</string>
+    <string name="title_batch_config">Batchmodus configuratie</string>
+    <string name="title_manage_master_data">Masterdaata beheren</string>
+
+    <string name="title_spoiled">Bedorven</string>
+    <string name="title_use_specific">Gebruik specifiek voorraadartikel</string>
+    <string name="title_is_total_price">Is de totaalprijs</string>
+    <string name="title_stock_entry_no_specific">Geen specifieke vermelding</string>
+    <string name="title_shopping_list_ungrouped">Ongegroepeerd</string>
+    <string name="title_list_entry">Lijstvermelding</string>
+    <string name="title_edit_list_entry">Lijstitem bewerken</string>
+    <string name="title_create_list_entry">Lijstitem aanmaken</string>
+    <string name="title_shopping_list_edit">Boodschappenlijst aanpassen</string>
+    <string name="title_shopping_list_new">Nieuwe boodschappenlijst</string>
+    <string name="title_shopping_mode">Winkelmodus</string>
+    <string name="title_products_to_create">Producten om aan te maken</string>
+    <string name="title_batch_mode_shopping_list">Boodschappelijst batchmodus</string>
+
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s %2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(%1$s geopend)</string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">Waar %1$s voorraad heeft</string>
+    <string name="subtitle_default">Standaard</string>
+    <string name="subtitle_none_selected">Niks geselecteerd</string>
+    <string name="subtitle_empty">Leeg</string>
+    <string name="subtitle_done">Klaar</string>
+    <string name="subtitle_undone">Niet klaar</string>
+    <string name="subtitle_never_expires">Verloopt nooit</string>
+    <string name="subtitle_selected">Geselecteerd</string>
+    <string name="subtitle_stock_entry_no_specific">Eerst verloopt eerst, dan eerst in - eerst uit</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">Ingekocht: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">THT: %1$s; Aantal: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Item %1$d van %2$d</string>
+
+    <string name="description_batch_choose_link">Selecteer een product waar de streepjescode aan wordt gelinkt.</string>
+    <string name="description_batch_choose_create">Selecteer een product waar de streepjescode aan wordt gelinkt of maak een nieuw product aan.</string>
+    <string name="description_scan_batch_exit">Er zijn nieuwe producten gemaakt, maar deze zijn nog niet naar de server gestuurd omdat de vereiste details ontbreken. De productformulieren openen?</string>
+    <string name="description_missing_batch_exit">Sommige aankooptransacties zijn nog niet naar de server gestuurd. Weggooien of teruggaan naar de scanner?</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">Maak een nieuw prodct aan met de naam \"%1$s\"?</string>
+    <string name="description_clear_shopping_list">Wil je alle items verwijderen of alleen die klaar zijn?</string>
+
+    <string name="property_name">Naam</string>
+    <string name="property_name_singular">Naam (Enkelvoud)</string>
+    <string name="property_name_plural">Naam (Meervoud)</string>
+    <string name="property_product">Product</string>
+    <string name="property_products">Producten</string>
+    <string name="property_product_name">Naam van het product</string>
+    <string name="property_parent_product">Parent product</string>
+    <string name="property_description">Omschrijving</string>
+    <string name="property_note">Notitie</string>
+    <string name="property_status">Status</string>
+    <string name="property_amount">Aantal</string>
+    <string name="property_seconds">Seconden</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d seconden</string>
+    <string name="property_amount_min_stock">Min. aantal in voorraad</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">Aantal in %1$s</string>
+    <string name="property_price">Prijs</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">Prijs in %1$s</string>
+    <string name="property_quantity_unit">Hoeveelheid eenheid</string>
+    <string name="property_quantity_units">Aantal eenheden</string>
+    <string name="property_qu_purchase">Aankoopeenheid</string>
+    <string name="property_qu_stock">Voorraadeenheid</string>
+    <string name="property_qu_factor">"Factor van aankoop- naar voorraadeenheid  "</string>
+    <string name="property_barcode">Streepjescode</string>
+    <string name="property_barcodes">Streepjescodes</string>
+    <string name="property_bbd">Tenminste houdbaar tot</string>
+    <string name="property_bbd_next">Volgende houdbaarheidsdatum</string>
+    <string name="property_bb_days">THT dagen</string>
+    <string name="property_bb_days_default">Standaard THT dagen</string>
+    <string name="property_bb_days_default_opened">Standaard THT dagen na openen</string>
+    <string name="property_location">Locatie</string>
+    <string name="property_location_default">Standaard locatie</string>
+    <string name="property_notes">Notities</string>
+    <string name="property_locations">Locaties</string>
+    <string name="property_store">Winkel</string>
+    <string name="property_store_unknown">Winkel onbekend</string>
+    <string name="property_store_default">Standaard winkel</string>
+    <string name="property_stores">Winkels</string>
+    <string name="property_shopping_list">Boodschappenlijst</string>
+    <string name="property_shopping_lists">Boodschappenlijstjes</string>
+    <string name="property_last_purchased">Laatste aankoop</string>
+    <string name="property_last_used">Laatst gebruikt</string>
+    <string name="property_last_price">Laatste prijs</string>
+    <string name="property_average_shelf_life">Gemiddelde houdbaarheid</string>
+    <string name="property_spoil_rate">Verspillingsratio</string>
+    <string name="property_price_history">Prijshistorie</string>
+    <string name="property_product_group">Productgroep</string>
+    <string name="property_product_groups">Productgroepen</string>
+    <string name="property_opened">geopend</string>
+    <string name="property_not_opened">niet geopend</string>
+    <string name="property_is_freezer">Is een vriezer</string>
+
+    <string name="date_yesterday">Gisteren</string>
+    <string name="date_today">Vandaag</string>
+    <string name="date_tomorrow">Morgen</string>
+    <string name="date_unknown">Onbekend</string>
+    <string name="date_unlimited">Onbeperkt</string>
+    <string name="date_never">Nooit</string>
+    <!-- This string should contain the singular form of "day" -->
+    <string name="date_day_one">1 dag</string>
+    <!-- This string should contain the singular form of "month" -->
+    <string name="date_month_one">1 maand</string>
+    <!-- This string should contain the singular form of "year" -->
+    <string name="date_year_one">1 jaar</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <string name="date_days">%1$d dagen</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <string name="date_months">%1$d maanden</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <string name="date_years">%1$d jaren</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_from_now">In %1$d dagen</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_from_now">In één maand</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_from_now">In %1$d maanden</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_from_now">In één jaar</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_from_now">In %1$d jaren</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_ago">%1$d dagen geleden</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_ago">Één maand geleden</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_ago">%1$d maanden geleden</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_ago">Één jaar geleden</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_ago">%1$d jaren geleden</string>
+
+    <string name="info_acknowledgement">We willen Bernd Bestel bedanken, zonder wiens geweldige werk deze app nooit mogelijk zou zijn geweest.</string>
+    <string name="info_intro">Intro opnieuw afspelen</string>
+    <string name="info_intro_description">Features demonstreren</string>
+    <string name="info_material_components_built_with">Gemaakt met</string>
+    <string name="info_version">Version</string>
+    <string name="info_grocy_version">Grocy Version</string>
+    <string name="info_grocy_version_incompatible">Niet ondersteund</string>
+    <string name="info_changelog">Changelog</string>
+    <string name="info_changelog_description">Wat is nieuw?</string>
+    <string name="info_developers">Ontwikkelaars</string>
+    <string name="info_github">Grocy Android op GitHub</string>
+    <string name="info_github_description">Broncode</string>
+
+    <string name="feature_1_title">Grocy voor Android</string>
+    <string name="feature_1_description">Zelfgehost boodschappen management tool voor thuis</string>
+    <string name="feature_2_title">Intuïtief ontwerp</string>
+    <string name="feature_2_description">Open en consumeer met één swipe</string>
+    <string name="feature_3_title">Krachtige batch verwerking</string>
+    <string name="feature_3_description">Scan je hele aankoop in secondes</string>
+
+    <string name="category_licenses">Open Source licenties</string>
+    <string name="category_general">Algemeen</string>
+    <string name="category_purchase_consume">Aankoop &amp; consumeer</string>
+    <string name="category_server">Server</string>
+    <string name="category_debugging">Debugging</string>
+    <string name="category_presets">Voorinstellingen voor nieuwe producten</string>
+
+    <string name="hint_server">Server URL</string>
+    <string name="hint_key">Geldige API sleutel</string>
+
+    <string name="setting_dark_mode">Forceer darkmode</string>
+    <string name="setting_dark_mode_description">Uit voor systeemafhankelijkheid</string>
+    <string name="setting_open_food_facts">Open Food Facts gebruiken</string>
+    <string name="setting_open_food_facts_description">Info van streepjescode gebruiken</string>
+    <string name="setting_use_front_cam">Gebruik selfie-camera</string>
+    <string name="setting_use_front_cam_description">Voor streepjescode te scannen</string>
+    <string name="setting_reload_config">Configuratie opnieuw inladen</string>
+    <string name="setting_reload_config_description">App herstart nodig</string>
+    <string name="setting_logout">Uitloggen</string>
+    <string name="setting_logout_description">Terug naar loginpagina</string>
+    <string name="setting_list_indicator">Product markeren</string>
+    <string name="setting_list_indicator_description">Blauwe punt tonen, als product zich in boodschappenlijst bevindt</string>
+    <string name="setting_shopping_mode_update_interval">Winkelmodus update interval</string>
+    <string name="setting_keep_screen_on">Houd het scherm aan</string>
+    <string name="setting_keep_screen_on_description">Wanneer in winkelmodus</string>
+    <string name="setting_expiring_soon_days">\"Vervalt binnenkort\" dagen</string>
+    <string name="setting_default_amount_purchase">Standaard aantal voor inkoop</string>
+    <string name="setting_default_amount_consume">Standaard aantal bij consumeren</string>
+    <string name="setting_empty_value">Leeg</string>
+    <string name="setting_sync_off">Synchonisatie uit</string>
+    <string name="setting_not_loaded">Kon niet worden geladen</string>
+    <string name="setting_debug">Logging aangezet</string>
+    <string name="setting_debug_description">Vind en rapporteer fouten</string>
+    <string name="setting_info_logs">Info-Logs bekijken</string>
+    <string name="setting_logs_description">Logcat van dit proces bekijken</string>
+
+    <string name="setting_ask_best_before_date">Vraag naar THT-datum</string>
+    <string name="setting_ask_price">Vraag naar prijs</string>
+    <string name="setting_ask_store">Vraag naar winkel</string>
+    <string name="setting_ask_location">Vraag naar locatie</string>
+    <string name="setting_ask_specific_item">Vraag naar een specifiek item</string>
+    <string name="setting_consume_all">Consumeer alle items van een product</string>
+
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
+    <string name="url_grocy_demo">https://nl.demo.grocy.info</string>
+    <!-- Strings for HelpActivity -->
+
+    <string name="help_general_header">Hoe weet ik wat iets doet?</string>
+    <string name="help_general_body">Vanaf Android 8 kun je bijna elk klikbaar element lang zonder label indrukken om te zien wat het zal doen.</string>
+    <string name="help_key_invalid_header">Mijn API sleutel is niet geldig.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_key_invalid_body">
+        Druk op SLEUTEL AANMAKEN om naar de pagina Sleutel Management op uw Grocy-instantie te gaan. \n
+        Maak een nieuwe sleutel en kopieer deze naar het klembord, plak deze in het veld API-sleutel in Grocy Android en probeer het opnieuw.\n\n
+
+        Als je Hass.io gebruikt met de Grocy-add-on, lees dan de volgende vraag.
+    </string>
+    <string name="help_homeassistant_header">Kan ik de app icm Hass.io gebruiken?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_homeassistant_body" >
+        Open in de Hass.io-supervisor het tabblad "Configuratie" in de Grocy-add-on.\n
+        Verander de hostpoort (die zal worden onthuld) van \"null\" in een nummer, b.v. \"40\" (zonder aanhalingstekens) in het netwerkgedeelte.\n
+        Voer nu het domein of IP-adres van uw Hass.io-server samen met \":\" en het geselecteerde poortnummer in het veld \"Server-URL\" in deze app in.\n
+        De server-URL kan er nu als volgt uitzien: \n\n
+
+        - http://192.168.178.123:40\n
+        - https://myhassioserver.com:40\n\n
+
+        Let op! Als uw Hass.io-server openbaar toegankelijk is, let dan op het volgende:\n\n
+
+        - Zorg ervoor dat u een werkend HTTPS-certificaat heeft ingesteld in de configuratie van de Grocy-add-on.\n
+        - Start de URL met \"https://\" zoals in het bovenstaande voorbeeld.\n
+        - Stel een sterk wachtwoord in voor alle gebruikers in Grocy (standaard is \"admin\"), omdat iedereen nu toegang heeft tot uw Grocy-instantie en het niet langer wordt beschermd door de Hass.io-login.
+    </string>
+    <string name="help_consume_header">Hoe consumeer je een product?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_consume_body">
+        Elke keer dat je iets consumeert, consumeer je het ook in Grocy.\n
+        Manieren om een ​​product te consumeren: \n\n
+
+        - Voorraad: zoek het product, swipe naar rechts en tik op het CONSUMEER-icoontje (het bestek iccontje).\n
+        - Inventaris: zoek naar het product, klik erop om het productoverzicht te openen en tik vervolgens op het pictogram CONSUMEREN.\n
+        - Druk op de groene knop in de inventaris om in de batchmodus te komen, zorg ervoor dat de modus "Consumeren" is en scan je product.\n
+        - Druk op de Grocy-link in uw app-opstartprogramma (sinds Android 7.1) en scan je product.\n
+        - Open de Consumeer pagina in het hoofdmenu en vul het formulier in. Druk dan op de groene knop.
+    </string>
+    <string name="help_open_header">Hoe markeer je een product als geopend?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_open_body">
+        Elke keer dat je iets opent of aanbreekt, markeer het dan als open in Grocy.\n
+        Manieren om een ​​product als open te markeren: \n\n
+
+        - Voorraad: zoek het product, swipe naar rechts en tik op het iccontje OPENEN.\n
+        - Voorraad: Zoek het product, klik erop om het productoverzicht te openen en tik vervolgens op het icoontje OPENEN.\n
+        - Druk op de groene knop in de inventaris om in de batchmodus te komen, druk op de modusknop zodat de modus "Markeer als open" is en scan je product.\n
+        - Druk op de snelkoppeling USE Grocy in uw app-opstartprogramma (sinds Android 7.1) en ga verder zoals hierboven.\n
+        - Open de Consumeer pagina in het hoofdmenu en vul het formulier in. Druk vervolgens op het OPEN-symbool onderaan de balk.
+    </string>
+    <string name="help_selfie_camera_header">Waarom zijn mijn barcodes onleesbaar als in de selfie-cam gebruik?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_selfie_camera_body">
+        De meeste apparaten hebben een camera aan de voorkant met een vaste focus voor de normale afstand tussen je ogen en het apparaat.\n
+        Op deze afstand is de beeldresolutie soms te laag voor het scanalgoritme.
+    </string>
+    <string name="help_other_question_header">Ik heb nog een andere vraag.</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_other_question_body">
+        Ga naar onze projectpagina op GitHub en open een nieuw probleem met je vraag.\n
+        We helpen je zo snel mogelijk.
+    </string>
+
+</resources>
