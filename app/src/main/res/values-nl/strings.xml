@@ -165,8 +165,8 @@
     <!-- %1$s is a number like 0, 1, 2 -->
     <string name="error_bounds_min">Groter of gelijk aan %1$s</string>
     <string name="error_offline">Offline</string>
-    <string name="error_name_exists">Name bestaat al</string>
-    <string name="error_offline_subtitle">Controleer je verbinding en probeer nogmaals</string>
+    <string name="error_name_exists">Naam bestaat al</string>
+    <string name="error_offline_subtitle">Controleer je verbinding en probeer opnieuw</string>
     <string name="error_unknown">Oeps!</string>
     <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
     <string name="error_timeout">Timeout fout</string>
@@ -272,7 +272,7 @@
     <string name="property_quantity_units">Aantal eenheden</string>
     <string name="property_qu_purchase">Aankoopeenheid</string>
     <string name="property_qu_stock">Voorraadeenheid</string>
-    <string name="property_qu_factor">"Factor van aankoop- naar voorraadeenheid  "</string>
+    <string name="property_qu_factor">Factor van aankoop- naar voorraadeenheid</string>
     <string name="property_barcode">Streepjescode</string>
     <string name="property_barcodes">Streepjescodes</string>
     <string name="property_bbd">Tenminste houdbaar tot</string>
@@ -455,7 +455,7 @@
         Elke keer dat je iets consumeert, consumeer je het ook in Grocy.\n
         Manieren om een ​​product te consumeren: \n\n
 
-        - Voorraad: zoek het product, swipe naar rechts en tik op het CONSUMEER-icoontje (het bestek iccontje).\n
+        - Voorraad: zoek het product, swipe naar rechts en tik op het CONSUMEER-icoontje (het bestek icoontje).\n
         - Inventaris: zoek naar het product, klik erop om het productoverzicht te openen en tik vervolgens op het pictogram CONSUMEREN.\n
         - Druk op de groene knop in de inventaris om in de batchmodus te komen, zorg ervoor dat de modus "Consumeren" is en scan je product.\n
         - Druk op de Grocy-link in uw app-opstartprogramma (sinds Android 7.1) en scan je product.\n
@@ -468,7 +468,7 @@
         Elke keer dat je iets opent of aanbreekt, markeer het dan als open in Grocy.\n
         Manieren om een ​​product als open te markeren: \n\n
 
-        - Voorraad: zoek het product, swipe naar rechts en tik op het iccontje OPENEN.\n
+        - Voorraad: zoek het product, swipe naar rechts en tik op het icoontje OPENEN.\n
         - Voorraad: Zoek het product, klik erop om het productoverzicht te openen en tik vervolgens op het icoontje OPENEN.\n
         - Druk op de groene knop in de inventaris om in de batchmodus te komen, druk op de modusknop zodat de modus "Markeer als open" is en scan je product.\n
         - Druk op de snelkoppeling USE Grocy in uw app-opstartprogramma (sinds Android 7.1) en ga verder zoals hierboven.\n
