@@ -172,7 +172,7 @@
     <string name="error_timeout">Timeout fout</string>
     <!-- %1$s is a server URL -->
     <string name="error_failed_to_connect_to">Verbinding met %1$s mislukt</string>
-    <string name="error_handshake">Centificaat ontbreekt</string>
+    <string name="error_handshake">Certificaat ontbreekt</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s heeft een certificaat dat niet wordt herkend door Android.\nHet servercertificaat moet worden ondertekend door een vertrouwde certificeringsinstantie (CA)\nOm aan deze vereisten te voldoen, kunt u een gratis certificaat aanmaken via letsencrypt.org</string>
     <string name="error_unexpected_response_code">Onverwachte reactie met code: %1$d</string>
