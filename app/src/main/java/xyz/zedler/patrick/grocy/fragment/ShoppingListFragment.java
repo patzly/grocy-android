@@ -89,10 +89,10 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.web.WebRequest;
 
-public class ShoppingListFragment extends Fragment
-        implements ShoppingListItemAdapter.ShoppingListItemAdapterListener,
-            LoadOfflineDataShoppingListHelper.AsyncResponse,
-            StoreOfflineDataShoppingListHelper.AsyncResponse {
+public class ShoppingListFragment extends Fragment implements
+        ShoppingListItemAdapter.ShoppingListItemAdapterListener,
+        LoadOfflineDataShoppingListHelper.AsyncResponse,
+        StoreOfflineDataShoppingListHelper.AsyncResponse {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST;
 
@@ -162,39 +162,6 @@ public class ShoppingListFragment extends Fragment
             binding.recyclerShoppingList.setAdapter(null);
             binding = null;
         }
-
-        activity = null;
-        sharedPrefs = null;
-        dlHelper = null;
-        database = null;
-        grocyApi = null;
-        request = null;
-        appBarBehavior = null;
-        shoppingListItemAdapter = null;
-        clickUtil = null;
-        animUtil = null;
-        swipeBehavior = null;
-        chipMissing = null;
-        chipUndone = null;
-        shoppingLists = null;
-        shoppingListItems = null;
-        shoppingListItemsSelected = null;
-        missingItems = null;
-        missingShoppingListItems = null;
-        undoneShoppingListItems = null;
-        filteredItems = null;
-        displayedItems = null;
-        quantityUnits = null;
-        products = null;
-        productGroups = null;
-        groupedListItems = null;
-        shoppingListHashMap = null;
-        startupShoppingListName = null;
-        itemsToDisplay = null;
-        search = null;
-        errorState = null;
-
-        System.gc();
     }
 
     @Override
