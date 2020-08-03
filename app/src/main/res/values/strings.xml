@@ -418,6 +418,7 @@
     <string name="setting_ask_store">Ask for store</string>
     <string name="setting_ask_location">Ask for location</string>
     <string name="setting_ask_specific_item">Ask for specific item</string>
+    <string name="setting_consume_all">Consume all items of a product</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>
@@ -498,6 +499,13 @@
         - Tap the green button in stock overview to go into scan mode, tap the CONSUME label to switch to MARK AS OPENED, then scan your product.\n
         - Tap on the CONSUME shortcut of Grocy in your app launcher (since Android 7.1) and continue as described previously.\n
         - Open the CONSUME page in the bottom drawer and fill out the form, then tap the OPEN icon in the bottom bar.
+    </string>
+    <string name="help_selfie_camera_header">Why are my barcodes unreadable if I use the selfie camera?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_selfie_camera_body">
+        Most devices have a front camera with a fixed focus for the normal distance between your eyes and the device.\n
+        With this distance, the picture resolution is sometimes too low for the scanning algorithm.
     </string>
     <string name="help_other_question_header">I have another question.</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.

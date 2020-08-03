@@ -662,6 +662,7 @@ public class PurchaseFragment extends Fragment {
 
         // PRODUCT
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
+        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
         binding.textInputPurchaseProduct.setErrorEnabled(false);
 
         // BBD
@@ -1220,8 +1221,18 @@ public class PurchaseFragment extends Fragment {
 
     private boolean isAmountValid() {
         if(amount >= minAmount) {
-            binding.textInputPurchaseAmount.setErrorEnabled(false);
-            return true;
+            if(productDetails != null
+                    && amount % 1 != 0 // partial amount, has to be allowed in product master
+                    && productDetails.getProduct().getAllowPartialUnitsInStock() == 0
+            ) {
+                binding.textInputPurchaseAmount.setError(
+                        activity.getString(R.string.error_invalid_amount)
+                );
+                return false;
+            } else {
+                binding.textInputPurchaseAmount.setErrorEnabled(false);
+                return true;
+            }
         } else {
             if(productDetails != null) {
                 binding.textInputPurchaseAmount.setError(

@@ -471,8 +471,14 @@ public class ScanBatchActivity extends AppCompatActivity
 
     private void consumeProduct() {
         JSONObject body = new JSONObject();
+        double amount;
+        if(sharedPrefs.getBoolean(Constants.PREF.BATCH_CONFIG_CONSUME_ALL, false)) {
+            amount = currentProductDetails.getStockAmount();
+        } else {
+            amount = 1;
+        }
         try {
-            body.put("amount", 1);
+            body.put("amount", amount);
             body.put("transaction_type", "consume");
             body.put("spoiled", false);
             if(entryId != null && !entryId.isEmpty()) {
@@ -495,13 +501,13 @@ public class ScanBatchActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         if(debug) Log.e(TAG, "consumeProduct: " + e);
                     }
-                    if(debug) Log.i(TAG, "consumeProduct: consumed 1");
+                    if(debug) Log.i(TAG, "consumeProduct: consumed " + NumUtil.trim(amount));
 
                     Snackbar snackbar = Snackbar.make(
                             findViewById(R.id.barcode_scan_batch),
                             getString(
                                     R.string.msg_consumed,
-                                    NumUtil.trim(1),
+                                    NumUtil.trim(amount),
                                     currentProductDetails.getQuantityUnitStock().getName(),
                                     currentProductName
                             ), Snackbar.LENGTH_LONG

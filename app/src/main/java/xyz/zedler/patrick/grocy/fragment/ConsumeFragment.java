@@ -118,23 +118,7 @@ public class ConsumeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        adapterProducts = null;
-        gson = null;
-        sharedPrefs = null;
-        activity = null;
-        startupBundle = null;
-        request = null;
-        grocyApi = null;
-        products = null;
-        stockLocations = null;
-        stockEntries = null;
-        productNames = null;
-        productDetails = null;
-        selectedStockEntryId = null;
-
-        System.gc();
     }
 
     @Override
@@ -198,9 +182,12 @@ public class ConsumeFragment extends Fragment {
                 // try again to download products
                 if(productNames.isEmpty()) downloadProductNames();
             } else {
-                binding.textInputConsumeProduct.setError(
-                        activity.getString(R.string.error_invalid_product)
-                );
+                String input = binding.autoCompleteConsumeProduct.getText().toString();
+                if(!productNames.isEmpty() && !productNames.contains(input)) {
+                    binding.textInputConsumeProduct.setError(
+                            activity.getString(R.string.error_invalid_product)
+                    );
+                }
             }
         });
         binding.autoCompleteConsumeProduct.setOnItemClickListener(
@@ -213,6 +200,12 @@ public class ConsumeFragment extends Fragment {
         binding.autoCompleteConsumeProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                        String input = binding.autoCompleteConsumeProduct.getText().toString();
+                        input = input.trim();
+                        if(!productNames.isEmpty() && productNames.contains(input)) {
+                            Product product = getProductFromName(input);
+                            if(product != null) loadProductDetails(product.getId());
+                        }
                         binding.editTextConsumeAmount.requestFocus();
                         return true;
                     } return false;
@@ -521,6 +514,7 @@ public class ConsumeFragment extends Fragment {
 
         // PRODUCT
         binding.autoCompleteConsumeProduct.setText(productDetails.getProduct().getName());
+        binding.autoCompleteConsumeProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
         binding.textInputConsumeProduct.setErrorEnabled(false);
 
         // AMOUNT
@@ -540,9 +534,7 @@ public class ConsumeFragment extends Fragment {
             if(defaultAmount == null) defaultAmount = String.valueOf(1);
             if(defaultAmount.isEmpty()) {
                 binding.editTextConsumeAmount.setText(null);
-            } else if(Double.parseDouble(defaultAmount)
-                    > productDetails.getStockAmount()
-            ) {
+            } else if(Double.parseDouble(defaultAmount) > productDetails.getStockAmount()) {
                 binding.editTextConsumeAmount.setText(
                         NumUtil.trim(productDetails.getStockAmount())
                 );
@@ -956,17 +948,12 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void setAmountBounds() {
-        if(selectedStockEntryId == null) {
-            // called from fillWithProductDetails
-            maxAmount = productDetails.getStockAmount();
-        } else {
-            StockEntry stockEntry = getStockEntry(selectedStockEntryId);
-            if(stockEntry != null) {
-                maxAmount = stockEntry.getAmount();
-            }
-        }
         if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
-            minAmount = 1;
+            if(productDetails.getProduct().getAllowPartialUnitsInStock() == 0) {
+                minAmount = 1;
+            } else {
+                minAmount = 0.01; // this is the same behavior as the grocy web server
+            }
             if(selectedStockEntryId == null) {
                 // called from fillWithProductDetails
                 maxAmount = productDetails.getStockAmount();
@@ -974,6 +961,8 @@ public class ConsumeFragment extends Fragment {
                 StockEntry stockEntry = getStockEntry(selectedStockEntryId);
                 if(stockEntry != null) {
                     maxAmount = stockEntry.getAmount();
+                } else {
+                    maxAmount = 0;
                 }
             }
         } else {
@@ -986,8 +975,18 @@ public class ConsumeFragment extends Fragment {
     private boolean isAmountValid() {
         if(!getAmount().isEmpty()) {
             if(amount >= minAmount && amount <= maxAmount) {
-                binding.textInputConsumeAmount.setErrorEnabled(false);
-                return true;
+                if(productDetails != null
+                        && amount % 1 != 0 // partial amount, has to be allowed in product master
+                        && productDetails.getProduct().getAllowPartialUnitsInStock() == 0
+                ) {
+                    binding.textInputConsumeAmount.setError(
+                            activity.getString(R.string.error_invalid_amount)
+                    );
+                    return false;
+                } else {
+                    binding.textInputConsumeAmount.setErrorEnabled(false);
+                    return true;
+                }
             } else {
                 if(productDetails != null) {
                     binding.textInputConsumeAmount.setError(

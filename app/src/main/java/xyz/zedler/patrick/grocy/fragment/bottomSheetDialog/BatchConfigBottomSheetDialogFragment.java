@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
@@ -78,9 +80,6 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
 
         String batchType = getArguments().getString(Constants.ARGUMENT.TYPE);
         assert batchType != null;
-        if(batchType.equals(Constants.ACTION.OPEN)) {
-            batchType = Constants.ACTION.CONSUME;
-        }
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
@@ -89,10 +88,10 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         LinearLayout linearLayoutBestBeforeDate = view.findViewById(R.id.linear_batch_config_bbd);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutBestBeforeDate.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_BBD);
                 if(status < 2) status++;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_BBD, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_BBD, status);
                 textViewBestBeforeDate.animate().alpha(0).withEndAction(() -> {
                     textViewBestBeforeDate.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_BBD)
@@ -110,10 +109,10 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         LinearLayout linearLayoutPrice = view.findViewById(R.id.linear_batch_config_price);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutPrice.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_PRICE);
                 if(status < 2) status++;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_PRICE, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_PRICE, status);
                 textViewPrice.animate().alpha(0).withEndAction(() -> {
                     textViewPrice.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_PRICE)
@@ -131,10 +130,10 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         LinearLayout linearLayoutStore = view.findViewById(R.id.linear_batch_config_store);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutStore.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_STORE);
                 if(status < 2) status++;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_STORE, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_STORE, status);
                 textViewStore.animate().alpha(0).withEndAction(() -> {
                     textViewStore.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STORE)
@@ -152,10 +151,10 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         LinearLayout linearLayoutLocation = view.findViewById(R.id.linear_batch_config_location);
         if(batchType.equals(Constants.ACTION.PURCHASE)) {
             linearLayoutLocation.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_LOCATION);
                 if(status < 2) status++;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_LOCATION, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_LOCATION, status);
                 textViewLocation.animate().alpha(0).withEndAction(() -> {
                     textViewLocation.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_LOCATION)
@@ -173,12 +172,13 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         LinearLayout linearLayoutStockLocation = view.findViewById(
                 R.id.linear_batch_config_stock_location
         );
-        if(batchType.equals(Constants.ACTION.CONSUME)) {
+        if(!batchType.equals(Constants.ACTION.PURCHASE)) {
+            // batchType is either CONSUME or OPEN
             linearLayoutStockLocation.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION);
                 if(status == 0) status = 2;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION, status);
                 textViewStockLocation.animate().alpha(0).withEndAction(() -> {
                     textViewStockLocation.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_STOCK_LOCATION)
@@ -196,12 +196,13 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         // SPECIFIC
         textViewSpecific = view.findViewById(R.id.text_batch_config_specific);
         LinearLayout linearLayoutSpecific = view.findViewById(R.id.linear_batch_config_specific);
-        if(batchType.equals(Constants.ACTION.CONSUME)) {
+        if(!batchType.equals(Constants.ACTION.PURCHASE)) {
+            // batchType is either CONSUME or OPEN
             linearLayoutSpecific.setOnClickListener(v -> {
-                int status = getIntStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC);
+                int status = getStatusIntFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC);
                 if(status == 0) status = 2;
                 else status = 0;
-                setPrefToStatus(Constants.PREF.BATCH_CONFIG_SPECIFIC, status);
+                setPrefToStatusInt(Constants.PREF.BATCH_CONFIG_SPECIFIC, status);
                 textViewSpecific.animate().alpha(0).withEndAction(() -> {
                     textViewSpecific.setText(
                             getTextStatusFromPref(Constants.PREF.BATCH_CONFIG_SPECIFIC)
@@ -214,6 +215,31 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
             );
         } else {
             linearLayoutSpecific.setVisibility(View.GONE);
+        }
+
+        // CONSUME ALL
+        LinearLayout linearLayoutConsumeMode = view.findViewById(
+                R.id.linear_batch_config_consume_all
+        );
+        if(batchType.equals(Constants.ACTION.CONSUME)) {
+            SwitchMaterial switchMode = view.findViewById(
+                    R.id.switch_batch_config_consume_all
+            );
+            switchMode.setChecked(
+                    getStatusBooleanFromPref(Constants.PREF.BATCH_CONFIG_CONSUME_ALL)
+            );
+            switchMode.setOnCheckedChangeListener(
+                    (CompoundButton button, boolean isChecked) -> setPrefToStatusBoolean(
+                            Constants.PREF.BATCH_CONFIG_CONSUME_ALL, isChecked
+                    )
+            );
+            linearLayoutConsumeMode.setOnClickListener(v -> {
+                boolean status = getStatusBooleanFromPref(Constants.PREF.BATCH_CONFIG_CONSUME_ALL);
+                setPrefToStatusBoolean(Constants.PREF.BATCH_CONFIG_CONSUME_ALL, !status);
+                switchMode.setChecked(!status);
+            });
+        } else {
+            linearLayoutConsumeMode.setVisibility(View.GONE);
         }
 
         hideDisabledFeatures(view);
@@ -245,12 +271,20 @@ public class BatchConfigBottomSheetDialogFragment extends CustomBottomSheetDialo
         }
     }
 
-    private int getIntStatusFromPref(String pref) {
+    private int getStatusIntFromPref(String pref) {
         return sharedPrefs.getInt(pref, 0);
     }
 
-    private void setPrefToStatus(String pref, int status) {
+    private boolean getStatusBooleanFromPref(String pref) {
+        return sharedPrefs.getBoolean(pref, false);
+    }
+
+    private void setPrefToStatusInt(String pref, int status) {
         sharedPrefs.edit().putInt(pref, status).apply();
+    }
+
+    private void setPrefToStatusBoolean(String pref, boolean status) {
+        sharedPrefs.edit().putBoolean(pref, status).apply();
     }
 
     private String getTextStatusFromPref(String pref) {
