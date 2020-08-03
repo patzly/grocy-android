@@ -151,10 +151,7 @@ public class ShoppingListFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
 
-        if(emptyStateHelper != null) {
-            emptyStateHelper.destroyInstance();
-            emptyStateHelper = null;
-        }
+        if(emptyStateHelper != null) emptyStateHelper.destroyInstance();
         if(binding != null) {
             binding.recyclerShoppingList.animate().cancel();
             binding.buttonShoppingListLists.animate().cancel();
@@ -162,6 +159,7 @@ public class ShoppingListFragment extends Fragment implements
             binding.recyclerShoppingList.setAdapter(null);
             binding = null;
         }
+        if(dlHelper != null) dlHelper.close();
     }
 
     @Override
