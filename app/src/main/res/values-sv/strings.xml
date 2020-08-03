@@ -38,6 +38,8 @@
     <string name="action_clear_shopping_list">Töm inköpslista</string>
     <string name="action_rate">Betygsätt på Google Play</string>
     <string name="action_rate_description">Stöd fortsatt utveckling</string>
+    <string name="action_email">Skicka e-post</string>
+    <string name="action_email_description">Kontakta utvecklarna</string>
     <string name="action_new_issue">Öppna nytt ärende på GitHub</string>
     <string name="action_new_issue_description">Rapportera buggar eller föreslå en förbättring</string>
     <string name="action_get_started">Kom igång</string>
@@ -383,6 +385,8 @@
     <string name="setting_dark_mode_description">Av för att använda systemets inställning</string>
     <string name="setting_open_food_facts">Använd Open Food Facts</string>
     <string name="setting_open_food_facts_description">Hämta information från streckkoder</string>
+    <string name="setting_use_front_cam">Använd främre kamera</string>
+    <string name="setting_use_front_cam_description">För streckkodsskanning</string>
     <string name="setting_reload_config">Ladda om konfiguration</string>
     <string name="setting_reload_config_description">Appomstart krävs</string>
     <string name="setting_logout">Logga ut</string>
@@ -408,6 +412,7 @@
     <string name="setting_ask_store">Fråga efter butik</string>
     <string name="setting_ask_location">Fråga efter plats</string>
     <string name="setting_ask_specific_item">Fråga efter specifikt objekt</string>
+    <string name="setting_consume_all">Konsumera alla artiklar av en produkt</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
@@ -468,6 +473,13 @@
         - Tryck på den gröna knappen i lageröversikten för att starta skanningsläget, tryck på texten KONSUMERA för att byta till läget MARKERA SOM ÖPPNAD, och skanna sedan produktens steckkod.\n
         - Tryck på genvägen KONSUMERA efter att ha tryckt länge på Grocy i din enhets programstartare (endast Android 7.1 eller nyare) och fortsätt sedan som i steget ovan.\n
         -  Öppna sidan KONSUMERA i menyn längst ner till vänster i lageröversikten. Fyll sedan i formuläret och tryck på ikonen för MARKERA SOM ÖPPNAD i menyn nere till vänster.
+    </string>
+    <string name="help_selfie_camera_header">Varför är streckkoder oläsliga när jag använder den främre kameran?</string>
+    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
+    Then you can translate by replacing one sentence by its translation and so on. -->
+    <string name="help_selfie_camera_body">
+        Många enheter har en främre kamera med fast fokus anpassat för avståndet mellan dina ögon och enheten.\n
+        Vid det här avståndet är upplösningen ibland för låg för att skanningsalgoritmen ska kunna känna igen en streckkod.
     </string>
     <string name="help_other_question_header">Jag har en annan fråga.</string>
     <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
