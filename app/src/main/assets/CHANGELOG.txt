@@ -1,6 +1,7 @@
 1.8.0:
+- Dutch translation (thanks Maarten Siersema!)
 - Consume & purchase partial amount
-- Consume all in batch mode
+- Consume all in batch mode (option)
 - Offline indicator in shopping list
 - Fixed expiring items filter in stock overview
 - Fixed animation of product overview bottom sheet
