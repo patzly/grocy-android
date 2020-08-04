@@ -95,6 +95,7 @@ public class FeedbackBottomSheetDialogFragment extends CustomBottomSheetDialogFr
 							)
 					), 0
 			);
+			dismiss();
 		});
 
 		view.findViewById(R.id.linear_feedback_email).setOnClickListener(v -> {
