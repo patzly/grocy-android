@@ -85,8 +85,8 @@ public class DrawerBottomSheetDialogFragment
         if(debug) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
-            startActivity(new Intent(activity, ShoppingActivity.class));
-            new Handler().postDelayed(this::dismiss, 500);
+            dismiss();
+            activity.startActivity(new Intent(activity, ShoppingActivity.class));
         });
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
