@@ -62,6 +62,7 @@ You can help translating this project at [Transifex](https://www.transifex.com/g
 Translations which reached a completion level of 80% will be included in releases.
 
 Completed translations: German, French, Swedish & Dutch
+Thanks translators!
 
 ## Acknowledgement
 
