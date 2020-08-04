@@ -86,15 +86,11 @@ public class FeedbackBottomSheetDialogFragment extends CustomBottomSheetDialogFr
 		});
 
 		view.findViewById(R.id.linear_feedback_issue).setOnClickListener(v -> {
-			IconUtil.start(view, R.id.image_feedback_issue);
-			new Handler().postDelayed(
-					() -> startActivity(
-							new Intent(
-									Intent.ACTION_VIEW,
-									Uri.parse(activity.getString(R.string.url_github_new_issue))
-							)
-					), 0
+			Intent intent = new Intent(
+					Intent.ACTION_VIEW,
+					Uri.parse(activity.getString(R.string.url_github_new_issue))
 			);
+			startActivity(intent);
 			dismiss();
 		});
 
