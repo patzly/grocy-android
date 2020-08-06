@@ -325,16 +325,20 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         RecyclerView.ViewHolder viewHolder,
                         List<UnderlayButton> underlayButtons
                 ) {
+                    if(viewHolder.getAdapterPosition() >= stockItems.size()) return;
                     StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
                     if(stockItem.getAmount() > 0
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
                                 R.drawable.ic_round_consume_product,
-                                position -> performAction(
-                                        Constants.ACTION.CONSUME,
-                                        displayedItems.get(position).getProduct().getId()
-                                )
+                                position -> {
+                                    if(position >= displayedItems.size()) return;
+                                    performAction(
+                                            Constants.ACTION.CONSUME,
+                                            displayedItems.get(position).getProduct().getId()
+                                    );
+                                }
                         ));
                     }
                     if(stockItem.getAmount()
@@ -344,10 +348,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
                                 R.drawable.ic_round_open,
-                                position -> performAction(
-                                        Constants.ACTION.OPEN,
-                                        displayedItems.get(position).getProduct().getId()
-                                )
+                                position -> {
+                                    if(position >= displayedItems.size()) return;
+                                    performAction(
+                                            Constants.ACTION.OPEN,
+                                            displayedItems.get(position).getProduct().getId()
+                                    );
+                                }
                         ));
                     }
                     if(underlayButtons.isEmpty()) {
