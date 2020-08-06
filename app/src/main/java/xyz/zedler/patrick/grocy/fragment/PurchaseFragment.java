@@ -131,25 +131,8 @@ public class PurchaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        binding = null;
-        activity = null;
-        sharedPrefs = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        dlHelper = null;
-        dateUtil = null;
-        adapterProducts = null;
-        startupBundle = null;
-        products = null;
-        locations = null;
-        stores = null;
-        productNames = null;
-        quantityUnits = null;
-        productDetails = null;
-        selectedBestBeforeDate = null;
-
-        System.gc();
+        if(binding != null) binding = null;
+        if(dlHelper != null) dlHelper.close();
     }
 
     @Override
@@ -1151,6 +1134,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     public void selectBestBeforeDate(String selectedBestBeforeDate) {
+        if(selectedBestBeforeDate == null) return;
         this.selectedBestBeforeDate = selectedBestBeforeDate;
         if(selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
             binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));

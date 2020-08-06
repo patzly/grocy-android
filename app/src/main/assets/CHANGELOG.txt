@@ -1,5 +1,6 @@
 1.8.1:
 - Fix crash in shopping mode
+- Bug fixes and improvements
 
 1.8.0:
 - Dutch translation (thanks Maarten Siersema!)
