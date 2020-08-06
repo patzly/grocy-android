@@ -399,6 +399,9 @@ public class MissingBatchItemsFragment extends Fragment
 
         BatchPurchaseEntry batchPurchaseEntry = batchPurchaseEntries.get(0);
 
+        // TODO: There should be an error in the UI
+        if(missingBatchItem.getProductId() == null) return;
+
         purchaseProduct(
                 Integer.parseInt(missingBatchItem.getProductId()),
                 batchPurchaseEntry.getLocationId(),
