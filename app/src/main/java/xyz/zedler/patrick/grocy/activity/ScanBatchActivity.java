@@ -610,6 +610,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void purchaseProduct() {
+        // TODO: NullPointerException with price bottom sheet, where does it appear?
         JSONObject body = new JSONObject();
         double amountMultiplied = currentProductDetails.getProduct().getQuFactorPurchaseToStock();
         try {

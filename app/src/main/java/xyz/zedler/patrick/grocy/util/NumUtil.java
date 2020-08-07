@@ -38,7 +38,8 @@ public class NumUtil {
     }
 
     public static double stringToDouble(String input) {
-        if(input.isEmpty()) return 0;
+        // TODO: NumberFormatException?
+        if(input == null || input.isEmpty()) return 0;
         return Double.parseDouble(input.replace(",", "."));
     }
 

@@ -218,12 +218,7 @@ public class ConsumeFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 if(productDetails == null) return;
-                String input = s.toString();
-                if(!input.isEmpty()) {
-                    amount = Double.parseDouble(input);
-                } else {
-                    amount = 0;
-                }
+                NumUtil.stringToDouble(s.toString());
                 isAmountValid();
             }
         });
