@@ -115,22 +115,6 @@ public class MasterStoresFragment extends Fragment
             binding.recyclerMasterStores.animate().cancel();
             binding = null;
         }
-
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        appBarBehavior = null;
-        request = null;
-        clickUtil = null;
-        animUtil = null;
-        products = null;
-        search = null;
-        errorState = null;
-        stores = null;
-        filteredStores = null;
-        displayedStores = null;
-
-        System.gc();
     }
 
     @Override
