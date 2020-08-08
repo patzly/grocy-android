@@ -403,7 +403,7 @@
     <string name="setting_sync_off">Synchonisation aus</string>
     <string name="setting_not_loaded">Konnte nicht geladen werden</string>
     <string name="setting_debug">Logging aktivieren</string>
-    <string name="setting_debug_description">Fehler finden und melden</string>
+    <string name="setting_debug_description">Fehler in den Logs anzeigen</string>
     <string name="setting_info_logs">Info-Logs anzeigen</string>
     <string name="setting_logs_description">Logcat von diesem Prozess anzeigen</string>
 
