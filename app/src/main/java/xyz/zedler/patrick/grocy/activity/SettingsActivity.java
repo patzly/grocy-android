@@ -39,7 +39,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -74,8 +73,6 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class SettingsActivity extends AppCompatActivity
 		implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -83,8 +80,7 @@ public class SettingsActivity extends AppCompatActivity
 	private final static String TAG = "SettingsActivity";
 
 	private GrocyApi grocyApi;
-	private RequestQueue requestQueue;
-	private WebRequest request;
+	private DownloadHelper dlHelper;
 	private Gson gson = new Gson();
 
 	private ArrayList<Location> locations = new ArrayList<>();
@@ -129,8 +125,7 @@ public class SettingsActivity extends AppCompatActivity
 
 		// WEB REQUESTS
 
-		requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
-		request = new WebRequest(requestQueue);
+		dlHelper = new DownloadHelper(this, TAG);
 
 		// API
 
@@ -254,7 +249,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
 		textViewExpiringSoonDays.setText(
-				days.isEmpty() || days.equals("null")
+				days == null || days.isEmpty() || days.equals("null")
 						? String.valueOf(5)
 						: days
 		);
@@ -368,6 +363,12 @@ public class SettingsActivity extends AppCompatActivity
 		}
 
 		hideDisabledFeatures();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		dlHelper.destroy();
 	}
 
 	private void hideDisabledFeatures() {
@@ -592,7 +593,7 @@ public class SettingsActivity extends AppCompatActivity
 				} catch (JSONException e) {
 					if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + e);
 				}
-				request.put(
+				dlHelper.put(
 						grocyApi.getUserSetting(Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK),
 						body,
 						response -> sharedPrefs.edit().putBoolean(
@@ -635,7 +636,7 @@ public class SettingsActivity extends AppCompatActivity
 			OnResponseListener responseListener,
 			OnErrorListener errorListener
 	) {
-		request.get(
+		dlHelper.get(
 				grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
 				response -> {
 					try {
@@ -676,7 +677,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setLocation: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID),
 				body,
 				response -> {
@@ -703,7 +704,7 @@ public class SettingsActivity extends AppCompatActivity
 			OnResponseListener responseListener,
 			OnErrorListener errorListener
 	) {
-		request.get(
+		dlHelper.get(
 				grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
 				response -> {
 					try {
@@ -747,7 +748,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setProductGroup: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID),
 				body,
 				response -> {
@@ -774,7 +775,7 @@ public class SettingsActivity extends AppCompatActivity
 			OnResponseListener responseListener,
 			OnErrorListener errorListener
 	) {
-		request.get(
+		dlHelper.get(
 				grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
 				response -> {
 					try {
@@ -815,7 +816,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setQuantityUnit: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.PRODUCT_PRESETS_QU_ID),
 				body,
 				response -> {
@@ -845,7 +846,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
 				body,
 				response -> {
@@ -868,7 +869,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setAmountPurchase: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT),
 				body,
 				response -> {
@@ -899,7 +900,7 @@ public class SettingsActivity extends AppCompatActivity
 		} catch (JSONException e) {
 			if(debug) Log.e(TAG, "setAmountConsume: " + e);
 		}
-		request.put(
+		dlHelper.put(
 				grocyApi.getUserSetting(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT),
 				body,
 				response -> {

@@ -56,8 +56,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
@@ -67,6 +67,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -76,7 +77,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ConsumeFragment extends Fragment {
 
@@ -86,7 +86,7 @@ public class ConsumeFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
     private Bundle startupBundle;
     private FragmentConsumeBinding binding;
@@ -119,6 +119,7 @@ public class ConsumeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        dlHelper.destroy();
     }
 
     @Override
@@ -137,7 +138,7 @@ public class ConsumeFragment extends Fragment {
 
         // WEB REQUESTS
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -431,7 +432,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void downloadProductNames() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
                     products = gson.fromJson(
@@ -584,7 +585,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void loadProductDetails(int productId) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(productId),
                 response -> {
                     productDetails = gson.fromJson(
@@ -597,7 +598,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void loadStockLocations() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockLocationsFromProduct(productDetails.getProduct().getId()),
                 response -> {
                     stockLocations = gson.fromJson(
@@ -610,7 +611,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void loadStockEntries() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockEntriesFromProduct(productDetails.getProduct().getId()),
                 response -> {
                     stockEntries = gson.fromJson(
@@ -624,7 +625,7 @@ public class ConsumeFragment extends Fragment {
 
     private void loadProductDetailsByBarcode(String barcode) {
         binding.swipeConsume.setRefreshing(true);
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     binding.swipeConsume.setRefreshing(false);
@@ -693,7 +694,7 @@ public class ConsumeFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "consumeProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.consumeProduct(productDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -769,7 +770,7 @@ public class ConsumeFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "openProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.openProduct(productDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -827,7 +828,7 @@ public class ConsumeFragment extends Fragment {
 
     private void undoTransaction(String transactionId) {
         if(binding == null || activity != null && activity.isDestroyed()) return;
-        request.post(
+        dlHelper.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
                     activity.showMessage(
@@ -870,7 +871,7 @@ public class ConsumeFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
-        request.put(
+        dlHelper.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),
                 body,
                 response -> { },

@@ -38,7 +38,6 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
-import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -60,8 +59,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentManager fragmentManager;
     private ActivityLoginBinding binding;
     private ClickUtil clickUtil = new ClickUtil();
@@ -89,11 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // WEB REQUESTS
 
-        RequestQueue requestQueue = RequestQueueSingleton.getInstance(
-                getApplicationContext()
-        ).getRequestQueue();
-
-        request = new WebRequest(requestQueue);
+        dlHelper = new DownloadHelper(this, TAG);
 
         // INITIALIZE VIEWS
 
@@ -194,10 +187,16 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dlHelper.destroy();
+    }
+
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
         binding.buttonLoginLogin.setEnabled(false);
         binding.buttonLoginDemo.setEnabled(false);
-        request.get(
+        dlHelper.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);

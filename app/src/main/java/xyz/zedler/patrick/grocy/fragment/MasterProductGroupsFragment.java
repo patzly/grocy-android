@@ -47,8 +47,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductGroupAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -64,7 +65,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterProductGroupsFragment extends Fragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
@@ -75,7 +75,7 @@ public class MasterProductGroupsFragment extends Fragment
     private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private MasterProductGroupAdapter masterProductGroupAdapter;
     private FragmentMasterProductGroupsBinding binding;
     private ClickUtil clickUtil;
@@ -117,23 +117,7 @@ public class MasterProductGroupsFragment extends Fragment
             binding.recyclerMasterProductGroups.animate().cancel();
             binding = null;
         }
-
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        appBarBehavior = null;
-        request = null;
-        masterProductGroupAdapter = null;
-        clickUtil = null;
-        animUtil = null;
-        productGroups = null;
-        filteredProductGroups = null;
-        displayedProductGroups = null;
-        products = null;
-        search = null;
-        errorState = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -155,7 +139,7 @@ public class MasterProductGroupsFragment extends Fragment
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -354,7 +338,7 @@ public class MasterProductGroupsFragment extends Fragment
     }
 
     private void downloadProductGroups() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                 response -> {
                     productGroups = gson.fromJson(
@@ -376,7 +360,7 @@ public class MasterProductGroupsFragment extends Fragment
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -577,7 +561,7 @@ public class MasterProductGroupsFragment extends Fragment
     }
 
     public void deleteProductGroup(ProductGroup productGroup) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
                 response -> {
                     int index = getProductGroupPosition(productGroup.getId());

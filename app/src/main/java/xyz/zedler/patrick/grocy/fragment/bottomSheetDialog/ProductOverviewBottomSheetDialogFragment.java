@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -70,7 +71,6 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
@@ -87,7 +87,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 	private ActionButton actionButtonConsume, actionButtonOpen;
 	private boolean showActions = false;
 	private BezierCurveChart priceHistory;
-	private WebRequest request;
+	private DownloadHelper dlHelper;
 	private ListItem
 			itemAmount,
 			itemLocation,
@@ -144,7 +144,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 
 		// WEB REQUESTS
 
-		request = new WebRequest(activity.getRequestQueue());
+		dlHelper = new DownloadHelper(activity, TAG);
 
 		// VIEWS
 
@@ -329,7 +329,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		// LOAD DETAILS
 
 		if(activity.isOnline() && !hasDetails()) {
-			request.get(
+			dlHelper.get(
 					activity.getGrocy().getStockProductDetails(product.getId()),
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
@@ -348,6 +348,12 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		hideDisabledFeatures(view);
 
 		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		dlHelper.destroy();
 	}
 
 	private void refreshItems() {
@@ -456,7 +462,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
 			return;
 		}
-		request.get(
+		dlHelper.get(
 				activity.getGrocy().getPriceHistory(product.getId()),
 				response -> {
 					Type listType = new TypeToken<ArrayList<PriceHistoryEntry>>(){}.getType();

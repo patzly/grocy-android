@@ -57,8 +57,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
@@ -86,7 +86,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
 
@@ -98,7 +97,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
     private StockItemAdapter stockItemAdapter;
     private ClickUtil clickUtil;
     private AnimUtil animUtil;
@@ -155,7 +153,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             binding.recyclerStock.setAdapter(null);
             binding = null;
         }
-        if(dlHelper != null) dlHelper.close();
+        if(dlHelper != null) dlHelper.destroy();
     }
 
     @Override
@@ -189,8 +187,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         // WEB REQUESTS
 
         dlHelper = new DownloadHelper(activity, TAG);
-
-        request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -903,7 +899,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void loadProductDetailsByBarcode(String barcode) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     ProductDetails productDetails = gson.fromJson(
@@ -971,7 +967,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "consumeProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.consumeProduct(productId),
                 body,
                 response -> {
@@ -1007,7 +1003,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             String transactionId,
             boolean undo
     ) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(stockItemOld.getProductId()),
                 response -> {
 
@@ -1066,7 +1062,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                             ).setAction(
                                     activity.getString(R.string.action_undo),
                                     // on success, this method will be executed again to update
-                                    v -> request.post(
+                                    v -> dlHelper.post(
                                             grocyApi.undoStockTransaction(transactionId),
                                             response1 -> updateConsumedStockItem(
                                                     index,
@@ -1107,7 +1103,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "openProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.openProduct(productId),
                 body,
                 response -> {
@@ -1134,7 +1130,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             String transactionId,
             boolean undo
     ) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(productId),
                 response -> {
 
@@ -1174,7 +1170,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                     ContextCompat.getColor(activity, R.color.secondary)
                             ).setAction(
                                     activity.getString(R.string.action_undo),
-                                    v -> request.post(
+                                    v -> dlHelper.post(
                                             grocyApi.undoStockTransaction(transactionId),
                                             response1 -> updateOpenedStockItem(
                                                     index,

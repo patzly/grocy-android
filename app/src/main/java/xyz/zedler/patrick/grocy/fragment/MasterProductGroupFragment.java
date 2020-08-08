@@ -44,17 +44,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterProductGroupFragment extends Fragment {
 
@@ -63,7 +63,7 @@ public class MasterProductGroupFragment extends Fragment {
     private MainActivity activity;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentMasterProductGroupBinding binding;
 
     private ArrayList<ProductGroup> productGroups;
@@ -89,18 +89,8 @@ public class MasterProductGroupFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        productGroups = null;
-        products = null;
-        productGroupNames = null;
-        editProductGroup = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -117,7 +107,7 @@ public class MasterProductGroupFragment extends Fragment {
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -255,7 +245,7 @@ public class MasterProductGroupFragment extends Fragment {
     }
 
     private void downloadProductGroups() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                 response -> {
                     productGroups = gson.fromJson(
@@ -294,7 +284,7 @@ public class MasterProductGroupFragment extends Fragment {
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -369,7 +359,7 @@ public class MasterProductGroupFragment extends Fragment {
             if(debug) Log.e(TAG, "saveProductGroup: " + e);
         }
         if(editProductGroup != null) {
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(
                             GrocyApi.ENTITY.PRODUCT_GROUPS,
                             editProductGroup.getId()
@@ -382,7 +372,7 @@ public class MasterProductGroupFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -447,7 +437,7 @@ public class MasterProductGroupFragment extends Fragment {
     }
 
     public void deleteProductGroup(ProductGroup productGroup) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()

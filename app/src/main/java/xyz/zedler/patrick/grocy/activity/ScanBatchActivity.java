@@ -81,6 +81,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialo
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
@@ -97,7 +98,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.BarcodeRipple;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
@@ -118,7 +118,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
     private RequestQueue requestQueue;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private SharedPreferences sharedPrefs;
 
     private ArrayList<Product> products = new ArrayList<>();
@@ -178,7 +178,7 @@ public class ScanBatchActivity extends AppCompatActivity
         // WEB REQUESTS
 
         requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
-        request = new WebRequest(requestQueue);
+        dlHelper = new DownloadHelper(this, TAG);
 
         // API
 
@@ -305,6 +305,7 @@ public class ScanBatchActivity extends AppCompatActivity
         super.onDestroy();
         barcodeScannerView.setTorchOff();
         capture.onDestroy();
+        dlHelper.destroy();
     }
 
     @Override
@@ -324,7 +325,7 @@ public class ScanBatchActivity extends AppCompatActivity
             OnResponseListener responseListener,
             OnErrorListener errorListener
     ) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
                     products = gson.fromJson(
@@ -348,7 +349,7 @@ public class ScanBatchActivity extends AppCompatActivity
             OnResponseListener responseListener,
             OnErrorListener errorListener
     ) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                 response -> {
                     stores = gson.fromJson(
@@ -364,7 +365,7 @@ public class ScanBatchActivity extends AppCompatActivity
             OnResponseListener responseListener,
             OnErrorListener errorListener
     ) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                 response -> {
                     locations = gson.fromJson(
@@ -377,7 +378,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     public void loadProductDetailsByBarcode(String barcode) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     currentProductDetails = gson.fromJson(
@@ -490,7 +491,7 @@ public class ScanBatchActivity extends AppCompatActivity
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "consumeProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.consumeProduct(currentProductDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -556,7 +557,7 @@ public class ScanBatchActivity extends AppCompatActivity
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "openProduct: " + e);
         }
-        if(request != null && grocyApi != null) request.post(
+        if(dlHelper != null && grocyApi != null) dlHelper.post(
                 grocyApi.openProduct(currentProductDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -627,7 +628,7 @@ public class ScanBatchActivity extends AppCompatActivity
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.purchaseProduct(currentProductDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -675,7 +676,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private void undoTransaction(String transactionId) {
-        request.post(
+        dlHelper.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
                     showMessage(getString(R.string.msg_undone_transaction));
@@ -1015,7 +1016,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private void showSpecificEntryBottomSheet() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockEntriesFromProduct(currentProductDetails.getProduct().getId()),
                 response -> {
                     ArrayList<StockEntry> stockEntries = gson.fromJson(
@@ -1058,7 +1059,7 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private void showStockLocationsBottomSheet() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockLocationsFromProduct(currentProductDetails.getProduct().getId()),
                 response -> {
                     ArrayList<StockLocation> stockLocations = gson.fromJson(

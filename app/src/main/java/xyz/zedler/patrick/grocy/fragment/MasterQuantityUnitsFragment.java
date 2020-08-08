@@ -47,8 +47,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterQuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -64,7 +65,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterQuantityUnitsFragment extends Fragment
         implements MasterQuantityUnitAdapter.MasterQuantityUnitAdapterListener {
@@ -75,7 +75,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     private Gson gson;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private MasterQuantityUnitAdapter masterQuantityUnitAdapter;
     private ClickUtil clickUtil;
     private AnimUtil animUtil;
@@ -117,23 +117,7 @@ public class MasterQuantityUnitsFragment extends Fragment
             binding.recyclerMasterQuantityUnits.animate().cancel();
             binding = null;
         }
-
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        appBarBehavior = null;
-        request = null;
-        masterQuantityUnitAdapter = null;
-        clickUtil = null;
-        animUtil = null;
-        quantityUnits = null;
-        filteredQuantityUnits = null;
-        displayedQuantityUnits = null;
-        products = null;
-        search = null;
-        errorState = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -155,7 +139,7 @@ public class MasterQuantityUnitsFragment extends Fragment
 
         // WEB REQUESTS
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -357,7 +341,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     }
 
     private void downloadQuantityUnits() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 response -> {
                     quantityUnits = gson.fromJson(
@@ -377,7 +361,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -570,7 +554,7 @@ public class MasterQuantityUnitsFragment extends Fragment
     }
 
     public void deleteQuantityUnit(QuantityUnit quantityUnit) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnit.getId()),
                 response -> {
                     int index = getQuantityUnitPosition(quantityUnit.getId());

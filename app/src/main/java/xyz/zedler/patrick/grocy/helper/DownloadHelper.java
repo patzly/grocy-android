@@ -8,7 +8,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -21,8 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -38,8 +43,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 /*
     This file is part of Grocy Android.
@@ -62,9 +67,10 @@ import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class DownloadHelper {
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private RequestQueue requestQueue;
     private Gson gson;
     private SimpleDateFormat dateTimeFormat;
+    private String uuidHelper;
 
     private ArrayList<Queue> queueArrayList;
     private String tag;
@@ -76,8 +82,9 @@ public class DownloadHelper {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         gson = new Gson();
-        request = new WebRequest(RequestQueueSingleton.getInstance(context).getRequestQueue());
+        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
         grocyApi = new GrocyApi(context);
+        uuidHelper = UUID.randomUUID().toString();
         dateTimeFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
         );
@@ -85,11 +92,134 @@ public class DownloadHelper {
         queueArrayList = new ArrayList<>();
     }
 
-    public void close() {
-        if(queueArrayList == null || request == null) return;
+    // cancel all requests
+    public void destroy() {
         for(Queue queue : queueArrayList) {
             queue.reset();
         }
+        requestQueue.cancelAll(uuidHelper);
+    }
+
+    public String getUuid() {
+        return uuidHelper;
+    }
+
+    public void get(
+            String url,
+            String tag,
+            OnResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                onResponse::onResponse,
+                onError::onError
+        );
+        if(tag != null) request.setTag(tag);
+        requestQueue.add(request);
+    }
+
+    // for single requests without a queue
+    public void get(
+            String url,
+            OnResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        get(url, uuidHelper, onResponse, onError);
+    }
+
+    // GET requests with modified user-agent
+    public void get(
+            String url,
+            OnResponseListener onResponse,
+            OnErrorListener onError,
+            String userAgent
+    ) {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                onResponse::onResponse,
+                onError::onError
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", userAgent);
+                return params;
+            }
+        };
+        request.setTag(uuidHelper);
+        requestQueue.add(request);
+    }
+
+    public void post(
+            String url,
+            JSONObject json,
+            OnJSONResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+                Request.Method.POST,
+                url,
+                json,
+                onResponse::onResponse,
+                onError::onError
+        );
+        request.setTag(uuidHelper);
+        requestQueue.add(request);
+    }
+
+    public void post(String url, OnResponseListener onResponse, OnErrorListener onError) {
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                onResponse::onResponse,
+                onError::onError
+        );
+        request.setTag(uuidHelper);
+        requestQueue.add(request);
+    }
+
+    public void put(
+            String url,
+            JSONObject json,
+            OnJSONResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                json,
+                onResponse::onResponse,
+                onError::onError
+        );
+        request.setTag(uuidHelper);
+        requestQueue.add(request);
+    }
+
+    public void delete(
+            String url,
+            String tag,
+            OnResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                onResponse::onResponse,
+                onError::onError
+        );
+        request.setTag(tag);
+        requestQueue.add(request);
+    }
+
+    public void delete(
+            String url,
+            OnResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        delete(url, uuidHelper, onResponse, onError);
     }
 
     public QueueItem getProductGroups(
@@ -103,7 +233,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                         uuid,
                         response -> {
@@ -139,7 +269,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                         uuid,
                         response -> {
@@ -175,7 +305,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                         uuid,
                         response -> {
@@ -211,7 +341,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                         uuid,
                         response -> {
@@ -247,7 +377,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getStock(),
                         uuid,
                         response -> {
@@ -283,7 +413,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getStockVolatile(),
                         uuid,
                         response -> {
@@ -344,7 +474,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getStockProductDetails(productId),
                         uuid,
                         response -> {
@@ -383,7 +513,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
                         uuid,
                         response -> {
@@ -421,7 +551,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
                         uuid,
                         response -> {
@@ -457,7 +587,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                         uuid,
                         response -> {
@@ -487,10 +617,10 @@ public class DownloadHelper {
             OnResponseListener onResponseListener,
             OnErrorListener onErrorListener
     ) {
-        request.delete(
+        delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId),
-                onResponseListener::onResponse,
-                onErrorListener::onError
+                onResponseListener,
+                onErrorListener
         );
     }
 
@@ -507,7 +637,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.put(
+                put(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemId),
                         body,
                         response -> {
@@ -545,7 +675,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.delete(
+                delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemId),
                         uuid,
                         response -> {
@@ -572,8 +702,9 @@ public class DownloadHelper {
             OnDateResponseListener onResponseListener,
             OnSimpleErrorListener onErrorListener
     ) {
-        request.get(
+        get(
                 grocyApi.getDbChangedTime(),
+                uuidHelper,
                 response -> {
                     try {
                         JSONObject body = new JSONObject(response);
@@ -601,7 +732,7 @@ public class DownloadHelper {
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
-                request.get(
+                get(
                         url,
                         uuid,
                         response -> {
@@ -632,14 +763,14 @@ public class DownloadHelper {
         private ArrayList<QueueItem> queueItems;
         private OnQueueEmptyListener onQueueEmptyListener;
         private OnErrorListener onErrorListener;
-        private String uuid;
+        private String uuidQueue;
         private int queueSize;
 
         public Queue(OnQueueEmptyListener onQueueEmptyListener, OnErrorListener onErrorListener) {
             this.onQueueEmptyListener = onQueueEmptyListener;
             this.onErrorListener = onErrorListener;
             queueItems = new ArrayList<>();
-            uuid = UUID.randomUUID().toString();
+            uuidQueue = UUID.randomUUID().toString();
             queueSize = 0;
         }
 
@@ -665,12 +796,12 @@ public class DownloadHelper {
                 }, error -> {
                     if(onErrorListener != null) onErrorListener.onError(error);
                     reset();
-                }, uuid);
+                }, uuidQueue);
             }
         }
 
         private void reset() {
-            request.cancelAll(uuid);
+            requestQueue.cancelAll(uuidQueue);
             queueItems.clear();
             queueSize = 0;
         }
@@ -691,8 +822,9 @@ public class DownloadHelper {
                 OnErrorListener errorListener,
                 String uuid
         );
-        public void perform() {
-            perform(null, null, null);
+        public void perform(String uuid) {
+            // UUID is for cancelling the requests; should be uuidHelper from above
+            perform(null, null, uuid);
         }
     }
 
