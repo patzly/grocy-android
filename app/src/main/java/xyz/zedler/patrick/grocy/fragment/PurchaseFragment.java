@@ -306,7 +306,7 @@ public class PurchaseFragment extends Fragment {
         // price
 
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        if(currency.isEmpty()) {
+        if(currency == null || currency.isEmpty()) {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
         } else {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price_in, currency));
@@ -754,7 +754,7 @@ public class PurchaseFragment extends Fragment {
                 String defaultAmount = sharedPrefs.getString(
                         Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
                 );
-                if(defaultAmount.isEmpty()) {
+                if(defaultAmount == null || defaultAmount.isEmpty()) {
                     binding.editTextPurchaseAmount.setText(null);
                 } else {
                     binding.editTextPurchaseAmount.setText(
