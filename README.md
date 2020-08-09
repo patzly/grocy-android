@@ -20,7 +20,7 @@ Grocy Android will soon be available in the official F-Droid repository.
 
 ## Screenshots
 
-<a href="#"><img src="assets/screen1.png" width="200px"/></a><a href="#"><img src="assets/screen2.png" width="200px"/></a><a href="#"><img src="assets/screen3.png" width="200px"/></a><a href="#"><img src="assets/screen4.png" width="200px"/></a>
+<a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen1.png"><img src="assets/screen1.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen2.png"><img src="assets/screen2.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen3.png"><img src="assets/screen3.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen4.png"><img src="assets/screen4.png" width="200px"/></a>
 
 ## Features
 
