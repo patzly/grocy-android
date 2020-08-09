@@ -16,6 +16,8 @@ You can try it using the demo option available on the login screen.
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a><a href='https://apt.izzysoft.de/fdroid/index/apk/xyz.zedler.patrick.grocy'><img alt='Get it on IzzyOnDroid' height="80" src='assets/badge_izzyondroid.png'/></a>
 
+Grocy Android will soon be available in the official F-Droid repository.
+
 ## Screenshots
 
 <a href="#"><img src="assets/screen1.png" width="200px"/></a><a href="#"><img src="assets/screen2.png" width="200px"/></a><a href="#"><img src="assets/screen3.png" width="200px"/></a><a href="#"><img src="assets/screen4.png" width="200px"/></a>
