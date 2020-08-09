@@ -57,8 +57,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
@@ -84,7 +84,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class PurchaseFragment extends Fragment {
 
@@ -94,7 +93,6 @@ public class PurchaseFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
     private DownloadHelper dlHelper;
     private DateUtil dateUtil;
     private ArrayAdapter<String> adapterProducts;
@@ -130,9 +128,8 @@ public class PurchaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        if(binding != null) binding = null;
-        if(dlHelper != null) dlHelper.close();
+        binding = null;
+        dlHelper.destroy();
     }
 
     @Override
@@ -151,7 +148,6 @@ public class PurchaseFragment extends Fragment {
 
         // WEB REQUESTS
 
-        request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
         dlHelper = new DownloadHelper(activity, TAG);
@@ -211,7 +207,7 @@ public class PurchaseFragment extends Fragment {
                 productNames = getProductNames();
                 adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
                 binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-            }).perform();
+            }).perform(dlHelper.getUuid());
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
                 (parent, v, position, id) -> loadProductDetails(
@@ -306,7 +302,7 @@ public class PurchaseFragment extends Fragment {
         // price
 
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        if(currency.isEmpty()) {
+        if(currency == null || currency.isEmpty()) {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
         } else {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price_in, currency));
@@ -754,7 +750,7 @@ public class PurchaseFragment extends Fragment {
                 String defaultAmount = sharedPrefs.getString(
                         Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
                 );
-                if(defaultAmount.isEmpty()) {
+                if(defaultAmount == null || defaultAmount.isEmpty()) {
                     binding.editTextPurchaseAmount.setText(null);
                 } else {
                     binding.editTextPurchaseAmount.setText(
@@ -787,7 +783,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     private void loadProductDetails(int productId) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(productId),
                 response -> {
                     productDetails = gson.fromJson(
@@ -801,7 +797,7 @@ public class PurchaseFragment extends Fragment {
 
     private void loadProductDetailsByBarcode(String barcode) {
         binding.swipePurchase.setRefreshing(true);
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     binding.swipePurchase.setRefreshing(false);
@@ -878,7 +874,7 @@ public class PurchaseFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.purchaseProduct(productDetails.getProduct().getId()),
                 body,
                 response -> {
@@ -938,7 +934,7 @@ public class PurchaseFragment extends Fragment {
                                         Constants.ARGUMENT.SHOPPING_LIST_ITEM
                                 );
                                 assert shoppingListItem != null;
-                                request.delete(
+                                dlHelper.delete(
                                         grocyApi.getObject(
                                                 GrocyApi.ENTITY.SHOPPING_LIST,
                                                 shoppingListItem.getId()
@@ -955,7 +951,7 @@ public class PurchaseFragment extends Fragment {
                                 assert listItems != null;
                                 ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
                                 assert listItem != null;
-                                request.delete(
+                                dlHelper.delete(
                                         grocyApi.getObject(
                                                 GrocyApi.ENTITY.SHOPPING_LIST,
                                                 listItem.getId()
@@ -995,7 +991,7 @@ public class PurchaseFragment extends Fragment {
 
     private void undoTransaction(String transactionId) {
         if(binding == null || activity != null && activity.isDestroyed()) return;
-        request.post(
+        dlHelper.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
                     showMessage(activity.getString(R.string.msg_undone_transaction));
@@ -1033,7 +1029,7 @@ public class PurchaseFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
-        request.put(
+        dlHelper.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),
                 body,
                 response -> { },

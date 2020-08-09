@@ -88,7 +88,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ShoppingListFragment extends Fragment implements
         ShoppingListItemAdapter.ShoppingListItemAdapterListener,
@@ -103,7 +102,6 @@ public class ShoppingListFragment extends Fragment implements
     private AppDatabase database;
     private GrocyApi grocyApi;
     private AppBarBehavior appBarBehavior;
-    private WebRequest request;
     private ShoppingListItemAdapter shoppingListItemAdapter;
     private ClickUtil clickUtil;
     private AnimUtil animUtil;
@@ -160,7 +158,7 @@ public class ShoppingListFragment extends Fragment implements
             binding.recyclerShoppingList.setAdapter(null);
             binding = null;
         }
-        if(dlHelper != null) dlHelper.close();
+        dlHelper.destroy();
     }
 
     @Override
@@ -183,10 +181,7 @@ public class ShoppingListFragment extends Fragment implements
         // WEB
 
         dlHelper = new DownloadHelper(activity, TAG);
-
         database = AppDatabase.getAppDatabase(activity.getApplicationContext());
-
-        request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
         // INITIALIZE VARIABLES
@@ -865,7 +860,7 @@ public class ShoppingListFragment extends Fragment implements
                     showMessage(activity.getString(R.string.error_undefined));
                     if(debug) Log.e(TAG, "toggleDoneStatus: " + error);
                 }
-        ).perform();
+        ).perform(dlHelper.getUuid());
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem, int position) {
@@ -921,7 +916,7 @@ public class ShoppingListFragment extends Fragment implements
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "saveNotes: " + e);
         }
-        request.put(
+        dlHelper.put(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, selectedShoppingListId),
                 body,
                 response -> {
@@ -951,7 +946,7 @@ public class ShoppingListFragment extends Fragment implements
 
     public void deleteItem(int position) {
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 response -> removeItemFromList(position),
                 error -> {
@@ -1022,7 +1017,7 @@ public class ShoppingListFragment extends Fragment implements
                     } catch (JSONException e) {
                         if(debug) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
                     }
-                    request.post(
+                    dlHelper.post(
                             grocyApi.addMissingProducts(),
                             jsonObject,
                             response -> {
@@ -1149,7 +1144,7 @@ public class ShoppingListFragment extends Fragment implements
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "clearShoppingList: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.clearShoppingList(),
                 jsonObject,
                 response -> responseListener.onResponse(),
@@ -1196,7 +1191,7 @@ public class ShoppingListFragment extends Fragment implements
             if(debug) Log.e(TAG, "deleteShoppingList: delete list: " + e);
         }
 
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(
                         GrocyApi.ENTITY.SHOPPING_LISTS,
                         shoppingList.getId()
@@ -1237,7 +1232,7 @@ public class ShoppingListFragment extends Fragment implements
         for(ShoppingListItem listItem : shoppingListItems) {
             if(!listIds.contains(listItem.getShoppingListId())) {
                 if(debug) Log.i(TAG, "tidyUpItems: " + listItem);
-                request.delete(
+                dlHelper.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, listItem.getId()),
                         response -> new Thread(() -> itemDao.delete(listItem) // delete in db too
                         ).start(),

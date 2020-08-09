@@ -34,10 +34,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.RequestQueue;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -56,17 +54,16 @@ import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "BatchChooseBottomSheet";
 
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private Product selectedProduct;
     private String barcode, batchType, buttonAction;
 
@@ -122,9 +119,7 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
 
         // WEB REQUESTS
 
-        RequestQueue requestQueue = RequestQueueSingleton
-                .getInstance(getContext()).getRequestQueue();
-        request = new WebRequest(requestQueue);
+        dlHelper = new DownloadHelper(activity, TAG);
 
         // API
 
@@ -210,7 +205,7 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
         // GET PRODUCT NAME FROM OPEN FOOD FACTS
 
         if(activity.isOpenFoodFactsEnabled()) {
-            request.get(
+            dlHelper.get(
                     OpenFoodFactsApi.getProduct(barcode),
                     response -> {
                         try {
@@ -238,8 +233,9 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onDestroyView() {
+        super.onDestroyView();
+        dlHelper.destroy();
     }
 
     private void addProductBarcode(String barcode) {
@@ -260,7 +256,7 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
             dismissWithMessage(activity.getString(R.string.error_undefined));
             if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
-        request.put(
+        dlHelper.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, selectedProduct.getId()),
                 body,
                 response -> {

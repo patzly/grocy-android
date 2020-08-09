@@ -44,17 +44,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterLocationFragment extends Fragment {
 
@@ -63,7 +63,7 @@ public class MasterLocationFragment extends Fragment {
     private MainActivity activity;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentMasterLocationBinding binding;
 
     private ArrayList<Location> locations;
@@ -87,18 +87,8 @@ public class MasterLocationFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        locations = null;
-        products = null;
-        locationNames = null;
-        editLocation = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -115,7 +105,7 @@ public class MasterLocationFragment extends Fragment {
 
         // WEB REQUESTS
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -266,7 +256,7 @@ public class MasterLocationFragment extends Fragment {
     }
 
     private void downloadLocations() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                 response -> {
                     locations = gson.fromJson(
@@ -305,7 +295,7 @@ public class MasterLocationFragment extends Fragment {
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -383,7 +373,7 @@ public class MasterLocationFragment extends Fragment {
             if(debug) Log.e(TAG, "saveLocation: " + e);
         }
         if(editLocation != null) {
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -393,7 +383,7 @@ public class MasterLocationFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -456,7 +446,7 @@ public class MasterLocationFragment extends Fragment {
     }
 
     public void deleteLocation(Location location) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, location.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()

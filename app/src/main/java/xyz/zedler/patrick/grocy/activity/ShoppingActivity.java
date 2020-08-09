@@ -190,6 +190,12 @@ public class ShoppingActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dlHelper.destroy();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         keepScreenOn(
@@ -271,7 +277,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         dlHelper.getShoppingListItems(listItems -> {
             this.shoppingListItems = listItems;
             onQueueEmpty(true);
-        }, this::onDownloadError).perform();
+        }, this::onDownloadError).perform(dlHelper.getUuid());
         productUpdateDone = false;
     }
 
@@ -287,7 +293,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             }
             this.missingProductIds = missingProductIds;
             onQueueEmpty(true);
-        }).perform();
+        }).perform(dlHelper.getUuid());
     }
 
     private void onQueueEmpty(boolean onlyDeltaUpdate) {
@@ -538,7 +544,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                         updateDoneStatus(shoppingListItem, false);
                         loadOfflineData();
                     }
-            ).perform();
+            ).perform(dlHelper.getUuid());
         }, () -> {
             updateDoneStatus(shoppingListItem, false);
             loadOfflineData();

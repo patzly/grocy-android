@@ -47,14 +47,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListEditBinding;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ShoppingListEditFragment extends Fragment {
 
@@ -63,7 +63,7 @@ public class ShoppingListEditFragment extends Fragment {
     private MainActivity activity;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private Bundle startupBundle;
     private FragmentShoppingListEditBinding binding;
 
@@ -86,18 +86,8 @@ public class ShoppingListEditFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        dlHelper.destroy();
         binding = null;
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        startupBundle = null;
-        shoppingLists = null;
-        shoppingListNames = null;
-        action = null;
-
-        System.gc();
     }
 
     @Override
@@ -121,7 +111,7 @@ public class ShoppingListEditFragment extends Fragment {
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -248,9 +238,8 @@ public class ShoppingListEditFragment extends Fragment {
     }
 
     private void downloadShoppingLists() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
-                TAG,
                 response -> {
                     binding.swipeShoppingListEdit.setRefreshing(false);
                     shoppingLists = gson.fromJson(
@@ -277,7 +266,6 @@ public class ShoppingListEditFragment extends Fragment {
 
     private void onError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        request.cancelAll(TAG);
         binding.swipeShoppingListEdit.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
@@ -329,7 +317,7 @@ public class ShoppingListEditFragment extends Fragment {
                     Constants.ARGUMENT.SHOPPING_LIST
             );
             assert shoppingList != null;
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, shoppingList.getId()),
                     jsonObject,
                     response -> activity.dismissFragment(bundle),
@@ -339,7 +327,7 @@ public class ShoppingListEditFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
                     jsonObject,
                     response -> activity.dismissFragment(bundle),
@@ -388,7 +376,7 @@ public class ShoppingListEditFragment extends Fragment {
                         Constants.ARGUMENT.SHOPPING_LIST
                 );
                 assert shoppingList != null;
-                request.delete(
+                dlHelper.delete(
                         grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, shoppingList.getId()),
                         response -> activity.dismissFragment(),
                         error -> {

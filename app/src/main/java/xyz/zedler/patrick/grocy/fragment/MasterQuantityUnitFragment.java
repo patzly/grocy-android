@@ -44,17 +44,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterQuantityUnitFragment extends Fragment {
 
@@ -63,7 +63,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     private MainActivity activity;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentMasterQuantityUnitBinding binding;
 
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
@@ -90,6 +90,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        dlHelper.destroy();
     }
 
     @Override
@@ -106,7 +107,7 @@ public class MasterQuantityUnitFragment extends Fragment {
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -250,7 +251,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     private void downloadQuantityUnits() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                 response -> {
                     quantityUnits = gson.fromJson(
@@ -289,7 +290,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -374,7 +375,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             if(debug) Log.e(TAG, "saveQuantityUnit: " + e);
         }
         if(editQuantityUnit != null) {
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, editQuantityUnit.getId()),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -384,7 +385,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -459,7 +460,7 @@ public class MasterQuantityUnitFragment extends Fragment {
     }
 
     public void deleteQuantityUnit(QuantityUnit quantityUnit) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnit.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()

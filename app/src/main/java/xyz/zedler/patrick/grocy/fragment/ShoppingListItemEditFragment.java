@@ -55,8 +55,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -75,7 +75,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class ShoppingListItemEditFragment extends Fragment {
 
@@ -85,7 +84,6 @@ public class ShoppingListItemEditFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
     private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
     private Bundle startupBundle;
@@ -120,23 +118,8 @@ public class ShoppingListItemEditFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        activity = null;
-        sharedPrefs = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        dlHelper = null;
-        adapterProducts = null;
-        startupBundle = null;
-        products = null;
-        shoppingLists = null;
-        productNames = null;
-        productDetails = null;
-        action = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -161,7 +144,6 @@ public class ShoppingListItemEditFragment extends Fragment {
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
         gson = new Gson();
         dlHelper = new DownloadHelper(activity, TAG);
@@ -243,7 +225,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                         binding.autoCompleteShoppingListItemEditProduct.setAdapter(
                                 adapterProducts
                         );
-                    }).perform();
+                    }).perform(dlHelper.getUuid());
                 });
         binding.autoCompleteShoppingListItemEditProduct.setOnItemClickListener(
                 (parent, itemView, position, id) -> loadProductDetails(
@@ -434,8 +416,6 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private void onError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        if(request == null || binding == null || activity == null) return;
-        request.cancelAll(TAG);
         binding.swipeShoppingListItemEdit.setRefreshing(false);
         activity.showMessage(
                 Snackbar.make(
@@ -542,7 +522,7 @@ public class ShoppingListItemEditFragment extends Fragment {
     }
 
     private void loadProductDetails(int productId) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(productId),
                 response -> {
                     productDetails = gson.fromJson(
@@ -556,7 +536,7 @@ public class ShoppingListItemEditFragment extends Fragment {
 
     private void loadProductDetailsByBarcode(String barcode) {
         binding.swipeShoppingListItemEdit.setRefreshing(true);
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     binding.swipeShoppingListItemEdit.setRefreshing(false);
@@ -613,7 +593,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     Constants.ARGUMENT.SHOPPING_LIST_ITEM
             );
             assert shoppingListItem != null;
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                     jsonObject,
                     response -> {
@@ -626,7 +606,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
                     jsonObject,
                     response -> {
@@ -699,7 +679,7 @@ public class ShoppingListItemEditFragment extends Fragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "editProductBarcodes: " + e);
         }
-        request.put(
+        dlHelper.put(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
                 body,
                 response -> { },
@@ -771,7 +751,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                             Constants.ARGUMENT.SHOPPING_LIST_ITEM
                     );
                     assert shoppingListItem != null;
-                    request.delete(
+                    dlHelper.delete(
                             grocyApi.getObject(
                                     GrocyApi.ENTITY.SHOPPING_LIST,
                                     shoppingListItem.getId()
@@ -807,7 +787,7 @@ public class ShoppingListItemEditFragment extends Fragment {
                 } else {
                     Product product = getProductFromName(input);
                     if(product != null) {
-                        request.get(
+                        dlHelper.get(
                                 grocyApi.getStockProductDetails(product.getId()),
                                 response -> {
                                     productDetails = gson.fromJson(

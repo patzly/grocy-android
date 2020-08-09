@@ -63,8 +63,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -87,7 +87,6 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterProductSimpleFragment extends Fragment {
 
@@ -97,7 +96,6 @@ public class MasterProductSimpleFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
-    private WebRequest request;
     private DownloadHelper dlHelper;
     private FragmentMasterProductSimpleBinding binding;
     private ArrayAdapter<String> adapterProducts;
@@ -164,10 +162,8 @@ public class MasterProductSimpleFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        dlHelper = null;
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -185,8 +181,6 @@ public class MasterProductSimpleFragment extends Fragment {
         // WEB
 
         dlHelper = new DownloadHelper(activity, TAG);
-
-        request = new WebRequest(activity.getRequestQueue());
         grocyApi = activity.getGrocy();
 
         // VARIABLES
@@ -256,7 +250,7 @@ public class MasterProductSimpleFragment extends Fragment {
                 productNames = getProductNames();
                 adapterProducts = new MatchArrayAdapter(activity, productNames);
                 autoCompleteTextViewParentProduct.setAdapter(adapterProducts);
-            }).perform();
+            }).perform(dlHelper.getUuid());
         });
         autoCompleteTextViewParentProduct.setOnItemClickListener(
                 (parent, v, position, id) -> productParent = getProductFromName(
@@ -1042,7 +1036,7 @@ public class MasterProductSimpleFragment extends Fragment {
                 && sharedPrefs.getBoolean(Constants.PREF.FOOD_FACTS, false)
         ) {
             // get product name from open food facts
-            request.get(
+            dlHelper.get(
                     OpenFoodFactsApi.getProduct(
                             Arrays.asList(createProductObj.getBarcodes().split(",")).get(0)
                     ),
@@ -1115,7 +1109,7 @@ public class MasterProductSimpleFragment extends Fragment {
 
     private void loadParentProductByBarcode(String barcode) {
         swipeRefreshLayout.setRefreshing(true);
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductByBarcode(barcode),
                 response -> {
                     swipeRefreshLayout.setRefreshing(false);
@@ -1237,7 +1231,7 @@ public class MasterProductSimpleFragment extends Fragment {
         }
 
         if(editProduct != null) {
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
@@ -1253,7 +1247,7 @@ public class MasterProductSimpleFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
                     response -> {
@@ -1418,7 +1412,7 @@ public class MasterProductSimpleFragment extends Fragment {
     }
 
     private void checkForStock(Product product) {
-        request.get(
+        dlHelper.get(
                 grocyApi.getStockProductDetails(product.getId()),
                 response -> {
                     ProductDetails productDetails = new Gson().fromJson(
@@ -1448,7 +1442,7 @@ public class MasterProductSimpleFragment extends Fragment {
     }
 
     public void deleteProduct(Product product) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
                 response -> {
                     if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {

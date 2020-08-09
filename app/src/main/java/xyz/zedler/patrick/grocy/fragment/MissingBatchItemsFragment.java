@@ -49,12 +49,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMissingBatchItemsBinding;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.MissingBatchItem;
@@ -65,7 +66,6 @@ import xyz.zedler.patrick.grocy.util.BitmapUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MissingBatchItemsFragment extends Fragment
         implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
@@ -74,7 +74,7 @@ public class MissingBatchItemsFragment extends Fragment
 
     private MainActivity activity;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private Gson gson;
     private ClickUtil clickUtil;
     private AnimUtil animUtil;
@@ -105,16 +105,7 @@ public class MissingBatchItemsFragment extends Fragment
             binding.recyclerMissingBatchItems.setAdapter(null);
             binding = null;
         }
-
-        activity = null;
-        grocyApi = null;
-        request = null;
-        gson = null;
-        clickUtil = null;
-        animUtil = null;
-        missingBatchItemAdapter = null;
-        missingBatchItems = null;
-        errorState = null;
+        dlHelper.destroy();
     }
 
     @Override
@@ -134,7 +125,7 @@ public class MissingBatchItemsFragment extends Fragment
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -279,7 +270,7 @@ public class MissingBatchItemsFragment extends Fragment
 
     private void refresh() {
         binding.swipeMissingBatchItems.setRefreshing(true);
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> {
                     ArrayList<Product> products = gson.fromJson(
@@ -456,7 +447,7 @@ public class MissingBatchItemsFragment extends Fragment
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
-        request.post(
+        dlHelper.post(
                 grocyApi.purchaseProduct(productId),
                 body,
                 responseListener::onResponse,
@@ -528,7 +519,7 @@ public class MissingBatchItemsFragment extends Fragment
             bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
             activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
         } else {
-            request.get(
+            dlHelper.get(
                     grocyApi.getStockProductDetails(Integer.parseInt(batchItem.getProductId())),
                     response -> {
                         ProductDetails productDetails = gson.fromJson(

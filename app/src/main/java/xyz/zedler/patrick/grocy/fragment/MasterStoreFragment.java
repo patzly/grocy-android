@@ -44,17 +44,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.web.WebRequest;
 
 public class MasterStoreFragment extends Fragment {
 
@@ -63,7 +63,7 @@ public class MasterStoreFragment extends Fragment {
     private MainActivity activity;
     private Gson gson;
     private GrocyApi grocyApi;
-    private WebRequest request;
+    private DownloadHelper dlHelper;
     private FragmentMasterStoreBinding binding;
 
     private ArrayList<Store> stores;
@@ -87,18 +87,8 @@ public class MasterStoreFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
-        activity = null;
-        gson = null;
-        grocyApi = null;
-        request = null;
-        stores = null;
-        products = null;
-        storeNames = null;
-        editStore = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -115,7 +105,7 @@ public class MasterStoreFragment extends Fragment {
 
         // WEB
 
-        request = new WebRequest(activity.getRequestQueue());
+        dlHelper = new DownloadHelper(activity, TAG);
         grocyApi = activity.getGrocy();
         gson = new Gson();
 
@@ -257,7 +247,7 @@ public class MasterStoreFragment extends Fragment {
     }
 
     private void downloadStores() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                 response -> {
                     stores = gson.fromJson(
@@ -296,7 +286,7 @@ public class MasterStoreFragment extends Fragment {
     }
 
     private void downloadProducts() {
-        request.get(
+        dlHelper.get(
                 grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                 response -> products = gson.fromJson(
                         response,
@@ -369,7 +359,7 @@ public class MasterStoreFragment extends Fragment {
             if(debug) Log.e(TAG, "saveStore: " + e);
         }
         if(editStore != null) {
-            request.put(
+            dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.STORES, editStore.getId()),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -379,7 +369,7 @@ public class MasterStoreFragment extends Fragment {
                     }
             );
         } else {
-            request.post(
+            dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                     jsonObject,
                     response -> activity.dismissFragment(),
@@ -440,7 +430,7 @@ public class MasterStoreFragment extends Fragment {
     }
 
     public void deleteStore(Store store) {
-        request.delete(
+        dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.STORES, store.getId()),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()

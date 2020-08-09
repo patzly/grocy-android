@@ -127,20 +127,7 @@ public class MasterProductsFragment extends Fragment
             binding.recyclerMasterProducts.animate().cancel();
             binding = null;
         }
-
-        activity = null;
-        appBarBehavior = null;
-        masterProductAdapter = null;
-        clickUtil = null;
-        animUtil = null;
-        locations = null;
-        filteredProducts = null;
-        displayedProducts = null;
-        products = null;
-        search = null;
-        errorState = null;
-
-        System.gc();
+        dlHelper.destroy();
     }
 
     @Override
@@ -658,7 +645,8 @@ public class MasterProductsFragment extends Fragment
             } else {
                 showMessage(activity.getString(R.string.msg_master_delete_stock));
             }
-        }, error -> showMessage(activity.getString(R.string.error_undefined))).perform();
+        }, error -> showMessage(activity.getString(R.string.error_undefined)))
+                .perform(dlHelper.getUuid());
     }
 
     public void deleteProduct(Product product) {
