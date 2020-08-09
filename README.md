@@ -28,7 +28,6 @@ Grocy Android will soon be available in the official F-Droid repository.
 * Shopping lists with offline support
 * In-store shopping mode (big UI elements)
 * Fast barcode scanning
-* Open and consume with one swipe
 * Consume and purchase with app shortcuts
 * OpenFoodFacts implementation
 * Master data editing
@@ -36,15 +35,7 @@ Grocy Android will soon be available in the official F-Droid repository.
 * Dark mode
 * No ads, analytics or in-app purchases
 * Low data usage
-* Tiny app size (~5MB)
-
-## Upcoming
-
-Grocy Android is still under development. In the next weeks we're going to implement some more features!
-
-* Recipes
-* Meal plans
-* Extended product editing
+* Small app size (~6MB)
 
 ## Compatibility
 
