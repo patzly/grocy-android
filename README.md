@@ -18,7 +18,7 @@ You can try it using the demo option available on the login screen.
 
 ## Screenshots
 
-<a href="#"><img src="assets/screen1.png" width="220px"/></a><a href="#"><img src="assets/screen2.png" width="220px"/></a><a href="#"><img src="assets/screen3.png" width="220px"/></a><a href="#"><img src="assets/screen4.png" width="220px"/></a>
+<a href="#"><img src="assets/screen1.png" width="210px"/></a><a href="#"><img src="assets/screen2.png" width="210px"/></a><a href="#"><img src="assets/screen3.png" width="210px"/></a><a href="#"><img src="assets/screen4.png" width="210px"/></a>
 
 ## Features
 
