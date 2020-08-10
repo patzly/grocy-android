@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- TESTED -->
-
     <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
         <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>

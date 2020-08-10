@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Grocy" parent="Base.Grocy">
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Grocy.BottomAppBar.SwipeToRefresh" parent="Theme.Grocy.BottomAppBar">
+        <item name="android:statusBarColor">@color/primary</item>
+    </style>
+
+</resources>
