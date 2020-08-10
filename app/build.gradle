@@ -13,7 +13,7 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 15
+        versionCode 16
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -30,8 +30,6 @@ android {
                 'proguard-rules.pro'
             }
             debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
         }
     }
     
