@@ -58,7 +58,7 @@ public class FeaturesActivity extends AppCompatActivity {
     private PagerAdapter pagerAdapter;
     private FrameLayout frameLayoutPrevious, frameLayoutNext;
     private TextView textViewTitle, textViewDescription;
-    private ClickUtil clickUtil = new ClickUtil();
+    private final ClickUtil clickUtil = new ClickUtil();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -212,7 +212,7 @@ public class FeaturesActivity extends AppCompatActivity {
     }
 
     public static class FeaturesPageFragment extends Fragment {
-        private ImageView imageViewBack, imageViewFront;
+        private ImageView imageViewBack, imageViewFront, imageViewRotate;
         TextView textViewTitle, textViewDescription;
         private int position = 0;
 
@@ -230,6 +230,7 @@ public class FeaturesActivity extends AppCompatActivity {
             ImageView imageViewFocused = view.findViewById(R.id.image_features_focused);
             imageViewBack = view.findViewById(R.id.image_features_back);
             imageViewFront = view.findViewById(R.id.image_features_front);
+            imageViewRotate = view.findViewById(R.id.image_features_rotate);
             textViewTitle = view.findViewById(R.id.text_features_title);
             textViewDescription = view.findViewById(R.id.text_features_description);
 
@@ -239,16 +240,19 @@ public class FeaturesActivity extends AppCompatActivity {
                 case 1:
                     imageViewBack.setImageResource(R.drawable.feature_2_b);
                     imageViewFocused.setImageResource(R.drawable.feature_2_m);
+                    imageViewRotate.setImageDrawable(null);
                     imageViewFront.setImageResource(R.drawable.feature_2_f);
                     break;
                 case 2:
                     imageViewBack.setImageResource(R.drawable.feature_3_b);
                     imageViewFocused.setImageResource(R.drawable.feature_3_m);
+                    imageViewRotate.setImageDrawable(null);
                     imageViewFront.setImageResource(R.drawable.feature_3_f);
                     break;
                 default:
                     imageViewBack.setImageResource(R.drawable.feature_1_b);
                     imageViewFocused.setImageResource(R.drawable.feature_1_m);
+                    imageViewRotate.setImageResource(R.drawable.feature_1_r);
                     imageViewFront.setImageResource(R.drawable.feature_1_f);
             }
 
@@ -262,27 +266,33 @@ public class FeaturesActivity extends AppCompatActivity {
         public void setOffset(int position, float offset) {
             if(imageViewFront == null || imageViewBack == null) return;
             int frontOffset = 200, backOffset = -200;
-            int titleOffset = 100, descriptionOffset = -100;
+            int rotation = 50;
+            int titleOffset = 0, descriptionOffset = -100;
             imageViewFront.setTranslationX(
                     position == this.position
-                            ? offset * (frontOffset * -1)
+                            ? offset * -frontOffset
                             : (1 - offset) * frontOffset
             );
             imageViewBack.setTranslationX(
                     position == this.position
-                            ? offset * (backOffset * -1)
+                            ? offset * -backOffset
                             : (1 - offset) * backOffset
             );
-            /*textViewTitle.setTranslationX(
+            imageViewRotate.setRotation(
                     position == this.position
-                            ? offset * (titleOffset * -1)
+                            ? offset * -rotation
+                            : (1 - offset) * rotation
+            );
+            textViewTitle.setTranslationX(
+                    position == this.position
+                            ? offset * -titleOffset
                             : (1 - offset) * titleOffset
             );
             textViewDescription.setTranslationX(
                     position == this.position
-                            ? offset * (descriptionOffset * -1)
+                            ? offset * -descriptionOffset
                             : (1 - offset) * descriptionOffset
-            );*/
+            );
         }
     }
 }

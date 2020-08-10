@@ -68,7 +68,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_features_start"
-            style="@style/Widget.Grocy.Button.OutlinedButton"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_get_started"/>
