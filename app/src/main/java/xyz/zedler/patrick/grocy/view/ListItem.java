@@ -33,7 +33,7 @@ import xyz.zedler.patrick.grocy.R;
 
 public class ListItem extends LinearLayout {
 
-    private Context context;
+    private final Context context;
     private TextView textViewProperty, textViewValue, textViewExtra;
     private LinearLayout linearLayoutContainer, linearLayoutExtra;
     private int height = 0;

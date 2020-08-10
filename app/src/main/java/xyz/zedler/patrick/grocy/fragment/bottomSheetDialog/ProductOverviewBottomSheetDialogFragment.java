@@ -373,6 +373,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 				getAmountText(),
 				isAggregatedAmount == 1 ? getAggregatedAmount() : null
 		);
+		itemAmount.setSingleLine(false);
 
 		// LOCATION
 		if(hasDetails()) location = productDetails.getLocation(); // refresh

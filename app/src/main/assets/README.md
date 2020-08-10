@@ -17,6 +17,7 @@ Alle button Höhen anpassen auf match_parent und formatierung anschauen bei lang
 Bei Batch Scanner Best before Date bottom sheet wird "speichern" umgebrochen
 
 Im Product overview bottom sheet wird zB. "5 Packungen (2 geöff..." angezeigt, Umbruch nötig
+-> in Produktübersicht erledigt
 
 ## Features
 
