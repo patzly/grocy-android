@@ -5,21 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAlignment="viewStart"
-            android:text="@string/title_batch_config"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
-
-    </LinearLayout>
+        android:padding="16dp"
+        android:singleLine="true"
+        android:textAlignment="viewStart"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:text="@string/title_batch_config"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     <View
         style="@style/Theme.Grocy.Divider"

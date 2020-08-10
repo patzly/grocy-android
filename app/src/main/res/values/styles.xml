@@ -427,7 +427,6 @@
     <style name="TextAppearance.Grocy.Toolbar" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/on_primary</item>
         <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
 
@@ -473,9 +472,8 @@
     <style
         name="TextAppearance.Grocy.BottomSheet.Title"
         parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_background</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">19sp</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
 

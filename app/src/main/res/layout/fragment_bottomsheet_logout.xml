@@ -6,22 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_logout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/text_logout_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
-            android:textSize="16sp"
-            android:text="@string/title_logout"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
-
-    </LinearLayout>
+        android:padding="16dp"
+        android:textAlignment="viewStart"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:text="@string/title_logout"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     <View
         style="@style/Theme.Grocy.Divider"

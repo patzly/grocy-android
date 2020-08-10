@@ -69,6 +69,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="@string/title_shopping_list"
+                            android:fontFamily="@font/roboto_mono_bold"
                             android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
                         <xyz.zedler.patrick.grocy.view.ActionButton

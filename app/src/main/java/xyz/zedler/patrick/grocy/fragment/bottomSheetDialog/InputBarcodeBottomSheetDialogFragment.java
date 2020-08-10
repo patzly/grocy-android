@@ -42,7 +42,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
-    private final static String TAG = "ConsumeBarcodeBottomSheet";
+    private final static String TAG = "InputBarcodeBottomSheet";
 
     private MainActivity activity;
 

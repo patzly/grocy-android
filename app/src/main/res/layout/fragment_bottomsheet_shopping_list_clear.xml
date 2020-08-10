@@ -6,21 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
-            android:textSize="16sp"
-            android:text="@string/action_clear_shopping_list"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
-
-    </LinearLayout>
+        android:textAlignment="viewStart"
+        android:padding="16dp"
+        android:text="@string/action_clear_shopping_list"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     <View
         style="@style/Theme.Grocy.Divider"

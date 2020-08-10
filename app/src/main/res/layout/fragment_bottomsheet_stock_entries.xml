@@ -17,6 +17,7 @@
             android:singleLine="true"
             android:text="@string/title_stock_entries"
             android:textAlignment="viewStart"
+            android:fontFamily="@font/roboto_mono_bold"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
         <LinearLayout

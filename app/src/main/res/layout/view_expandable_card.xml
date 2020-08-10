@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/on_background"
-            android:alpha="0.7"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
     </FrameLayout>

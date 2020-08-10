@@ -6,21 +6,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_text_edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/text_text_edit_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAlignment="viewStart"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
-
-    </LinearLayout>
+        android:padding="16dp"
+        android:singleLine="true"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
     <View
         style="@style/Theme.Grocy.Divider"

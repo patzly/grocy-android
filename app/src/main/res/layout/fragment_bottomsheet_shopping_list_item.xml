@@ -20,6 +20,7 @@
             android:text="@string/title_list_entry"
             android:textAlignment="viewStart"
             android:layout_margin="16dp"
+            android:fontFamily="@font/roboto_mono_bold"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
         <com.google.android.material.appbar.MaterialToolbar

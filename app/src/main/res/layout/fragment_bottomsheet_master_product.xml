@@ -19,6 +19,7 @@
             android:singleLine="true"
             android:textAlignment="viewStart"
             android:layout_margin="16dp"
+            android:fontFamily="@font/roboto_mono_bold"
             android:text="@string/title_product"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 
