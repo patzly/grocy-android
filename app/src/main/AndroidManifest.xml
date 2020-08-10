@@ -38,13 +38,17 @@
 
         </activity>
 
-        <activity android:name=".activity.LoginActivity"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/Theme.Grocy.NoNavBarDivider"/>
 
         <activity android:name=".activity.SettingsActivity"/>
 
         <activity android:name=".activity.ShoppingActivity"/>
 
-        <activity android:name=".activity.FeaturesActivity"/>
+        <activity
+            android:name=".activity.FeaturesActivity"
+            android:theme="@style/Theme.Grocy.NoNavBarDivider"/>
 
         <activity android:name=".activity.AboutActivity"/>
 
