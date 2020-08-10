@@ -160,8 +160,8 @@
     <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="boxCornerRadiusTopStart">8dp</item>
-        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
         <item name="boxBackgroundColor">@color/on_background_tertiary</item>
         <item name="boxStrokeColor">@color/secondary</item>
         <item name="hintTextColor">@color/secondary</item>
@@ -175,8 +175,8 @@
     <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="boxCornerRadiusTopStart">8dp</item>
-        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
         <item name="boxBackgroundColor">@color/on_background_tertiary</item>
         <item name="boxStrokeColor">@color/secondary</item>
         <item name="hintTextColor">@color/secondary</item>
@@ -241,6 +241,7 @@
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
         <item name="strokeColor">@color/stroke_secondary</item>
         <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">6dp</item>
     </style>
 
     <style name="Widget.Grocy.Button.UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -249,6 +250,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
         <item name="backgroundTint">@color/button_bg_color_selector</item>
+        <item name="cornerRadius">6dp</item>
     </style>
 
     <style name="Widget.Grocy.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
@@ -256,6 +258,7 @@
         <item name="android:textColor">@color/button_text_color_secondary_selector</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="cornerRadius">6dp</item>
     </style>
 
     <!-- Category -->
