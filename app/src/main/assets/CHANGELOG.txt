@@ -1,4 +1,5 @@
 1.8.1:
+- Design improvements
 - Improved download termination
 - Fix crash in shopping mode
 - Bug fixes and improvements
