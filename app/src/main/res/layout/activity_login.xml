@@ -28,7 +28,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_round_grocy_color"
                 tools:ignore="ContentDescription"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="32dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_login_server"
@@ -99,17 +99,17 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_login_demo"
                 style="@style/Widget.Grocy.Button.TextButton"
-                app:rippleColor="@color/highlight"
-                android:textColor="@color/on_background_secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/action_use_demo_account" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
 
                 <xyz.zedler.patrick.grocy.view.ActionButton
                     android:id="@+id/button_login_feedback"

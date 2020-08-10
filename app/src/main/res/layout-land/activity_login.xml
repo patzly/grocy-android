@@ -16,18 +16,72 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingStart="32dp"
+            android:paddingEnd="0dp">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_round_grocy_color"
+                tools:ignore="ContentDescription"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_feedback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_feedback_anim"
+                    app:tint="@color/icon"/>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_help_outline_anim"
+                    app:tint="@color/icon"/>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_info_outline_anim"
+                    app:tint="@color/icon"/>
+
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_open_in_browser_anim"
+                    app:tint="@color/icon"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingStart="48dp"
-            android:paddingEnd="0dp">
+            android:paddingStart="32dp"
+            android:paddingEnd="48dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_login_server"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="4dp"
                 android:hint="@string/hint_server"
                 app:helperTextEnabled="true"
@@ -92,66 +146,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_login_demo"
                 style="@style/Widget.Grocy.Button.TextButton"
-                app:rippleColor="@color/highlight"
-                android:textColor="@color/on_background_secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/action_use_demo_account" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingStart="16dp"
-            android:paddingEnd="32dp">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_round_grocy_color"
-                tools:ignore="ContentDescription"
-                android:layout_marginBottom="8dp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_feedback"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_feedback_anim"
-                    app:tint="@color/icon"/>
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_help"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_help_outline_anim"
-                    app:tint="@color/icon"/>
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_info_outline_anim"
-                    app:tint="@color/icon"/>
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_open_in_browser_anim"
-                    app:tint="@color/icon"/>
-
-            </LinearLayout>
 
         </LinearLayout>
 

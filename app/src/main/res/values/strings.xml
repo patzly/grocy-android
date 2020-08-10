@@ -369,6 +369,7 @@
     <string name="info_developers">Developers</string>
     <string name="info_github">Grocy Android on GitHub</string>
     <string name="info_github_description">Source code</string>
+    <string name="info_website">Open Grocy website</string>
 
     <string name="feature_1_title">Grocy for Android</string>
     <string name="feature_1_description">Self-hosted grocery management for your home</string>

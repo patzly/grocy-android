@@ -158,24 +158,28 @@ public class LoginActivity extends AppCompatActivity {
             requestLogin(getString(R.string.url_grocy_demo), "", true, true);
         });
 
+        binding.buttonLoginHelp.setTooltipText(getString(R.string.title_help));
         binding.buttonLoginHelp.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginHelp.startIconAnimation();
             startActivity(new Intent(this, HelpActivity.class));
         });
 
+        binding.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
         binding.buttonLoginFeedback.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginFeedback.startIconAnimation();
             showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
         });
 
+        binding.buttonLoginAbout.setTooltipText(getString(R.string.title_about));
         binding.buttonLoginAbout.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginAbout.startIconAnimation();
             startActivity(new Intent(this, AboutActivity.class));
         });
 
+        binding.buttonLoginWebsite.setTooltipText(getString(R.string.info_website));
         binding.buttonLoginWebsite.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginWebsite.startIconAnimation();

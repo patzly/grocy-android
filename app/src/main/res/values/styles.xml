@@ -198,8 +198,8 @@
         <item name="errorIconDrawable">@drawable/ic_round_error</item>
         <item name="hintTextColor">@color/transparent</item>
         <item name="boxCollapsedPaddingTop">0dp</item>
-        <item name="boxCornerRadiusTopStart">5dp</item>
-        <item name="boxCornerRadiusTopEnd">5dp</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
     </style>
 
     <style name="Widget.Grocy.TextInputEditText.FilledBox.Mini" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
