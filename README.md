@@ -20,7 +20,7 @@ Grocy Android will soon be available in the official F-Droid repository.
 
 ## Screenshots
 
-<a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen1.png"><img src="assets/screen1.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen2.png"><img src="assets/screen2.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen3.png"><img src="assets/screen3.png" width="200px"/></a><a href="https://raw.githubusercontent.com/patzly/grocy-android/master/assets/screen4.png"><img src="assets/screen4.png" width="200px"/></a>
+<a href="assets/screen1.png"><img src="assets/screen1.png" width="200px"/></a><a href="assets/screen2.png"><img src="assets/screen2.png" width="200px"/></a><a href="assets/screen3.png"><img src="assets/screen3.png" width="200px"/></a><a href="assets/screen4.png"><img src="assets/screen4.png" width="200px"/></a>
 
 ## Features
 
@@ -57,7 +57,7 @@ Translations which reached a completion level of 80% will be included in release
 Completed translations: German, French, Swedish & Dutch  
 Thanks translators!
 
-## About the project
+## About
 
 This app is a project of my brother and me. We mainly worked on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close. Now the main work is done, occasionally we release updates with improvements and bug fixes.
 
