@@ -1,7 +1,9 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -26,11 +28,14 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment {
         view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
             if(dialog == null) return;
-            View view1 = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if(view1 == null) return;
-            BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(view1);
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            behavior.setSkipCollapsed(true);
+
+            View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if(sheet == null) return;
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            BottomSheetBehavior.from(sheet).setPeekHeight(metrics.heightPixels / 2);
         });
     }
 }
