@@ -256,12 +256,7 @@ public class PurchaseFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                String input = s.toString();
-                if(!input.isEmpty()) {
-                    amount = Double.parseDouble(input);
-                } else {
-                    amount = 0;
-                }
+                amount = NumUtil.stringToDouble(s.toString());
                 isAmountValid();
             }
         });
