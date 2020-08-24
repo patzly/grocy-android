@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
         // FRAGMENT
 
-        if(savedInstanceState != null) {
+        /*if(savedInstanceState != null) {
             String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
             if(tag != null) {
                 fragmentCurrent = fragmentManager.getFragment(savedInstanceState, tag);
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     fragmentCurrent,
                     Constants.UI.STOCK
             ).commit();
-        }
+        }*/
 
         // SHORTCUT
 
@@ -332,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateUI(String uiMode, boolean animated, String origin) {
         if(debug) Log.i(TAG, "updateUI: " + uiMode + ", origin = " + origin);
 
+        if(true) return;
         this.uiMode = uiMode;
 
         if(uiMode.startsWith(Constants.UI.STOCK) && isDemo()) {
@@ -997,16 +998,7 @@ public class MainActivity extends AppCompatActivity {
         if(bundle != null) {
             fragmentCurrent.setArguments(bundle);
         }
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(
-                        (animated) ? R.anim.slide_in_up : R.anim.slide_no,
-                        (animated) ? R.anim.fade_out : R.anim.slide_no,
-                        R.anim.fade_in,
-                        R.anim.slide_out_down)
-                .hide(fragmentOld)
-                .add(R.id.frame_main_container, fragmentCurrent, fragmentCurrent.toString())
-                .addToBackStack(fragmentCurrent.toString())
-                .commit();
+
 
         if(debug) Log.i(
                 TAG, "replaceFragment: replaced " + fragmentOld
@@ -1123,7 +1115,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
-            fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+            bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             if(debug) Log.i(TAG, "showBottomSheet: " + tag);
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
