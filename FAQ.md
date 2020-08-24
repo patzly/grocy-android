@@ -8,11 +8,12 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## Index
 
-* [How to ...?](#user-content-how-to)
+* [How to ...?](#user-content-howto)
 * [Planned features](#user-content-planned-features)
 * [Frequently Asked Questions](#user-content-frequently-asked-questions)
 * [Support](#user-content-support)
 
+<a name="howto">
 ## How to ...?
 
 <a name="howto1"></a>
