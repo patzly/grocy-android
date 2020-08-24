@@ -160,6 +160,10 @@ public class MasterProductsFragment extends Fragment
         locations = new ArrayList<>();
         quantityUnits = new ArrayList<>();
 
+        locationsMap = new HashMap<>();
+        productGroupsMap = new HashMap<>();
+        quantityUnitsMap = new HashMap<>();
+
         search = "";
         errorState = Constants.STATE.NONE;
         filterProductGroupId = -1;
