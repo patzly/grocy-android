@@ -8,7 +8,7 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## Index
 
-* [How to ...?](#user-content-howto)
+* [How to ...?](#user-content-how-to)
 * [Planned features](#user-content-planned-features)
 * [Frequently Asked Questions](#user-content-frequently-asked-questions)
 * [Support](#user-content-support)
