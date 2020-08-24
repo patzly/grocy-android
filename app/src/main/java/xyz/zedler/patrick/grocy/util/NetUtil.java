@@ -23,6 +23,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 public class NetUtil {
 
@@ -37,5 +40,11 @@ public class NetUtil {
         if(cm == null) return false;
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    public static void openURL(Context context, String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 }

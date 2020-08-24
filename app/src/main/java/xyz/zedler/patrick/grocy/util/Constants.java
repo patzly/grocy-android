@@ -68,6 +68,11 @@ public final class Constants {
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
+    public final static class URL {
+        public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
+        public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-index";
+    }
+
     public final static class DATE {
         public final static String NEVER_EXPIRES = "2999-12-31";
     }

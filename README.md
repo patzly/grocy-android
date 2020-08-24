@@ -40,11 +40,17 @@ Grocy Android will soon be available in the official F-Droid repository.
 ## Compatibility
 
 Grocy Android requires at least Android 5.0 Lollipop on your device and [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
-It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server. Our in-app help explains how to do that.
+It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server.
 
 **Self-signed certificates are not supported at the moment.**  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
 To meet these requirements, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for proper `https` encryption.
+
+Grocy Android will work properly on devices without any Google service installed.
+
+## FAQ
+
+Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of often asked questions.
 
 ## Contribution
 
@@ -59,7 +65,8 @@ Thanks translators!
 
 ## About
 
-This app is a project of my brother and me. We mainly worked on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close. Now the main work is done, occasionally we release updates with improvements and bug fixes.
+This app is a project of my brother and me. We mainly worked on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close.
+Now the main work is done, occasionally we release updates with improvements and bug fixes.
 
 We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
 

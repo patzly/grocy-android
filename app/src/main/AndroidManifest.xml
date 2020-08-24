@@ -52,8 +52,6 @@
 
         <activity android:name=".activity.AboutActivity"/>
 
-        <activity android:name=".activity.HelpActivity"/>
-
         <activity android:name=".activity.LogActivity"/>
 
         <activity

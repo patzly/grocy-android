@@ -38,7 +38,6 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.HelpActivity;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.SettingsActivity;
@@ -46,6 +45,7 @@ import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class DrawerBottomSheetDialogFragment
         extends CustomBottomSheetDialogFragment implements View.OnClickListener {
@@ -175,7 +175,7 @@ public class DrawerBottomSheetDialogFragment
                 IconUtil.start(view, R.id.image_help);
                 new Handler().postDelayed(() -> {
                     dismiss();
-                    startActivity(new Intent(activity, HelpActivity.class));
+                    NetUtil.openURL(activity, Constants.URL.HELP);
                 }, 300);
                 break;
         }
