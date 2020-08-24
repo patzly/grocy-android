@@ -1,4 +1,5 @@
-# FairEmail support
+<a name="pagetop"></a>
+# Grocy Android Support
 
 If you have a question, please check the frequently asked questions below first.
 At the bottom, you can find out how to ask other questions, request features, and report bugs.
@@ -60,6 +61,8 @@ Anything on this list is in random order and *might* be added in the near future
 
 [I have another question.](#user-content-support)
 
+<br />
+
 <a name="faq1"></a>
 **(1) Which permissions are needed and why?**
 
@@ -113,8 +116,6 @@ Attention! If your Hass.io server is publicly accessible, following points are i
 
 Most devices have a front camera with a fixed focus for the normal distance between your eyes and the device.
 With this distance, the picture resolution is sometimes too low for the scanning algorithm.
-
-<br />
 
 ## Support
 

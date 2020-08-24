@@ -70,7 +70,7 @@ public final class Constants {
 
     public final static class URL {
         public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
-        public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-index";
+        public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-pagetop";
     }
 
     public final static class DATE {
