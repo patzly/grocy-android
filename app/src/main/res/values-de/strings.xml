@@ -363,6 +363,7 @@
     <string name="info_developers">Entwickler</string>
     <string name="info_github">Grocy Android auf GitHub</string>
     <string name="info_github_description">Quellcode</string>
+    <string name="info_website">Grocy Website öffnen</string>
 
     <string name="feature_1_title">Grocy für Android</string>
     <string name="feature_1_description">selbst gehostete Lebensmittelverwaltung für Ihr Zuhause</string>
@@ -417,76 +418,4 @@
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://de.demo.grocy.info</string>
-    <!-- Strings for HelpActivity -->
-
-    <string name="help_general_header">Wie weiß ich, was ein Button in der App macht?</string>
-    <string name="help_general_body">Ab Android 8 können Sie fast jedes klickbare Element ohne einen Schriftzug lange drücken, damit Sie sehen, welche Aktion ausgeführt wird.</string>
-    <string name="help_key_invalid_header">Mein API Schlüssel ist ungültig.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_key_invalid_body">
-        Drücken Sie SCHLÜSSEL ERSTELLEN, um die Seite der Schlüsselverwaltung auf Ihrer Grocy Instanz aufzurufen.\n
-        Erstellen Sie einen neuen Schlüssel und kopieren Sie ihn in die Zwischenablage, dann fügen sie ihn in dem API Schlüssel Feld in Grocy Android ein und versuchen es erneut.\n\n
-
-        Wenn Sie Hass.io mit dem Grocy Add-on benutzen, lesen Sie die nächtste Frage.
-    </string>
-    <string name="help_homeassistant_header">Wie kann ich diese App mit Hass.io benutzen?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_homeassistant_body" >
-        Öffnen Sie im Supervisor von Hass.io den Tab \"Konfiguration\" im Grocy Add-on.\n
-        Ändern Sie den Host Port (welcher offengelegt wird) von \"null\" zu einer Zahl, z.B. \"40\" (ohne Anführungszeichen) im Netzwerk Abschnitt.\n
-        Geben Sie nun hier in dieser App im Feld \"Server URL\" die Domain oder IP Adresse von Ihrem Hass.io Server zusammen mit \":\" und der gewählten Portnummer ein.\n
-        Die Server URL kann nun wie folgt aussehen:\n\n
-
-        - http://192.168.178.123:40\n
-        - https://myhassioserver.com:40\n\n
-
-        Achtung! Wenn Ihr Hass.io Server öffentlich zugänglich ist, müssen Sie folgende Punkte beachten:\n\n
-
-        - Stellen Sie sicher, dass Sie ein funktionierendes HTTPS Zertifikat in der Konfiguration des Grocy Add-ons eingerichtet haben.\n
-        - Beginnen Sie die URL mit \"https://\" wie im Beispiel oben.\n
-        - Legen Sie ein starkes Passwort für alle Benutzer in Grocy fest (Standard ist \"admin\"), denn jeder hat nun Zugriff auf Ihre Grocy Instanz und sie ist nicht mehr durch den Hass.io Login geschützt.
-    </string>
-    <string name="help_consume_header">Wie verbrauche ich ein Produkt?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_consume_body">
-        Jedes Mal, wenn Sie etwas verbrauchen, verbrauchen Sie es in Grocy auch.\n
-        Wege, um ein Produkt zu verbrauchen:\n\n
-
-        - Bestand: Suchen Sie nach dem Produkt, nach rechts wischen und auf das VERBRAUCHEN Symbol tippen.\n
-        - Bestand: Suchen Sie nach dem Produkt, klicken auf es, um die Produktübersicht zu öffnen, dann auf das VERBRAUCHEN Symbol tippen.\n
-        - Drücken Sie im Bestand den grünen Button, um in den Stapelmodus zu gelangen, stellen Sie sicher, dass der Modus \"Verbrauchen\" ist und scannen Sie Ihr Produkt.\n
-        - Drücken Sie auf die VERBRAUCHEN Verknüpfung von Grocy in Ihrem App Launcher (seit Android 7.1) und scannen Sie Ihr Produkt.\n
-        - Öffnen Sie die Seite \"Verbrauch\" im Hauptmenü und füllen Sie das Formular aus. Drücken Sie dann den grünen Button.
-    </string>
-    <string name="help_open_header">Wie markiere ich ein Produkt als geöffnet?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_open_body">
-        Jedes Mal, wenn Sie etwas öffnen oder anbrechen, markieren Sie es in Grocy als geöffnet.\n
-        Wege, um ein Produkt als geöffnet zu markieren:\n\n
-
-        - Bestand: Suchen Sie nach dem Produkt, nach rechts wischen und auf das ÖFFNEN Symbol tippen.\n
-        - Bestand: Suchen Sie nach dem Produkt, klicken auf es, um die Produktübersicht zu öffnen, dann auf das ÖFFNEN Symbol tippen.\n
-        - Drücken Sie im Bestand den grünen Button, um in den Stapelmodus zu gelangen, drücken Sie die Modus-Taste, damit der Modus \"Als geöffnet markieren\" ist und scannen Sie Ihr Produkt.\n
-        - Drücken Sie auf die VERBRAUCHEN Verknüpfung von Grocy in Ihrem App Launcher (seit Android 7.1) und fahren Sie wie gerade eben fort.\n
-        - Öffnen Sie die Seite \"Verbrauch\" im Hauptmenü und füllen Sie das Formular aus. Drücken Sie dann das ÖFFNEN Symbol unten in der Leiste.
-    </string>
-    <string name="help_selfie_camera_header">Warum sind meine Barcodes unlesbar wenn ich die Selfie-Kamera benutze?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_selfie_camera_body">
-        Die meisten Geräte haben eine vordere Kamera mit einem unveränderbaren Fokus für die normale Entfernung zwischen Ihren Augen und dem Gerät.\n
-        Mit dieser Entfernung ist die Bildauflösung für den Scan-Algorithmus manchmal zu niedrig.
-    </string>
-    <string name="help_other_question_header">Ich habe eine andere Frage.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_other_question_body">
-        Bitte gehen Sie auf unsere Projektseite auf GitHub und öffnen ein neues Issue mit Ihrer Frage.\n
-        Wir werden Ihnen so schnell wie möglich helfen.
-    </string>
-
-</resources>
+    </resources>
