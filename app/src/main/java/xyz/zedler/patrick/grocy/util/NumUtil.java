@@ -38,9 +38,12 @@ public class NumUtil {
     }
 
     public static double stringToDouble(String input) {
-        // TODO: NumberFormatException?
-        if(input == null || input.isEmpty()) return 0;
-        return Double.parseDouble(input.replace(",", "."));
+        if(input == null || input.isEmpty()) return -1;
+        try {
+            return Double.parseDouble(input.replace(",", "."));
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
     }
 
     public static boolean isStringInt(String s) {

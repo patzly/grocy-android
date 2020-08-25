@@ -59,6 +59,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -162,7 +163,16 @@ public class LoginActivity extends AppCompatActivity {
         binding.buttonLoginHelp.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginHelp.startIconAnimation();
-            startActivity(new Intent(this, HelpActivity.class));
+            new Handler().postDelayed(() -> {
+                boolean success = NetUtil.openURL(this, Constants.URL.HELP);
+                if(!success) {
+                    Snackbar.make(
+                            binding.coordinatorLoginContainer,
+                            R.string.error_no_browser,
+                            Snackbar.LENGTH_LONG
+                    ).show();
+                }
+            }, 300);
         });
 
         binding.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
@@ -319,13 +329,18 @@ public class LoginActivity extends AppCompatActivity {
                 || server.contains("hassio_ingress")
                 || server.contains("hassio/ingress")
         ) {
-            // maybe a grocy instance on Hass.io - this doesn't work like this
-            Intent intent = new Intent(this, HelpActivity.class);
-            intent.putExtra(
-                    Constants.ARGUMENT.SELECTED_ID,
-                    R.string.help_homeassistant_header
+            // maybe a grocy instance on Hass.io - url doesn't work like this
+            boolean success = NetUtil.openURL(
+                    this,
+                    Constants.URL.FAQ + "#user-content-faq4"
             );
-            new Handler().postDelayed(() -> startActivity(intent), 200);
+            if(!success) {
+                Snackbar.make(
+                        binding.coordinatorLoginContainer,
+                        R.string.error_no_browser,
+                        Snackbar.LENGTH_LONG
+                ).show();
+            }
         }
     }
 
@@ -362,6 +377,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showMessage(String text) {
-        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_LONG).show();
     }
 }

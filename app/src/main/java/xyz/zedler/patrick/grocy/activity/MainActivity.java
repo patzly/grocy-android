@@ -52,7 +52,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.RequestQueue;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
@@ -90,14 +89,12 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
-import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = MainActivity.class.getSimpleName();
 
     public ActivityMainBinding binding;
-    private RequestQueue requestQueue;
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private GrocyApi grocyApi;
@@ -136,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
         netUtil = new NetUtil(this);
 
         // WEB
-
-        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
 
         networkReceiver = new BroadcastReceiver() {
             @Override
@@ -1118,10 +1113,6 @@ public class MainActivity extends AppCompatActivity {
             bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
             if(debug) Log.i(TAG, "showBottomSheet: " + tag);
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
-    }
-
-    public RequestQueue getRequestQueue() {
-        return requestQueue;
     }
 
     private void showDemoIndicator(boolean animated) {

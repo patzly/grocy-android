@@ -535,13 +535,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
                 dlHelper.getQuantityUnits(quantityUnits -> this.quantityUnits = quantityUnits),
-                dlHelper.getLocations(locations -> {
-                    this.locations = locations;
-                    setMenuLocationFilters();
-                }),
                 dlHelper.getProductGroups(productGroups -> {
                     this.productGroups = productGroups;
                     setMenuProductGroupFilters();
+                    updateMenuFilterVisibility();
                 }),
                 dlHelper.getStockItems(stockItems -> {
                     this.stockItems = stockItems;
@@ -604,6 +601,15 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 shoppingListProductIds.add(item.getProductId());
                             }
                         }
+                    })
+            );
+        }
+        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+            queue.append(
+                    dlHelper.getLocations(locations -> {
+                        this.locations = locations;
+                        setMenuLocationFilters();
+                        updateMenuFilterVisibility();
                     })
             );
         }
@@ -1255,6 +1261,19 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         Snackbar.LENGTH_SHORT
                 )
         );
+    }
+
+    private void updateMenuFilterVisibility() {
+        if(activity == null) return;
+        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
+        if(productGroups == null || productGroups.isEmpty()
+                || locations == null
+                || locations.isEmpty()
+        ) {
+            menuItem.setVisible(false);
+        } else {
+            menuItem.setVisible(true);
+        }
     }
 
     private void setMenuLocationFilters() {
