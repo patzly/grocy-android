@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.util;
 */
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,9 +43,14 @@ public class NetUtil {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public static void openURL(Context context, String url) {
+    public static boolean openURL(Context context, String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
+        try {
+            customTabsIntent.launchUrl(context, Uri.parse(url));
+            return true;
+        } catch (ActivityNotFoundException ex) {
+            return false;
+        }
     }
 }

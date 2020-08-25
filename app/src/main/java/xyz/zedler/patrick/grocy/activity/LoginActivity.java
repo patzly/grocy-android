@@ -163,9 +163,16 @@ public class LoginActivity extends AppCompatActivity {
         binding.buttonLoginHelp.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginHelp.startIconAnimation();
-            new Handler().postDelayed(
-                    () -> NetUtil.openURL(this, Constants.URL.HELP), 300
-            );
+            new Handler().postDelayed(() -> {
+                boolean success = NetUtil.openURL(this, Constants.URL.HELP);
+                if(!success) {
+                    Snackbar.make(
+                            binding.coordinatorLoginContainer,
+                            R.string.error_no_browser,
+                            Snackbar.LENGTH_LONG
+                    ).show();
+                }
+            }, 300);
         });
 
         binding.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
@@ -322,8 +329,18 @@ public class LoginActivity extends AppCompatActivity {
                 || server.contains("hassio_ingress")
                 || server.contains("hassio/ingress")
         ) {
-            // maybe a grocy instance on Hass.io - this doesn't work like this
-            NetUtil.openURL(this, Constants.URL.FAQ + "#user-content-faq4");
+            // maybe a grocy instance on Hass.io - url doesn't work like this
+            boolean success = NetUtil.openURL(
+                    this,
+                    Constants.URL.FAQ + "#user-content-faq4"
+            );
+            if(!success) {
+                Snackbar.make(
+                        binding.coordinatorLoginContainer,
+                        R.string.error_no_browser,
+                        Snackbar.LENGTH_LONG
+                ).show();
+            }
         }
     }
 
@@ -360,6 +377,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showMessage(String text) {
-        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_LONG).show();
     }
 }

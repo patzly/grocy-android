@@ -36,6 +36,7 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -175,7 +176,14 @@ public class DrawerBottomSheetDialogFragment
                 IconUtil.start(view, R.id.image_help);
                 new Handler().postDelayed(() -> {
                     dismiss();
-                    NetUtil.openURL(activity, Constants.URL.HELP);
+                    boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
+                    if(!success) {
+                        Snackbar.make(
+                                activity.binding.frameMainContainer,
+                                R.string.error_no_browser,
+                                Snackbar.LENGTH_LONG
+                        ).show();
+                    }
                 }, 300);
                 break;
         }
