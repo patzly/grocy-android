@@ -524,11 +524,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
     private void download() {
         binding.swipeStock.setRefreshing(true);
-        if(expiringItems == null) {
-            expiringItems = new ArrayList<>();
-        } else {
-            expiringItems.clear();
-        }
         AtomicBoolean stockItemsDownloaded = new AtomicBoolean(false);
         AtomicBoolean volatileItemsDownloaded = new AtomicBoolean(false);
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
