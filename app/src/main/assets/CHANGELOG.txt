@@ -1,4 +1,5 @@
 1.8.2:
+- Moved in-app help to project page on Github
 - Updated translations
 - Bug fixes and improvements
 
