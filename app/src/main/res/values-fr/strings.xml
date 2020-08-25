@@ -355,7 +355,6 @@
     <string name="info_developers">Développeurs</string>
     <string name="info_github">Grocy Android sur GitHub</string>
     <string name="info_github_description">Code source</string>
-
     <string name="feature_1_title">Grocy pour Android</string>
     <string name="feature_1_description">Gestion d\'épicerie auto-hébergée pour votre maison</string>
     <string name="feature_2_title">Conception intuitive</string>
@@ -372,7 +371,6 @@
 
     <string name="hint_server">URL du serveur</string>
     <string name="hint_key">Clé API valide</string>
-    <string name="hint_message">Écrire un email</string>
 
     <string name="setting_dark_mode">Forcer le mode sombre</string>
     <string name="setting_dark_mode_description">Désactivé pour la dépendance système</string>
@@ -394,7 +392,6 @@
     <string name="setting_sync_off">Synchronisation désactivée</string>
     <string name="setting_not_loaded">Impossible de charger</string>
     <string name="setting_debug">Activer la journalisation</string>
-    <string name="setting_debug_description">Rechercher et signaler des erreurs</string>
     <string name="setting_info_logs">Afficher les journaux d\'informations</string>
     <string name="setting_logs_description">Afficher le logcat de ce processus</string>
 
@@ -403,67 +400,7 @@
     <string name="setting_ask_store">Demander un magasin</string>
     <string name="setting_ask_location">Demandez l\'emplacement</string>
     <string name="setting_ask_specific_item">Demander un article spécifique</string>
-
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
-    <!-- Strings for HelpActivity -->
-
-    <string name="help_general_header">Comment savoir ce que fait quelque chose?</string>
-    <string name="help_general_body">À partir d\'Android 8, vous pouvez appuyer longuement sur presque tous les éléments cliquables sans étiquette pour voir ce qu\'il fera.</string>
-    <string name="help_key_invalid_header">Ma clé API n\'est pas valide.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_key_invalid_body">
-Appuyez sur CRÉER UNE CLÉ pour ouvrir la page de gestion des clés de votre instance Grocy.\n
-Créez une nouvelle clé et copiez-la dans votre presse-papiers, puis collez-la dans le champ clé de Grocy Android et réessayez.\n\ n
-
-Si vous utilisez Hass.io avec le module complémentaire Grocy, lisez la section suivante.</string>
-    <string name="help_homeassistant_header">Comment puis-je utiliser cette application avec Hass.io?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_homeassistant_body" >
-Dans le superviseur de Hass.io, ouvrez l\'onglet Configuration du module complémentaire Grocy.\n
-Modifiez le port hôte (qui sera exposé) de \"null\" à tout autre numéro comme \"40\" (sans les guillemets) dans la section Réseau.\n
-Maintenant, dans cette application ici dans le champ \"URL du serveur\", entrez le domaine ou l\'adresse IP de votre serveur Hass.io avec \":\" et le numéro de port choisi.\n
-L\'URL du serveur peut donc ressembler à ceci:\n\n
-
-- http://192.168.178.123:40\n
-- https://myhassioserver.com:40\n\n
-
-Attention! Si votre serveur Hass.io est accessible au public, les points suivants sont importants pour vous:\n\n
-
-- Assurez-vous que vous avez configuré un certificat HTTPS fonctionnel dans la section Configuration du module complémentaire Grocy.\n
-- Démarrez l\'URL avec \"https: //\" comme ci-dessus.\n
-- Définissez un mot de passe fort pour tous les utilisateurs de Grocy (la valeur par défaut est \"admin\"), car tout le monde a désormais accès à votre instance Grocy et elle n\'est plus protégée par la connexion Hass.io.</string>
-    <string name="help_consume_header">Comment consommer un produit?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_consume_body">
-Chaque fois que vous consommez quelque chose, vous le consommez également dans Grocy.\n
-Façons de consommer un produit:\n\n
-
-- Aperçu des stocks: recherchez le produit, faites-le glisser vers la droite et appuyez sur l\'icône CONSOMMER.\n
-- Aperçu des stocks: recherchez le produit, appuyez dessus pour ouvrir l\'aperçu des produits, puis appuyez sur l\'icône CONSOMMER.\n
-- Appuyez sur le bouton vert dans l\'aperçu des stocks pour passer en mode numérisation, assurez-vous que vous êtes en mode CONSOMMATION, puis numérisez votre produit.\n
-- Appuyez sur le raccourci CONSUME de Grocy dans le lanceur d\'applications (depuis Android 7.1) et scannez votre produit.\n
-- Ouvrez la page CONSOMMER dans le tiroir du bas et remplissez le formulaire, puis appuyez sur le bouton vert.</string>
-    <string name="help_open_header">Comment marquer un produit comme ouvert?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_open_body">
-Chaque fois que vous ouvrez ou abordez quelque chose, vous marquez l\'un d\'entre eux dans Grocy comme ouvert.\n 
-
-Façons de marquer un produit comme ouvert:\n\n 
-   - Aperçu du stock: recherchez le produit, balayez vers la droite et appuyez sur l\'icône OUVERT.\n - Aperçu des stocks: recherchez le produit, appuyez dessus pour ouvrir l\'aperçu des produits, puis appuyez sur l\'icône OUVERT.\n       
-- Appuyez sur le bouton vert dans l\'aperçu des stocks pour passer en mode de numérisation, appuyez sur le Étiquette CONSUME pour passer à MARQUER COMME OUVERT, puis numérisez votre produit.\n 
- - Tapez sur le raccourci CONSUME de Grocy dans votre lanceur d\'application (depuis Android 7.1) et continuez comme décrit précédemment.\n 
-- Ouvrez la page CONSUME dans le tiroir du bas et remplissez le formulaire, puis appuyez sur l\'icône OUVRIR dans la barre inférieure.</string>
-    <string name="help_other_question_header">J\'ai encore une question.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_other_question_body">
-Veuillez vous rendre sur notre page de projet sur GitHub et ouvrir un nouveau problème avec votre question.\n
-Nous essaierons de vous aider le plus rapidement possible.</string>
-
-</resources>
+    </resources>
