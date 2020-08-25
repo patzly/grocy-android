@@ -80,7 +80,6 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -553,28 +552,12 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 missingStockItems.add(stockItem);
                             }
                         }
-                        if(DateUtil.getDaysFromNow(stockItem.getBestBeforeDate()) == 0) {
-                            // these stockItems are not in volatile items (API bug?)
-                            if(!expiringItems.contains(stockItem)) {
-                                expiringItems.add(stockItem);
-                            }
-                        }
                     }
-                    // update of chip is necessary because number of items maybe has changed
-                    // (if this lambda function was executed after the one of getVolatile)
-                    chipExpiring.setText(
-                            activity.getString(R.string.msg_expiring_products, expiringItems.size())
-                    );
                     stockItemsDownloaded.set(true);
                     if(volatileItemsDownloaded.get()) downloadMissingItemDetails(queue);
                 }),
                 dlHelper.getVolatile((expiring, expired, missing) -> {
-                    for(StockItem stockItem : expiring) {
-                        // checking is necessary because same item can already be added above
-                        if(!expiringItems.contains(stockItem)) {
-                            expiringItems.add(stockItem);
-                        }
-                    }
+                    expiringItems = expiring;
                     expiredItems = expired;
                     missingItems = missing;
                     chipExpiring.setText(
