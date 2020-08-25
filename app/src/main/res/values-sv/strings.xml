@@ -363,7 +363,6 @@
     <string name="info_developers">Utvecklare</string>
     <string name="info_github">Grocy Android på GitHub</string>
     <string name="info_github_description">Källkod</string>
-
     <string name="feature_1_title">Grocy för Android</string>
     <string name="feature_1_description">Lokalt hostad livsmedelshantering för ditt hem</string>
     <string name="feature_2_title">Intuitiv design</string>
@@ -403,7 +402,6 @@
     <string name="setting_sync_off">Synkronisering av</string>
     <string name="setting_not_loaded">Kunde inte läsas in</string>
     <string name="setting_debug">Aktivera loggning</string>
-    <string name="setting_debug_description">Hitta och rapportera fel</string>
     <string name="setting_info_logs">Visa informationsloggar</string>
     <string name="setting_logs_description">Visa logcat-loggar för denna process</string>
 
@@ -417,76 +415,4 @@
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://sv.demo.grocy.info</string>
-    <!-- Strings for HelpActivity -->
-
-    <string name="help_general_header">Hur vet jag vad en viss knapp/element har för funktion?</string>
-    <string name="help_general_body">Från och med Android 8 går det att trycka länge på många interaktiva element som saknar text för att se vilken funktion det har.</string>
-    <string name="help_key_invalid_header">Min API-nyckel är ogiltig.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_key_invalid_body">
-        Tryck på SKAPA NYCKEL för att öppna sidan för hantering av API-nycklar från din Grocy-instans.\n
-        Skapa en ny nyckel och kopiera den till klippbordet. Klistra sedan in den i API-nyckelfältet i Grocy Android och prova igen.\n\n
-
-        Om du använder Grocy-tillägget från Hass.io, läs nästa sektion.
-    </string>
-    <string name="help_homeassistant_header">Hur kan jag använda appen tillsammans med Hass.io?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_homeassistant_body" >
-        Under Supervisor-menyn i Home Assistant / Hass.io, öppna konfigurationsfliken för Grocy-tillägget.\n
-        I sektionen \"nätverk\", ändra porten (där tillägget kommer att lyssna efter anslutningar) från \"null\" till \"40\" (utan citattecken).\n
-        I fältet \"Server URL\" i den här appen, ange domänen eller IP-adressen till din Hass.io server följt av \":40\".\n
-        Fältet för Server URL kan då se ut som följande:\n\n
-
-        - http://192.168.178.123:40\n
-        - https://minhassioserver.com:40\n\n
-
-        Observera! Om din Hass.io server är publikt åtkomlig så är följande punkter viktiga:\n\n
-
-        - Se till att ett giltigt certifikat är angivet i konfigurationssektionen för Grocy-tillägget.\n
-        - URL:en till servern som angivits ovan måste börja med \"https://\".\n
-        - Sätt ett starkt lösenord för alla användare i Grocy (standard är \"admin\"), då din Grocy-instans är åtkomlig för alla på internet och inte längre kräver inloggning till Hass.io.
-    </string>
-    <string name="help_consume_header">Hur konsumerar man en produkt?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_consume_body">
-        Varje gång du konsumerar något i den här appen så konsumeras det också i Grocy.\n
-        En produkt kan konsumeras på följande sätt:\n\n
-
-        - Lageröversikt: leta upp produkten, svep fingret till höger över den och tryck på ikonen för KONSUMERA.\n
-        - Lageröversikt: leta upp produkten, tryck på den för att öppna produktöversikten och tryck sedan på ikonen för KONSUMERA.\n
-        - Tryck på den gröna knappen i lageröversikten för att starta skanningsläget, se till att läget KONSUMERA är valt, och skanna sedan produktens steckkod.\n
-        - Tryck på genvägen KONSUMERA efter att ha tryckt länge på Grocy i din enhets programstartare (endast Android 7.1 eller nyare) och skanna sedan en produkt.\n
-        - Öppna sidan KONSUMERA i menyn längst ner till vänster i lageröversikten. Fyll sedan i formuläret och tryck på den gröna knappen för att bekräfta.
-    </string>
-    <string name="help_open_header">Hur markerar man en produkt som öppnad?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_open_body">
-        Varje gång du markerar en produkt som öppnad så markeras den också direkt i Grocy.\n
-        En produkt kan markeras som öppnad på följande sätt:\n\n
-
-        - Lageröversikt: leta upp produkten, svep fingret till höger över den och tryck på ikonen för ÖPPNA.\n
-        - Lageröversikt: leta upp produkten, tryck på den för att öppna produktöversikten och tryck sedan på ikonen för ÖPPNA.\n
-        - Tryck på den gröna knappen i lageröversikten för att starta skanningsläget, tryck på texten KONSUMERA för att byta till läget MARKERA SOM ÖPPNAD, och skanna sedan produktens steckkod.\n
-        - Tryck på genvägen KONSUMERA efter att ha tryckt länge på Grocy i din enhets programstartare (endast Android 7.1 eller nyare) och fortsätt sedan som i steget ovan.\n
-        -  Öppna sidan KONSUMERA i menyn längst ner till vänster i lageröversikten. Fyll sedan i formuläret och tryck på ikonen för MARKERA SOM ÖPPNAD i menyn nere till vänster.
-    </string>
-    <string name="help_selfie_camera_header">Varför är streckkoder oläsliga när jag använder den främre kameran?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_selfie_camera_body">
-        Många enheter har en främre kamera med fast fokus anpassat för avståndet mellan dina ögon och enheten.\n
-        Vid det här avståndet är upplösningen ibland för låg för att skanningsalgoritmen ska kunna känna igen en streckkod.
-    </string>
-    <string name="help_other_question_header">Jag har en annan fråga.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_other_question_body">
-        Vänligen gå till vår projektsida på GitHub och öppna ett nytt ärende med din fråga.\n
-        Vi kommer att försöka hjälpa dig så fort som möjligt.
-    </string>
-
-</resources>
+    </resources>
