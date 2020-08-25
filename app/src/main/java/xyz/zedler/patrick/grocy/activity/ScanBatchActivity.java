@@ -1213,7 +1213,8 @@ public class ScanBatchActivity extends AppCompatActivity
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
             try {
-                fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+                // there was an IllegalStateException sometimes
+                bottomSheet.show(fragmentManager, tag);
                 if(debug) Log.i(TAG, "showBottomSheet: " + tag);
             } catch (IllegalStateException ignore) {}
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");

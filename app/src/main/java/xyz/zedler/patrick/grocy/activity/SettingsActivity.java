@@ -968,10 +968,7 @@ public class SettingsActivity extends AppCompatActivity
 
 	private void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
 		if(bundle != null) bottomSheet.setArguments(bundle);
-		getSupportFragmentManager()
-				.beginTransaction()
-				.add(bottomSheet, bottomSheet.toString())
-				.commit();
+		bottomSheet.show(getSupportFragmentManager(), bottomSheet.toString());
 	}
 
 	public void showKeyboard(EditText editText) {
