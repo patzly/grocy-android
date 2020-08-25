@@ -1,5 +1,5 @@
 1.8.3:
-- Bug fixes and improvements
+- Hotfix for batch mode
 
 1.8.2:
 - Moved in-app help to project page on Github
