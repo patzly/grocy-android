@@ -8,14 +8,14 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## Index
 
-* [How to ...?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-howto)
+* [How to](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-howto)
 * [Planned features](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-planned-features)
 * [Frequently Asked Questions](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Support](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
 <a name="howto">
 
-## How to ...?
+## How to
 
 <a name="howto-consume"></a>
 **(1) How to consume a product?**
