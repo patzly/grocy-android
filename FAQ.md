@@ -8,10 +8,10 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## Index
 
-* [How to ...?](#user-content-howto)
-* [Planned features](#user-content-planned-features)
-* [Frequently Asked Questions](#user-content-frequently-asked-questions)
-* [Support](#user-content-support)
+* [How to ...?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-howto)
+* [Planned features](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-planned-features)
+* [Frequently Asked Questions](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-frequently-asked-questions)
+* [Support](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
 <a name="howto">
 
@@ -55,13 +55,13 @@ Anything on this list is in random order and *might* be added in the near future
 
 ## Frequently Asked Questions
 
-* [(1) Which permissions are needed and why?](#user-content-faq1)
-* [(2) How do I know what something does?](#user-content-faq2)
-* [(3) My API key is invalid. What can I do?](#user-content-faq3)
-* [(4) How can I use this app with Hass.io?](#user-content-faq4)
-* [(5) Why are my barcodes unreadable if I use the selfie camera?](#user-content-faq5)
+* [(1) Which permissions are needed and why?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq1)
+* [(2) How do I know what something does?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq2)
+* [(3) My API key is invalid. What can I do?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq3)
+* [(4) How can I use this app with Hass.io?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4)
+* [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
 
-[I have another question.](#user-content-support)
+[I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
 <br />
 
@@ -90,7 +90,7 @@ Starting with Android 8 you can long press almost every clickable element withou
 Tap CREATE KEY to open the key management page of your Grocy instance.
 Create a new key and copy it to your clipboard, then paste it in the key field of Grocy Android and try again.
 
-If you use Hass.io with the Grocy Add-on, read [this](#user-content-faq4) section.
+If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) section.
 
 <br />
 
