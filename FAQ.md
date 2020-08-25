@@ -17,7 +17,7 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 
 ## How to ...?
 
-<a name="howto1"></a>
+<a name="howto-consume"></a>
 **(1) How to consume a product?**
 
 Every time you consume something, you consume it in Grocy as well.
@@ -31,7 +31,7 @@ Ways to consume a product:
 
 <br />
 
-<a name="howto2"></a>
+<a name="howto-open"></a>
 **(2) How to mark a product as opened?**
 
 Every time you open or broach something, you mark one of it in Grocy as open.
@@ -102,8 +102,8 @@ Change the host port (which will be exposed) from "null" to any other number lik
 Now in this app here in the field "Server URL", enter the domain or IP address of your Hass.io server together with ":" and the chosen port number.
 So the Server URL can look like this:
 
-- http://192.168.178.123:40
-- https://myhassioserver.com:40
+- `http://192.168.178.123:40`
+- `https://myhassioserver.com:40`
 
 Attention! If your Hass.io server is publicly accessible, following points are important for you:
 
