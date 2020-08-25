@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -163,10 +164,7 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
             }
         });
 
-        view.findViewById(R.id.button_batch_name_discard).setOnClickListener(v -> {
-            dismiss();
-            activity.resumeScan();
-        });
+        view.findViewById(R.id.button_batch_name_discard).setOnClickListener(v -> dismiss());
 
         textInputProduct = view.findViewById(R.id.text_input_batch_choose_name);
         autoCompleteTextViewProduct = (MaterialAutoCompleteTextView) textInputProduct.getEditText();
@@ -238,6 +236,12 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
         dlHelper.destroy();
     }
 
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        activity.resumeScan();
+    }
+
     private void addProductBarcode(String barcode) {
         List<String> barcodes;
         if(selectedProduct.getBarcode() != null && !selectedProduct.getBarcode().isEmpty()) {
@@ -276,7 +280,6 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
                 Snackbar.LENGTH_SHORT
         ).show();
         dismiss();
-        activity.resumeScan();
     }
 
     private Product getProductFromName(String name) {
