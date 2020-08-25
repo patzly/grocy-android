@@ -363,7 +363,6 @@
     <string name="info_developers">Ontwikkelaars</string>
     <string name="info_github">Grocy Android op GitHub</string>
     <string name="info_github_description">Broncode</string>
-
     <string name="feature_1_title">Grocy voor Android</string>
     <string name="feature_1_description">Zelfgehost boodschappen management tool voor thuis</string>
     <string name="feature_2_title">Intuïtief ontwerp</string>
@@ -403,7 +402,6 @@
     <string name="setting_sync_off">Synchonisatie uit</string>
     <string name="setting_not_loaded">Kon niet worden geladen</string>
     <string name="setting_debug">Logging aangezet</string>
-    <string name="setting_debug_description">Vind en rapporteer fouten</string>
     <string name="setting_info_logs">Info-Logs bekijken</string>
     <string name="setting_logs_description">Logcat van dit proces bekijken</string>
 
@@ -417,76 +415,4 @@
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://nl.demo.grocy.info</string>
-    <!-- Strings for HelpActivity -->
-
-    <string name="help_general_header">Hoe weet ik wat iets doet?</string>
-    <string name="help_general_body">Vanaf Android 8 kun je bijna elk klikbaar element lang zonder label indrukken om te zien wat het zal doen.</string>
-    <string name="help_key_invalid_header">Mijn API sleutel is niet geldig.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_key_invalid_body">
-        Druk op SLEUTEL AANMAKEN om naar de pagina Sleutel Management op uw Grocy-instantie te gaan. \n
-        Maak een nieuwe sleutel en kopieer deze naar het klembord, plak deze in het veld API-sleutel in Grocy Android en probeer het opnieuw.\n\n
-
-        Als je Hass.io gebruikt met de Grocy-add-on, lees dan de volgende vraag.
-    </string>
-    <string name="help_homeassistant_header">Kan ik de app icm Hass.io gebruiken?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_homeassistant_body" >
-        Open in de Hass.io-supervisor het tabblad "Configuratie" in de Grocy-add-on.\n
-        Verander de hostpoort (die zal worden onthuld) van \"null\" in een nummer, b.v. \"40\" (zonder aanhalingstekens) in het netwerkgedeelte.\n
-        Voer nu het domein of IP-adres van uw Hass.io-server samen met \":\" en het geselecteerde poortnummer in het veld \"Server-URL\" in deze app in.\n
-        De server-URL kan er nu als volgt uitzien: \n\n
-
-        - http://192.168.178.123:40\n
-        - https://myhassioserver.com:40\n\n
-
-        Let op! Als uw Hass.io-server openbaar toegankelijk is, let dan op het volgende:\n\n
-
-        - Zorg ervoor dat u een werkend HTTPS-certificaat heeft ingesteld in de configuratie van de Grocy-add-on.\n
-        - Start de URL met \"https://\" zoals in het bovenstaande voorbeeld.\n
-        - Stel een sterk wachtwoord in voor alle gebruikers in Grocy (standaard is \"admin\"), omdat iedereen nu toegang heeft tot uw Grocy-instantie en het niet langer wordt beschermd door de Hass.io-login.
-    </string>
-    <string name="help_consume_header">Hoe consumeer je een product?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_consume_body">
-        Elke keer dat je iets consumeert, consumeer je het ook in Grocy.\n
-        Manieren om een ​​product te consumeren: \n\n
-
-        - Voorraad: zoek het product, swipe naar rechts en tik op het CONSUMEER-icoontje (het bestek icoontje).\n
-        - Inventaris: zoek naar het product, klik erop om het productoverzicht te openen en tik vervolgens op het pictogram CONSUMEREN.\n
-        - Druk op de groene knop in de inventaris om in de batchmodus te komen, zorg ervoor dat de modus "Consumeren" is en scan je product.\n
-        - Druk op de Grocy-link in uw app-opstartprogramma (sinds Android 7.1) en scan je product.\n
-        - Open de Consumeer pagina in het hoofdmenu en vul het formulier in. Druk dan op de groene knop.
-    </string>
-    <string name="help_open_header">Hoe markeer je een product als geopend?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_open_body">
-        Elke keer dat je iets opent of aanbreekt, markeer het dan als open in Grocy.\n
-        Manieren om een ​​product als open te markeren: \n\n
-
-        - Voorraad: zoek het product, swipe naar rechts en tik op het icoontje OPENEN.\n
-        - Voorraad: Zoek het product, klik erop om het productoverzicht te openen en tik vervolgens op het icoontje OPENEN.\n
-        - Druk op de groene knop in de inventaris om in de batchmodus te komen, druk op de modusknop zodat de modus "Markeer als open" is en scan je product.\n
-        - Druk op de snelkoppeling USE Grocy in uw app-opstartprogramma (sinds Android 7.1) en ga verder zoals hierboven.\n
-        - Open de Consumeer pagina in het hoofdmenu en vul het formulier in. Druk vervolgens op het OPEN-symbool onderaan de balk.
-    </string>
-    <string name="help_selfie_camera_header">Waarom zijn mijn barcodes onleesbaar als in de selfie-cam gebruik?</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_selfie_camera_body">
-        De meeste apparaten hebben een camera aan de voorkant met een vaste focus voor de normale afstand tussen je ogen en het apparaat.\n
-        Op deze afstand is de beeldresolutie soms te laag voor het scanalgoritme.
-    </string>
-    <string name="help_other_question_header">Ik heb nog een andere vraag.</string>
-    <!-- Simply click in Transifex on the button "Copy source string" or press Ctrl+g to copy the English text together with the formatting.
-    Then you can translate by replacing one sentence by its translation and so on. -->
-    <string name="help_other_question_body">
-        Ga naar onze projectpagina op GitHub en open een nieuw probleem met je vraag.\n
-        We helpen je zo snel mogelijk.
-    </string>
-
-</resources>
+    </resources>
