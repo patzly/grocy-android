@@ -18,7 +18,7 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 ## How to
 
 <a name="howto-consume"></a>
-**(1) How to consume a product?**
+**How to consume a product?**
 
 Every time you consume something, you consume it in Grocy as well.
 Ways to consume a product:
@@ -32,7 +32,7 @@ Ways to consume a product:
 <br />
 
 <a name="howto-open"></a>
-**(2) How to mark a product as opened?**
+**How to mark a product as opened?**
 
 Every time you open or broach something, you mark one of it in Grocy as open.
 Ways to mark a product as opened:
