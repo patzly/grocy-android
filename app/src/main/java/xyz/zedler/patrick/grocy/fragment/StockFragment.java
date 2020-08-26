@@ -1266,6 +1266,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private void updateMenuFilterVisibility() {
         if(activity == null) return;
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
+        if(menuItem == null) return;
         if(productGroups == null || productGroups.isEmpty()
                 || locations == null
                 || locations.isEmpty()

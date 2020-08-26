@@ -47,7 +47,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.card.MaterialCardView;
@@ -97,7 +96,6 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.BarcodeRipple;
-import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
@@ -117,7 +115,6 @@ public class ScanBatchActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private Gson gson = new Gson();
     private GrocyApi grocyApi;
-    private RequestQueue requestQueue;
     private DownloadHelper dlHelper;
     private SharedPreferences sharedPrefs;
 
@@ -176,8 +173,7 @@ public class ScanBatchActivity extends AppCompatActivity
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         // WEB REQUESTS
-
-        requestQueue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+        
         dlHelper = new DownloadHelper(this, TAG);
 
         // API
@@ -1217,14 +1213,11 @@ public class ScanBatchActivity extends AppCompatActivity
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
             try {
-                fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+                // there was an IllegalStateException sometimes
+                bottomSheet.show(fragmentManager, tag);
                 if(debug) Log.i(TAG, "showBottomSheet: " + tag);
             } catch (IllegalStateException ignore) {}
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
-    }
-
-    public RequestQueue getRequestQueue() {
-        return requestQueue;
     }
 
     public GrocyApi getGrocy() {

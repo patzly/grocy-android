@@ -155,8 +155,8 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
                     } else {
                         // name from list is name of batchItem product
                         activity.addBatchItemBarcode(barcode, inputText);
+                        dismiss();
                     }
-                    dismiss();
                 } else {
                     textInputProduct.setError(activity.getString(R.string.error_invalid_product));
                 }

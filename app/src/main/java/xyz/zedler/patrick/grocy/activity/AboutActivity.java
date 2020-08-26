@@ -188,8 +188,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 			bundle.putString(Constants.ARGUMENT.LINK, getString(link));
 		}
 		bottomSheet.setArguments(bundle);
-		getSupportFragmentManager().beginTransaction()
-				.add(bottomSheet, bottomSheet.toString())
-				.commit();
+		bottomSheet.show(getSupportFragmentManager(), bottomSheet.toString());
 	}
 }

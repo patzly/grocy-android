@@ -366,7 +366,7 @@ public class LoginActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
-            fragmentManager.beginTransaction().add(bottomSheet, tag).commit();
+            bottomSheet.show(fragmentManager, tag);
             if(DEBUG) Log.i(TAG, "showBottomSheet: " + tag);
         } else Log.e(TAG, "showBottomSheet: sheet already visible");
     }

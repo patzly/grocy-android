@@ -1110,7 +1110,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
-            bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+            bottomSheet.show(fragmentManager, tag);
             if(debug) Log.i(TAG, "showBottomSheet: " + tag);
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }

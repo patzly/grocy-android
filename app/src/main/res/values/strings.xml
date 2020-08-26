@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">Grocy</string>
-    <string name="app_version" translatable="false">1.8.1</string>
+    <string name="app_version" translatable="false">1.8.3</string>
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 

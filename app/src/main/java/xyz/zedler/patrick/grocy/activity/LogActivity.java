@@ -68,10 +68,7 @@ public class LogActivity extends AppCompatActivity {
 			switch (item.getItemId()) {
 				case R.id.action_feedback:
 					BottomSheetDialogFragment sheet = new FeedbackBottomSheetDialogFragment();
-					getSupportFragmentManager()
-							.beginTransaction()
-							.add(sheet, sheet.toString())
-							.commit();
+					sheet.show(getSupportFragmentManager(), sheet.toString());
 					break;
 				case R.id.action_refresh:
 					setLog(showInfo);

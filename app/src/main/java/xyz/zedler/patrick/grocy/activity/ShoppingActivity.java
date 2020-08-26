@@ -683,7 +683,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment == null || !fragment.isVisible()) {
             if(bundle != null) bottomSheet.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().add(bottomSheet, tag).commit();
+            bottomSheet.show(getSupportFragmentManager(), tag);
             if(debug) Log.i(TAG, "showBottomSheet: " + tag);
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
