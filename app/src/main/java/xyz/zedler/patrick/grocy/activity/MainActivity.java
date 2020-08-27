@@ -1172,7 +1172,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Fragment getCurrentFragment() {
-        return fragmentCurrent;
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getFragments().get(0);
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

@@ -25,17 +25,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -47,7 +57,6 @@ public class MasterDataBottomSheetDialogFragment
     private MainActivity activity;
     private View view;
     private SharedPreferences sharedPrefs;
-    private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
 
     @NonNull
@@ -72,8 +81,6 @@ public class MasterDataBottomSheetDialogFragment
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
-
         setOnClickListeners(
                 R.id.linear_master_data_products,
                 R.id.linear_master_data_locations,
@@ -82,15 +89,17 @@ public class MasterDataBottomSheetDialogFragment
                 R.id.linear_master_data_product_groups
         );
 
-        if(uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
+        Fragment currentFragment = activity.getCurrentFragment();
+
+        if(currentFragment instanceof MasterProductsFragment) {
             select(R.id.linear_master_data_products, R.id.text_master_data_products);
-        } else if(uiMode.startsWith(Constants.UI.MASTER_LOCATIONS)) {
+        } else if(currentFragment instanceof MasterLocationsFragment) {
             select(R.id.linear_master_data_locations, R.id.text_master_data_locations);
-        } else if(uiMode.startsWith(Constants.UI.MASTER_STORES)) {
+        } else if(currentFragment instanceof MasterStoresFragment) {
             select(R.id.linear_master_data_stores, R.id.text_master_data_stores);
-        } else if(uiMode.startsWith(Constants.UI.MASTER_QUANTITY_UNITS)) {
+        } else if(currentFragment instanceof MasterQuantityUnitsFragment) {
             select(R.id.linear_master_data_quantity_units, R.id.text_master_data_quantity_units);
-        } else if(uiMode.startsWith(Constants.UI.MASTER_PRODUCT_GROUPS)) {
+        } else if(currentFragment instanceof MasterProductGroupsFragment) {
             select(R.id.linear_master_data_product_groups, R.id.text_master_data_product_groups);
         }
 
@@ -110,55 +119,51 @@ public class MasterDataBottomSheetDialogFragment
 
         switch(v.getId()) {
             case R.id.linear_master_data_products:
-                if(!uiMode.startsWith(Constants.UI.MASTER_PRODUCTS)) {
-                    replaceFragment(Constants.UI.MASTER_PRODUCTS);
-                }
+                navigate(R.id.masterProductsFragment);
                 break;
             case R.id.linear_master_data_locations:
-                if(!uiMode.startsWith(Constants.UI.MASTER_LOCATIONS)) {
-                    replaceFragment(Constants.UI.MASTER_LOCATIONS);
-                }
+                navigate(R.id.masterLocationsFragment);
                 break;
             case R.id.linear_master_data_stores:
-                if(!uiMode.startsWith(Constants.UI.MASTER_STORES)) {
-                    replaceFragment(Constants.UI.MASTER_STORES);
-                }
+                navigate(R.id.masterStoresFragment);
                 break;
             case R.id.linear_master_data_quantity_units:
-                if(!uiMode.startsWith(Constants.UI.MASTER_QUANTITY_UNITS)) {
-                    replaceFragment(Constants.UI.MASTER_QUANTITY_UNITS);
-                }
+                navigate(R.id.masterQuantityUnitsFragment);
                 break;
             case R.id.linear_master_data_product_groups:
-                if(!uiMode.startsWith(Constants.UI.MASTER_PRODUCT_GROUPS)) {
-                    replaceFragment(Constants.UI.MASTER_PRODUCT_GROUPS);
-                }
+                navigate(R.id.masterProductGroupsFragment);
                 break;
         }
     }
 
+    private void navigate(int fragmentId) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+        builder.setPopUpTo(R.id.stockFragment, false);
+        if(! (activity.getCurrentFragment() instanceof StockFragment)) {
+            builder.setExitAnim(R.anim.slide_out_down);
+        }
+        NavHostFragment.findNavController(this).navigate(
+                fragmentId,
+                null,
+                builder.build()
+        );
+        dismiss();
+    }
+
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId) {
-        view.findViewById(linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
+        LinearLayout linearLayout = view.findViewById(linearLayoutId);
+        linearLayout.setBackgroundResource(R.drawable.bg_drawer_item_selected);
+        linearLayout.setClickable(false);
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
     }
 
-    private void replaceFragment(String fragmentNew) {
-        activity.replaceAll(fragmentNew, null, true);
-        dismiss();
-    }
-
     private void hideDisabledFeatures() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING, true)) {
             view.findViewById(R.id.linear_master_data_locations).setVisibility(View.GONE);
         }
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

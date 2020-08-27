@@ -28,21 +28,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -114,14 +127,20 @@ public class DrawerBottomSheetDialogFragment
                 R.id.linear_help
         );
 
-        if(uiMode.startsWith(Constants.UI.SHOPPING_LIST)) {
-            select(R.id.linear_drawer_shopping_list, R.id.text_drawer_shopping_list);
-        } else if(uiMode.startsWith(Constants.UI.CONSUME)) {
-            select(R.id.linear_drawer_consume, R.id.text_drawer_consume);
-        } else if(uiMode.startsWith(Constants.UI.PURCHASE)) {
-            select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase);
-        } else if(uiMode.startsWith(Constants.UI.MASTER)) {
-            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data);
+        Fragment currentFragment = activity.getCurrentFragment();
+        if(currentFragment instanceof ShoppingListFragment) {
+            select(R.id.linear_drawer_shopping_list, R.id.text_drawer_shopping_list, false);
+        } else if(currentFragment instanceof ConsumeFragment) {
+            select(R.id.linear_drawer_consume, R.id.text_drawer_consume, false);
+        } else if(currentFragment instanceof PurchaseFragment) {
+            select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase, false);
+        } else if(currentFragment instanceof MasterProductsFragment
+                || currentFragment instanceof MasterLocationsFragment
+                || currentFragment instanceof MasterStoresFragment
+                || currentFragment instanceof MasterQuantityUnitsFragment
+                || currentFragment instanceof MasterProductGroupsFragment
+        ) {
+            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data, true);
         }
 
         hideDisabledFeatures();
@@ -140,37 +159,23 @@ public class DrawerBottomSheetDialogFragment
 
         switch(v.getId()) {
             case R.id.linear_drawer_shopping_list:
-                if(!uiMode.startsWith(Constants.UI.SHOPPING_LIST)) {
-                    replaceFragment(Constants.UI.SHOPPING_LIST);
-                }
+                navigate(R.id.shoppingListFragment);
                 break;
             case R.id.linear_drawer_consume:
-                if(!uiMode.startsWith(Constants.UI.CONSUME)) {
-                    replaceFragment(Constants.UI.CONSUME);
-                }
+                navigate(R.id.consumeFragment);
                 break;
             case R.id.linear_drawer_purchase:
-                if(!uiMode.startsWith(Constants.UI.PURCHASE)) {
-                    replaceFragment(Constants.UI.PURCHASE);
-                }
+                navigate(R.id.purchaseFragment);
                 break;
             case R.id.linear_drawer_master_data:
-                dismiss();
-                Bundle bundle = new Bundle();
-                // selection for master data sheet
-                bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
-                activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), bundle);
+                navigate(R.id.masterDataBottomSheetDialogFragment);
                 break;
             case R.id.linear_settings:
                 IconUtil.start(view, R.id.image_settings);
-                new Handler().postDelayed(() -> {
-                    dismiss();
-                    startActivity(new Intent(activity, SettingsActivity.class));
-                }, 300);
+                new Handler().postDelayed(() -> navigate(R.id.settingsActivity), 300);
                 break;
             case R.id.linear_feedback:
-                dismiss();
-                activity.showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+                navigate(R.id.feedbackBottomSheetDialogFragment);
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);
@@ -189,16 +194,33 @@ public class DrawerBottomSheetDialogFragment
         }
     }
 
-    private void replaceFragment(String fragmentNew) {
-        activity.replaceAll(fragmentNew, null, true);
+    private void navigate(int fragmentId) {
         dismiss();
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+        builder.setPopUpTo(R.id.stockFragment, false);
+        if(! (activity.getCurrentFragment() instanceof StockFragment)) {
+            builder.setExitAnim(R.anim.slide_out_down);
+        }
+        NavHostFragment.findNavController(this).navigate(
+                fragmentId,
+                null,
+                builder.build()
+        );
     }
 
-    private void select(@IdRes int linearLayoutId, @IdRes int textViewId) {
-        view.findViewById(linearLayoutId).setBackgroundResource(R.drawable.bg_drawer_item_selected);
+    private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {
+        LinearLayout linearLayout = view.findViewById(linearLayoutId);
+        linearLayout.setBackgroundResource(R.drawable.bg_drawer_item_selected);
+        linearLayout.setClickable(clickable);
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.retro_green_fg)
         );
+    }
+
+    private void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
+        dismiss();
+        activity.showBottomSheet(bottomSheet, null);
     }
 
     private void hideDisabledFeatures() {

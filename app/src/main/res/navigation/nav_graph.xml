@@ -7,4 +7,48 @@
         android:id="@+id/stockFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.StockFragment"
         android:label="StockFragment" />
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
+        android:label="ShoppingListFragment" />
+    <fragment
+        android:id="@+id/consumeFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
+        android:label="ConsumeFragment" />
+    <fragment
+        android:id="@+id/purchaseFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
+        android:label="PurchaseFragment" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
+        android:label="SettingsActivity" />
+    <dialog
+        android:id="@+id/masterDataBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDataBottomSheetDialogFragment"
+        android:label="MasterDataBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/masterProductsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
+        android:label="MasterProductsFragment" />
+    <fragment
+        android:id="@+id/masterStoresFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterStoresFragment"
+        android:label="MasterStoresFragment" />
+    <fragment
+        android:id="@+id/masterLocationsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment"
+        android:label="MasterLocationsFragment" />
+    <fragment
+        android:id="@+id/masterQuantityUnitsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment"
+        android:label="MasterQuantityUnitsFragment" />
+    <fragment
+        android:id="@+id/masterProductGroupsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment"
+        android:label="MasterProductGroupsFragment" />
+    <dialog
+        android:id="@+id/feedbackBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment"
+        android:label="FeedbackBottomSheetDialogFragment" />
 </navigation>
