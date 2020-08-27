@@ -40,7 +40,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -76,7 +75,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class ShoppingListItemEditFragment extends Fragment {
+public class ShoppingListItemEditFragment extends BasicFragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
 
@@ -326,11 +325,27 @@ public class ShoppingListItemEditFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list_item_edit);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_shopping_list_item_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveItem
         );
     }
 
@@ -434,55 +449,60 @@ public class ShoppingListItemEditFragment extends Fragment {
     private void onQueueEmpty() {
         binding.swipeShoppingListItemEdit.setRefreshing(false);
 
-        String action = null;
-        if(startupBundle != null) {
-            action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-        }
-        if(action != null && action.equals(Constants.ACTION.EDIT)) {
-            ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                    Constants.ARGUMENT.SHOPPING_LIST_ITEM
-            );
-            if(shoppingListItem == null) return;
-            String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
-            if(productName != null) {
-                // is given after new product was created from this fragment
-                // with method (setProductName)
-                binding.autoCompleteShoppingListItemEditProduct.setText(productName);
-            } else if(shoppingListItem.getProduct() != null) {
-                binding.autoCompleteShoppingListItemEditProduct.setText(
-                        shoppingListItem.getProduct().getName()
+        assert getArguments() != null;
+        ShoppingListItemEditFragmentArgs args = ShoppingListItemEditFragmentArgs
+                .fromBundle(getArguments());
+
+        String action = args.getAction();
+        switch (action) {
+            case Constants.ACTION.EDIT: {
+                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
+                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
                 );
+                if (shoppingListItem == null) return;
+                String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                if (productName != null) {
+                    // is given after new product was created from this fragment
+                    // with method (setProductName)
+                    binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+                } else if (shoppingListItem.getProduct() != null) {
+                    binding.autoCompleteShoppingListItemEditProduct.setText(
+                            shoppingListItem.getProduct().getName()
+                    );
+                }
+                binding.editTextShoppingListItemEditAmount.setText(
+                        NumUtil.trim(shoppingListItem.getAmount())
+                );
+                selectShoppingList(shoppingListItem.getShoppingListId());
+                binding.editTextShoppingListItemEditNote.setText(
+                        TextUtil.trimCharSequence(shoppingListItem.getNote())
+                );
+                break;
             }
-            binding.editTextShoppingListItemEditAmount.setText(
-                    NumUtil.trim(shoppingListItem.getAmount())
-            );
-            selectShoppingList(shoppingListItem.getShoppingListId());
-            binding.editTextShoppingListItemEditNote.setText(
-                    TextUtil.trimCharSequence(shoppingListItem.getNote())
-            );
-        } else if(action != null && action.equals(Constants.ACTION.CREATE)) {
-            String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
-            if(productName != null) {
-                // is given after new product was created from this fragment
-                // with method (setProductName)
-                binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+            case Constants.ACTION.CREATE: {
+                String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                if (productName != null) {
+                    // is given after new product was created from this fragment
+                    // with method (setProductName)
+                    binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+                }
+                if (shoppingLists.size() >= 1 && getArguments() != null) {
+                    selectShoppingList(args.getSelectedShoppingListId());
+                } else {
+                    selectShoppingList(-1);
+                }
+                break;
             }
-            if(shoppingLists.size() >= 1) {
-                selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
-            } else {
-                selectShoppingList(-1);
-            }
-        } else if(action != null && action.equals(Constants.ACTION.CREATE_FROM_STOCK)) {
-            Product product = startupBundle.getParcelable(
-                    Constants.ARGUMENT.PRODUCT
-            );
-            if(product == null) return;
-            binding.autoCompleteShoppingListItemEditProduct.setText(product.getName());
-            if(shoppingLists.size() >= 1) {
-                selectShoppingList(shoppingLists.get(0).getId());
-            } else {
-                selectShoppingList(-1);
-            }
+            case Constants.ACTION.CREATE_FROM_STOCK:
+                Product product = startupBundle.getParcelable(Constants.ARGUMENT.PRODUCT);
+                if (product == null) return;
+                binding.autoCompleteShoppingListItemEditProduct.setText(product.getName());
+                if (shoppingLists.size() >= 1) {
+                    selectShoppingList(shoppingLists.get(0).getId());
+                } else {
+                    selectShoppingList(-1);
+                }
+                break;
         }
     }
 

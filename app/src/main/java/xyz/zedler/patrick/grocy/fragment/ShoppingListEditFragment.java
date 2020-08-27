@@ -180,11 +180,27 @@ public class ShoppingListEditFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                Constants.UI.SHOPPING_LIST_EDIT,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list_edit);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_shopping_list_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveItem
         );
     }
 

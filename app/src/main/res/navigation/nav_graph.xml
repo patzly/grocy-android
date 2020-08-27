@@ -10,7 +10,11 @@
     <fragment
         android:id="@+id/shoppingListFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
-        android:label="ShoppingListFragment" />
+        android:label="ShoppingListFragment" >
+        <action
+            android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
+            app:destination="@id/shoppingListItemEditFragment" />
+    </fragment>
     <fragment
         android:id="@+id/consumeFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
@@ -30,25 +34,77 @@
     <fragment
         android:id="@+id/masterProductsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
-        android:label="MasterProductsFragment" />
+        android:label="MasterProductsFragment" >
+        <action
+            android:id="@+id/action_masterProductsFragment_to_masterProductSimpleFragment"
+            app:destination="@id/masterProductSimpleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/masterStoresFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterStoresFragment"
-        android:label="MasterStoresFragment" />
+        android:label="MasterStoresFragment" >
+        <action
+            android:id="@+id/action_masterStoresFragment_to_masterStoreFragment"
+            app:destination="@id/masterStoreFragment" />
+    </fragment>
     <fragment
         android:id="@+id/masterLocationsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment"
-        android:label="MasterLocationsFragment" />
+        android:label="MasterLocationsFragment" >
+        <action
+            android:id="@+id/action_masterLocationsFragment_to_masterLocationFragment"
+            app:destination="@id/masterLocationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/masterQuantityUnitsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment"
-        android:label="MasterQuantityUnitsFragment" />
+        android:label="MasterQuantityUnitsFragment" >
+        <action
+            android:id="@+id/action_masterQuantityUnitsFragment_to_masterQuantityUnitFragment"
+            app:destination="@id/masterQuantityUnitFragment" />
+    </fragment>
     <fragment
         android:id="@+id/masterProductGroupsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment"
-        android:label="MasterProductGroupsFragment" />
+        android:label="MasterProductGroupsFragment" >
+        <action
+            android:id="@+id/action_masterProductGroupsFragment_to_masterProductGroupFragment"
+            app:destination="@id/masterProductGroupFragment" />
+    </fragment>
     <dialog
         android:id="@+id/feedbackBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment"
         android:label="FeedbackBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/masterProductSimpleFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment"
+        android:label="MasterProductSimpleFragment" />
+    <fragment
+        android:id="@+id/masterLocationFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationFragment"
+        android:label="MasterLocationFragment" />
+    <fragment
+        android:id="@+id/masterStoreFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterStoreFragment"
+        android:label="MasterStoreFragment" />
+    <fragment
+        android:id="@+id/masterQuantityUnitFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment"
+        android:label="MasterQuantityUnitFragment" />
+    <fragment
+        android:id="@+id/masterProductGroupFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment"
+        android:label="MasterProductGroupFragment" />
+    <fragment
+        android:id="@+id/shoppingListItemEditFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment"
+        android:label="ShoppingListItemEditFragment" >
+        <argument
+            android:name="selectedShoppingListId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="action"
+            app:argType="string" />
+    </fragment>
 </navigation>

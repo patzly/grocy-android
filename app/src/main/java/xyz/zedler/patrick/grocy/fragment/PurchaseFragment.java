@@ -41,7 +41,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -85,7 +84,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class PurchaseFragment extends Fragment {
+public class PurchaseFragment extends BasicFragment {
 
     private final static String TAG = Constants.UI.PURCHASE;
 
@@ -398,8 +397,28 @@ public class PurchaseFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(Constants.UI.PURCHASE, savedInstanceState == null, TAG);
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_purchase,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_local_grocery_store,
+                R.string.action_purchase,
+                Constants.FAB.TAG.PURCHASE,
+                animated,
+                this::purchaseProduct
+        );
     }
 
     @Override

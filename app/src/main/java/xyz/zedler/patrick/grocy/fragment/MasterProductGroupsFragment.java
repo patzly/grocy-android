@@ -35,7 +35,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,7 +66,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterProductGroupsFragment extends Fragment
+public class MasterProductGroupsFragment extends BasicFragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUPS;
@@ -209,13 +209,31 @@ public class MasterProductGroupsFragment extends Fragment
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_product_groups);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_master_items,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_add_anim,
+                R.string.action_add,
+                Constants.FAB.TAG.ADD,
+                animated,
+                () -> NavHostFragment.findNavController(this).navigate(
+                        MasterProductGroupsFragmentDirections
+                                .actionMasterProductGroupsFragmentToMasterProductGroupFragment(),
+                        getNavOptions()
+                )
         );
     }
 
@@ -523,7 +541,7 @@ public class MasterProductGroupsFragment extends Fragment
         binding.textInputMasterProductGroupsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterProductGroupsSearch);
 
-        activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_SEARCH);
+        setIsSearchVisible(true);
     }
 
     public void dismissSearch() {
@@ -532,7 +550,7 @@ public class MasterProductGroupsFragment extends Fragment
         binding.editTextMasterProductGroupsSearch.setText("");
         filterProductGroups();
 
-        activity.setUI(Constants.UI.MASTER_PRODUCT_GROUPS_DEFAULT);
+        setIsSearchVisible(false);
     }
 
     public void checkForUsage(ProductGroup productGroup) {

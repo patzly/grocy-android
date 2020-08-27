@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterLocationFragment extends Fragment {
+public class MasterLocationFragment extends BasicFragment {
 
     private final static String TAG = Constants.UI.MASTER_LOCATION;
 
@@ -177,8 +177,28 @@ public class MasterLocationFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(Constants.UI.MASTER_LOCATION, savedInstanceState == null, TAG);
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_location);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_master_item_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveLocation
+        );
     }
 
     @Override
@@ -376,7 +396,7 @@ public class MasterLocationFragment extends Fragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> NavHostFragment.findNavController(this).navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);
@@ -386,7 +406,7 @@ public class MasterLocationFragment extends Fragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> NavHostFragment.findNavController(this).navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);

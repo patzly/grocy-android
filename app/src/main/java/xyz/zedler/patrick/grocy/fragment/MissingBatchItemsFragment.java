@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -167,33 +168,30 @@ public class MissingBatchItemsFragment extends Fragment
         binding.recyclerMissingBatchItems.setAdapter(missingBatchItemAdapter);
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                Constants.UI.MISSING_BATCH_ITEMS,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_missing_batch_items);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_missing_batch_items,
+                animated,
+                this::setUpBottomMenu
         );
         activity.updateFab(
                 new BitmapDrawable(
                         getResources(),
-                        BitmapUtil.getFromDrawableWithNumber(
-                                activity,
-                                R.drawable.ic_round_shopping_cart,
-                                getReadyPurchaseEntriesSize(),
-                                7.3f,
-                                -1.5f,
-                                8
-                        )
+                        getBitmap(getReadyPurchaseEntriesSize())
                 ),
                 R.string.action_perform_purchasing_processes,
                 Constants.FAB.TAG.PURCHASE,
-                savedInstanceState == null,
-                () -> {
-                    if(activity.getCurrentFragment().getClass()== MissingBatchItemsFragment.class) {
-                        ((MissingBatchItemsFragment) activity.getCurrentFragment())
-                                .doOnePurchaseRequest();
-                    }
-                }
+                animated,
+                this::doOnePurchaseRequest
         );
     }
 
@@ -355,16 +353,20 @@ public class MissingBatchItemsFragment extends Fragment
         new Handler().postDelayed(() -> activity.setFabIcon(
                 new BitmapDrawable(
                         getResources(),
-                        BitmapUtil.getFromDrawableWithNumber(
-                                activity,
-                                R.drawable.ic_round_shopping_cart,
-                                getReadyPurchaseEntriesSize(),
-                                7.3f,
-                                -1.5f,
-                                8
-                        )
+                        getBitmap(getReadyPurchaseEntriesSize())
                 )
         ), 500);
+    }
+
+    private Bitmap getBitmap(int number) {
+        return BitmapUtil.getFromDrawableWithNumber(
+                activity,
+                R.drawable.ic_round_shopping_cart,
+                number,
+                7.3f,
+                -1.5f,
+                8
+        );
     }
 
     private void doOnePurchaseRequest() {

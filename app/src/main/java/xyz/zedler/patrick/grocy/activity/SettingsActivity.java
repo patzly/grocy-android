@@ -37,6 +37,7 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ActivityNavigator;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -369,6 +370,12 @@ public class SettingsActivity extends AppCompatActivity
 	protected void onDestroy() {
 		super.onDestroy();
 		dlHelper.destroy();
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		ActivityNavigator.applyPopAnimationsToPendingTransition(this);
 	}
 
 	private void hideDisabledFeatures() {

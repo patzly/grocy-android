@@ -35,7 +35,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,7 +66,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterLocationsFragment extends Fragment
+public class MasterLocationsFragment extends BasicFragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_LOCATIONS;
@@ -210,13 +210,31 @@ public class MasterLocationsFragment extends Fragment
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_LOCATIONS_DEFAULT
-                        : Constants.UI.MASTER_LOCATIONS_SEARCH,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_locations);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_master_items,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_add_anim,
+                R.string.action_add,
+                Constants.FAB.TAG.ADD,
+                animated,
+                () -> NavHostFragment.findNavController(this).navigate(
+                        MasterLocationsFragmentDirections
+                                .actionMasterLocationsFragmentToMasterLocationFragment(),
+                        getNavOptions()
+                )
         );
     }
 
@@ -506,7 +524,7 @@ public class MasterLocationsFragment extends Fragment
         binding.textInputMasterLocationsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterLocationsSearch);
 
-        activity.setUI(Constants.UI.MASTER_LOCATIONS_SEARCH);
+        setIsSearchVisible(true);
     }
 
     public void dismissSearch() {
@@ -517,7 +535,7 @@ public class MasterLocationsFragment extends Fragment
 
         emptyStateHelper.clearState();
 
-        activity.setUI(Constants.UI.MASTER_LOCATIONS_DEFAULT);
+        setIsSearchVisible(false);
     }
 
     public void checkForUsage(Location location) {

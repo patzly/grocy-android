@@ -36,7 +36,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,8 +47,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
@@ -70,7 +70,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class MasterProductsFragment extends Fragment
+public class MasterProductsFragment extends BasicFragment
         implements MasterProductAdapter.MasterProductAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCTS;
@@ -222,13 +222,31 @@ public class MasterProductsFragment extends Fragment
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.MASTER_PRODUCTS_DEFAULT
-                        : Constants.UI.MASTER_PRODUCTS_SEARCH,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_products);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_master_products,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_add_anim,
+                R.string.action_add,
+                Constants.FAB.TAG.ADD,
+                animated,
+                () -> NavHostFragment.findNavController(this).navigate(
+                        MasterProductsFragmentDirections
+                                .actionMasterProductsFragmentToMasterProductSimpleFragment(),
+                        getNavOptions()
+                )
         );
     }
 
@@ -626,7 +644,7 @@ public class MasterProductsFragment extends Fragment
         binding.textInputMasterProductsSearch.requestFocus();
         activity.showKeyboard(binding.editTextMasterProductsSearch);
 
-        activity.setUI(Constants.UI.MASTER_PRODUCTS_SEARCH);
+        setIsSearchVisible(true);
     }
 
     public void dismissSearch() {
@@ -635,7 +653,7 @@ public class MasterProductsFragment extends Fragment
         binding.editTextMasterProductsSearch.setText("");
         filterProducts();
 
-        activity.setUI(Constants.UI.MASTER_PRODUCTS_DEFAULT);
+        setIsSearchVisible(false);
     }
 
     public void checkForStock(Product product) {

@@ -41,7 +41,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -78,7 +77,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class ConsumeFragment extends Fragment {
+public class ConsumeFragment extends BasicFragment {
 
     private final static String TAG = Constants.UI.CONSUME;
 
@@ -348,8 +347,28 @@ public class ConsumeFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(Constants.UI.CONSUME, savedInstanceState == null, TAG);
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_consume,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_consume_product,
+                R.string.action_consume,
+                Constants.FAB.TAG.CONSUME,
+                animated,
+                this::consumeProduct
+        );
     }
 
     @Override

@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -361,6 +362,11 @@ public class ShoppingListFragment extends BasicFragment implements
         );
     }
 
+    private void updateUI() {
+        updateUI(getArguments() == null || getArguments().getBoolean(
+                Constants.ARGUMENT.ANIMATED, true));
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if(isHidden()) return;
@@ -442,18 +448,6 @@ public class ShoppingListFragment extends BasicFragment implements
         if(hidden) return;
 
         if(getView() != null) onViewCreated(getView(), null);
-    }
-
-    private void updateUI() {
-        activity.updateUI(
-                showOffline
-                        ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
-                        : Constants.UI.SHOPPING_LIST_DEFAULT,
-                getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true
-                ),
-                TAG
-        );
     }
 
     private void load() {
@@ -965,10 +959,13 @@ public class ShoppingListFragment extends BasicFragment implements
     }
 
     public void addItem() {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
-        bundle.putInt(Constants.ARGUMENT.SHOPPING_LIST_ID, selectedShoppingListId);
-        activity.replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundle, true);
+        NavHostFragment.findNavController(this).navigate(
+                ShoppingListFragmentDirections
+                        .actionShoppingListFragmentToShoppingListItemEditFragment(
+                                Constants.ACTION.CREATE
+                        ).setSelectedShoppingListId(selectedShoppingListId),
+                getNavOptions()
+        );
     }
 
     private void showNotesEditor() {
