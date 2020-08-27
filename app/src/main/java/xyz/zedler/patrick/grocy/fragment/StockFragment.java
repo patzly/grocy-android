@@ -38,7 +38,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
@@ -87,7 +87,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
+public class StockFragment extends BasicFragment implements StockItemAdapter.StockItemAdapterListener {
 
     private final static String TAG = Constants.UI.STOCK;
 
@@ -371,17 +371,34 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
 
-        activity.updateUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.STOCK_DEFAULT
-                        : Constants.UI.STOCK_SEARCH,
-                (getArguments() == null
-                        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                        && savedInstanceState == null,
-                TAG
-        );
         setArguments(null);
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_stock);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_stock,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_barcode_scan,
+                R.string.action_scan,
+                Constants.FAB.TAG.SCAN,
+                animated,
+                () -> {
+                    Intent intent = new Intent(activity, ScanBatchActivity.class);
+                    intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+                    startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+                }
+        );
     }
 
     @Override
@@ -1423,9 +1440,10 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(binding.editTextStockSearch);
 
-        activity.setUI(Constants.UI.STOCK_SEARCH);
+        setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
@@ -1434,7 +1452,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         emptyStateHelper.clearState();
 
-        activity.setUI(Constants.UI.STOCK_DEFAULT);
+        setIsSearchVisible(false);
     }
 
     private boolean isFeatureEnabled(String pref) {

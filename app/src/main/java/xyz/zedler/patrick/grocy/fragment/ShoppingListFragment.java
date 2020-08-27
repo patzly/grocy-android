@@ -39,7 +39,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,7 +88,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 
-public class ShoppingListFragment extends Fragment implements
+public class ShoppingListFragment extends BasicFragment implements
         ShoppingListItemAdapter.ShoppingListItemAdapterListener,
         LoadOfflineDataShoppingListHelper.AsyncResponse,
         StoreOfflineDataShoppingListHelper.AsyncResponse {
@@ -336,25 +335,30 @@ public class ShoppingListFragment extends Fragment implements
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
 
-        String uiMode;
-        if(appBarBehavior.isPrimaryLayout()) {
-            uiMode = showOffline
-                    ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
-                    : Constants.UI.SHOPPING_LIST_DEFAULT;
-        } else {
-            uiMode = showOffline
-                    ? Constants.UI.SHOPPING_LIST_OFFLINE_SEARCH
-                    : Constants.UI.SHOPPING_LIST_SEARCH;
-        }
-        activity.updateUI(
-                uiMode,
-                (getArguments() == null || getArguments().getBoolean(
-                        Constants.ARGUMENT.ANIMATED, true)
-                ),
-                TAG
-        );
         setArguments(null);
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                showOffline ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_add_anim,
+                R.string.action_add,
+                Constants.FAB.TAG.ADD,
+                animated,
+                this::addItem
+        );
     }
 
     @Override
@@ -1384,11 +1388,7 @@ public class ShoppingListFragment extends Fragment implements
         binding.textInputShoppingListSearch.requestFocus();
         activity.showKeyboard(binding.editTextShoppingListSearch);
 
-        activity.setUI(
-                showOffline
-                        ? Constants.UI.SHOPPING_LIST_OFFLINE_SEARCH
-                        : Constants.UI.SHOPPING_LIST_SEARCH
-        );
+        setIsSearchVisible(true);
     }
 
     public void dismissSearch() {
@@ -1399,11 +1399,7 @@ public class ShoppingListFragment extends Fragment implements
 
         emptyStateHelper.clearState();
 
-        activity.setUI(
-                showOffline
-                        ? Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT
-                        : Constants.UI.SHOPPING_LIST_DEFAULT
-        );
+        setIsSearchVisible(false);
     }
 
     private void appBarOfflineInfo(boolean visible) {

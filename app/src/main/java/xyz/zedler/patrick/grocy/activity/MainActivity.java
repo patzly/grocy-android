@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
+import xyz.zedler.patrick.grocy.fragment.BasicFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
@@ -308,11 +309,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        String tag = fragmentCurrent != null ? fragmentCurrent.toString() : null;
+        /*String tag = fragmentCurrent != null ? fragmentCurrent.toString() : null;
         if(tag != null) {
             fragmentManager.putFragment(outState, tag, fragmentCurrent);
             outState.putString(Constants.ARGUMENT.CURRENT_FRAGMENT, tag);
-        }
+        }*/
+    }
+
+    public BottomAppBarRefreshScrollBehavior getScrollBehavior() {
+        return scrollBehavior;
     }
 
     public void setUI(String uiMode) {
@@ -330,69 +335,12 @@ public class MainActivity extends AppCompatActivity {
         if(true) return;
         this.uiMode = uiMode;
 
-        if(uiMode.startsWith(Constants.UI.STOCK) && isDemo()) {
-            showDemoIndicator(animated);
-        } else {
-            hideDemoIndicator(animated);
-        }
-
         if(fragmentCurrent == null) {
             recreate();
             return;
         }
 
         switch (uiMode) {
-            case Constants.UI.STOCK_DEFAULT:
-            case Constants.UI.STOCK_SEARCH:
-                scrollBehavior.setUpScroll(R.id.scroll_stock);
-                scrollBehavior.setHideOnScroll(true);
-                updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER, R.menu.menu_stock, animated, () -> {
-                            if(fragmentCurrent.getClass() == StockFragment.class) {
-                                ((StockFragment) fragmentCurrent).setUpBottomMenu();
-                            }
-                        }
-                );
-                updateFab(
-                        R.drawable.ic_round_barcode_scan,
-                        R.string.action_scan,
-                        Constants.FAB.TAG.SCAN,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == StockFragment.class) {
-                                Intent intent = new Intent(
-                                        this, ScanBatchActivity.class
-                                );
-                                intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                                startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
-                            }
-                        }
-                );
-                break;
-            case Constants.UI.SHOPPING_LIST_DEFAULT:
-            case Constants.UI.SHOPPING_LIST_SEARCH:
-                scrollBehavior.setUpScroll(R.id.scroll_shopping_list);
-                scrollBehavior.setHideOnScroll(true);
-                updateBottomAppBar(
-                        Constants.FAB.POSITION.CENTER, R.menu.menu_shopping_list, animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                                ((ShoppingListFragment) fragmentCurrent).setUpBottomMenu();
-                            }
-                        }
-                );
-                updateFab(
-                        R.drawable.ic_round_add_anim,
-                        R.string.action_add,
-                        Constants.FAB.TAG.ADD,
-                        animated,
-                        () -> {
-                            if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                                ((ShoppingListFragment) fragmentCurrent).addItem();
-                            }
-                        }
-                );
-                break;
             case Constants.UI.SHOPPING_LIST_OFFLINE_DEFAULT:
             case Constants.UI.SHOPPING_LIST_OFFLINE_SEARCH:
                 scrollBehavior.setUpScroll(R.id.scroll_shopping_list);
@@ -775,7 +723,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateBottomAppBar(
+    public void updateBottomAppBar(
             int newFabPosition,
             @MenuRes int newMenuId,
             boolean animated,
@@ -846,6 +794,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        BasicFragment currentFragment = (BasicFragment) getCurrentFragment();
+
+        if(currentFragment.isSearchVisible()) {
+            currentFragment.dismissSearch();
+            return;
+        } else if(true){
+            super.onBackPressed();
+            return;
+        }
         switch (uiMode) {
             case Constants.UI.STOCK_DEFAULT:
                 super.onBackPressed();
@@ -1115,8 +1073,8 @@ public class MainActivity extends AppCompatActivity {
         } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
     }
 
-    private void showDemoIndicator(boolean animated) {
-        if(uiMode.startsWith(Constants.UI.STOCK)) {
+    public void showHideDemoIndicator(Fragment fragment, boolean animated) {
+        if(fragment instanceof StockFragment && isDemo()) {
             if(animated) {
                 binding.frameMainDemo.setVisibility(View.VISIBLE);
                 binding.frameMainDemo.animate().alpha(1).setDuration(200).start();
@@ -1124,17 +1082,15 @@ public class MainActivity extends AppCompatActivity {
                 binding.frameMainDemo.setAlpha(1);
                 binding.frameMainDemo.setVisibility(View.VISIBLE);
             }
-        }
-    }
-
-    private void hideDemoIndicator(boolean animated) {
-        if(animated) {
-            binding.frameMainDemo.animate().alpha(0).setDuration(200).withEndAction(
-                    () -> binding.frameMainDemo.setVisibility(View.GONE)
-            );
         } else {
-            binding.frameMainDemo.setAlpha(0);
-            binding.frameMainDemo.setVisibility(View.GONE);
+            if(animated) {
+                binding.frameMainDemo.animate().alpha(0).setDuration(200).withEndAction(
+                        () -> binding.frameMainDemo.setVisibility(View.GONE)
+                );
+            } else {
+                binding.frameMainDemo.setAlpha(0);
+                binding.frameMainDemo.setVisibility(View.GONE);
+            }
         }
     }
 
