@@ -21,6 +21,9 @@
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_shoppingListFragment_to_purchaseFragment"
+            app:destination="@id/purchaseFragment" />
     </fragment>
     <fragment
         android:id="@+id/consumeFragment"
@@ -58,6 +61,11 @@
         <action
             android:id="@+id/action_purchaseFragment_to_inputNameBottomSheetDialogFragment"
             app:destination="@id/inputNameBottomSheetDialogFragment" />
+        <argument
+            android:name="amount"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true" />
     </fragment>
     <activity
         android:id="@+id/settingsActivity"
@@ -177,6 +185,11 @@
         <argument
             android:name="productName"
             app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="shoppingListItem"
+            app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

@@ -87,7 +87,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private GrocyApi grocyApi;
     private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
-    private Bundle startupBundle;
+    private ShoppingListItemEditFragmentArgs args;
     private FragmentShoppingListItemEditBinding binding;
 
     private ArrayList<Product> products;
@@ -99,7 +99,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private double amount;
     private boolean nameAutoFilled;
     private int selectedShoppingListId;
-    private String action;
     private boolean debug;
 
     @Override
@@ -128,15 +127,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         if(isHidden()) return;
 
         activity = (MainActivity) getActivity();
-        assert activity != null;
+        assert activity != null && getArguments() != null;
 
-        startupBundle = getArguments();
-        if(startupBundle != null) {
-            action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-            if(action == null) action = Constants.ACTION.CREATE;
-        } else {
-            action = Constants.ACTION.CREATE;
-        }
+        args = ShoppingListItemEditFragmentArgs.fromBundle(getArguments());
 
         // PREFERENCES
 
@@ -167,7 +160,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         // title
 
-        if(action.equals(Constants.ACTION.EDIT)) {
+        if(args.getAction().equals(Constants.ACTION.EDIT)) {
             binding.textShoppingListItemEditTitle.setText(
                     activity.getString(R.string.title_edit_list_entry)
             );
@@ -331,7 +324,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        // We use a String here, but any type that can be put in a Bundle is supported
         NavBackStackEntry currentBackStackEntry = NavHostFragment
                 .findNavController(this)
                 .getCurrentBackStackEntry();
@@ -340,7 +332,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 .getSavedStateHandle()
                 .getLiveData(Constants.ARGUMENT.PRODUCT_NAME);
         liveData.observe(getViewLifecycleOwner(), (String productName) -> {
-            setProductName(productName);
+            // TODO: Prioritize productName over args.getProductName(), no idea yet
             currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
         });
     }
@@ -376,7 +368,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
             outState.putDouble("amount", amount);
             outState.putBoolean("nameAutoFilled", nameAutoFilled);
-            outState.putString("action", action);
             outState.putInt("selectedShoppingListId", selectedShoppingListId);
         }
         super.onSaveInstanceState(outState);
@@ -396,7 +387,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         amount = savedInstanceState.getDouble("amount");
         nameAutoFilled = savedInstanceState.getBoolean("nameAutoFilled");
-        action = savedInstanceState.getString("action");
         selectedShoppingListId = savedInstanceState.getInt("selectedShoppingListId");
         selectShoppingList(selectedShoppingListId);
 
@@ -464,18 +454,11 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private void onQueueEmpty() {
         binding.swipeShoppingListItemEdit.setRefreshing(false);
 
-        assert getArguments() != null;
-        ShoppingListItemEditFragmentArgs args = ShoppingListItemEditFragmentArgs
-                .fromBundle(getArguments());
-
-        String action = args.getAction();
-        switch (action) {
+        switch (args.getAction()) {
             case Constants.ACTION.EDIT: {
-                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
-                );
+                ShoppingListItem shoppingListItem = args.getShoppingListItem();
                 if (shoppingListItem == null) return;
-                String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                String productName = args.getProductName();
                 if (productName != null) {
                     // is given after new product was created from this fragment
                     // with method (setProductName)
@@ -500,10 +483,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                     // is given after new product was created from this fragment
                     // with method (setProductName)
                     binding.autoCompleteShoppingListItemEditProduct.setText(productName);
-                } else if(startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
-                    binding.autoCompleteShoppingListItemEditProduct.setText(
-                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                    );
                 }
                 if (shoppingLists.size() >= 1 && args.getSelectedShoppingListId() != -1) {
                     selectShoppingList(args.getSelectedShoppingListId());
@@ -619,10 +598,8 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "saveShoppingListItem: " + e);
         }
-        if(action.equals(Constants.ACTION.EDIT)) {
-            ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                    Constants.ARGUMENT.SHOPPING_LIST_ITEM
-            );
+        if(args.getAction().equals(Constants.ACTION.EDIT)) {
+            ShoppingListItem shoppingListItem = args.getShoppingListItem();
             assert shoppingListItem != null;
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
@@ -741,11 +718,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         return names;
     }
 
-    public void setProductName(String productName) {
-        if(startupBundle == null) return;
-        startupBundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-    }
-
     public void selectShoppingList(int selectedId) {
         if(sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true)) {
             this.selectedShoppingListId = selectedId;
@@ -774,13 +746,11 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         MenuItem menuItemDelete, menuItemDetails;
         menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(menuItemDelete != null) {
-            menuItemDelete.setVisible(action.equals(Constants.ACTION.EDIT));
+            menuItemDelete.setVisible(args.getAction().equals(Constants.ACTION.EDIT));
             if(menuItemDelete.isVisible()) {
                 menuItemDelete.setOnMenuItemClickListener(item -> {
                     ((Animatable) menuItemDelete.getIcon()).start();
-                    ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                            Constants.ARGUMENT.SHOPPING_LIST_ITEM
-                    );
+                    ShoppingListItem shoppingListItem = args.getShoppingListItem();
                     assert shoppingListItem != null;
                     dlHelper.delete(
                             grocyApi.getObject(

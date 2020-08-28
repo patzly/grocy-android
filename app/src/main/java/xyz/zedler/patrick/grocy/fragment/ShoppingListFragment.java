@@ -892,16 +892,11 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     public void editItem(int position) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-        bundle.putParcelable(
-                Constants.ARGUMENT.SHOPPING_LIST_ITEM,
-                (ShoppingListItem) groupedListItems.get(position)
-        );
-        activity.replaceFragment(
-                Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-                bundle,
-                true
+        NavHostFragment.findNavController(this).navigate(
+                ShoppingListFragmentDirections
+                        .actionShoppingListFragmentToShoppingListItemEditFragment(
+                                Constants.ACTION.EDIT
+                        ).setShoppingListItem((ShoppingListItem) groupedListItems.get(position))
         );
     }
 
@@ -934,6 +929,12 @@ public class ShoppingListFragment extends BaseFragment implements
         if(showOffline) return;
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         if(shoppingListItem.getProduct() == null) return;
+        NavHostFragment.findNavController(this).navigate(
+                ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
+                .setProductName(shoppingListItem.getProduct().getName())
+                .setAmount(String.valueOf(shoppingListItem.getAmount()))
+        );
+        // TODO
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST);
         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, shoppingListItem.getProduct().getName());

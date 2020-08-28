@@ -40,7 +40,6 @@ import android.widget.EditText;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -220,13 +219,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public NavController getNavController() {
-        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-                .findFragmentById(R.id.nav_host_fragment);
-        assert navHostFragment != null;
-        return navHostFragment.getNavController();
-    }
-
     private void setUp(Bundle savedInstanceState) {
         ConfigUtil.loadInfo(
                 new DownloadHelper(this, TAG),
@@ -295,17 +287,6 @@ public class MainActivity extends AppCompatActivity {
             }
             getIntent().setAction(null);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        /*String tag = fragmentCurrent != null ? fragmentCurrent.toString() : null;
-        if(tag != null) {
-            fragmentManager.putFragment(outState, tag, fragmentCurrent);
-            outState.putString(Constants.ARGUMENT.CURRENT_FRAGMENT, tag);
-        }*/
     }
 
     public BottomAppBarRefreshScrollBehavior getScrollBehavior() {

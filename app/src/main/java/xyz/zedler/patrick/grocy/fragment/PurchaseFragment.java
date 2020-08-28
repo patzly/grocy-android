@@ -95,6 +95,7 @@ public class PurchaseFragment extends BaseFragment {
     private DownloadHelper dlHelper;
     private DateUtil dateUtil;
     private ArrayAdapter<String> adapterProducts;
+    private PurchaseFragmentArgs args;
     private Bundle startupBundle;
     private FragmentPurchaseBinding binding;
 
@@ -136,9 +137,10 @@ public class PurchaseFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
-        assert activity != null;
+        assert activity != null && getArguments() != null;
 
-        if(getArguments() != null) startupBundle = getArguments();
+        startupBundle = getArguments();
+        args = PurchaseFragmentArgs.fromBundle(getArguments());
 
         // GET PREFERENCES
 
