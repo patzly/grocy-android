@@ -40,6 +40,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -62,7 +63,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -480,29 +480,21 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                 break;
             }
             case Constants.ACTION.CREATE: {
-                String productName = startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                String productName = args.getProductName();
                 if (productName != null) {
                     // is given after new product was created from this fragment
                     // with method (setProductName)
                     binding.autoCompleteShoppingListItemEditProduct.setText(productName);
                 }
-                if (shoppingLists.size() >= 1 && getArguments() != null) {
+                if (shoppingLists.size() >= 1 && args.getSelectedShoppingListId() != -1) {
                     selectShoppingList(args.getSelectedShoppingListId());
-                } else {
-                    selectShoppingList(-1);
-                }
-                break;
-            }
-            case Constants.ACTION.CREATE_FROM_STOCK:
-                Product product = startupBundle.getParcelable(Constants.ARGUMENT.PRODUCT);
-                if (product == null) return;
-                binding.autoCompleteShoppingListItemEditProduct.setText(product.getName());
-                if (shoppingLists.size() >= 1) {
+                } else if(shoppingLists.size() >= 1) {
                     selectShoppingList(shoppingLists.get(0).getId());
                 } else {
                     selectShoppingList(-1);
                 }
                 break;
+            }
         }
     }
 
@@ -797,12 +789,11 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                 String input = binding.autoCompleteShoppingListItemEditProduct.getText()
                         .toString()
                         .trim();
-                Bundle bundle = new Bundle();
                 if(productDetails != null && input.equals(productDetails.getProduct().getName())) {
-                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                    activity.showBottomSheet(
-                            new ProductOverviewBottomSheetDialogFragment(),
-                            bundle
+                    NavHostFragment.findNavController(this).navigate(
+                                    ShoppingListItemEditFragmentDirections
+                                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
+                                            .setProductDetails(productDetails)
                     );
                 } else {
                     Product product = getProductFromName(input);
@@ -815,13 +806,10 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                                             new TypeToken<ProductDetails>() {
                                             }.getType()
                                     );
-                                    bundle.putParcelable(
-                                            Constants.ARGUMENT.PRODUCT_DETAILS,
-                                            productDetails
-                                    );
-                                    activity.showBottomSheet(
-                                            new ProductOverviewBottomSheetDialogFragment(),
-                                            bundle
+                                    NavHostFragment.findNavController(this).navigate(
+                                            ShoppingListItemEditFragmentDirections
+                                                    .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
+                                                    .setProductDetails(productDetails)
                                     );
                                 }, error -> {
                                 }

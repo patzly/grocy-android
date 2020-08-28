@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
@@ -69,7 +67,6 @@ public class DrawerBottomSheetDialogFragment
     private MainActivity activity;
     private View view;
     private SharedPreferences sharedPrefs;
-    private String uiMode;
     private ClickUtil clickUtil = new ClickUtil();
 
     @NonNull
@@ -89,14 +86,10 @@ public class DrawerBottomSheetDialogFragment
         );
 
         activity = (MainActivity) getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        assert activity != null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         boolean debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
-
-        uiMode = bundle.getString(Constants.ARGUMENT.UI_MODE, Constants.UI.STOCK_DEFAULT);
-        if(debug) Log.i(TAG, "onCreateView: uiMode = " + uiMode);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
             dismiss();
@@ -216,11 +209,6 @@ public class DrawerBottomSheetDialogFragment
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.retro_green_fg)
         );
-    }
-
-    private void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
-        dismiss();
-        activity.showBottomSheet(bottomSheet, null);
     }
 
     private void hideDisabledFeatures() {

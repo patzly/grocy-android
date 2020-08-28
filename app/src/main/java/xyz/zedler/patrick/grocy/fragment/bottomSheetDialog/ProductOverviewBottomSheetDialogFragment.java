@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -51,9 +51,6 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -85,7 +82,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 	private QuantityUnit quantityUnit;
 	private Location location;
 	private ActionButton actionButtonConsume, actionButtonOpen;
-	private boolean showActions = false;
 	private BezierCurveChart priceHistory;
 	private DownloadHelper dlHelper;
 	private ListItem
@@ -121,25 +117,23 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-		Bundle startupBundle = getArguments();
-		if(startupBundle != null) {
-			showActions = startupBundle.getBoolean(
-					Constants.ARGUMENT.SHOW_ACTIONS,
-					false
-			);
+		assert getArguments() != null;
+		ProductOverviewBottomSheetDialogFragmentArgs args =
+				ProductOverviewBottomSheetDialogFragmentArgs.fromBundle(getArguments());
 
-			// setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem
+		boolean showActions = args.getShowActions();
 
-			productDetails = startupBundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
-			if(productDetails != null) {
-				product = productDetails.getProduct();
-				stockItem = new StockItem(productDetails);
-			} else {
-				stockItem = startupBundle.getParcelable(Constants.ARGUMENT.STOCK_ITEM);
-				quantityUnit = startupBundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-				location = startupBundle.getParcelable(Constants.ARGUMENT.LOCATION);
-				product = stockItem.getProduct();
-			}
+		// setup in CONSUME/PURCHASE with ProductDetails, in STOCK with StockItem
+
+		if(args.getProductDetails() != null) {
+			productDetails = args.getProductDetails();
+			product = productDetails.getProduct();
+			stockItem = new StockItem(productDetails);
+		} else if(args.getStockItem() != null) {
+			stockItem = args.getStockItem();
+			quantityUnit = args.getQuantityUnit();
+			location = args.getLocation();
+			product = stockItem.getProduct();
 		}
 
 		// WEB REQUESTS
@@ -179,16 +173,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			Bundle bundle = new Bundle();
 			switch (item.getItemId()) {
 				case R.id.action_add_to_shopping_list:
-					bundle.putString(
-							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.CREATE_FROM_STOCK
-					);
-					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					activity.replaceFragment(
-							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-							bundle,
-							true
-					);
+					NavHostFragment.findNavController(this).navigate(ProductOverviewBottomSheetDialogFragmentDirections.actionProductOverviewBottomSheetDialogFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE).setProductName(product.getName()));
 					dismiss();
 					return true;
 				case R.id.action_consume_all:
@@ -224,31 +209,9 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 					dismiss();
 					return true;
 				case R.id.action_edit_product:
-					Fragment current = activity.getCurrentFragment();
-					if(current.getClass() == PurchaseFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_PURCHASE
-						);
-					} else if(current.getClass() == ConsumeFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_CONSUME
-						);
-					} else if(current.getClass() == ShoppingListItemEditFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT
-						);
-					}else {
-						bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-					}
+					bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
 					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					activity.replaceFragment(
-							Constants.UI.MASTER_PRODUCT_SIMPLE,
-							bundle,
-							true
-					);
+					NavHostFragment.findNavController(this).navigate(R.id.action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment, bundle);
 					dismiss();
 					return true;
 			}

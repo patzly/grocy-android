@@ -44,6 +44,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -1254,7 +1255,8 @@ public class MasterProductSimpleFragment extends BasicFragment {
                         bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
                         bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                        activity.dismissFragment(bundle);
+                        // TODO
+                        NavHostFragment.findNavController(this).navigateUp();
                     },
                     error -> {
                         showErrorMessage();

@@ -49,6 +49,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -68,7 +70,6 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -150,22 +151,24 @@ public class MainActivity extends AppCompatActivity {
                 v -> showBottomSheet(new LogoutBottomSheetDialogFragment(), new Bundle())
         );
 
+        fragmentManager = getSupportFragmentManager();
+
         // BOTTOM APP BAR
 
         binding.bottomAppBar.setNavigationOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             IconUtil.start(binding.bottomAppBar.getNavigationIcon());
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.UI_MODE, uiMode);
-            showBottomSheet(new DrawerBottomSheetDialogFragment(), bundle);
+            NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                    .findFragmentById(R.id.nav_host_fragment);
+            assert navHostFragment != null;
+            NavController navController = navHostFragment.getNavController();
+            navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
         });
 
         scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
         scrollBehavior.setUpBottomAppBar(binding.bottomAppBar);
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
-
-        fragmentManager = getSupportFragmentManager();
 
         if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
             startActivityForResult(

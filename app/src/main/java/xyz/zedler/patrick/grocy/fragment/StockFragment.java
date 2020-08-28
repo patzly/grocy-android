@@ -38,6 +38,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,7 +68,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -1408,28 +1408,27 @@ public class StockFragment extends BasicFragment implements StockItemAdapter.Sto
     }
 
     private void showProductOverview(StockItem stockItem) {
-        if(stockItem != null) {
-            QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
-            Location location = getLocation(stockItem.getProduct().getLocationId());
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, stockItem);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-            bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
-        }
+        if(stockItem == null) return;
+        QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
+        Location location = getLocation(stockItem.getProduct().getLocationId());
+        NavHostFragment.findNavController(this).navigate(
+                StockFragmentDirections
+                        .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                        .setShowActions(true)
+                        .setStockItem(stockItem)
+                        .setQuantityUnit(quantityUnit)
+                        .setLocation(location)
+        );
     }
 
     private void showProductOverview(ProductDetails productDetails) {
-        if(productDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            activity.showBottomSheet(
-                    new ProductOverviewBottomSheetDialogFragment(),
-                    bundle
-            );
-        }
+        if(productDetails == null) return;
+        NavHostFragment.findNavController(this).navigate(
+                StockFragmentDirections
+                        .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                        .setShowActions(true)
+                        .setProductDetails(productDetails)
+        );
     }
 
     private void setUpSearch() {

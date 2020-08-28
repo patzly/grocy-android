@@ -6,7 +6,11 @@
     <fragment
         android:id="@+id/stockFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.StockFragment"
-        android:label="StockFragment" />
+        android:label="StockFragment" >
+        <action
+            android:id="@+id/action_stockFragment_to_productOverviewBottomSheetDialogFragment"
+            app:destination="@id/productOverviewBottomSheetDialogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/shoppingListFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
@@ -106,5 +110,53 @@
         <argument
             android:name="action"
             app:argType="string" />
+        <action
+            android:id="@+id/action_shoppingListItemEditFragment_to_productOverviewBottomSheetDialogFragment"
+            app:destination="@id/productOverviewBottomSheetDialogFragment" />
+        <argument
+            android:name="productName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
+    <dialog
+        android:id="@+id/productOverviewBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment"
+        android:label="ProductOverviewBottomSheetDialogFragment" >
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
+            app:destination="@id/masterProductSimpleFragment" />
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_shoppingListItemEditFragment"
+            app:destination="@id/shoppingListItemEditFragment" />
+        <argument
+            android:name="productDetails"
+            app:argType="xyz.zedler.patrick.grocy.model.ProductDetails"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="stockItem"
+            app:argType="xyz.zedler.patrick.grocy.model.StockItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="quantityUnit"
+            app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="location"
+            app:argType="xyz.zedler.patrick.grocy.model.Location"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="showActions"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </dialog>
+    <dialog
+        android:id="@+id/drawerBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment"
+        android:label="DrawerBottomSheetDialogFragment" />
+    <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
 </navigation>
