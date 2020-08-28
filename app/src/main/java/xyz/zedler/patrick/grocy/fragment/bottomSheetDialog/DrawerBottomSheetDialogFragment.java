@@ -34,6 +34,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -89,7 +90,6 @@ public class DrawerBottomSheetDialogFragment
         assert activity != null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        boolean debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
             dismiss();
@@ -152,23 +152,31 @@ public class DrawerBottomSheetDialogFragment
 
         switch(v.getId()) {
             case R.id.linear_drawer_shopping_list:
-                navigate(R.id.shoppingListFragment);
+                navigate(DrawerBottomSheetDialogFragmentDirections
+                        .actionDrawerBottomSheetDialogFragmentToShoppingListFragment(), true);
                 break;
             case R.id.linear_drawer_consume:
-                navigate(R.id.consumeFragment);
+                navigate(DrawerBottomSheetDialogFragmentDirections
+                        .actionDrawerBottomSheetDialogFragmentToConsumeFragment(), true);
                 break;
             case R.id.linear_drawer_purchase:
-                navigate(R.id.purchaseFragment);
+                navigate(DrawerBottomSheetDialogFragmentDirections
+                        .actionDrawerBottomSheetDialogFragmentToPurchaseFragment(), true);
                 break;
             case R.id.linear_drawer_master_data:
-                navigate(R.id.masterDataBottomSheetDialogFragment);
+                dismiss();
+                NavHostFragment.findNavController(this).navigate(
+                        R.id.masterDataBottomSheetDialogFragment
+                );
                 break;
             case R.id.linear_settings:
                 IconUtil.start(view, R.id.image_settings);
-                new Handler().postDelayed(() -> navigate(R.id.settingsActivity), 300);
+                new Handler().postDelayed(() -> navigate(DrawerBottomSheetDialogFragmentDirections
+                        .actionDrawerBottomSheetDialogFragmentToSettingsActivity(), true), 300);
                 break;
             case R.id.linear_feedback:
-                navigate(R.id.feedbackBottomSheetDialogFragment);
+                navigate(DrawerBottomSheetDialogFragmentDirections
+                        .actionDrawerBottomSheetDialogFragmentToFeedbackBottomSheetDialogFragment(), false);
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);
@@ -187,25 +195,25 @@ public class DrawerBottomSheetDialogFragment
         }
     }
 
-    private void navigate(int fragmentId) {
-        dismiss();
+    private void navigate(NavDirections directions, boolean popUp) {
+
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-        builder.setPopUpTo(R.id.stockFragment, false);
+        if(popUp) builder.setPopUpTo(R.id.stockFragment, false);
         if(! (activity.getCurrentFragment() instanceof StockFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         }
         NavHostFragment.findNavController(this).navigate(
-                fragmentId,
-                null,
+                directions,
                 builder.build()
         );
+        dismiss();
     }
 
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {
         LinearLayout linearLayout = view.findViewById(linearLayoutId);
         linearLayout.setBackgroundResource(R.drawable.bg_drawer_item_selected);
-        linearLayout.setClickable(clickable);
+        linearLayout.setClickable(clickable);  // so selected entries can be disabled
         ((TextView) view.findViewById(textViewId)).setTextColor(
                 ContextCompat.getColor(activity, R.color.retro_green_fg)
         );

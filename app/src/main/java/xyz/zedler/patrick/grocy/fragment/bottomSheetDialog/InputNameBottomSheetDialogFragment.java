@@ -27,23 +27,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputNameBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "InputNameBottomSheet";
-
-    private MainActivity activity;
 
     @NonNull
     @Override
@@ -61,65 +56,37 @@ public class InputNameBottomSheetDialogFragment extends CustomBottomSheetDialogF
                 R.layout.fragment_bottomsheet_input_name, container, false
         );
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
-
-        if(getArguments() == null
-                || getArguments().getString(Constants.ARGUMENT.PRODUCT_NAME) == null
-        ) {
-            dismissWithMessage(activity.getString(R.string.error_undefined));
-            return view;
-        }
+        MainActivity activity = (MainActivity) getActivity();
+        assert activity != null && getArguments() != null;
 
         setCancelable(false);
 
-        String productName = getArguments().getString(Constants.ARGUMENT.PRODUCT_NAME);
+        String productName = InputNameBottomSheetDialogFragmentArgs
+                .fromBundle(getArguments())
+                .getProductName();
 
         TextView textView = view.findViewById(R.id.text_input_name_question);
         textView.setText(activity.getString(R.string.description_input_name, productName));
 
         view.findViewById(R.id.button_input_name_create).setOnClickListener(v -> {
-            Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == PurchaseFragment.class) {
-                CreateProduct createProduct = new CreateProduct(
-                        productName,
-                        null,
-                        null,
-                        null,
-                        null
-                );
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
-            } else if(current.getClass() == ShoppingListItemEditFragment.class) {
-                CreateProduct createProduct = new CreateProduct(
-                        productName,
-                        null,
-                        null,
-                        null,
-                        null
-                );
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT);
-                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
-            }
+            CreateProduct createProduct = new CreateProduct(
+                    productName,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            NavHostFragment.findNavController(this).navigate(
+                    InputNameBottomSheetDialogFragmentDirections
+                            .actionInputNameBottomSheetDialogFragmentToMasterProductSimpleFragment(
+                                    Constants.ACTION.CREATE
+                            ).setCreateProductObject(createProduct));
             dismiss();
         });
 
         view.findViewById(R.id.button_input_name_cancel).setOnClickListener(v -> dismiss());
 
         return view;
-    }
-
-    private void dismissWithMessage(String msg) {
-        Snackbar.make(
-                activity.findViewById(R.id.frame_main_container),
-                msg,
-                Snackbar.LENGTH_SHORT
-        ).show();
-        dismiss();
     }
 
     @NonNull

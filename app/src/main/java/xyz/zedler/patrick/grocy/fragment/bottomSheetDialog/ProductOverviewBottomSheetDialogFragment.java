@@ -191,27 +191,30 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 					dismiss();
 					return true;
 				case R.id.action_purchase:
-					bundle.putString(
-							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.PURCHASE_THEN_STOCK
+					NavHostFragment.findNavController(this).navigate(
+							ProductOverviewBottomSheetDialogFragmentDirections
+									.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
+									.setCloseWhenFinished(true)
+									.setProductName(product.getName())
 					);
-					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-					activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
 					dismiss();
 					return true;
 				case R.id.action_consume:
-					bundle.putString(
-							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.CONSUME_THEN_STOCK
+					NavHostFragment.findNavController(this).navigate(
+							ProductOverviewBottomSheetDialogFragmentDirections
+									.actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
+									.setCloseWhenFinished(true)
+									.setProductName(product.getName())
 					);
-					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-					activity.replaceFragment(Constants.UI.CONSUME, bundle, true);
 					dismiss();
 					return true;
 				case R.id.action_edit_product:
-					bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					NavHostFragment.findNavController(this).navigate(R.id.action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment, bundle);
+					NavHostFragment.findNavController(this).navigate(
+							ProductOverviewBottomSheetDialogFragmentDirections
+									.actionProductOverviewBottomSheetDialogFragmentToMasterProductSimpleFragment(
+											Constants.ACTION.EDIT
+									).setProduct(product)
+					);
 					dismiss();
 					return true;
 			}

@@ -244,7 +244,9 @@ public class MasterProductsFragment extends BasicFragment
                 animated,
                 () -> NavHostFragment.findNavController(this).navigate(
                         MasterProductsFragmentDirections
-                                .actionMasterProductsFragmentToMasterProductSimpleFragment(),
+                                .actionMasterProductsFragmentToMasterProductSimpleFragment(
+                                        Constants.ACTION.CREATE
+                                ),
                         getNavOptions()
                 )
         );

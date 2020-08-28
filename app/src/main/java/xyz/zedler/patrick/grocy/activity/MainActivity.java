@@ -225,6 +225,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public NavController getNavController() {
+        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                .findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        return navHostFragment.getNavController();
+    }
+
     private void setUp(Bundle savedInstanceState) {
         ConfigUtil.loadInfo(
                 new DownloadHelper(this, TAG),

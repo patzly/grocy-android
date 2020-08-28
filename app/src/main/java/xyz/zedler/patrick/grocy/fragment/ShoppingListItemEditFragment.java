@@ -40,6 +40,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -328,6 +330,20 @@ public class ShoppingListItemEditFragment extends BasicFragment {
         updateUI((getArguments() == null
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
+
+        // We use a String here, but any type that can be put in a Bundle is supported
+        NavBackStackEntry currentBackStackEntry = NavHostFragment
+                .findNavController(this)
+                .getCurrentBackStackEntry();
+        assert currentBackStackEntry != null;
+        MutableLiveData<String> liveData = currentBackStackEntry
+                .getSavedStateHandle()
+                .getLiveData(Constants.ARGUMENT.PRODUCT_NAME);
+        liveData.observe(getViewLifecycleOwner(), (String productName) -> {
+            setProductName(productName);
+            currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
+        });
+
     }
 
     private void updateUI(boolean animated) {
@@ -485,6 +501,10 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                     // is given after new product was created from this fragment
                     // with method (setProductName)
                     binding.autoCompleteShoppingListItemEditProduct.setText(productName);
+                } else if(startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME) != null) {
+                    binding.autoCompleteShoppingListItemEditProduct.setText(
+                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
+                    );
                 }
                 if (shoppingLists.size() >= 1 && args.getSelectedShoppingListId() != -1) {
                     selectShoppingList(args.getSelectedShoppingListId());

@@ -41,6 +41,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -66,7 +67,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
@@ -221,12 +221,7 @@ public class PurchaseFragment extends BasicFragment {
                         clearInputFocus();
                         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
                         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-                            activity.showBottomSheet(
-                                    new InputNameBottomSheetDialogFragment(), bundle
-                            );
+                            showInputNameBottomSheet(input);
                         }
                         return true;
                     } return false;
@@ -558,6 +553,18 @@ public class PurchaseFragment extends BasicFragment {
     }
 
     private void onQueueEmpty() {
+        if(true) {
+            binding.swipePurchase.setRefreshing(false);
+            assert getArguments() != null;
+            String productName = PurchaseFragmentArgs.fromBundle(getArguments()).getProductName();
+            Product product = getProductFromName(productName);
+            if(product != null) {
+                loadProductDetails(product.getId());
+            } else {
+                binding.autoCompletePurchaseProduct.setText(productName);
+            }
+            return;
+        }
         String action = null;
         if(startupBundle != null) {
             action = startupBundle.getString(Constants.ARGUMENT.TYPE);
@@ -841,12 +848,7 @@ public class PurchaseFragment extends BasicFragment {
         boolean isIncomplete = false;
         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-            activity.showBottomSheet(
-                    new InputNameBottomSheetDialogFragment(), bundle
-            );
+            showInputNameBottomSheet(input);
             isIncomplete = true;
         }
         if(productDetails == null) {
@@ -858,6 +860,13 @@ public class PurchaseFragment extends BasicFragment {
         if(!isPriceValid()) isIncomplete = true;
         if(!isLocationValid()) isIncomplete = true;
         return isIncomplete;
+    }
+
+    private void showInputNameBottomSheet(String productName) {
+        NavHostFragment.findNavController(this).navigate(
+                PurchaseFragmentDirections
+                        .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName)
+        );
     }
 
     public void purchaseProduct() {
@@ -935,6 +944,16 @@ public class PurchaseFragment extends BasicFragment {
                         );
                     }
                     activity.showMessage(snackbar);
+
+                    if(true) {
+                        assert getArguments() != null;
+                        if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                            NavHostFragment.findNavController(this).navigateUp();
+                        } else {
+                            clearAll();
+                        }
+                        return;
+                    }
 
                     String action = null;
                     if(startupBundle != null) {

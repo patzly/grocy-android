@@ -22,11 +22,37 @@
     <fragment
         android:id="@+id/consumeFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
-        android:label="ConsumeFragment" />
+        android:label="ConsumeFragment" >
+        <argument
+            android:name="closeWhenFinished"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="productName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_consumeFragment_to_inputNameBottomSheetDialogFragment"
+            app:destination="@id/inputNameBottomSheetDialogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
-        android:label="PurchaseFragment" />
+        android:label="PurchaseFragment" >
+        <argument
+            android:name="closeWhenFinished"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="productName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_purchaseFragment_to_inputNameBottomSheetDialogFragment"
+            app:destination="@id/inputNameBottomSheetDialogFragment" />
+    </fragment>
     <activity
         android:id="@+id/settingsActivity"
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
@@ -34,7 +60,23 @@
     <dialog
         android:id="@+id/masterDataBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDataBottomSheetDialogFragment"
-        android:label="MasterDataBottomSheetDialogFragment" />
+        android:label="MasterDataBottomSheetDialogFragment" >
+        <action
+            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterStoresFragment"
+            app:destination="@id/masterStoresFragment" />
+        <action
+            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterLocationsFragment"
+            app:destination="@id/masterLocationsFragment" />
+        <action
+            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterQuantityUnitsFragment"
+            app:destination="@id/masterQuantityUnitsFragment" />
+        <action
+            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterProductGroupsFragment"
+            app:destination="@id/masterProductGroupsFragment" />
+        <action
+            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterProductsFragment"
+            app:destination="@id/masterProductsFragment" />
+    </dialog>
     <fragment
         android:id="@+id/masterProductsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
@@ -82,7 +124,21 @@
     <fragment
         android:id="@+id/masterProductSimpleFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment"
-        android:label="MasterProductSimpleFragment" />
+        android:label="MasterProductSimpleFragment" >
+        <argument
+            android:name="action"
+            app:argType="string" />
+        <argument
+            android:name="product"
+            app:argType="xyz.zedler.patrick.grocy.model.Product"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="createProductObject"
+            app:argType="xyz.zedler.patrick.grocy.model.CreateProduct"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/masterLocationFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationFragment"
@@ -153,10 +209,43 @@
             android:name="showActions"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
+            app:destination="@id/consumeFragment" />
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
+            app:destination="@id/purchaseFragment" />
     </dialog>
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment"
-        android:label="DrawerBottomSheetDialogFragment" />
+        android:label="DrawerBottomSheetDialogFragment" >
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingListFragment"
+            app:destination="@id/shoppingListFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_purchaseFragment"
+            app:destination="@id/purchaseFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_consumeFragment"
+            app:destination="@id/consumeFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_feedbackBottomSheetDialogFragment"
+            app:destination="@id/feedbackBottomSheetDialogFragment" />
+    </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
+    <dialog
+        android:id="@+id/inputNameBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment"
+        android:label="InputNameBottomSheetDialogFragment" >
+        <argument
+            android:name="productName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_inputNameBottomSheetDialogFragment_to_masterProductSimpleFragment"
+            app:destination="@id/masterProductSimpleFragment" />
+    </dialog><action android:id="@+id/action_global_masterDataBottomSheetDialogFragment" app:destination="@id/masterDataBottomSheetDialogFragment"/>
 </navigation>

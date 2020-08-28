@@ -171,7 +171,7 @@ public class MasterProductSimpleFragment extends BasicFragment {
         super.onActivityCreated(savedInstanceState);
 
         activity = (MainActivity) getActivity();
-        assert activity != null;
+        assert activity != null && getArguments() != null;
 
         // PREFERENCES
 
@@ -547,34 +547,18 @@ public class MasterProductSimpleFragment extends BasicFragment {
 
         // STARTUP BUNDLE
 
-        Bundle bundle = getArguments();
-        if(bundle != null && bundle.getString(Constants.ARGUMENT.TYPE) != null) {
-            intendedAction = bundle.getString(Constants.ARGUMENT.TYPE);
-        }
+        MasterProductSimpleFragmentArgs args = MasterProductSimpleFragmentArgs
+                .fromBundle(getArguments());
+        intendedAction = args.getAction();
 
-        if(intendedAction == null) {
-            intendedAction = Constants.ACTION.CREATE;
-        }
-
-        if(bundle == null) {
-            resetAll();
+        if(intendedAction.equals(Constants.ACTION.EDIT)) {
+            editProduct = args.getProduct();
         } else {
-            switch (intendedAction) {
-                case Constants.ACTION.EDIT:
-                case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH:
-                case Constants.ACTION.EDIT_THEN_CONSUME:
-                case Constants.ACTION.EDIT_THEN_PURCHASE:
-                case Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT:
-                    editProduct = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
-                    break;
-                case Constants.ACTION.CREATE:
-                case Constants.ACTION.CREATE_THEN_PURCHASE:
-                case Constants.ACTION.CREATE_THEN_PURCHASE_BATCH:
-                case Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT:
-                    createProductObj = bundle.getParcelable(
-                            Constants.ARGUMENT.CREATE_PRODUCT_OBJECT
-                    );
-            }
+            createProductObj = args.getCreateProductObject();
+        }
+
+        if(createProductObj == null && editProduct == null) {
+            resetAll();
         }
 
         hideDisabledFeatures();
@@ -1256,6 +1240,7 @@ public class MasterProductSimpleFragment extends BasicFragment {
                         bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         // TODO
+                        NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         NavHostFragment.findNavController(this).navigateUp();
                     },
                     error -> {
@@ -1280,7 +1265,8 @@ public class MasterProductSimpleFragment extends BasicFragment {
                                     Constants.ARGUMENT.PRODUCT_ID,
                                     response.getInt("created_object_id")
                             );
-                            activity.dismissFragment(bundle);
+                            // TODO
+                            NavHostFragment.findNavController(this).navigateUp();
                         } catch (JSONException e) {
                             if(debug) Log.e(TAG, "saveProduct: " + e.toString());
                             showErrorMessage();
