@@ -165,9 +165,7 @@ public class DrawerBottomSheetDialogFragment
                 break;
             case R.id.linear_drawer_master_data:
                 dismiss();
-                NavHostFragment.findNavController(this).navigate(
-                        R.id.masterDataBottomSheetDialogFragment
-                );
+                activity.showBottomSheet(new MasterDataBottomSheetDialogFragment(), null);
                 break;
             case R.id.linear_settings:
                 IconUtil.start(view, R.id.image_settings);
@@ -203,11 +201,11 @@ public class DrawerBottomSheetDialogFragment
         if(! (activity.getCurrentFragment() instanceof StockFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         }
+        dismiss();
         NavHostFragment.findNavController(this).navigate(
                 directions,
                 builder.build()
         );
-        dismiss();
     }
 
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {

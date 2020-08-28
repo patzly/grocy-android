@@ -66,7 +66,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterProductGroupsFragment extends BasicFragment
+public class MasterProductGroupsFragment extends BaseFragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUPS;
@@ -544,6 +544,7 @@ public class MasterProductGroupsFragment extends BasicFragment
         setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();

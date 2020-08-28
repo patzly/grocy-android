@@ -77,7 +77,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class ConsumeFragment extends BasicFragment {
+public class ConsumeFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.CONSUME;
 
@@ -87,7 +87,6 @@ public class ConsumeFragment extends BasicFragment {
     private GrocyApi grocyApi;
     private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
-    private Bundle startupBundle;
     private FragmentConsumeBinding binding;
 
     private ArrayList<Product> products;
@@ -127,8 +126,6 @@ public class ConsumeFragment extends BasicFragment {
 
         activity = (MainActivity) getActivity();
         assert activity != null;
-
-        if(getArguments() != null) startupBundle = getArguments();
 
         // GET PREFERENCES
 
@@ -419,10 +416,6 @@ public class ConsumeFragment extends BasicFragment {
         if(!hidden && getView() != null) onViewCreated(getView(), null);
     }
 
-    public void giveBundle(Bundle bundle) {
-        startupBundle = bundle;
-    }
-
     private void refresh() {
         if(activity.isOnline()) {
             download();
@@ -462,21 +455,12 @@ public class ConsumeFragment extends BasicFragment {
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     binding.autoCompleteConsumeProduct.setAdapter(adapterProducts);
 
-                    // fill with product from bundle
-                    String action = null;
-                    if(startupBundle != null) {
-                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-                    }
-                    if(action != null) {
-                        if(action.equals(Constants.ACTION.CONSUME_THEN_STOCK)
-                                || action.equals(Constants.ACTION.EDIT_THEN_CONSUME)
-                        ) {
-                            Product product = getProductFromName(
-                                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                            );
-                            if(product != null) loadProductDetails(product.getId());
-                        }
-                    }
+                    // fill with product from args
+                    assert getArguments() != null;
+                    String productName = ConsumeFragmentArgs.fromBundle(getArguments())
+                            .getProductName();
+                    Product product = getProductFromName(productName);
+                    if(product != null) loadProductDetails(product.getId());
                     binding.swipeConsume.setRefreshing(false);
                 }, error -> {
                     binding.swipeConsume.setRefreshing(false);
@@ -901,11 +885,10 @@ public class ConsumeFragment extends BasicFragment {
     }
 
     private Product getProductFromName(String name) {
-        if(name != null) {
-            for(Product product : products) {
-                if(product.getName().equals(name)) {
-                    return product;
-                }
+        if(name == null) return null;
+        for(Product product : products) {
+            if(product.getName().equals(name)) {
+                return product;
             }
         }
         return null;

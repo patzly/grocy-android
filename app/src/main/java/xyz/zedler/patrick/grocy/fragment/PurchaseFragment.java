@@ -84,7 +84,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class PurchaseFragment extends BasicFragment {
+public class PurchaseFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.PURCHASE;
 
@@ -948,7 +948,7 @@ public class PurchaseFragment extends BasicFragment {
                     if(true) {
                         assert getArguments() != null;
                         if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                            NavHostFragment.findNavController(this).navigateUp();
+                            navigateUp(this, activity);
                         } else {
                             clearAll();
                         }

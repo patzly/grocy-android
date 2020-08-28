@@ -89,7 +89,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 
-public class ShoppingListFragment extends BasicFragment implements
+public class ShoppingListFragment extends BaseFragment implements
         ShoppingListItemAdapter.ShoppingListItemAdapterListener,
         LoadOfflineDataShoppingListHelper.AsyncResponse,
         StoreOfflineDataShoppingListHelper.AsyncResponse {
@@ -1388,6 +1388,7 @@ public class ShoppingListFragment extends BasicFragment implements
         setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();

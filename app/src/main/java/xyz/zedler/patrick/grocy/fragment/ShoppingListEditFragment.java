@@ -33,7 +33,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
@@ -56,7 +55,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class ShoppingListEditFragment extends Fragment {
+public class ShoppingListEditFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_EDIT;
 

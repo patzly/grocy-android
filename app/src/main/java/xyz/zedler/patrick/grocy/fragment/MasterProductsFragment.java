@@ -70,7 +70,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class MasterProductsFragment extends BasicFragment
+public class MasterProductsFragment extends BaseFragment
         implements MasterProductAdapter.MasterProductAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCTS;
@@ -639,7 +639,7 @@ public class MasterProductsFragment extends BasicFragment
     }
 
     private void setUpSearch() {
-        if(search.isEmpty()) { // only if no search is active
+        if (search.isEmpty()) { // only if no search is active
             appBarBehavior.switchToSecondary();
             binding.editTextMasterProductsSearch.setText("");
         }
@@ -649,6 +649,7 @@ public class MasterProductsFragment extends BasicFragment
         setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();

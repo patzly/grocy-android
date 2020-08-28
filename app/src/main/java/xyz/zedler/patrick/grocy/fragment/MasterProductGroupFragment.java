@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterProductGroupFragment extends BasicFragment {
+public class MasterProductGroupFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUP;
 

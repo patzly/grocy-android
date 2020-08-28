@@ -66,7 +66,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterQuantityUnitsFragment extends BasicFragment
+public class MasterQuantityUnitsFragment extends BaseFragment
         implements MasterQuantityUnitAdapter.MasterQuantityUnitAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_QUANTITY_UNITS;
@@ -538,6 +538,7 @@ public class MasterQuantityUnitsFragment extends BasicFragment
         setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();

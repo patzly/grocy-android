@@ -1,10 +1,15 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.Activity;
+
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
-import xyz.zedler.patrick.grocy.R;
+import androidx.navigation.fragment.NavHostFragment;
 
-public class BasicFragment extends Fragment {
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+
+public class BaseFragment extends Fragment {
 
     private boolean isSearchVisible = false;
 
@@ -23,5 +28,11 @@ public class BasicFragment extends Fragment {
                 .setEnterAnim(R.anim.slide_in_up)
                 .setPopExitAnim(R.anim.slide_out_down)
                 .build();
+    }
+
+    public static void navigateUp(Fragment fragment, Activity activity) {
+        if(fragment == null || activity == null) return;
+        NavHostFragment.findNavController(fragment).navigateUp();
+        if(activity instanceof MainActivity) ((MainActivity) activity).binding.bottomAppBar.show();
     }
 }

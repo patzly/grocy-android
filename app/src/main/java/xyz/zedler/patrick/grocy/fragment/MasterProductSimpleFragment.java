@@ -88,7 +88,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class MasterProductSimpleFragment extends BasicFragment {
+public class MasterProductSimpleFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.MASTER_PRODUCT_SIMPLE;
 
@@ -1241,7 +1241,7 @@ public class MasterProductSimpleFragment extends BasicFragment {
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         // TODO
                         NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                        NavHostFragment.findNavController(this).navigateUp();
+                        navigateUp(this, activity);
                     },
                     error -> {
                         showErrorMessage();
@@ -1266,7 +1266,7 @@ public class MasterProductSimpleFragment extends BasicFragment {
                                     response.getInt("created_object_id")
                             );
                             // TODO
-                            NavHostFragment.findNavController(this).navigateUp();
+                            navigateUp(this, activity);
                         } catch (JSONException e) {
                             if(debug) Log.e(TAG, "saveProduct: " + e.toString());
                             showErrorMessage();

@@ -77,7 +77,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class ShoppingListItemEditFragment extends BasicFragment {
+public class ShoppingListItemEditFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
 
@@ -630,7 +630,7 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                     jsonObject,
                     response -> {
                         editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        activity.dismissFragment();
+                        NavHostFragment.findNavController(this).navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -643,7 +643,7 @@ public class ShoppingListItemEditFragment extends BasicFragment {
                     jsonObject,
                     response -> {
                         editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        activity.dismissFragment();
+                        navigateUp(this, activity);
                     },
                     error -> {
                         showErrorMessage();

@@ -34,7 +34,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,7 +67,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class MissingBatchItemsFragment extends Fragment
+public class MissingBatchItemsFragment extends BaseFragment
         implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
 
     private final static String TAG = Constants.UI.MISSING_BATCH_ITEMS;

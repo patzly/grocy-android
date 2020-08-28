@@ -17,7 +17,9 @@
         android:label="ShoppingListFragment" >
         <action
             android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
-            app:destination="@id/shoppingListItemEditFragment" />
+            app:destination="@id/shoppingListItemEditFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/consumeFragment"
@@ -60,23 +62,7 @@
     <dialog
         android:id="@+id/masterDataBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDataBottomSheetDialogFragment"
-        android:label="MasterDataBottomSheetDialogFragment" >
-        <action
-            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterStoresFragment"
-            app:destination="@id/masterStoresFragment" />
-        <action
-            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterLocationsFragment"
-            app:destination="@id/masterLocationsFragment" />
-        <action
-            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterQuantityUnitsFragment"
-            app:destination="@id/masterQuantityUnitsFragment" />
-        <action
-            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterProductGroupsFragment"
-            app:destination="@id/masterProductGroupsFragment" />
-        <action
-            android:id="@+id/action_masterDataBottomSheetDialogFragment_to_masterProductsFragment"
-            app:destination="@id/masterProductsFragment" />
-    </dialog>
+        android:label="MasterDataBottomSheetDialogFragment" />
     <fragment
         android:id="@+id/masterProductsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
@@ -181,10 +167,14 @@
         android:label="ProductOverviewBottomSheetDialogFragment" >
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment" />
+            app:destination="@id/masterProductSimpleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_shoppingListItemEditFragment"
-            app:destination="@id/shoppingListItemEditFragment" />
+            app:destination="@id/shoppingListItemEditFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="productDetails"
             app:argType="xyz.zedler.patrick.grocy.model.ProductDetails"
@@ -211,10 +201,14 @@
             android:defaultValue="false" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
-            app:destination="@id/consumeFragment" />
+            app:destination="@id/consumeFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
-            app:destination="@id/purchaseFragment" />
+            app:destination="@id/purchaseFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
     </dialog>
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
@@ -247,5 +241,5 @@
         <action
             android:id="@+id/action_inputNameBottomSheetDialogFragment_to_masterProductSimpleFragment"
             app:destination="@id/masterProductSimpleFragment" />
-    </dialog><action android:id="@+id/action_global_masterDataBottomSheetDialogFragment" app:destination="@id/masterDataBottomSheetDialogFragment"/>
+    </dialog>
 </navigation>

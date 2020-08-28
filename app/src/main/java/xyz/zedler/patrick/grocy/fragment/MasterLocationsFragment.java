@@ -66,7 +66,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterLocationsFragment extends BasicFragment
+public class MasterLocationsFragment extends BaseFragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
     private final static String TAG = Constants.UI.MASTER_LOCATIONS;
@@ -527,6 +527,7 @@ public class MasterLocationsFragment extends BasicFragment
         setIsSearchVisible(true);
     }
 
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();

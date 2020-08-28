@@ -32,7 +32,6 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -120,29 +119,24 @@ public class MasterDataBottomSheetDialogFragment
 
         switch(v.getId()) {
             case R.id.linear_master_data_products:
-                navigate(MasterDataBottomSheetDialogFragmentDirections
-                        .actionMasterDataBottomSheetDialogFragmentToMasterProductsFragment());
+                navigate(R.id.masterProductsFragment);
                 break;
             case R.id.linear_master_data_locations:
-                navigate(MasterDataBottomSheetDialogFragmentDirections
-                        .actionMasterDataBottomSheetDialogFragmentToMasterLocationsFragment());
+                navigate(R.id.masterLocationsFragment);
                 break;
             case R.id.linear_master_data_stores:
-                navigate(MasterDataBottomSheetDialogFragmentDirections
-                        .actionMasterDataBottomSheetDialogFragmentToMasterStoresFragment());
+                navigate(R.id.masterStoresFragment);
                 break;
             case R.id.linear_master_data_quantity_units:
-                navigate(MasterDataBottomSheetDialogFragmentDirections
-                        .actionMasterDataBottomSheetDialogFragmentToMasterQuantityUnitsFragment());
+                navigate(R.id.masterQuantityUnitsFragment);
                 break;
             case R.id.linear_master_data_product_groups:
-                navigate(MasterDataBottomSheetDialogFragmentDirections
-                        .actionMasterDataBottomSheetDialogFragmentToMasterProductGroupsFragment());
+                navigate(R.id.masterProductGroupsFragment);
                 break;
         }
     }
 
-    private void navigate(NavDirections navDirections) {
+    private void navigate(int fragmentId) {
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
         builder.setPopUpTo(R.id.stockFragment, false);
@@ -150,7 +144,8 @@ public class MasterDataBottomSheetDialogFragment
             builder.setExitAnim(R.anim.slide_out_down);
         }
         NavHostFragment.findNavController(this).navigate(
-                navDirections,
+                fragmentId,
+                null,
                 builder.build()
         );
         dismiss();

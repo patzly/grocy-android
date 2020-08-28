@@ -87,7 +87,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class StockFragment extends BasicFragment implements StockItemAdapter.StockItemAdapterListener {
+public class StockFragment extends BaseFragment implements StockItemAdapter.StockItemAdapterListener {
 
     private final static String TAG = Constants.UI.STOCK;
 

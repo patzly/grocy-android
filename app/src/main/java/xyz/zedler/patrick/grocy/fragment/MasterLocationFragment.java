@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +55,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterLocationFragment extends BasicFragment {
+public class MasterLocationFragment extends BaseFragment {
 
     private final static String TAG = Constants.UI.MASTER_LOCATION;
 
@@ -396,7 +395,7 @@ public class MasterLocationFragment extends BasicFragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
                     jsonObject,
-                    response -> NavHostFragment.findNavController(this).navigateUp(),
+                    response -> navigateUp(this, activity),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);
@@ -406,7 +405,7 @@ public class MasterLocationFragment extends BasicFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                     jsonObject,
-                    response -> NavHostFragment.findNavController(this).navigateUp(),
+                    response -> navigateUp(this, activity),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);

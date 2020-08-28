@@ -63,12 +63,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
-import xyz.zedler.patrick.grocy.fragment.BasicFragment;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -93,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
     private Fragment fragmentCurrent;
 
-    private String uiMode = Constants.UI.STOCK_DEFAULT;
     private boolean debug;
 
     @Override
@@ -388,9 +383,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        BasicFragment currentFragment = (BasicFragment) getCurrentFragment();
-
+        BaseFragment currentFragment = (BaseFragment) getCurrentFragment();
         if(currentFragment.isSearchVisible()) {
             currentFragment.dismissSearch();
         } else {
@@ -398,94 +391,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {
+    public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {}
 
-    }
+    public void dismissFragments() {}
 
-    public void dismissFragments() {
-        int count = fragmentManager.getBackStackEntryCount();
-        if(count >= 1) {
-            for(int i = 0; i < count ; i++) {
-                fragmentManager.popBackStackImmediate();
-            }
-            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
+    public void dismissFragment() {}
 
-            if(debug) Log.i(TAG, "dismissFragments: dismissed all fragments except stock");
-        } else {
-            if(debug) Log.e(
-                    TAG, "dismissFragments: no fragments dismissed, backStackCount = " + count
-            );
-        }
-        binding.bottomAppBar.show();
-    }
-
-    public void dismissFragment() {
-        String tag;
-        int count = fragmentManager.getBackStackEntryCount();
-        if(count == 0) {
-            if(debug) Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = 0");
-            return;
-        }
-        fragmentManager.popBackStackImmediate();
-        count = fragmentManager.getBackStackEntryCount();
-        if(count == 0) {
-            tag = Constants.UI.STOCK;
-            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-        } else {
-            tag = fragmentManager.getBackStackEntryAt(
-                    fragmentManager.getBackStackEntryCount()-1
-            ).getName();
-            fragmentCurrent = fragmentManager.findFragmentByTag(tag);
-        }
-        if(fragmentCurrent == null) {
-            fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-            if(debug) Log.e(TAG, "dismissFragment: " + tag + " not found");
-        } else if(debug) {
-            Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
-        }
-        binding.bottomAppBar.show();
-    }
-
-    public void dismissFragment(Bundle bundle) {
-        int count = fragmentManager.getBackStackEntryCount();
-        if(count >= 1) {
-            fragmentManager.popBackStackImmediate();
-            String tag;
-            if(fragmentManager.getBackStackEntryCount() == 0) {
-                tag = Constants.UI.STOCK;
-                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-            } else {
-                tag = fragmentManager.getBackStackEntryAt(
-                        fragmentManager.getBackStackEntryCount()-1
-                ).getName();
-                fragmentCurrent = fragmentManager.findFragmentByTag(tag);
-            }
-            if(fragmentCurrent != null) {
-                if(fragmentCurrent.getClass() == PurchaseFragment.class) {
-                    ((PurchaseFragment) fragmentCurrent).giveBundle(bundle);
-                } else if(fragmentCurrent.getClass() == ConsumeFragment.class) {
-                    ((ConsumeFragment) fragmentCurrent).giveBundle(bundle);
-                } else if(fragmentCurrent.getClass() == MissingBatchItemsFragment.class) {
-                    ((MissingBatchItemsFragment) fragmentCurrent).createdOrEditedProduct(bundle);
-                } else if(fragmentCurrent.getClass() == ShoppingListItemEditFragment.class) {
-                    ((ShoppingListItemEditFragment) fragmentCurrent).setProductName(
-                            bundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                    );
-                } else if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                    ((ShoppingListFragment) fragmentCurrent).selectShoppingList(
-                            bundle.getString(Constants.ARGUMENT.SHOPPING_LIST_NAME)
-                    );
-                }
-                if(debug) Log.i(TAG, "dismissFragment: fragment dismissed, current = " + tag);
-            } else {
-                fragmentCurrent = fragmentManager.findFragmentByTag(Constants.UI.STOCK);
-                if(debug) Log.e(TAG, "dismissFragment: " + tag + " not found");
-            }
-        } else {
-            if(debug) Log.e(TAG, "dismissFragment: no fragment dismissed, backStackCount = " + count);
-        }
-        binding.bottomAppBar.show();
-    }
+    public void dismissFragment(Bundle bundle) { }
 
     public boolean isOnline() {
         return netUtil.isOnline();
