@@ -19,6 +19,7 @@
             android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
             app:destination="@id/shoppingListItemEditFragment"
             app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
@@ -37,6 +38,9 @@
         <action
             android:id="@+id/action_consumeFragment_to_inputNameBottomSheetDialogFragment"
             app:destination="@id/inputNameBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_consumeFragment_to_productOverviewBottomSheetDialogFragment"
+            app:destination="@id/productOverviewBottomSheetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
@@ -69,7 +73,10 @@
         android:label="MasterProductsFragment" >
         <action
             android:id="@+id/action_masterProductsFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment" />
+            app:destination="@id/masterProductSimpleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/masterStoresFragment"
@@ -169,11 +176,13 @@
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
             app:destination="@id/masterProductSimpleFragment"
             app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_shoppingListItemEditFragment"
             app:destination="@id/shoppingListItemEditFragment"
             app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="productDetails"
@@ -203,11 +212,13 @@
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
             app:destination="@id/consumeFragment"
             app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
             app:destination="@id/purchaseFragment"
             app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
     </dialog>
     <dialog
@@ -240,6 +251,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_inputNameBottomSheetDialogFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment" />
+            app:destination="@id/masterProductSimpleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </dialog>
 </navigation>

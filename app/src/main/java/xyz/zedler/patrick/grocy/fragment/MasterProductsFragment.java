@@ -246,8 +246,7 @@ public class MasterProductsFragment extends BaseFragment
                         MasterProductsFragmentDirections
                                 .actionMasterProductsFragmentToMasterProductSimpleFragment(
                                         Constants.ACTION.CREATE
-                                ),
-                        getNavOptions()
+                                )
                 )
         );
     }

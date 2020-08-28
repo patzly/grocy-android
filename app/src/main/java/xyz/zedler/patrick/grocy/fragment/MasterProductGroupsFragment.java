@@ -231,8 +231,7 @@ public class MasterProductGroupsFragment extends BaseFragment
                 animated,
                 () -> NavHostFragment.findNavController(this).navigate(
                         MasterProductGroupsFragmentDirections
-                                .actionMasterProductGroupsFragmentToMasterProductGroupFragment(),
-                        getNavOptions()
+                                .actionMasterProductGroupsFragmentToMasterProductGroupFragment()
                 )
         );
     }

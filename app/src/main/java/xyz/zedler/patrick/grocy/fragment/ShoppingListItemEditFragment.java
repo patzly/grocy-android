@@ -343,7 +343,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             setProductName(productName);
             currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
         });
-
     }
 
     private void updateUI(boolean animated) {

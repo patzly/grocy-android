@@ -963,8 +963,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 ShoppingListFragmentDirections
                         .actionShoppingListFragmentToShoppingListItemEditFragment(
                                 Constants.ACTION.CREATE
-                        ).setSelectedShoppingListId(selectedShoppingListId),
-                getNavOptions()
+                        ).setSelectedShoppingListId(selectedShoppingListId)
         );
     }
 

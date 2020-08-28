@@ -411,12 +411,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
         String tag = bottomSheet.toString();
-        Fragment fragment = fragmentManager.findFragmentByTag(tag);
-        if (fragment == null || !fragment.isVisible()) {
-            if(bundle != null) bottomSheet.setArguments(bundle);
-            bottomSheet.show(fragmentManager, tag);
-            if(debug) Log.i(TAG, "showBottomSheet: " + tag);
-        } else if(debug) Log.e(TAG, "showBottomSheet: sheet already visible");
+        bottomSheet.setArguments(bundle);
+        bottomSheet.show(fragmentManager, tag);
+        if(debug) Log.i(TAG, "showBottomSheet: " + bottomSheet.toString());
     }
 
     public void showHideDemoIndicator(Fragment fragment, boolean animated) {

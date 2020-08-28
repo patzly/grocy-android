@@ -234,8 +234,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
                 animated,
                 () -> NavHostFragment.findNavController(this).navigate(
                         MasterQuantityUnitsFragmentDirections
-                                .actionMasterQuantityUnitsFragmentToMasterQuantityUnitFragment(),
-                        getNavOptions()
+                                .actionMasterQuantityUnitsFragmentToMasterQuantityUnitFragment()
                 )
         );
     }

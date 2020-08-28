@@ -41,6 +41,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -63,7 +66,6 @@ import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -347,6 +349,19 @@ public class ConsumeFragment extends BaseFragment {
         updateUI((getArguments() == null
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
+
+        // We use a String here, but any type that can be put in a Bundle is supported
+        NavBackStackEntry currentBackStackEntry = NavHostFragment
+                .findNavController(this)
+                .getCurrentBackStackEntry();
+        assert currentBackStackEntry != null;
+        MutableLiveData<String> liveData = currentBackStackEntry
+                .getSavedStateHandle()
+                .getLiveData(Constants.ARGUMENT.PRODUCT_NAME);
+        liveData.observe(getViewLifecycleOwner(), (String productName) -> {
+            // TODO: Set product name; has higher relevance than productName in getArguments()
+            currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
+        });
     }
 
     private void updateUI(boolean animated) {
@@ -747,8 +762,12 @@ public class ConsumeFragment extends BaseFragment {
                     }
                     activity.showMessage(snackbar);
 
-                    // CLEAR USER INPUT
-                    clearAll();
+                    assert getArguments() != null;
+                    if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                        navigateUp(this, activity);
+                    } else {
+                        clearAll();
+                    }
                 },
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
@@ -819,8 +838,12 @@ public class ConsumeFragment extends BaseFragment {
                     }
                     activity.showMessage(snackbar);
 
-                    // CLEAR USER INPUT
-                    clearAll();
+                    assert getArguments() != null;
+                    if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                        navigateUp(this, activity);
+                    } else {
+                        clearAll();
+                    }
                 },
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
@@ -1044,11 +1067,10 @@ public class ConsumeFragment extends BaseFragment {
         if(menuItemDetails != null) menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(productDetails != null) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                activity.showBottomSheet(
-                        new ProductOverviewBottomSheetDialogFragment(),
-                        bundle
+                NavHostFragment.findNavController(this).navigate(
+                        ConsumeFragmentDirections
+                                .actionConsumeFragmentToProductOverviewBottomSheetDialogFragment()
+                                .setProductDetails(productDetails)
                 );
             } else {
                 binding.textInputConsumeProduct.setError(

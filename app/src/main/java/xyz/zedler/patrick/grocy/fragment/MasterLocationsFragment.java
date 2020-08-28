@@ -232,8 +232,7 @@ public class MasterLocationsFragment extends BaseFragment
                 animated,
                 () -> NavHostFragment.findNavController(this).navigate(
                         MasterLocationsFragmentDirections
-                                .actionMasterLocationsFragmentToMasterLocationFragment(),
-                        getNavOptions()
+                                .actionMasterLocationsFragmentToMasterLocationFragment()
                 )
         );
     }

@@ -142,6 +142,8 @@ public class MasterDataBottomSheetDialogFragment
         builder.setPopUpTo(R.id.stockFragment, false);
         if(! (activity.getCurrentFragment() instanceof StockFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
+        } else {
+            builder.setExitAnim(R.anim.slide_no);
         }
         NavHostFragment.findNavController(this).navigate(
                 fragmentId,

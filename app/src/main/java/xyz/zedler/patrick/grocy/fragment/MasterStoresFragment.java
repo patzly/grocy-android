@@ -230,8 +230,7 @@ public class MasterStoresFragment extends BaseFragment
                 animated,
                 () -> NavHostFragment.findNavController(this).navigate(
                         MasterStoresFragmentDirections
-                                .actionMasterStoresFragmentToMasterStoreFragment(),
-                        getNavOptions()
+                                .actionMasterStoresFragmentToMasterStoreFragment()
                 )
         );
     }
