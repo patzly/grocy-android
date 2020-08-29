@@ -1,3 +1,6 @@
+1.8.4:
+- Norwegian translation (thanks teitrand!)
+
 1.8.3:
 - Hotfix for batch mode
 
