@@ -30,6 +30,7 @@ Im Product overview bottom sheet wird zB. "5 Packungen (2 geöff..." angezeigt, 
 - versionCode +1
 - version name updated?
 - latest libs?
+- German translation complete?
 - changelog added?
 
 # Conventions
