@@ -29,6 +29,7 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -73,6 +74,7 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Boolean> isDownloadingLive;
     private SingleLiveEvent<Boolean> totalPriceCheckedLive;
+    private SingleLiveEvent<Boolean> isTareWeightEnabledLive;
     private SingleLiveEvent<String> bestBeforeDateLive;
     private SingleLiveEvent<String> priceLive;
     private SingleLiveEvent<Double> amountLive;
@@ -97,8 +99,10 @@ public class PurchaseViewModel extends AndroidViewModel {
         storesLive = new SingleLiveEvent<>();
         isDownloadingLive = new SingleLiveEvent<>();
         totalPriceCheckedLive = new SingleLiveEvent<>();
+        isTareWeightEnabledLive = new SingleLiveEvent<>();
         isDownloadingLive.setValue(false);
         totalPriceCheckedLive.setValue(false);
+        isTareWeightEnabledLive.setValue(false);
 
         productDetailsLive = new SingleLiveEvent<>();
         amountLive = new SingleLiveEvent<>();
@@ -178,6 +182,35 @@ public class PurchaseViewModel extends AndroidViewModel {
                     );
                     writeDefaultValues();
                 }, error -> {}
+        );
+    }
+
+    public void loadProductDetailsByBarcode(String barcode) {
+        getIsDownloadingLive().setValue(true);
+        dlHelper.get(
+                grocyApi.getStockProductByBarcode(barcode),
+                response -> {
+                    getIsDownloadingLive().setValue(false);
+                    productDetailsLive.setValue(
+                            gson.fromJson(
+                                    response,
+                                    new TypeToken<ProductDetails>(){}.getType()
+                            )
+                    );
+                }, error -> {
+                    NetworkResponse response = error.networkResponse;
+                    if(response != null && response.statusCode == 400) {
+                        /*binding.autoCompletePurchaseProduct.setText(barcode);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
+                        activity.showBottomSheet(
+                                new InputBarcodeBottomSheetDialogFragment(), bundle
+                        );*/
+                    } else {
+                        showMessage(getString(R.string.error_undefined));
+                    }
+                    getIsDownloadingLive().setValue(false);
+                }
         );
     }
 
@@ -380,6 +413,23 @@ public class PurchaseViewModel extends AndroidViewModel {
         return amountLive.getValue();
     }
 
+    public Double getMinAmount() {
+        assert getIsTareWeightEnabledLive().getValue() != null;
+        double minAmount;
+        if(getProductDetails() == null || !getIsTareWeightEnabledLive().getValue()) {
+            minAmount = 1;
+        } else {
+            minAmount = getProductDetails().getProduct().getTareWeight();
+            minAmount += getProductDetails().getStockAmount();
+        }
+        return minAmount;
+    }
+
+    @NonNull
+    public SingleLiveEvent<Boolean> getIsTareWeightEnabledLive() {
+        return isTareWeightEnabledLive;
+    }
+
     @NonNull
     public SingleLiveEvent<String> getPriceLive() {
         return priceLive;
@@ -420,9 +470,22 @@ public class PurchaseViewModel extends AndroidViewModel {
         return locationsLive.getValue();
     }
 
+    @NonNull
+    public SingleLiveEvent<Integer> getLocationIdLive() {
+        return locationIdLive;
+    }
+
     public int getLocationId() {
         assert locationIdLive.getValue() != null;
         return locationIdLive.getValue();
+    }
+
+    @Nullable
+    public Location getLocationFromId(int locationId) {
+        if(getLocations() == null || getLocations().isEmpty() || locationId == -1) return null;
+        for(Location locationTmp : getLocations()) {
+            if (locationTmp.getId() == locationId) return locationTmp;
+        } return null;
     }
 
     @NonNull
@@ -435,9 +498,22 @@ public class PurchaseViewModel extends AndroidViewModel {
         return storesLive.getValue();
     }
 
+    @NonNull
+    public SingleLiveEvent<Integer> getStoreIdLive() {
+        return storeIdLive;
+    }
+
     public int getStoreId() {
         assert storeIdLive.getValue() != null;
         return storeIdLive.getValue();
+    }
+
+    @Nullable
+    public Store getStoreFromId(int storeId) {
+        if(getStores() == null || getStores().isEmpty() || storeId == -1) return null;
+        for(Store storeTmp : getStores()) {
+            if (storeTmp.getId() == storeId) return storeTmp;
+        } return null;
     }
 
     @NonNull

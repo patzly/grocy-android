@@ -42,10 +42,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.NetworkResponse;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -59,25 +57,24 @@ import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 
 public class PurchaseFragment extends BaseFragment {
 
@@ -99,12 +96,7 @@ public class PurchaseFragment extends BaseFragment {
 
     private ProductDetails productDetails;
 
-    private int selectedLocationId;
-    private int selectedStoreId;
     private int shoppingListItemPos;
-    private String selectedBestBeforeDate;
-    private double amount;
-    private double minAmount;
     private boolean debug;
 
     @Override
@@ -157,11 +149,6 @@ public class PurchaseFragment extends BaseFragment {
         quantityUnits = new ArrayList<>();
 
         productDetails = null;
-        selectedLocationId = -1;
-        selectedStoreId = -1;
-        selectedBestBeforeDate = null;
-        amount = 0;
-        minAmount = 0;
         shoppingListItemPos = 0;
 
         // INITIALIZE VIEWS
@@ -272,7 +259,7 @@ public class PurchaseFragment extends BaseFragment {
             if(!getAmount().isEmpty()) {
                 IconUtil.start(activity, R.id.image_purchase_amount);
                 double amountNew = Double.parseDouble(getAmount()) - 1;
-                if(amountNew >= minAmount) {
+                if(amountNew >= viewModel.getMinAmount()) {
                     binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
                 }
             }
@@ -320,9 +307,12 @@ public class PurchaseFragment extends BaseFragment {
         });
 
         binding.linearPurchaseTotalPrice.setOnClickListener(
-                v -> viewModel.getTotalPriceCheckedLive().setValue(
+                v -> binding.checkboxPurchaseTotalPrice.setChecked(
                         !binding.checkboxPurchaseTotalPrice.isChecked()
                 )
+        );
+        binding.checkboxPurchaseTotalPrice.setOnCheckedChangeListener(
+                (v, isChecked) -> viewModel.getTotalPriceCheckedLive().setValue(isChecked)
         );
 
         // store
@@ -404,8 +394,18 @@ public class PurchaseFragment extends BaseFragment {
         viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
             if(productDetails != null) {
                 fillWithProductDetails(productDetails);
+
+                binding.textInputPurchaseAmount.setHint(
+                        activity.getString(
+                                R.string.property_amount_in,
+                                productDetails.getQuantityUnitPurchase().getNamePlural()
+                        )
+                );
+
             } else {
                 clearAll();
+
+                binding.textInputPurchaseAmount.setHint(getString(R.string.property_amount));
             }
         });
         viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
@@ -435,6 +435,28 @@ public class PurchaseFragment extends BaseFragment {
                 getViewLifecycleOwner(),
                 amount -> binding.editTextPurchaseAmount.setText(NumUtil.trim(amount))
         );
+        viewModel.getIsTareWeightEnabledLive().observe(
+                getViewLifecycleOwner(),
+                isEnabled -> {
+                    // deactivate checkbox if tare weight handling is on
+                    if(isEnabled) {
+                        binding.linearPurchaseTotalPrice.setEnabled(false);
+                        binding.linearPurchaseTotalPrice.setAlpha(0.5f);
+                        binding.checkboxPurchaseTotalPrice.setEnabled(false);
+                    } else {
+                        binding.linearPurchaseTotalPrice.setEnabled(true);
+                        binding.linearPurchaseTotalPrice.setAlpha(1.0f);
+                        binding.checkboxPurchaseTotalPrice.setEnabled(true);
+                    }
+
+                    // set icon for tare weight, else for normal amount
+                    binding.imagePurchaseAmount.setImageResource(
+                            isEnabled
+                                    ? R.drawable.ic_round_scale_anim
+                                    : R.drawable.ic_round_scatter_plot_anim
+                    );
+                }
+        );
         viewModel.getPriceLive().observe(
                 getViewLifecycleOwner(),
                 price -> binding.editTextPurchasePrice.setText(price)
@@ -442,6 +464,32 @@ public class PurchaseFragment extends BaseFragment {
         viewModel.getTotalPriceCheckedLive().observe(
                 getViewLifecycleOwner(),
                 isChecked -> binding.checkboxPurchaseTotalPrice.setChecked(isChecked)
+        );
+        viewModel.getStoreIdLive().observe(
+                getViewLifecycleOwner(),
+                storeId -> {
+                    Store store = viewModel.getStoreFromId(storeId);
+                    if(store != null) {
+                        binding.textPurchaseStore.setText(store.getName());
+                    } else {
+                        binding.textPurchaseStore.setText(
+                                getString(R.string.subtitle_none_selected)
+                        );
+                    }
+                }
+        );
+        viewModel.getLocationIdLive().observe(
+                getViewLifecycleOwner(),
+                locationId -> {
+                    Location location = viewModel.getLocationFromId(locationId);
+                    if(location != null) {
+                        binding.textPurchaseLocation.setText(location.getName());
+                    } else {
+                        binding.textPurchaseLocation.setText(
+                                getString(R.string.subtitle_none_selected)
+                        );
+                    }
+                }
         );
     }
 
@@ -545,7 +593,7 @@ public class PurchaseFragment extends BaseFragment {
         if(listItem.getProductId() != null) {
             //loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
-            fillAmount(false);
+            //fillAmount(false);
         }
     }
 
@@ -568,9 +616,8 @@ public class PurchaseFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {
-            if(data != null) {
-                loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
-            }
+            if(data == null) return;
+            viewModel.loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
         }
     }
 
@@ -578,115 +625,35 @@ public class PurchaseFragment extends BaseFragment {
     private void fillWithProductDetails(ProductDetails productDetails) {
         clearInputFocus();
 
-        boolean isTareWeightHandlingEnabled = productDetails
-                .getProduct()
-                .getEnableTareWeightHandling() == 1;
+        viewModel.getIsTareWeightEnabledLive().setValue(
+                productDetails.getProduct().getEnableTareWeightHandling() == 1
+        );
 
         // PRODUCT
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
         binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
-        binding.textInputPurchaseProduct.setErrorEnabled(false);
 
         // AMOUNT
 
-        fillAmount(isTareWeightHandlingEnabled);
-
-        // PRICE
-
-        if(productDetails.getLastPrice() != null && !productDetails.getLastPrice().isEmpty()) {
-            binding.editTextPurchasePrice.setText(
-                    NumUtil.trimPrice(Double.parseDouble(productDetails.getLastPrice()))
-            );
-        } else {
-            binding.editTextPurchasePrice.setText(null);
-        }
-
-        binding.checkboxPurchaseTotalPrice.setChecked(false);
-
-        // deactivate checkbox if tare weight handling is on
-        if(isTareWeightHandlingEnabled) {
-            binding.linearPurchaseTotalPrice.setEnabled(false);
-            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
-            binding.checkboxPurchaseTotalPrice.setEnabled(false);
-        } else {
-            binding.linearPurchaseTotalPrice.setEnabled(true);
-            binding.linearPurchaseTotalPrice.setAlpha(1.0f);
-            binding.checkboxPurchaseTotalPrice.setEnabled(true);
-        }
-
-        // STORE
-        String storeId;
-        if(productDetails.getLastShoppingLocationId() != null
-                && !productDetails.getLastShoppingLocationId().isEmpty()
-        ) {
-            storeId = productDetails.getLastShoppingLocationId();
-        } else {
-            storeId = productDetails.getProduct().getStoreId();
-        }
-        if(storeId == null || storeId.isEmpty()) {
-            selectedStoreId = -1;
-            binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
-        } else {
-            selectedStoreId = Integer.parseInt(storeId);
-            Store store = getStore(selectedStoreId);
-            if(store != null) {
-                binding.textPurchaseStore.setText(store.getName());
-            } else {
-                binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
-            }
-        }
-
-        // LOCATION
-        if(productDetails.getLocation() != null) {
-            selectedLocationId = productDetails.getLocation().getId();
-            binding.textPurchaseLocation.setText(productDetails.getLocation().getName());
-        } else {
-            selectedLocationId = -1;
-        }
-
-        // mark fields with invalid or missing content as invalid
-        isFormIncomplete();
-    }
-
-    private void fillAmount(boolean isTareWeightHandlingEnabled) {
-        if(viewModel.getProductDetails() != null) {
-            binding.textInputPurchaseAmount.setHint(
-                    activity.getString(
-                            R.string.property_amount_in,
-                            viewModel.getProductDetails().getQuantityUnitPurchase().getNamePlural()
-                    )
-            );
-        } else {
-            binding.textInputPurchaseAmount.setHint(activity.getString(R.string.property_amount));
-        }
-        if(!isTareWeightHandlingEnabled || viewModel.getProductDetails() == null) {
-            minAmount = 1;
-        } else {
-            minAmount = viewModel.getProductDetails().getProduct().getTareWeight();
-            minAmount += viewModel.getProductDetails().getStockAmount();
-        }
-
+        assert viewModel.getIsTareWeightEnabledLive().getValue() != null;
         if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
             double amount = Double.parseDouble(Objects.requireNonNull(
                     startupBundle.getString(Constants.ARGUMENT.AMOUNT)
             ));
             binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
-        } else {
-            // leave amount empty if tare weight handling enabled
-            if(!isTareWeightHandlingEnabled) {
-                String defaultAmount = sharedPrefs.getString(
-                        Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
-                );
-                if(defaultAmount == null || defaultAmount.isEmpty()) {
-                    binding.editTextPurchaseAmount.setText(null);
-                } else {
-                    binding.editTextPurchaseAmount.setText(
-                            NumUtil.trim(Double.parseDouble(defaultAmount))
-                    );
-                }
-            } else {
+        } else if(!viewModel.getIsTareWeightEnabledLive().getValue()) { // leave amount empty if tare weight handling enabled
+            String defaultAmount = sharedPrefs.getString(
+                    Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
+            );
+            if(defaultAmount == null || defaultAmount.isEmpty()) {
                 binding.editTextPurchaseAmount.setText(null);
+            } else {
+                binding.editTextPurchaseAmount.setText(
+                        NumUtil.trim(Double.parseDouble(defaultAmount))
+                );
             }
+        } else {
+            binding.editTextPurchaseAmount.setText(null);
         }
 
         if(getAmount().isEmpty()) {
@@ -694,12 +661,37 @@ public class PurchaseFragment extends BaseFragment {
             activity.showKeyboard(binding.editTextPurchaseAmount);
         }
 
-        // set icon for tare weight, else for normal amount
-        binding.imagePurchaseAmount.setImageResource(
-                isTareWeightHandlingEnabled
-                        ? R.drawable.ic_round_scale_anim
-                        : R.drawable.ic_round_scatter_plot_anim
-        );
+        // PRICE
+
+        String lastPrice = productDetails.getLastPrice();
+        if(lastPrice != null && !lastPrice.isEmpty()) {
+            viewModel.getPriceLive().setValue(NumUtil.trimPrice(Double.parseDouble(lastPrice)));
+        } else {
+            viewModel.getPriceLive().setValue(null);
+        }
+
+        // STORE
+        String storeId = productDetails.getLastShoppingLocationId();
+        if(storeId == null || storeId.isEmpty()) {
+            storeId = productDetails.getLastShoppingLocationId();
+        } else {
+            storeId = productDetails.getProduct().getStoreId();
+        }
+        if(storeId == null || storeId.isEmpty()) {
+            viewModel.getStoreIdLive().setValue(-1);
+        } else {
+            viewModel.getStoreIdLive().setValue(Integer.parseInt(storeId));
+        }
+
+        // LOCATION
+        if(productDetails.getLocation() == null) {
+            viewModel.getLocationIdLive().setValue(-1);
+        } else {
+            viewModel.getStoreIdLive().setValue(productDetails.getLocation().getId());
+        }
+
+        // mark fields with invalid or missing content as invalid
+        isFormIncomplete();
     }
 
     private void clearInputFocus() {
@@ -707,34 +699,6 @@ public class PurchaseFragment extends BaseFragment {
         binding.textInputPurchaseProduct.clearFocus();
         binding.textInputPurchaseAmount.clearFocus();
         binding.textInputPurchasePrice.clearFocus();
-    }
-
-    private void loadProductDetailsByBarcode(String barcode) {
-        binding.swipePurchase.setRefreshing(true);
-        dlHelper.get(
-                grocyApi.getStockProductByBarcode(barcode),
-                response -> {
-                    binding.swipePurchase.setRefreshing(false);
-                    productDetails = gson.fromJson(
-                            response,
-                            new TypeToken<ProductDetails>(){}.getType()
-                    );
-                    fillWithProductDetails(productDetails);
-                }, error -> {
-                    NetworkResponse response = error.networkResponse;
-                    if(response != null && response.statusCode == 400) {
-                        binding.autoCompletePurchaseProduct.setText(barcode);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
-                        activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(), bundle
-                        );
-                    } else {
-                        showMessage(activity.getString(R.string.error_undefined));
-                    }
-                    binding.swipePurchase.setRefreshing(false);
-                }
-        );
     }
 
     private boolean isFormIncomplete() {
@@ -853,40 +817,17 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     public void selectStore(int selectedId) {
-        this.selectedStoreId = selectedId;
-        if(stores.isEmpty()) {
-            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
-        } else {
-            Store store = getStore(selectedId);
-            if(store != null) {
-                binding.textPurchaseStore.setText(store.getName());
-            } else {
-                binding.textPurchaseStore.setText(getString(R.string.subtitle_none_selected));
-                showErrorMessage();
-            }
-        }
+        viewModel.getStoreIdLive().setValue(selectedId);
     }
 
     public void selectLocation(int selectedId) {
-        this.selectedLocationId = selectedId;
-        if(viewModel.getLocations() == null || viewModel.getLocations().isEmpty()) {
-            binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
-        } else {
-            Location location = getLocation(selectedId);
-            if(location != null) {
-                binding.textPurchaseLocation.setText(location.getName());
-            } else {
-                binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
-                showErrorMessage();
-            }
-        }
-        isLocationValid();
+        viewModel.getLocationIdLive().setValue(selectedId);
     }
 
     private boolean isLocationValid() {
         if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             return true;
-        } else if(selectedLocationId < 0) {
+        } else if(viewModel.getLocationId() < 0) {
             binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
             return false;
         } else {
@@ -898,9 +839,9 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private boolean isAmountValid() {
-        if(amount >= minAmount) {
+        if(viewModel.getAmount() >= viewModel.getMinAmount()) {
             if(productDetails != null
-                    && amount % 1 != 0 // partial amount, has to be allowed in product master
+                    && viewModel.getAmount() % 1 != 0 // partial amount, has to be allowed in product master
                     && productDetails.getProduct().getAllowPartialUnitsInStock() == 0
             ) {
                 binding.textInputPurchaseAmount.setError(
@@ -916,7 +857,7 @@ public class PurchaseFragment extends BaseFragment {
                 binding.textInputPurchaseAmount.setError(
                         activity.getString(
                                 R.string.error_bounds_min,
-                                NumUtil.trim(minAmount)
+                                NumUtil.trim(viewModel.getMinAmount())
                         )
                 );
             }
@@ -944,23 +885,6 @@ public class PurchaseFragment extends BaseFragment {
             binding.textInputPurchasePrice.setErrorEnabled(false);
             return true;
         }
-    }
-
-    private Store getStore(int storeId) {
-        for(Store store : stores) {
-            if(store.getId() == storeId) {
-                return store;
-            }
-        } return null;
-    }
-
-    private Location getLocation(int locationId) {
-        if(viewModel.getLocations() == null) return null;
-        for(Location location : viewModel.getLocations()) {
-            if(location.getId() == locationId) {
-                return location;
-            }
-        } return null;
     }
 
     public void addInputAsBarcode() {
