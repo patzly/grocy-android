@@ -77,6 +77,12 @@ public final class Constants {
         public final static String NEVER_EXPIRES = "2999-12-31";
     }
 
+    public final static class MessageType {
+        public final static int NORMAL = 0;
+        public final static int DOWNLOAD_ERROR_REFRESH = 1;
+        public final static int PURCHASE_FINISHED = 2;
+    }
+
     public final static class UI {
         public final static String STOCK = "stock";
         public final static String STOCK_DEFAULT = "stock_default";

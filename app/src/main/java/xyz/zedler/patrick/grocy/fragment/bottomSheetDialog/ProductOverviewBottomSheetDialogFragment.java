@@ -170,7 +170,6 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		);
 		toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
 		toolbar.setOnMenuItemClickListener(item -> {
-			Bundle bundle = new Bundle();
 			switch (item.getItemId()) {
 				case R.id.action_add_to_shopping_list:
 					NavHostFragment.findNavController(this).navigate(ProductOverviewBottomSheetDialogFragmentDirections.actionProductOverviewBottomSheetDialogFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE).setProductName(product.getName()));

@@ -34,18 +34,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
-import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -68,7 +67,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -81,8 +79,9 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
+import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.SnackbarMessage;
 
 public class PurchaseFragment extends BaseFragment {
 
@@ -94,15 +93,12 @@ public class PurchaseFragment extends BaseFragment {
     private GrocyApi grocyApi;
     private DownloadHelper dlHelper;
     private DateUtil dateUtil;
-    private ArrayAdapter<String> adapterProducts;
     private PurchaseFragmentArgs args;
     private Bundle startupBundle;
     private FragmentPurchaseBinding binding;
+    private PurchaseViewModel viewModel;
 
-    private ArrayList<Product> products;
-    private ArrayList<Location> locations;
     private ArrayList<Store> stores;
-    private ArrayList<String> productNames;
     private ArrayList<QuantityUnit> quantityUnits;
 
     private ProductDetails productDetails;
@@ -142,6 +138,8 @@ public class PurchaseFragment extends BaseFragment {
         startupBundle = getArguments();
         args = PurchaseFragmentArgs.fromBundle(getArguments());
 
+        viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
+
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -159,10 +157,7 @@ public class PurchaseFragment extends BaseFragment {
 
         // INITIALIZE VARIABLES
 
-        products = new ArrayList<>();
-        locations = new ArrayList<>();
         stores = new ArrayList<>();
-        productNames = new ArrayList<>();
         quantityUnits = new ArrayList<>();
 
         productDetails = null;
@@ -191,6 +186,11 @@ public class PurchaseFragment extends BaseFragment {
         );
         binding.swipePurchase.setOnRefreshListener(this::refresh);
 
+        viewModel.getIsDownloadingLive().observe(
+                getViewLifecycleOwner(),
+                isDownloading -> binding.swipePurchase.setRefreshing(isDownloading)
+        );
+
         // product
 
         binding.textInputPurchaseProduct.setErrorIconDrawable(null);
@@ -198,20 +198,61 @@ public class PurchaseFragment extends BaseFragment {
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
+
+        viewModel.getProductsLive().observe(
+                getViewLifecycleOwner(),
+                products1 -> viewModel.getProductNamesLive().setValue(getProductNames(products1))
+        );
+
+        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
+            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
+                    activity,
+                    new ArrayList<>(productNames)
+            );
+            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
+        });
+
+        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails1 -> {
+            if(productDetails1 != null) {
+                fillWithProductDetails(productDetails1);
+            } else {
+                clearAll();
+            }
+        });
+
+        viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
+            if(date == null) {
+                binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
+            } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
+                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
+            } else {
+                binding.textPurchaseBbd.setText(
+                        dateUtil.getLocalizedDate(viewModel.getBestBeforeDateLive().getValue(), DateUtil.FORMAT_MEDIUM)
+                );
+            }
+            if(viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+                if(viewModel.getBestBeforeDateLive().getValue() == null) {
+                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
+                } else {
+                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
+                }
+            }
+        });
+
+        viewModel.getAmountLive().observe(
+                getViewLifecycleOwner(),
+                amount -> binding.editTextPurchaseAmount.setText(NumUtil.trim(amount))
+        );
+
         binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(!hasFocus) return;
             IconUtil.start(binding.imagePurchaseProduct);
-            if(!productNames.isEmpty()) return;
-            // try again to download products
-            dlHelper.getProducts(products -> {
-                this.products = products;
-                productNames = getProductNames();
-                adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
-                binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-            }).perform(dlHelper.getUuid());
+            if(viewModel.getProductNamesLive().getValue() != null
+                    && !viewModel.getProductNamesLive().getValue().isEmpty()
+            ) viewModel.updateProducts();
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
-                (parent, v, position, id) -> loadProductDetails(
+                (parent, v, position, id) -> viewModel.loadProductDetails(
                         getProductFromName(
                                 String.valueOf(parent.getItemAtPosition(position))
                         ).getId()
@@ -222,7 +263,11 @@ public class PurchaseFragment extends BaseFragment {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
                         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-                        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
+                        if(viewModel.getProductNames() != null
+                                && !viewModel.getProductNames().isEmpty()
+                                && !viewModel.getProductNames().contains(input)
+                                && !input.isEmpty()
+                        ) {
                             showInputNameBottomSheet(input);
                         }
                         return true;
@@ -232,11 +277,11 @@ public class PurchaseFragment extends BaseFragment {
         // best before date
 
         binding.linearPurchaseBbd.setOnClickListener(v -> {
-            if(productDetails != null) {
+            if(viewModel.getProductDetails() != null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(
                         Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
-                        String.valueOf(productDetails.getProduct().getDefaultBestBeforeDays())
+                        String.valueOf(viewModel.getProductDetails().getProduct().getDefaultBestBeforeDays())
                 );
                 bundle.putString(Constants.ARGUMENT.SELECTED_DATE, selectedBestBeforeDate);
                 activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
@@ -252,15 +297,12 @@ public class PurchaseFragment extends BaseFragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                amount = NumUtil.stringToDouble(s.toString());
-                isAmountValid();
+                if(viewModel.getAmount() == NumUtil.stringToDouble(s.toString())) return;
+                viewModel.getAmountLive().setValue(NumUtil.stringToDouble(s.toString()));
             }
         });
         binding.editTextPurchaseAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(binding.imagePurchaseAmount);
-                // editTextAmount.selectAll();
-            }
+            if(hasFocus) IconUtil.start(binding.imagePurchaseAmount);
         });
         binding.editTextPurchaseAmount.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
@@ -268,7 +310,7 @@ public class PurchaseFragment extends BaseFragment {
                         clearInputFocus();
                         return true;
                     } return false;
-                });
+        });
 
         binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_amount);
@@ -345,7 +387,7 @@ public class PurchaseFragment extends BaseFragment {
         // store
 
         binding.linearPurchaseStore.setOnClickListener(v -> {
-            if(productDetails != null) {
+            if(viewModel.getProductDetails() != null) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedStoreId);
@@ -359,10 +401,10 @@ public class PurchaseFragment extends BaseFragment {
         // location
 
         binding.linearPurchaseLocation.setOnClickListener(v -> {
-            if(productDetails != null) {
+            if(viewModel.getProductDetails() != null) {
                 IconUtil.start(activity, R.id.image_purchase_location);
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+                bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
                 activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
             } else {
@@ -389,14 +431,14 @@ public class PurchaseFragment extends BaseFragment {
 
         if(savedInstanceState == null) {
             refresh();
-        } else {
-            restoreSavedInstanceState(savedInstanceState);
         }
 
         // UPDATE UI
         updateUI((getArguments() == null
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
+
+        setupSnackbar();
     }
 
     private void updateUI(boolean animated) {
@@ -414,71 +456,48 @@ public class PurchaseFragment extends BaseFragment {
                 R.string.action_purchase,
                 Constants.FAB.TAG.PURCHASE,
                 animated,
-                this::purchaseProduct
+                () -> {
+                    if(isFormIncomplete()) return;
+                    viewModel.purchaseProduct();
+                }
         );
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(isHidden()) return;
-
-        outState.putParcelableArrayList("products", products);
-        outState.putParcelableArrayList("locations", locations);
-        outState.putParcelableArrayList("stores", stores);
-        outState.putParcelableArrayList("quantityUnits", quantityUnits);
-
-        outState.putParcelable("productDetails", productDetails);
-
-        outState.putInt("selectedLocationId", selectedLocationId);
-        outState.putInt("selectedStoreId", selectedStoreId);
-        outState.putInt("shoppingListItemPos", shoppingListItemPos);
-        outState.putString("selectedBestBeforeDate", selectedBestBeforeDate);
-
-        outState.putDouble("amount", amount);
-        outState.putDouble("minAmount", minAmount);
-    }
-
-    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
-        if(isHidden()) return;
-
-        products = savedInstanceState.getParcelableArrayList("products");
-        locations = savedInstanceState.getParcelableArrayList("locations");
-        stores = savedInstanceState.getParcelableArrayList("stores");
-        quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
-
-        productNames = getProductNames();
-        adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
-        binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-
-        productDetails = savedInstanceState.getParcelable("productDetails");
-
-        selectedLocationId = savedInstanceState.getInt("selectedLocationId");
-        selectedStoreId = savedInstanceState.getInt("selectedStoreId");
-        shoppingListItemPos = savedInstanceState.getInt("shoppingListItemPos");
-        selectedBestBeforeDate = savedInstanceState.getString("selectedBestBeforeDate");
-
-        amount = savedInstanceState.getDouble("amount");
-        minAmount = savedInstanceState.getDouble("minAmount");
-
-        fillWithShoppingListItem();
-
-        binding.swipePurchase.setRefreshing(false);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if(!hidden && getView() != null) onViewCreated(getView(), null);
-    }
-
-    public void giveBundle(Bundle bundle) {
-        startupBundle = bundle;
+    private void setupSnackbar() {
+        viewModel.getSnackbarMessage().observe(
+                this,
+                (SnackbarMessage.SnackbarObserver) messageObj -> {
+                    if(messageObj.getType() == Constants.MessageType.DOWNLOAD_ERROR_REFRESH) {
+                        assert messageObj.getMsg() != null;
+                        activity.showMessage(
+                                Snackbar.make(
+                                        activity.binding.frameMainContainer,
+                                        messageObj.getMsg(),
+                                        Snackbar.LENGTH_LONG
+                                ).setActionTextColor(
+                                        ContextCompat.getColor(activity, R.color.secondary)
+                                ).setAction(
+                                        activity.getString(R.string.action_retry),
+                                        v1 -> viewModel.downloadData()
+                                )
+                        );
+                    } else if(messageObj.getMsg() != null) {
+                        activity.showMessage(
+                                Snackbar.make(
+                                        activity.binding.frameMainContainer,
+                                        messageObj.getMsg(),
+                                        Snackbar.LENGTH_LONG
+                                )
+                        );
+                    }
+                }
+        );
     }
 
     private void refresh() {
         if(activity.isOnline()) {
-            download();
+            viewModel.downloadData();
         } else {
-            binding.swipePurchase.setRefreshing(false);
             activity.showMessage(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
@@ -493,65 +512,7 @@ public class PurchaseFragment extends BaseFragment {
             );
         }
 
-        clearAll();
-    }
-
-    private void download() {
-        binding.swipePurchase.setRefreshing(true);
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onError);
-        queue.append(
-                dlHelper.getProducts(products -> {
-                    this.products = products;
-                    productNames = getProductNames();
-                    adapterProducts = new MatchArrayAdapter(activity, new ArrayList<>(productNames));
-                    binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-                }),
-                dlHelper.getStores(stores -> {
-                    this.stores = stores;
-                    SortUtil.sortStoresByName(this.stores, true);
-                    // Insert NONE as first element
-                    stores.add(
-                            0,
-                            new Store(-1, activity.getString(R.string.subtitle_none_selected))
-                    );
-                })
-        );
-        if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            queue.append(
-                    dlHelper.getLocations(locations -> {
-                        this.locations = locations;
-                        SortUtil.sortLocationsByName(this.locations, true);
-                    })
-            );
-        }
-        // only load quantity units if shopping list items have to be displayed
-        if(startupBundle != null) {
-            String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
-            if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
-                queue.append(
-                        dlHelper.getQuantityUnits(quUnits -> this.quantityUnits = quUnits)
-                );
-            }
-        }
-
-        queue.start();
-    }
-
-    private void onError(VolleyError error) {
-        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        binding.swipePurchase.setRefreshing(false);
-        activity.showMessage(
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        activity.getString(R.string.error_undefined),
-                        Snackbar.LENGTH_SHORT
-                ).setActionTextColor(
-                        ContextCompat.getColor(activity, R.color.secondary)
-                ).setAction(
-                        activity.getString(R.string.action_retry),
-                        v1 -> download()
-                )
-        );
+        //clearAll();
     }
 
     private void onQueueEmpty() {
@@ -561,45 +522,11 @@ public class PurchaseFragment extends BaseFragment {
             String productName = PurchaseFragmentArgs.fromBundle(getArguments()).getProductName();
             Product product = getProductFromName(productName);
             if(product != null) {
-                loadProductDetails(product.getId());
+                //loadProductDetails(product.getId());
             } else {
                 binding.autoCompletePurchaseProduct.setText(productName);
             }
             return;
-        }
-        String action = null;
-        if(startupBundle != null) {
-            action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-        }
-        if(action != null) {
-            Product product;
-            switch (action) {
-                case Constants.ACTION.CREATE_THEN_PURCHASE:
-                case Constants.ACTION.EDIT_THEN_PURCHASE:
-                    product = getProductFromName(
-                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                    );
-                    if(product != null) {
-                        loadProductDetails(product.getId());
-                    } else {
-                        binding.autoCompletePurchaseProduct.setText(
-                                startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                        );
-                    }
-                    break;
-                case Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST:
-                case Constants.ACTION.PURCHASE_THEN_STOCK:
-                    product = getProductFromName(
-                            startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                    );
-                    if(product != null) {
-                        loadProductDetails(product.getId());
-                    }
-                    break;
-                case Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST:
-                    fillWithShoppingListItem();
-                    break;
-            }
         }
         binding.swipePurchase.setRefreshing(false);
     }
@@ -623,7 +550,7 @@ public class PurchaseFragment extends BaseFragment {
         );
         startupBundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(listItem.getAmount()));
         if(listItem.getProductId() != null) {
-            loadProductDetails(Integer.parseInt(listItem.getProductId()));
+            //loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
             fillAmount(false);
         }
@@ -655,7 +582,7 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private void fillWithProductDetails() {
+    private void fillWithProductDetails(ProductDetails productDetails) {
         clearInputFocus();
 
         boolean isTareWeightHandlingEnabled = productDetails
@@ -666,22 +593,6 @@ public class PurchaseFragment extends BaseFragment {
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
         binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
         binding.textInputPurchaseProduct.setErrorEnabled(false);
-
-        // BBD
-        int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
-        if(defaultBestBeforeDays < 0) {
-            selectedBestBeforeDate = Constants.DATE.NEVER_EXPIRES;
-            binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
-        } else if (defaultBestBeforeDays == 0) {
-            selectedBestBeforeDate = null;
-            binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
-        } else {
-            // add default best before days to today
-            selectedBestBeforeDate = DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays);
-            binding.textPurchaseBbd.setText(
-                    dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
-            );
-        }
 
         // AMOUNT
 
@@ -745,21 +656,21 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private void fillAmount(boolean isTareWeightHandlingEnabled) {
-        if(productDetails != null) {
+        if(viewModel.getProductDetails() != null) {
             binding.textInputPurchaseAmount.setHint(
                     activity.getString(
                             R.string.property_amount_in,
-                            productDetails.getQuantityUnitPurchase().getNamePlural()
+                            viewModel.getProductDetails().getQuantityUnitPurchase().getNamePlural()
                     )
             );
         } else {
             binding.textInputPurchaseAmount.setHint(activity.getString(R.string.property_amount));
         }
-        if(!isTareWeightHandlingEnabled || productDetails == null) {
+        if(!isTareWeightHandlingEnabled || viewModel.getProductDetails() == null) {
             minAmount = 1;
         } else {
-            minAmount = productDetails.getProduct().getTareWeight();
-            minAmount += productDetails.getStockAmount();
+            minAmount = viewModel.getProductDetails().getProduct().getTareWeight();
+            minAmount += viewModel.getProductDetails().getStockAmount();
         }
 
         if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
@@ -805,19 +716,6 @@ public class PurchaseFragment extends BaseFragment {
         binding.textInputPurchasePrice.clearFocus();
     }
 
-    private void loadProductDetails(int productId) {
-        dlHelper.get(
-                grocyApi.getStockProductDetails(productId),
-                response -> {
-                    productDetails = gson.fromJson(
-                            response,
-                            new TypeToken<ProductDetails>(){}.getType()
-                    );
-                    fillWithProductDetails();
-                }, error -> {}
-        );
-    }
-
     private void loadProductDetailsByBarcode(String barcode) {
         binding.swipePurchase.setRefreshing(true);
         dlHelper.get(
@@ -828,7 +726,7 @@ public class PurchaseFragment extends BaseFragment {
                             response,
                             new TypeToken<ProductDetails>(){}.getType()
                     );
-                    fillWithProductDetails();
+                    fillWithProductDetails(productDetails);
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
@@ -849,178 +747,25 @@ public class PurchaseFragment extends BaseFragment {
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-        if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
+        if(viewModel.getProductNames() != null && !viewModel.getProductNames().isEmpty() && !viewModel.getProductNames().contains(input) && !input.isEmpty()) {
             showInputNameBottomSheet(input);
             isIncomplete = true;
         }
-        if(productDetails == null) {
+        if(viewModel.getProductDetails() == null) {
             binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             isIncomplete = true;
         }
-        if(!isBestBeforeDateValid()) isIncomplete = true;
+        if(viewModel.getBestBeforeDateLive().getValue() == null) isIncomplete = true;
         if(!isAmountValid()) isIncomplete = true;
         if(!isPriceValid()) isIncomplete = true;
         if(!isLocationValid()) isIncomplete = true;
         return isIncomplete;
     }
 
-    private void showInputNameBottomSheet(String productName) {
+    private void showInputNameBottomSheet(@NonNull String productName) {
         NavHostFragment.findNavController(this).navigate(
                 PurchaseFragmentDirections
                         .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName)
-        );
-    }
-
-    public void purchaseProduct() {
-        if(isFormIncomplete()) return;
-        double amountMultiplied = amount * productDetails.getProduct().getQuFactorPurchaseToStock();
-        JSONObject body = new JSONObject();
-        try {
-            body.put("amount", amountMultiplied);
-            body.put("transaction_type", "purchase");
-            if(!getPrice().isEmpty()) {
-                double price = NumUtil.stringToDouble(getPrice());
-                if(binding.checkboxPurchaseTotalPrice.isChecked()) {
-                    price = price / amount;
-                }
-                body.put("price", price);
-            }
-            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-                body.put("best_before_date", selectedBestBeforeDate);
-            } else {
-                body.put("best_before_date", Constants.DATE.NEVER_EXPIRES);
-            }
-            if(selectedStoreId > -1) {
-                body.put("shopping_location_id", selectedStoreId);
-            }
-            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-                body.put("location_id", selectedLocationId);
-            }
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "purchaseProduct: " + e);
-        }
-        dlHelper.post(
-                grocyApi.purchaseProduct(productDetails.getProduct().getId()),
-                body,
-                response -> {
-                    // ADD BARCODES TO PRODUCT
-                    editProductBarcodes();
-
-                    // UNDO OPTION
-                    String transactionId = null;
-                    try {
-                        transactionId = response.getString("transaction_id");
-                    } catch (JSONException e) {
-                        if(debug) Log.e(TAG, "purchaseProduct: " + e);
-                    }
-                    if(debug) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
-
-                    double amountAdded;
-                    if(productDetails.getProduct().getEnableTareWeightHandling() == 0) {
-                        amountAdded = amountMultiplied;
-                    } else {
-                        // calculate difference of amount if tare weight handling enabled
-                        amountAdded = amountMultiplied - productDetails.getProduct().getTareWeight()
-                                - productDetails.getStockAmount();
-                    }
-
-                    Snackbar snackbar = Snackbar.make(
-                            activity.binding.frameMainContainer,
-                            activity.getString(
-                                    R.string.msg_purchased,
-                                    NumUtil.trim(amountAdded),
-                                    amountMultiplied == 1
-                                            ? productDetails.getQuantityUnitStock().getName()
-                                            : productDetails.getQuantityUnitStock().getNamePlural(),
-                                    productDetails.getProduct().getName()
-                            ), Snackbar.LENGTH_LONG
-                    );
-
-                    if(transactionId != null) {
-                        String transId = transactionId;
-                        snackbar.setActionTextColor(
-                                ContextCompat.getColor(activity, R.color.secondary)
-                        ).setAction(
-                                activity.getString(R.string.action_undo),
-                                v -> undoTransaction(transId)
-                        );
-                    }
-                    activity.showMessage(snackbar);
-
-                    if(true) {
-                        assert getArguments() != null;
-                        if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                            navigateUp(this, activity);
-                        } else {
-                            clearAll();
-                        }
-                        return;
-                    }
-
-                    String action = null;
-                    if(startupBundle != null) {
-                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-                    }
-                    if(action != null) {
-                        switch (action) {
-                            case Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST:
-                                // delete entry from shopping list
-                                ShoppingListItem shoppingListItem = startupBundle.getParcelable(
-                                        Constants.ARGUMENT.SHOPPING_LIST_ITEM
-                                );
-                                assert shoppingListItem != null;
-                                dlHelper.delete(
-                                        grocyApi.getObject(
-                                                GrocyApi.ENTITY.SHOPPING_LIST,
-                                                shoppingListItem.getId()
-                                        ),
-                                        response1 -> activity.dismissFragment(),
-                                        error -> activity.dismissFragment()
-                                );
-                                return;
-                            case Constants.ACTION.PURCHASE_THEN_STOCK:
-                                activity.dismissFragment();
-                                return;
-                            case Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST:
-                                ArrayList<ShoppingListItem> listItems = getShoppingListItems();
-                                assert listItems != null;
-                                ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
-                                assert listItem != null;
-                                dlHelper.delete(
-                                        grocyApi.getObject(
-                                                GrocyApi.ENTITY.SHOPPING_LIST,
-                                                listItem.getId()
-                                        ),
-                                        response1 -> {
-                                            shoppingListItemPos += 1;
-                                            if(shoppingListItemPos + 1 > listItems.size()) {
-                                                activity.dismissFragment();
-                                                return;
-                                            }
-                                            clearAll();
-                                            fillWithShoppingListItem();
-                                        },
-                                        error -> {
-                                            shoppingListItemPos += 1;
-                                            if(shoppingListItemPos + 1 > listItems.size()) {
-                                                activity.dismissFragment();
-                                                return;
-                                            }
-                                            clearAll();
-                                            fillWithShoppingListItem();
-                                        }
-                                );
-                            default:
-                                clearAll();
-                        }
-                    } else {
-                        clearAll();
-                    }
-                },
-                error -> {
-                    showErrorMessage();
-                    if(debug) Log.i(TAG, "purchaseProduct: " + error);
-                }
         );
     }
 
@@ -1074,36 +819,35 @@ public class PurchaseFragment extends BaseFragment {
         );
     }
 
-    private Product getProductFromName(String name) {
-        if(name != null) {
-            for(Product product : products) {
-                if(product.getName().equals(name)) {
-                    return product;
-                }
+    @Nullable
+    private Product getProductFromName(@Nullable String name) {
+        if(viewModel.getProductsLive().getValue() == null || name == null) return null;
+        for(Product product : viewModel.getProductsLive().getValue()) {
+            if(product.getName().equals(name)) {
+                return product;
             }
         }
         return null;
     }
 
-    private ArrayList<String> getProductNames() {
+    @NonNull
+    private ArrayList<String> getProductNames(@NonNull ArrayList<Product> products) {
         ArrayList<String> names = new ArrayList<>();
-        if(products != null) {
-            for(Product product : products) {
-                names.add(product.getName());
-            }
+        for(Product product : products) {
+            names.add(product.getName());
         }
         return names;
     }
 
     private void hideDisabledFeatures() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
             binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
             binding.linearPurchasePrice.setVisibility(View.GONE);
         }
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             binding.linearPurchaseLocation.setVisibility(View.GONE);
         }
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             binding.linearPurchaseBbd.setVisibility(View.GONE);
         }
     }
@@ -1111,70 +855,58 @@ public class PurchaseFragment extends BaseFragment {
     public void setUpBottomMenu() {
         MenuItem menuItemBatch, menuItemDetails, menuItemSkipItem;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
+        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
+        menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
+        if(menuItemBatch == null || menuItemDetails == null || menuItemSkipItem == null) return;
+
         menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
             activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
             return true;
         });
-        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        if(menuItemDetails != null) {
-            menuItemDetails.setOnMenuItemClickListener(item -> {
-                IconUtil.start(menuItemDetails);
-                if(productDetails != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                    activity.showBottomSheet(
-                            new ProductOverviewBottomSheetDialogFragment(),
-                            bundle
-                    );
-                } else {
-                    binding.textInputPurchaseProduct.setError(
-                            activity.getString(R.string.error_select_product)
-                    );
+        menuItemDetails.setOnMenuItemClickListener(item -> {
+            IconUtil.start(menuItemDetails);
+            if(viewModel.getProductDetailsLive().getValue() == null) {
+                binding.textInputPurchaseProduct.setError(
+                        getString(R.string.error_select_product)
+                );
+                return false;
+            }
+            NavHostFragment.findNavController(this).navigate(
+                    PurchaseFragmentDirections
+                            .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
+                            .setProductDetails(viewModel.getProductDetailsLive().getValue())
+            );
+            return true;
+        });
+        String action = null;
+        if(startupBundle != null) action = startupBundle.getString(Constants.ARGUMENT.TYPE);
+        if(action != null && action.equals(
+                Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
+        )) {
+            menuItemSkipItem.setVisible(true);
+            menuItemSkipItem.setOnMenuItemClickListener(item -> {
+                IconUtil.start(menuItemSkipItem);
+                ArrayList<ShoppingListItem> listItems = startupBundle
+                        .getParcelableArrayList(
+                                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
+                        );
+                assert listItems != null;
+                shoppingListItemPos += 1;
+                if(shoppingListItemPos + 1 > listItems.size()) {
+                    activity.dismissFragment();
+                    return true;
                 }
+                clearAll();
+                fillWithShoppingListItem();
                 return true;
             });
-        }
-        menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
-        if(menuItemSkipItem != null) {
-            String action = null;
-            if(startupBundle != null) action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-            if(action != null && action.equals(
-                    Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
-            )) {
-                menuItemSkipItem.setVisible(true);
-                menuItemSkipItem.setOnMenuItemClickListener(item -> {
-                    IconUtil.start(menuItemSkipItem);
-                    ArrayList<ShoppingListItem> listItems = startupBundle
-                            .getParcelableArrayList(
-                                    Constants.ARGUMENT.SHOPPING_LIST_ITEMS
-                            );
-                    assert listItems != null;
-                    shoppingListItemPos += 1;
-                    if(shoppingListItemPos + 1 > listItems.size()) {
-                        activity.dismissFragment();
-                        return true;
-                    }
-                    clearAll();
-                    fillWithShoppingListItem();
-                    return true;
-                });
-            }
         }
     }
 
     public void selectBestBeforeDate(String selectedBestBeforeDate) {
-        if(selectedBestBeforeDate == null) return;
-        this.selectedBestBeforeDate = selectedBestBeforeDate;
-        if(selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
-            binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
-        } else {
-            binding.textPurchaseBbd.setText(
-                    dateUtil.getLocalizedDate(selectedBestBeforeDate, DateUtil.FORMAT_MEDIUM)
-            );
-        }
-        isBestBeforeDateValid();
+        viewModel.getBestBeforeDateLive().setValue(selectedBestBeforeDate);
     }
 
     public void selectStore(int selectedId) {
@@ -1194,7 +926,7 @@ public class PurchaseFragment extends BaseFragment {
 
     public void selectLocation(int selectedId) {
         this.selectedLocationId = selectedId;
-        if(locations.isEmpty()) {
+        if(viewModel.getLocations() == null || viewModel.getLocations().isEmpty()) {
             binding.textPurchaseLocation.setText(getString(R.string.subtitle_none_selected));
         } else {
             Location location = getLocation(selectedId);
@@ -1208,20 +940,8 @@ public class PurchaseFragment extends BaseFragment {
         isLocationValid();
     }
 
-    private boolean isBestBeforeDateValid() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-            return true;
-        } else if(selectedBestBeforeDate == null || selectedBestBeforeDate.isEmpty()) {
-            binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
-            return false;
-        } else {
-            binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
-            return true;
-        }
-    }
-
     private boolean isLocationValid() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             return true;
         } else if(selectedLocationId < 0) {
             binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
@@ -1292,7 +1012,8 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private Location getLocation(int locationId) {
-        for(Location location : locations) {
+        if(viewModel.getLocations() == null) return null;
+        for(Location location : viewModel.getLocations()) {
             if(location.getId() == locationId) {
                 return location;
             }
@@ -1368,11 +1089,6 @@ public class PurchaseFragment extends BaseFragment {
         Editable price = binding.editTextPurchasePrice.getText();
         if(price == null) return "";
         return price.toString();
-    }
-
-    private boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
     }
 
     @NonNull

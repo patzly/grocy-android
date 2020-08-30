@@ -1,7 +1,7 @@
 package xyz.zedler.patrick.grocy.helper;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -77,13 +77,16 @@ public class DownloadHelper {
     private boolean debug;
 
     public DownloadHelper(Activity activity, String tag) {
-        Context context = activity.getApplicationContext();
+        this(activity.getApplication(), tag);
+    }
+
+    public DownloadHelper(Application application, String tag) {
         this.tag = tag;
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         gson = new Gson();
-        requestQueue = RequestQueueSingleton.getInstance(context).getRequestQueue();
-        grocyApi = new GrocyApi(context);
+        requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
+        grocyApi = new GrocyApi(application);
         uuidHelper = UUID.randomUUID().toString();
         dateTimeFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
