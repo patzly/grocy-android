@@ -19,45 +19,19 @@ package xyz.zedler.patrick.grocy.viewmodel;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
 
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.model.Event;
 
 /**
- * A SingleLiveEvent used for Snackbar messages. Like a {@link SingleLiveEvent} but also prevents
+ * A SingleLiveEvent used for all kinds of events. Like a {@link SingleLiveEvent} but also prevents
  * null messages and uses a custom observer.
  * <p>
  * Note that only one observer is going to be notified of changes.
  */
-public class SnackbarMessage extends SingleLiveEvent<SnackbarMessage.Message> {
+public class EventHandler extends SingleLiveEvent<Event> {
 
-    public static class Message {
-        String msg;
-        int type;
-
-        public Message(@NonNull String msg) {
-            this.msg = msg;
-            this.type = Constants.MessageType.NORMAL;
-        }
-
-        public Message(@NonNull String msg, int type) {
-            this.msg = msg;
-            this.type = type;
-        }
-
-        @Nullable
-        public String getMsg() {
-            return msg;
-        }
-
-        public int getType() {
-            return type;
-        }
-    }
-
-    public void observe(LifecycleOwner owner, final SnackbarObserver observer) {
+    public void observe(LifecycleOwner owner, final EventObserver observer) {
         super.observe(owner, t -> {
             if (t == null) {
                 return;
@@ -66,12 +40,12 @@ public class SnackbarMessage extends SingleLiveEvent<SnackbarMessage.Message> {
         });
     }
 
-    public interface SnackbarObserver {
+    public interface EventObserver {
         /**
          * Called when there is a new message to be shown.
-         * @param message The new message, non-null.
+         * @param event The new event, non-null.
          */
-        void onNewMessage(Message message);
+        void onNewMessage(Event event);
     }
 
 }

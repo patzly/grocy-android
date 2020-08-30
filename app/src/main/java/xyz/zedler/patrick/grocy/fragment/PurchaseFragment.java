@@ -25,9 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -49,11 +47,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
@@ -80,8 +74,10 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
+import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
-import xyz.zedler.patrick.grocy.viewmodel.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 
 public class PurchaseFragment extends BaseFragment {
 
@@ -186,11 +182,6 @@ public class PurchaseFragment extends BaseFragment {
         );
         binding.swipePurchase.setOnRefreshListener(this::refresh);
 
-        viewModel.getIsDownloadingLive().observe(
-                getViewLifecycleOwner(),
-                isDownloading -> binding.swipePurchase.setRefreshing(isDownloading)
-        );
-
         // product
 
         binding.textInputPurchaseProduct.setErrorIconDrawable(null);
@@ -199,56 +190,11 @@ public class PurchaseFragment extends BaseFragment {
                 Constants.REQUEST.SCAN
         ));
 
-        viewModel.getProductsLive().observe(
-                getViewLifecycleOwner(),
-                products1 -> viewModel.getProductNamesLive().setValue(getProductNames(products1))
-        );
-
-        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
-            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
-                    activity,
-                    new ArrayList<>(productNames)
-            );
-            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-        });
-
-        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails1 -> {
-            if(productDetails1 != null) {
-                fillWithProductDetails(productDetails1);
-            } else {
-                clearAll();
-            }
-        });
-
-        viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
-            if(date == null) {
-                binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
-            } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
-                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
-            } else {
-                binding.textPurchaseBbd.setText(
-                        dateUtil.getLocalizedDate(viewModel.getBestBeforeDateLive().getValue(), DateUtil.FORMAT_MEDIUM)
-                );
-            }
-            if(viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-                if(viewModel.getBestBeforeDateLive().getValue() == null) {
-                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
-                } else {
-                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
-                }
-            }
-        });
-
-        viewModel.getAmountLive().observe(
-                getViewLifecycleOwner(),
-                amount -> binding.editTextPurchaseAmount.setText(NumUtil.trim(amount))
-        );
-
         binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(!hasFocus) return;
             IconUtil.start(binding.imagePurchaseProduct);
-            if(viewModel.getProductNamesLive().getValue() != null
-                    && !viewModel.getProductNamesLive().getValue().isEmpty()
+            if(viewModel.getProductNamesLive().getValue() == null
+                    || viewModel.getProductNamesLive().getValue().isEmpty()
             ) viewModel.updateProducts();
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
@@ -283,7 +229,7 @@ public class PurchaseFragment extends BaseFragment {
                         Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
                         String.valueOf(viewModel.getProductDetails().getProduct().getDefaultBestBeforeDays())
                 );
-                bundle.putString(Constants.ARGUMENT.SELECTED_DATE, selectedBestBeforeDate);
+                bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
                 activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
@@ -343,7 +289,12 @@ public class PurchaseFragment extends BaseFragment {
         binding.editTextPurchasePrice.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            public void afterTextChanged(Editable s) {isPriceValid();}
+            public void afterTextChanged(Editable s) {
+                if(viewModel.getPrice() != null && viewModel.getPrice().equals(s.toString())) {
+                    return;
+                }
+                viewModel.getPriceLive().setValue(s.toString());
+            }
         });
         binding.editTextPurchasePrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
@@ -361,25 +312,15 @@ public class PurchaseFragment extends BaseFragment {
 
         binding.buttonPurchasePriceMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_price);
-            if(getPrice().isEmpty()) {
-                binding.editTextPurchasePrice.setText(NumUtil.trimPrice(1));
-            } else {
-                double priceNew = NumUtil.stringToDouble(getPrice()) + 1;
-                binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
-            }
+            viewModel.changePriceMore();
         });
         binding.buttonPurchasePriceLess.setOnClickListener(v -> {
-            if(!getPrice().isEmpty()) {
-                IconUtil.start(activity, R.id.image_purchase_price);
-                double priceNew = NumUtil.stringToDouble(getPrice()) - 1;
-                if(priceNew >= 0) {
-                    binding.editTextPurchasePrice.setText(NumUtil.trimPrice(priceNew));
-                }
-            }
+            IconUtil.start(activity, R.id.image_purchase_price);
+            viewModel.changePriceLess();
         });
 
         binding.linearPurchaseTotalPrice.setOnClickListener(
-                v -> binding.checkboxPurchaseTotalPrice.setChecked(
+                v -> viewModel.getTotalPriceCheckedLive().setValue(
                         !binding.checkboxPurchaseTotalPrice.isChecked()
                 )
         );
@@ -389,8 +330,8 @@ public class PurchaseFragment extends BaseFragment {
         binding.linearPurchaseStore.setOnClickListener(v -> {
             if(viewModel.getProductDetails() != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedStoreId);
+                bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, viewModel.getStores());
+                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getStoreId());
                 activity.showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
@@ -405,7 +346,7 @@ public class PurchaseFragment extends BaseFragment {
                 IconUtil.start(activity, R.id.image_purchase_location);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
+                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getLocationId());
                 activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
             } else {
                 // no product selected
@@ -438,7 +379,70 @@ public class PurchaseFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        setupSnackbar();
+        setupEventHandler();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        viewModel.getIsDownloadingLive().observe(
+                getViewLifecycleOwner(),
+                isDownloading -> binding.swipePurchase.setRefreshing(isDownloading)
+        );
+        viewModel.getProductsLive().observe(
+                getViewLifecycleOwner(),
+                products -> viewModel.getProductNamesLive().setValue(getProductNames(products))
+        );
+        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
+            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
+                    activity,
+                    new ArrayList<>(productNames)
+            );
+            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
+        });
+        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
+            if(productDetails != null) {
+                fillWithProductDetails(productDetails);
+            } else {
+                clearAll();
+            }
+        });
+        viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
+            if(date == null) {
+                binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
+            } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
+                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
+            } else {
+                binding.textPurchaseBbd.setText(
+                        dateUtil.getLocalizedDate(
+                                viewModel.getBestBeforeDate(),
+                                DateUtil.FORMAT_MEDIUM
+                        )
+                );
+            }
+            if(viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+                if(viewModel.getBestBeforeDateLive().getValue() == null) {
+                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
+                } else {
+                    binding.textPurchaseBbdLabel.setTextColor(
+                            getColor(R.color.on_background_secondary)
+                    );
+                }
+            }
+        });
+        viewModel.getAmountLive().observe(
+                getViewLifecycleOwner(),
+                amount -> binding.editTextPurchaseAmount.setText(NumUtil.trim(amount))
+        );
+        viewModel.getPriceLive().observe(
+                getViewLifecycleOwner(),
+                price -> binding.editTextPurchasePrice.setText(price)
+        );
+        viewModel.getTotalPriceCheckedLive().observe(
+                getViewLifecycleOwner(),
+                isChecked -> binding.checkboxPurchaseTotalPrice.setChecked(isChecked)
+        );
     }
 
     private void updateUI(boolean animated) {
@@ -463,35 +467,24 @@ public class PurchaseFragment extends BaseFragment {
         );
     }
 
-    private void setupSnackbar() {
-        viewModel.getSnackbarMessage().observe(
-                this,
-                (SnackbarMessage.SnackbarObserver) messageObj -> {
-                    if(messageObj.getType() == Constants.MessageType.DOWNLOAD_ERROR_REFRESH) {
-                        assert messageObj.getMsg() != null;
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.binding.frameMainContainer,
-                                        messageObj.getMsg(),
-                                        Snackbar.LENGTH_LONG
-                                ).setActionTextColor(
-                                        ContextCompat.getColor(activity, R.color.secondary)
-                                ).setAction(
-                                        activity.getString(R.string.action_retry),
-                                        v1 -> viewModel.downloadData()
-                                )
-                        );
-                    } else if(messageObj.getMsg() != null) {
-                        activity.showMessage(
-                                Snackbar.make(
-                                        activity.binding.frameMainContainer,
-                                        messageObj.getMsg(),
-                                        Snackbar.LENGTH_LONG
-                                )
-                        );
+    private void setupEventHandler() {
+        viewModel.getEventHandler().observe(
+                getViewLifecycleOwner(),
+                (EventHandler.EventObserver) event -> {
+                    if(event.getType() == Event.SNACKBAR_MESSAGE) {
+                        activity.showMessage(((SnackbarMessage) event).getSnackbar(
+                                activity,
+                                activity.binding.frameMainContainer
+                        ));
+                    } else if(event.getType() == Event.PURCHASE_SUCCESS) {
+                        assert getArguments() != null;
+                        if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                            navigateUp(this, activity);
+                        } else {
+                            clearAll();
+                        }
                     }
-                }
-        );
+        });
     }
 
     private void refresh() {
@@ -766,56 +759,6 @@ public class PurchaseFragment extends BaseFragment {
         NavHostFragment.findNavController(this).navigate(
                 PurchaseFragmentDirections
                         .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName)
-        );
-    }
-
-    private void undoTransaction(String transactionId) {
-        if(binding == null || activity != null && activity.isDestroyed()) return;
-        dlHelper.post(
-                grocyApi.undoStockTransaction(transactionId),
-                success -> {
-                    showMessage(activity.getString(R.string.msg_undone_transaction));
-                    if(debug) Log.i(TAG, "undoTransaction: undone");
-                },
-                error -> showErrorMessage()
-        );
-    }
-
-    private void editProductBarcodes() {
-        if(binding.linearPurchaseBarcodeContainer.getChildCount() == 0) return;
-
-        String barcodesString = productDetails.getProduct().getBarcode();
-        ArrayList<String> barcodes;
-        if(barcodesString == null || barcodesString.isEmpty()) {
-            barcodes = new ArrayList<>();
-        } else {
-            barcodes = new ArrayList<>(
-                    Arrays.asList(
-                            productDetails.getProduct().getBarcode().split(",")
-                    )
-            );
-        }
-
-        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
-            if(!barcodes.contains(inputChip.getText())) {
-                barcodes.add(inputChip.getText());
-            }
-        }
-        if(debug) Log.i(TAG, "editProductBarcodes: " + barcodes);
-        JSONObject body = new JSONObject();
-        try {
-            body.put("barcode", TextUtils.join(",", barcodes));
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
-        }
-        dlHelper.put(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productDetails.getProduct().getId()),
-                body,
-                response -> { },
-                error -> {
-                    if(debug) Log.i(TAG, "editProductBarcodes: " + error);
-                }
         );
     }
 

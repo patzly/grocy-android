@@ -25,24 +25,32 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class PurchaseViewModel extends AndroidViewModel {
@@ -54,15 +62,22 @@ public class PurchaseViewModel extends AndroidViewModel {
     private DownloadHelper dlHelper;
     private Gson gson;
     private GrocyApi grocyApi;
-    private SnackbarMessage snackbarText;
+    private EventHandler eventHandler;
 
-    private MutableLiveData<ArrayList<Product>> productsLive;
-    private MutableLiveData<ArrayList<Location>> locationsLive;
-    private MutableLiveData<ArrayList<String>> productNamesLive;
-    private MutableLiveData<ProductDetails> productDetailsLive;
-    private MutableLiveData<String> bestBeforeDateLive;
-    private MutableLiveData<Double> amountLive;
-    private MutableLiveData<Boolean> isDownloadingLive;
+    private SingleLiveEvent<ArrayList<Product>> productsLive;
+    private SingleLiveEvent<ArrayList<Location>> locationsLive;
+    private SingleLiveEvent<ArrayList<Store>> storesLive;
+    private SingleLiveEvent<ArrayList<QuantityUnit>> quantityUnitsLive;
+    private SingleLiveEvent<ArrayList<String>> productNamesLive;
+    private SingleLiveEvent<ProductDetails> productDetailsLive;
+
+    private SingleLiveEvent<Boolean> isDownloadingLive;
+    private SingleLiveEvent<Boolean> totalPriceCheckedLive;
+    private SingleLiveEvent<String> bestBeforeDateLive;
+    private SingleLiveEvent<String> priceLive;
+    private SingleLiveEvent<Double> amountLive;
+    private SingleLiveEvent<Integer> storeIdLive;
+    private SingleLiveEvent<Integer> locationIdLive;
 
     public PurchaseViewModel(@NonNull Application application) {
         super(application);
@@ -73,16 +88,27 @@ public class PurchaseViewModel extends AndroidViewModel {
         dlHelper = new DownloadHelper(getApplication(), TAG);
         gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
-        snackbarText = new SnackbarMessage();
+        eventHandler = new EventHandler();
 
-        productsLive = new MutableLiveData<>();
-        productNamesLive = new MutableLiveData<>();
-        productDetailsLive = new MutableLiveData<>();
-        bestBeforeDateLive = new MutableLiveData<>();
-        amountLive = new MutableLiveData<>();
-        locationsLive = new MutableLiveData<>();
-        isDownloadingLive = new MutableLiveData<>();
-        amountLive.setValue((double) 0);
+        productsLive = new SingleLiveEvent<>();
+        productNamesLive = new SingleLiveEvent<>();
+        quantityUnitsLive = new SingleLiveEvent<>();
+        locationsLive = new SingleLiveEvent<>();
+        storesLive = new SingleLiveEvent<>();
+        isDownloadingLive = new SingleLiveEvent<>();
+        totalPriceCheckedLive = new SingleLiveEvent<>();
+        isDownloadingLive.setValue(false);
+        totalPriceCheckedLive.setValue(false);
+
+        productDetailsLive = new SingleLiveEvent<>();
+        amountLive = new SingleLiveEvent<>();
+        priceLive = new SingleLiveEvent<>();
+        storeIdLive = new SingleLiveEvent<>();
+        locationIdLive = new SingleLiveEvent<>();
+        bestBeforeDateLive = new SingleLiveEvent<>();
+        amountLive.setValue(0d);
+        storeIdLive.setValue(-1);
+        locationIdLive.setValue(-1);
     }
 
     public void updateProducts() {
@@ -91,62 +117,17 @@ public class PurchaseViewModel extends AndroidViewModel {
         ).perform(dlHelper.getUuid());
     }
 
-    @NonNull
-    public MutableLiveData<ArrayList<Product>> getProductsLive() {
-        return productsLive;
-    }
-
-    @NonNull
-    public MutableLiveData<ArrayList<String>> getProductNamesLive() {
-        return productNamesLive;
-    }
-
-    @Nullable
-    public ArrayList<String> getProductNames() {
-        return productNamesLive.getValue();
-    }
-
-    @NonNull
-    public MutableLiveData<String> getBestBeforeDateLive() {
-        return bestBeforeDateLive;
-    }
-
-    @NonNull
-    public MutableLiveData<Double> getAmountLive() {
-        return amountLive;
-    }
-
-    public Double getAmount() {
-        return amountLive.getValue();
-    }
-
-    @NonNull
-    public MutableLiveData<ArrayList<Location>> getLocationsLive() {
-        return locationsLive;
-    }
-
-    @Nullable
-    public ArrayList<Location> getLocations() {
-        return locationsLive.getValue();
-    }
-
-    @NonNull
-    public MutableLiveData<Boolean> getIsDownloadingLive() {
-        return isDownloadingLive;
-    }
-
     public void downloadData() {
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
                 dlHelper.getProducts(products -> this.productsLive.setValue(products)),
                 dlHelper.getStores(stores -> {
-                    /*SortUtil.sortStoresByName(stores, true);
-                    this.stores = stores;
-                    // Insert NONE as first element
-                    stores.add(
+                    SortUtil.sortStoresByName(stores, true);
+                    stores.add( // Insert NONE as first element
                             0,
-                            new Store(-1, activity.getString(R.string.subtitle_none_selected))
-                    );*/
+                            new Store(-1, getString(R.string.subtitle_none_selected))
+                    );
+                    storesLive.setValue(stores);
                 })
         );
         if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
@@ -162,7 +143,7 @@ public class PurchaseViewModel extends AndroidViewModel {
             String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
             if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
                 queue.append(
-                        dlHelper.getQuantityUnits(quUnits -> this.quantityUnits = quUnits)
+                        dlHelper.getQuantityUnits(quUnits -> quantityUnitsLive.setValue(quUnits))
                 );
             }
         }*/
@@ -177,20 +158,12 @@ public class PurchaseViewModel extends AndroidViewModel {
     private void onDownloadError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         getIsDownloadingLive().setValue(false);
-        showSnackbarMessage(new SnackbarMessage.Message(
-                getApplication().getString(R.string.error_undefined),
-                Constants.MessageType.DOWNLOAD_ERROR_REFRESH
-        ));
-    }
-
-    @NonNull
-    public MutableLiveData<ProductDetails> getProductDetailsLive() {
-        return productDetailsLive;
-    }
-
-    @Nullable
-    public ProductDetails getProductDetails() {
-        return productDetailsLive.getValue();
+        showSnackbar(
+                new SnackbarMessage(getString(R.string.error_undefined)).setAction(
+                        getString(R.string.action_retry),
+                        v -> downloadData()
+                )
+        );
     }
 
     public void loadProductDetails(int productId) {
@@ -224,16 +197,18 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     public void purchaseProduct() {
-        /*assert getProductDetails() != null;
+
+        assert getProductDetails() != null;
         assert getAmount() != null;
         double amountMultiplied = getAmount() * getProductDetails().getProduct().getQuFactorPurchaseToStock();
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");
-            if(!getPrice().isEmpty()) {
+            if(getPrice() != null && !getPrice().isEmpty()) {
                 double price = NumUtil.stringToDouble(getPrice());
-                if(binding.checkboxPurchaseTotalPrice.isChecked()) {
+                assert totalPriceCheckedLive.getValue() != null;
+                if(totalPriceCheckedLive.getValue()) {
                     price = price / getAmount();
                 }
                 body.put("price", price);
@@ -243,11 +218,12 @@ public class PurchaseViewModel extends AndroidViewModel {
             } else {
                 body.put("best_before_date", Constants.DATE.NEVER_EXPIRES);
             }
-            if(selectedStoreId > -1) {
-                body.put("shopping_location_id", selectedStoreId);
+            assert storeIdLive.getValue() != null;
+            if(storeIdLive.getValue() > -1) {
+                body.put("shopping_location_id", storeIdLive.getValue());
             }
             if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-                body.put("location_id", selectedLocationId);
+                body.put("location_id", locationIdLive.getValue());
             }
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "purchaseProduct: " + e);
@@ -277,8 +253,8 @@ public class PurchaseViewModel extends AndroidViewModel {
                                 - getProductDetails().getStockAmount();
                     }
 
-                    showSnackbarMessage(new SnackbarMessage.Message(
-                            getApplication().getString(
+                    SnackbarMessage snackbarMessage = new SnackbarMessage(
+                            getString(
                                     R.string.msg_purchased,
                                     NumUtil.trim(amountAdded),
                                     amountMultiplied == 1
@@ -286,45 +262,224 @@ public class PurchaseViewModel extends AndroidViewModel {
                                             : getProductDetails().getQuantityUnitStock().getNamePlural(),
                                     getProductDetails().getProduct().getName()
                             )
-                    ));
-
+                    );
                     if(transactionId != null) {
                         String transId = transactionId;
-                        snackbar.setActionTextColor(
-                                ContextCompat.getColor(activity, R.color.secondary)
-                        ).setAction(
-                                activity.getString(R.string.action_undo),
+                        snackbarMessage.setAction(
+                                getString(R.string.action_undo),
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showMessage(snackbar);
-
-                    assert getArguments() != null;
-                    if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                        navigateUp(this, activity);
-                    } else {
-                        clearAll();
-                    }
+                    showSnackbar(snackbarMessage);
+                    sendEvent(Event.PURCHASE_SUCCESS);
                 },
                 error -> {
                     showErrorMessage();
                     if(debug) Log.i(TAG, "purchaseProduct: " + error);
                 }
+        );
+    }
+
+    private void undoTransaction(String transactionId) {
+        dlHelper.post(
+                grocyApi.undoStockTransaction(transactionId),
+                success -> {
+                    showMessage(getString(R.string.msg_undone_transaction));
+                    if(debug) Log.i(TAG, "undoTransaction: undone");
+                },
+                error -> showErrorMessage()
+        );
+    }
+
+    private void editProductBarcodes() {
+        /*if(binding.linearPurchaseBarcodeContainer.getChildCount() == 0) return;
+        if(getProductDetails() == null) return;
+
+        String barcodesString = getProductDetails().getProduct().getBarcode();
+        ArrayList<String> barcodes;
+        if(barcodesString == null || barcodesString.isEmpty()) {
+            barcodes = new ArrayList<>();
+        } else {
+            barcodes = new ArrayList<>(
+                    Arrays.asList(getProductDetails().getProduct().getBarcode().split(","))
+            );
+        }
+
+        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
+            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
+            if(!barcodes.contains(inputChip.getText())) {
+                barcodes.add(inputChip.getText());
+            }
+        }
+        if(debug) Log.i(TAG, "editProductBarcodes: " + barcodes);
+        JSONObject body = new JSONObject();
+        try {
+            body.put("barcode", TextUtils.join(",", barcodes));
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
+        }
+        dlHelper.put(
+                grocyApi.getObject(
+                        GrocyApi.ENTITY.PRODUCTS,
+                        getProductDetails().getProduct().getId()
+                ),
+                body,
+                response -> { },
+                error -> {
+                    if(debug) Log.i(TAG, "editProductBarcodes: " + error);
+                }
         );*/
     }
 
     @NonNull
-    public SnackbarMessage getSnackbarMessage() {
-        return snackbarText;
+    public SingleLiveEvent<ArrayList<Product>> getProductsLive() {
+        return productsLive;
     }
 
-    private void showSnackbarMessage(SnackbarMessage.Message message) {
-        snackbarText.setValue(message);
+    @NonNull
+    public SingleLiveEvent<ArrayList<String>> getProductNamesLive() {
+        return productNamesLive;
+    }
+
+    @Nullable
+    public ArrayList<String> getProductNames() {
+        return productNamesLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<ProductDetails> getProductDetailsLive() {
+        return productDetailsLive;
+    }
+
+    @Nullable
+    public ProductDetails getProductDetails() {
+        return productDetailsLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<Boolean> getIsDownloadingLive() {
+        return isDownloadingLive;
+    }
+
+    @NonNull
+    public SingleLiveEvent<String> getBestBeforeDateLive() {
+        return bestBeforeDateLive;
+    }
+
+    @Nullable
+    public String getBestBeforeDate() {
+        return bestBeforeDateLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<Double> getAmountLive() {
+        return amountLive;
+    }
+
+    public Double getAmount() {
+        return amountLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<String> getPriceLive() {
+        return priceLive;
+    }
+
+    @Nullable
+    public String getPrice() {
+        return priceLive.getValue();
+    }
+
+    public void changePriceMore() {
+        if(getPrice() == null || getPrice().isEmpty()) {
+            priceLive.setValue(NumUtil.trimPrice(1));
+        } else {
+            double priceNew = NumUtil.stringToDouble(getPrice()) + 1;
+            priceLive.setValue(NumUtil.trimPrice(priceNew));
+        }
+    }
+
+    public void changePriceLess() {
+        if(getPrice() == null || getPrice().isEmpty()) return;
+        double priceNew = NumUtil.stringToDouble(getPrice()) - 1;
+        if(priceNew >= 0) priceLive.setValue(NumUtil.trimPrice(priceNew));
+    }
+
+    @NonNull
+    public SingleLiveEvent<Boolean> getTotalPriceCheckedLive() {
+        return totalPriceCheckedLive;
+    }
+
+    @NonNull
+    public SingleLiveEvent<ArrayList<Location>> getLocationsLive() {
+        return locationsLive;
+    }
+
+    @Nullable
+    public ArrayList<Location> getLocations() {
+        return locationsLive.getValue();
+    }
+
+    public int getLocationId() {
+        assert locationIdLive.getValue() != null;
+        return locationIdLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<ArrayList<Store>> getStoresLive() {
+        return storesLive;
+    }
+
+    @Nullable
+    public ArrayList<Store> getStores() {
+        return storesLive.getValue();
+    }
+
+    public int getStoreId() {
+        assert storeIdLive.getValue() != null;
+        return storeIdLive.getValue();
+    }
+
+    @NonNull
+    public SingleLiveEvent<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
+        return quantityUnitsLive;
+    }
+
+    private void showErrorMessage() {
+        showMessage(getString(R.string.error_undefined));
+    }
+
+    private void showMessage(@NonNull String message) {
+        showSnackbar(new SnackbarMessage(message));
+    }
+
+    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
+        eventHandler.setValue(snackbarMessage);
+    }
+
+    private void sendEvent(int type) {
+        eventHandler.setValue(new Event() {
+            @Override
+            public int getType() {return type;}
+        });
+    }
+
+    @NonNull
+    public EventHandler getEventHandler() {
+        return eventHandler;
     }
 
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    private String getString(@StringRes int resId) {
+        return getApplication().getString(resId);
+    }
+
+    private String getString(@StringRes int resId, Object... formatArgs) {
+        return getApplication().getString(resId, formatArgs);
     }
 
     @Override

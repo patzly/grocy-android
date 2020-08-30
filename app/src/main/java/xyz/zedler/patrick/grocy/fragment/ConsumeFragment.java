@@ -350,7 +350,6 @@ public class ConsumeFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        // We use a String here, but any type that can be put in a Bundle is supported
         NavBackStackEntry currentBackStackEntry = NavHostFragment
                 .findNavController(this)
                 .getCurrentBackStackEntry();
