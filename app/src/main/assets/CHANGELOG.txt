@@ -1,6 +1,6 @@
 1.8.4:
 - Norwegian translation (thanks teitrand!)
-- Spanish (Latin America) translation (thanks martinvolantin!)
+- Spanish translation (thanks Martín!)
 
 1.8.3:
 - Hotfix for batch mode
@@ -17,7 +17,7 @@
 - Bug fixes and improvements
 
 1.8.0:
-- Dutch translation (thanks Maarten Siersema!)
+- Dutch translation (thanks Maarten!)
 - Consume & purchase partial amount
 - Consume all in batch mode (option)
 - Offline indicator in shopping list
