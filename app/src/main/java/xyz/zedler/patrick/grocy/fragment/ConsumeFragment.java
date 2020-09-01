@@ -217,7 +217,7 @@ public class ConsumeFragment extends BaseFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 if(productDetails == null) return;
-                amount = NumUtil.stringToDouble(s.toString());
+                amount = NumUtil.toDouble(s.toString());
                 isAmountValid();
             }
         });

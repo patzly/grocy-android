@@ -34,10 +34,20 @@ public class NumUtil {
     }
 
     public static String formatPrice(String value) {
-        return trimPrice(stringToDouble(value));
+        return trimPrice(toDouble(value));
     }
 
-    public static double stringToDouble(String input) {
+    public static boolean isDouble(String input) {
+        if(input == null || input.isEmpty()) return false;
+        try {
+            Double.parseDouble(input.replace(",", "."));
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    public static double toDouble(String input) {
         if(input == null || input.isEmpty()) return -1;
         try {
             return Double.parseDouble(input.replace(",", "."));

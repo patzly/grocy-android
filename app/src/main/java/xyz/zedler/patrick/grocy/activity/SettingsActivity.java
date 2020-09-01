@@ -882,7 +882,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					String amountFormatted = amount == null || amount.isEmpty()
 							? null
-							: NumUtil.trim(NumUtil.stringToDouble(amount));
+							: NumUtil.trim(NumUtil.toDouble(amount));
 					textViewAmountPurchase.setText(
 							amountFormatted != null
 									? amountFormatted
@@ -913,7 +913,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					String amountFormatted = amount == null || amount.isEmpty()
 							? null
-							: NumUtil.trim(NumUtil.stringToDouble(amount));
+							: NumUtil.trim(NumUtil.toDouble(amount));
 					textViewAmountConsume.setText(
 							amountFormatted != null
 									? amountFormatted

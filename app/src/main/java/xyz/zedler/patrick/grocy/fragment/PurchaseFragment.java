@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +37,10 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -94,8 +96,6 @@ public class PurchaseFragment extends BaseFragment {
     private ArrayList<Store> stores;
     private ArrayList<QuantityUnit> quantityUnits;
 
-    private ProductDetails productDetails;
-
     private int shoppingListItemPos;
     private boolean debug;
 
@@ -148,7 +148,6 @@ public class PurchaseFragment extends BaseFragment {
         stores = new ArrayList<>();
         quantityUnits = new ArrayList<>();
 
-        productDetails = null;
         shoppingListItemPos = 0;
 
         // INITIALIZE VIEWS
@@ -230,8 +229,7 @@ public class PurchaseFragment extends BaseFragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                if(viewModel.getAmount() == NumUtil.stringToDouble(s.toString())) return;
-                viewModel.getAmountLive().setValue(NumUtil.stringToDouble(s.toString()));
+                viewModel.getAmountLive().setValue(s != null ? s.toString() : "");
             }
         });
         binding.editTextPurchaseAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -239,64 +237,47 @@ public class PurchaseFragment extends BaseFragment {
         });
         binding.editTextPurchaseAmount.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        clearInputFocus();
-                        return true;
-                    } return false;
-        });
-
-        binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_purchase_amount);
-            if(getAmount().isEmpty()) {
-                binding.editTextPurchaseAmount.setText(String.valueOf(1));
-            } else {
-                double amountNew = Double.parseDouble(getAmount()) + 1;
-                binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
-            }
-        });
-
-        binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
-            if(!getAmount().isEmpty()) {
-                IconUtil.start(activity, R.id.image_purchase_amount);
-                double amountNew = Double.parseDouble(getAmount()) - 1;
-                if(amountNew >= viewModel.getMinAmount()) {
-                    binding.editTextPurchaseAmount.setText(NumUtil.trim(amountNew));
+                    if (actionId != EditorInfo.IME_ACTION_DONE) return false;
+                    clearInputFocus();
+                    return true;
                 }
-            }
+        );
+        binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
+            binding.progressbarPurchase.setVisibility(View.VISIBLE);
+            IconUtil.start(activity, R.id.image_purchase_amount);
+            viewModel.changeAmountMore();
+        });
+        binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
+            binding.progressbarPurchase.setVisibility(View.GONE);
+            IconUtil.start(activity, R.id.image_purchase_amount);
+            viewModel.changeAmountLess();
         });
 
         // price
 
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        if(currency == null || currency.isEmpty()) {
-            binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
-        } else {
+        if(currency != null && !currency.isEmpty()) {
             binding.textInputPurchasePrice.setHint(getString(R.string.property_price_in, currency));
+        } else {
+            binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
         }
         binding.editTextPurchasePrice.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                if(viewModel.getPrice() != null && viewModel.getPrice().equals(s.toString())) {
-                    return;
-                }
-                viewModel.getPriceLive().setValue(s.toString());
+                viewModel.getPriceLive().setValue(s != null ? s.toString() : "");
             }
         });
         binding.editTextPurchasePrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) {
-                IconUtil.start(binding.imagePurchasePrice);
-                // editTextAmount.selectAll();
-            }
+            if(hasFocus) IconUtil.start(binding.imagePurchasePrice);
         });
         binding.editTextPurchasePrice.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        clearInputFocus();
-                        return true;
-                    } return false;
-                });
-
+                    if (actionId != EditorInfo.IME_ACTION_DONE) return false;
+                    clearInputFocus();
+                    return true;
+                }
+        );
         binding.buttonPurchasePriceMore.setOnClickListener(v -> {
             IconUtil.start(activity, R.id.image_purchase_price);
             viewModel.changePriceMore();
@@ -369,7 +350,6 @@ public class PurchaseFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        setupEventHandler();
     }
 
     @Override
@@ -403,7 +383,7 @@ public class PurchaseFragment extends BaseFragment {
                 );
 
             } else {
-                clearAll();
+                clearFields();
 
                 binding.textInputPurchaseAmount.setHint(getString(R.string.property_amount));
             }
@@ -421,46 +401,60 @@ public class PurchaseFragment extends BaseFragment {
                         )
                 );
             }
-            if(viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-                if(viewModel.getBestBeforeDateLive().getValue() == null) {
-                    binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
-                } else {
-                    binding.textPurchaseBbdLabel.setTextColor(
-                            getColor(R.color.on_background_secondary)
-                    );
-                }
+            if(viewModel.getProductDetails() != null
+                    && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
+                    && viewModel.getBestBeforeDateLive().getValue() == null
+            ) {
+                binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
+            } else {
+                binding.textPurchaseBbdLabel.setTextColor(
+                        getColor(R.color.on_background_secondary)
+                );
             }
         });
-        viewModel.getAmountLive().observe(
-                getViewLifecycleOwner(),
-                amount -> binding.editTextPurchaseAmount.setText(NumUtil.trim(amount))
-        );
-        viewModel.getIsTareWeightEnabledLive().observe(
-                getViewLifecycleOwner(),
-                isEnabled -> {
-                    // deactivate checkbox if tare weight handling is on
-                    if(isEnabled) {
-                        binding.linearPurchaseTotalPrice.setEnabled(false);
-                        binding.linearPurchaseTotalPrice.setAlpha(0.5f);
-                        binding.checkboxPurchaseTotalPrice.setEnabled(false);
-                    } else {
-                        binding.linearPurchaseTotalPrice.setEnabled(true);
-                        binding.linearPurchaseTotalPrice.setAlpha(1.0f);
-                        binding.checkboxPurchaseTotalPrice.setEnabled(true);
-                    }
-
-                    // set icon for tare weight, else for normal amount
-                    binding.imagePurchaseAmount.setImageResource(
-                            isEnabled
-                                    ? R.drawable.ic_round_scale_anim
-                                    : R.drawable.ic_round_scatter_plot_anim
-                    );
-                }
-        );
-        viewModel.getPriceLive().observe(
-                getViewLifecycleOwner(),
-                price -> binding.editTextPurchasePrice.setText(price)
-        );
+        viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
+            if(binding.editTextPurchaseAmount.getText() != null
+                    && !binding.editTextPurchaseAmount.getText().toString().equals(amount)
+            ) {
+                binding.editTextPurchaseAmount.setText(amount);
+            }
+            if(viewModel.getProductDetails() != null && NumUtil.isDouble(amount)
+                    && NumUtil.toDouble(amount) < viewModel.getMinAmount()
+            ) {
+                binding.textInputPurchaseAmount.setError(
+                        activity.getString(
+                                R.string.error_bounds_min,
+                                NumUtil.trim(viewModel.getMinAmount())
+                        )
+                );
+            } else if(viewModel.getProductDetails() != null && NumUtil.isDouble(amount)
+                    && NumUtil.toDouble(amount) % 1 != 0 // partial amount, has to be allowed in product master
+                    && viewModel.getProductDetails().getProduct().getAllowPartialUnitsInStock() == 0
+                    || viewModel.getProductDetails() != null && !NumUtil.isDouble(amount)
+            ) {
+                binding.textInputPurchaseAmount.setError(
+                        activity.getString(R.string.error_invalid_amount)
+                );
+            } else {
+                binding.textInputPurchaseAmount.setErrorEnabled(false);
+            }
+        });
+        viewModel.getPriceLive().observe(getViewLifecycleOwner(), price -> {
+            if(binding.editTextPurchasePrice.getText() != null
+                    && !binding.editTextPurchasePrice.getText().toString().equals(price)
+            ) {
+                binding.editTextPurchasePrice.setText(price);
+            }
+            if(viewModel.getProductDetails() != null && price != null && !price.isEmpty()
+                    && NumUtil.toDouble(price) < 0
+            ) {
+                binding.textInputPurchasePrice.setError(
+                        activity.getString(R.string.error_bounds_min, NumUtil.trim(0))
+                );
+            } else {
+                binding.textInputPurchasePrice.setErrorEnabled(false);
+            }
+        });
         viewModel.getTotalPriceCheckedLive().observe(
                 getViewLifecycleOwner(),
                 isChecked -> binding.checkboxPurchaseTotalPrice.setChecked(isChecked)
@@ -478,19 +472,40 @@ public class PurchaseFragment extends BaseFragment {
                     }
                 }
         );
-        viewModel.getLocationIdLive().observe(
-                getViewLifecycleOwner(),
-                locationId -> {
-                    Location location = viewModel.getLocationFromId(locationId);
-                    if(location != null) {
-                        binding.textPurchaseLocation.setText(location.getName());
-                    } else {
-                        binding.textPurchaseLocation.setText(
-                                getString(R.string.subtitle_none_selected)
-                        );
-                    }
-                }
-        );
+        viewModel.getLocationIdLive().observe(getViewLifecycleOwner(), locationId -> {
+            Location location = viewModel.getLocationFromId(locationId);
+            if(location != null) {
+                binding.textPurchaseLocation.setText(location.getName());
+            } else {
+                binding.textPurchaseLocation.setText(
+                        getString(R.string.subtitle_none_selected)
+                );
+            }
+            if(viewModel.getProductDetails() != null
+                    && !viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
+                    && viewModel.getLocationId() < 0
+            ) {
+                binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
+            } else {
+                binding.textPurchaseLocationLabel.setTextColor(
+                        getColor(R.color.on_background_secondary)
+                );
+            }
+        });
+
+        NavBackStackEntry currentBackStackEntry = NavHostFragment
+                .findNavController(this)
+                .getCurrentBackStackEntry();
+        assert currentBackStackEntry != null;
+        SavedStateHandle savedStateHandle = currentBackStackEntry.getSavedStateHandle();
+        MutableLiveData<Integer> liveData = savedStateHandle
+                .getLiveData(Constants.ARGUMENT.PRODUCT_ID);
+        liveData.observe(getViewLifecycleOwner(), productId -> {
+            viewModel.loadProductDetails(productId);
+            savedStateHandle.remove(Constants.ARGUMENT.PRODUCT_ID);
+        });
+
+        setupEventHandler();
     }
 
     private void updateUI(boolean animated) {
@@ -529,7 +544,7 @@ public class PurchaseFragment extends BaseFragment {
                         if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
                             navigateUp(this, activity);
                         } else {
-                            clearAll();
+                            viewModel.getProductDetailsLive().setValue(null);
                         }
                     }
         });
@@ -554,22 +569,6 @@ public class PurchaseFragment extends BaseFragment {
         }
 
         //clearAll();
-    }
-
-    private void onQueueEmpty() {
-        if(true) {
-            binding.swipePurchase.setRefreshing(false);
-            assert getArguments() != null;
-            String productName = PurchaseFragmentArgs.fromBundle(getArguments()).getProductName();
-            Product product = getProductFromName(productName);
-            if(product != null) {
-                //loadProductDetails(product.getId());
-            } else {
-                binding.autoCompletePurchaseProduct.setText(productName);
-            }
-            return;
-        }
-        binding.swipePurchase.setRefreshing(false);
     }
 
     private void fillWithShoppingListItem() {
@@ -621,12 +620,21 @@ public class PurchaseFragment extends BaseFragment {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private void fillWithProductDetails(ProductDetails productDetails) {
+    private void fillWithProductDetails(@NonNull ProductDetails productDetails) {
         clearInputFocus();
 
-        viewModel.getIsTareWeightEnabledLive().setValue(
-                productDetails.getProduct().getEnableTareWeightHandling() == 1
+        // deactivate checkbox if tare weight handling is on
+        if(viewModel.isTareWeightEnabled()) {
+            binding.linearPurchaseTotalPrice.setEnabled(false);
+            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
+            binding.checkboxPurchaseTotalPrice.setEnabled(false);
+        }
+
+        // set icon for tare weight, else for normal amount
+        binding.imagePurchaseAmount.setImageResource(
+                viewModel.isTareWeightEnabled()
+                        ? R.drawable.ic_round_scale_anim
+                        : R.drawable.ic_round_scatter_plot_anim
         );
 
         // PRODUCT
@@ -635,13 +643,12 @@ public class PurchaseFragment extends BaseFragment {
 
         // AMOUNT
 
-        assert viewModel.getIsTareWeightEnabledLive().getValue() != null;
         if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
             double amount = Double.parseDouble(Objects.requireNonNull(
                     startupBundle.getString(Constants.ARGUMENT.AMOUNT)
             ));
             binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
-        } else if(!viewModel.getIsTareWeightEnabledLive().getValue()) { // leave amount empty if tare weight handling enabled
+        } else if(!viewModel.isTareWeightEnabled()) { // leave amount empty if tare weight handling enabled
             String defaultAmount = sharedPrefs.getString(
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
             );
@@ -712,10 +719,10 @@ public class PurchaseFragment extends BaseFragment {
             binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
             isIncomplete = true;
         }
-        if(viewModel.getBestBeforeDateLive().getValue() == null) isIncomplete = true;
-        if(!isAmountValid()) isIncomplete = true;
-        if(!isPriceValid()) isIncomplete = true;
-        if(!isLocationValid()) isIncomplete = true;
+        if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
+        if(binding.textInputPurchasePrice.isErrorEnabled()) isIncomplete = true;
+        if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) isIncomplete = true;
+        if(binding.textPurchaseBbdLabel.getCurrentTextColor() == getColor(R.color.error)) isIncomplete = true;
         return isIncomplete;
     }
 
@@ -805,7 +812,7 @@ public class PurchaseFragment extends BaseFragment {
                     activity.dismissFragment();
                     return true;
                 }
-                clearAll();
+                clearFields();
                 fillWithShoppingListItem();
                 return true;
             });
@@ -822,69 +829,6 @@ public class PurchaseFragment extends BaseFragment {
 
     public void selectLocation(int selectedId) {
         viewModel.getLocationIdLive().setValue(selectedId);
-    }
-
-    private boolean isLocationValid() {
-        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            return true;
-        } else if(viewModel.getLocationId() < 0) {
-            binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
-            return false;
-        } else {
-            binding.textPurchaseLocationLabel.setTextColor(
-                    getColor(R.color.on_background_secondary)
-            );
-            return true;
-        }
-    }
-
-    private boolean isAmountValid() {
-        if(viewModel.getAmount() >= viewModel.getMinAmount()) {
-            if(productDetails != null
-                    && viewModel.getAmount() % 1 != 0 // partial amount, has to be allowed in product master
-                    && productDetails.getProduct().getAllowPartialUnitsInStock() == 0
-            ) {
-                binding.textInputPurchaseAmount.setError(
-                        activity.getString(R.string.error_invalid_amount)
-                );
-                return false;
-            } else {
-                binding.textInputPurchaseAmount.setErrorEnabled(false);
-                return true;
-            }
-        } else {
-            if(productDetails != null) {
-                binding.textInputPurchaseAmount.setError(
-                        activity.getString(
-                                R.string.error_bounds_min,
-                                NumUtil.trim(viewModel.getMinAmount())
-                        )
-                );
-            }
-            return false;
-        }
-    }
-
-    private boolean isPriceValid() {
-        if(!getPrice().isEmpty()) {
-            if(NumUtil.stringToDouble(getPrice()) >= 0) {
-                binding.textInputPurchasePrice.setErrorEnabled(false);
-                return true;
-            } else {
-                if(productDetails != null) {
-                    binding.textInputPurchasePrice.setError(
-                            activity.getString(
-                                    R.string.error_bounds_min,
-                                    NumUtil.trim(0)
-                            )
-                    );
-                }
-                return false;
-            }
-        } else {
-            binding.textInputPurchasePrice.setErrorEnabled(false);
-            return true;
-        }
     }
 
     public void addInputAsBarcode() {
@@ -908,11 +852,9 @@ public class PurchaseFragment extends BaseFragment {
         binding.autoCompletePurchaseProduct.requestFocus();
     }
 
-    public void clearAll() {
-        productDetails = null;
+    public void clearFields() {
         binding.textInputPurchaseProduct.setErrorEnabled(false);
         binding.autoCompletePurchaseProduct.setText(null);
-        binding.textPurchaseBbd.setText(activity.getString(R.string.subtitle_none_selected));
         binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
         binding.textInputPurchaseAmount.setErrorEnabled(false);
         binding.editTextPurchaseAmount.setText(null);
@@ -923,9 +865,10 @@ public class PurchaseFragment extends BaseFragment {
         binding.linearPurchaseTotalPrice.setEnabled(true);
         binding.checkboxPurchaseTotalPrice.setEnabled(true);
         binding.checkboxPurchaseTotalPrice.setChecked(false);
-        binding.textPurchaseStore.setText(activity.getString(R.string.subtitle_none_selected));
-        binding.textPurchaseLocation.setText(activity.getString(R.string.subtitle_none_selected));
         binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
+        viewModel.getBestBeforeDateLive().setValue(null);
+        viewModel.getStoreIdLive().setValue(-1);
+        viewModel.getLocationIdLive().setValue(-1);
         clearInputFocus();
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
@@ -950,12 +893,6 @@ public class PurchaseFragment extends BaseFragment {
         Editable amount = binding.editTextPurchaseAmount.getText();
         if(amount == null) return "";
         return amount.toString();
-    }
-
-    private String getPrice() {
-        Editable price = binding.editTextPurchasePrice.getText();
-        if(price == null) return "";
-        return price.toString();
     }
 
     @NonNull

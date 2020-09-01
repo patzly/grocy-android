@@ -125,7 +125,7 @@ public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDial
             if(currentFragment.getClass() == ConsumeFragment.class) {
                 ((ConsumeFragment) currentFragment).clearAll();
             } else if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).clearAll();
+                ((PurchaseFragment) currentFragment).clearFields();
             } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
                 ((ShoppingListItemEditFragment) currentFragment).clearAll();
             }

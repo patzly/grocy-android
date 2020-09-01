@@ -61,6 +61,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
+
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'

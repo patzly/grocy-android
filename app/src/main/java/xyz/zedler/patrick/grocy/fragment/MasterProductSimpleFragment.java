@@ -1240,7 +1240,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         // TODO
-                        NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                        NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         navigateUp(this, activity);
                     },
                     error -> {

@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -72,14 +73,13 @@ public class PurchaseViewModel extends AndroidViewModel {
     private SingleLiveEvent<ArrayList<String>> productNamesLive;
     private SingleLiveEvent<ProductDetails> productDetailsLive;
 
-    private SingleLiveEvent<Boolean> isDownloadingLive;
-    private SingleLiveEvent<Boolean> totalPriceCheckedLive;
-    private SingleLiveEvent<Boolean> isTareWeightEnabledLive;
-    private SingleLiveEvent<String> bestBeforeDateLive;
-    private SingleLiveEvent<String> priceLive;
-    private SingleLiveEvent<Double> amountLive;
-    private SingleLiveEvent<Integer> storeIdLive;
-    private SingleLiveEvent<Integer> locationIdLive;
+    private MutableLiveData<Boolean> isDownloadingLive;
+    private MutableLiveData<Boolean> totalPriceCheckedLive;
+    private MutableLiveData<String> bestBeforeDateLive;
+    private MutableLiveData<String> priceLive;
+    private MutableLiveData<String> amountLive;
+    private MutableLiveData<Integer> storeIdLive;
+    private MutableLiveData<Integer> locationIdLive;
 
     public PurchaseViewModel(@NonNull Application application) {
         super(application);
@@ -97,20 +97,17 @@ public class PurchaseViewModel extends AndroidViewModel {
         quantityUnitsLive = new SingleLiveEvent<>();
         locationsLive = new SingleLiveEvent<>();
         storesLive = new SingleLiveEvent<>();
-        isDownloadingLive = new SingleLiveEvent<>();
-        totalPriceCheckedLive = new SingleLiveEvent<>();
-        isTareWeightEnabledLive = new SingleLiveEvent<>();
+        isDownloadingLive = new MutableLiveData<>();
         isDownloadingLive.setValue(false);
-        totalPriceCheckedLive.setValue(false);
-        isTareWeightEnabledLive.setValue(false);
 
         productDetailsLive = new SingleLiveEvent<>();
-        amountLive = new SingleLiveEvent<>();
-        priceLive = new SingleLiveEvent<>();
-        storeIdLive = new SingleLiveEvent<>();
-        locationIdLive = new SingleLiveEvent<>();
-        bestBeforeDateLive = new SingleLiveEvent<>();
-        amountLive.setValue(0d);
+        amountLive = new MutableLiveData<>();
+        priceLive = new MutableLiveData<>();
+        storeIdLive = new MutableLiveData<>();
+        locationIdLive = new MutableLiveData<>();
+        bestBeforeDateLive = new MutableLiveData<>();
+        totalPriceCheckedLive = new MutableLiveData<>();
+        totalPriceCheckedLive.setValue(false);
         storeIdLive.setValue(-1);
         locationIdLive.setValue(-1);
     }
@@ -231,18 +228,20 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     public void purchaseProduct() {
 
-        assert getProductDetails() != null;
-        assert getAmount() != null;
-        double amountMultiplied = getAmount() * getProductDetails().getProduct().getQuFactorPurchaseToStock();
+        assert getProductDetails() != null && getAmount() != null;
+        ProductDetails productDetails = getProductDetails();
+        Product product = productDetails.getProduct();
+        double amount = NumUtil.toDouble(getAmount());
+        double amountMultiplied = amount * product.getQuFactorPurchaseToStock();
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");
             if(getPrice() != null && !getPrice().isEmpty()) {
-                double price = NumUtil.stringToDouble(getPrice());
+                double price = NumUtil.toDouble(getPrice());
                 assert totalPriceCheckedLive.getValue() != null;
                 if(totalPriceCheckedLive.getValue()) {
-                    price = price / getAmount();
+                    price = price / amount;
                 }
                 body.put("price", price);
             }
@@ -262,7 +261,7 @@ public class PurchaseViewModel extends AndroidViewModel {
             if(debug) Log.e(TAG, "purchaseProduct: " + e);
         }
         dlHelper.post(
-                grocyApi.purchaseProduct(getProductDetails().getProduct().getId()),
+                grocyApi.purchaseProduct(product.getId()),
                 body,
                 response -> {
                     // ADD BARCODES TO PRODUCT
@@ -278,12 +277,12 @@ public class PurchaseViewModel extends AndroidViewModel {
                     if(debug) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
 
                     double amountAdded;
-                    if(getProductDetails().getProduct().getEnableTareWeightHandling() == 0) {
+                    if(product.getEnableTareWeightHandling() == 0) {
                         amountAdded = amountMultiplied;
                     } else {
                         // calculate difference of amount if tare weight handling enabled
-                        amountAdded = amountMultiplied - getProductDetails().getProduct().getTareWeight()
-                                - getProductDetails().getStockAmount();
+                        amountAdded = amountMultiplied - product.getTareWeight()
+                                - productDetails.getStockAmount();
                     }
 
                     SnackbarMessage snackbarMessage = new SnackbarMessage(
@@ -291,9 +290,9 @@ public class PurchaseViewModel extends AndroidViewModel {
                                     R.string.msg_purchased,
                                     NumUtil.trim(amountAdded),
                                     amountMultiplied == 1
-                                            ? getProductDetails().getQuantityUnitStock().getName()
-                                            : getProductDetails().getQuantityUnitStock().getNamePlural(),
-                                    getProductDetails().getProduct().getName()
+                                            ? productDetails.getQuantityUnitStock().getName()
+                                            : productDetails.getQuantityUnitStock().getNamePlural(),
+                                    product.getName()
                             )
                     );
                     if(transactionId != null) {
@@ -390,12 +389,12 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<Boolean> getIsDownloadingLive() {
+    public MutableLiveData<Boolean> getIsDownloadingLive() {
         return isDownloadingLive;
     }
 
     @NonNull
-    public SingleLiveEvent<String> getBestBeforeDateLive() {
+    public MutableLiveData<String> getBestBeforeDateLive() {
         return bestBeforeDateLive;
     }
 
@@ -405,18 +404,37 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<Double> getAmountLive() {
+    public MutableLiveData<String> getAmountLive() {
         return amountLive;
     }
 
-    public Double getAmount() {
+    @Nullable
+    public String getAmount() {
         return amountLive.getValue();
     }
 
+    public void changeAmountMore() {
+        if(!NumUtil.isDouble(getAmount())) {
+            amountLive.setValue(String.valueOf(1));
+        } else {
+            double amountNew = NumUtil.toDouble(getAmount()) + 1;
+            amountLive.setValue(String.valueOf(amountNew));
+        }
+    }
+
+    public void changeAmountLess() {
+        if(!NumUtil.isDouble(getAmount())) {
+            amountLive.setValue(String.valueOf(1));
+        } else {
+            double amountNew = NumUtil.toDouble(getAmount()) - 1;
+            if(amountNew < getMinAmount()) return;
+            amountLive.setValue(String.valueOf(amountNew));
+        }
+    }
+
     public Double getMinAmount() {
-        assert getIsTareWeightEnabledLive().getValue() != null;
         double minAmount;
-        if(getProductDetails() == null || !getIsTareWeightEnabledLive().getValue()) {
+        if(getProductDetails() == null || !isTareWeightEnabled()) {
             minAmount = 1;
         } else {
             minAmount = getProductDetails().getProduct().getTareWeight();
@@ -425,13 +443,13 @@ public class PurchaseViewModel extends AndroidViewModel {
         return minAmount;
     }
 
-    @NonNull
-    public SingleLiveEvent<Boolean> getIsTareWeightEnabledLive() {
-        return isTareWeightEnabledLive;
+    public boolean isTareWeightEnabled() {
+        if(getProductDetails() == null) return false;
+        return getProductDetails().getProduct().getEnableTareWeightHandling() == 1;
     }
 
     @NonNull
-    public SingleLiveEvent<String> getPriceLive() {
+    public MutableLiveData<String> getPriceLive() {
         return priceLive;
     }
 
@@ -444,19 +462,19 @@ public class PurchaseViewModel extends AndroidViewModel {
         if(getPrice() == null || getPrice().isEmpty()) {
             priceLive.setValue(NumUtil.trimPrice(1));
         } else {
-            double priceNew = NumUtil.stringToDouble(getPrice()) + 1;
+            double priceNew = NumUtil.toDouble(getPrice()) + 1;
             priceLive.setValue(NumUtil.trimPrice(priceNew));
         }
     }
 
     public void changePriceLess() {
         if(getPrice() == null || getPrice().isEmpty()) return;
-        double priceNew = NumUtil.stringToDouble(getPrice()) - 1;
+        double priceNew = NumUtil.toDouble(getPrice()) - 1;
         if(priceNew >= 0) priceLive.setValue(NumUtil.trimPrice(priceNew));
     }
 
     @NonNull
-    public SingleLiveEvent<Boolean> getTotalPriceCheckedLive() {
+    public MutableLiveData<Boolean> getTotalPriceCheckedLive() {
         return totalPriceCheckedLive;
     }
 
@@ -471,7 +489,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<Integer> getLocationIdLive() {
+    public MutableLiveData<Integer> getLocationIdLive() {
         return locationIdLive;
     }
 
@@ -499,7 +517,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<Integer> getStoreIdLive() {
+    public MutableLiveData<Integer> getStoreIdLive() {
         return storeIdLive;
     }
 
