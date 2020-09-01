@@ -54,7 +54,7 @@
     <string name="action_logout">Abmelden</string>
     <string name="action_restart">Neustarten</string>
     <string name="action_show_extended">Erweitertes Formular anzeigen</string>
-    <string name="action_batch_mode">Stapelmodus</string>
+    <string name="title_batch_mode">Stapelmodus</string>
     <string name="action_create">Erstellen</string>
     <string name="action_link">Verknüpfen</string>
     <string name="action_open_forms">Formulare öffnen</string>

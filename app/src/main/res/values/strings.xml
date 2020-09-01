@@ -59,7 +59,6 @@
     <string name="action_logout">Logout</string>
     <string name="action_restart">Restart</string>
     <string name="action_show_extended">Show extended form</string>
-    <string name="action_batch_mode">Batch mode</string>
     <string name="action_create">Create</string>
     <string name="action_link">Link</string>
     <string name="action_open_forms">Open forms</string>
@@ -72,6 +71,8 @@
     <string name="action_add_missing">Add missing products</string>
     <string name="action_purchase_all_items">Purchase all items</string>
     <string name="action_skip_entry">Skip entry</string>
+    <string name="action_toggle_flash">Toggle flash</string>
+    <string name="action_config_batch_mode">Configure batch mode</string>
     <string name="action_delete_shopping_list">Delete shopping list</string>
     <string name="action_discard_products">Discard products</string>
     <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
@@ -190,6 +191,7 @@
     <string name="title_stock_overview">Stock overview</string>
     <string name="title_purchase">Purchase</string>
     <string name="title_consume">Consume</string>
+    <string name="title_batch_mode">Batch mode</string>
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
     <string name="title_master_data">Master data</string>

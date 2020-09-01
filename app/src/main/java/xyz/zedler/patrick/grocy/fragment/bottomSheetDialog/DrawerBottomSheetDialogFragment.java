@@ -44,7 +44,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
@@ -97,18 +96,19 @@ public class DrawerBottomSheetDialogFragment
         });
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
-            dismiss();
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            navigate(DrawerBottomSheetDialogFragmentDirections
+                    .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
+                            Constants.ACTION.CONSUME
+                    ), true
+            );
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
-            /*dismiss();
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
-            navigate(DrawerBottomSheetDialogFragmentDirections.actionDrawerBottomSheetDialogFragmentToScanBatchFragment(), true);
+            navigate(DrawerBottomSheetDialogFragmentDirections
+                    .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
+                            Constants.ACTION.PURCHASE
+                    ), true
+            );
         });
 
         setOnClickListeners(

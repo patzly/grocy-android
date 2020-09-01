@@ -54,7 +54,7 @@
     <string name="action_logout">Uitloggen</string>
     <string name="action_restart">Herstarten</string>
     <string name="action_show_extended">Uitgebreid formulier weergeven</string>
-    <string name="action_batch_mode">Batchmodus</string>
+    <string name="title_batch_mode">Batchmodus</string>
     <string name="action_create">Aanmaken</string>
     <string name="action_link">Linken</string>
     <string name="action_open_forms">Open formulier</string>

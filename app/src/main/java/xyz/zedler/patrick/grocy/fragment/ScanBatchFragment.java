@@ -14,6 +14,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentScanBatchBinding;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
@@ -52,8 +53,6 @@ public class ScanBatchFragment extends BaseFragment
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        activity.hideBottom();
-
         // GET PREFERENCES
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         boolean debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
@@ -70,6 +69,21 @@ public class ScanBatchFragment extends BaseFragment
         capture = new ScanBatchCaptureManager(activity, barcodeScannerView, this);
         capture.decode();
 
+        // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.GONE,
+                R.menu.menu_scan_batch,
+                animated,
+                () -> {}
+        );
     }
 
     @Override

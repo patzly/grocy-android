@@ -52,7 +52,7 @@
     <string name="action_logout">Se déconnecter</string>
     <string name="action_restart">Redémarrer</string>
     <string name="action_show_extended">Afficher le formulaire étendu</string>
-    <string name="action_batch_mode">Temps différé</string>
+    <string name="title_batch_mode">Temps différé</string>
     <string name="action_create">Créer</string>
     <string name="action_link">Lien</string>
     <string name="action_open_forms">Ouvrir le formulaire</string>

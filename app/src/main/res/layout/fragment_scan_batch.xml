@@ -3,45 +3,88 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:theme="@style/Theme.Grocy.Camera"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:orientation="vertical"
+        android:background="@color/primary">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/frame_purchase_back"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="?attr/actionBarItemBackground"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:contentDescription="@string/action_back"
+                    android:tooltipText="@string/action_back"
+                    android:focusable="true"
+                    tools:targetApi="o">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_arrow_back" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/title_batch_mode"
+                    android:fontFamily="@font/roboto_mono_bold"
+                    android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+
+            </LinearLayout>
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/progressbar_purchase"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                app:mpb_useIntrinsicPadding="false"
+                app:mpb_progressStyle="horizontal"
+                android:layout_gravity="bottom"
+                android:visibility="gone"
+                android:indeterminate="true"/>
+
+        </FrameLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcode_scan_batch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?android:actionBarSize"
         app:zxing_scanner_layout="@layout/partial_scanner"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:src="@drawable/bg_shape_circle_button"
-                app:tint="#50000000"/>
-
-            <xyz.zedler.patrick.grocy.view.ActionButton
-                android:id="@+id/button_scan_batch_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:tint="@color/white"
-                app:icon="@drawable/ic_round_close" />
-
-        </FrameLayout>
+        android:layout_marginTop="?android:actionBarSize">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -101,107 +144,34 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <FrameLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_scan_batch_type"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="RelativeOverlap">
+                android:layout_height="40dp"
+                android:minWidth="40dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="#40000000"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:rippleColor="@color/highlight"
+                app:contentPaddingRight="16dp"
+                app:contentPaddingLeft="16dp">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/bg_shape_circle_button"
-                    app:tint="#50000000"/>
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_scan_batch_config"
+                <TextView
+                    android:id="@+id/text_scan_batch_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    app:tint="@color/white"
-                    app:icon="@drawable/ic_round_tune" />
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:background="@color/transparent"
+                    android:fontFamily="@font/roboto_mono_medium"
+                    android:textSize="15.5sp"
+                    android:textColor="@color/white"/>
 
-            </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_scan_batch_type"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:minWidth="40dp"
-            android:layout_marginTop="64dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentTop="true"
-            app:cardBackgroundColor="#40000000"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            app:rippleColor="@color/highlight"
-            app:contentPaddingRight="16dp"
-            app:contentPaddingLeft="16dp">
-
-            <TextView
-                android:id="@+id/text_scan_batch_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAlignment="center"
-                android:background="@color/transparent"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textSize="15.5sp"
-                android:textColor="@color/white"/>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            tools:ignore="RelativeOverlap">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:src="@drawable/bg_shape_circle_button"
-                app:tint="#50000000"/>
-
-            <xyz.zedler.patrick.grocy.view.ActionButton
-                android:id="@+id/button_scan_batch_flash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:tint="@color/white"
-                app:icon="@drawable/ic_round_flash_off_to_on" />
-
-        </FrameLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_scan_batch_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            app:cardBackgroundColor="#99000000"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:contentPadding="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAlignment="center"
-                android:background="@color/transparent"
-                android:text="@string/msg_point_at_barcode"
-                android:textSize="15.5sp"
-                android:textColor="@color/white"/>
-
-        </com.google.android.material.card.MaterialCardView>
 
     </RelativeLayout>
 

@@ -54,7 +54,7 @@
     <string name="action_logout">Logga ut</string>
     <string name="action_restart">Starta om</string>
     <string name="action_show_extended">Visa utökat formulär</string>
-    <string name="action_batch_mode">Batch-läge</string>
+    <string name="title_batch_mode">Batch-läge</string>
     <string name="action_create">Skapa</string>
     <string name="action_link">Länk</string>
     <string name="action_open_forms">Öppna formulär</string>

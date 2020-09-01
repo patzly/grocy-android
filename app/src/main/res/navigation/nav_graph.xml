@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_consumeFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_consumeFragment_to_scanBatchFragment"
+            app:destination="@id/scanBatchFragment" />
     </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
@@ -69,6 +72,9 @@
         <action
             android:id="@+id/action_purchaseFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_purchaseFragment_to_scanBatchFragment"
+            app:destination="@id/scanBatchFragment" />
     </fragment>
     <activity
         android:id="@+id/settingsActivity"
@@ -298,5 +304,9 @@
     <fragment
         android:id="@+id/scanBatchFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanBatchFragment"
-        android:label="ScanBatchFragment" />
+        android:label="ScanBatchFragment" >
+        <argument
+            android:name="action"
+            app:argType="string" />
+    </fragment>
 </navigation>

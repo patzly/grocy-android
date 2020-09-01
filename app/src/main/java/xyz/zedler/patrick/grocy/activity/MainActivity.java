@@ -374,7 +374,6 @@ public class MainActivity extends AppCompatActivity {
             currentFragment.dismissSearch();
         } else {
             super.onBackPressed();
-            if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
             binding.bottomAppBar.show();
         }
     }
