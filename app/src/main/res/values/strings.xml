@@ -65,6 +65,7 @@
     <string name="action_open_forms">Open forms</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
+    <string name="action_clear_form">Clear form</string>
     <string name="action_toggle_done">Toggle done</string>
     <string name="action_edit_notes">Edit notes</string>
     <string name="action_shopping_mode">Shopping mode</string>

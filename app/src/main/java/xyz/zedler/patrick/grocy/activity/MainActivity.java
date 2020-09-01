@@ -206,11 +206,16 @@ public class MainActivity extends AppCompatActivity {
                 && resultCode == Activity.RESULT_OK
                 && data != null
         ) {
+            NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                    .findFragmentById(R.id.nav_host_fragment);
+            assert navHostFragment != null;
+            NavController navController = navHostFragment.getNavController();
+            /*navController.navigate((new NavDirections);
             replaceFragment(
                     Constants.UI.MISSING_BATCH_ITEMS,
-                    data.getBundleExtra(Constants.ARGUMENT.BUNDLE),
+                    data.getParcelableArrayListExtra(Constants.ARGUMENT.BUNDLE),
                     true
-            );
+            );*/
         } else if((requestCode == Constants.REQUEST.SCAN_BATCH)
                 && resultCode == Activity.RESULT_CANCELED
                 && fragmentCurrent.getClass() == StockFragment.class
@@ -369,7 +374,14 @@ public class MainActivity extends AppCompatActivity {
             currentFragment.dismissSearch();
         } else {
             super.onBackPressed();
+            if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
+            binding.bottomAppBar.show();
         }
+    }
+
+    public void hideBottom() {
+        if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
+        binding.bottomAppBar.hide();
     }
 
     public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {}

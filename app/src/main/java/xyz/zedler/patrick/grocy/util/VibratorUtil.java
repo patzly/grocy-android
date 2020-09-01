@@ -33,6 +33,12 @@ public class VibratorUtil {
 
     private Vibrator vibrator;
 
+    public VibratorUtil(Context context) {
+        if(context != null) {
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+    }
+
     public VibratorUtil(Activity activity) {
         if(activity != null) {
             vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
-    app:startDestination="@id/purchaseFragment">
+    app:startDestination="@id/stockFragment">
 
     <fragment
         android:id="@+id/stockFragment"
@@ -268,6 +268,9 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_feedbackBottomSheetDialogFragment"
             app:destination="@id/feedbackBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_scanBatchFragment"
+            app:destination="@id/scanBatchFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog
@@ -284,4 +287,16 @@
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
     </dialog>
+    <fragment
+        android:id="@+id/missingBatchItemsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment"
+        android:label="MissingBatchItemsFragment" >
+        <argument
+            android:name="missingBatchItems"
+            app:argType="xyz.zedler.patrick.grocy.model.MissingBatchItem[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanBatchFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ScanBatchFragment"
+        android:label="ScanBatchFragment" />
 </navigation>

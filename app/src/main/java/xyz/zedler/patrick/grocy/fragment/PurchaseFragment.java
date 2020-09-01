@@ -166,7 +166,9 @@ public class PurchaseFragment extends BaseFragment {
         binding.swipePurchase.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        binding.swipePurchase.setOnRefreshListener(this::refresh);
+        binding.swipePurchase.setOnRefreshListener(() -> {
+            viewModel.refresh();
+        });
 
         // product
 
@@ -243,12 +245,10 @@ public class PurchaseFragment extends BaseFragment {
                 }
         );
         binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
-            binding.progressbarPurchase.setVisibility(View.VISIBLE);
             IconUtil.start(activity, R.id.image_purchase_amount);
             viewModel.changeAmountMore();
         });
         binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
-            binding.progressbarPurchase.setVisibility(View.GONE);
             IconUtil.start(activity, R.id.image_purchase_amount);
             viewModel.changeAmountLess();
         });
@@ -342,7 +342,8 @@ public class PurchaseFragment extends BaseFragment {
         // START
 
         if(savedInstanceState == null) {
-            refresh();
+            binding.progressbarPurchase.setVisibility(View.VISIBLE);
+            viewModel.refresh();
         }
 
         // UPDATE UI
@@ -352,13 +353,40 @@ public class PurchaseFragment extends BaseFragment {
 
     }
 
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_purchase,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_local_grocery_store,
+                R.string.action_purchase,
+                Constants.FAB.TAG.PURCHASE,
+                animated,
+                () -> {
+                    if(isFormIncomplete()) return;
+                    viewModel.purchaseProduct();
+                }
+        );
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         viewModel.getIsDownloadingLive().observe(
                 getViewLifecycleOwner(),
-                isDownloading -> binding.swipePurchase.setRefreshing(isDownloading)
+                isDownloading -> {
+                    if(!isDownloading) {
+                        binding.swipePurchase.setRefreshing(false);
+                        binding.progressbarPurchase.setVisibility(View.GONE);
+                    }
+                }
         );
         viewModel.getProductsLive().observe(
                 getViewLifecycleOwner(),
@@ -508,28 +536,6 @@ public class PurchaseFragment extends BaseFragment {
         setupEventHandler();
     }
 
-    private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                R.menu.menu_purchase,
-                animated,
-                this::setUpBottomMenu
-        );
-        activity.updateFab(
-                R.drawable.ic_round_local_grocery_store,
-                R.string.action_purchase,
-                Constants.FAB.TAG.PURCHASE,
-                animated,
-                () -> {
-                    if(isFormIncomplete()) return;
-                    viewModel.purchaseProduct();
-                }
-        );
-    }
-
     private void setupEventHandler() {
         viewModel.getEventHandler().observe(
                 getViewLifecycleOwner(),
@@ -548,27 +554,6 @@ public class PurchaseFragment extends BaseFragment {
                         }
                     }
         });
-    }
-
-    private void refresh() {
-        if(activity.isOnline()) {
-            viewModel.downloadData();
-        } else {
-            activity.showMessage(
-                    Snackbar.make(
-                            activity.binding.frameMainContainer,
-                            activity.getString(R.string.msg_no_connection),
-                            Snackbar.LENGTH_SHORT
-                    ).setActionTextColor(
-                            ContextCompat.getColor(activity, R.color.secondary)
-                    ).setAction(
-                            activity.getString(R.string.action_retry),
-                            v1 -> refresh()
-                    )
-            );
-        }
-
-        //clearAll();
     }
 
     private void fillWithShoppingListItem() {
@@ -767,11 +752,14 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemBatch, menuItemDetails, menuItemSkipItem;
+        MenuItem menuItemBatch, menuItemDetails, menuItemClear, menuItemSkipItem;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
+        menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
         menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
-        if(menuItemBatch == null || menuItemDetails == null || menuItemSkipItem == null) return;
+        if(menuItemBatch == null || menuItemDetails == null || menuItemClear == null
+                || menuItemSkipItem == null
+        ) return;
 
         menuItemBatch.setOnMenuItemClickListener(item -> {
             Intent intent = new Intent(activity, ScanBatchActivity.class);
@@ -792,6 +780,11 @@ public class PurchaseFragment extends BaseFragment {
                             .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
                             .setProductDetails(viewModel.getProductDetailsLive().getValue())
             );
+            return true;
+        });
+        menuItemClear.setOnMenuItemClickListener(item -> {
+            IconUtil.start(menuItemClear);
+            viewModel.getProductDetailsLive().setValue(null);
             return true;
         });
         String action = null;

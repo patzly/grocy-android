@@ -104,10 +104,11 @@ public class DrawerBottomSheetDialogFragment
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
-            dismiss();
+            /*dismiss();
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
+            navigate(DrawerBottomSheetDialogFragmentDirections.actionDrawerBottomSheetDialogFragmentToScanBatchFragment(), true);
         });
 
         setOnClickListeners(

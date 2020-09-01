@@ -44,6 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.ActivityNavigator;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -165,6 +166,9 @@ public class ScanBatchActivity extends AppCompatActivity
         }
         if(actionType == null) finish();
 
+        /*assert getIntent().getExtras() != null;
+        actionType = ScanBatchActivityArgs.fromBundle(getIntent().getExtras()).getAction();*/
+
         isTorchOn = false;
 
         // PREFERENCES
@@ -259,13 +263,13 @@ public class ScanBatchActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
 
-        Bundle bundle = intent.getBundleExtra(Constants.ARGUMENT.BUNDLE);
+        /*Bundle bundle = intent.getBundleExtra(Constants.ARGUMENT.BUNDLE);
         if(bundle != null) {
             if(bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) != null) {
                 missingBatchItems = bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
                 refreshCounter();
             }
-        }
+        }*/
 
         capture = new ScanBatchCaptureManager(this, barcodeScannerView, this);
         capture.decode();
@@ -302,6 +306,12 @@ public class ScanBatchActivity extends AppCompatActivity
         barcodeScannerView.setTorchOff();
         capture.onDestroy();
         dlHelper.destroy();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        ActivityNavigator.applyPopAnimationsToPendingTransition(this);
     }
 
     @Override

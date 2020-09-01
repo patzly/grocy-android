@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.util;
 */
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -35,6 +36,11 @@ public class NetUtil {
     public NetUtil(Activity activity) {
         if(activity == null) return;
         cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    public NetUtil(Application application) {
+        if(application == null) return;
+        cm = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public boolean isOnline() {

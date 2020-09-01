@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
@@ -60,23 +59,16 @@ public class ExitScanBatchBottomSheetDialogFragment extends CustomBottomSheetDia
         );
 
         activity = (ScanBatchActivity) getActivity();
-        assert activity != null;
-
-        Bundle bundle = getArguments();
-        if(bundle == null) {
-            dismiss();
-            Snackbar.make(
-                    view,
-                    activity.getString(R.string.error_undefined),
-                    Snackbar.LENGTH_SHORT
-            ).show();
-        }
+        assert activity != null && getArguments() != null;
 
         view.findViewById(R.id.button_exit_scan_batch_open).setOnClickListener(v -> {
             dismiss();
             activity.setResult(
                     Activity.RESULT_OK,
-                    new Intent().putExtra(Constants.ARGUMENT.BUNDLE, bundle)
+                    new Intent().putParcelableArrayListExtra(
+                            Constants.ARGUMENT.BATCH_ITEMS,
+                            getArguments().getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS)
+                    )
             );
             activity.finish();
         });

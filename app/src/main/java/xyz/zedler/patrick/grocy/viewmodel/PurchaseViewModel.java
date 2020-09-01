@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -62,6 +63,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     private boolean debug;
 
     private DownloadHelper dlHelper;
+    private NetUtil netUtil;
     private Gson gson;
     private GrocyApi grocyApi;
     private EventHandler eventHandler;
@@ -88,6 +90,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         dlHelper = new DownloadHelper(getApplication(), TAG);
+        netUtil = new NetUtil(getApplication());
         gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
         eventHandler = new EventHandler();
@@ -110,6 +113,21 @@ public class PurchaseViewModel extends AndroidViewModel {
         totalPriceCheckedLive.setValue(false);
         storeIdLive.setValue(-1);
         locationIdLive.setValue(-1);
+    }
+
+    public void refresh() {
+        if(netUtil.isOnline()) {
+            downloadData();
+        } else {
+            showSnackbar(
+                    new SnackbarMessage(getString(R.string.msg_no_connection)).setAction(
+                            getString(R.string.action_retry),
+                            v -> refresh()
+                    )
+            );
+        }
+
+        //clearAll();
     }
 
     public void updateProducts() {
