@@ -2,7 +2,7 @@
 
 # Grocy Android
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads)](https://github.com/patzly/grocy-android/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
 [Grocy](https://grocy.info/) is a self-hosted groceries & household management solution for your home.
 
@@ -61,7 +61,7 @@ Like the grocy project, Grocy Android can be translated, too. The main language 
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
 Translations which reached a completion level of 80% will be included in releases.
 
-Completed translations: German, French, Swedish & Dutch  
+Completed translations: German, French, Swedish, Dutch, Norwegian & Spanish (Latin America)  
 Thanks translators!
 
 ## About
