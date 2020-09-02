@@ -373,7 +373,8 @@ public class MainActivity extends AppCompatActivity {
         if(currentFragment.isSearchVisible()) {
             currentFragment.dismissSearch();
         } else {
-            super.onBackPressed();
+            boolean handled = currentFragment.onBackPressed();
+            if(!handled) super.onBackPressed();
             binding.bottomAppBar.show();
         }
     }
@@ -381,6 +382,15 @@ public class MainActivity extends AppCompatActivity {
     public void hideBottom() {
         if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
         binding.bottomAppBar.hide();
+    }
+
+    public void navigateUp() {
+        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                .findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        navController.navigateUp();
+        binding.bottomAppBar.show();
     }
 
     public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {}
@@ -462,11 +472,11 @@ public class MainActivity extends AppCompatActivity {
         return binding.bottomAppBar.getMenu();
     }
 
-    public Fragment getCurrentFragment() {
+    public BaseFragment getCurrentFragment() {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
         return navHostFragment == null
                 ? null
-                : navHostFragment.getChildFragmentManager().getFragments().get(0);
+                : (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

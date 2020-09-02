@@ -1241,7 +1241,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         // TODO
                         NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
-                        navigateUp(this, activity);
+                        activity.navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -1266,7 +1266,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                                     response.getInt("created_object_id")
                             );
                             // TODO
-                            navigateUp(this, activity);
+                            activity.navigateUp();
                         } catch (JSONException e) {
                             if(debug) Log.e(TAG, "saveProduct: " + e.toString());
                             showErrorMessage();

@@ -619,7 +619,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                     jsonObject,
                     response -> {
                         editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        navigateUp(this, activity);
+                        activity.navigateUp();
                     },
                     error -> {
                         showErrorMessage();

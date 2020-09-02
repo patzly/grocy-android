@@ -395,7 +395,7 @@ public class MasterLocationFragment extends BaseFragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
                     jsonObject,
-                    response -> navigateUp(this, activity),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);
@@ -405,7 +405,7 @@ public class MasterLocationFragment extends BaseFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                     jsonObject,
-                    response -> navigateUp(this, activity),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);

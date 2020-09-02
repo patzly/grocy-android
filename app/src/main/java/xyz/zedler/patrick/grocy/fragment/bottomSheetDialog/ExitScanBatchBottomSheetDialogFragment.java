@@ -33,14 +33,14 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ExitScanBatchBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "ExitScanBatchBottomSheet";
 
-    private ScanBatchActivity activity;
+    private MainActivity activity;
 
     @NonNull
     @Override
@@ -58,8 +58,10 @@ public class ExitScanBatchBottomSheetDialogFragment extends CustomBottomSheetDia
                 R.layout.fragment_bottomsheet_exit_scan_batch, container, false
         );
 
-        activity = (ScanBatchActivity) getActivity();
+        activity = (MainActivity) getActivity();
         assert activity != null && getArguments() != null;
+
+        activity.getCurrentFragment().pauseScan();
 
         view.findViewById(R.id.button_exit_scan_batch_open).setOnClickListener(v -> {
             dismiss();
@@ -75,8 +77,7 @@ public class ExitScanBatchBottomSheetDialogFragment extends CustomBottomSheetDia
 
         view.findViewById(R.id.button_exit_scan_batch_discard).setOnClickListener(v -> {
             dismiss();
-            activity.setResult(Activity.RESULT_CANCELED);
-            activity.finish();
+            activity.navigateUp();
         });
 
         return view;
@@ -85,7 +86,7 @@ public class ExitScanBatchBottomSheetDialogFragment extends CustomBottomSheetDia
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        activity.resumeScan();
+        activity.getCurrentFragment().resumeScan();
     }
 
     @NonNull

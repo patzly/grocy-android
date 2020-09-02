@@ -548,7 +548,7 @@ public class PurchaseFragment extends BaseFragment {
                     } else if(event.getType() == Event.PURCHASE_SUCCESS) {
                         assert getArguments() != null;
                         if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                            navigateUp(this, activity);
+                            activity.navigateUp();
                         } else {
                             viewModel.getProductDetailsLive().setValue(null);
                         }

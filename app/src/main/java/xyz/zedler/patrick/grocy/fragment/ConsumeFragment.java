@@ -763,7 +763,7 @@ public class ConsumeFragment extends BaseFragment {
 
                     assert getArguments() != null;
                     if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                        navigateUp(this, activity);
+                        activity.navigateUp();
                     } else {
                         clearAll();
                     }
@@ -838,8 +838,8 @@ public class ConsumeFragment extends BaseFragment {
                     activity.showMessage(snackbar);
 
                     assert getArguments() != null;
-                    if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                        navigateUp(this, activity);
+                    if(ConsumeFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                        activity.navigateUp();
                     } else {
                         clearAll();
                     }

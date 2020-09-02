@@ -17,8 +17,10 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentScanBatchBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.view.BarcodeRipple;
 
 public class ScanBatchFragment extends BaseFragment
         implements ScanBatchCaptureManager.BarcodeListener {
@@ -29,6 +31,7 @@ public class ScanBatchFragment extends BaseFragment
     private SharedPreferences sharedPrefs;
     private FragmentScanBatchBinding binding;
     private ScanBatchCaptureManager capture;
+    private BarcodeRipple barcodeRipple;
 
     @Override
     public View onCreateView(
@@ -56,6 +59,8 @@ public class ScanBatchFragment extends BaseFragment
         // GET PREFERENCES
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         boolean debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+
+        barcodeRipple = view.findViewById(R.id.ripple_scan);
 
         DecoratedBarcodeView barcodeScannerView = binding.barcodeScanBatch;
         barcodeScannerView.setTorchOff();
@@ -89,13 +94,19 @@ public class ScanBatchFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        capture.onResume();
+        resumeScan();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        capture.onPause();
+        pauseScan();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        activity.showBottomSheet(new ExitScanBatchBottomSheetDialogFragment(), null);
+        return true;
     }
 
     @Override
@@ -106,5 +117,17 @@ public class ScanBatchFragment extends BaseFragment
     @Override
     public void onBarcodeResult(BarcodeResult result) {
 
+    }
+
+    @Override
+    public void pauseScan() {
+        barcodeRipple.pauseAnimation();
+        capture.onPause();
+    }
+
+    @Override
+    public void resumeScan() {
+        barcodeRipple.resumeAnimation();
+        capture.onResume();
     }
 }
