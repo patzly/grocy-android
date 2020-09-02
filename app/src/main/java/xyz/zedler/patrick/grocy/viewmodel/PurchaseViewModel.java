@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -215,12 +216,9 @@ public class PurchaseViewModel extends AndroidViewModel {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        /*binding.autoCompletePurchaseProduct.setText(barcode);
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
-                        activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(), bundle
-                        );*/
+                        sendEvent(Event.BARCODE_UNKNOWN, bundle);
                     } else {
                         showMessage(getString(R.string.error_undefined));
                     }
@@ -433,20 +431,20 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     public void changeAmountMore() {
         if(!NumUtil.isDouble(getAmount())) {
-            amountLive.setValue(String.valueOf(1));
+            amountLive.setValue(NumUtil.trim(1));
         } else {
             double amountNew = NumUtil.toDouble(getAmount()) + 1;
-            amountLive.setValue(String.valueOf(amountNew));
+            amountLive.setValue(NumUtil.trim(amountNew));
         }
     }
 
     public void changeAmountLess() {
         if(!NumUtil.isDouble(getAmount())) {
-            amountLive.setValue(String.valueOf(1));
+            amountLive.setValue(NumUtil.trim(1));
         } else {
             double amountNew = NumUtil.toDouble(getAmount()) - 1;
             if(amountNew < getMinAmount()) return;
-            amountLive.setValue(String.valueOf(amountNew));
+            amountLive.setValue(NumUtil.trim(amountNew));
         }
     }
 
@@ -576,6 +574,16 @@ public class PurchaseViewModel extends AndroidViewModel {
         });
     }
 
+    private void sendEvent(int type, Bundle bundle) {
+        eventHandler.setValue(new Event() {
+            @Override
+            public int getType() {return type;}
+
+            @Override
+            public Bundle getBundle() {return bundle;}
+        });
+    }
+
     @NonNull
     public EventHandler getEventHandler() {
         return eventHandler;
@@ -596,6 +604,7 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     @Override
     protected void onCleared() {
+        dlHelper.destroy();
         super.onCleared();
     }
 }

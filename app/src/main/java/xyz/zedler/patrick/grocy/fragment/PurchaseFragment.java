@@ -45,28 +45,24 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -80,24 +76,17 @@ import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.PURCHASE;
+    private final static String TAG = PurchaseFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson;
-    private GrocyApi grocyApi;
-    private DownloadHelper dlHelper;
     private DateUtil dateUtil;
     private PurchaseFragmentArgs args;
     private Bundle startupBundle;
     private FragmentPurchaseBinding binding;
     private PurchaseViewModel viewModel;
 
-    private ArrayList<Store> stores;
-    private ArrayList<QuantityUnit> quantityUnits;
-
     private int shoppingListItemPos;
-    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -113,7 +102,6 @@ public class PurchaseFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        dlHelper.destroy();
     }
 
     @Override
@@ -131,22 +119,12 @@ public class PurchaseFragment extends BaseFragment {
         // GET PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
-
-        // WEB REQUESTS
-
-        grocyApi = activity.getGrocy();
-        gson = new Gson();
-        dlHelper = new DownloadHelper(activity, TAG);
 
         // UTILS
 
         dateUtil = new DateUtil(activity);
 
         // INITIALIZE VARIABLES
-
-        stores = new ArrayList<>();
-        quantityUnits = new ArrayList<>();
 
         shoppingListItemPos = 0;
 
@@ -166,9 +144,7 @@ public class PurchaseFragment extends BaseFragment {
         binding.swipePurchase.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        binding.swipePurchase.setOnRefreshListener(() -> {
-            viewModel.refresh();
-        });
+        binding.swipePurchase.setOnRefreshListener(() -> viewModel.refresh());
 
         // product
 
@@ -177,7 +153,6 @@ public class PurchaseFragment extends BaseFragment {
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN
         ));
-
         binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(!hasFocus) return;
             IconUtil.start(binding.imagePurchaseProduct);
@@ -187,9 +162,7 @@ public class PurchaseFragment extends BaseFragment {
         });
         binding.autoCompletePurchaseProduct.setOnItemClickListener(
                 (parent, v, position, id) -> viewModel.loadProductDetails(
-                        getProductFromName(
-                                String.valueOf(parent.getItemAtPosition(position))
-                        ).getId()
+                        getProductFromName((String) parent.getItemAtPosition(position)).getId()
                 )
         );
         binding.autoCompletePurchaseProduct.setOnEditorActionListener(
@@ -211,18 +184,15 @@ public class PurchaseFragment extends BaseFragment {
         // best before date
 
         binding.linearPurchaseBbd.setOnClickListener(v -> {
-            if(viewModel.getProductDetails() != null) {
-                Bundle bundle = new Bundle();
-                bundle.putString(
-                        Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
-                        String.valueOf(viewModel.getProductDetails().getProduct().getDefaultBestBeforeDays())
-                );
-                bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
-                activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
-            } else {
-                // no product selected
-                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
-            }
+            ProductDetails productDetails = requireProductDetails();
+            if(productDetails == null) return;
+            Bundle bundle = new Bundle();
+            bundle.putString(
+                    Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
+                    String.valueOf(productDetails.getProduct().getDefaultBestBeforeDays())
+            );
+            bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
+            activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
         });
 
         // amount
@@ -299,30 +269,22 @@ public class PurchaseFragment extends BaseFragment {
         // store
 
         binding.linearPurchaseStore.setOnClickListener(v -> {
-            if(viewModel.getProductDetails() != null) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, viewModel.getStores());
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getStoreId());
-                activity.showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
-            } else {
-                // no product selected
-                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
-            }
+            if(requireProductDetails() == null) return;
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, viewModel.getStores());
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getStoreId());
+            activity.showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
         });
 
         // location
 
         binding.linearPurchaseLocation.setOnClickListener(v -> {
-            if(viewModel.getProductDetails() != null) {
-                IconUtil.start(activity, R.id.image_purchase_location);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
-                bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getLocationId());
-                activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
-            } else {
-                // no product selected
-                binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
-            }
+            if(requireProductDetails() == null) return;
+            IconUtil.start(activity, R.id.image_purchase_location);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
+            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getLocationId());
+            activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
         });
 
         hideDisabledFeatures();
@@ -552,6 +514,15 @@ public class PurchaseFragment extends BaseFragment {
                         } else {
                             viewModel.getProductDetailsLive().setValue(null);
                         }
+                    } else if(event.getType() == Event.BARCODE_UNKNOWN) {
+                        assert event.getBundle() != null;
+                        binding.autoCompletePurchaseProduct.setText(
+                                event.getBundle().getString(Constants.ARGUMENT.BARCODE)
+                        );
+                        activity.showBottomSheet(
+                                new InputBarcodeBottomSheetDialogFragment(),
+                                event.getBundle()
+                        );
                     }
         });
     }
@@ -571,7 +542,7 @@ public class PurchaseFragment extends BaseFragment {
                 activity,
                 listItem,
                 binding.linearPurchaseShoppingListItem,
-                quantityUnits
+                viewModel.getQuantityUnitsLive().getValue()
         );
         startupBundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(listItem.getAmount()));
         if(listItem.getProductId() != null) {
@@ -700,10 +671,7 @@ public class PurchaseFragment extends BaseFragment {
             showInputNameBottomSheet(input);
             isIncomplete = true;
         }
-        if(viewModel.getProductDetails() == null) {
-            binding.textInputPurchaseProduct.setError(activity.getString(R.string.error_select_product));
-            isIncomplete = true;
-        }
+        if(requireProductDetails() == null) isIncomplete = true;
         if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
         if(binding.textInputPurchasePrice.isErrorEnabled()) isIncomplete = true;
         if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) isIncomplete = true;
@@ -762,19 +730,15 @@ public class PurchaseFragment extends BaseFragment {
         ) return;
 
         menuItemBatch.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            NavHostFragment.findNavController(this).navigate(
+                    PurchaseFragmentDirections
+                            .actionPurchaseFragmentToScanBatchFragment(Constants.ACTION.PURCHASE)
+            );
             return true;
         });
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
-            if(viewModel.getProductDetailsLive().getValue() == null) {
-                binding.textInputPurchaseProduct.setError(
-                        getString(R.string.error_select_product)
-                );
-                return false;
-            }
+            if(requireProductDetails() == null) return false;
             NavHostFragment.findNavController(this).navigate(
                     PurchaseFragmentDirections
                             .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
@@ -822,6 +786,14 @@ public class PurchaseFragment extends BaseFragment {
 
     public void selectLocation(int selectedId) {
         viewModel.getLocationIdLive().setValue(selectedId);
+    }
+
+    private ProductDetails requireProductDetails() {
+        ProductDetails productDetails = viewModel.getProductDetailsLive().getValue();
+        if(productDetails == null) {
+            binding.textInputPurchaseProduct.setError(getString(R.string.error_select_product));
+        }
+        return productDetails;
     }
 
     public void addInputAsBarcode() {

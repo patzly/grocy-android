@@ -5,16 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_config"
+        android:id="@+id/action_open_config"
         android:title="@string/action_config_batch_mode"
         android:icon="@drawable/ic_round_tune"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_flash"
+        android:id="@+id/action_toggle_flash"
         android:title="@string/action_toggle_flash"
-        android:icon="@drawable/ic_round_flash_off_to_on"
+        android:icon="@drawable/ic_round_flash_on_to_off"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 

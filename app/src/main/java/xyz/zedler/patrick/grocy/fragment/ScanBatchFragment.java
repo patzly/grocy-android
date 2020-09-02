@@ -1,8 +1,10 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,6 +34,9 @@ public class ScanBatchFragment extends BaseFragment
     private FragmentScanBatchBinding binding;
     private ScanBatchCaptureManager capture;
     private BarcodeRipple barcodeRipple;
+    private DecoratedBarcodeView barcodeScannerView;
+
+    private boolean isTorchOn = false;
 
     @Override
     public View onCreateView(
@@ -62,7 +67,7 @@ public class ScanBatchFragment extends BaseFragment
 
         barcodeRipple = view.findViewById(R.id.ripple_scan);
 
-        DecoratedBarcodeView barcodeScannerView = binding.barcodeScanBatch;
+        barcodeScannerView = binding.barcodeScanBatch;
         barcodeScannerView.setTorchOff();
         //barcodeScannerView.setTorchListener(this);
         CameraSettings cameraSettings = new CameraSettings();
@@ -87,8 +92,35 @@ public class ScanBatchFragment extends BaseFragment
                 Constants.FAB.POSITION.GONE,
                 R.menu.menu_scan_batch,
                 animated,
-                () -> {}
+                this::setUpBottomMenu
         );
+    }
+
+    public void setUpBottomMenu() {
+        MenuItem menuItemTorch, menuItemConfig;
+        menuItemTorch = activity.getBottomMenu().findItem(R.id.action_toggle_flash);
+        menuItemConfig = activity.getBottomMenu().findItem(R.id.action_open_config);
+        if(menuItemTorch == null || menuItemConfig == null) return;
+
+        menuItemTorch.setOnMenuItemClickListener(item -> {
+            switchTorch();
+            return true;
+        });
+    }
+
+    private void switchTorch() {
+        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_toggle_flash);
+        if(isTorchOn) {
+            barcodeScannerView.setTorchOff();
+            menuItem.setIcon(R.drawable.ic_round_flash_off_to_on);
+            if(menuItem.getIcon() instanceof Animatable) ((Animatable) menuItem.getIcon()).start();
+            isTorchOn = false;
+        } else {
+            barcodeScannerView.setTorchOn();
+            menuItem.setIcon(R.drawable.ic_round_flash_on_to_off);
+            if(menuItem.getIcon() instanceof Animatable) ((Animatable) menuItem.getIcon()).start();
+            isTorchOn = true;
+        }
     }
 
     @Override
