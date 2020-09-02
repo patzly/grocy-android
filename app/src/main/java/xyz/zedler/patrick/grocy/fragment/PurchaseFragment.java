@@ -19,12 +19,11 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,10 +36,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -51,7 +47,6 @@ import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
@@ -149,10 +144,11 @@ public class PurchaseFragment extends BaseFragment {
         // product
 
         binding.textInputPurchaseProduct.setErrorIconDrawable(null);
-        binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        ));
+        binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> NavHostFragment
+                .findNavController(this).navigate(
+                        PurchaseFragmentDirections.actionPurchaseFragmentToScanInputFragment()
+                )
+        );
         binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(!hasFocus) return;
             IconUtil.start(binding.imagePurchaseProduct);
@@ -312,7 +308,6 @@ public class PurchaseFragment extends BaseFragment {
         updateUI((getArguments() == null
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
-
     }
 
     private void updateUI(boolean animated) {
@@ -483,17 +478,14 @@ public class PurchaseFragment extends BaseFragment {
             }
         });
 
-        NavBackStackEntry currentBackStackEntry = NavHostFragment
-                .findNavController(this)
-                .getCurrentBackStackEntry();
-        assert currentBackStackEntry != null;
-        SavedStateHandle savedStateHandle = currentBackStackEntry.getSavedStateHandle();
-        MutableLiveData<Integer> liveData = savedStateHandle
-                .getLiveData(Constants.ARGUMENT.PRODUCT_ID);
-        liveData.observe(getViewLifecycleOwner(), productId -> {
-            viewModel.loadProductDetails(productId);
-            savedStateHandle.remove(Constants.ARGUMENT.PRODUCT_ID);
+        getFromPreviousFragment(Constants.ARGUMENT.BARCODE, barcode -> {
+            Log.i(TAG, "onViewCreated: " + barcode); // TODO: Remove line
+            viewModel.loadProductDetailsByBarcode((String) barcode);
         });
+        getFromPreviousFragment(
+                Constants.ARGUMENT.PRODUCT_ID,
+                productId -> viewModel.loadProductDetails((Integer) productId)
+        );
 
         setupEventHandler();
     }
@@ -566,14 +558,6 @@ public class PurchaseFragment extends BaseFragment {
     private ShoppingListItem getCurrentShoppingListItem(ArrayList<ShoppingListItem> listItems) {
         if(shoppingListItemPos+1 > listItems.size()) return null;
         return listItems.get(shoppingListItemPos);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == Constants.REQUEST.SCAN && resultCode == Activity.RESULT_OK) {
-            if(data == null) return;
-            viewModel.loadProductDetailsByBarcode(data.getStringExtra(Constants.EXTRA.SCAN_RESULT));
-        }
     }
 
     private void fillWithProductDetails(@NonNull ProductDetails productDetails) {
@@ -838,10 +822,6 @@ public class PurchaseFragment extends BaseFragment {
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
         }
-    }
-
-    private void showErrorMessage() {
-        showMessage(activity.getString(R.string.error_undefined));
     }
 
     private void showMessage(String text) {

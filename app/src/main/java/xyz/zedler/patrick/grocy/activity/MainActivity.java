@@ -33,6 +33,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -369,8 +370,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        BaseFragment currentFragment = (BaseFragment) getCurrentFragment();
-        if(currentFragment.isSearchVisible()) {
+        BaseFragment currentFragment = getCurrentFragment();
+        if(currentFragment == null) {
+            super.onBackPressed();
+        } else if(currentFragment.isSearchVisible()) {
             currentFragment.dismissSearch();
         } else {
             boolean handled = currentFragment.onBackPressed();
@@ -379,9 +382,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void hideBottom() {
-        if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
-        binding.bottomAppBar.hide();
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        BaseFragment currentFragment = getCurrentFragment();
+        if(currentFragment == null) {
+            return super.onKeyDown(keyCode, event);
+        }
+        return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
     public void navigateUp() {

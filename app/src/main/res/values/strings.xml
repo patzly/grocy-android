@@ -192,6 +192,7 @@
     <string name="title_purchase">Purchase</string>
     <string name="title_consume">Consume</string>
     <string name="title_batch_mode">Batch mode</string>
+    <string name="title_barcode_input">Barcode input</string>
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
     <string name="title_master_data">Master data</string>

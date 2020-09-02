@@ -50,6 +50,12 @@
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_consumeFragment_to_scanInputFragment"
+            app:destination="@id/scanInputFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
@@ -78,6 +84,12 @@
         <action
             android:id="@+id/action_purchaseFragment_to_scanBatchFragment"
             app:destination="@id/scanBatchFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_purchaseFragment_to_scanInputFragment"
+            app:destination="@id/scanInputFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
@@ -315,4 +327,8 @@
             android:name="action"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/scanInputFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ScanInputFragment"
+        android:label="ScanInputFragment" />
 </navigation>

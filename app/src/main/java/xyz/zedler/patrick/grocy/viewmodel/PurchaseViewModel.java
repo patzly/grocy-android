@@ -214,6 +214,7 @@ public class PurchaseViewModel extends AndroidViewModel {
                             )
                     );
                 }, error -> {
+                    getIsDownloadingLive().setValue(false);
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         Bundle bundle = new Bundle();
@@ -222,7 +223,6 @@ public class PurchaseViewModel extends AndroidViewModel {
                     } else {
                         showMessage(getString(R.string.error_undefined));
                     }
-                    getIsDownloadingLive().setValue(false);
                 }
         );
     }

@@ -67,27 +67,19 @@ public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDial
 
         setCancelable(false);
 
-        Fragment currentFragment = activity.getCurrentFragment();
-
         TextView textView = view.findViewById(R.id.text_input_barcode_question);
         MaterialButton buttonNew = view.findViewById(R.id.button_input_barcode_new);
 
-        if(currentFragment.getClass() == ConsumeFragment.class) {
+        if(activity.getCurrentFragment().getClass() == ConsumeFragment.class) {
             textView.setText(activity.getString(R.string.title_link_barcode_to_existing));
             buttonNew.setVisibility(View.GONE);
-        } else { // PurchaseFragment
+        } else {
             textView.setText(activity.getString(R.string.title_link_barcode_or_create));
             buttonNew.setVisibility(View.VISIBLE);
         }
 
         view.findViewById(R.id.button_input_barcode_link).setOnClickListener(v -> {
-            if(currentFragment.getClass() == ConsumeFragment.class) {
-                ((ConsumeFragment) currentFragment).addInputAsBarcode();
-            } else if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).addInputAsBarcode();
-            } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
-                ((ShoppingListItemEditFragment) currentFragment).addInputAsBarcode();
-            }
+            activity.getCurrentFragment().addInputAsBarcode();
             dismiss();
         });
 
@@ -122,13 +114,7 @@ public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDial
         });
 
         view.findViewById(R.id.button_input_barcode_cancel).setOnClickListener(v -> {
-            if(currentFragment.getClass() == ConsumeFragment.class) {
-                ((ConsumeFragment) currentFragment).clearAll();
-            } else if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).clearFields();
-            } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
-                ((ShoppingListItemEditFragment) currentFragment).clearAll();
-            }
+            activity.getCurrentFragment().clearFields();
             dismiss();
         });
 

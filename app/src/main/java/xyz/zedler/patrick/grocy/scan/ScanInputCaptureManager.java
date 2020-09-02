@@ -72,7 +72,6 @@ public class ScanInputCaptureManager {
             barcodeView.pause();
             inactivityTimer.cancel();
             barcodeListener.onBarcodeResult(result);
-            finish();
         }
     };
 
@@ -190,7 +189,7 @@ public class ScanInputCaptureManager {
     public void onPause() {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inactivityTimer.cancel();
-        barcodeView.pauseAndWait();
+        barcodeView.pause();
     }
 
     /**

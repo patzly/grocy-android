@@ -292,7 +292,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         assert editTextBarcodes != null;
         editTextBarcodes.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                addInputAsBarcode();
+                addBarcode();
                 return true;
             } return false;
         });
@@ -1157,7 +1157,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         );
     }
 
-    private void addInputAsBarcode() {
+    private void addBarcode() {
         addBarcode(editTextBarcodes.getText().toString());
         editTextBarcodes.setText(null);
         textInputBarcodes.clearFocus();

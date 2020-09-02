@@ -40,8 +40,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -324,16 +322,8 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        NavBackStackEntry currentBackStackEntry = NavHostFragment
-                .findNavController(this)
-                .getCurrentBackStackEntry();
-        assert currentBackStackEntry != null;
-        MutableLiveData<String> liveData = currentBackStackEntry
-                .getSavedStateHandle()
-                .getLiveData(Constants.ARGUMENT.PRODUCT_NAME);
-        liveData.observe(getViewLifecycleOwner(), (String productName) -> {
+        getFromPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName -> {
             // TODO: Prioritize productName over args.getProductName(), no idea yet
-            currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
         });
     }
 

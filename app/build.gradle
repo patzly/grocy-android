@@ -7,6 +7,10 @@ apply plugin: "androidx.navigation.safeargs"
 android {
     compileSdkVersion 29
 
+    lintOptions {
+        abortOnError false
+    }
+
     buildFeatures {
         viewBinding = true
     }

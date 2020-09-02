@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -19,20 +22,19 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentScanBatchBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
+import xyz.zedler.patrick.grocy.databinding.FragmentScanInputBinding;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.BarcodeRipple;
 
-public class ScanBatchFragment extends BaseFragment
-        implements ScanBatchCaptureManager.BarcodeListener {
+public class ScanInputFragment extends BaseFragment
+        implements ScanInputCaptureManager.BarcodeListener {
 
-    private final static String TAG = ScanBatchFragment.class.getSimpleName();
+    private final static String TAG = ScanInputFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentScanBatchBinding binding;
-    private ScanBatchCaptureManager capture;
+    private FragmentScanInputBinding binding;
+    private ScanInputCaptureManager capture;
     private BarcodeRipple barcodeRipple;
     private DecoratedBarcodeView barcodeScannerView;
 
@@ -44,7 +46,7 @@ public class ScanBatchFragment extends BaseFragment
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentScanBatchBinding.inflate(inflater, container, false);
+        binding = FragmentScanInputBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -64,11 +66,11 @@ public class ScanBatchFragment extends BaseFragment
         // GET PREFERENCES
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        binding.frameBack.setOnClickListener(v -> onBackPressed());
+        binding.frameBack.setOnClickListener(v -> activity.onBackPressed());
 
         barcodeRipple = view.findViewById(R.id.ripple_scan);
 
-        barcodeScannerView = binding.barcodeScanBatch;
+        barcodeScannerView = binding.barcodeScanInput;
         barcodeScannerView.setTorchOff();
         isTorchOn = false;
         CameraSettings cameraSettings = new CameraSettings();
@@ -82,7 +84,7 @@ public class ScanBatchFragment extends BaseFragment
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        capture = new ScanBatchCaptureManager(activity, barcodeScannerView, this);
+        capture = new ScanInputCaptureManager(activity, barcodeScannerView, this);
         capture.decode();
     }
 
@@ -91,17 +93,16 @@ public class ScanBatchFragment extends BaseFragment
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.GONE,
-                R.menu.menu_scan_batch,
+                R.menu.menu_scan_input,
                 animated,
                 this::setUpBottomMenu
         );
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemTorch, menuItemConfig;
+        MenuItem menuItemTorch;
         menuItemTorch = activity.getBottomMenu().findItem(R.id.action_toggle_flash);
-        menuItemConfig = activity.getBottomMenu().findItem(R.id.action_open_config);
-        if(menuItemTorch == null || menuItemConfig == null) return;
+        if(menuItemTorch == null) return;
 
         if(!hasFlash()) menuItemTorch.setVisible(false);
         if(hasFlash()) menuItemTorch.setOnMenuItemClickListener(item -> {
@@ -145,9 +146,8 @@ public class ScanBatchFragment extends BaseFragment
     }
 
     @Override
-    public boolean onBackPressed() {
-        activity.showBottomSheet(new ExitScanBatchBottomSheetDialogFragment(), null);
-        return true;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -159,7 +159,12 @@ public class ScanBatchFragment extends BaseFragment
 
     @Override
     public void onBarcodeResult(BarcodeResult result) {
-
+        barcodeRipple.pauseAnimation();
+        NavBackStackEntry backStackEntry = NavHostFragment.findNavController(this)
+                .getPreviousBackStackEntry();
+        assert backStackEntry != null;
+        backStackEntry.getSavedStateHandle().set(Constants.ARGUMENT.BARCODE, result.getText());
+        activity.navigateUp();
     }
 
     @Override

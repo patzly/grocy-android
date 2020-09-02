@@ -25,7 +25,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:id="@+id/frame_purchase_back"
+                    android:id="@+id/frame_back"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="4dp"
@@ -60,7 +60,7 @@
             </LinearLayout>
 
             <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-                android:id="@+id/progressbar_purchase"
+                android:id="@+id/progressbar"
                 style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
