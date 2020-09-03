@@ -37,6 +37,16 @@ Grocy Android will soon be available in the official F-Droid repository.
 * Low data usage
 * Small app size (~6MB)
 
+## Coming up
+
+* Smooth navigation & better UI overview with Navigation component
+* Less code & easier maintainance with ViewModels and LiveData
+* Almost all Activities will be Fragments
+* Extended product editing
+* Cleaned up settings
+
+Stay tuned!
+
 ## Compatibility
 
 Grocy Android requires at least Android 5.0 Lollipop on your device and [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
