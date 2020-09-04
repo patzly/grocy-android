@@ -36,7 +36,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -242,11 +241,10 @@ public class MasterProductsFragment extends BaseFragment
                 R.string.action_add,
                 Constants.FAB.TAG.ADD,
                 animated,
-                () -> NavHostFragment.findNavController(this).navigate(
-                        MasterProductsFragmentDirections
-                                .actionMasterProductsFragmentToMasterProductSimpleFragment(
-                                        Constants.ACTION.CREATE
-                                )
+                () -> navigate(MasterProductsFragmentDirections
+                        .actionMasterProductsFragmentToMasterProductSimpleFragment(
+                                Constants.ACTION.CREATE
+                        )
                 )
         );
     }

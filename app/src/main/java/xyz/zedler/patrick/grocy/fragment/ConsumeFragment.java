@@ -1066,11 +1066,9 @@ public class ConsumeFragment extends BaseFragment {
         if(menuItemDetails != null) menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(productDetails != null) {
-                NavHostFragment.findNavController(this).navigate(
-                        ConsumeFragmentDirections
-                                .actionConsumeFragmentToProductOverviewBottomSheetDialogFragment()
-                                .setProductDetails(productDetails)
-                );
+                navigate(ConsumeFragmentDirections
+                        .actionConsumeFragmentToProductOverviewBottomSheetDialogFragment()
+                        .setProductDetails(productDetails));
             } else {
                 binding.textInputConsumeProduct.setError(
                         activity.getString(R.string.error_select_product)

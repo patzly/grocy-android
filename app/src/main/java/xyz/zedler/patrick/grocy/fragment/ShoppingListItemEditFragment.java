@@ -40,7 +40,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -596,7 +595,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                     jsonObject,
                     response -> {
                         editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        NavHostFragment.findNavController(this).navigateUp();
+                        activity.navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -769,11 +768,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                         .toString()
                         .trim();
                 if(productDetails != null && input.equals(productDetails.getProduct().getName())) {
-                    NavHostFragment.findNavController(this).navigate(
-                                    ShoppingListItemEditFragmentDirections
-                                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
-                                            .setProductDetails(productDetails)
-                    );
+                    navigate(ShoppingListItemEditFragmentDirections
+                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
+                            .setProductDetails(productDetails));
                 } else {
                     Product product = getProductFromName(input);
                     if(product != null) {
@@ -785,11 +782,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                                             new TypeToken<ProductDetails>() {
                                             }.getType()
                                     );
-                                    NavHostFragment.findNavController(this).navigate(
-                                            ShoppingListItemEditFragmentDirections
-                                                    .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
-                                                    .setProductDetails(productDetails)
-                                    );
+                                    navigate(ShoppingListItemEditFragmentDirections
+                                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
+                                            .setProductDetails(productDetails));
                                 }, error -> {
                                 }
                         );

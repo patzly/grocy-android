@@ -23,7 +23,10 @@
             app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_shoppingListFragment_to_purchaseFragment"
-            app:destination="@id/purchaseFragment" />
+            app:destination="@id/purchaseFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/consumeFragment"
@@ -93,6 +96,17 @@
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_purchaseFragment_to_masterProductSimpleFragment"
+            app:destination="@id/masterProductSimpleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <argument
+            android:name="shoppingListItems"
+            app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <activity
         android:id="@+id/settingsActivity"

@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -35,9 +34,6 @@ import com.google.android.material.button.MaterialButton;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
-import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
@@ -63,14 +59,16 @@ public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDial
         );
 
         activity = (MainActivity) getActivity();
-        assert activity != null;
+        assert activity != null && getArguments() != null;
+
+        String barcode = getArguments().getString(Constants.ARGUMENT.BARCODE);
 
         setCancelable(false);
 
         TextView textView = view.findViewById(R.id.text_input_barcode_question);
         MaterialButton buttonNew = view.findViewById(R.id.button_input_barcode_new);
 
-        if(activity.getCurrentFragment().getClass() == ConsumeFragment.class) {
+        if(activity.getCurrentFragment() instanceof ConsumeFragment) {
             textView.setText(activity.getString(R.string.title_link_barcode_to_existing));
             buttonNew.setVisibility(View.GONE);
         } else {
@@ -79,37 +77,12 @@ public class InputBarcodeBottomSheetDialogFragment extends CustomBottomSheetDial
         }
 
         view.findViewById(R.id.button_input_barcode_link).setOnClickListener(v -> {
-            activity.getCurrentFragment().addInputAsBarcode();
+            activity.getCurrentFragment().addBarcode(barcode);
             dismiss();
         });
 
         view.findViewById(R.id.button_input_barcode_new).setOnClickListener(v -> {
-            Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == PurchaseFragment.class && getArguments() != null) {
-                CreateProduct createProduct = new CreateProduct(
-                        null,
-                        getArguments().getString(Constants.ARGUMENT.BARCODES),
-                        null,
-                        null,
-                        null
-                );
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
-                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
-            } else if(current.getClass() == ShoppingListItemEditFragment.class && getArguments() != null) {
-                CreateProduct createProduct = new CreateProduct(
-                        null,
-                        getArguments().getString(Constants.ARGUMENT.BARCODES),
-                        null,
-                        null,
-                        null
-                );
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_SHOPPING_LIST_ITEM_EDIT);
-                bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-                activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
-            }
+            activity.getCurrentFragment().createProductFromBarcode(barcode);
             dismiss();
         });
 

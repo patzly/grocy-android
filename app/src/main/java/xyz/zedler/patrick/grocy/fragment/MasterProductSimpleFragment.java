@@ -44,7 +44,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -1164,7 +1163,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         activity.hideKeyboard();
     }
 
-    private void addBarcode(String barcode) {
+    public void addBarcode(String barcode) {
         barcode = barcode.trim();
         if(barcode.isEmpty()) return;
         for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
@@ -1240,7 +1239,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         // TODO
-                        NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
+                        findNavController().getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
                         activity.navigateUp();
                     },
                     error -> {

@@ -38,7 +38,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1411,24 +1410,20 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         if(stockItem == null) return;
         QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
         Location location = getLocation(stockItem.getProduct().getLocationId());
-        NavHostFragment.findNavController(this).navigate(
-                StockFragmentDirections
-                        .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
-                        .setShowActions(true)
-                        .setStockItem(stockItem)
-                        .setQuantityUnit(quantityUnit)
-                        .setLocation(location)
-        );
+        navigate(StockFragmentDirections
+                .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                .setShowActions(true)
+                .setStockItem(stockItem)
+                .setQuantityUnit(quantityUnit)
+                .setLocation(location));
     }
 
     private void showProductOverview(ProductDetails productDetails) {
         if(productDetails == null) return;
-        NavHostFragment.findNavController(this).navigate(
-                StockFragmentDirections
-                        .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
-                        .setShowActions(true)
-                        .setProductDetails(productDetails)
-        );
+        navigate(StockFragmentDirections
+                .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                .setShowActions(true)
+                .setProductDetails(productDetails));
     }
 
     private void setUpSearch() {

@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +44,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
@@ -54,6 +56,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDial
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -139,7 +142,7 @@ public class PurchaseFragment extends BaseFragment {
         binding.swipePurchase.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        binding.swipePurchase.setOnRefreshListener(() -> viewModel.refresh());
+        binding.swipePurchase.setOnRefreshListener(() -> viewModel.refresh(args));
 
         // product
 
@@ -301,7 +304,7 @@ public class PurchaseFragment extends BaseFragment {
 
         if(savedInstanceState == null) {
             binding.progressbarPurchase.setVisibility(View.VISIBLE);
-            viewModel.refresh();
+            viewModel.refresh(args);
         }
 
         // UPDATE UI
@@ -477,6 +480,57 @@ public class PurchaseFragment extends BaseFragment {
                 );
             }
         });
+        viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemId -> {
+
+        });
+        viewModel.getEventHandler().observe(getViewLifecycleOwner(),
+                (EventHandler.EventObserver) event -> {
+            if(event.getType() == Event.SNACKBAR_MESSAGE) {
+                activity.showMessage(((SnackbarMessage) event).getSnackbar(
+                        activity,
+                        activity.binding.frameMainContainer
+                ));
+            } else if(event.getType() == Event.PURCHASE_SUCCESS) {
+                assert getArguments() != null;
+                if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                    activity.navigateUp();
+                } else {
+                    viewModel.getProductDetailsLive().setValue(null);
+                }
+            } else if(event.getType() == Event.BARCODE_UNKNOWN) {
+                assert event.getBundle() != null;
+                activity.showBottomSheet(
+                        new InputBarcodeBottomSheetDialogFragment(),
+                        event.getBundle()
+                );
+            }
+        });
+
+        if(viewModel.getProductDetails() != null
+                && (binding.autoCompletePurchaseProduct.getText() == null
+                || !binding.autoCompletePurchaseProduct.getText().toString()
+                .equals(viewModel.getProductDetails().getProduct().getName()))
+        ) {
+            new Handler().postDelayed(() -> binding.autoCompletePurchaseProduct.setText(
+                    viewModel.getProductDetails().getProduct().getName()
+            ), 100);
+        }
+
+        // display barcodes which are already in viewModel
+        for(String barcode : viewModel.getBarcodes()) {
+            InputChip inputChipBarcode = new InputChip(
+                    activity, barcode, R.drawable.ic_round_barcode, false
+            );
+            inputChipBarcode.setPadding(0, 0, 0, 8);
+            binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
+        }
+
+        assert viewModel.getShoppingListItemPosLive().getValue() != null;
+        if(args.getShoppingListItems() != null
+                && viewModel.getShoppingListItemPosLive().getValue() == -1
+        ) {
+            viewModel.getShoppingListItemPosLive().setValue(0);
+        }
 
         getFromPreviousFragment(Constants.ARGUMENT.BARCODE, barcode -> {
             Log.i(TAG, "onViewCreated: " + barcode); // TODO: Remove line
@@ -486,44 +540,15 @@ public class PurchaseFragment extends BaseFragment {
                 Constants.ARGUMENT.PRODUCT_ID,
                 productId -> viewModel.loadProductDetails((Integer) productId)
         );
-
-        setupEventHandler();
-    }
-
-    private void setupEventHandler() {
-        viewModel.getEventHandler().observe(
-                getViewLifecycleOwner(),
-                (EventHandler.EventObserver) event -> {
-                    if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                        activity.showMessage(((SnackbarMessage) event).getSnackbar(
-                                activity,
-                                activity.binding.frameMainContainer
-                        ));
-                    } else if(event.getType() == Event.PURCHASE_SUCCESS) {
-                        assert getArguments() != null;
-                        if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                            activity.navigateUp();
-                        } else {
-                            viewModel.getProductDetailsLive().setValue(null);
-                        }
-                    } else if(event.getType() == Event.BARCODE_UNKNOWN) {
-                        assert event.getBundle() != null;
-                        binding.autoCompletePurchaseProduct.setText(
-                                event.getBundle().getString(Constants.ARGUMENT.BARCODE)
-                        );
-                        activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(),
-                                event.getBundle()
-                        );
-                    }
-        });
     }
 
     private void fillWithShoppingListItem() {
-        ArrayList<ShoppingListItem> listItems = getShoppingListItems();
-        if(listItems == null) return;
+        if(args.getShoppingListItems() == null) return;
+        ArrayList<ShoppingListItem> listItems = new ArrayList<>(
+                Arrays.asList(args.getShoppingListItems())
+        );
         ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
-        if(listItem == null) return;
+        if(listItem == null || viewModel.getQuantityUnitsLive().getValue() == null) return;
 
         binding.textPurchaseBatch.setText(activity.getString(
                 R.string.subtitle_entry_num_of_num,
@@ -542,17 +567,6 @@ public class PurchaseFragment extends BaseFragment {
         } else {
             //fillAmount(false);
         }
-    }
-
-    private ArrayList<ShoppingListItem> getShoppingListItems() {
-        if(startupBundle == null) return null;
-        String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
-        if(type == null || !type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
-            return null;
-        }
-        return startupBundle.getParcelableArrayList(
-                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
-        );
     }
 
     private ShoppingListItem getCurrentShoppingListItem(ArrayList<ShoppingListItem> listItems) {
@@ -664,10 +678,8 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private void showInputNameBottomSheet(@NonNull String productName) {
-        NavHostFragment.findNavController(this).navigate(
-                PurchaseFragmentDirections
-                        .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName)
-        );
+        navigate(PurchaseFragmentDirections
+                .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName));
     }
 
     @Nullable
@@ -714,20 +726,16 @@ public class PurchaseFragment extends BaseFragment {
         ) return;
 
         menuItemBatch.setOnMenuItemClickListener(item -> {
-            NavHostFragment.findNavController(this).navigate(
-                    PurchaseFragmentDirections
-                            .actionPurchaseFragmentToScanBatchFragment(Constants.ACTION.PURCHASE)
-            );
+            navigate(PurchaseFragmentDirections
+                    .actionPurchaseFragmentToScanBatchFragment(Constants.ACTION.PURCHASE));
             return true;
         });
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(requireProductDetails() == null) return false;
-            NavHostFragment.findNavController(this).navigate(
-                    PurchaseFragmentDirections
-                            .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
-                            .setProductDetails(viewModel.getProductDetailsLive().getValue())
-            );
+            navigate(PurchaseFragmentDirections
+                    .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
+                    .setProductDetails(viewModel.getProductDetailsLive().getValue()));
             return true;
         });
         menuItemClear.setOnMenuItemClickListener(item -> {
@@ -735,11 +743,7 @@ public class PurchaseFragment extends BaseFragment {
             viewModel.getProductDetailsLive().setValue(null);
             return true;
         });
-        String action = null;
-        if(startupBundle != null) action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-        if(action != null && action.equals(
-                Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
-        )) {
+        if(args.getShoppingListItems() != null) {
             menuItemSkipItem.setVisible(true);
             menuItemSkipItem.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemSkipItem);
@@ -753,7 +757,7 @@ public class PurchaseFragment extends BaseFragment {
                     activity.dismissFragment();
                     return true;
                 }
-                clearFields();
+                viewModel.getProductDetailsLive().setValue(null);
                 fillWithShoppingListItem();
                 return true;
             });
@@ -780,27 +784,41 @@ public class PurchaseFragment extends BaseFragment {
         return productDetails;
     }
 
-    public void addInputAsBarcode() {
-        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-        if(input.isEmpty()) return;
+    @Override
+    public void addBarcode(String barcode) {
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
-            if(inputChip.getText().equals(input)) {
+            if(inputChip.getText().equals(barcode)) {
                 showMessage(activity.getString(R.string.msg_barcode_duplicate));
-                binding.autoCompletePurchaseProduct.setText(null);
-                binding.autoCompletePurchaseProduct.requestFocus();
+                if(viewModel.getProductDetails() == null) {
+                    binding.autoCompletePurchaseProduct.setText(null);
+                    activity.showKeyboard(binding.autoCompletePurchaseProduct);
+                }
                 return;
             }
         }
         InputChip inputChipBarcode = new InputChip(
-                activity, input, R.drawable.ic_round_barcode, true
+                activity, barcode, R.drawable.ic_round_barcode, true
         );
         inputChipBarcode.setPadding(0, 0, 0, 8);
         binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
-        binding.autoCompletePurchaseProduct.setText(null);
-        binding.autoCompletePurchaseProduct.requestFocus();
+        viewModel.getBarcodes().add(barcode);
+        if(viewModel.getProductDetails() == null) {
+            binding.autoCompletePurchaseProduct.setText(null);
+            activity.showKeyboard(binding.autoCompletePurchaseProduct);
+        }
     }
 
+    @Override
+    public void createProductFromBarcode(String barcode) {
+        navigate(PurchaseFragmentDirections
+                .actionPurchaseFragmentToMasterProductSimpleFragment(Constants.ACTION.CREATE)
+                .setCreateProductObject(new CreateProduct(null, barcode,
+                        null, null, null)
+                ));
+    }
+
+    @Override
     public void clearFields() {
         binding.textInputPurchaseProduct.setErrorEnabled(false);
         binding.autoCompletePurchaseProduct.setText(null);

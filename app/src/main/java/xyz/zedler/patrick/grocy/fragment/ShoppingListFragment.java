@@ -39,7 +39,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -892,12 +891,9 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     public void editItem(int position) {
-        NavHostFragment.findNavController(this).navigate(
-                ShoppingListFragmentDirections
-                        .actionShoppingListFragmentToShoppingListItemEditFragment(
-                                Constants.ACTION.EDIT
-                        ).setShoppingListItem((ShoppingListItem) groupedListItems.get(position))
-        );
+        navigate(ShoppingListFragmentDirections
+                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
+                .setShoppingListItem((ShoppingListItem) groupedListItems.get(position)));
     }
 
     public void saveNotes(Spanned notes) {
@@ -929,11 +925,9 @@ public class ShoppingListFragment extends BaseFragment implements
         if(showOffline) return;
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         if(shoppingListItem.getProduct() == null) return;
-        NavHostFragment.findNavController(this).navigate(
-                ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
+        navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
                 .setProductName(shoppingListItem.getProduct().getName())
-                .setAmount(String.valueOf(shoppingListItem.getAmount()))
-        );
+                .setAmount(String.valueOf(shoppingListItem.getAmount())));
         // TODO
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE_THEN_SHOPPING_LIST);
@@ -960,12 +954,9 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     public void addItem() {
-        NavHostFragment.findNavController(this).navigate(
-                ShoppingListFragmentDirections
-                        .actionShoppingListFragmentToShoppingListItemEditFragment(
-                                Constants.ACTION.CREATE
-                        ).setSelectedShoppingListId(selectedShoppingListId)
-        );
+        navigate(ShoppingListFragmentDirections
+                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
+                .setSelectedShoppingListId(selectedShoppingListId));
     }
 
     private void showNotesEditor() {

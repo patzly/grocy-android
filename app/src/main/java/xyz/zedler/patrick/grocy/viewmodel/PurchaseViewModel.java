@@ -43,6 +43,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -83,6 +84,9 @@ public class PurchaseViewModel extends AndroidViewModel {
     private MutableLiveData<String> amountLive;
     private MutableLiveData<Integer> storeIdLive;
     private MutableLiveData<Integer> locationIdLive;
+    private MutableLiveData<Integer> shoppingListItemPosLive;
+
+    private ArrayList<String> barcodes;
 
     public PurchaseViewModel(@NonNull Application application) {
         super(application);
@@ -101,29 +105,28 @@ public class PurchaseViewModel extends AndroidViewModel {
         quantityUnitsLive = new SingleLiveEvent<>();
         locationsLive = new SingleLiveEvent<>();
         storesLive = new SingleLiveEvent<>();
-        isDownloadingLive = new MutableLiveData<>();
-        isDownloadingLive.setValue(false);
-
         productDetailsLive = new SingleLiveEvent<>();
+
+        isDownloadingLive = new MutableLiveData<>(false);
         amountLive = new MutableLiveData<>();
         priceLive = new MutableLiveData<>();
-        storeIdLive = new MutableLiveData<>();
-        locationIdLive = new MutableLiveData<>();
+        storeIdLive = new MutableLiveData<>(-1);
+        locationIdLive = new MutableLiveData<>(-1);
+        shoppingListItemPosLive = new MutableLiveData<>(-1);
         bestBeforeDateLive = new MutableLiveData<>();
-        totalPriceCheckedLive = new MutableLiveData<>();
-        totalPriceCheckedLive.setValue(false);
-        storeIdLive.setValue(-1);
-        locationIdLive.setValue(-1);
+        totalPriceCheckedLive = new MutableLiveData<>(false);
+
+        barcodes = new ArrayList<>();
     }
 
-    public void refresh() {
+    public void refresh(PurchaseFragmentArgs args) {
         if(netUtil.isOnline()) {
-            downloadData();
+            downloadData(args);
         } else {
             showSnackbar(
                     new SnackbarMessage(getString(R.string.msg_no_connection)).setAction(
                             getString(R.string.action_retry),
-                            v -> refresh()
+                            v -> refresh(args)
                     )
             );
         }
@@ -137,8 +140,11 @@ public class PurchaseViewModel extends AndroidViewModel {
         ).perform(dlHelper.getUuid());
     }
 
-    public void downloadData() {
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    public void downloadData(PurchaseFragmentArgs args) {
+        DownloadHelper.Queue queue = dlHelper.newQueue(
+                this::onQueueEmpty,
+                err -> onDownloadError(err, args)
+        );
         queue.append(
                 dlHelper.getProducts(products -> this.productsLive.setValue(products)),
                 dlHelper.getStores(stores -> {
@@ -159,14 +165,9 @@ public class PurchaseViewModel extends AndroidViewModel {
             );
         }
         // only load quantity units if shopping list items have to be displayed
-        /*if(startupBundle != null) {
-            String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
-            if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
-                queue.append(
-                        dlHelper.getQuantityUnits(quUnits -> quantityUnitsLive.setValue(quUnits))
-                );
-            }
-        }*/
+        if(args.getShoppingListItems() != null) {
+            queue.append(dlHelper.getQuantityUnits(quUnits -> quantityUnitsLive.setValue(quUnits)));
+        }
         getIsDownloadingLive().setValue(true);
         queue.start();
     }
@@ -175,13 +176,13 @@ public class PurchaseViewModel extends AndroidViewModel {
         getIsDownloadingLive().setValue(false);
     }
 
-    private void onDownloadError(VolleyError error) {
+    private void onDownloadError(VolleyError error, PurchaseFragmentArgs args) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         getIsDownloadingLive().setValue(false);
         showSnackbar(
                 new SnackbarMessage(getString(R.string.error_undefined)).setAction(
                         getString(R.string.action_retry),
-                        v -> downloadData()
+                        v -> downloadData(args)
                 )
         );
     }
@@ -218,7 +219,7 @@ public class PurchaseViewModel extends AndroidViewModel {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
+                        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
                         sendEvent(Event.BARCODE_UNKNOWN, bundle);
                     } else {
                         showMessage(getString(R.string.error_undefined));
@@ -523,6 +524,11 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
+    public MutableLiveData<Integer> getShoppingListItemPosLive() {
+        return shoppingListItemPosLive;
+    }
+
+    @NonNull
     public SingleLiveEvent<ArrayList<Store>> getStoresLive() {
         return storesLive;
     }
@@ -553,6 +559,11 @@ public class PurchaseViewModel extends AndroidViewModel {
     @NonNull
     public SingleLiveEvent<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
         return quantityUnitsLive;
+    }
+
+    @NonNull
+    public ArrayList<String> getBarcodes() {
+        return barcodes;
     }
 
     private void showErrorMessage() {

@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -447,9 +448,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showKeyboard(EditText editText) {
-        ((InputMethodManager) Objects
-                .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
-        ).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        new Handler().postDelayed(() -> {
+            editText.requestFocus();
+            ((InputMethodManager) Objects
+                    .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
+            ).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        }, 100);
     }
 
     public void hideKeyboard() {

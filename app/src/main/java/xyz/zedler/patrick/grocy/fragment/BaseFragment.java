@@ -2,8 +2,11 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.view.KeyEvent;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 public class BaseFragment extends Fragment {
@@ -32,24 +35,35 @@ public class BaseFragment extends Fragment {
 
     public void resumeScan() {}
 
-    public void addInputAsBarcode() {}
+    public void addBarcode(String barcode) {}
+
+    public void createProductFromBarcode(String barcode) {}
 
     public void clearFields() {}
 
+    @NonNull
+    NavController findNavController() {
+        return NavHostFragment.findNavController(this);
+    }
+
+    void navigate(NavDirections directions) {
+        findNavController().navigate(directions);
+    }
+
     void getFromPreviousFragment(String key, ObserverListener observerListener) {
-        NavBackStackEntry backStackEntry = NavHostFragment.findNavController(this)
-                .getCurrentBackStackEntry();
+        NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
-        if(backStackEntry.getSavedStateHandle().getLiveData(key).hasObservers()) {
-            backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
-                    getViewLifecycleOwner()
-            );
-        }
+        backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
+                getViewLifecycleOwner()
+        );
         backStackEntry.getSavedStateHandle().getLiveData(key).observe(
                 getViewLifecycleOwner(),
                 value -> {
                     observerListener.onChange(value);
                     backStackEntry.getSavedStateHandle().remove(key);
+                    backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
+                            getViewLifecycleOwner()
+                    );
                 }
         );
     }
