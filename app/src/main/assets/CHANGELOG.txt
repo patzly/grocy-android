@@ -1,5 +1,5 @@
 1.8.4:
-- Norwegian translation (thanks teitrand!)
+- Norwegian translation (thanks Tor!)
 - Spanish translation (thanks Martín!)
 
 1.8.3:
