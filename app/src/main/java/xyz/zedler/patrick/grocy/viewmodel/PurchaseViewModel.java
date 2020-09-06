@@ -451,7 +451,7 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     public Double getMinAmount() {
         double minAmount;
-        if(getProductDetails() == null || !isTareWeightEnabled()) {
+        if(getProductDetails() == null || !isTareWeightEnabled(getProductDetails())) {
             minAmount = 1;
         } else {
             minAmount = getProductDetails().getProduct().getTareWeight();
@@ -460,9 +460,9 @@ public class PurchaseViewModel extends AndroidViewModel {
         return minAmount;
     }
 
-    public boolean isTareWeightEnabled() {
-        if(getProductDetails() == null) return false;
-        return getProductDetails().getProduct().getEnableTareWeightHandling() == 1;
+    public boolean isTareWeightEnabled(ProductDetails productDetails) {
+        if(productDetails == null) return false;
+        return productDetails.getProduct().getEnableTareWeightHandling() == 1;
     }
 
     @NonNull
@@ -526,6 +526,13 @@ public class PurchaseViewModel extends AndroidViewModel {
     @NonNull
     public MutableLiveData<Integer> getShoppingListItemPosLive() {
         return shoppingListItemPosLive;
+    }
+
+    public void nextShoppingListItemPos() {
+        assert shoppingListItemPosLive.getValue() != null;
+        int pos = shoppingListItemPosLive.getValue();
+        if(pos == -1) return;
+        shoppingListItemPosLive.setValue(pos + 1);
     }
 
     @NonNull

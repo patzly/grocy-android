@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -44,8 +43,6 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -80,7 +77,6 @@ public class PurchaseFragment extends BaseFragment {
     private SharedPreferences sharedPrefs;
     private DateUtil dateUtil;
     private PurchaseFragmentArgs args;
-    private Bundle startupBundle;
     private FragmentPurchaseBinding binding;
     private PurchaseViewModel viewModel;
 
@@ -109,7 +105,6 @@ public class PurchaseFragment extends BaseFragment {
         activity = (MainActivity) getActivity();
         assert activity != null && getArguments() != null;
 
-        startupBundle = getArguments();
         args = PurchaseFragmentArgs.fromBundle(getArguments());
 
         viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
@@ -289,13 +284,8 @@ public class PurchaseFragment extends BaseFragment {
         hideDisabledFeatures();
 
         // show or hide shopping list item section
-        if(startupBundle != null) {
-            String type = startupBundle.getString(Constants.ARGUMENT.TYPE);
-            if(type != null && type.equals(Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST)) {
-                binding.linearPurchaseBatchModeSection.setVisibility(View.VISIBLE);
-            } else {
-                binding.linearPurchaseBatchModeSection.setVisibility(View.GONE);
-            }
+        if(args.getShoppingListItems() != null) {
+            binding.linearPurchaseBatchModeSection.setVisibility(View.VISIBLE);
         } else {
             binding.linearPurchaseBatchModeSection.setVisibility(View.GONE);
         }
@@ -306,6 +296,8 @@ public class PurchaseFragment extends BaseFragment {
             binding.progressbarPurchase.setVisibility(View.VISIBLE);
             viewModel.refresh(args);
         }
+
+        observeStates(savedInstanceState);
 
         // UPDATE UI
         updateUI((getArguments() == null
@@ -335,10 +327,7 @@ public class PurchaseFragment extends BaseFragment {
         );
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void observeStates(Bundle savedInstanceState) {
         viewModel.getIsDownloadingLive().observe(
                 getViewLifecycleOwner(),
                 isDownloading -> {
@@ -348,34 +337,6 @@ public class PurchaseFragment extends BaseFragment {
                     }
                 }
         );
-        viewModel.getProductsLive().observe(
-                getViewLifecycleOwner(),
-                products -> viewModel.getProductNamesLive().setValue(getProductNames(products))
-        );
-        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
-            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
-                    activity,
-                    new ArrayList<>(productNames)
-            );
-            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-        });
-        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
-            if(productDetails != null) {
-                fillWithProductDetails(productDetails);
-
-                binding.textInputPurchaseAmount.setHint(
-                        activity.getString(
-                                R.string.property_amount_in,
-                                productDetails.getQuantityUnitPurchase().getNamePlural()
-                        )
-                );
-
-            } else {
-                clearFields();
-
-                binding.textInputPurchaseAmount.setHint(getString(R.string.property_amount));
-            }
-        });
         viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
             if(date == null) {
                 binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
@@ -480,8 +441,37 @@ public class PurchaseFragment extends BaseFragment {
                 );
             }
         });
-        viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemId -> {
+        viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemPos -> {
+            if(args.getShoppingListItems() == null) return;
+            if(itemPos == -1) {
+                viewModel.getShoppingListItemPosLive().setValue(0);
+                return;
+            }
+            if(itemPos+1 > args.getShoppingListItems().length) {
+                activity.navigateUp();
+                return;
+            }
+            fillWithShoppingListItem(itemPos);
+        });
 
+
+        viewModel.getProductsLive().observe(
+                getViewLifecycleOwner(),
+                products -> viewModel.getProductNamesLive().setValue(getProductNames(products))
+        );
+        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
+            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
+                    activity,
+                    new ArrayList<>(productNames)
+            );
+            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
+        });
+        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
+            if(productDetails != null) {
+                fillWithProductDetails(productDetails, null);
+            } else {
+                clearFields();
+            }
         });
         viewModel.getEventHandler().observe(getViewLifecycleOwner(),
                 (EventHandler.EventObserver) event -> {
@@ -525,35 +515,25 @@ public class PurchaseFragment extends BaseFragment {
             binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
         }
 
-        assert viewModel.getShoppingListItemPosLive().getValue() != null;
-        if(args.getShoppingListItems() != null
-                && viewModel.getShoppingListItemPosLive().getValue() == -1
-        ) {
-            viewModel.getShoppingListItemPosLive().setValue(0);
-        }
-
-        getFromPreviousFragment(Constants.ARGUMENT.BARCODE, barcode -> {
-            Log.i(TAG, "onViewCreated: " + barcode); // TODO: Remove line
-            viewModel.loadProductDetailsByBarcode((String) barcode);
-        });
+        getFromPreviousFragment(
+                Constants.ARGUMENT.BARCODE,
+                barcode -> viewModel.loadProductDetailsByBarcode((String) barcode)
+        );
         getFromPreviousFragment(
                 Constants.ARGUMENT.PRODUCT_ID,
                 productId -> viewModel.loadProductDetails((Integer) productId)
         );
     }
 
-    private void fillWithShoppingListItem() {
+    private void fillWithShoppingListItem(int itemPos) {
         if(args.getShoppingListItems() == null) return;
-        ArrayList<ShoppingListItem> listItems = new ArrayList<>(
-                Arrays.asList(args.getShoppingListItems())
-        );
-        ShoppingListItem listItem = getCurrentShoppingListItem(listItems);
-        if(listItem == null || viewModel.getQuantityUnitsLive().getValue() == null) return;
+        ShoppingListItem listItem = args.getShoppingListItems()[itemPos];
+        if(viewModel.getQuantityUnitsLive().getValue() == null) return;
 
         binding.textPurchaseBatch.setText(activity.getString(
                 R.string.subtitle_entry_num_of_num,
-                shoppingListItemPos+1,
-                listItems.size()
+                itemPos+1,
+                args.getShoppingListItems().length
         ));
         ShoppingListItemAdapter.fillShoppingListItem(
                 activity,
@@ -561,75 +541,74 @@ public class PurchaseFragment extends BaseFragment {
                 binding.linearPurchaseShoppingListItem,
                 viewModel.getQuantityUnitsLive().getValue()
         );
-        startupBundle.putString(Constants.ARGUMENT.AMOUNT, String.valueOf(listItem.getAmount()));
         if(listItem.getProductId() != null) {
-            //loadProductDetails(Integer.parseInt(listItem.getProductId()));
+            viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
-            //fillAmount(false);
+            viewModel.getProductDetailsLive().setValue(null);
+            fillWithProductDetails(null, NumUtil.trim(listItem.getAmount()));
         }
     }
 
-    private ShoppingListItem getCurrentShoppingListItem(ArrayList<ShoppingListItem> listItems) {
-        if(shoppingListItemPos+1 > listItems.size()) return null;
-        return listItems.get(shoppingListItemPos);
-    }
-
-    private void fillWithProductDetails(@NonNull ProductDetails productDetails) {
+    /**
+     * Fills the form.
+     * @param productDetails (ProductDetails): if null, the form won't be filled with these details
+     * @param amountForced (String): if not null, this String will be in the amount field
+     */
+    private void fillWithProductDetails(
+            @Nullable ProductDetails productDetails,
+            @Nullable String amountForced
+    ) {
         clearInputFocus();
 
-        // deactivate checkbox if tare weight handling is on
-        if(viewModel.isTareWeightEnabled()) {
-            binding.linearPurchaseTotalPrice.setEnabled(false);
-            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
-            binding.checkboxPurchaseTotalPrice.setEnabled(false);
-        }
-
-        // set icon for tare weight, else for normal amount
-        binding.imagePurchaseAmount.setImageResource(
-                viewModel.isTareWeightEnabled()
-                        ? R.drawable.ic_round_scale_anim
-                        : R.drawable.ic_round_scatter_plot_anim
-        );
-
-        // PRODUCT
-        binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
-        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
-
         // AMOUNT
-
-        if(startupBundle != null && startupBundle.getString(Constants.ARGUMENT.AMOUNT) != null) {
-            double amount = Double.parseDouble(Objects.requireNonNull(
-                    startupBundle.getString(Constants.ARGUMENT.AMOUNT)
-            ));
-            binding.editTextPurchaseAmount.setText(NumUtil.trim(amount));
-        } else if(!viewModel.isTareWeightEnabled()) { // leave amount empty if tare weight handling enabled
+        if(amountForced != null) {
+            binding.editTextPurchaseAmount.setText(amountForced);
+        } else if(!viewModel.isTareWeightEnabled(productDetails)) {
             String defaultAmount = sharedPrefs.getString(
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
             );
-            if(defaultAmount == null || defaultAmount.isEmpty()) {
-                binding.editTextPurchaseAmount.setText(null);
-            } else {
-                binding.editTextPurchaseAmount.setText(
-                        NumUtil.trim(Double.parseDouble(defaultAmount))
-                );
+            if(defaultAmount != null && !defaultAmount.isEmpty()) {
+                defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
             }
-        } else {
+            binding.editTextPurchaseAmount.setText(defaultAmount);
+        } else { // leave amount empty if tare weight handling enabled
             binding.editTextPurchaseAmount.setText(null);
         }
-
         if(getAmount().isEmpty()) {
             binding.editTextPurchaseAmount.requestFocus();
             activity.showKeyboard(binding.editTextPurchaseAmount);
         }
 
+        if(productDetails == null) {
+            return;
+        }
+
+        binding.textInputPurchaseAmount.setHint(
+                activity.getString(
+                        R.string.property_amount_in,
+                        productDetails.getQuantityUnitPurchase().getNamePlural()
+                )
+        );
+
+        // deactivate checkbox if tare weight handling is on
+        if(viewModel.isTareWeightEnabled(productDetails)) {
+            binding.linearPurchaseTotalPrice.setEnabled(false);
+            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
+            binding.checkboxPurchaseTotalPrice.setEnabled(false);
+            binding.imagePurchaseAmount.setImageResource(R.drawable.ic_round_scale_anim);
+        }
+
+        // PRODUCT
+        binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
+        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
+
         // PRICE
 
         String lastPrice = productDetails.getLastPrice();
         if(lastPrice != null && !lastPrice.isEmpty()) {
-            viewModel.getPriceLive().setValue(NumUtil.trimPrice(Double.parseDouble(lastPrice)));
-        } else {
-            viewModel.getPriceLive().setValue(null);
+            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
         }
+        viewModel.getPriceLive().setValue(lastPrice);
 
         // STORE
         String storeId = productDetails.getLastShoppingLocationId();
@@ -747,18 +726,7 @@ public class PurchaseFragment extends BaseFragment {
             menuItemSkipItem.setVisible(true);
             menuItemSkipItem.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemSkipItem);
-                ArrayList<ShoppingListItem> listItems = startupBundle
-                        .getParcelableArrayList(
-                                Constants.ARGUMENT.SHOPPING_LIST_ITEMS
-                        );
-                assert listItems != null;
-                shoppingListItemPos += 1;
-                if(shoppingListItemPos + 1 > listItems.size()) {
-                    activity.dismissFragment();
-                    return true;
-                }
-                viewModel.getProductDetailsLive().setValue(null);
-                fillWithShoppingListItem();
+                viewModel.nextShoppingListItemPos();
                 return true;
             });
         }
