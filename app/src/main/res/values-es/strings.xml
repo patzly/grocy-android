@@ -121,7 +121,7 @@
     <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">Este producto todavía tiene stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
-    <string name="msg_master_delete_usage">El/la  %1$s aún está en uso</string>
+    <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
     <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>
     <string name="msg_item_marked_as_undone">Elemento marcado como deshecho</string>
     <string name="msg_batch_no_products">No hay productos nuevos que se tengan que crear</string>
