@@ -121,7 +121,7 @@
     <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
     <string name="msg_master_delete_stock">Este producto todavía tiene stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
-    <string name="msg_master_delete_usage">El/la  %1$s aún está en uso</string>
+    <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
     <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>
     <string name="msg_item_marked_as_undone">Elemento marcado como deshecho</string>
     <string name="msg_batch_no_products">No hay productos nuevos que se tengan que crear</string>
@@ -221,7 +221,7 @@
     <string name="title_batch_mode_shopping_list">Modo de lista de compras por lotes</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
-    <string name="subtitle_amount">%1$s%2$s</string>
+    <string name="subtitle_amount">%1$s %2$s</string>
     <!-- %1$s is a number like 1, 2, 3 -->
     <string name="subtitle_amount_opened">(%1$s abierto)</string>
     <!-- %1$s is a product name -->
