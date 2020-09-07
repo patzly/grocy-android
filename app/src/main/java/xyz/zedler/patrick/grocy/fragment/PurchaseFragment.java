@@ -664,7 +664,7 @@ public class PurchaseFragment extends BaseFragment {
         }
     }
 
-    public void setUpBottomMenu() {
+    private void setUpBottomMenu() {
         MenuItem menuItemBatch, menuItemDetails, menuItemClear, menuItemSkipItem;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);

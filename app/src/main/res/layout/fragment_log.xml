@@ -17,10 +17,10 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@color/background">
+            android:background="@color/primary">
 
             <FrameLayout
-                android:id="@+id/frame_log_close"
+                android:id="@+id/frame_log_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -28,8 +28,8 @@
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
                 android:gravity="center"
-                android:contentDescription="@string/action_close"
-                android:tooltipText="@string/action_close"
+                android:contentDescription="@string/action_back"
+                android:tooltipText="@string/action_back"
                 android:focusable="true"
                 tools:targetApi="o">
 
@@ -38,7 +38,7 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_close" />
+                    android:src="@drawable/ic_round_arrow_back" />
 
             </FrameLayout>
 
@@ -53,12 +53,6 @@
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_log"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:menu="@menu/menu_log"/>
-
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -68,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
+        android:layout_marginBottom="?android:actionBarSize"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 

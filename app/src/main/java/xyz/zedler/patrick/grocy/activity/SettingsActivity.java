@@ -555,7 +555,8 @@ public class SettingsActivity extends AppCompatActivity
 				switchInfoLogs.setChecked(!switchInfoLogs.isChecked());
 				break;
 			case R.id.linear_setting_logs:
-				startActivity(new Intent(this, LogActivity.class));
+				// TODO: navigate to LogFragment
+				//startActivity(new Intent(this, LogActivity.class));
 				break;
 		}
 	}

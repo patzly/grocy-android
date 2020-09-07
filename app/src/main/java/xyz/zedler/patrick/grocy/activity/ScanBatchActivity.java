@@ -256,10 +256,10 @@ public class ScanBatchActivity extends AppCompatActivity
 
         barcodeRipple = findViewById(R.id.ripple_scan);
 
-        if(!hasFlash()) {
+        /*if(!hasFlash()) {
             View view = findViewById(R.id.frame_scan_flash);
             if(view != null) view.setVisibility(View.GONE);
-        }
+        }*/
 
         fragmentManager = getSupportFragmentManager();
 

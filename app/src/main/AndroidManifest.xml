@@ -52,8 +52,6 @@
 
         <activity android:name=".activity.AboutActivity"/>
 
-        <activity android:name=".activity.LogActivity"/>
-
         <activity
             android:name=".activity.ScanBatchActivity"
             android:theme="@style/Theme.Grocy.Camera"
