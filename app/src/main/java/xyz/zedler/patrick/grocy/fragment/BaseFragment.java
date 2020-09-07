@@ -50,7 +50,13 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(directions);
     }
 
-    void getFromPreviousFragment(String key, ObserverListener observerListener) {
+    /**
+     * Get data from last fragment (which was in backStack on the top of the current one).
+     * The last fragment stored this data with <code>setForPreviousFragment</code>.
+     * @param key (String): identifier for value
+     * @param observerListener (ObserverListener): observer for callback after value was received
+     */
+    void getFromLastFragment(String key, ObserverListener observerListener) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
@@ -66,6 +72,17 @@ public class BaseFragment extends Fragment {
                     );
                 }
         );
+    }
+
+    /**
+     * Set data for previous fragment (which is in backStack below the current one)
+     * @param key (String): identifier for value
+     * @param value (Object): the value to store
+     */
+    void setForPreviousFragment(String key, Object value) {
+        NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
+        assert backStackEntry != null;
+        backStackEntry.getSavedStateHandle().set(key, value);
     }
 
     interface ObserverListener {

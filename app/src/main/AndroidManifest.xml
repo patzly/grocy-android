@@ -55,12 +55,6 @@
         <activity android:name=".activity.LogActivity"/>
 
         <activity
-            android:name=".activity.ScanInputActivity"
-            android:stateNotNeeded="true"
-            android:theme="@style/Theme.Grocy.Camera"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity
             android:name=".activity.ScanBatchActivity"
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />

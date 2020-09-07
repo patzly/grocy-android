@@ -61,7 +61,6 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
@@ -171,10 +170,9 @@ public class ConsumeFragment extends BaseFragment {
         // product
 
         binding.textInputConsumeProduct.setErrorIconDrawable(null);
-        binding.textInputConsumeProduct.setEndIconOnClickListener(v -> startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        ));
+        binding.textInputConsumeProduct.setEndIconOnClickListener(
+                v -> navigate(ConsumeFragmentDirections.actionConsumeFragmentToScanInputFragment())
+        );
         binding.autoCompleteConsumeProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 IconUtil.start(activity, R.id.image_consume_product);

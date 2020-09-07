@@ -59,7 +59,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
@@ -214,10 +213,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
 
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
         binding.frameStockSearchScan.setOnClickListener(v -> {
-            startActivityForResult(
-                    new Intent(activity, ScanInputActivity.class),
-                    Constants.REQUEST.SCAN
-            );
+            navigate(StockFragmentDirections.actionStockFragmentToScanInputFragment());
             dismissSearch();
         });
         binding.editTextStockSearch.addTextChangedListener(new TextWatcher() {

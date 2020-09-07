@@ -135,7 +135,10 @@ public class PurchaseFragment extends BaseFragment {
         binding.swipePurchase.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        binding.swipePurchase.setOnRefreshListener(() -> viewModel.refresh(args));
+        binding.swipePurchase.setOnRefreshListener(() -> {
+            binding.swipePurchase.setRefreshing(false);
+            viewModel.refresh(args);
+        });
 
         binding.partialError.buttonErrorRetry.setOnClickListener(v -> {
             viewModel.getErrorFullscreenLive().setValue(null);
@@ -157,11 +160,11 @@ public class PurchaseFragment extends BaseFragment {
                     || viewModel.getProductNamesLive().getValue().isEmpty()
             ) viewModel.updateProducts();
         });
-        binding.autoCompletePurchaseProduct.setOnItemClickListener(
-                (parent, v, position, id) -> viewModel.loadProductDetails(
-                        getProductFromName((String) parent.getItemAtPosition(position)).getId()
-                )
-        );
+        binding.autoCompletePurchaseProduct.setOnItemClickListener((parent, v, position, id) -> {
+            String productName = (String) parent.getItemAtPosition(position);
+            Product product = viewModel.getProductFromName(productName);
+            if(product != null) viewModel.loadProductDetails(product.getId());
+        });
         binding.autoCompletePurchaseProduct.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -295,12 +298,10 @@ public class PurchaseFragment extends BaseFragment {
 
         // START
 
-        if(savedInstanceState == null) { // means: not a configuration change
-            binding.progressbarPurchase.setVisibility(View.VISIBLE);
-            viewModel.refresh(args);
-        }
+        // load or refresh data if there wasn't a configuration change
+        if(savedInstanceState == null) viewModel.refresh(args);
 
-        observeStates(savedInstanceState);
+        observeStates();
 
         updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
@@ -327,27 +328,22 @@ public class PurchaseFragment extends BaseFragment {
         );
     }
 
-    public void observeStates(Bundle savedInstanceState) {
-        viewModel.getErrorFullscreenLive().observe(getViewLifecycleOwner(), errorFullscreen -> {
-            errorFullscreenHelper.setError(errorFullscreen);
-        });
-        viewModel.getIsDownloadingLive().observe(getViewLifecycleOwner(), isDownloading -> {
-            if(!isDownloading) {
-                binding.swipePurchase.setRefreshing(false);
-                binding.progressbarPurchase.setVisibility(View.GONE);
-            }
-        });
+    public void observeStates() {
+        viewModel.getErrorFullscreenLive().observe(
+                getViewLifecycleOwner(),
+                errorFullscreen -> errorFullscreenHelper.setError(errorFullscreen)
+        );
+        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
+                binding.progressbarPurchase.setVisibility(isDownloading ? View.VISIBLE : View.GONE)
+        );
         viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
             if(date == null) {
                 binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
             } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
                 binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
             } else {
-                binding.textPurchaseBbd.setText(
-                        dateUtil.getLocalizedDate(
-                                viewModel.getBestBeforeDate(),
-                                DateUtil.FORMAT_MEDIUM
-                        )
+                binding.textPurchaseBbd.setText(dateUtil
+                        .getLocalizedDate(viewModel.getBestBeforeDate(), DateUtil.FORMAT_MEDIUM)
                 );
             }
             if(viewModel.getProductDetails() != null
@@ -452,17 +448,13 @@ public class PurchaseFragment extends BaseFragment {
                 return;
             }
             if(viewModel.getIsDownloading()) {
-                viewModel.setQueueEmptyAction(() -> fillWithShoppingListItem(itemPos));
+                viewModel.addQueueEmptyAction(() -> fillWithShoppingListItem(itemPos));
             } else {
                 fillWithShoppingListItem(itemPos);
             }
         });
 
 
-        viewModel.getProductsLive().observe(
-                getViewLifecycleOwner(),
-                products -> viewModel.getProductNamesLive().setValue(getProductNames(products))
-        );
         viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
             MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
                     activity,
@@ -472,7 +464,7 @@ public class PurchaseFragment extends BaseFragment {
         });
         viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
             if(productDetails != null) {
-                fillWithProductDetails(productDetails, null);
+                fillWithProductDetails(productDetails);
                 viewModel.writeDefaultValues();
             } else {
                 clearFields();
@@ -500,7 +492,6 @@ public class PurchaseFragment extends BaseFragment {
                 );
             }
         });
-
         if(viewModel.getProductDetails() != null
                 && (binding.autoCompletePurchaseProduct.getText() == null
                 || !binding.autoCompletePurchaseProduct.getText().toString()
@@ -520,18 +511,18 @@ public class PurchaseFragment extends BaseFragment {
             binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
         }
 
-        getFromPreviousFragment(Constants.ARGUMENT.BARCODE, barcode -> {
+        getFromLastFragment(Constants.ARGUMENT.BARCODE, barcode -> {
             if(viewModel.getIsDownloading()) {
-                viewModel.setQueueEmptyAction(
+                viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetailsByBarcode((String) barcode)
                 );
             } else {
                 viewModel.loadProductDetailsByBarcode((String) barcode);
             }
         });
-        getFromPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
+        getFromLastFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
             if(viewModel.getIsDownloading()) {
-                viewModel.setQueueEmptyAction(
+                viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetails((Integer) productId)
                 );
             } else {
@@ -560,24 +551,24 @@ public class PurchaseFragment extends BaseFragment {
             viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
             viewModel.getProductDetailsLive().setValue(null);
-            fillWithProductDetails(null, NumUtil.trim(listItem.getAmount()));
+            fillWithProductDetails(null);
         }
+        viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
     }
 
     /**
      * Fills the form.
      * @param productDetails (ProductDetails): if null, the form won't be filled with these details
-     * @param amountForced (String): if not null, this String will be in the amount field
      */
     private void fillWithProductDetails(
-            @Nullable ProductDetails productDetails,
-            @Nullable String amountForced
+            @Nullable ProductDetails productDetails
     ) {
         clearInputFocus();
 
         // AMOUNT
-        if(amountForced != null) {
-            binding.editTextPurchaseAmount.setText(amountForced);
+        if(viewModel.getForcedAmount() != null) {
+            binding.editTextPurchaseAmount.setText(viewModel.getForcedAmount());
+            viewModel.setForcedAmount(null);
         } else if(!viewModel.isTareWeightEnabled(productDetails)) {
             String defaultAmount = sharedPrefs.getString(
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
@@ -595,6 +586,7 @@ public class PurchaseFragment extends BaseFragment {
         }
 
         if(productDetails == null) {
+            requireProductDetails();
             return;
         }
 
@@ -648,26 +640,6 @@ public class PurchaseFragment extends BaseFragment {
     private void showInputNameBottomSheet(@NonNull String productName) {
         navigate(PurchaseFragmentDirections
                 .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName));
-    }
-
-    @Nullable
-    private Product getProductFromName(@Nullable String name) {
-        if(viewModel.getProductsLive().getValue() == null || name == null) return null;
-        for(Product product : viewModel.getProductsLive().getValue()) {
-            if(product.getName().equals(name)) {
-                return product;
-            }
-        }
-        return null;
-    }
-
-    @NonNull
-    private ArrayList<String> getProductNames(@NonNull ArrayList<Product> products) {
-        ArrayList<String> names = new ArrayList<>();
-        for(Product product : products) {
-            names.add(product.getName());
-        }
-        return names;
     }
 
     private void hideDisabledFeatures() {

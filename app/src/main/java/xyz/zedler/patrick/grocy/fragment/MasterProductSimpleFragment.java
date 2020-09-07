@@ -64,7 +64,6 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
@@ -234,10 +233,10 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 R.id.text_input_master_product_simple_parent_product
         );
         textInputParentProduct.setErrorIconDrawable(null);
-        textInputParentProduct.setEndIconOnClickListener(v -> startActivityForResult(
+        /*textInputParentProduct.setEndIconOnClickListener(v -> startActivityForResult(
                 new Intent(activity, ScanInputActivity.class),
                 Constants.REQUEST.SCAN_PARENT_PRODUCT
-        ));
+        ));*/
         autoCompleteTextViewParentProduct =
                 (MaterialAutoCompleteTextView) textInputParentProduct.getEditText();
         assert autoCompleteTextViewParentProduct != null;
@@ -283,10 +282,10 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 R.id.text_input_master_product_simple_barcodes
         );
         textInputBarcodes.setErrorIconDrawable(null);
-        textInputBarcodes.setEndIconOnClickListener(v -> startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        ));
+        textInputBarcodes.setEndIconOnClickListener(
+                v -> navigate(MasterProductSimpleFragmentDirections
+                        .actionMasterProductSimpleFragmentToScanInputFragment())
+        );
         editTextBarcodes = textInputBarcodes.getEditText();
         assert editTextBarcodes != null;
         editTextBarcodes.setOnEditorActionListener((v, actionId, event) -> {
@@ -1234,12 +1233,8 @@ public class MasterProductSimpleFragment extends BaseFragment {
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
-                        bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
-                        bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                        // TODO
-                        findNavController().getPreviousBackStackEntry().getSavedStateHandle().set(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
+                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
+                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         activity.navigateUp();
                     },
                     error -> {
@@ -1252,24 +1247,17 @@ public class MasterProductSimpleFragment extends BaseFragment {
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
                     response -> {
+                        int createdObjectId;
                         try {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.ARGUMENT.TYPE, intendedAction);
-                            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, productName);
-                            bundle.putParcelable(  // to search for old name in batch items
-                                    Constants.ARGUMENT.CREATE_PRODUCT_OBJECT,
-                                    createProductObj
-                            );
-                            bundle.putInt(
-                                    Constants.ARGUMENT.PRODUCT_ID,
-                                    response.getInt("created_object_id")
-                            );
-                            // TODO
-                            activity.navigateUp();
+                            createdObjectId = response.getInt("created_object_id");
                         } catch (JSONException e) {
                             if(debug) Log.e(TAG, "saveProduct: " + e.toString());
                             showErrorMessage();
+                            return;
                         }
+                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, createdObjectId);
+                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                        activity.navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -1471,10 +1459,6 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         Snackbar.LENGTH_SHORT
                 )
         );
-    }
-
-    public String getIntendedAction() {
-        return intendedAction;
     }
 
     private void hideDisabledFeatures() {

@@ -10,6 +10,12 @@
         <action
             android:id="@+id/action_stockFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_stockFragment_to_scanInputFragment"
+            app:destination="@id/scanInputFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/shoppingListFragment"
@@ -196,6 +202,12 @@
             app:argType="xyz.zedler.patrick.grocy.model.CreateProduct"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_masterProductSimpleFragment_to_scanInputFragment"
+            app:destination="@id/scanInputFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/masterLocationFragment"
@@ -237,6 +249,12 @@
             app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_shoppingListItemEditFragment_to_scanInputFragment"
+            app:destination="@id/scanInputFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <dialog
         android:id="@+id/productOverviewBottomSheetDialogFragment"

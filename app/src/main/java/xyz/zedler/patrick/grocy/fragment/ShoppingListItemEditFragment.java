@@ -56,7 +56,6 @@ import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
@@ -198,10 +197,8 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         binding.textInputShoppingListItemEditProduct.setErrorIconDrawable(null);
         binding.textInputShoppingListItemEditProduct.setEndIconOnClickListener(
-                v -> startActivityForResult(
-                        new Intent(activity, ScanInputActivity.class),
-                        Constants.REQUEST.SCAN
-                )
+                v -> navigate(ShoppingListItemEditFragmentDirections
+                        .actionShoppingListItemEditFragmentToScanInputFragment())
         );
         binding.autoCompleteShoppingListItemEditProduct.setOnFocusChangeListener(
                 (View v, boolean hasFocus) -> {
@@ -321,7 +318,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
                 && savedInstanceState == null);
 
-        getFromPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName -> {
+        getFromLastFragment(Constants.ARGUMENT.PRODUCT_NAME, productName -> {
             // TODO: Prioritize productName over args.getProductName(), no idea yet
         });
     }

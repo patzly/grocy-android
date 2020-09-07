@@ -71,16 +71,18 @@ public class DownloadHelper {
     private Gson gson;
     private SimpleDateFormat dateTimeFormat;
     private String uuidHelper;
+    private OnLoadingListener onLoadingListener;
 
     private ArrayList<Queue> queueArrayList;
     private String tag;
     private boolean debug;
+    private int loadingRequests;
 
-    public DownloadHelper(Activity activity, String tag) {
-        this(activity.getApplication(), tag);
-    }
-
-    public DownloadHelper(Application application, String tag) {
+    public DownloadHelper(
+            Application application,
+            String tag,
+            OnLoadingListener onLoadingListener
+    ) {
         this.tag = tag;
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
@@ -88,11 +90,15 @@ public class DownloadHelper {
         requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
         grocyApi = new GrocyApi(application);
         uuidHelper = UUID.randomUUID().toString();
-        dateTimeFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
-        );
+        dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         queueArrayList = new ArrayList<>();
+        loadingRequests = 0;
+        this.onLoadingListener = onLoadingListener;
+    }
+
+    public DownloadHelper(Activity activity, String tag) {
+        this(activity.getApplication(), tag, null);
     }
 
     // cancel all requests
@@ -101,6 +107,24 @@ public class DownloadHelper {
             queue.reset();
         }
         requestQueue.cancelAll(uuidHelper);
+        resetLoadingRequests();
+    }
+
+    private void resetLoadingRequests() {
+        this.loadingRequests = 0;
+        if(onLoadingListener != null) onLoadingListener.onLoadingChanged(false);
+    }
+
+    private void onRequestLoading() {
+        loadingRequests += 1;
+        if(onLoadingListener != null) onLoadingListener.onLoadingChanged(true);
+    }
+
+    private void onRequestFinished() {
+        loadingRequests -= 1;
+        if(onLoadingListener != null && loadingRequests == 0) {
+            onLoadingListener.onLoadingChanged(false);
+        }
     }
 
     public String getUuid() {
@@ -116,10 +140,17 @@ public class DownloadHelper {
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 url,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         );
         if(tag != null) request.setTag(tag);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -142,8 +173,14 @@ public class DownloadHelper {
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 url,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         ) {
             @Override
             public Map<String, String> getHeaders() {
@@ -153,6 +190,7 @@ public class DownloadHelper {
             }
         };
         request.setTag(uuidHelper);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -166,10 +204,17 @@ public class DownloadHelper {
                 Request.Method.POST,
                 url,
                 json,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         );
         request.setTag(uuidHelper);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -177,10 +222,17 @@ public class DownloadHelper {
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         );
         request.setTag(uuidHelper);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -194,10 +246,17 @@ public class DownloadHelper {
                 Request.Method.PUT,
                 url,
                 json,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         );
         request.setTag(uuidHelper);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -210,10 +269,17 @@ public class DownloadHelper {
         StringRequest request = new StringRequest(
                 Request.Method.DELETE,
                 url,
-                onResponse::onResponse,
-                onError::onError
+                response -> {
+                    onRequestFinished();
+                    onResponse.onResponse(response);
+                },
+                error -> {
+                    onRequestFinished();
+                    onError.onError(error);
+                }
         );
         request.setTag(tag);
+        onRequestLoading();
         requestQueue.add(request);
     }
 
@@ -897,5 +963,9 @@ public class DownloadHelper {
 
     public interface OnQueueEmptyListener {
         void execute();
+    }
+
+    public interface OnLoadingListener {
+        void onLoadingChanged(boolean isLoading);
     }
 }
