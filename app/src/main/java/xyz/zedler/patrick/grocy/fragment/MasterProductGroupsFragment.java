@@ -318,27 +318,27 @@ public class MasterProductGroupsFragment extends BaseFragment
     private void setError(String state, boolean animated) {
         errorState = state;
 
-        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+        binding.relativeError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
-        View viewIn = binding.linearError.linearError;
+        View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollMasterProductGroups;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
-                binding.linearError.textErrorTitle.setText(R.string.error_offline);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.relativeError.textErrorTitle.setText(R.string.error_offline);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.ERROR:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
-                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.relativeError.textErrorTitle.setText(R.string.error_unknown);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollMasterProductGroups;
-                viewOut = binding.linearError.linearError;
+                viewOut = binding.relativeError.relativeError;
                 break;
         }
 

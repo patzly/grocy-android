@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDial
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.helper.ErrorFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -79,8 +80,7 @@ public class PurchaseFragment extends BaseFragment {
     private PurchaseFragmentArgs args;
     private FragmentPurchaseBinding binding;
     private PurchaseViewModel viewModel;
-
-    private int shoppingListItemPos;
+    private ErrorFullscreenHelper errorFullscreenHelper;
 
     @Override
     public View onCreateView(
@@ -95,6 +95,10 @@ public class PurchaseFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(errorFullscreenHelper != null) {
+            errorFullscreenHelper.destroyInstance();
+            errorFullscreenHelper = null;
+        }
         binding = null;
     }
 
@@ -109,17 +113,11 @@ public class PurchaseFragment extends BaseFragment {
 
         viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
 
-        // GET PREFERENCES
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-        // UTILS
 
         dateUtil = new DateUtil(activity);
 
-        // INITIALIZE VARIABLES
-
-        shoppingListItemPos = 0;
+        errorFullscreenHelper = new ErrorFullscreenHelper(binding.partialError);
 
         // INITIALIZE VIEWS
 
@@ -138,6 +136,11 @@ public class PurchaseFragment extends BaseFragment {
                 ContextCompat.getColor(activity, R.color.secondary)
         );
         binding.swipePurchase.setOnRefreshListener(() -> viewModel.refresh(args));
+
+        binding.partialError.buttonErrorRetry.setOnClickListener(v -> {
+            viewModel.getErrorFullscreenLive().setValue(null);
+            viewModel.refresh(args);
+        });
 
         // product
 
@@ -292,17 +295,14 @@ public class PurchaseFragment extends BaseFragment {
 
         // START
 
-        if(savedInstanceState == null) {
+        if(savedInstanceState == null) { // means: not a configuration change
             binding.progressbarPurchase.setVisibility(View.VISIBLE);
             viewModel.refresh(args);
         }
 
         observeStates(savedInstanceState);
 
-        // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                && savedInstanceState == null);
+        updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
 
     private void updateUI(boolean animated) {
@@ -328,15 +328,15 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     public void observeStates(Bundle savedInstanceState) {
-        viewModel.getIsDownloadingLive().observe(
-                getViewLifecycleOwner(),
-                isDownloading -> {
-                    if(!isDownloading) {
-                        binding.swipePurchase.setRefreshing(false);
-                        binding.progressbarPurchase.setVisibility(View.GONE);
-                    }
-                }
-        );
+        viewModel.getErrorFullscreenLive().observe(getViewLifecycleOwner(), errorFullscreen -> {
+            errorFullscreenHelper.setError(errorFullscreen);
+        });
+        viewModel.getIsDownloadingLive().observe(getViewLifecycleOwner(), isDownloading -> {
+            if(!isDownloading) {
+                binding.swipePurchase.setRefreshing(false);
+                binding.progressbarPurchase.setVisibility(View.GONE);
+            }
+        });
         viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
             if(date == null) {
                 binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
@@ -451,7 +451,11 @@ public class PurchaseFragment extends BaseFragment {
                 activity.navigateUp();
                 return;
             }
-            fillWithShoppingListItem(itemPos);
+            if(viewModel.getIsDownloading()) {
+                viewModel.setQueueEmptyAction(() -> fillWithShoppingListItem(itemPos));
+            } else {
+                fillWithShoppingListItem(itemPos);
+            }
         });
 
 
@@ -469,6 +473,7 @@ public class PurchaseFragment extends BaseFragment {
         viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
             if(productDetails != null) {
                 fillWithProductDetails(productDetails, null);
+                viewModel.writeDefaultValues();
             } else {
                 clearFields();
             }
@@ -515,14 +520,24 @@ public class PurchaseFragment extends BaseFragment {
             binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
         }
 
-        getFromPreviousFragment(
-                Constants.ARGUMENT.BARCODE,
-                barcode -> viewModel.loadProductDetailsByBarcode((String) barcode)
-        );
-        getFromPreviousFragment(
-                Constants.ARGUMENT.PRODUCT_ID,
-                productId -> viewModel.loadProductDetails((Integer) productId)
-        );
+        getFromPreviousFragment(Constants.ARGUMENT.BARCODE, barcode -> {
+            if(viewModel.getIsDownloading()) {
+                viewModel.setQueueEmptyAction(
+                        () -> viewModel.loadProductDetailsByBarcode((String) barcode)
+                );
+            } else {
+                viewModel.loadProductDetailsByBarcode((String) barcode);
+            }
+        });
+        getFromPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
+            if(viewModel.getIsDownloading()) {
+                viewModel.setQueueEmptyAction(
+                        () -> viewModel.loadProductDetails((Integer) productId)
+                );
+            } else {
+                viewModel.loadProductDetails((Integer) productId);
+            }
+        });
     }
 
     private void fillWithShoppingListItem(int itemPos) {
@@ -583,6 +598,8 @@ public class PurchaseFragment extends BaseFragment {
             return;
         }
 
+        binding.textInputPurchaseProduct.setErrorEnabled(false);
+
         binding.textInputPurchaseAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
@@ -601,34 +618,6 @@ public class PurchaseFragment extends BaseFragment {
         // PRODUCT
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
         binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
-
-        // PRICE
-
-        String lastPrice = productDetails.getLastPrice();
-        if(lastPrice != null && !lastPrice.isEmpty()) {
-            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
-        }
-        viewModel.getPriceLive().setValue(lastPrice);
-
-        // STORE
-        String storeId = productDetails.getLastShoppingLocationId();
-        if(storeId == null || storeId.isEmpty()) {
-            storeId = productDetails.getLastShoppingLocationId();
-        } else {
-            storeId = productDetails.getProduct().getStoreId();
-        }
-        if(storeId == null || storeId.isEmpty()) {
-            viewModel.getStoreIdLive().setValue(-1);
-        } else {
-            viewModel.getStoreIdLive().setValue(Integer.parseInt(storeId));
-        }
-
-        // LOCATION
-        if(productDetails.getLocation() == null) {
-            viewModel.getLocationIdLive().setValue(-1);
-        } else {
-            viewModel.getStoreIdLive().setValue(productDetails.getLocation().getId());
-        }
 
         // mark fields with invalid or missing content as invalid
         isFormIncomplete();

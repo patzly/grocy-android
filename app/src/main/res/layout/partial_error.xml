@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear_error"
+    android:id="@+id/relative_error"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="?actionBarSize"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
+    android:background="@color/background"
     android:visibility="gone">
 
     <ImageView
         android:id="@+id/image_error"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="12dp"
+        android:layout_above="@+id/text_error_title"
+        android:layout_centerHorizontal="true"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/text_error_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:textAlignment="center"
         android:fontFamily="@font/roboto_mono_medium"
         android:textSize="18sp"
@@ -33,7 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_gravity="center"
+        android:layout_below="@+id/text_error_title"
+        android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
@@ -43,6 +47,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_below="@+id/text_error_subtitle"
+        android:layout_centerHorizontal="true"
         android:text="@string/action_retry"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/text_error_exact"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button_error_retry"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"/>
+
+</RelativeLayout>

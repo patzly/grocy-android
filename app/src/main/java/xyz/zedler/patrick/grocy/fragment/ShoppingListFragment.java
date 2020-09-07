@@ -484,27 +484,27 @@ public class ShoppingListFragment extends BaseFragment implements
     private void setError(String state, boolean animated) {
         errorState = state;
 
-        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+        binding.relativeError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
-        View viewIn = binding.linearError.linearError;
+        View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollShoppingList;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
-                binding.linearError.textErrorTitle.setText(R.string.error_offline);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.relativeError.textErrorTitle.setText(R.string.error_offline);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.ERROR:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
-                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.relativeError.textErrorTitle.setText(R.string.error_unknown);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollShoppingList;
-                viewOut = binding.linearError.linearError;
+                viewOut = binding.relativeError.relativeError;
                 break;
         }
 
@@ -924,7 +924,6 @@ public class ShoppingListFragment extends BaseFragment implements
     public void purchaseItem(int position) {
         if(showOffline) return;
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
-        if(shoppingListItem.getProduct() == null) return;
         navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
                 .setShoppingListItems(new ShoppingListItem[]{shoppingListItem}));
     }
@@ -1036,15 +1035,13 @@ public class ShoppingListFragment extends BaseFragment implements
                     showMessage(activity.getString(R.string.error_empty_shopping_list));
                     return true;
                 }
-                Bundle bundle = new Bundle();
-                bundle.putString(
-                        Constants.ARGUMENT.TYPE,
-                        Constants.ACTION.PURCHASE_MULTI_THEN_SHOPPING_LIST
-                );
                 ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
                 SortUtil.sortShoppingListItemsByName(listItems, true);
-                bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LIST_ITEMS, listItems);
-                activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
+                ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
+                for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
+                navigate(ShoppingListFragmentDirections
+                        .actionShoppingListFragmentToPurchaseFragment()
+                        .setShoppingListItems(array));
                 return true;
             });
         }

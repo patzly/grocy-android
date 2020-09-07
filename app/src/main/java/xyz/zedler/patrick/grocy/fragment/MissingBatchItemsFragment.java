@@ -459,25 +459,25 @@ public class MissingBatchItemsFragment extends BaseFragment
     private void setError(String state, boolean animated) {
         errorState = state;
 
-        binding.linearError.buttonErrorRetry.setVisibility(View.GONE);
+        binding.relativeError.buttonErrorRetry.setVisibility(View.GONE);
 
-        View viewIn = binding.linearError.linearError;
+        View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollMissingBatchItems;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
-                binding.linearError.textErrorTitle.setText(R.string.error_offline);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.relativeError.textErrorTitle.setText(R.string.error_offline);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
                 break;
             case Constants.STATE.ERROR:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
-                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.relativeError.textErrorTitle.setText(R.string.error_unknown);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_undefined);
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollMissingBatchItems;
-                viewOut = binding.linearError.linearError;
+                viewOut = binding.relativeError.relativeError;
                 break;
         }
 

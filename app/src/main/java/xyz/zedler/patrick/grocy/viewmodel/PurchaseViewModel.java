@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.ErrorFullscreen;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -70,6 +71,8 @@ public class PurchaseViewModel extends AndroidViewModel {
     private GrocyApi grocyApi;
     private EventHandler eventHandler;
 
+    private Runnable queueEmptyAction;
+
     private SingleLiveEvent<ArrayList<Product>> productsLive;
     private SingleLiveEvent<ArrayList<Location>> locationsLive;
     private SingleLiveEvent<ArrayList<Store>> storesLive;
@@ -82,6 +85,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     private MutableLiveData<String> bestBeforeDateLive;
     private MutableLiveData<String> priceLive;
     private MutableLiveData<String> amountLive;
+    private MutableLiveData<ErrorFullscreen> errorFullscreenLive;
     private MutableLiveData<Integer> storeIdLive;
     private MutableLiveData<Integer> locationIdLive;
     private MutableLiveData<Integer> shoppingListItemPosLive;
@@ -110,6 +114,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         isDownloadingLive = new MutableLiveData<>(false);
         amountLive = new MutableLiveData<>();
         priceLive = new MutableLiveData<>();
+        errorFullscreenLive = new MutableLiveData<>();
         storeIdLive = new MutableLiveData<>(-1);
         locationIdLive = new MutableLiveData<>(-1);
         shoppingListItemPosLive = new MutableLiveData<>(-1);
@@ -123,15 +128,8 @@ public class PurchaseViewModel extends AndroidViewModel {
         if(netUtil.isOnline()) {
             downloadData(args);
         } else {
-            showSnackbar(
-                    new SnackbarMessage(getString(R.string.msg_no_connection)).setAction(
-                            getString(R.string.action_retry),
-                            v -> refresh(args)
-                    )
-            );
+            errorFullscreenLive.setValue(new ErrorFullscreen(ErrorFullscreen.OFFLINE));
         }
-
-        //clearAll();
     }
 
     public void updateProducts() {
@@ -141,10 +139,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     public void downloadData(PurchaseFragmentArgs args) {
-        DownloadHelper.Queue queue = dlHelper.newQueue(
-                this::onQueueEmpty,
-                err -> onDownloadError(err, args)
-        );
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
                 dlHelper.getProducts(products -> this.productsLive.setValue(products)),
                 dlHelper.getStores(stores -> {
@@ -174,31 +169,30 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     private void onQueueEmpty() {
         getIsDownloadingLive().setValue(false);
+        if(queueEmptyAction != null) {
+            queueEmptyAction.run();
+            queueEmptyAction = null;
+        }
+
     }
 
-    private void onDownloadError(VolleyError error, PurchaseFragmentArgs args) {
+    private void onDownloadError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         getIsDownloadingLive().setValue(false);
-        showSnackbar(
-                new SnackbarMessage(getString(R.string.error_undefined)).setAction(
-                        getString(R.string.action_retry),
-                        v -> downloadData(args)
-                )
+        errorFullscreenLive.setValue(
+                new ErrorFullscreen(ErrorFullscreen.NETWORK, error.getLocalizedMessage())
         );
     }
 
     public void loadProductDetails(int productId) {
         dlHelper.get(
                 grocyApi.getStockProductDetails(productId),
-                response -> {
-                    productDetailsLive.setValue(
-                            gson.fromJson(
-                                    response,
-                                    new TypeToken<ProductDetails>(){}.getType()
-                            )
-                    );
-                    writeDefaultValues();
-                }, error -> {}
+                response -> productDetailsLive.setValue(
+                        gson.fromJson(
+                                response,
+                                new TypeToken<ProductDetails>(){}.getType()
+                        )
+                ), error -> {}
         );
     }
 
@@ -228,7 +222,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         );
     }
 
-    private void writeDefaultValues() { // TODO
+    public void writeDefaultValues() {
         ProductDetails productDetails = getProductDetailsLive().getValue();
         if(productDetails == null) return;
 
@@ -241,10 +235,36 @@ public class PurchaseViewModel extends AndroidViewModel {
         } else {
             bestBeforeDateLive.setValue(DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays));
         }
+
+        // PRICE
+        String lastPrice = productDetails.getLastPrice();
+        if(lastPrice != null && !lastPrice.isEmpty()) {
+            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+        }
+        priceLive.setValue(lastPrice);
+
+        // STORE
+        String storeId = productDetails.getLastShoppingLocationId();
+        if(storeId == null || storeId.isEmpty()) {
+            storeId = productDetails.getLastShoppingLocationId();
+        } else {
+            storeId = productDetails.getProduct().getStoreId();
+        }
+        if(storeId == null || storeId.isEmpty()) {
+            storeIdLive.setValue(-1);
+        } else {
+            storeIdLive.setValue(Integer.parseInt(storeId));
+        }
+
+        // LOCATION
+        if(productDetails.getLocation() == null) {
+            locationIdLive.setValue(-1);
+        } else {
+            locationIdLive.setValue(productDetails.getLocation().getId());
+        }
     }
 
     public void purchaseProduct() {
-
         assert getProductDetails() != null && getAmount() != null;
         ProductDetails productDetails = getProductDetails();
         Product product = productDetails.getProduct();
@@ -411,6 +431,12 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
+    public Boolean getIsDownloading() {
+        assert isDownloadingLive.getValue() != null;
+        return isDownloadingLive.getValue();
+    }
+
+    @NonNull
     public MutableLiveData<String> getBestBeforeDateLive() {
         return bestBeforeDateLive;
     }
@@ -571,6 +597,15 @@ public class PurchaseViewModel extends AndroidViewModel {
     @NonNull
     public ArrayList<String> getBarcodes() {
         return barcodes;
+    }
+
+    @NonNull
+    public MutableLiveData<ErrorFullscreen> getErrorFullscreenLive() {
+        return errorFullscreenLive;
+    }
+
+    public void setQueueEmptyAction(Runnable runnable) {
+        queueEmptyAction = runnable;
     }
 
     private void showErrorMessage() {

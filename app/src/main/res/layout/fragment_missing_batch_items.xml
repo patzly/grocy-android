@@ -68,7 +68,7 @@
             android:layout_marginTop="?actionBarSize">
 
             <include
-                android:id="@+id/linear_error"
+                android:id="@+id/relative_error"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?actionBarSize"

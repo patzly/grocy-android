@@ -143,6 +143,13 @@ public final class Constants {
         public final static String NONE = "none";
     }
 
+    public final static class ERROR {  // warning: create no unclear error states, that's bad UX
+        public final static String NONE = "none"; // no error
+        public final static String COMMUNICATION = "communication"; // example: server code 400
+        public final static String NETWORK = "network"; // example: any volley error other than 400
+        public final static String OFFLINE = "offline"; // example: device is offline
+    }
+
     public final static class SHOPPING_LIST {
         public final static class FILTER {
             public final static String UNDONE = "undone";
