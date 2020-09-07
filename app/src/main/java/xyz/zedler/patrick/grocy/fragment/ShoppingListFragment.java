@@ -925,7 +925,8 @@ public class ShoppingListFragment extends BaseFragment implements
         if(showOffline) return;
         ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItems.get(position);
         navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
-                .setShoppingListItems(new ShoppingListItem[]{shoppingListItem}));
+                .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
+                .setCloseWhenFinished(true));
     }
 
     public void deleteItem(int position) {
@@ -1041,7 +1042,8 @@ public class ShoppingListFragment extends BaseFragment implements
                 for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
                 navigate(ShoppingListFragmentDirections
                         .actionShoppingListFragmentToPurchaseFragment()
-                        .setShoppingListItems(array));
+                        .setShoppingListItems(array)
+                        .setCloseWhenFinished(true));
                 return true;
             });
         }

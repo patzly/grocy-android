@@ -221,6 +221,7 @@
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
     <string name="title_is_total_price">Is total price</string>
+    <string name="title_delete_entry">Delete entry</string>
     <string name="title_stock_entry_no_specific">No specific entry</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_list_entry">List entry</string>

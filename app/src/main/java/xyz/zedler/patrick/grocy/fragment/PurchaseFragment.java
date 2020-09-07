@@ -322,7 +322,10 @@ public class PurchaseFragment extends BaseFragment {
                 Constants.FAB.TAG.PURCHASE,
                 animated,
                 () -> {
-                    if(isFormIncomplete()) return;
+                    if(isFormIncomplete()) {
+                        showMessage(getString(R.string.error_missing_information));
+                        return;
+                    }
                     viewModel.purchaseProduct();
                 }
         );
@@ -625,15 +628,21 @@ public class PurchaseFragment extends BaseFragment {
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
         String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
-        if(viewModel.getProductNames() != null && !viewModel.getProductNames().isEmpty() && !viewModel.getProductNames().contains(input) && !input.isEmpty()) {
+        if(viewModel.getProductNames() != null && !viewModel.getProductNames().isEmpty()
+                && !viewModel.getProductNames().contains(input) && !input.isEmpty()
+        ) {
             showInputNameBottomSheet(input);
             isIncomplete = true;
         }
         if(requireProductDetails() == null) isIncomplete = true;
         if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
         if(binding.textInputPurchasePrice.isErrorEnabled()) isIncomplete = true;
-        if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) isIncomplete = true;
-        if(binding.textPurchaseBbdLabel.getCurrentTextColor() == getColor(R.color.error)) isIncomplete = true;
+        if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) {
+            isIncomplete = true;
+        }
+        if(binding.textPurchaseBbdLabel.getCurrentTextColor() == getColor(R.color.error)) {
+            isIncomplete = true;
+        }
         return isIncomplete;
     }
 
@@ -773,7 +782,7 @@ public class PurchaseFragment extends BaseFragment {
 
     private void showMessage(String text) {
         activity.showMessage(
-                Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_SHORT)
+                Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_LONG)
         );
     }
 
