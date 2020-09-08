@@ -1,0 +1,38 @@
+Grocy is a self-hosted groceries and household management solution for your home. Go to grocy.info for more information about the project.
+
+Grocy for Android uses Grocy's official API to provide you a beautiful interface on your phone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
+
+<b>This app requires a running self-hosted instance of the grocy server application. It is a companion app, therefore it cannot run standalone or manage products itself!
+You can try and test all features using the demo option available on the login screen.</b>
+
+<b>Features:</b>
+• Stock overview
+• Shopping lists with offline support
+• In-store shopping mode with big UI elements
+• Fast barcode scanning
+• Consume and purchase with app shortcuts
+• OpenFoodFacts implementation
+• Master data editing
+• Intuitive batch processing
+• Dark mode
+
+<b>Furthermore:</b>
+• Open-source: github.com/patzly/grocy-android
+• No ads, analytics or in-app purchases
+• Low data usage
+• Animated icons
+• Material Components
+• Tiny app size (~5MB)
+
+<b>Contribution:</b>
+If you run into a bug or miss a feature, feel free to give feedback in the app, send us an email or <a href="https://github.com/patzly/grocy-android/issues/new">open an issue on GitHub</a>.
+Like the grocy project, Grocy Android can be translated, too. Please go to our GitHub page for more information.
+
+<b>Compatibility:</b>
+Grocy Android requires at least grocy 2.7.0 on your server.
+It is also possible to use the grocy Add-on on a Hass.io server. Our in-app help explains how to do that.
+
+Self-signed certificates are not supported at the moment. Right now, the server certificate has to be signed by a certificate authority (CA). This CA has to be public and trusted by Android.
+To meet these requirements, you can use a free certificate from letsencrypt.org for proper https encryption.
+
+We'd like to thank the developer of Grocy, Bernd Bestel, without whose great work this app would never have been possible.
