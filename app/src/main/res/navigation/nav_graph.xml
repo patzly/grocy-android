@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
-    app:startDestination="@id/logFragment">
+    app:startDestination="@id/stockFragment">
 
     <fragment
         android:id="@+id/stockFragment"
@@ -371,4 +371,8 @@
         android:id="@+id/logFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LogFragment"
         android:label="LogFragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
+        android:label="AboutFragment" />
 </navigation>
