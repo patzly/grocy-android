@@ -71,7 +71,7 @@ Like the grocy project, Grocy Android can be translated, too. The main language 
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
 Translations which reached a completion level of 80% will be included in releases.
 
-Completed translations: German, French, Swedish, Dutch, Norwegian & Spanish
+Completed translations: German, French, Swedish, Dutch, Norwegian & Spanish  
 Thanks translators!
 
 ## About
