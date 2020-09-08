@@ -12,7 +12,6 @@ You can try and test all features using the demo option available on the login s
    <li>Shopping lists with offline support</li>
    <li>In-store shopping mode (big UI elements)</li>
    <li>Fast barcode scanning</li>
-   <li>Consume and purchase with app shortcuts</li>
    <li>OpenFoodFacts implementation</li>
    <li>Master data editing</li>
    <li>Intuitive batch processing</li>
