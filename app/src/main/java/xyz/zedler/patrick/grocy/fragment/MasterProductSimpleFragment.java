@@ -1435,17 +1435,8 @@ public class MasterProductSimpleFragment extends BaseFragment {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
                 response -> {
-                    if(intendedAction.equals(Constants.ACTION.EDIT_THEN_PURCHASE_BATCH)) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(
-                                Constants.ARGUMENT.TYPE,
-                                Constants.ACTION.DELETE_THEN_PURCHASE_BATCH
-                        );
-                        bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, product.getId());
-                        activity.dismissFragment(bundle);
-                    } else {
-                        activity.dismissFragment();
-                    }
+                    setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+                    activity.navigateUp();
                 },
                 error -> showErrorMessage()
         );

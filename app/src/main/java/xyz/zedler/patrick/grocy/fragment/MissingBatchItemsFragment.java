@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,7 +50,6 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MissingBatchItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMissingBatchItemsBinding;
@@ -553,11 +551,11 @@ public class MissingBatchItemsFragment extends BaseFragment
         MenuItem menuItemScan;
         menuItemScan = activity.getBottomMenu().findItem(R.id.action_scan);
         menuItemScan.setOnMenuItemClickListener(item -> {
-            activity.dismissFragments();
+            /*activity.dismissFragments();
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
             intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
             return true;
         });
     }

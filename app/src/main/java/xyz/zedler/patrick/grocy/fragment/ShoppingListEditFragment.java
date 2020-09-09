@@ -324,8 +324,7 @@ public class ShoppingListEditFragment extends BaseFragment {
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "saveShoppingList: " + e);
         }
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.SHOPPING_LIST_NAME, name);
+        setForPreviousFragment(Constants.ARGUMENT.SHOPPING_LIST_NAME, name);
 
         if(action.equals(Constants.ACTION.EDIT)) {
             ShoppingList shoppingList = startupBundle.getParcelable(
@@ -335,7 +334,7 @@ public class ShoppingListEditFragment extends BaseFragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, shoppingList.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(bundle),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
@@ -345,7 +344,7 @@ public class ShoppingListEditFragment extends BaseFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
                     jsonObject,
-                    response -> activity.dismissFragment(bundle),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveShoppingListItem: " + error);

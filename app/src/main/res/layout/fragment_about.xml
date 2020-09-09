@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@color/primary">
+            android:background="@color/background">
 
             <FrameLayout
                 android:id="@+id/frame_about_back"

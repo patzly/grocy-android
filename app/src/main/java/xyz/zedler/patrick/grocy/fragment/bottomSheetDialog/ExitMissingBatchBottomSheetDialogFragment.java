@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +31,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ExitMissingBatchBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
@@ -62,16 +59,16 @@ public class ExitMissingBatchBottomSheetDialogFragment extends CustomBottomSheet
 
         view.findViewById(R.id.button_exit_missing_batch_open).setOnClickListener(v -> {
             dismiss();
-            activity.dismissFragments();
+            /*activity.dismissFragments();
             Intent intent = new Intent(activity, ScanBatchActivity.class);
             intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
             intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
         });
 
         view.findViewById(R.id.button_exit_missing_batch_discard).setOnClickListener(v -> {
             dismiss();
-            activity.dismissFragments();
+            //activity.dismissFragments();
         });
 
         return view;

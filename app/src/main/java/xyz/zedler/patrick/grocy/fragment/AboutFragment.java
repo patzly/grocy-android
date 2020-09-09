@@ -26,11 +26,13 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.res.ResourcesCompat;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.FeaturesActivity;
@@ -196,5 +198,17 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         bundle.putString(Constants.ARGUMENT.FILE, file);
         if(link != 0) bundle.putString(Constants.ARGUMENT.LINK, getString(link));
         activity.showBottomSheet(new TextBottomSheetDialogFragment(), bundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = activity.getWindow();
+        window.setStatusBarColor(ResourcesCompat.getColor(getResources(), R.color.background, null));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

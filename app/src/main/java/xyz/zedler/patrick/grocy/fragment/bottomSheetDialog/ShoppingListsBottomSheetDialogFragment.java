@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,10 +37,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
@@ -52,7 +47,7 @@ public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDia
 
     private final static String TAG = "ShoppingListsBottomSheet";
 
-    private Activity activity;
+    private MainActivity activity;
     private ArrayList<ShoppingList> shoppingLists;
 
     @NonNull
@@ -71,7 +66,7 @@ public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDia
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -100,12 +95,8 @@ public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDia
         if(!bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
-                if(activity.getClass() != MainActivity.class) return;
-                MainActivity activity = (MainActivity) this.activity;
                 dismiss();
-                Bundle bundle1 = new Bundle();
-                bundle1.getString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
-                activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle1, true);
+                activity.navigateUp();
             });
         }
 
@@ -114,7 +105,7 @@ public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDia
 
     @Override
     public void onItemRowClicked(int position) {
-        if(activity.getClass() == MainActivity.class) {
+        /*if(activity.getClass() == MainActivity.class) {
             Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
             if(currentFragment.getClass() == ShoppingListFragment.class) {
                 ((ShoppingListFragment) currentFragment).selectShoppingList(
@@ -128,7 +119,7 @@ public class ShoppingListsBottomSheetDialogFragment extends CustomBottomSheetDia
         } else if(activity.getClass() == ShoppingActivity.class) {
             ((ShoppingActivity) activity).selectShoppingList(shoppingLists.get(position).getId());
         }
-        dismiss();
+        dismiss();*/
     }
 
     @NonNull

@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundleNoAnim = new Bundle();
             bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
 
-            switch (action) {
+            /*switch (action) {
                 case Constants.SHORTCUT_ACTION.CONSUME:
                     Intent intentConsume = new Intent(this, ScanBatchActivity.class);
                     intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                     startActivity(new Intent(this, ShoppingActivity.class));
                     break;
-            }
+            }*/
             getIntent().setAction(null);
         }
     }
@@ -403,11 +403,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {}
 
-    public void dismissFragments() {}
-
     public void dismissFragment() {}
-
-    public void dismissFragment(Bundle bundle) { }
 
     public boolean isOnline() {
         return netUtil.isOnline();
