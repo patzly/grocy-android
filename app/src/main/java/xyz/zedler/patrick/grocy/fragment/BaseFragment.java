@@ -41,6 +41,8 @@ public class BaseFragment extends Fragment {
 
     public void clearFields() {}
 
+    public void updateConnectivity(boolean isOnline) {}
+
     @NonNull
     NavController findNavController() {
         return NavHostFragment.findNavController(this);

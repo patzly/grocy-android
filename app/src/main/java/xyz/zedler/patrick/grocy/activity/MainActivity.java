@@ -42,6 +42,7 @@ import android.widget.EditText;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,7 +66,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.fragment.LoginFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
     private NetUtil netUtil;
     private BroadcastReceiver networkReceiver;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
-    private Fragment fragmentCurrent;
 
     private boolean debug;
 
@@ -122,10 +122,7 @@ public class MainActivity extends AppCompatActivity {
         networkReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(fragmentCurrent == null) return;
-                if(fragmentCurrent.getClass() == ShoppingListFragment.class) {
-                    ((ShoppingListFragment) fragmentCurrent).updateConnectivity(netUtil.isOnline());
-                }
+                getCurrentFragment().updateConnectivity(netUtil.isOnline());
             }
         };
         registerReceiver(
@@ -179,12 +176,6 @@ public class MainActivity extends AppCompatActivity {
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if(destination.getId() == R.id.loginFragment) {
-                binding.bottomAppBar.setVisibility(View.GONE);
-            } else {
-                binding.bottomAppBar.setVisibility(View.VISIBLE);
-            }
-
             if(destination.getId() != R.id.loginFragment && isServerUrlEmpty()) {
                 navController.navigate(R.id.loginFragment);
             }
@@ -238,11 +229,6 @@ public class MainActivity extends AppCompatActivity {
                     data.getParcelableArrayListExtra(Constants.ARGUMENT.BUNDLE),
                     true
             );*/
-        } else if((requestCode == Constants.REQUEST.SCAN_BATCH)
-                && resultCode == Activity.RESULT_CANCELED
-                && fragmentCurrent.getClass() == StockFragment.class
-        ) {
-            ((StockFragment) fragmentCurrent).refresh();
         }
     }
 
@@ -392,23 +378,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         BaseFragment currentFragment = getCurrentFragment();
-        if(currentFragment == null) {
-            super.onBackPressed();
-        } else if(currentFragment.isSearchVisible()) {
+        if(currentFragment.isSearchVisible()) {
             currentFragment.dismissSearch();
         } else {
             boolean handled = currentFragment.onBackPressed();
             if(!handled) super.onBackPressed();
-            binding.bottomAppBar.show();
+            if(!(currentFragment instanceof LoginFragment)) binding.bottomAppBar.show();
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         BaseFragment currentFragment = getCurrentFragment();
-        if(currentFragment == null) {
-            return super.onKeyDown(keyCode, event);
-        }
         return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
@@ -499,11 +480,11 @@ public class MainActivity extends AppCompatActivity {
         return binding.bottomAppBar.getMenu();
     }
 
+    @NonNull
     public BaseFragment getCurrentFragment() {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
-        return navHostFragment == null
-                ? null
-                : (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        assert navHostFragment != null;
+        return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {

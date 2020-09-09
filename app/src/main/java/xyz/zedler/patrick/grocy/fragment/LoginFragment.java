@@ -35,6 +35,7 @@ import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.AuthFailureError;
@@ -218,16 +219,29 @@ public class LoginFragment extends BaseFragment {
         if(getArguments() != null && getArguments().getBoolean(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, false)) {
             showMessage(getString(R.string.msg_features));
         }
+    }
 
-        activity.showHideDemoIndicator(this, true);
-        //activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
-                R.menu.menu_empty,
-                true,
-                () -> {}
-        );
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.getWindow().setStatusBarColor(ResourcesCompat.getColor(
+                getResources(),
+                R.color.background,
+                null
+        ));
+        activity.getWindow().setNavigationBarColor(ResourcesCompat.getColor(
+                getResources(),
+                R.color.background,
+                null
+        ));
+        ((MainActivity) requireActivity()).binding.bottomAppBar.setVisibility(View.GONE);
+        ((MainActivity) requireActivity()).binding.fabMain.hide();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((MainActivity) requireActivity()).binding.bottomAppBar.setVisibility(View.VISIBLE);
     }
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
@@ -341,8 +355,8 @@ public class LoginFragment extends BaseFragment {
                 new DownloadHelper(requireActivity(), TAG),
                 new GrocyApi(requireContext()),
                 sharedPrefs,
-                () -> {},
-                () -> {}
+                () -> activity.navigateUp(),
+                () -> activity.navigateUp()
         );
     }
 
