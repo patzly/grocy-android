@@ -85,6 +85,27 @@ public class BaseFragment extends Fragment {
         backStackEntry.getSavedStateHandle().set(key, value);
     }
 
+    /**
+     * Set data for this fragment (which is on top of the backStack)
+     * @param key (String): identifier for value
+     * @param value (Object): the value to store
+     */
+    void setForThisFragment(String key, Object value) {
+        NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
+        assert backStackEntry != null;
+        backStackEntry.getSavedStateHandle().set(key, value);
+    }
+
+    /**
+     * Remove set data of this fragment (which is on top of the backStack)
+     * @param key (String): identifier for value
+     */
+    void removeForThisFragment(String key) {
+        NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
+        assert backStackEntry != null;
+        backStackEntry.getSavedStateHandle().remove(key);
+    }
+
     interface ObserverListener {
         void onChange(Object value);
     }

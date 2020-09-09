@@ -418,7 +418,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         outState.putInt("filterLocationId", filterLocationId);
         outState.putInt("filterProductGroupId", filterProductGroupId);
 
-        appBarBehavior.saveInstanceState(outState);
+        //appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {

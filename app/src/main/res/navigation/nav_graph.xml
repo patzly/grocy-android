@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
-    app:startDestination="@id/aboutFragment">
+    app:startDestination="@id/stockFragment">
 
     <fragment
         android:id="@+id/stockFragment"
@@ -385,4 +385,14 @@
         android:id="@+id/shoppingListEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
         android:label="ShoppingListEditFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
+        android:label="LoginFragment" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down" />
 </navigation>

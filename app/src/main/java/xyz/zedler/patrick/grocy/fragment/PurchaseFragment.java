@@ -467,9 +467,14 @@ public class PurchaseFragment extends BaseFragment {
         });
         viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
             if(productDetails != null) {
+                setForThisFragment( // for loading selected product after process death
+                        Constants.ARGUMENT.PRODUCT_ID,
+                        productDetails.getProduct().getId()
+                );
                 fillWithProductDetails(productDetails);
                 viewModel.writeDefaultValues();
             } else {
+                removeForThisFragment(Constants.ARGUMENT.PRODUCT_ID);
                 clearFields();
             }
         });

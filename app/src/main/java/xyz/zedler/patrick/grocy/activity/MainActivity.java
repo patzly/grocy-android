@@ -174,12 +174,32 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if(isServerUrlEmpty()) {
+        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                .findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(destination.getId() == R.id.loginFragment) {
+                binding.bottomAppBar.setVisibility(View.GONE);
+            } else {
+                binding.bottomAppBar.setVisibility(View.VISIBLE);
+            }
+
+            if(destination.getId() != R.id.loginFragment && isServerUrlEmpty()) {
+                navController.navigate(R.id.loginFragment);
+            }
+        });
+
+        /*if(isServerUrlEmpty()) {
             startActivityForResult(
                     new Intent(this, LoginActivity.class),
                     Constants.REQUEST.LOGIN
             );
         } else {
+            setUp(savedInstanceState);
+        }*/
+
+        if(!isServerUrlEmpty()) {
             setUp(savedInstanceState);
         }
     }
