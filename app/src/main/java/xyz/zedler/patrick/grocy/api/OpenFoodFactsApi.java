@@ -29,7 +29,7 @@ public class OpenFoodFactsApi {
 
     public static String getUserAgent(Context context) {
         return "Grocy Android - v"
-                + context.getString(R.string.app_version) + " - "
+                + context.getString(R.string.versionName) + " - "
                 + context.getString(R.string.url_github);
     }
 
