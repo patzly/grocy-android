@@ -19,7 +19,7 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 19
+        versionCode 20
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -59,7 +59,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.5'
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
 
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
     implementation 'com.android.volley:volley:1.1.1'
 

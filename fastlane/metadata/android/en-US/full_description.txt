@@ -1,0 +1,32 @@
+Grocy Android is an open-source Android client for grocy. <a href="https://grocy.info/">grocy</a> (<a href="https://github.com/grocy/grocy">source code</a>) is a self-hosted groceries & household management solution for your home.
+
+Grocy Android uses grocy's official API to provide you a beautiful interface on your phone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
+
+<b>This app requires a running self-hosted instance of the grocy server application. It is a companion app, therefore it cannot run standalone or manage products itself!
+You can try and test all features using the demo option available on the login screen.</b>
+
+<b>Features:</b>
+
+<ul>
+   <li>Stock overview</li>
+   <li>Shopping lists with offline support</li>
+   <li>In-store shopping mode (big UI elements)</li>
+   <li>Fast barcode scanning</li>
+   <li>OpenFoodFacts implementation</li>
+   <li>Master data editing</li>
+   <li>Intuitive batch processing</li>
+   <li>Dark mode</li>
+   <li>No ads, analytics or in-app purchases</li>
+   <li>Low data usage</li>
+   <li>Small app size (~6MB)</li>
+</ul>
+
+<b>Contribution:</b>
+If you run into a bug or miss a feature, feel free to give feedback in the app, send us an email or <a href="https://github.com/patzly/grocy-android/issues/new">open an issue on GitHub</a>.
+Like the grocy project, Grocy Android can be translated, too. Please go to our GitHub page for more information.
+
+<b>Compatibility:</b>
+Grocy Android requires at least grocy 2.7.0 on your server.
+It is also possible to use the grocy Add-on on a Hass.io server. Our in-app help explains how to do that.
+
+We'd like to thank the developer of Grocy, Bernd Bestel, without whose great work this app would never have been possible.

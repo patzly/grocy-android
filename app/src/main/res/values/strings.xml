@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">Grocy</string>
-    <string name="app_version" translatable="false">1.8.4</string>
+    <string name="app_version" translatable="false">1.8.5</string>
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
@@ -89,7 +89,7 @@
     <string name="tooltip_switch_purchase">Switch to purchase mode</string>
     <string name="tooltip_switch_consume">Switch to consume mode</string>
     <string name="tooltip_switch_open">Switch to open mode</string>
-    <string name="tooltip_demo">Your\'re in demo mode</string>
+    <string name="tooltip_demo">You\'re in demo mode</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiring soon</string>
