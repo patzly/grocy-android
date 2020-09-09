@@ -9,6 +9,10 @@ android {
         viewBinding = true
     }
 
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
