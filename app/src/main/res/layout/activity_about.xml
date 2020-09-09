@@ -103,9 +103,10 @@
                         style="@style/Theme.Grocy.ListItem.OverLine"
                         android:text="@string/info_version" />
 
+                    <!--suppress AndroidDomInspection -->
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/app_version" />
+                        android:text="@string/versionName" />
 
                 </LinearLayout>
 
