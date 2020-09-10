@@ -65,10 +65,10 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
@@ -781,7 +781,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 Constants.ARGUMENT.SHOW_OFFLINE,
                 showOffline || !isFeatureMultipleListsEnabled()
         );
-        activity.showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
     }
 
     public void selectShoppingList(int shoppingListId) {
@@ -964,7 +964,7 @@ public class ShoppingListFragment extends BaseFragment implements
         ShoppingList shoppingList = getShoppingList(selectedShoppingListId);
         if(shoppingList == null) return;
         bundle.putString(Constants.ARGUMENT.HTML, shoppingList.getNotes());
-        activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new TextEditBottomSheet(), bundle);
     }
 
     public void setUpBottomMenu() {
@@ -1067,7 +1067,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 }
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
-                activity.showBottomSheet(new ShoppingListClearBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new ShoppingListClearBottomSheet(), bundle);
                 return true;
             });
         }
@@ -1347,7 +1347,7 @@ public class ShoppingListFragment extends BaseFragment implements
             bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
             bundle.putInt(Constants.ARGUMENT.POSITION, position);
             bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, showOffline);
-            activity.showBottomSheet(new ShoppingListItemBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
         }
     }
 

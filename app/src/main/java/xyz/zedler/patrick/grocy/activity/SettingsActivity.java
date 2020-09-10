@@ -57,13 +57,13 @@ import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -147,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity
 					//startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
-					showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+					showBottomSheet(new FeedbackBottomSheet(), null);
 					break;
 			}
 			return true;
@@ -417,7 +417,7 @@ public class SettingsActivity extends AppCompatActivity
 						new DownloadHelper(this, TAG),
 						grocyApi,
 						sharedPrefs,
-						() -> showBottomSheet(new RestartBottomSheetDialogFragment(), null),
+						() -> showBottomSheet(new RestartBottomSheet(), null),
 						this::showErrorMessage
 				);
 				break;
@@ -425,7 +425,7 @@ public class SettingsActivity extends AppCompatActivity
 				Bundle bundle = null;
 				if(isDemo()) bundle = new Bundle();
 				// empty bundle for indicating demo type
-				showBottomSheet(new LogoutBottomSheetDialogFragment(), bundle);
+				showBottomSheet(new LogoutBottomSheet(), bundle);
 				break;
 			case R.id.linear_setting_dark_mode:
 				switchDark.setChecked(!switchDark.isChecked());
@@ -448,7 +448,7 @@ public class SettingsActivity extends AppCompatActivity
 						textViewExpiringSoonDays.getText().toString()
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleExpiringSoonDays
 				);
 				break;
@@ -472,7 +472,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleUpdateInterval
 				);
 				break;
@@ -494,7 +494,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleAmountPurchase
 				);
 				break;
@@ -513,7 +513,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleAmountConsume
 				);
 				break;
@@ -666,7 +666,7 @@ public class SettingsActivity extends AppCompatActivity
 		tmpLocations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, tmpLocations);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetLocationId);
-		showBottomSheet(new LocationsBottomSheetDialogFragment(), bundleLocations);
+		showBottomSheet(new LocationsBottomSheet(), bundleLocations);
 	}
 
 	private Location getLocation(int id) {
@@ -737,7 +737,7 @@ public class SettingsActivity extends AppCompatActivity
 				tmpProductGroups
 		);
 		bundleProductGroups.putInt(Constants.ARGUMENT.SELECTED_ID, presetProductGroupId);
-		showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundleProductGroups);
+		showBottomSheet(new ProductGroupsBottomSheet(), bundleProductGroups);
 	}
 
 	private ProductGroup getProductGroup(int id) {
@@ -805,7 +805,7 @@ public class SettingsActivity extends AppCompatActivity
 		tmpQuantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, tmpQuantityUnits);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetQuantityUnitId);
-		showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundleLocations);
+		showBottomSheet(new QuantityUnitsBottomSheet(), bundleLocations);
 	}
 
 	private QuantityUnit getQuantityUnit(int id) {

@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -461,7 +461,7 @@ public class MasterLocationFragment extends BaseFragment {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
     public void deleteLocation(Location location) {

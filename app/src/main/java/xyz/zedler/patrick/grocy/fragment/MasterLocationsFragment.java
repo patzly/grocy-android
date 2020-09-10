@@ -53,8 +53,8 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationsBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -508,7 +508,7 @@ public class MasterLocationsFragment extends BaseFragment
         if(location != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            activity.showBottomSheet(new MasterLocationBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new MasterLocationBottomSheet(), bundle);
         }
     }
 
@@ -556,7 +556,7 @@ public class MasterLocationsFragment extends BaseFragment
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
     public void deleteLocation(Location location) {

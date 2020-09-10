@@ -49,10 +49,10 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.ErrorFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -192,7 +192,7 @@ public class PurchaseFragment extends BaseFragment {
                     String.valueOf(productDetails.getProduct().getDefaultBestBeforeDays())
             );
             bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
-            activity.showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new BBDateBottomSheet(), bundle);
         });
 
         // amount
@@ -273,7 +273,7 @@ public class PurchaseFragment extends BaseFragment {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, viewModel.getStores());
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getStoreId());
-            activity.showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new StoresBottomSheet(), bundle);
         });
 
         // location
@@ -284,7 +284,7 @@ public class PurchaseFragment extends BaseFragment {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getLocationId());
-            activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new LocationsBottomSheet(), bundle);
         });
 
         hideDisabledFeatures();
@@ -495,7 +495,7 @@ public class PurchaseFragment extends BaseFragment {
             } else if(event.getType() == Event.BARCODE_UNKNOWN) {
                 assert event.getBundle() != null;
                 activity.showBottomSheet(
-                        new InputBarcodeBottomSheetDialogFragment(),
+                        new InputBarcodeBottomSheet(),
                         event.getBundle()
                 );
             }

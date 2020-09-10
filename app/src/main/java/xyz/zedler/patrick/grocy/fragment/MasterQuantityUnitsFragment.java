@@ -53,8 +53,8 @@ import xyz.zedler.patrick.grocy.adapter.MasterQuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitsBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -519,7 +519,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
         if(quantityUnit != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-            activity.showBottomSheet(new MasterQuantityUnitBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new MasterQuantityUnitBottomSheet(), bundle);
         }
     }
 
@@ -565,7 +565,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QUANTITY_UNIT);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
     public void deleteQuantityUnit(QuantityUnit quantityUnit) {

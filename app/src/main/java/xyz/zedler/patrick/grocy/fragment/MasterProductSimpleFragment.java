@@ -68,11 +68,11 @@ import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductSimpleBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -272,7 +272,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
             bundle.putString(Constants.ARGUMENT.HTML, productDescriptionHtml);
             bundle.putString(Constants.ARGUMENT.TITLE, "Edit description");
             bundle.putString(Constants.ARGUMENT.HINT, "Product description");
-            activity.showBottomSheet(new TextEditBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new TextEditBottomSheet(), bundle);
         });
         textViewDescription = activity.findViewById(R.id.text_master_product_simple_description);
 
@@ -310,7 +310,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         locations
                 );
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
-                activity.showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new LocationsBottomSheet(), bundle);
             }
         });
         textViewLocation = activity.findViewById(R.id.text_master_product_simple_location);
@@ -439,7 +439,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, productGroups);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedProductGroupId);
-                activity.showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new ProductGroupsBottomSheet(), bundle);
             }
         });
         textViewProductGroup = activity.findViewById(
@@ -456,7 +456,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QU_PURCHASE);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQUPurchaseId);
-                activity.showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
             }
         });
         textViewQUPurchase = activity.findViewById(
@@ -476,7 +476,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QU_STOCK);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedQUStockId);
-                activity.showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
             }
         });
         textViewQUStock = activity.findViewById(
@@ -1414,7 +1414,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                         bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
                         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT);
                         activity.showBottomSheet(
-                                new MasterDeleteBottomSheetDialogFragment(),
+                                new MasterDeleteBottomSheet(),
                                 bundle
                         );
                     } else {

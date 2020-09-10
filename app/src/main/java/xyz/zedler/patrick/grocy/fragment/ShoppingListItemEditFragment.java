@@ -59,9 +59,9 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -186,7 +186,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedShoppingListId);
-            activity.showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
         });
 
         if(!sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true)) {
@@ -241,7 +241,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                             );
                             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
                             activity.showBottomSheet(
-                                    new InputNameBottomSheetDialogFragment(), bundle
+                                    new InputNameBottomSheet(), bundle
                             );
                         }
                         return true;
@@ -549,7 +549,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
                         activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(), bundle
+                                new InputBarcodeBottomSheet(), bundle
                         );
                     } else {
                         showErrorMessage();
@@ -633,7 +633,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-            activity.showBottomSheet(new InputNameBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new InputNameBottomSheet(), bundle);
             return true;
         } else return !isAmountValid();
     }

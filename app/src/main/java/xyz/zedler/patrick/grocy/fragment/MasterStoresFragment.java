@@ -53,8 +53,8 @@ import xyz.zedler.patrick.grocy.adapter.MasterStoreAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoresBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -516,7 +516,7 @@ public class MasterStoresFragment extends BaseFragment
         if(store != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Constants.ARGUMENT.STORE, store);
-            activity.showBottomSheet(new MasterStoreBottomSheetDialogFragment(), bundle);
+            activity.showBottomSheet(new MasterStoreBottomSheet(), bundle);
         }
     }
 
@@ -565,7 +565,7 @@ public class MasterStoresFragment extends BaseFragment
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.STORE, store);
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.STORE);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
     public void deleteStore(Store store) {

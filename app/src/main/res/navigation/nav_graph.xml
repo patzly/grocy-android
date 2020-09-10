@@ -185,7 +185,7 @@
     </fragment>
     <dialog
         android:id="@+id/feedbackBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet"
         android:label="FeedbackBottomSheetDialogFragment" />
     <fragment
         android:id="@+id/masterProductSimpleFragment"
@@ -260,7 +260,7 @@
     </fragment>
     <dialog
         android:id="@+id/productOverviewBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet"
         android:label="ProductOverviewBottomSheetDialogFragment" >
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
@@ -313,7 +313,7 @@
     </dialog>
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheet"
         android:label="DrawerBottomSheetDialogFragment" >
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingListFragment"
@@ -337,7 +337,7 @@
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog
         android:id="@+id/inputNameBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetDialogFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet"
         android:label="InputNameBottomSheetDialogFragment" >
         <argument
             android:name="productName"

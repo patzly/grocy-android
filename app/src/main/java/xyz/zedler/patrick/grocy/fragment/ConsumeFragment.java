@@ -64,9 +64,9 @@ import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -264,7 +264,7 @@ public class ConsumeFragment extends BaseFragment {
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
-                activity.showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new StockLocationsBottomSheet(), bundle);
             } else if(productDetails != null) {
                 activity.showMessage(
                         Snackbar.make(
@@ -313,7 +313,7 @@ public class ConsumeFragment extends BaseFragment {
                             filteredStockEntries
                     );
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
-                    activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                    activity.showBottomSheet(new StockEntriesBottomSheet(), bundle);
                 }
             } else {
                 // no product selected
@@ -654,7 +654,7 @@ public class ConsumeFragment extends BaseFragment {
                     if(response != null && response.statusCode == 400) {
                         binding.autoCompleteConsumeProduct.setText(barcode);
                         activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(), null
+                                new InputBarcodeBottomSheet(), null
                         );
                     } else {
                         activity.showMessage(

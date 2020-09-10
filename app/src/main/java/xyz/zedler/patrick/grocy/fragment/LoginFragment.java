@@ -54,9 +54,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
@@ -198,7 +198,7 @@ public class LoginFragment extends BaseFragment {
         binding.buttonLoginFeedback.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginFeedback.startIconAnimation();
-            activity.showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+            activity.showBottomSheet(new FeedbackBottomSheet(), null);
         });
 
         binding.buttonLoginAbout.setTooltipText(getString(R.string.title_about));
@@ -269,7 +269,7 @@ public class LoginFragment extends BaseFragment {
                                     supportedVersions
                             );
                             activity.showBottomSheet(
-                                    new CompatibilityBottomSheetDialogFragment(),
+                                    new CompatibilityBottomSheet(),
                                     bundle
                             );
                             return;
@@ -307,7 +307,7 @@ public class LoginFragment extends BaseFragment {
                                     Constants.ARGUMENT.TEXT,
                                     getString(R.string.error_handshake_description, server)
                             );
-                            activity.showBottomSheet(new MessageBottomSheetDialogFragment(), bundle);
+                            activity.showBottomSheet(new MessageBottomSheet(), bundle);
                         } else if(error.toString().contains("Invalid host")) {
                             binding.textInputLoginServer.setError(
                                     getString(R.string.error_invalid_url)

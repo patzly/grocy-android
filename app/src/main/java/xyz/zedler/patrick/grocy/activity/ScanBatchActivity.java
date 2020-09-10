@@ -72,15 +72,15 @@ import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchConfigBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchConfigBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PriceBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.BatchPurchaseEntry;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -247,7 +247,7 @@ public class ScanBatchActivity extends AppCompatActivity
             new Handler().postDelayed(this::pauseScan, 300);
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, actionType);
-            showBottomSheet(new BatchConfigBottomSheetDialogFragment(), bundle);
+            showBottomSheet(new BatchConfigBottomSheet(), bundle);
         });
 
         buttonFlash = findViewById(R.id.button_scan_batch_flash);
@@ -319,7 +319,7 @@ public class ScanBatchActivity extends AppCompatActivity
         if(missingBatchItems.size() > 0) {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchItems);
-            showBottomSheet(new ExitScanBatchBottomSheetDialogFragment(), bundle);
+            showBottomSheet(new ExitScanBatchBottomSheet(), bundle);
             pauseScan();
         } else {
             setResult(Activity.RESULT_CANCELED);
@@ -950,7 +950,7 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
         bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCTS, products);
         bundle.putStringArrayList(Constants.ARGUMENT.PRODUCT_NAMES, productNames);
-        showBottomSheet(new BatchChooseBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new BatchChooseBottomSheet(), bundle);
     }
 
     private void showBBDateBottomSheet() {
@@ -960,7 +960,7 @@ public class ScanBatchActivity extends AppCompatActivity
                 Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
                 String.valueOf(currentDefaultBestBeforeDays)
         );
-        showBottomSheet(new BBDateBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new BBDateBottomSheet(), bundle);
     }
 
     private void showPriceBottomSheet() {
@@ -968,7 +968,7 @@ public class ScanBatchActivity extends AppCompatActivity
         bundle.putString(Constants.ARGUMENT.PRICE, price);
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
         bundle.putString(Constants.ARGUMENT.CURRENCY, currency);
-        showBottomSheet(new PriceBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new PriceBottomSheet(), bundle);
     }
 
     private void showStoresBottomSheet(boolean tryDownload) {
@@ -993,7 +993,7 @@ public class ScanBatchActivity extends AppCompatActivity
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
         }
         bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
-        showBottomSheet(new StoresBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new StoresBottomSheet(), bundle);
     }
 
     private void showLocationsBottomSheet(boolean tryDownload) {
@@ -1018,7 +1018,7 @@ public class ScanBatchActivity extends AppCompatActivity
             bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
         }
         bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
-        showBottomSheet(new LocationsBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new LocationsBottomSheet(), bundle);
     }
 
     private void showSpecificEntryBottomSheet() {
@@ -1058,7 +1058,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             filteredStockEntries
                     );
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, entryId);
-                    showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                    showBottomSheet(new StockEntriesBottomSheet(), bundle);
                 },
                 error -> showMessage(getString(R.string.error_undefined))
         );
@@ -1092,7 +1092,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     );
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, stockLocationId);
                     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, currentProductDetails);
-                    showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
+                    showBottomSheet(new StockLocationsBottomSheet(), bundle);
                 },
                 error -> showMessage(getString(R.string.error_undefined))
         );

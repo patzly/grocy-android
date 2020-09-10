@@ -69,7 +69,7 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.LoginFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.frameMainDemo.setOnClickListener(
                 // bottomSheet only checks if bundle is != null, then it's of type demo
-                v -> showBottomSheet(new LogoutBottomSheetDialogFragment(), new Bundle())
+                v -> showBottomSheet(new LogoutBottomSheet(), new Bundle())
         );
 
         fragmentManager = getSupportFragmentManager();

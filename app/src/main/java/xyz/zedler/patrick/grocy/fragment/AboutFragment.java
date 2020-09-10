@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.FeaturesActivity;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -200,6 +200,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         bundle.putString(Constants.ARGUMENT.TITLE, getString(title));
         bundle.putString(Constants.ARGUMENT.FILE, file);
         if(link != 0) bundle.putString(Constants.ARGUMENT.LINK, getString(link));
-        activity.showBottomSheet(new TextBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new TextBottomSheet(), bundle);
     }
 }

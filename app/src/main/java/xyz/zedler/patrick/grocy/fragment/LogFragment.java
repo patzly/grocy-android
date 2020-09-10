@@ -37,7 +37,7 @@ import java.io.InputStreamReader;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentLogBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
@@ -130,7 +130,7 @@ public class LogFragment extends BaseFragment {
         });
         menuItemFeedback.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemFeedback);
-            activity.showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+            activity.showBottomSheet(new FeedbackBottomSheet(), null);
             return true;
         });
     }

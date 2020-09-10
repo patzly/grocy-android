@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.databinding.ActivityShoppingBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.LoadOfflineDataShoppingListHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
@@ -602,7 +602,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
         bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedShoppingListId);
         bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, true);
-        showBottomSheet(new ShoppingListsBottomSheetDialogFragment(), bundle);
+        showBottomSheet(new ShoppingListsBottomSheet(), bundle);
     }
 
     public void selectShoppingList(int shoppingListId) {

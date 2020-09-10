@@ -52,8 +52,8 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterProductAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductsBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -632,7 +632,7 @@ public class MasterProductsFragment extends BaseFragment
         bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT_STOCK, quantityUnitStock);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
 
-        activity.showBottomSheet(new MasterProductBottomSheetDialogFragment(), bundle);
+        activity.showBottomSheet(new MasterProductBottomSheet(), bundle);
     }
 
     private void setUpSearch() {
@@ -663,7 +663,7 @@ public class MasterProductsFragment extends BaseFragment
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT);
-                activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
             } else {
                 showMessage(activity.getString(R.string.msg_master_delete_stock));
             }

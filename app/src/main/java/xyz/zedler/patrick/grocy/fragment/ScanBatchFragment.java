@@ -20,7 +20,7 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentScanBatchBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheet;
 import xyz.zedler.patrick.grocy.scan.ScanBatchCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.BarcodeRipple;
@@ -146,7 +146,7 @@ public class ScanBatchFragment extends BaseFragment
 
     @Override
     public boolean onBackPressed() {
-        activity.showBottomSheet(new ExitScanBatchBottomSheetDialogFragment(), null);
+        activity.showBottomSheet(new ExitScanBatchBottomSheet(), null);
         return true;
     }
 
