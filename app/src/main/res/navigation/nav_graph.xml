@@ -364,6 +364,10 @@
         <argument
             android:name="action"
             app:argType="string" />
+        <argument
+            android:name="startAnimated"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/scanInputFragment"
@@ -417,4 +421,12 @@
         app:exitAnim="@anim/slide_no"
         app:popEnterAnim="@anim/slide_from_right"
         app:popExitAnim="@anim/slide_to_left" />
+    <action
+        android:id="@+id/action_global_scanBatchFragment"
+        app:destination="@id/scanBatchFragment"
+        app:enterAnim="@anim/slide_no"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down"
+        app:popUpTo="@id/stockFragment"
+        app:popUpToInclusive="false" />
 </navigation>

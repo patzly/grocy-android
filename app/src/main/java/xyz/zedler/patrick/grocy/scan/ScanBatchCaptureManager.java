@@ -190,7 +190,7 @@ public class ScanBatchCaptureManager {
     public void onPause() {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inactivityTimer.cancel();
-        barcodeView.pauseAndWait();
+        barcodeView.pause();
     }
 
     /**

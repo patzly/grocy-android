@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -62,6 +63,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.NavGraphDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     private GrocyApi grocyApi;
     private ClickUtil clickUtil;
     private NetUtil netUtil;
+    private NavController navController;
     private BroadcastReceiver networkReceiver;
     private BottomAppBarRefreshScrollBehavior scrollBehavior;
 
@@ -147,15 +150,43 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
+        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
+                .findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
+        navController.addOnDestinationChangedListener((controller, dest, args) -> {
+            // conditional navigation
+            if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)
+                    && isServerUrlEmpty()
+            ) {
+                controller.navigate(R.id.action_global_loginFragment);
+                controller.navigate(R.id.action_global_featuresFragment);
+            } else if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+                controller.navigate(R.id.action_global_featuresFragment);
+            } else if((dest.getId() != R.id.loginFragment && dest.getId() != R.id.aboutFragment
+                    && dest.getId() != R.id.featuresFragment) && isServerUrlEmpty()
+            ) {
+                controller.navigate(R.id.action_global_loginFragment);
+            }
+            if(dest.getId() != R.id.loginFragment && dest.getId() != R.id.aboutFragment) {
+                setStatusBarColor(R.color.primary);
+            }
+            if(isServerUrlEmpty()) {
+                binding.bottomAppBar.setVisibility(View.GONE);
+                binding.fabMain.hide();
+                setNavBarColor(R.color.background);
+            } else {
+                binding.bottomAppBar.setVisibility(View.VISIBLE);
+                setNavBarColor(R.color.primary);
+            }
+        });
+
         // BOTTOM APP BAR
 
         binding.bottomAppBar.setNavigationOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             IconUtil.start(binding.bottomAppBar.getNavigationIcon());
-            NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-                    .findFragmentById(R.id.nav_host_fragment);
-            assert navHostFragment != null;
-            NavController navController = navHostFragment.getNavController();
             navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
         });
 
@@ -164,56 +195,15 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
 
-        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-                .findFragmentById(R.id.nav_host_fragment);
-        assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            Log.i(TAG, "onCreate: " + destination.getLabel());
-            if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false) && isServerUrlEmpty()) {
-                navController.navigate(R.id.action_global_loginFragment);
-                navController.navigate(R.id.action_global_featuresFragment);
-            } else if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false) && destination.getId() != R.id.featuresFragment) {
-                navController.navigate(R.id.action_global_featuresFragment);
-            } else if((destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment && destination.getId() != R.id.featuresFragment) && isServerUrlEmpty()) {
-                navController.navigate(R.id.action_global_loginFragment);
-            }
-            if(destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment) {
-                getWindow().setStatusBarColor(ResourcesCompat.getColor(
-                        getResources(),
-                        R.color.primary,
-                        null
-                ));
-            }
-            if(isServerUrlEmpty()) {
-                binding.bottomAppBar.setVisibility(View.GONE);
-                binding.fabMain.hide();
-                getWindow().setNavigationBarColor(ResourcesCompat.getColor(
-                        getResources(),
-                        R.color.background,
-                        null
-                ));
-            } else {
-                binding.bottomAppBar.setVisibility(View.VISIBLE);
-                getWindow().setNavigationBarColor(ResourcesCompat.getColor(
-                        getResources(),
-                        R.color.primary,
-                        null
-                ));
-            }
-        });
-
-        /*if(isServerUrlEmpty()) {
-            startActivityForResult(
-                    new Intent(this, LoginActivity.class),
-                    Constants.REQUEST.LOGIN
-            );
-        } else {
-            setUp(savedInstanceState);
-        }*/
-
         if(!isServerUrlEmpty()) {
-            setUp(savedInstanceState);
+            ConfigUtil.loadInfo(
+                    new DownloadHelper(this, TAG),
+                    grocyApi,
+                    sharedPrefs,
+                    null,
+                    null
+            );
+            handleShortcutAction();
         }
     }
 
@@ -228,16 +218,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.REQUEST.FEATURES) {
-            /*if(isServerUrlEmpty()) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.putExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, true);
-                startActivityForResult(intent, Constants.REQUEST.LOGIN);
-            }*/
-        } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
-            grocyApi.loadCredentials();
-            setUp(null);
-        } else if(requestCode == Constants.REQUEST.SCAN_BATCH
+        if(requestCode == Constants.REQUEST.SCAN_BATCH
                 && resultCode == Activity.RESULT_OK
                 && data != null
         ) {
@@ -254,74 +235,44 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp(Bundle savedInstanceState) {
-        ConfigUtil.loadInfo(
-                new DownloadHelper(this, TAG),
-                grocyApi,
-                sharedPrefs,
-                null,
-                null
-        );
+    public void handleShortcutAction() {
+        if(getIntent() == null || getIntent().getAction() == null) return;
 
-        // FRAGMENT
+        // no animation for shortcut fragments
+        Bundle bundleNoAnim = new Bundle();
+        bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
 
-        /*if(savedInstanceState != null) {
-            String tag = savedInstanceState.getString(Constants.ARGUMENT.CURRENT_FRAGMENT);
-            if(tag != null) {
-                fragmentCurrent = fragmentManager.getFragment(savedInstanceState, tag);
-            }
-        } else { // default is stock
-            fragmentCurrent = new StockFragment();
-            Bundle bundleNoAnim = new Bundle();
-            bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-            fragmentCurrent.setArguments(bundleNoAnim);
-            fragmentManager.beginTransaction().replace(
-                    R.id.frame_main_container,
-                    fragmentCurrent,
-                    Constants.UI.STOCK
-            ).commit();
-        }*/
-
-        // SHORTCUT
-
-        String action = getIntent() != null ? getIntent().getAction() : null;
-        if(action != null) {
-            // no animation for shortcut fragments
-            Bundle bundleNoAnim = new Bundle();
-            bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-
-            /*switch (action) {
-                case Constants.SHORTCUT_ACTION.CONSUME:
-                    Intent intentConsume = new Intent(this, ScanBatchActivity.class);
-                    intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                    startActivityForResult(intentConsume, Constants.REQUEST.SCAN_BATCH);
-                    break;
-                case Constants.SHORTCUT_ACTION.PURCHASE:
-                    Intent intentPurchase = new Intent(this, ScanBatchActivity.class);
-                    intentPurchase.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-                    startActivityForResult(intentPurchase, Constants.REQUEST.SCAN_BATCH);
-                    break;
-                case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
-                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                    break;
-                case Constants.SHORTCUT_ACTION.ADD_ENTRY:
-                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                    Bundle bundleCreate = new Bundle();
-                    bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
-                    bundleCreate.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-                    replaceFragment(
-                            Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-                            bundleCreate,
-                            false
-                    );
-                    break;
-                case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
-                    replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                    startActivity(new Intent(this, ShoppingActivity.class));
-                    break;
-            }*/
-            getIntent().setAction(null);
+        switch (getIntent().getAction()) {
+            case Constants.SHORTCUT_ACTION.CONSUME:
+                Intent intentConsume = new Intent(this, ScanBatchActivity.class);
+                intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
+                startActivityForResult(intentConsume, Constants.REQUEST.SCAN_BATCH);
+                break;
+            case Constants.SHORTCUT_ACTION.PURCHASE:
+                navController.navigate(
+                        NavGraphDirections.actionGlobalScanBatchFragment(Constants.ACTION.PURCHASE)
+                );
+                break;
+            case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
+                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                break;
+            case Constants.SHORTCUT_ACTION.ADD_ENTRY:
+                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                Bundle bundleCreate = new Bundle();
+                bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
+                bundleCreate.putBoolean(Constants.ARGUMENT.ANIMATED, false);
+                replaceFragment(
+                        Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+                        bundleCreate,
+                        false
+                );
+                break;
+            case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
+                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                startActivity(new Intent(this, ShoppingActivity.class));
+                break;
         }
+        getIntent().setAction(null);
     }
 
     public BottomAppBarRefreshScrollBehavior getScrollBehavior() {
@@ -473,6 +424,32 @@ public class MainActivity extends AppCompatActivity {
                 binding.frameMainDemo.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void setNavBarColor(@ColorRes int color) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
+        ) {
+            color = R.color.black;
+        }
+        getWindow().setNavigationBarColor(ResourcesCompat.getColor(
+                getResources(),
+                color,
+                null
+        ));
+    }
+
+    public void setStatusBarColor(@ColorRes int color) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
+        ) {
+            color = R.color.black;
+        }
+        getWindow().setStatusBarColor(ResourcesCompat.getColor(
+                getResources(),
+                color,
+                null
+        ));
     }
 
     public void showKeyboard(EditText editText) {

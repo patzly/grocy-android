@@ -42,6 +42,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import xyz.zedler.patrick.grocy.NavGraphDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
@@ -103,8 +104,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
-            navigate(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
+            navigate(NavGraphDirections.actionGlobalScanBatchFragment(
                             Constants.ACTION.PURCHASE
                     ), true
             );

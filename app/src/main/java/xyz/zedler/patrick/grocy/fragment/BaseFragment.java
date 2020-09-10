@@ -1,6 +1,5 @@
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -8,12 +7,13 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
+
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
 
@@ -123,17 +123,13 @@ public class BaseFragment extends Fragment {
             int transit,
             boolean enter,
             int nextAnim,
-            Activity activity,
+            MainActivity activity,
             @ColorRes int color
     ) {
         if(!enter) return super.onCreateAnimation(transit, false, nextAnim);
         if(nextAnim == 0) {
             // set color of statusBar immediately after popBackStack, when previous fragment appears
-            activity.getWindow().setStatusBarColor(ResourcesCompat.getColor(
-                    getResources(),
-                    color,
-                    null
-            ));
+            activity.setStatusBarColor(color);
             return super.onCreateAnimation(transit, true, nextAnim);
         }
         // set color of statusBar after transition is finished (when shown)
@@ -145,11 +141,7 @@ public class BaseFragment extends Fragment {
             public void onAnimationRepeat(Animation animation) {}
             @Override
             public void onAnimationEnd(Animation animation) {
-                activity.getWindow().setStatusBarColor(ResourcesCompat.getColor(
-                        getResources(),
-                        color,
-                        null
-                ));
+                activity.setStatusBarColor(color);
             }
         });
         return anim;

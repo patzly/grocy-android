@@ -42,6 +42,8 @@ public class ConfigUtil {
 
         boolean debug = prefs.getBoolean(Constants.PREF.DEBUG, false);
 
+        api.loadCredentials();
+
         DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
             if(onSuccessAction != null) onSuccessAction.run();
         }, volleyError -> {
