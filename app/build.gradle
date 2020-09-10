@@ -15,12 +15,16 @@ android {
         viewBinding = true
     }
 
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 20
-        versionName "1.8.5"
+        versionName "1.8.6"
 
         javaCompileOptions {
             annotationProcessorOptions {
