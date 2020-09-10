@@ -29,6 +29,8 @@ import android.net.Uri;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import xyz.zedler.patrick.grocy.R;
+
 public class NetUtil {
 
     private ConnectivityManager cm;
@@ -51,6 +53,8 @@ public class NetUtil {
 
     public static boolean openURL(Context context, String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setStartAnimations(context, R.anim.slide_in_up, R.anim.slide_no);
+        builder.setExitAnimations(context, R.anim.slide_no, R.anim.fade_out);
         CustomTabsIntent customTabsIntent = builder.build();
         try {
             customTabsIntent.launchUrl(context, Uri.parse(url));

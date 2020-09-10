@@ -87,7 +87,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        binding.frameAboutBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
 
         setOnClickListeners(
                 R.id.linear_intro,

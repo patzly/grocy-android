@@ -433,13 +433,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showSnackbar(Snackbar snackbar) {
-        if(binding.bottomAppBar.getVisibility() == View.GONE && !binding.fabMain.isOrWillBeShown()) {
-            snackbar.show();
-        } else {
-            snackbar.setAnchorView(
-                    binding.fabMain.isOrWillBeShown() ? binding.fabMain : binding.bottomAppBar
-            ).show();
+        if(binding.fabMain.isOrWillBeShown()) {
+            snackbar.setAnchorView(binding.fabMain);
+        } else if(binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+            snackbar.setAnchorView(binding.bottomAppBar);
         }
+        snackbar.show();
     }
 
     public void showMessage(@StringRes int message) {

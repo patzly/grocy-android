@@ -88,7 +88,7 @@ public class FeedbackBottomSheet extends CustomBottomSheet {
 		view.findViewById(R.id.linear_feedback_issue).setOnClickListener(v -> {
 			Intent intent = new Intent(
 					Intent.ACTION_VIEW,
-					Uri.parse(activity.getString(R.string.url_github_new_issue))
+					Uri.parse(activity.getString(R.string.url_github_issues))
 			);
 			startActivity(intent);
 			dismiss();
