@@ -671,7 +671,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
             download();
         } else {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
@@ -728,7 +728,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
     private void onDownloadError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         swipeRefreshLayout.setRefreshing(false);
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.error_undefined),
@@ -1122,7 +1122,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                             autoCompleteTextViewParentProduct.setText(productParent.getName());
                             textInputParentProduct.clearFocus();
                         } else {
-                            activity.showMessage(
+                            activity.showSnackbar(
                                     Snackbar.make(
                                             activity.findViewById(R.id.frame_main_container),
                                             "Product can't be parent of itself",
@@ -1140,7 +1140,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 }, error -> {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
-                        activity.showMessage(
+                        activity.showSnackbar(
                                 Snackbar.make(
                                         activity.findViewById(R.id.frame_main_container),
                                         "Product not found",
@@ -1168,7 +1168,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         for(int i = 0; i < linearLayoutBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) linearLayoutBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(barcode)) {
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.findViewById(R.id.frame_main_container),
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -1418,7 +1418,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                                 bundle
                         );
                     } else {
-                        activity.showMessage(
+                        activity.showSnackbar(
                                 Snackbar.make(
                                         activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.msg_master_delete_stock),
@@ -1443,7 +1443,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.error_undefined),

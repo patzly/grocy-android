@@ -253,7 +253,7 @@ public class MasterLocationFragment extends BaseFragment {
             download();
         } else {
             binding.swipeMasterLocation.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -297,7 +297,7 @@ public class MasterLocationFragment extends BaseFragment {
                 },
                 error -> {
                     binding.swipeMasterLocation.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -444,7 +444,7 @@ public class MasterLocationFragment extends BaseFragment {
         if(!products.isEmpty()) {
             for(Product product : products) {
                 if(product.getLocationId() == location.getId()) {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(
@@ -473,7 +473,7 @@ public class MasterLocationFragment extends BaseFragment {
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),

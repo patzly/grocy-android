@@ -266,7 +266,7 @@ public class ConsumeFragment extends BaseFragment {
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
                 activity.showBottomSheet(new StockLocationsBottomSheet(), bundle);
             } else if(productDetails != null) {
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(
@@ -296,7 +296,7 @@ public class ConsumeFragment extends BaseFragment {
                     }
                 }
                 if(filteredStockEntries.isEmpty()) {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(
@@ -433,7 +433,7 @@ public class ConsumeFragment extends BaseFragment {
             download();
         } else {
             binding.swipeConsume.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -476,7 +476,7 @@ public class ConsumeFragment extends BaseFragment {
                     binding.swipeConsume.setRefreshing(false);
                 }, error -> {
                     binding.swipeConsume.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -509,7 +509,7 @@ public class ConsumeFragment extends BaseFragment {
                 .getEnableTareWeightHandling() == 1;
 
         if(productDetails.getStockAmount() == 0) { // check if stock is empty
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(
@@ -657,7 +657,7 @@ public class ConsumeFragment extends BaseFragment {
                                 new InputBarcodeBottomSheet(), null
                         );
                     } else {
-                        activity.showMessage(
+                        activity.showSnackbar(
                                 Snackbar.make(
                                         activity.binding.frameMainContainer,
                                         activity.getString(R.string.error_undefined),
@@ -757,7 +757,7 @@ public class ConsumeFragment extends BaseFragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
 
                     assert getArguments() != null;
                     if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
@@ -833,7 +833,7 @@ public class ConsumeFragment extends BaseFragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
 
                     assert getArguments() != null;
                     if(ConsumeFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
@@ -854,7 +854,7 @@ public class ConsumeFragment extends BaseFragment {
         dlHelper.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_undone_transaction),
@@ -1113,7 +1113,7 @@ public class ConsumeFragment extends BaseFragment {
         for(int i = 0; i < binding.linearConsumeBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) binding.linearConsumeBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -1154,7 +1154,7 @@ public class ConsumeFragment extends BaseFragment {
     }
 
     private void showMessage(String text) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_SHORT)
         );
     }

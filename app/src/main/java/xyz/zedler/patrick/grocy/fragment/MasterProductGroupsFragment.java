@@ -300,7 +300,7 @@ public class MasterProductGroupsFragment extends BaseFragment
             download();
         } else {
             binding.swipeMasterProductGroups.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -466,7 +466,7 @@ public class MasterProductGroupsFragment extends BaseFragment
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -555,7 +555,7 @@ public class MasterProductGroupsFragment extends BaseFragment
             for(Product product : products) {
                 if(product.getProductGroupId() == null) continue;
                 if(product.getProductGroupId().equals(String.valueOf(productGroup.getId()))) {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(

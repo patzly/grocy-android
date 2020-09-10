@@ -321,7 +321,7 @@ public class MasterProductsFragment extends BaseFragment
             download();
         } else {
             binding.swipeMasterProducts.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -551,7 +551,7 @@ public class MasterProductsFragment extends BaseFragment
     }
 
     private void showMessage(String message) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         message,

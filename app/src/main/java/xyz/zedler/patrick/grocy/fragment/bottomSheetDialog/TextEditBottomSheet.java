@@ -114,7 +114,7 @@ public class TextEditBottomSheet extends CustomBottomSheet {
     }
 
     private void dismissWithMessage(String msg) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.frame_main_container),
                         msg,

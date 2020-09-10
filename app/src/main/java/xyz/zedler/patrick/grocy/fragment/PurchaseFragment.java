@@ -481,7 +481,7 @@ public class PurchaseFragment extends BaseFragment {
         viewModel.getEventHandler().observe(getViewLifecycleOwner(),
                 (EventHandler.EventObserver) event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showMessage(((SnackbarMessage) event).getSnackbar(
+                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
                         activity,
                         activity.binding.frameMainContainer
                 ));
@@ -786,7 +786,7 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private void showMessage(String text) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_LONG)
         );
     }

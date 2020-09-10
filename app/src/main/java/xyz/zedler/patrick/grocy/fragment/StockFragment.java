@@ -488,7 +488,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
             download();
         } else {
             binding.swipeStock.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -941,7 +941,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                                 Snackbar.LENGTH_SHORT
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 }
         );
     }
@@ -1104,7 +1104,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                         );
                         if(debug) Log.i(TAG, "updateConsumedStockItem: undone");
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
@@ -1209,7 +1209,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                         );
                         if(debug) Log.i(TAG, "updateOpenedStockItem: undone");
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
@@ -1266,7 +1266,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     }
 
     private void showErrorMessage(VolleyError error) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),

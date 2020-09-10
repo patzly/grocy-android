@@ -164,24 +164,21 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
 
-        if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
-            startActivityForResult(
-                    new Intent(this, FeaturesActivity.class),
-                    Constants.REQUEST.FEATURES
-            );
-            return;
-        }
-
         NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
                 .findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             Log.i(TAG, "onCreate: " + destination.getLabel());
-            if((destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment) && isServerUrlEmpty()) {
+            if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false) && isServerUrlEmpty()) {
+                navController.navigate(R.id.action_global_loginFragment);
+                navController.navigate(R.id.action_global_featuresFragment);
+            } else if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false) && destination.getId() != R.id.featuresFragment) {
+                navController.navigate(R.id.action_global_featuresFragment);
+            } else if((destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment && destination.getId() != R.id.featuresFragment) && isServerUrlEmpty()) {
                 navController.navigate(R.id.action_global_loginFragment);
             }
-            if(destination.getId() != R.id.loginFragment) {
+            if(destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment) {
                 getWindow().setStatusBarColor(ResourcesCompat.getColor(
                         getResources(),
                         R.color.primary,
@@ -435,10 +432,20 @@ public class MainActivity extends AppCompatActivity {
         return netUtil.isOnline();
     }
 
-    public void showMessage(Snackbar snackbar) {
-        snackbar.setAnchorView(
-                binding.fabMain.isOrWillBeShown() ? binding.fabMain : binding.bottomAppBar
-        ).show();
+    public void showSnackbar(Snackbar snackbar) {
+        if(binding.bottomAppBar.getVisibility() == View.GONE && !binding.fabMain.isOrWillBeShown()) {
+            snackbar.show();
+        } else {
+            snackbar.setAnchorView(
+                    binding.fabMain.isOrWillBeShown() ? binding.fabMain : binding.bottomAppBar
+            ).show();
+        }
+    }
+
+    public void showMessage(@StringRes int message) {
+        showSnackbar(
+                Snackbar.make(binding.frameMainContainer, getString(message), Snackbar.LENGTH_LONG)
+        );
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {

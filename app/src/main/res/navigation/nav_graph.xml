@@ -376,7 +376,14 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
-        android:label="AboutFragment" />
+        android:label="AboutFragment" >
+        <action
+            android:id="@+id/action_aboutFragment_to_featuresFragment"
+            app:destination="@id/featuresFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
     <fragment
         android:id="@+id/shoppingListEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
@@ -397,5 +404,17 @@
         app:destination="@id/loginFragment"
         app:enterAnim="@anim/slide_no"
         app:exitAnim="@anim/slide_no"
-        app:popExitAnim="@anim/slide_out_down" />
+        app:popEnterAnim="@anim/slide_from_right"
+        app:popExitAnim="@anim/slide_to_left" />
+    <fragment
+        android:id="@+id/featuresFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.FeaturesFragment"
+        android:label="FeaturesFragment" />
+    <action
+        android:id="@+id/action_global_featuresFragment"
+        app:destination="@id/featuresFragment"
+        app:enterAnim="@anim/slide_no"
+        app:exitAnim="@anim/slide_no"
+        app:popEnterAnim="@anim/slide_from_right"
+        app:popExitAnim="@anim/slide_to_left" />
 </navigation>

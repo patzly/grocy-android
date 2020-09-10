@@ -389,7 +389,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             download();
         } else {
             binding.swipeShoppingListItemEdit.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -423,7 +423,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private void onError(VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         binding.swipeShoppingListItemEdit.setRefreshing(false);
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -858,7 +858,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     }
 
     private void showMessage(String msg) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
     }

@@ -240,7 +240,7 @@ public class MasterStoreFragment extends BaseFragment {
             download();
         } else {
             binding.swipeMasterStore.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.findViewById(R.id.frame_main_container),
                             activity.getString(R.string.msg_no_connection),
@@ -284,7 +284,7 @@ public class MasterStoreFragment extends BaseFragment {
                 },
                 error -> {
                     binding.swipeMasterStore.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.frame_main_container),
                                     activity.getString(R.string.error_undefined),
@@ -424,7 +424,7 @@ public class MasterStoreFragment extends BaseFragment {
             for(Product product : products) {
                 if(product.getStoreId() == null) continue;
                 if(product.getStoreId().equals(String.valueOf(store.getId()))) {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.findViewById(R.id.frame_main_container),
                                     activity.getString(
@@ -453,7 +453,7 @@ public class MasterStoreFragment extends BaseFragment {
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.findViewById(R.id.frame_main_container),
                         activity.getString(R.string.error_undefined),

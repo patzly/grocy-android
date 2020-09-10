@@ -1416,7 +1416,7 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     private void showMessage(String msg) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
     }

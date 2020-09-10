@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.activity;
+package xyz.zedler.patrick.grocy.fragment;
 
 /*
     This file is part of Grocy Android.
@@ -25,85 +25,84 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.preference.PreferenceManager;
-
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.tabs.TabLayout;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentFeaturesBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class FeaturesActivity extends AppCompatActivity {
+public class FeaturesFragment extends BaseFragment {
 
-    private final static String TAG = "FeaturesActivity";
+    private final static String TAG = FeaturesFragment.class.getSimpleName();
 
+    private FragmentFeaturesBinding binding;
+    private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
-    private FrameLayout frameLayoutPrevious, frameLayoutNext;
-    private TextView textViewTitle, textViewDescription;
     private final ClickUtil clickUtil = new ClickUtil();
+
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+        binding = FragmentFeaturesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        activity = (MainActivity) requireActivity();
 
-        AppCompatDelegate.setDefaultNightMode(
-                sharedPrefs.getBoolean(Constants.PREF.DARK_MODE,false)
-                        ? AppCompatDelegate.MODE_NIGHT_YES
-                        : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        );
-        setContentView(R.layout.activity_features);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        LinearLayout linearLayoutLandTextContainer = findViewById(R.id.linear_features_text_land);
-        textViewTitle = findViewById(R.id.text_features_title_land);
-        textViewDescription = findViewById(R.id.text_features_description_land);
-        frameLayoutPrevious = findViewById(R.id.frame_features_previous);
-        frameLayoutPrevious.setOnClickListener(v -> {
-            if(viewPager.getCurrentItem() > 0) {
-                IconUtil.start(this, R.id.image_features_previous);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        binding.frameFeaturesPrevious.setOnClickListener(v -> {
+            if(binding.pagerFeatures.getCurrentItem() > 0) {
+                IconUtil.start(binding.imageFeaturesPrevious);
+                binding.pagerFeatures.setCurrentItem(binding.pagerFeatures.getCurrentItem() - 1);
             }
         });
-        frameLayoutNext = findViewById(R.id.frame_features_next);
-        frameLayoutNext.setOnClickListener(v -> {
-            if(viewPager.getCurrentItem() < 3) {
-                IconUtil.start(this, R.id.image_features_next);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        binding.frameFeaturesNext.setOnClickListener(v -> {
+            if(binding.pagerFeatures.getCurrentItem() < 3) {
+                IconUtil.start(binding.imageFeaturesNext);
+                binding.pagerFeatures.setCurrentItem(binding.pagerFeatures.getCurrentItem() + 1);
             }
         });
         setArrows(0, false);
 
-        MaterialButton buttonGetStarted = findViewById(R.id.button_features_start);
-        buttonGetStarted.setOnClickListener(v -> {
+        binding.buttonFeaturesStart.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
-            finish();
+            activity.onBackPressed();
         });
 
-        viewPager = findViewById(R.id.pager_features);
-        pagerAdapter = new FeaturesPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pagerAdapter = new FeaturesPagerAdapter(activity.getSupportFragmentManager());
+        binding.pagerFeatures.setAdapter(pagerAdapter);
+        binding.pagerFeatures.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 setOffset(position, position, positionOffset); // active page
@@ -111,7 +110,7 @@ public class FeaturesActivity extends AppCompatActivity {
                 if(position != pagerAdapter.getCount() -1) {
                     setOffset(position + 1, position, positionOffset);
                 }
-                linearLayoutLandTextContainer.setAlpha(
+                binding.linearFeaturesTextLand.setAlpha(
                         positionOffset < 0.5f
                                 ? 1 - 2 * positionOffset
                                 : 2 * positionOffset - 1
@@ -128,66 +127,51 @@ public class FeaturesActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) { }
         });
 
-        TabLayout tabLayout = findViewById(R.id.tabs_features);
-        tabLayout.setupWithViewPager(viewPager);
-        LinearLayout tabStrip = (LinearLayout) tabLayout.getChildAt(0);
+        binding.tabsFeatures.setupWithViewPager(binding.pagerFeatures);
+        LinearLayout tabStrip = (LinearLayout) binding.tabsFeatures.getChildAt(0);
         for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setOnTouchListener((v, event) -> true);
         }
-
-        setResult(RESULT_OK);
     }
 
     @Override
-    public void onBackPressed() {
-        sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
-        super.onBackPressed();
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+            activity.showMessage(R.string.msg_features);
+            sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
+        }
+        return false;
     }
 
     private void setText(int position) {
-        textViewTitle.setText(getTitle(position));
-        textViewDescription.setText(getDescription(position));
-    }
-
-    private int getTitle(int position) {
-        int[] titles = {
-                R.string.feature_1_title,
-                R.string.feature_2_title,
-                R.string.feature_3_title
-        };
-        return titles[position];
-    }
-
-    private int getDescription(int position) {
-        int[] descriptions = {
-                R.string.feature_1_description,
-                R.string.feature_2_description,
-                R.string.feature_3_description
-        };
-        return descriptions[position];
+        binding.textFeaturesTitleLand.setText(FeaturesPageFragment.getTitle(position));
+        binding.textFeaturesDescriptionLand.setText(FeaturesPageFragment.getDescription(position));
     }
 
     private void setArrows(int position, boolean animated) {
         if(animated) {
-            frameLayoutPrevious.animate().alpha(
+            binding.frameFeaturesPrevious.animate().alpha(
                     position > 0 ? 1 : 0
             ).setDuration(200).start();
-            frameLayoutNext.animate().alpha(
+            binding.frameFeaturesNext.animate().alpha(
                     position < 2 ? 1 : 0
             ).setDuration(200).start();
         } else {
-            frameLayoutPrevious.setAlpha(position > 0 ? 1 : 0);
-            frameLayoutNext.setAlpha(position < 2 ? 1 : 0);
+            binding.frameFeaturesPrevious.setAlpha(position > 0 ? 1 : 0);
+            binding.frameFeaturesNext.setAlpha(position < 2 ? 1 : 0);
         }
-        frameLayoutPrevious.setEnabled(position > 0);
-        frameLayoutNext.setEnabled(position < 2);
+        binding.frameFeaturesPrevious.setEnabled(position > 0);
+        binding.frameFeaturesNext.setEnabled(position < 2);
     }
 
     private void setOffset(int targetPos, int scrollPos, float offset) {
-        ((FeaturesPageFragment) pagerAdapter.instantiateItem(viewPager, targetPos)).setOffset(
-                scrollPos,
-                offset
-        );
+        ((FeaturesPageFragment) pagerAdapter.instantiateItem(binding.pagerFeatures, targetPos))
+                .setOffset(scrollPos, offset);
     }
 
     private static class FeaturesPagerAdapter extends FragmentStatePagerAdapter {
@@ -225,6 +209,24 @@ public class FeaturesActivity extends AppCompatActivity {
             return inflater.inflate(R.layout.fragment_features_page, container, false);
         }
 
+        public static int getTitle(int position) {
+            int[] titles = {
+                    R.string.feature_1_title,
+                    R.string.feature_2_title,
+                    R.string.feature_3_title
+            };
+            return titles[position];
+        }
+
+        public static int getDescription(int position) {
+            int[] descriptions = {
+                    R.string.feature_1_description,
+                    R.string.feature_2_description,
+                    R.string.feature_3_description
+            };
+            return descriptions[position];
+        }
+
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             ImageView imageViewFocused = view.findViewById(R.id.image_features_focused);
@@ -256,11 +258,8 @@ public class FeaturesActivity extends AppCompatActivity {
                     imageViewFront.setImageResource(R.drawable.feature_1_f);
             }
 
-            FeaturesActivity activity = (FeaturesActivity) getActivity();
-            if(activity != null)  {
-                textViewTitle.setText(activity.getTitle(position));
-                textViewDescription.setText(activity.getDescription(position));
-            }
+            textViewTitle.setText(getTitle(position));
+            textViewDescription.setText(getDescription(position));
         }
 
         public void setOffset(int position, float offset) {

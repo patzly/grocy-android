@@ -27,6 +27,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -35,7 +36,6 @@ import androidx.annotation.StringRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.FeaturesActivity;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
@@ -117,7 +117,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             case R.id.linear_intro:
                 IconUtil.start(activity, R.id.image_intro);
                 new Handler().postDelayed(
-                        () -> startActivity(new Intent(activity, FeaturesActivity.class)),
+                        () -> navigate(AboutFragmentDirections
+                                .actionAboutFragmentToFeaturesFragment()),
                         150
                 );
                 break;
@@ -201,5 +202,10 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         bundle.putString(Constants.ARGUMENT.FILE, file);
         if(link != 0) bundle.putString(Constants.ARGUMENT.LINK, getString(link));
         activity.showBottomSheet(new TextBottomSheet(), bundle);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 }

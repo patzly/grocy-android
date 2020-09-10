@@ -42,10 +42,6 @@
         <activity android:name=".activity.ShoppingActivity"/>
 
         <activity
-            android:name=".activity.FeaturesActivity"
-            android:theme="@style/Theme.Grocy.NoNavBarDivider"/>
-
-        <activity
             android:name=".activity.ScanBatchActivity"
             android:theme="@style/Theme.Grocy.Camera"
             android:windowSoftInputMode="stateAlwaysHidden" />

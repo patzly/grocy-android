@@ -102,7 +102,7 @@ public class ShoppingListClearBottomSheet extends CustomBottomSheet {
     }
 
     private void showMessage(String msg) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
     }

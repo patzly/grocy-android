@@ -244,7 +244,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             download();
         } else {
             binding.swipeMasterQuantityUnit.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -288,7 +288,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
                 },
                 error -> {
                     binding.swipeMasterQuantityUnit.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -455,7 +455,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             for(Product product : products) {
                 if(product.getQuIdStock() != quantityUnit.getId()
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(
@@ -483,7 +483,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),

@@ -303,7 +303,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
             download();
         } else {
             binding.swipeMasterQuantityUnits.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -549,7 +549,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
             for(Product product : products) {
                 if(product.getQuIdStock() != quantityUnit.getId()
                         && product.getQuIdPurchase() != quantityUnit.getId()) continue;
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(
@@ -586,7 +586,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
     }
 
     private void showMessage(String message) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, message, Snackbar.LENGTH_SHORT)
         );
     }

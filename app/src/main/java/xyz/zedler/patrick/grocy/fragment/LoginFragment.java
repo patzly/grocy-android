@@ -214,10 +214,6 @@ public class LoginFragment extends BaseFragment {
             binding.buttonLoginWebsite.startIconAnimation();
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
         });
-
-        if(getArguments() != null && getArguments().getBoolean(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, false)) {
-            showMessage(getString(R.string.msg_features));
-        }
     }
 
     @Override
