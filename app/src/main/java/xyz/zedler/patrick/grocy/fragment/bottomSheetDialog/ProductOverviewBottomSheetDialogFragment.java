@@ -172,7 +172,11 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		toolbar.setOnMenuItemClickListener(item -> {
 			switch (item.getItemId()) {
 				case R.id.action_add_to_shopping_list:
-					NavHostFragment.findNavController(this).navigate(ProductOverviewBottomSheetDialogFragmentDirections.actionProductOverviewBottomSheetDialogFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE).setProductName(product.getName()));
+					NavHostFragment.findNavController(this).navigate(
+							ProductOverviewBottomSheetDialogFragmentDirections
+									.actionProductOverviewBottomSheetDialogFragmentToShoppingListItemEditFragment(
+											Constants.ACTION.CREATE
+									).setProductName(product.getName()));
 					dismiss();
 					return true;
 				case R.id.action_consume_all:
@@ -194,7 +198,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 							ProductOverviewBottomSheetDialogFragmentDirections
 									.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
 									.setCloseWhenFinished(true)
-									.setProductName(product.getName())
+									.setProductName(product.getName()) // TODO: Doesn't work yet
 					);
 					dismiss();
 					return true;

@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.AboutActivity;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginBinding;
@@ -206,7 +205,7 @@ public class LoginFragment extends BaseFragment {
         binding.buttonLoginAbout.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginAbout.startIconAnimation();
-            startActivity(new Intent(requireContext(), AboutActivity.class));
+            navigate(LoginFragmentDirections.actionLoginFragmentToAboutFragment());
         });
 
         binding.buttonLoginWebsite.setTooltipText(getString(R.string.info_website));
@@ -229,21 +228,9 @@ public class LoginFragment extends BaseFragment {
                 R.color.background,
                 null
         ));
-        activity.getWindow().setNavigationBarColor(ResourcesCompat.getColor(
-                getResources(),
-                R.color.background,
-                null
-        ));
-        ((MainActivity) requireActivity()).binding.bottomAppBar.setVisibility(View.GONE);
-        ((MainActivity) requireActivity()).binding.fabMain.hide();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        ((MainActivity) requireActivity()).binding.bottomAppBar.setVisibility(View.VISIBLE);
-    }
-
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
         binding.buttonLoginLogin.setEnabled(false);
         binding.buttonLoginDemo.setEnabled(false);
@@ -350,6 +337,12 @@ public class LoginFragment extends BaseFragment {
         );
     }
 
+    @Override
+    public boolean onBackPressed() {
+        activity.finish();
+        return true;
+    }
+
     private void loadInfoAndFinish() {
         ConfigUtil.loadInfo(
                 new DownloadHelper(requireActivity(), TAG),
@@ -380,6 +373,7 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
+    @Override
     public void enableLoginButtons() {
         binding.buttonLoginLogin.setEnabled(true);
         binding.buttonLoginDemo.setEnabled(true);

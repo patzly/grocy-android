@@ -48,6 +48,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -176,8 +177,32 @@ public class MainActivity extends AppCompatActivity {
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if(destination.getId() != R.id.loginFragment && isServerUrlEmpty()) {
-                navController.navigate(R.id.loginFragment);
+            Log.i(TAG, "onCreate: " + destination.getLabel());
+            if((destination.getId() != R.id.loginFragment && destination.getId() != R.id.aboutFragment) && isServerUrlEmpty()) {
+                navController.navigate(R.id.action_global_loginFragment);
+            }
+            if(destination.getId() != R.id.loginFragment) {
+                getWindow().setStatusBarColor(ResourcesCompat.getColor(
+                        getResources(),
+                        R.color.primary,
+                        null
+                ));
+            }
+            if(isServerUrlEmpty()) {
+                binding.bottomAppBar.setVisibility(View.GONE);
+                binding.fabMain.hide();
+                getWindow().setNavigationBarColor(ResourcesCompat.getColor(
+                        getResources(),
+                        R.color.background,
+                        null
+                ));
+            } else {
+                binding.bottomAppBar.setVisibility(View.VISIBLE);
+                getWindow().setNavigationBarColor(ResourcesCompat.getColor(
+                        getResources(),
+                        R.color.primary,
+                        null
+                ));
             }
         });
 
@@ -207,11 +232,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.REQUEST.FEATURES) {
-            if(isServerUrlEmpty()) {
+            /*if(isServerUrlEmpty()) {
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(Constants.EXTRA.AFTER_FEATURES_ACTIVITY, true);
                 startActivityForResult(intent, Constants.REQUEST.LOGIN);
-            }
+            }*/
         } else if(requestCode == Constants.REQUEST.LOGIN && resultCode == Activity.RESULT_OK) {
             grocyApi.loadCredentials();
             setUp(null);

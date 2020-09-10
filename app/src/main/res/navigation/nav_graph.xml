@@ -128,10 +128,6 @@
         android:id="@+id/settingsActivity"
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
         android:label="SettingsActivity" />
-    <dialog
-        android:id="@+id/masterDataBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDataBottomSheetDialogFragment"
-        android:label="MasterDataBottomSheetDialogFragment" />
     <fragment
         android:id="@+id/masterProductsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
@@ -388,11 +384,18 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
-        app:enterAnim="@anim/slide_in_up"
+        app:enterAnim="@anim/slide_no"
         app:exitAnim="@anim/slide_no"
         app:popExitAnim="@anim/slide_out_down" />
 </navigation>

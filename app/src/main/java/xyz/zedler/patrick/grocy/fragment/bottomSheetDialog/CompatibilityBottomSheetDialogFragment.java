@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,14 +34,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.LoginActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
 
     private final static String TAG = "CompatibilityBottomSheet";
 
-    private Activity activity;
+    private MainActivity activity;
 
     @NonNull
     @Override
@@ -61,7 +60,7 @@ public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDia
                 R.layout.fragment_bottomsheet_compatibility, container, false
         );
 
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
         assert activity != null;
 
         if(getArguments() == null) {
@@ -85,15 +84,15 @@ public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDia
 
         view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
             dismiss();
-            ((LoginActivity) activity).enableLoginButtons();
+            activity.getCurrentFragment().enableLoginButtons();
         });
 
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
             String server = getArguments().getString(Constants.ARGUMENT.SERVER);
             String key = getArguments().getString(Constants.ARGUMENT.KEY);
             boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
-            ((LoginActivity) activity).requestLogin(server, key, false, isDemo);
-            ((LoginActivity) activity).enableLoginButtons();
+            activity.getCurrentFragment().requestLogin(server, key, false, isDemo);
+            activity.getCurrentFragment().enableLoginButtons();
             dismiss();
         });
 

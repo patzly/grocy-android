@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.activity;
 */
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -145,7 +144,7 @@ public class SettingsActivity extends AppCompatActivity
 			switch (item.getItemId()) {
 				case R.id.action_about:
 					IconUtil.start(item);
-					startActivity(new Intent(this, AboutActivity.class));
+					//startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
 					showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);

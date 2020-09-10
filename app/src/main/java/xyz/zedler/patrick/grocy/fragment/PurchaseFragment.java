@@ -121,7 +121,7 @@ public class PurchaseFragment extends BaseFragment {
 
         // INITIALIZE VIEWS
 
-        binding.framePurchaseBack.setOnClickListener(v -> activity.onBackPressed());
+        binding.framePurchaseBack.setOnClickListener(v -> activity.navigateUp());
 
         binding.linearPurchaseShoppingListItem.linearShoppingListItemContainer.setBackground(
                 ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)

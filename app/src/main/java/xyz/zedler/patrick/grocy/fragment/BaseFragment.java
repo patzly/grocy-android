@@ -43,6 +43,10 @@ public class BaseFragment extends Fragment {
 
     public void updateConnectivity(boolean isOnline) {}
 
+    public void enableLoginButtons() {}
+
+    public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {}
+
     @NonNull
     NavController findNavController() {
         return NavHostFragment.findNavController(this);

@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@color/background">
+            android:background="@color/primary">
 
             <FrameLayout
                 android:id="@+id/frame_about_back"
@@ -57,10 +57,10 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_about"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:layout_marginBottom="?android:actionBarSize">
+        android:layout_marginTop="?android:actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"

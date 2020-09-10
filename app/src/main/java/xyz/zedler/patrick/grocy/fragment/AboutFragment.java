@@ -23,16 +23,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.res.ResourcesCompat;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.FeaturesActivity;
@@ -58,6 +58,22 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             Bundle savedInstanceState
     ) {
         binding = FragmentAboutBinding.inflate(inflater, container, false);
+
+        activity = (MainActivity) requireActivity();
+
+        // Add bottom margin if bottomAppBar is visible
+        TypedValue tv = new TypedValue();
+        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE && activity.getTheme()
+                .resolveAttribute(android.R.attr.actionBarSize, tv, true)
+        ) {
+            int actionBarHeight = TypedValue
+                    .complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+            CoordinatorLayout.LayoutParams layoutParams =
+                    (CoordinatorLayout.LayoutParams) binding.scrollAbout.getLayoutParams();
+            layoutParams.setMargins(0, 0, 0, actionBarHeight);
+            binding.scrollAbout.setLayoutParams(layoutParams);
+        }
+
         return binding.getRoot();
     }
 
@@ -70,9 +86,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
 
         binding.frameAboutBack.setOnClickListener(v -> activity.onBackPressed());
 
@@ -87,16 +100,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                 R.id.linear_license_volley,
                 R.id.linear_license_gson,
                 R.id.linear_license_xzing_android
-        );
-
-        activity.showHideDemoIndicator(this, true);
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_about);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
-                R.menu.menu_empty,
-                true,
-                () -> {}
         );
     }
 
@@ -198,17 +201,5 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         bundle.putString(Constants.ARGUMENT.FILE, file);
         if(link != 0) bundle.putString(Constants.ARGUMENT.LINK, getString(link));
         activity.showBottomSheet(new TextBottomSheetDialogFragment(), bundle);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Window window = activity.getWindow();
-        window.setStatusBarColor(ResourcesCompat.getColor(getResources(), R.color.background, null));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 }
