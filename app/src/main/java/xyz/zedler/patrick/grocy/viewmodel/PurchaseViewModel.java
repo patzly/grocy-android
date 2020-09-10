@@ -184,6 +184,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     private void onDownloadError(VolleyError error) {
+        // TODO: If there was an error, queue gets cancelled, but loading bar is still there (-> DownloadHelper)
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         errorFullscreenLive.setValue(
                 new ErrorFullscreen(ErrorFullscreen.NETWORK, error.getLocalizedMessage())
