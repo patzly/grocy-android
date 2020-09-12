@@ -47,7 +47,6 @@ Ways to mark a product as opened:
 
 ## Planned features
 
-* Extended product edit form
 * Recipes
 * Mealplans
 
@@ -60,6 +59,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(3) My API key is invalid. What can I do?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq3)
 * [(4) How can I use this app with Hass.io?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4)
 * [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
+* [(6) What is the APK with ML Kit as barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
 
 [I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
@@ -118,6 +118,19 @@ Attention! If your Hass.io server is publicly accessible, following points are i
 
 Most devices have a front camera with a fixed focus for the normal distance between your eyes and the device.
 With this distance, the picture resolution is sometimes too low for the scanning algorithm.
+
+<br />
+
+<a name="faq6"></a>
+**(6) What is the APK with ML Kit as barcode scanner?**
+
+On devices with Google Play Services or [microG](https://microg.org/) it is possible to use the APK option with ML Kit as barcode recognition instead of ZXing.
+ML Kit uses (like the names indicates) machine learning approach for barcode recognition and works with a trained model instead of stroke width detection.
+This has many advantages:
+
+- No horizontal alignment of barcodes necessary
+- We never saw any recognition mistakes
+- It uses the new CameraX implementation
 
 ## Support
 
