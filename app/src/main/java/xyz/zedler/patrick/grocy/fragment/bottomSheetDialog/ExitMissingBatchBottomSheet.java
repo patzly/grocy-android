@@ -59,16 +59,10 @@ public class ExitMissingBatchBottomSheet extends CustomBottomSheet {
 
         view.findViewById(R.id.button_exit_missing_batch_open).setOnClickListener(v -> {
             dismiss();
-            /*activity.dismissFragments();
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
         });
 
         view.findViewById(R.id.button_exit_missing_batch_discard).setOnClickListener(v -> {
             dismiss();
-            //activity.dismissFragments();
         });
 
         return view;

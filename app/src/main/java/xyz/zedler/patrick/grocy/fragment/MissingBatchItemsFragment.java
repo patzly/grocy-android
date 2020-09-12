@@ -551,11 +551,7 @@ public class MissingBatchItemsFragment extends BaseFragment
         MenuItem menuItemScan;
         menuItemScan = activity.getBottomMenu().findItem(R.id.action_scan);
         menuItemScan.setOnMenuItemClickListener(item -> {
-            /*activity.dismissFragments();
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.PURCHASE);
-            intent.putExtra(Constants.ARGUMENT.BUNDLE, getArguments());
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);*/
+            activity.navigateUp();
             return true;
         });
     }

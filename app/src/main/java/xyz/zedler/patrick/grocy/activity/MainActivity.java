@@ -244,9 +244,9 @@ public class MainActivity extends AppCompatActivity {
 
         switch (getIntent().getAction()) {
             case Constants.SHORTCUT_ACTION.CONSUME:
-                Intent intentConsume = new Intent(this, ScanBatchActivity.class);
-                intentConsume.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                startActivityForResult(intentConsume, Constants.REQUEST.SCAN_BATCH);
+                navController.navigate(
+                        NavGraphDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME)
+                );
                 break;
             case Constants.SHORTCUT_ACTION.PURCHASE:
                 navController.navigate(

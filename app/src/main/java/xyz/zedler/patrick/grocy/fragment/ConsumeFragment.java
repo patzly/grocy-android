@@ -58,9 +58,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.NavGraphDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
@@ -1055,9 +1055,7 @@ public class ConsumeFragment extends BaseFragment {
         MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
         if(menuItemBatch != null) menuItemBatch.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
+            navigate(NavGraphDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME));
             return true;
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);

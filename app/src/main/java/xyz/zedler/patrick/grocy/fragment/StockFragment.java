@@ -58,7 +58,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
@@ -388,11 +387,8 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 R.string.action_scan,
                 Constants.FAB.TAG.SCAN,
                 animated,
-                () -> {
-                    Intent intent = new Intent(activity, ScanBatchActivity.class);
-                    intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-                    startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
-                }
+                () -> navigate(StockFragmentDirections
+                        .actionGlobalScanBatchFragment(Constants.ACTION.CONSUME))
         );
     }
 
