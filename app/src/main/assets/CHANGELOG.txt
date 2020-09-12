@@ -1,3 +1,6 @@
+1.8.7
+- Hebrew translation (thanks Yaron!)
+
 1.8.5
 - Fixed Norwegian translation
 - Updated translations
