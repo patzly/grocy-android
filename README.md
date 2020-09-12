@@ -16,7 +16,7 @@ You can try it using the demo option available on the login screen.
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a><a href='https://apt.izzysoft.de/fdroid/index/apk/xyz.zedler.patrick.grocy'><img alt='Get it on IzzyOnDroid' height="80" src='assets/badge_izzyondroid.png'/></a>
 
-Grocy Android will soon be available in the official F-Droid repository.
+Grocy Android will [soon](https://gitlab.com/fdroid/rfp/-/issues/1477) be available in the official F-Droid repository.
 
 ## Screenshots
 
@@ -71,7 +71,7 @@ Like the grocy project, Grocy Android can be translated, too. The main language 
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
 Translations which reached a completion level of 80% will be included in releases.
 
-Completed translations: German, French, Swedish, Dutch, Norwegian & Spanish  
+Completed translations: German, French, Swedish, Dutch, Norwegian, Spanish & Hebrew  
 Thanks translators!
 
 ## About
