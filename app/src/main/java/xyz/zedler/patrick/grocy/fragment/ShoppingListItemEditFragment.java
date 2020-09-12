@@ -506,7 +506,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         binding.textInputShoppingListItemEditAmount.setHint(
                 activity.getString(
                         R.string.property_amount_in,
-                        productDetails.getQuantityUnitStock().getNamePlural()
+                        productDetails.getQuantityUnitPurchase().getNamePlural()
                 )
         );
     }

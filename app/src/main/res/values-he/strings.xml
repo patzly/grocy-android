@@ -1,0 +1,422 @@
+<resources>
+
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in purchase screen for example. -->
+    <string name="action_purchase">לרכוש</string>
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
+    <string name="action_consume">לצרוך</string>
+    <!-- This is an action – in English, it contains a verb. -->
+    <string name="action_consume_all">לצרוך הכול</string>
+
+    <string name="action_consume_one_spoiled">לצרוך אחד כמקולקל</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">לצרוך %1$s אחד מתוך %2$s</string>
+    <string name="action_open">לסמן כפתוח</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">פתיחת %1$s אחד מתוך %2$s</string>
+    <string name="action_edit_product">עריכת מוצר</string>
+    <string name="action_shopping_list_add">הוספה לרשימת הקניות</string>
+
+    <string name="action_back">חזרה</string>
+    <string name="action_search">חיפוש</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_next">הבא</string>
+    <string name="action_new">חדש</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_prev">הקודם</string>
+    <string name="action_send_feedback">שליחת משוב</string>
+    <string name="action_reset">איפוס</string>
+    <string name="action_reload">רענון</string>
+    <string name="action_top_scroll">גלילה למעלה</string>
+    <string name="action_send">שליחה</string>
+    <string name="action_close">סגירה</string>
+    <string name="action_scan">סריקה</string>
+    <string name="action_cancel">ביטול</string>
+    <string name="action_add">הוספה</string>
+    <string name="action_clear">פינוי</string>
+    <string name="action_clear_shopping_list">פינוי רשימת הקניות</string>
+    <string name="action_rate">דירוג ב־Google Play</string>
+    <string name="action_rate_description">תמיכה בפיתוח</string>
+    <string name="action_email">שליחת דוא״ל</string>
+    <string name="action_email_description">יצירת קשר עם המפתחים</string>
+    <string name="action_new_issue">פתיחת תקלה חדשה ב־GitHub</string>
+    <string name="action_new_issue_description">לדווח על תקלות או לבקש תכונה</string>
+    <string name="action_get_started">איך מתחילים</string>
+    <string name="action_ascending">עולה</string>
+    <string name="action_filter">סינון</string>
+    <string name="action_sort">מיון</string>
+    <string name="action_undo">החזרה</string>
+    <string name="action_retry">ניסיון חוזר</string>
+    <string name="action_edit">עריכה</string>
+    <string name="action_delete">מחיקה</string>
+    <string name="action_save">שמירה</string>
+    <string name="action_logout">יציאה</string>
+    <string name="action_restart">הפעלה מחדש</string>
+    <string name="action_show_extended">הצגת טופס מורחב</string>
+    <string name="action_batch_mode">מצב מרוכז</string>
+    <string name="action_create">יצירה</string>
+    <string name="action_link">קישור</string>
+    <string name="action_open_forms">פתיחת טפסים</string>
+    <string name="action_open_scanner">פתיחת סורק</string>
+    <string name="action_discard">התעלמות</string>
+    <string name="action_toggle_done">החלפת מצב ביצוע</string>
+    <string name="action_edit_notes">עריכת הערות</string>
+    <string name="action_shopping_mode">מצב קניות</string>
+    <string name="action_add_missing">הוספת מוצרים חסרים</string>
+    <string name="action_purchase_all_items">לרכוש את כל הפריטים</string>
+    <string name="action_skip_entry">לדלג על רשומה</string>
+    <string name="action_delete_shopping_list">מחיקת רשימת קניות</string>
+    <string name="action_discard_products">השלכת מוצרים</string>
+    <string name="action_perform_purchasing_processes">ביצוע העברות רכישה למוצרים שנוצרו</string>
+    <string name="action_create_key">יצירת מפתח</string>
+    <string name="action_login">כניסה</string>
+    <string name="action_use_demo_account">להשתמש בחשבון לדוגמה</string>
+    <string name="action_ignore">התעלמות</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">הכול</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">בוצע</string>
+
+    <string name="tooltip_new_products_count">ספירת מוצרים חדשים</string>
+    <string name="tooltip_switch_purchase">מעבר למצב רכישה</string>
+    <string name="tooltip_switch_consume">מעבר למצב צריכה</string>
+    <string name="tooltip_switch_open">מעבר למצב פתיחה</string>
+    <string name="tooltip_demo">זה מצב הדגמה</string>
+
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">התוקף של %1$d עומד לפוג בקרוב</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">התוקף של %1$d פג</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">%1$d מתחת לכמות מינימום</string>
+    <string name="msg_consumed">נצרכו %1$s %2$s מתוך %3$s</string>
+    <string name="msg_consumed_spoiled">נצרכו %1$s %2$s מתוך %3$s כמקולקלים</string>
+    <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d לטיפול</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">הרכישה של %1$s נשמרה</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">%1$s לא במלאי</string>
+    <string name="msg_no_connection">אין חיבור</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">אין מיקומי מלאי עבור %1$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">אין רשומות מלאי עבור %1$s</string>
+    <string name="msg_not_found">המוצר לא נמצא</string>
+    <string name="msg_undone_transaction">העברה לטיפול</string>
+    <string name="msg_failed_to_sync">סנכרון הרשומות נכשל</string>
+    <string name="msg_synced">הרשומות סונכרנו בהצלחה</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">המוצרים החסרים נוספו אל %1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">%1$s התרוקנה בהצלחה</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">%1$s נמחקה בהצלחה</string>
+    <string name="msg_barcode_duplicate">הברקוד כבר קיים</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">למחוק %1$s „%2$s”?</string>
+    <string name="msg_master_delete_stock">עדיין יש מהמוצר הזה במלאי</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">%1$s זה עדיין בשימוש</string>
+    <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
+    <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
+    <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
+    <string name="msg_batch_tare_weight">המוצר לא תומך במצב מרוכז: מופעל טיפול במשקל טרה</string>
+    <string name="msg_purchase_transactions_done">העברות הרכישה של המוצרים שנוצרו בוצעו</string>
+    <string name="msg_no_purchase_transactions">אין העברות רכישה ממתינות</string>
+    <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
+    <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
+    <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
+    <string name="msg_restart">נדרשת הפעלת היישומון מחדש כדי להחיל את ההגדרות הנוכחיות של Grocy כראוי.</string>
+    <string name="msg_features">להתחיל את ההיכרות שוב תחת „על אודות”</string>
+    <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
+    <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
+
+    <string name="error_api_not_working">מפתח ה־API לא עובד</string>
+    <string name="error_select_product">נא לבחור מוצר</string>
+    <string name="error_empty">נדרש</string>
+    <string name="error_empty_stock">אין כלום במלאי</string>
+    <string name="error_empty_stock_sub">כדאי ללכת לרכוש כמה מוצרים</string>
+    <string name="error_empty_shopping_list">לרוקן את רשימת הקניות</string>
+    <string name="error_empty_shopping_list_sub">להוסיף כמה מוצרים שדרושים לך</string>
+    <string name="error_empty_master_data_sub">ניתן ליצור כמה בעזרת הכפתור שלהלן</string>
+    <string name="error_empty_locations">אין מיקומים</string>
+    <string name="error_empty_product_groups">אין קבוצות מוצרים</string>
+    <string name="error_empty_products">אין מוצרים</string>
+    <string name="error_empty_qu">אין יחידות כמות</string>
+    <string name="error_empty_stores">אין חנויות</string>
+    <string name="error_search">אין תוצאות חיפוש</string>
+    <string name="error_search_sub">נא לנסות ביטויים אחרים</string>
+    <string name="error_filter">אין מה להציג</string>
+    <string name="error_filter_sub">כדאי לנסות מסננים אחרים</string>
+    <string name="error_duplicate">כבר קיים</string>
+    <string name="error_parent">אין לו אפשרות להיות הורה של עצמו</string>
+    <string name="error_invalid_product">מוצר שגוי</string>
+    <string name="error_invalid_url">כתובת שגויה</string>
+    <string name="error_invalid_amount">כמות שגויה</string>
+    <string name="error_invalid_best_before_days">‎-1 מציין שאין תפוגה</string>
+    <string name="error_invalid_factor">מקדם שגוי</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">בין %1$s לבין %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">שווה או גדול מאשר %1$s</string>
+    <string name="error_offline">בלתי מקוון</string>
+    <string name="error_name_exists">השם כבר קיים</string>
+    <string name="error_offline_subtitle">נא לבדוק את החיבור שלך ולנסות שוב</string>
+    <string name="error_unknown">אוווופס!</string>
+    <string name="error_not_grocy_instance">מופע לא תקני של grocy</string>
+    <string name="error_timeout">שגיאת תום זמן המתנה</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">ההתחברות אל %1$s נכשלה</string>
+    <string name="error_handshake">חסר אישור</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$s דורש אישור שאינו מוכר או מהימן מול Android.\nעל אישור השרת לקבל חתימה מרשות אישורים מורשית (CA)\nכדי לעמוד בדרישות האלו, ניתן להשתמש באישור חינמי מ־letsencrypt.org להצפנה הולמת.</string>
+    <string name="error_unexpected_response_code">קוד שגיאה בלתי צפוי: %1$d</string>
+    <string name="error_unexpected_response">תגובה בלתי צפויה מהשרת</string>
+    <string name="error_no_browser">עליך להתקין דפדפן כדי להציג את דפי העזרה</string>
+    <string name="error_undefined">אירעה שגיאה</string>
+
+    <string name="title_stock_overview">סקירת מלאי</string>
+    <string name="title_purchase">רכישה</string>
+    <string name="title_consume">צריכה</string>
+    <string name="title_product_overview">סקירת מוצר</string>
+    <string name="title_product">מוצר</string>
+    <string name="title_master_data">נתוני על</string>
+    <string name="title_stock_entries">רשומות מלאי</string>
+    <string name="title_shopping_list">רשימת קניות</string>
+    <string name="title_feedback">משוב</string>
+    <string name="title_settings">הגדרות</string>
+    <string name="title_about">על אודות</string>
+    <string name="title_info">פרטים</string>
+    <string name="title_help">עזרה</string>
+    <string name="title_logs">יומנים</string>
+    <string name="title_link_barcode">קישור ברקוד למוצר</string>
+    <string name="title_batch_scan_exit">למלא את טופסי המוצר?</string>
+    <string name="title_batch_missing_exit">לחזור לסורק?</string>
+    <string name="title_link_barcode_to_existing">לקשר ברקוד למוצר קיים?</string>
+    <string name="title_link_barcode_or_create">לקשר את הברקוד למוצר קיים או ליצור עבורו מוצר חדש?</string>
+    <string name="title_compatibility">בעיות תאימות</string>
+    <string name="title_logout">לצאת מ־Grocy?</string>
+    <string name="title_restart">להפעיל את Grocy מחדש?</string>
+    <string name="title_logout_demo">לצאת ממצב ההדגמה?</string>
+    <string name="title_batch_config">הגדרות מצב מרוכז</string>
+    <string name="title_manage_master_data">ניהול נתוני העל</string>
+
+    <string name="title_spoiled">מקולקל</string>
+    <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
+    <string name="title_is_total_price">האם המחיר הכללי</string>
+    <string name="title_stock_entry_no_specific">אין רשומה מסוימת</string>
+    <string name="title_shopping_list_ungrouped">לא מקובץ</string>
+    <string name="title_list_entry">רשומה ברשימה</string>
+    <string name="title_edit_list_entry">עריכת רשומה ברשימה</string>
+    <string name="title_create_list_entry">יצירת רשומה ברשימה</string>
+    <string name="title_shopping_list_edit">עריכת רשימת קניות</string>
+    <string name="title_shopping_list_new">רשימת קניות חדשה</string>
+    <string name="title_shopping_mode">מצב קניות</string>
+    <string name="title_products_to_create">מוצרים ליצירה</string>
+    <string name="title_batch_mode_shopping_list">מצב רשימת קניות מרוכזת</string>
+
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s %2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(%1$s נפתחו)</string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">איפה למוצר %1$s יש מלאי</string>
+    <string name="subtitle_default">בררת מחדל</string>
+    <string name="subtitle_none_selected">לא נבחר כלום</string>
+    <string name="subtitle_empty">ריק</string>
+    <string name="subtitle_done">בוצע</string>
+    <string name="subtitle_undone">לטיפול</string>
+    <string name="subtitle_never_expires">אין תפוגה</string>
+    <string name="subtitle_selected">נבחר</string>
+    <string name="subtitle_stock_entry_no_specific">הראשונים שתוקפם יפוג ולאחר מכן הראשונים שמולאו - הראשונים שיצאו</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">רכישה: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">בתוקף עד: %1$s; כמות: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">רשומה %1$d מתוך %2$d</string>
+
+    <string name="description_batch_choose_link">נא לבחור את המוצר אליו יקושר הברקוד.</string>
+    <string name="description_batch_choose_create">נא לבחור את המוצר שאליו הברקוד יקושר או ליצור מוצר חדש.</string>
+    <string name="description_scan_batch_exit">נוצרו מוצרים חדשים אך הם לא נשלחו לשרת כיוון שחסרים פרטים חיוניים. לפתוח את טופסי המוצרים?</string>
+    <string name="description_missing_batch_exit">חלק מהעברות הרכישה לא נשלחו עדיין לשרת. להתעלם מהן או לחזור לסורק?</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">ליצור מוצר חדש עם השם „%1$s”?</string>
+    <string name="description_clear_shopping_list">למחוק את הכול או רק את הפריטים שבוצעו?</string>
+
+    <string name="property_name">שם</string>
+    <string name="property_name_singular">שם (צורת יחיד)</string>
+    <string name="property_name_plural">שם (צורת ריבוי)</string>
+    <string name="property_product">מוצר</string>
+    <string name="property_products">מוצרים</string>
+    <string name="property_product_name">שם מוצר</string>
+    <string name="property_parent_product">מוצר הורה</string>
+    <string name="property_description">תיאור</string>
+    <string name="property_note">הערה</string>
+    <string name="property_status">מצב</string>
+    <string name="property_amount">כמות</string>
+    <string name="property_seconds">שניות</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d שניות</string>
+    <string name="property_amount_min_stock">כמות מזערית במלאי</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">כמות ב%1$s</string>
+    <string name="property_price">מחיר</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">מחיר ב־%1$s</string>
+    <string name="property_quantity_unit">יחידת כמות</string>
+    <string name="property_quantity_units">יחידות כמות</string>
+    <string name="property_qu_purchase">יחידת כמות ברכישה</string>
+    <string name="property_qu_stock">יחידת כמות במלאי</string>
+    <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
+    <string name="property_barcode">ברקוד</string>
+    <string name="property_barcodes">ברקודים</string>
+    <string name="property_bbd">תאריך בתוקף עד</string>
+    <string name="property_bbd_next">תאריך בתוקף עד הבא</string>
+    <string name="property_bb_days">ימי תוקף עד</string>
+    <string name="property_bb_days_default">ימי תוקף עד כבררת מחדל</string>
+    <string name="property_bb_days_default_opened">ימי תוקף עד כבררת מחדל לאחר הפתיחה</string>
+    <string name="property_location">מיקום</string>
+    <string name="property_location_default">מיקום בררת מחדל</string>
+    <string name="property_notes">הערות</string>
+    <string name="property_locations">מיקומים</string>
+    <string name="property_store">חנות</string>
+    <string name="property_store_unknown">חנות בלתי ידועה</string>
+    <string name="property_store_default">חנות בררת מחדל</string>
+    <string name="property_stores">חנויות</string>
+    <string name="property_shopping_list">רשימת קניות</string>
+    <string name="property_shopping_lists">רשימות קניות</string>
+    <string name="property_last_purchased">רכישה אחרונה</string>
+    <string name="property_last_used">שימוש אחרון</string>
+    <string name="property_last_price">מחיר אחרון</string>
+    <string name="property_average_shelf_life">חיי מדף ממוצעים</string>
+    <string name="property_spoil_rate">יחס קלקול</string>
+    <string name="property_price_history">היסטוריית מחירים</string>
+    <string name="property_product_group">קבוצת מוצרים</string>
+    <string name="property_product_groups">קבוצות מוצרים</string>
+    <string name="property_opened">נפתח</string>
+    <string name="property_not_opened">לא נפתח</string>
+    <string name="property_is_freezer">במקפיא</string>
+
+    <string name="date_yesterday">אתמול</string>
+    <string name="date_today">היום</string>
+    <string name="date_tomorrow">מחר</string>
+    <string name="date_unknown">לא ידוע</string>
+    <string name="date_unlimited">בלתי מוגבל</string>
+    <string name="date_never">אף פעם</string>
+    <!-- This string should contain the singular form of "day" -->
+    <string name="date_day_one">יום אחד</string>
+    <!-- This string should contain the singular form of "month" -->
+    <string name="date_month_one">חודש אחד</string>
+    <!-- This string should contain the singular form of "year" -->
+    <string name="date_year_one">שנה אחת</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
+    <string name="date_days">%1$d ימים</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
+    <string name="date_months">%1$d חודשים</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
+    <string name="date_years">%1$d שנים</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_from_now">%1$d ימים מעכשיו</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_from_now">חודש מעכשיו</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_from_now">%1$d חודשים מעכשיו</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_from_now">שנה מעכשיו</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_from_now">%1$d שנים מעכשיו</string>
+    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_days_ago">לפני %1$d ימים</string>
+    <!-- This string should contain the singular form of "month".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_month_ago">לפני חודש</string>
+    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_months_ago">לפני %1$d חודשים</string>
+    <!-- This string should contain the singular form of "year".
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_year_ago">לפני שנה</string>
+    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
+    It stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <string name="date_years_ago">לפני %1$d שנים</string>
+
+    <string name="info_acknowledgement">אנו מעוניינים להודות לבֵּרְנְד בֵּסְטֵל, שללא העבודה הנפלאה שלו היישומון הזה לא היה רואה אור.</string>
+    <string name="info_intro">להציג את ההיכרות שוב</string>
+    <string name="info_intro_description">תכונות הצגה</string>
+    <string name="info_material_components_built_with">נבנה באמצעות</string>
+    <string name="info_version">גרסה</string>
+    <string name="info_grocy_version">גרסת Grocy</string>
+    <string name="info_grocy_version_incompatible">לא נתמך</string>
+    <string name="info_changelog">יומן שינויים</string>
+    <string name="info_changelog_description">מה חדש?</string>
+    <string name="info_developers">מפתחים</string>
+    <string name="info_github">Grocy ל־Android ב־GitHub</string>
+    <string name="info_github_description">קוד מקור</string>
+    <string name="info_website">פתיחת האתר של Grocy</string>
+
+    <string name="feature_1_title">Grocy ל־Android</string>
+    <string name="feature_1_description">ניהול משק בית באירוח עצמי</string>
+    <string name="feature_2_title">עיצוב ברור ונוח</string>
+    <string name="feature_2_description">ניתן לפתוח ולצרוך בהחלקה אחת</string>
+    <string name="feature_3_title">עיבוד מרוכז רב עצמה</string>
+    <string name="feature_3_description">ניתן לסרוק את כל מה שנרכש תוך שניות</string>
+
+    <string name="category_licenses">רישיונות קוד פתוח</string>
+    <string name="category_general">כללי</string>
+    <string name="category_purchase_consume">רכישה וצריכה</string>
+    <string name="category_server">שרת</string>
+    <string name="category_debugging">ניפוי שגיאות</string>
+    <string name="category_presets">ערכות למוצרים חדשים</string>
+
+    <string name="hint_server">כתובת שרת</string>
+    <string name="hint_key">מפתח API תקני</string>
+
+    <string name="setting_dark_mode">אילוץ מצב חשוך</string>
+    <string name="setting_dark_mode_description">כבוי עקב תלות מערכת</string>
+    <string name="setting_open_food_facts">להשתמש ב־Open Food Facts</string>
+    <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
+    <string name="setting_use_front_cam">להשתמש במצלמה הקדמית</string>
+    <string name="setting_use_front_cam_description">לסריקת ברקודים</string>
+    <string name="setting_reload_config">לרענן את ההגדרות</string>
+    <string name="setting_reload_config_description">נדרשת הפעלת היישומון מחדש</string>
+    <string name="setting_logout">יציאה</string>
+    <string name="setting_logout_description">חזרה לעמוד הכניסה למערכת</string>
+    <string name="setting_list_indicator">ציון רשימה ברשימה</string>
+    <string name="setting_list_indicator_description">הצגת נקודה כחולה אם המוצר הוא ברשימת הקניות</string>
+    <string name="setting_shopping_mode_update_interval">הפרש בין עדכוני מצב קניות</string>
+    <string name="setting_keep_screen_on">להשאיר את המסך פעיל</string>
+    <string name="setting_keep_screen_on_description">בזמן מצב קניות</string>
+    <string name="setting_expiring_soon_days">ימים לתפוגה מתקרבת</string>
+    <string name="setting_default_amount_purchase">כמות בררת מחדל לרכישה</string>
+    <string name="setting_default_amount_consume">כמות בררת מחדל לצריכה</string>
+    <string name="setting_empty_value">ריק</string>
+    <string name="setting_sync_off">סנכרון כבוי</string>
+    <string name="setting_not_loaded">אין אפשרות לטעון</string>
+    <string name="setting_debug">הפעלת יומן</string>
+    <string name="setting_debug_description">הצגת שגיאות ביומן</string>
+    <string name="setting_info_logs">הצגת יומני מידע</string>
+    <string name="setting_logs_description">הצגת logcat (יומן מעקב) לתהליך הזה</string>
+
+    <string name="setting_ask_best_before_date">בקשת תאריך בתוקף עד המיטבי</string>
+    <string name="setting_ask_price">בקשת מחיר</string>
+    <string name="setting_ask_store">בקשת חנות</string>
+    <string name="setting_ask_location">בקשת מיקום</string>
+    <string name="setting_ask_specific_item">בקשת פריט מסוים</string>
+    <string name="setting_consume_all">צריכת כל הפריטים למוצר</string>
+
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
+    <string name="url_grocy_demo">https://he.demo.grocy.info</string>
+    </resources>
