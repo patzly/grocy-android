@@ -174,7 +174,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
                 break;
             case R.id.linear_feedback:
                 navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToFeedbackBottomSheetDialogFragment(), false);
+                        .actionDrawerBottomSheetDialogFragmentToSettingsFragment(), true);
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);

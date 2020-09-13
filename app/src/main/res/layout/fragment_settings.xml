@@ -63,6 +63,7 @@
         android:layout_marginTop="?android:actionBarSize">
 
         <LinearLayout
+            android:id="@+id/linear_about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"

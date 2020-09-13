@@ -30,13 +30,10 @@ import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class SettingsFragment extends BaseFragment {
+public class SettingsOverviewFragment extends BaseFragment {
 
-    public final static int CATEGORY_SERVER = 0;
-
-    private final static String TAG = SettingsFragment.class.getSimpleName();
+    private final static String TAG = SettingsOverviewFragment.class.getSimpleName();
 
     private FragmentSettingsBinding binding;
     private MainActivity activity;
@@ -49,7 +46,6 @@ public class SettingsFragment extends BaseFragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        binding.linearAbout.addView(new InputChip(requireContext(), "Hello", false));
         return binding.getRoot();
     }
 
@@ -63,6 +59,12 @@ public class SettingsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
 
-        binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
+        //binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
+        binding.frameAboutBack.setOnClickListener(v -> goTo(SettingsFragment.CATEGORY_SERVER));
+    }
+
+    private void goTo(int category) {
+        navigate(SettingsOverviewFragmentDirections
+                .actionSettingsOverviewFragmentToSettingsFragment(category));
     }
 }
