@@ -110,8 +110,7 @@ public class MissingBatchItemsFragment extends BaseFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);

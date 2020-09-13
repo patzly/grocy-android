@@ -92,10 +92,7 @@ public class MasterStoreFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // PREFERENCES
 

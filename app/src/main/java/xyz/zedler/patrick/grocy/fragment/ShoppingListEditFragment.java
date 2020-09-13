@@ -93,8 +93,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         startupBundle = getArguments();
         action = Constants.ACTION.CREATE;

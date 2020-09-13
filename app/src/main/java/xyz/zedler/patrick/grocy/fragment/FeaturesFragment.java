@@ -75,8 +75,6 @@ public class FeaturesFragment extends BaseFragment {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         activity = (MainActivity) requireActivity();
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);

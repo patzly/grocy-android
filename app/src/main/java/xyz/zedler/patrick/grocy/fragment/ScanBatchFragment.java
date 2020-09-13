@@ -56,10 +56,7 @@ public class ScanBatchFragment extends BaseFragment
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // GET PREFERENCES
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);

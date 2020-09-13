@@ -168,8 +168,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        activity = (MainActivity) getActivity();
-        assert activity != null && getArguments() != null;
+        activity = (MainActivity) requireActivity();
 
         // PREFERENCES
 
@@ -546,7 +545,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         // STARTUP BUNDLE
 
         MasterProductSimpleFragmentArgs args = MasterProductSimpleFragmentArgs
-                .fromBundle(getArguments());
+                .fromBundle(requireArguments());
         intendedAction = args.getAction();
 
         if(intendedAction.equals(Constants.ACTION.EDIT)) {
@@ -570,8 +569,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         }
 
         // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        updateUI(requireArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true)
                 && savedInstanceState == null);
     }
 

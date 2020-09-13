@@ -104,12 +104,9 @@ public class PurchaseFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        activity = (MainActivity) requireActivity();
 
-        activity = (MainActivity) getActivity();
-        assert activity != null && getArguments() != null;
-
-        args = PurchaseFragmentArgs.fromBundle(getArguments());
+        args = PurchaseFragmentArgs.fromBundle(requireArguments());
 
         viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
 

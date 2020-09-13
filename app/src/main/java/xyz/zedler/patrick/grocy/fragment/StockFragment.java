@@ -74,7 +74,6 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -96,7 +95,6 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     private AppBarBehavior appBarBehavior;
     private StockItemAdapter stockItemAdapter;
     private ClickUtil clickUtil;
-    private AnimUtil animUtil;
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
     private EmptyStateHelper emptyStateHelper;
@@ -157,13 +155,11 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // UTILS
 
         clickUtil = new ClickUtil();
-        animUtil = new AnimUtil();
 
         // PREFERENCES
 

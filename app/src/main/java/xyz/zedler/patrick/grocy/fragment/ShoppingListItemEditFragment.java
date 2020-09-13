@@ -122,10 +122,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null && getArguments() != null;
+        activity = (MainActivity) requireActivity();
 
-        args = ShoppingListItemEditFragmentArgs.fromBundle(getArguments());
+        args = ShoppingListItemEditFragmentArgs.fromBundle(requireArguments());
 
         // PREFERENCES
 
@@ -314,8 +313,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         }
 
         // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        updateUI(requireArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true)
                 && savedInstanceState == null);
 
         getFromLastFragment(Constants.ARGUMENT.PRODUCT_NAME, productName -> {

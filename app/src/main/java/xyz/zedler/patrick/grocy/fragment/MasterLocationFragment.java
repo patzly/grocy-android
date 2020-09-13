@@ -94,8 +94,7 @@ public class MasterLocationFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
         
         // PREFERENCES
 

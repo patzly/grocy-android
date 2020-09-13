@@ -85,8 +85,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
 
         setOnClickListeners(

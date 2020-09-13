@@ -67,10 +67,7 @@ public class LogFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
