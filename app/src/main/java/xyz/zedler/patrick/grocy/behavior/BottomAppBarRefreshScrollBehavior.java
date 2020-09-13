@@ -109,7 +109,14 @@ public class BottomAppBarRefreshScrollBehavior {
 			if(DEBUG) Log.e(TAG, "setUpScroll: activity is null!");
 			return;
 		}
-		nestedScrollView = activity.findViewById(nestedScrollViewId);
+		setUpScroll(activity.findViewById(nestedScrollViewId));
+	}
+
+	/**
+	 * Initializes the scroll view behavior like liftOnScroll etc.
+	 */
+	public void setUpScroll(NestedScrollView nestedScrollView) {
+		this.nestedScrollView = nestedScrollView;
 		currentState = STATE_SCROLLED_UP;
 		if(fabScroll != null) fabScroll.hide();
 		measureScrollView();
@@ -127,7 +134,7 @@ public class BottomAppBarRefreshScrollBehavior {
 						}
 					});
 		}
-		if(fabScroll != null) {
+		if(fabScroll != null && nestedScrollView != null) {
 			fabScroll.setOnClickListener(v -> {
 				nestedScrollView.smoothScrollTo(0, 0);
 				fabScroll.hide();

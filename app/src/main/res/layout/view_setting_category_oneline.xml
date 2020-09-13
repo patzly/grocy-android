@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image"
+        style="@style/Theme.Grocy.ListItem.Icon"
+        android:src="@drawable/ic_round_sync_anim"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Theme.Grocy.ListItem.Title" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_marginStart="16dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="@drawable/ic_round_expand_more"
+        android:rotation="-90"
+        tools:ignore="ContentDescription"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+</LinearLayout>

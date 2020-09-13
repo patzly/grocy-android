@@ -27,19 +27,27 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class SettingsFragment extends BaseFragment {
 
     public final static int CATEGORY_SERVER = 0;
+    public final static int CATEGORY_SCANNER = 2;
+    public final static int CATEGORY_STOCK = 4;
+    public final static int CATEGORY_SHOPPING_MODE = 6;
+    public final static int CATEGORY_PURCHASE_CONSUME = 8;
+    public final static int CATEGORY_PRESETS = 10;
+    public final static int CATEGORY_DEBUGGING = 12;
 
     private final static String TAG = SettingsFragment.class.getSimpleName();
 
     private FragmentSettingsBinding binding;
     private MainActivity activity;
+    private SettingsFragmentArgs args;
     private final ClickUtil clickUtil = new ClickUtil();
 
     @Override
@@ -49,7 +57,16 @@ public class SettingsFragment extends BaseFragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        binding.linearAbout.addView(new InputChip(requireContext(), "Hello", false));
+        args = SettingsFragmentArgs.fromBundle(requireArguments());
+
+        switch (args.getShowCategory()) {
+            case CATEGORY_SERVER:
+                binding.appBarTitle.setText(R.string.category_server);
+                break;
+            case CATEGORY_SCANNER:
+                binding.appBarTitle.setText(R.string.category_barcode_scanner);
+                break;
+        }
         return binding.getRoot();
     }
 
@@ -63,6 +80,19 @@ public class SettingsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
 
-        binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
+        binding.frameBack.setOnClickListener(v -> activity.navigateUp());
+
+        activity.showHideDemoIndicator(this, true);
+        activity.getScrollBehavior().setUpScroll(binding.scroll);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.GONE,
+                R.menu.menu_purchase,
+                false,
+                () -> {}
+        );
+        activity.binding.fabMain.hide();
+
+        setForPreviousFragment(Constants.ARGUMENT.ANIMATED, false);
     }
 }

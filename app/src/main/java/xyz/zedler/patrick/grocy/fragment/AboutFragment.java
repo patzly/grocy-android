@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -58,22 +56,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             Bundle savedInstanceState
     ) {
         binding = FragmentAboutBinding.inflate(inflater, container, false);
-
-        activity = (MainActivity) requireActivity();
-
-        // Add bottom margin if bottomAppBar is visible
-        TypedValue tv = new TypedValue();
-        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE && activity.getTheme()
-                .resolveAttribute(android.R.attr.actionBarSize, tv, true)
-        ) {
-            int actionBarHeight = TypedValue
-                    .complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-            CoordinatorLayout.LayoutParams layoutParams =
-                    (CoordinatorLayout.LayoutParams) binding.scrollAbout.getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, actionBarHeight);
-            binding.scrollAbout.setLayoutParams(layoutParams);
-        }
-
         return binding.getRoot();
     }
 
@@ -85,6 +67,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) requireActivity();
+
         binding.frameAboutBack.setOnClickListener(v -> activity.navigateUp());
 
         setOnClickListeners(
@@ -99,6 +83,19 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                 R.id.linear_license_gson,
                 R.id.linear_license_xzing_android
         );
+
+        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+            activity.showHideDemoIndicator(this, true);
+            activity.updateBottomAppBar(
+                    Constants.FAB.POSITION.GONE,
+                    R.menu.menu_empty,
+                    true,
+                    () -> {}
+            );
+            activity.getScrollBehavior().setUpScroll(binding.scrollAbout);
+            activity.getScrollBehavior().setHideOnScroll(true);
+            activity.binding.fabMain.hide();
+        }
     }
 
     private void setOnClickListeners(@IdRes int... viewIds) {

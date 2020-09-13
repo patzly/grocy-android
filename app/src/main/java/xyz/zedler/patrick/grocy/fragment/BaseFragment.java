@@ -87,6 +87,19 @@ public class BaseFragment extends Fragment {
     }
 
     /**
+     * Returns data from last fragment (which was in backStack on the top of the current one)
+     * immediately. The last fragment stored this data with <code>setForPreviousFragment</code>.
+     * @param key (String): identifier for value
+     * @return Object: the value or null, if no data was set
+     */
+    @Nullable
+    Object getFromLastFragmentNow(String key) {
+        NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
+        assert backStackEntry != null;
+        return backStackEntry.getSavedStateHandle().get(key);
+    }
+
+    /**
      * Set data for previous fragment (which is in backStack below the current one)
      * @param key (String): identifier for value
      * @param value (Object): the value to store

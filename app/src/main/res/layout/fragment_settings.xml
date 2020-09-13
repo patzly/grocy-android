@@ -3,16 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_about"
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize">
 
         <LinearLayout
-            android:id="@+id/linear_about_app_bar"
+            android:id="@+id/linear_app_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -20,7 +19,7 @@
             android:background="@color/primary">
 
             <FrameLayout
-                android:id="@+id/frame_about_back"
+                android:id="@+id/frame_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -43,11 +42,12 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/app_bar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:singleLine="true"
-                android:text="@string/title_about"
+                android:text="@string/title_settings"
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
@@ -56,14 +56,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_about"
+        android:id="@+id/scroll"
         android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize">
 
         <LinearLayout
-            android:id="@+id/linear_about"
+            android:id="@+id/linear_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"

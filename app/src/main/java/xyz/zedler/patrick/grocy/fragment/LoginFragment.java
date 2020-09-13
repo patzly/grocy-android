@@ -199,7 +199,7 @@ public class LoginFragment extends BaseFragment {
             activity.showBottomSheet(new FeedbackBottomSheet(), null);
         });
 
-        binding.buttonLoginAbout.setTooltipText(getString(R.string.title_about));
+        binding.buttonLoginAbout.setTooltipText(getString(R.string.title_about_this_app));
         binding.buttonLoginAbout.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             binding.buttonLoginAbout.startIconAnimation();

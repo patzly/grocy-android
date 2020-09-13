@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:singleLine="true"
-                android:text="@string/title_about"
+                android:text="@string/title_about_this_app"
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
@@ -104,9 +104,10 @@
                         style="@style/Theme.Grocy.ListItem.OverLine"
                         android:text="@string/info_version" />
 
+                    <!--suppress AndroidDomInspection -->
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/app_version" />
+                        android:text="@string/versionName" />
 
                 </LinearLayout>
 
