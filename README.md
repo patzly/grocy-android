@@ -74,6 +74,8 @@ Translations which reached a completion level of 80% will be included in release
 Completed translations: German, French, Swedish, Dutch, Norwegian, Spanish & Hebrew  
 Thanks translators!
 
+![Translations](https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A..........-t-t9bnqWZLh&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x157&cht=bhs&chxl=0%3A%7CHungarian%7CKorean+%28Korea%29%7CItalian%7CFrench%7CSwedish%7CDutch%7CEnglish%7CGerman%7CNorwegian+Bokm%C3%A5l%7CSpanish%7CHebrew%7C1%3A%7C18%25%7C35%25%7C62%25%7C96%25%7C98%25%7C98%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C)
+
 ## About
 
 This app is a project of my brother and me. We mainly worked on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close.
