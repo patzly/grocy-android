@@ -288,6 +288,7 @@
     <string name="property_qu_factor">Factor purchase to stock</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
+    <string name="property_days">Days</string>
     <string name="property_bbd">Best before date</string>
     <string name="property_bbd_next">Next best before date</string>
     <string name="property_bb_days">Best before days</string>

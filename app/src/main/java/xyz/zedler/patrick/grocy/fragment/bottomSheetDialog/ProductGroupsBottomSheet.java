@@ -69,12 +69,10 @@ public class ProductGroupsBottomSheet extends CustomBottomSheet
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = requireActivity();
 
-        productGroups = bundle.getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
-        int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+        productGroups = requireArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
+        int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_product_groups));
@@ -110,8 +108,9 @@ public class ProductGroupsBottomSheet extends CustomBottomSheet
             int productGroupId = productGroups.get(position).getId();
             ((SettingsActivity) activity).setProductGroup(productGroupId);
         }
-        ((MainActivity) activity).getCurrentFragment().selectProductGroup(
-                productGroups.get(position)
+        ((MainActivity) activity).getCurrentFragment().setOption(
+                productGroups.get(position),
+                requireArguments().getString(Constants.ARGUMENT.OPTION)
         );
 
         dismiss();

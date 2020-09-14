@@ -46,7 +46,7 @@ public class SettingEntryClick extends LinearLayout {
             String tag,
             String title,
             String description,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         super(context);
         setTag(tag);
@@ -61,7 +61,7 @@ public class SettingEntryClick extends LinearLayout {
         if(onClick != null) {
             binding.getRoot().setOnClickListener(v -> {
                 IconUtil.start(binding.image);
-                onClick.run();
+                onClick.execute(this);
             });
         }
     }
@@ -72,7 +72,7 @@ public class SettingEntryClick extends LinearLayout {
             String title,
             String description,
             @DrawableRes int drawable,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(context, tag, title, description, onClick);
         binding.image.setImageDrawable(ContextCompat.getDrawable(context, drawable));
@@ -84,7 +84,7 @@ public class SettingEntryClick extends LinearLayout {
             @StringRes int title,
             @StringRes int description,
             @DrawableRes int drawable,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(
                 context,
@@ -101,7 +101,7 @@ public class SettingEntryClick extends LinearLayout {
             String tag,
             @StringRes int title,
             @StringRes int description,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(context, tag, context.getString(title), context.getString(description), onClick);
     }
@@ -113,7 +113,7 @@ public class SettingEntryClick extends LinearLayout {
             String title,
             String description,
             @DrawableRes int drawable,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(context, tag, title, description, drawable, onClick);
         binding.overline.setVisibility(VISIBLE);
@@ -129,7 +129,7 @@ public class SettingEntryClick extends LinearLayout {
             @ColorRes int descriptionColor,
             boolean descriptionBold,
             @DrawableRes int drawable,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(context, tag, title, context.getString(description), drawable, onClick);
         binding.description.setTextColor(getResources().getColor(descriptionColor));
@@ -146,7 +146,7 @@ public class SettingEntryClick extends LinearLayout {
             @StringRes int title,
             String description,
             @DrawableRes int drawable,
-            @Nullable Runnable onClick
+            @Nullable OnClickListener onClick
     ) {
         this(context, tag, context.getString(title), description, drawable, onClick);
     }
@@ -157,5 +157,13 @@ public class SettingEntryClick extends LinearLayout {
 
     public void setTitle(@StringRes int title) {
         binding.title.setText(title);
+    }
+
+    public String getTitle() {
+        return binding.title.getText().toString();
+    }
+
+    public interface OnClickListener {
+        void execute(SettingEntryClick view);
     }
 }

@@ -68,49 +68,55 @@ public class SettingsOverviewFragment extends BaseFragment {
                 R.string.category_server,
                 sharedPrefs.getString(Constants.PREF.SERVER_URL, getString(R.string.error_unknown)),
                 R.drawable.ic_round_settings_system,
-                () -> goTo(Constants.SETTING.SERVER.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.SERVER.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_appearance,
                 R.drawable.ic_round_dark_mode_on_anim,
-                () -> goTo(Constants.SETTING.APPEARANCE.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.APPEARANCE.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_barcode_scanner,
                 R.drawable.ic_round_barcode_scan,
-                () -> goTo(Constants.SETTING.SCANNER.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.SCANNER.class.getSimpleName())
         ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.title_stock_overview,
-                R.drawable.ic_round_view_list, // TODO: Shelf icon would be good
-                () -> goTo(Constants.SETTING.STOCK.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.title_shopping_mode,
-                R.drawable.ic_round_storefront,
-                () -> goTo(Constants.SETTING.SHOPPING_MODE.class.getSimpleName())
-        ));
+        if(isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
+                || isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
+        ) {
+            binding.linearBody.addView(new SettingCategory(
+                    requireContext(),
+                    R.string.title_stock_overview,
+                    R.drawable.ic_round_view_list, // TODO: Shelf icon would be good
+                    () -> goTo(Constants.SETTINGS.STOCK.class.getSimpleName())
+            ));
+        }
+        if(isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
+            binding.linearBody.addView(new SettingCategory(
+                    requireContext(),
+                    R.string.title_shopping_mode,
+                    R.drawable.ic_round_storefront,
+                    () -> goTo(Constants.SETTINGS.SHOPPING_MODE.class.getSimpleName())
+            ));
+        }
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_purchase_consume,
                 R.drawable.ic_round_pasta,
-                () -> goTo(Constants.SETTING.PURCHASE_CONSUME.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.PURCHASE_CONSUME.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_presets,
                 R.drawable.ic_round_widgets,
-                () -> goTo(Constants.SETTING.PRESETS.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.PRESETS.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_debugging,
                 R.drawable.ic_round_bug_report_anim,
-                () -> goTo(Constants.SETTING.DEBUGGING.class.getSimpleName())
+                () -> goTo(Constants.SETTINGS.DEBUGGING.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
@@ -145,5 +151,10 @@ public class SettingsOverviewFragment extends BaseFragment {
     private void goTo(String category) {
         navigate(SettingsOverviewFragmentDirections
                 .actionSettingsOverviewFragmentToSettingsFragment(category));
+    }
+
+    private boolean isFeatureEnabled(String pref) {
+        if(pref == null) return false;
+        return sharedPrefs.getBoolean(pref, true);
     }
 }

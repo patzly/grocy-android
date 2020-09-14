@@ -35,7 +35,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.SettingsActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -43,7 +43,7 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
 
     private final static String TAG = SettingInputBottomSheet.class.getSimpleName();
 
-    private SettingsActivity activity;
+    private MainActivity activity;
 
     private EditText editText;
 
@@ -63,13 +63,14 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
                 R.layout.fragment_bottomsheet_setting_input, container, false
         );
 
-        activity = (SettingsActivity) getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = (MainActivity) requireActivity();
+        Bundle bundle = requireArguments();
 
-        String type = bundle.getString(Constants.ARGUMENT.TYPE);
-        if(type == null) dismiss();
-        assert type != null;
+        String option = bundle.getString(Constants.ARGUMENT.OPTION);
+        if(option == null) {
+            dismiss();
+            return view;
+        }
 
         // INITIALIZE VIEWS
 
@@ -79,7 +80,7 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
         editText = textInput.getEditText();
         assert editText != null;
         editText.setInputType(
-                type.equals(Constants.PREF.STOCK_EXPIRING_SOON_DAYS)
+                option.equals(Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS)
                         ? InputType.TYPE_CLASS_NUMBER
                         : InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
         );
@@ -110,37 +111,25 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
         });
 
         view.findViewById(R.id.button_setting_input_save).setOnClickListener(v -> {
-            switch (type) {
-                case Constants.PREF.STOCK_EXPIRING_SOON_DAYS:
-                    if(editText.getText().toString().isEmpty()) {
-                        textInput.setError(activity.getString(R.string.error_empty));
-                        return;
-                    } else {
-                        textInput.setErrorEnabled(false);
-                    }
-                    activity.setExpiringSoonDays(editText.getText().toString());
-                    break;
-                case Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT:
-                    activity.setAmountPurchase(editText.getText().toString());
-                    break;
-                case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
-                    activity.setAmountConsume(editText.getText().toString());
-                    break;
-                case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
-                    activity.setUpdateInterval(editText.getText().toString());
-                    break;
+            if(option.equals(Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS)) {
+                if(editText.getText().toString().isEmpty()) {
+                    textInput.setError(activity.getString(R.string.error_empty));
+                    return;
+                } else {
+                    textInput.setErrorEnabled(false);
+                }
             }
+            activity.getCurrentFragment().setOption(editText.getText().toString(), option);
             dismiss();
         });
 
         String title = null;
         String hint = null;
-        String input = null;
-        switch (type) {
-            case Constants.PREF.STOCK_EXPIRING_SOON_DAYS:
+        String input = bundle.getString(Constants.ARGUMENT.TEXT);
+        switch (option) {
+            case Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS:
                 title = activity.getString(R.string.setting_expiring_soon_days);
-                hint = "Days";
-                input = bundle.getString(Constants.PREF.STOCK_EXPIRING_SOON_DAYS);
+                hint = activity.getString(R.string.property_days);
                 buttonClear.setText(activity.getString(R.string.action_reset));
                 buttonClear.setOnClickListener(v -> {
                     editText.setText(String.valueOf(5));
@@ -152,17 +141,14 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
             case Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT:
                 title = activity.getString(R.string.setting_default_amount_purchase);
                 hint = activity.getString(R.string.property_amount);
-                input = bundle.getString(Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT);
                 break;
             case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
                 title = activity.getString(R.string.setting_default_amount_consume);
                 hint = activity.getString(R.string.property_amount);
-                input = bundle.getString(Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT);
                 break;
             case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
                 title = activity.getString(R.string.setting_shopping_mode_update_interval);
                 hint = activity.getString(R.string.property_seconds);
-                input = bundle.getString(Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL);
                 break;
         }
 

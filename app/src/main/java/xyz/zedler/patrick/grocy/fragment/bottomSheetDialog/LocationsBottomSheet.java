@@ -72,12 +72,10 @@ public class LocationsBottomSheet extends CustomBottomSheet
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = requireActivity();
 
-        locations = bundle.getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
-        int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+        locations = requireArguments().getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
+        int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_locations));
@@ -134,8 +132,9 @@ public class LocationsBottomSheet extends CustomBottomSheet
             int locationId = locations.get(position).getId();
             ((SettingsActivity) activity).setLocation(locationId);
         }
-        ((MainActivity) activity).getCurrentFragment().selectLocation(
-                locations.get(position)
+        ((MainActivity) activity).getCurrentFragment().setOption(
+                locations.get(position),
+                requireArguments().getString(Constants.ARGUMENT.OPTION)
         );
 
         dismiss();

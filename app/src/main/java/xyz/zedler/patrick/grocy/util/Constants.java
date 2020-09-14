@@ -68,7 +68,7 @@ public final class Constants {
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
-    public final static class SETTING {
+    public final static class SETTINGS {
         public final static class SERVER {
             public final static String GROCY_URL = "grocy_url";
             public final static String GROCY_VERSION = "grocy_version";
@@ -83,7 +83,8 @@ public final class Constants {
             public final static String FRONT_CAM = "front_cam";
         }
         public final static class STOCK {
-
+            public final static String DISPLAY_DOTS = "display_dots";
+            public final static String EXPIRING_SOON_DAYS = "expiring_soon_days";
         }
         public final static class SHOPPING_MODE {
 
@@ -232,6 +233,7 @@ public final class Constants {
 
     public final static class ARGUMENT {
         public final static String UI_MODE = "ui_mode";
+        public final static String OPTION = "option";
         public final static String ANIMATED = "animated";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";

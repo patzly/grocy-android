@@ -84,6 +84,54 @@ public class SettingEntrySwitch extends LinearLayout {
             String tag,
             String title,
             String description,
+            @DrawableRes int drawable,
+            boolean setChecked,
+            OnCheckedChanged onCheckedChanged
+    ) {
+        super(context);
+        setTag(tag);
+        binding = ViewSettingEntrySwitchBinding.inflate(
+                LayoutInflater.from(context),
+                this,
+                true
+        );
+        binding.title.setText(title);
+        binding.description.setText(description);
+        if(description == null) binding.description.setVisibility(GONE);
+        binding.image.setImageDrawable(ContextCompat.getDrawable(context, drawable));
+        binding.switchMaterial.setChecked(setChecked);
+        binding.getRoot().setOnClickListener(v -> binding.switchMaterial.toggle());
+        binding.switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            IconUtil.start(binding.image);
+            if(onCheckedChanged != null) onCheckedChanged.execute(isChecked);
+        });
+    }
+
+    public SettingEntrySwitch(
+            Context context,
+            String tag,
+            @StringRes int title,
+            @StringRes int description,
+            @DrawableRes int drawable,
+            boolean setChecked,
+            OnCheckedChanged onCheckedChanged
+    ) {
+        this(
+                context,
+                tag,
+                context.getString(title),
+                context.getString(description),
+                drawable,
+                setChecked,
+                onCheckedChanged
+        );
+    }
+
+    public SettingEntrySwitch(
+            Context context,
+            String tag,
+            String title,
+            String description,
             @DrawableRes int drawableOffAnim,
             @DrawableRes int drawableOnAnim,
             String pref,
@@ -175,6 +223,10 @@ public class SettingEntrySwitch extends LinearLayout {
     }
 
     public interface OnFinishedAnim {
+        void execute(boolean isChecked);
+    }
+
+    public interface OnCheckedChanged {
         void execute(boolean isChecked);
     }
 }

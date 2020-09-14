@@ -70,12 +70,10 @@ public class QuantityUnitsBottomSheet extends CustomBottomSheet
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = getActivity();
-        bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = requireActivity();
 
-        quantityUnits = bundle.getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
-        int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+        quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
+        int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
         TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
         textViewTitle.setText(activity.getString(R.string.property_quantity_units));
@@ -120,8 +118,9 @@ public class QuantityUnitsBottomSheet extends CustomBottomSheet
             int quantityUnitId = quantityUnits.get(position).getId();
             ((SettingsActivity) activity).setQuantityUnit(quantityUnitId);
         }
-        ((MainActivity) activity).getCurrentFragment().selectQuantityUnit(
-                quantityUnits.get(position)
+        ((MainActivity) activity).getCurrentFragment().setOption(
+                quantityUnits.get(position),
+                requireArguments().getString(Constants.ARGUMENT.OPTION)
         );
         dismiss();
     }
