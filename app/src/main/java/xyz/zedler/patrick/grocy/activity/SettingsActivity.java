@@ -39,6 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.ActivityNavigator;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -612,7 +613,7 @@ public class SettingsActivity extends AppCompatActivity
 									Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
 									switchListIndicator.isChecked()
 							).apply();
-							showErrorMessage();
+							showErrorMessage(error);
 							if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
@@ -701,7 +702,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetLocationId = locationId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setLocation: " + error);
 				}
 		);
@@ -772,7 +773,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetProductGroupId = productGroupId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setProductGroup: " + error);
 				}
 		);
@@ -840,7 +841,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetQuantityUnitId = quantityUnitId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setQuantityUnit: " + error);
 				}
 		);
@@ -863,7 +864,7 @@ public class SettingsActivity extends AppCompatActivity
 							.apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
@@ -894,7 +895,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
@@ -925,7 +926,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
@@ -964,7 +965,7 @@ public class SettingsActivity extends AppCompatActivity
 		Snackbar.make(findViewById(R.id.scroll_settings), msg, Snackbar.LENGTH_SHORT).show();
 	}
 
-	private void showErrorMessage() {
+	private void showErrorMessage(VolleyError error) {
 		showMessage(getString(R.string.error_undefined));
 	}
 

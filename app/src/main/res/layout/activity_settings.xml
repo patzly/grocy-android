@@ -412,7 +412,7 @@
 
             <TextView
                 style="@style/Theme.Grocy.Category"
-                android:text="@string/category_presets"/>
+                android:text="@string/category_presets_new_products"/>
 
             <LinearLayout
                 android:id="@+id/linear_setting_default_location"

@@ -378,7 +378,7 @@
     <string name="category_purchase_consume">Comprar &amp; consumir</string>
     <string name="category_server">Servidor</string>
     <string name="category_debugging">Depuración</string>
-    <string name="category_presets">Preajustes para nuevos productos</string>
+    <string name="category_presets_new_products">Preajustes para nuevos productos</string>
 
     <string name="hint_server">URL del servidor</string>
     <string name="hint_key">Clave de API válida</string>

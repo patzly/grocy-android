@@ -110,6 +110,9 @@ public class ProductGroupsBottomSheet extends CustomBottomSheet
             int productGroupId = productGroups.get(position).getId();
             ((SettingsActivity) activity).setProductGroup(productGroupId);
         }
+        ((MainActivity) activity).getCurrentFragment().selectProductGroup(
+                productGroups.get(position)
+        );
 
         dismiss();
     }

@@ -343,7 +343,7 @@ public class LoginFragment extends BaseFragment {
                 new GrocyApi(requireContext()),
                 sharedPrefs,
                 () -> activity.navigateUp(),
-                () -> activity.navigateUp()
+                error -> activity.navigateUp()
         );
     }
 

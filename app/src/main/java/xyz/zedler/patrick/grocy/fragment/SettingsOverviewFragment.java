@@ -68,43 +68,49 @@ public class SettingsOverviewFragment extends BaseFragment {
                 R.string.category_server,
                 sharedPrefs.getString(Constants.PREF.SERVER_URL, getString(R.string.error_unknown)),
                 R.drawable.ic_round_settings_system,
-                () -> goTo(SettingsFragment.CATEGORY_SERVER)
+                () -> goTo(Constants.SETTING.SERVER.class.getSimpleName())
+        ));
+        binding.linearBody.addView(new SettingCategory(
+                requireContext(),
+                R.string.category_appearance,
+                R.drawable.ic_round_dark_mode_on_anim,
+                () -> goTo(Constants.SETTING.APPEARANCE.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_barcode_scanner,
                 R.drawable.ic_round_barcode_scan,
-                () -> goTo(SettingsFragment.CATEGORY_SCANNER)
+                () -> goTo(Constants.SETTING.SCANNER.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.title_stock_overview,
-                R.drawable.ic_round_ac_unit, // TODO: Shelf icon would be good
-                () -> goTo(SettingsFragment.CATEGORY_STOCK)
+                R.drawable.ic_round_view_list, // TODO: Shelf icon would be good
+                () -> goTo(Constants.SETTING.STOCK.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.title_shopping_mode,
                 R.drawable.ic_round_storefront,
-                () -> goTo(SettingsFragment.CATEGORY_SHOPPING_MODE)
+                () -> goTo(Constants.SETTING.SHOPPING_MODE.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_purchase_consume,
                 R.drawable.ic_round_pasta,
-                () -> goTo(SettingsFragment.CATEGORY_PURCHASE_CONSUME)
+                () -> goTo(Constants.SETTING.PURCHASE_CONSUME.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_presets,
                 R.drawable.ic_round_widgets,
-                () -> goTo(SettingsFragment.CATEGORY_PRESETS)
+                () -> goTo(Constants.SETTING.PRESETS.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
                 R.string.category_debugging,
                 R.drawable.ic_round_bug_report_anim,
-                () -> goTo(SettingsFragment.CATEGORY_DEBUGGING)
+                () -> goTo(Constants.SETTING.DEBUGGING.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
@@ -136,7 +142,7 @@ public class SettingsOverviewFragment extends BaseFragment {
         activity.binding.fabMain.hide();
     }
 
-    private void goTo(int category) {
+    private void goTo(String category) {
         navigate(SettingsOverviewFragmentDirections
                 .actionSettingsOverviewFragmentToSettingsFragment(category));
     }

@@ -375,7 +375,7 @@
     <string name="category_purchase_consume">Köp &amp; konsumera</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Felsökning</string>
-    <string name="category_presets">Förinställningar för nya produkter</string>
+    <string name="category_presets_new_products">Förinställningar för nya produkter</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Giltig API-nyckel</string>

@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.view;
 
 /*
     This file is part of Grocy Android.
@@ -19,17 +19,27 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.os.Bundle;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 
-public abstract class Event {
+import androidx.annotation.StringRes;
 
-    public final static int SNACKBAR_MESSAGE = 0;
-    public final static int PURCHASE_SUCCESS = 2;
-    public final static int BARCODE_UNKNOWN = 4;
+import xyz.zedler.patrick.grocy.databinding.ViewSettingEntryHeadingBinding;
 
-    abstract public int getType();
+public class SettingEntryHeading extends LinearLayout {
 
-    public Bundle getBundle() {
-        return null;
+    public SettingEntryHeading(Context context) {
+        super(context);
+    }
+
+    public SettingEntryHeading(Context context, @StringRes int text) {
+        super(context);
+        ViewSettingEntryHeadingBinding binding = ViewSettingEntryHeadingBinding.inflate(
+                LayoutInflater.from(context),
+                this,
+                true
+        );
+        binding.text.setText(text);
     }
 }

@@ -68,6 +68,41 @@ public final class Constants {
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
+    public final static class SETTING {
+        public final static class SERVER {
+            public final static String GROCY_URL = "grocy_url";
+            public final static String GROCY_VERSION = "grocy_version";
+            public final static String RELOAD_CONFIG = "reload_config";
+            public final static String LOGOUT = "logout";
+        }
+        public final static class APPEARANCE {
+            public final static String DARK_MODE = "dark_mode";
+        }
+        public final static class SCANNER {
+            public final static String FOOD_FACTS = "food_facts";
+            public final static String FRONT_CAM = "front_cam";
+        }
+        public final static class STOCK {
+
+        }
+        public final static class SHOPPING_MODE {
+
+        }
+        public final static class PURCHASE_CONSUME {
+
+        }
+        public final static class PRESETS {
+            public final static String LOCATION = "location";
+            public final static String PRODUCT_GROUP = "product_group";
+            public final static String QUANTITY_UNIT = "quantity_unit";
+        }
+        public final static class DEBUGGING {
+            public final static String ENABLE_DEBUGGING = "enable_debugging";
+            public final static String ENABLE_INFO_LOGS = "enable_info_logs";
+            public final static String SHOW_LOGS = "show_logs";
+        }
+    }
+
     public final static class URL {
         public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
         public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-pagetop";

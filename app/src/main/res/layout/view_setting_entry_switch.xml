@@ -11,23 +11,20 @@
         style="@style/Theme.Grocy.ListItem.Icon"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
-        style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
         <TextView
             android:id="@+id/title"
             style="@style/Theme.Grocy.ListItem.Title" />
 
+        <TextView
+            android:id="@+id/description"
+            style="@style/Theme.Grocy.ListItem.Description" />
+
     </LinearLayout>
 
-    <ImageView
-        android:layout_marginStart="16dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:src="@drawable/ic_round_expand_more"
-        android:rotation="-90"
-        tools:ignore="ContentDescription"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_material"
+        style="@style/Widget.Grocy.Switch"/>
 
 </LinearLayout>

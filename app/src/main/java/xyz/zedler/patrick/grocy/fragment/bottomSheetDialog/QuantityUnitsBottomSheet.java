@@ -120,6 +120,9 @@ public class QuantityUnitsBottomSheet extends CustomBottomSheet
             int quantityUnitId = quantityUnits.get(position).getId();
             ((SettingsActivity) activity).setQuantityUnit(quantityUnitId);
         }
+        ((MainActivity) activity).getCurrentFragment().selectQuantityUnit(
+                quantityUnits.get(position)
+        );
         dismiss();
     }
 

@@ -134,6 +134,9 @@ public class LocationsBottomSheet extends CustomBottomSheet
             int locationId = locations.get(position).getId();
             ((SettingsActivity) activity).setLocation(locationId);
         }
+        ((MainActivity) activity).getCurrentFragment().selectLocation(
+                locations.get(position)
+        );
 
         dismiss();
     }

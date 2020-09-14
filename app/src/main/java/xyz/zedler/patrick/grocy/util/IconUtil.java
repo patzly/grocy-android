@@ -56,7 +56,8 @@ public class IconUtil {
     }
 
     public static void start(ImageView imageView) {
-        if(imageView == null) return;
+        if(imageView == null || imageView.getDrawable() == null) return;
+        if(!(imageView.getDrawable() instanceof AnimatedVectorDrawable)) return;
         start(imageView.getDrawable());
     }
 

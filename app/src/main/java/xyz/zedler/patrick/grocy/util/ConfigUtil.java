@@ -37,7 +37,7 @@ public class ConfigUtil {
             GrocyApi api,
             SharedPreferences prefs,
             Runnable onSuccessAction,
-            Runnable onErrorAction
+            DownloadHelper.OnErrorListener onError
     ) {
 
         boolean debug = prefs.getBoolean(Constants.PREF.DEBUG, false);
@@ -47,7 +47,7 @@ public class ConfigUtil {
         DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
             if(onSuccessAction != null) onSuccessAction.run();
         }, volleyError -> {
-            if(onErrorAction != null) onErrorAction.run();
+            if(onError != null) onError.onError(volleyError);
         });
 
         queue.append(

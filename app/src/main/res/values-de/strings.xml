@@ -378,7 +378,7 @@
     <string name="category_purchase_consume">Einkauf &amp; Verbrauch</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets">Vorgaben für neue Produkte</string>
+    <string name="category_presets_new_products">Vorgaben für neue Produkte</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Gültiger API Schlüssel</string>

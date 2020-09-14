@@ -455,8 +455,22 @@
         android:id="@+id/settingsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
         android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_logFragment"
+            app:destination="@id/logFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
         <argument
             android:name="showCategory"
-            app:argType="integer" />
+            app:argType="string" />
+        <action
+            android:id="@+id/action_settingsFragment_self"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
 </navigation>

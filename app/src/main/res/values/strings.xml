@@ -371,6 +371,7 @@
     <string name="info_material_components" translatable="false">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy version</string>
+    <string name="info_grocy_version_compatible">Supported</string>
     <string name="info_grocy_version_incompatible">Not supported</string>
     <string name="info_changelog">Changelog</string>
     <string name="info_changelog_description">What\'s new?</string>
@@ -391,8 +392,10 @@
     <string name="category_purchase_consume">Purchase &amp; consume</string>
     <string name="category_server">Server</string>
     <string name="category_barcode_scanner">Barcode scanner</string>
+    <string name="category_appearance">Appearance</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets">Presets for new products</string>
+    <string name="category_presets">Presets</string>
+    <string name="category_presets_new_products">Presets for new products</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Valid API key</string>
@@ -422,6 +425,7 @@
     <string name="setting_debug_description">Display errors in the logs</string>
     <string name="setting_info_logs">Show info logs</string>
     <string name="setting_logs_description">Display logcat of this process</string>
+    <string name="setting_synchronized">These settings are synchronized with your server.</string>
 
     <string name="setting_ask_best_before_date">Ask for best before date</string>
     <string name="setting_ask_price">Ask for price</string>

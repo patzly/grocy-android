@@ -14,6 +14,9 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class BaseFragment extends Fragment {
 
@@ -159,6 +162,12 @@ public class BaseFragment extends Fragment {
         });
         return anim;
     }
+
+    public void selectQuantityUnit(QuantityUnit quantityUnit) {}
+
+    public void selectProductGroup(ProductGroup productGroup) {}
+
+    public void selectLocation(Location location) {}
 
     interface ObserverListener {
         void onChange(Object value);

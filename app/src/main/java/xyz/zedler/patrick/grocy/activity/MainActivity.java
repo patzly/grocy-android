@@ -398,11 +398,15 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+    public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
         String tag = bottomSheet.toString();
-        bottomSheet.setArguments(bundle);
         bottomSheet.show(fragmentManager, tag);
         if(debug) Log.i(TAG, "showBottomSheet: " + bottomSheet.toString());
+    }
+
+    public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
+        bottomSheet.setArguments(bundle);
+        showBottomSheet(bottomSheet);
     }
 
     public void showHideDemoIndicator(Fragment fragment, boolean animated) {
@@ -535,5 +539,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFabIcon(Drawable icon) {
         binding.fabMain.setImageDrawable(icon);
+    }
+
+    public void executeOnStart() {
+        onStart();
     }
 }
