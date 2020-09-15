@@ -92,7 +92,7 @@ public class ShoppingListFragment extends BaseFragment implements
         LoadOfflineDataShoppingListHelper.AsyncResponse,
         StoreOfflineDataShoppingListHelper.AsyncResponse {
 
-    private final static String TAG = Constants.UI.SHOPPING_LIST;
+    private final static String TAG = ShoppingListFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -1080,7 +1080,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
                 bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
-                activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle, true);
+                //activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle, true); //TODO
                 return true;
             });
         }

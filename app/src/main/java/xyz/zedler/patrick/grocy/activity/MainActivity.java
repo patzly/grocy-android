@@ -254,21 +254,17 @@ public class MainActivity extends AppCompatActivity {
                 );
                 break;
             case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
-                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 break;
             case Constants.SHORTCUT_ACTION.ADD_ENTRY:
-                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 Bundle bundleCreate = new Bundle();
                 bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
                 bundleCreate.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-                replaceFragment(
-                        Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-                        bundleCreate,
-                        false
-                );
+                //replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundleCreate, false);
                 break;
             case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
-                replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
+                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 startActivity(new Intent(this, ShoppingActivity.class));
                 break;
         }

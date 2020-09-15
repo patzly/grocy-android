@@ -75,7 +75,7 @@ import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class ShoppingListItemEditFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.SHOPPING_LIST_ITEM_EDIT;
+    private final static String TAG = ShoppingListItemEditFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;

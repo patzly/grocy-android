@@ -72,7 +72,7 @@ import xyz.zedler.patrick.grocy.view.InputChip;
 public class MasterProductsFragment extends BaseFragment
         implements MasterProductAdapter.MasterProductAdapterListener {
 
-    private final static String TAG = Constants.UI.MASTER_PRODUCTS;
+    private final static String TAG = MasterProductsFragment.class.getSimpleName();
 
     private MainActivity activity;
     private DownloadHelper dlHelper;
@@ -608,11 +608,7 @@ public class MasterProductsFragment extends BaseFragment
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-        activity.replaceFragment(
-                Constants.UI.MASTER_PRODUCT_SIMPLE,
-                bundle,
-                true
-        );
+        //activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true); //TODO
     }
 
     private void showProductSheet(Product product) {

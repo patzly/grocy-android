@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class ShoppingListEditFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.SHOPPING_LIST_EDIT;
+    private final static String TAG = ShoppingListEditFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;

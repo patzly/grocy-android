@@ -88,7 +88,7 @@ import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class MasterProductSimpleFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_PRODUCT_SIMPLE;
+    private final static String TAG = MasterProductSimpleFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;

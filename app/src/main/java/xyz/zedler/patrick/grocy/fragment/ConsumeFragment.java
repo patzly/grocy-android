@@ -80,7 +80,7 @@ import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class ConsumeFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.CONSUME;
+    private final static String TAG = ConsumeFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;

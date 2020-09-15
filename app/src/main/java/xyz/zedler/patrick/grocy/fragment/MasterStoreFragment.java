@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterStoreFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_STORE;
+    private final static String TAG = MasterStoreFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;

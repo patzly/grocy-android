@@ -68,7 +68,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class MasterLocationsFragment extends BaseFragment
         implements MasterLocationAdapter.MasterLocationAdapterListener {
 
-    private final static String TAG = Constants.UI.MASTER_LOCATIONS;
+    private final static String TAG = MasterLocationsFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -500,7 +500,7 @@ public class MasterLocationsFragment extends BaseFragment
     public void editLocation(Location location) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        activity.replaceFragment(Constants.UI.MASTER_LOCATION, bundle, true);
+        //activity.replaceFragment(Constants.UI.MASTER_LOCATION, bundle, true); // TODO
     }
 
     private void showLocationSheet(Location location) {

@@ -68,7 +68,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class MasterProductGroupsFragment extends BaseFragment
         implements MasterProductGroupAdapter.MasterProductGroupAdapterListener {
 
-    private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUPS;
+    private final static String TAG = MasterProductGroupsFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -517,7 +517,7 @@ public class MasterProductGroupsFragment extends BaseFragment
     public void editProductGroup(ProductGroup productGroup) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-        activity.replaceFragment(Constants.UI.MASTER_PRODUCT_GROUP, bundle, true);
+        //activity.replaceFragment(Constants.UI.MASTER_PRODUCT_GROUP, bundle, true); // TODO
     }
 
     private void showProductGroupSheet(ProductGroup productGroup) {

@@ -68,7 +68,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 public class MissingBatchItemsFragment extends BaseFragment
         implements MissingBatchItemAdapter.MissingBatchItemAdapterListener {
 
-    private final static String TAG = Constants.UI.MISSING_BATCH_ITEMS;
+    private final static String TAG = MissingBatchItemsFragment.class.getSimpleName();
 
     private MainActivity activity;
     private GrocyApi grocyApi;
@@ -515,7 +515,7 @@ public class MissingBatchItemsFragment extends BaseFragment
             );
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE_BATCH);
             bundle.putParcelable(Constants.ARGUMENT.CREATE_PRODUCT_OBJECT, createProduct);
-            activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true);
+            //activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true); //TODO
         } else {
             dlHelper.get(
                     grocyApi.getStockProductDetails(Integer.parseInt(batchItem.getProductId())),
@@ -532,11 +532,7 @@ public class MissingBatchItemsFragment extends BaseFragment
                                 Constants.ARGUMENT.PRODUCT,
                                 productDetails.getProduct()
                         );
-                        activity.replaceFragment(
-                                Constants.UI.MASTER_PRODUCT_SIMPLE,
-                                bundle,
-                                true
-                        );
+                        //activity.replaceFragment(Constants.UI.MASTER_PRODUCT_SIMPLE, bundle, true); //TODO
                     },
                     error -> {
                         showMessage(activity.getString(R.string.error_undefined));

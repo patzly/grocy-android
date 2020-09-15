@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterQuantityUnitFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_QUANTITY_UNIT;
+    private final static String TAG = MasterQuantityUnitFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;

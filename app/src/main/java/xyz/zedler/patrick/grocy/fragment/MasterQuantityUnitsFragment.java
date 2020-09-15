@@ -68,7 +68,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class MasterQuantityUnitsFragment extends BaseFragment
         implements MasterQuantityUnitAdapter.MasterQuantityUnitAdapterListener {
 
-    private final static String TAG = Constants.UI.MASTER_QUANTITY_UNITS;
+    private final static String TAG = MasterQuantityUnitsFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -511,7 +511,7 @@ public class MasterQuantityUnitsFragment extends BaseFragment
     public void editQuantityUnit(QuantityUnit quantityUnit) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-        activity.replaceFragment(Constants.UI.MASTER_QUANTITY_UNIT, bundle, true);
+        //activity.replaceFragment(Constants.UI.MASTER_QUANTITY_UNIT, bundle, true); //TODO
     }
 
     private void showQuantityUnitSheet(QuantityUnit quantityUnit) {

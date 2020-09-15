@@ -101,7 +101,7 @@ import xyz.zedler.patrick.grocy.view.BarcodeRipple;
 public class ScanBatchActivity extends AppCompatActivity
         implements ScanBatchCaptureManager.BarcodeListener, DecoratedBarcodeView.TorchListener {
 
-    private final static String TAG = Constants.UI.BATCH_SCAN;
+    private final static String TAG = ScanBatchActivity.class.getSimpleName();
 
     private ScanBatchCaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;

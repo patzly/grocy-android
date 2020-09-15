@@ -68,7 +68,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class MasterStoresFragment extends BaseFragment
         implements MasterStoreAdapter.MasterStoreAdapterListener {
 
-    private final static String TAG = Constants.UI.MASTER_STORES;
+    private final static String TAG = MasterStoresFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -508,7 +508,7 @@ public class MasterStoresFragment extends BaseFragment
     public void editStore(Store store) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARGUMENT.STORE, store);
-        activity.replaceFragment(Constants.UI.MASTER_STORE, bundle, true);
+        //activity.replaceFragment(Constants.UI.MASTER_STORE, bundle, true); //TODO
     }
 
     private void showStoreSheet(Store store) {

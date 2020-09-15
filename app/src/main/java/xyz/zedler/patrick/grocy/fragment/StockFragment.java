@@ -85,7 +85,7 @@ import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class StockFragment extends BaseFragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = Constants.UI.STOCK;
+    private final static String TAG = StockFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
