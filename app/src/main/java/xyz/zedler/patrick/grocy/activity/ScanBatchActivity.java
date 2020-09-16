@@ -260,12 +260,13 @@ public class ScanBatchActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
         Bundle bundle = intent.getBundleExtra(Constants.ARGUMENT.BUNDLE);
-        if(bundle != null) {
-            if(bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) != null) {
-                missingBatchItems = bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
-                refreshCounter();
-            }
+        if(savedInstanceState != null) {
+            bundle = savedInstanceState;
         }
+        if(bundle != null && bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS) != null) {
+            missingBatchItems = bundle.getParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS);
+        }
+        refreshCounter();
 
         capture = new ScanBatchCaptureManager(this, barcodeScannerView, this);
         capture.decode();
@@ -281,6 +282,7 @@ public class ScanBatchActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(Constants.ARGUMENT.TYPE, actionType);
+        outState.putParcelableArrayList(Constants.ARGUMENT.BATCH_ITEMS, missingBatchItems);
         super.onSaveInstanceState(outState);
     }
 
@@ -1155,7 +1157,12 @@ public class ScanBatchActivity extends AppCompatActivity
     }
 
     private void refreshCounter() {
-        String text = missingBatchItems.size() + " ";
+        String text;
+        if(missingBatchItems == null) {
+            text = null;
+        } else {
+            text = missingBatchItems.size() + " ";
+        }
         textViewCount.setText(text);
     }
 
