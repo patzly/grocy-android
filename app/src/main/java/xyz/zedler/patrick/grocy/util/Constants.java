@@ -68,53 +68,6 @@ public final class Constants {
         public final static String INTRO_SHOWN = "intro_shown";
     }
 
-    public final static class PREF_DEFAULT {  // default values for shared preferences
-        public final static String SERVER_URL = null;
-        public final static String API_KEY = null;
-        public final static String CURRENCY = "currency";
-        public final static String GROCY_VERSION = "grocy_version";
-        public final static String CREDENTIALS = "credentials";
-
-        public final static String FEATURE_SHOPPING_LIST = "feature_shopping_list";
-        public final static String FEATURE_STOCK_PRICE_TRACKING = "feature_stock_price_tracking";
-        public final static String FEATURE_STOCK_LOCATION_TRACKING = "feature_stock_location_tracking";
-        public final static String FEATURE_STOCK_BBD_TRACKING = "feature_stock_bbd_tracking";
-        public final static String FEATURE_STOCK_OPENED_TRACKING = "feature_stock_opened_tracking";
-        public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
-
-        public final static String STOCK_SORT_MODE = "stock_sort_mode";
-        public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
-
-        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expring_soon_days";
-        public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
-        public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
-        public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
-        public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
-        public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
-        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
-        public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
-        public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
-
-        public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
-        public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
-
-        public final static String BATCH_CONFIG_BBD = "batch_config_bbd";
-        public final static String BATCH_CONFIG_PRICE = "batch_config_price";
-        public final static String BATCH_CONFIG_STORE = "batch_config_store";
-        public final static String BATCH_CONFIG_LOCATION = "batch_config_location";
-        public final static String BATCH_CONFIG_STOCK_LOCATION = "batch_config_stock_location";
-        public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
-        public final static String BATCH_CONFIG_CONSUME_ALL = "batch_config_consume_all";
-
-        public final static String DARK_MODE = "force_dark_mode";
-        public final static String FOOD_FACTS = "use_open_food_facts";
-        public final static String USE_FRONT_CAM = "use_front_camera";
-        public final static String DEBUG = "debug";
-        public final static String SHOW_INFO_LOGS = "info_logs";
-
-        public final static String INTRO_SHOWN = "intro_shown";
-    }
-
     public final static class SETTINGS {
         public final static class SERVER {
             public final static String GROCY_URL = "grocy_url";
