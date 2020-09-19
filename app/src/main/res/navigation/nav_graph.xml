@@ -335,7 +335,7 @@
             app:destination="@id/scanBatchFragment" />
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsFragment"
-            app:destination="@id/settingsOverviewFragment" />
+            app:destination="@id/settingsFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog
@@ -433,25 +433,6 @@
         app:popUpTo="@id/stockFragment"
         app:popUpToInclusive="false" />
     <fragment
-        android:id="@+id/settingsOverviewFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.SettingsOverviewFragment"
-        android:label="SettingsOverviewFragment">
-        <action
-            android:id="@+id/action_settingsOverviewFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
-        <action
-            android:id="@+id/action_settingsOverviewFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
-    </fragment>
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
         android:label="SettingsFragment" >
@@ -464,7 +445,9 @@
             app:popExitAnim="@anim/slide_to_right" />
         <argument
             android:name="showCategory"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_settingsFragment_self"
             app:destination="@id/settingsFragment"
@@ -472,5 +455,12 @@
             app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_left"
             app:popExitAnim="@anim/slide_to_right" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_from_left"
+            app:exitAnim="@anim/slide_to_right"
+            app:popEnterAnim="@anim/slide_from_right"
+            app:popExitAnim="@anim/slide_to_left" />
     </fragment>
 </navigation>
