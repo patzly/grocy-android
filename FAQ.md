@@ -126,8 +126,8 @@ With this distance, the picture resolution is sometimes too low for the scanning
 
 (Coming soon)
 
-On devices with Google Play Services or [microG](https://microg.org/) it is possible to use the APK option with ML Kit as barcode recognition instead of ZXing.
-ML Kit uses (like the names indicates) machine learning approach for barcode recognition and works with a trained model instead of stroke width detection.
+It is possible to use the APK option with ML Kit as barcode recognition instead of ZXing.
+ML Kit uses (like the names indicates) a machine learning approach for barcode recognition and works with a trained model instead of stroke width detection.
 This has many advantages:
 
 - No horizontal alignment of barcodes necessary
