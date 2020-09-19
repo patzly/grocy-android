@@ -14,25 +14,23 @@
 
     <TextView
         android:id="@+id/text_shopping_list_item_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:singleLine="true"
         android:fontFamily="@font/roboto_mono_medium"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     <TextView
         android:id="@+id/text_shopping_list_note_as_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:textStyle="italic"
         android:visibility="gone"
         android:fontFamily="@font/roboto_mono_medium"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:minHeight="20dp"
@@ -40,7 +38,7 @@
 
         <TextView
             android:id="@+id/text_shopping_list_item_amount"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
@@ -49,7 +47,7 @@
 
     <LinearLayout
         android:id="@+id/linear_shopping_list_note"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:minHeight="20dp"
@@ -58,7 +56,7 @@
 
         <TextView
             android:id="@+id/text_shopping_list_note"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />

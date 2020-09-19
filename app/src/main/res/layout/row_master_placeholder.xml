@@ -12,7 +12,6 @@
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:singleLine="true"
         android:textColor="@color/transparent"
         android:background="@drawable/bg_placeholder_text"
