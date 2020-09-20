@@ -6,14 +6,14 @@
     android:layout_height="wrap_content"
     android:minHeight="64dp"
     android:background="@color/background"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:textColor="@color/transparent"
+        android:layout_gravity="start|center_vertical"
         android:background="@drawable/bg_placeholder_text"
         android:backgroundTint="@color/on_background_tertiary"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
@@ -25,6 +25,7 @@
         android:minHeight="20dp"
         android:singleLine="true"
         android:textColor="@color/transparent"
+        android:layout_gravity="start|center_vertical"
         android:background="@drawable/bg_placeholder_text"
         android:backgroundTint="@color/on_background_tertiary"
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />

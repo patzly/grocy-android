@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:minHeight="20dp"
@@ -47,16 +47,17 @@
 
         <TextView
             android:id="@+id/text_stock_item_amount"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_stock_item_days"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:minHeight="20dp"
@@ -64,9 +65,10 @@
 
         <TextView
             android:id="@+id/text_stock_item_days"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
     </LinearLayout>
