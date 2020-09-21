@@ -6,13 +6,12 @@
     android:layout_height="wrap_content"
     android:minHeight="48dp"
     android:background="@color/background"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="start|center_vertical"
         android:singleLine="true"
         android:textColor="@color/transparent"
         android:background="@drawable/bg_placeholder_text"

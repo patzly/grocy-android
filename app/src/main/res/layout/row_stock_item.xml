@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
     </LinearLayout>
@@ -67,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
     </LinearLayout>

@@ -4,7 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-Grocy Android is an open-source Android client for grocy. [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)) is a self-hosted groceries & household management solution for your home.
+Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
 
@@ -70,9 +70,6 @@ If you run into a bug or miss a feature, feel free to give feedback in the app, 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
 Translations which reached a completion level of 80% will be included in releases.
-
-Completed translations: German, French, Swedish, Dutch, Norwegian, Spanish & Hebrew  
-Thanks translators!
 
 <a href="https://www.transifex.com/grocy-android/grocy-android">
 <img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A..........-t-t9bnqWZLh&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x157&cht=bhs&chxl=0%3A%7CHungarian%7CKorean+%28Korea%29%7CItalian%7CFrench%7CSwedish%7CDutch%7CEnglish%7CGerman%7CNorwegian+Bokm%C3%A5l%7CSpanish%7CHebrew%7C1%3A%7C18%25%7C35%25%7C62%25%7C96%25%7C98%25%7C98%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C" alt="Translation status" />
