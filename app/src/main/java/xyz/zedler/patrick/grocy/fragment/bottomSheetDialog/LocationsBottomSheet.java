@@ -134,7 +134,7 @@ public class LocationsBottomSheet extends CustomBottomSheet
         }
         ((MainActivity) activity).getCurrentFragment().setOption(
                 locations.get(position),
-                requireArguments().getString(Constants.ARGUMENT.OPTION)
+                requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
         );
 
         dismiss();

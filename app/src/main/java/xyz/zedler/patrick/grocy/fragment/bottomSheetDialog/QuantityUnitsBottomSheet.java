@@ -120,7 +120,7 @@ public class QuantityUnitsBottomSheet extends CustomBottomSheet
         }
         ((MainActivity) activity).getCurrentFragment().setOption(
                 quantityUnits.get(position),
-                requireArguments().getString(Constants.ARGUMENT.OPTION)
+                requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
         );
         dismiss();
     }

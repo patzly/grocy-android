@@ -21,12 +21,12 @@ package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
@@ -43,13 +43,15 @@ public class SettingEntrySwitch extends LinearLayout {
 
     public SettingEntrySwitch(
             Context context,
-            String tag,
+            String preference,
+            boolean preferenceDefault,
             String title,
             String description,
-            String pref
+            Drawable drawable,
+            OnCheckedChanged onCheckedChanged
     ) {
         super(context);
-        setTag(tag);
+        setTag(preference);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         binding = ViewSettingEntrySwitchBinding.inflate(
                 LayoutInflater.from(context),
@@ -59,86 +61,56 @@ public class SettingEntrySwitch extends LinearLayout {
         binding.title.setText(title);
         binding.description.setText(description);
         if(description == null) binding.description.setVisibility(GONE);
-        binding.switchMaterial.setChecked(sharedPrefs.getBoolean(pref, false));
+        if(drawable != null) binding.image.setImageDrawable(drawable);
+        binding.switchMaterial.setChecked(sharedPrefs.getBoolean(preference, preferenceDefault));
         binding.getRoot().setOnClickListener(v -> binding.switchMaterial.toggle());
         binding.switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
             IconUtil.start(binding.image);
-            sharedPrefs.edit().putBoolean(pref, isChecked).apply();
+            sharedPrefs.edit().putBoolean(preference, isChecked).apply();
+            if(onCheckedChanged != null) onCheckedChanged.execute(preference, isChecked);
         });
     }
 
     public SettingEntrySwitch(
             Context context,
-            String tag,
+            String preference,
+            boolean preferenceDefault,
             String title,
             String description,
-            @DrawableRes int drawable,
-            String pref
+            Drawable drawable
     ) {
-        this(context, tag, title, description, pref);
-        binding.image.setImageDrawable(ContextCompat.getDrawable(context, drawable));
+        this(context, preference, preferenceDefault, title, description, drawable, null);
     }
 
     public SettingEntrySwitch(
             Context context,
-            String tag,
-            String title,
-            String description,
-            @DrawableRes int drawable,
-            boolean setChecked,
-            OnCheckedChanged onCheckedChanged
-    ) {
-        super(context);
-        setTag(tag);
-        binding = ViewSettingEntrySwitchBinding.inflate(
-                LayoutInflater.from(context),
-                this,
-                true
-        );
-        binding.title.setText(title);
-        binding.description.setText(description);
-        if(description == null) binding.description.setVisibility(GONE);
-        binding.image.setImageDrawable(ContextCompat.getDrawable(context, drawable));
-        binding.switchMaterial.setChecked(setChecked);
-        binding.getRoot().setOnClickListener(v -> binding.switchMaterial.toggle());
-        binding.switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            IconUtil.start(binding.image);
-            if(onCheckedChanged != null) onCheckedChanged.execute(isChecked);
-        });
-    }
-
-    public SettingEntrySwitch(
-            Context context,
-            String tag,
-            @StringRes int title,
-            @StringRes int description,
-            @DrawableRes int drawable,
-            boolean setChecked,
-            OnCheckedChanged onCheckedChanged
+            String preference,
+            boolean preferenceDefault,
+            String title
     ) {
         this(
                 context,
-                tag,
-                context.getString(title),
-                context.getString(description),
-                drawable,
-                setChecked,
-                onCheckedChanged
+                preference,
+                preferenceDefault,
+                title,
+                null,
+                null,
+                null
         );
     }
 
     public SettingEntrySwitch(
             Context context,
-            String tag,
+            String preference,
+            boolean preferenceDefault,
             String title,
             String description,
             @DrawableRes int drawableOffAnim,
             @DrawableRes int drawableOnAnim,
-            String pref,
             OnFinishedAnim onFinishedAnim
     ) {
         super(context);
-        setTag(tag);
+        setTag(preference);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         binding = ViewSettingEntrySwitchBinding.inflate(
                 LayoutInflater.from(context),
@@ -147,11 +119,11 @@ public class SettingEntrySwitch extends LinearLayout {
         );
         binding.title.setText(title);
         binding.description.setText(description);
-        boolean enabled = sharedPrefs.getBoolean(pref, false);
+        boolean enabled = sharedPrefs.getBoolean(preference, preferenceDefault);
         binding.image.setImageDrawable(ContextCompat.getDrawable(
                 context, enabled ? drawableOffAnim : drawableOnAnim
         ));
-        binding.switchMaterial.setChecked(sharedPrefs.getBoolean(pref, false));
+        binding.switchMaterial.setChecked(enabled);
         binding.getRoot().setOnClickListener(v -> binding.switchMaterial.toggle());
         binding.switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
             IconUtil.start(binding.image);
@@ -159,67 +131,8 @@ public class SettingEntrySwitch extends LinearLayout {
                 binding.image.setImageResource(isChecked ? drawableOffAnim : drawableOnAnim);
                 if(onFinishedAnim != null) onFinishedAnim.execute(isChecked);
             }, 300);
-            sharedPrefs.edit().putBoolean(pref, isChecked).apply();
+            sharedPrefs.edit().putBoolean(preference, isChecked).apply();
         });
-    }
-
-    public SettingEntrySwitch(
-            Context context,
-            String tag,
-            @StringRes int title,
-            @StringRes int description,
-            @DrawableRes int drawable,
-            String pref
-    ) {
-        this(
-                context,
-                tag,
-                context.getString(title),
-                context.getString(description),
-                drawable,
-                pref
-        );
-    }
-
-    public SettingEntrySwitch(
-            Context context,
-            String tag,
-            @StringRes int title,
-            @DrawableRes int drawable,
-            String pref
-    ) {
-        this(context, tag, context.getString(title), null, drawable, pref);
-    }
-
-    public SettingEntrySwitch(
-            Context context,
-            String tag,
-            @StringRes int title,
-            String pref
-    ) {
-        this(context, tag, context.getString(title), null, pref);
-    }
-
-    public SettingEntrySwitch(
-            Context context,
-            String tag,
-            @StringRes int title,
-            @StringRes int description,
-            @DrawableRes int drawableOffAnim,
-            @DrawableRes int drawableOnAnim,
-            String pref,
-            OnFinishedAnim onFinishedAnim
-    ) {
-        this(
-                context,
-                tag,
-                context.getString(title),
-                context.getString(description),
-                drawableOffAnim,
-                drawableOnAnim,
-                pref,
-                onFinishedAnim
-        );
     }
 
     public interface OnFinishedAnim {
@@ -227,6 +140,6 @@ public class SettingEntrySwitch extends LinearLayout {
     }
 
     public interface OnCheckedChanged {
-        void execute(boolean isChecked);
+        void execute(String preference, boolean isChecked);
     }
 }

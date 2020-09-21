@@ -458,9 +458,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_aboutFragment"
             app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/slide_from_left"
-            app:exitAnim="@anim/slide_to_right"
-            app:popEnterAnim="@anim/slide_from_right"
-            app:popExitAnim="@anim/slide_to_left" />
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
 </navigation>

@@ -110,7 +110,7 @@ public class ProductGroupsBottomSheet extends CustomBottomSheet
         }
         ((MainActivity) activity).getCurrentFragment().setOption(
                 productGroups.get(position),
-                requireArguments().getString(Constants.ARGUMENT.OPTION)
+                requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
         );
 
         dismiss();

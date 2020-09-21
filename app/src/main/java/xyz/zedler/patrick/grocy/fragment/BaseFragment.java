@@ -1,12 +1,15 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
@@ -158,6 +161,10 @@ public class BaseFragment extends Fragment {
             }
         });
         return anim;
+    }
+
+    Drawable getDrawable(@DrawableRes int drawable) {
+        return ContextCompat.getDrawable(requireContext(), drawable);
     }
 
     public void setOption(Object value, String option) {}

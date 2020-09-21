@@ -38,16 +38,19 @@ public final class Constants {
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 
+        // DO NOT EDIT THE FOLLOWING STRINGS, THEY ARE FOR SERVER SYNC STUFF
+        // (but you can edit the variable names)
         public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expring_soon_days";
         public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
         public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
         public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
         public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
         public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
-        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
         public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
+        // end of server sync stuff
 
+        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
         public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
         public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
 
@@ -77,31 +80,62 @@ public final class Constants {
         }
         public final static class APPEARANCE {
             public final static String DARK_MODE = "dark_mode";
-            public final static boolean DARK_MODE_DEFAULT = false;
         }
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";
             public final static String FRONT_CAM = "front_cam";
         }
         public final static class STOCK {
-            public final static String DISPLAY_DOTS = "display_dots";
-            public final static String EXPIRING_SOON_DAYS = "expiring_soon_days";
+            public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String EXPIRING_SOON_DAYS = "stock_expring_soon_days"; // used for pref sync, DO NOT EDIT VALUE
         }
         public final static class SHOPPING_MODE {
-
+            public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
+            public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
         }
         public final static class PURCHASE_CONSUME {
 
         }
         public final static class PRESETS {
-            public final static String LOCATION = "location";
-            public final static String PRODUCT_GROUP = "product_group";
-            public final static String QUANTITY_UNIT = "quantity_unit";
+            public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
         }
         public final static class DEBUGGING {
             public final static String ENABLE_DEBUGGING = "enable_debugging";
             public final static String ENABLE_INFO_LOGS = "enable_info_logs";
             public final static String SHOW_LOGS = "show_logs";
+        }
+    }
+
+    public final static class SETTINGS_DEFAULT {
+        public final static class SERVER {
+        }
+        public final static class APPEARANCE {
+            public final static boolean DARK_MODE_DEFAULT = false;
+        }
+        public final static class SCANNER {
+            public final static boolean FOOD_FACTS = false;
+            public final static boolean FRONT_CAM = false;
+        }
+        public final static class STOCK {
+            public final static boolean DISPLAY_DOTS_IN_STOCK = true;
+            public final static String EXPIRING_SOON_DAYS = "5";
+        }
+        public final static class SHOPPING_MODE {
+            public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
+            public final static boolean KEEP_SCREEN_ON = true;
+        }
+        public final static class PURCHASE_CONSUME {
+        }
+        public final static class PRESETS {
+            public final static int LOCATION = -1;
+            public final static int PRODUCT_GROUP = -1;
+            public final static int QUANTITY_UNIT = -1;
+        }
+        public final static class DEBUGGING {
+            public final static boolean ENABLE_DEBUGGING = false;
+            public final static boolean ENABLE_INFO_LOGS = false;
         }
     }
 
@@ -179,7 +213,7 @@ public final class Constants {
     }
 
     public final static class ARGUMENT {
-        public final static String OPTION = "option";
+        public final static String PREFERENCE = "option";
         public final static String ANIMATED = "animated";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";

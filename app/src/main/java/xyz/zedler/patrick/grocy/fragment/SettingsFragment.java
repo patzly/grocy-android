@@ -100,6 +100,8 @@ public class SettingsFragment extends BaseFragment {
             showCategoryScanner();
         } else if(category.equals(Constants.SETTINGS.STOCK.class.getSimpleName())) {
             showCategoryStock();
+        } else if(category.equals(Constants.SETTINGS.SHOPPING_MODE.class.getSimpleName())) {
+            showCategoryShoppingMode();
         } else if(category.equals(Constants.SETTINGS.PRESETS.class.getSimpleName())) {
             showCategoryPresets();
         } else if(category.equals(Constants.SETTINGS.DEBUGGING.class.getSimpleName())) {
@@ -271,18 +273,12 @@ public class SettingsFragment extends BaseFragment {
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.APPEARANCE.DARK_MODE,
-                R.string.setting_dark_mode,
-                R.string.setting_dark_mode_description,
+                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
+                getString(R.string.setting_dark_mode),
+                getString(R.string.setting_dark_mode_description),
                 R.drawable.ic_round_dark_mode_off_anim,
                 R.drawable.ic_round_dark_mode_on_anim,
-                Constants.PREF.DARK_MODE,
-                isChecked -> {
-                    AppCompatDelegate.setDefaultNightMode(isChecked
-                            ? AppCompatDelegate.MODE_NIGHT_YES
-                            : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    );
-                    activity.executeOnStart();
-                }
+                this::updateTheme
         ));
     }
 
@@ -291,18 +287,18 @@ public class SettingsFragment extends BaseFragment {
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.SCANNER.FOOD_FACTS,
-                R.string.setting_open_food_facts,
-                R.string.setting_open_food_facts_description,
-                R.drawable.ic_round_barcode,
-                Constants.PREF.FOOD_FACTS
+                Constants.SETTINGS_DEFAULT.SCANNER.FOOD_FACTS,
+                getString(R.string.setting_open_food_facts),
+                getString(R.string.setting_open_food_facts_description),
+                getDrawable(R.drawable.ic_round_barcode)
         ));
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.SCANNER.FRONT_CAM,
-                R.string.setting_use_front_cam,
-                R.string.setting_use_front_cam_description,
-                R.drawable.ic_round_camera_front,
-                Constants.PREF.USE_FRONT_CAM
+                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM,
+                getString(R.string.setting_use_front_cam),
+                getString(R.string.setting_use_front_cam_description),
+                getDrawable(R.drawable.ic_round_camera_front)
         ));
     }
 
@@ -314,11 +310,11 @@ public class SettingsFragment extends BaseFragment {
         ));
         if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             String days = sharedPrefs.getString(
-                    Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                    String.valueOf(5)
+                    Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS,
+                    Constants.SETTINGS_DEFAULT.STOCK.EXPIRING_SOON_DAYS
             );
             if(days == null || days.isEmpty() || days.equals("null")) {
-                days = String.valueOf(5);
+                days = Constants.SETTINGS_DEFAULT.STOCK.EXPIRING_SOON_DAYS;
             }
             binding.linearBody.addView(new SettingEntryClick(
                     requireContext(),
@@ -333,40 +329,49 @@ public class SettingsFragment extends BaseFragment {
         if(isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
             binding.linearBody.addView(new SettingEntrySwitch(
                     requireContext(),
-                    Constants.SETTINGS.STOCK.DISPLAY_DOTS,
-                    R.string.setting_list_indicator,
-                    R.string.setting_list_indicator_description,
-                    R.drawable.ic_round_shopping_list_long,
-                    sharedPrefs.getBoolean(
-                            Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK, false
-                    ),
-                    isChecked -> {
-                        JSONObject body = new JSONObject();
-                        try {
-                            body.put("value", isChecked);
-                        } catch (JSONException e) {
-                            if(debug) Log.e(TAG, "showCategoryStock: list indicator: " + e);
-                        }
-                        viewModel.getDownloadHelper().put(
-                                viewModel.getGrocyApi().getUserSetting(
-                                        Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK
-                                ),
-                                body,
-                                response -> sharedPrefs.edit().putBoolean(
-                                        Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                                        isChecked
-                                ).apply(),
-                                error -> {
-                                    sharedPrefs.edit().putBoolean(
-                                            Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-                                            isChecked
-                                    ).apply();
-                                    showVolleyError(error);
-                                }
-                        );
-                    }
+                    Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
+                    Constants.SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK,
+                    getString(R.string.setting_list_indicator),
+                    getString(R.string.setting_list_indicator_description),
+                    getDrawable(R.drawable.ic_round_shopping_list_long),
+                    this::updatePrefOnServerBoolean
             ));
         }
+    }
+
+    private void showCategoryShoppingMode() {
+        binding.appBarTitle.setText(R.string.title_shopping_mode);
+        binding.linearBody.addView(new SettingEntrySwitch(
+                requireContext(),
+                Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON,
+                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.KEEP_SCREEN_ON,
+                getString(R.string.setting_keep_screen_on),
+                getString(R.string.setting_keep_screen_on_description),
+                getDrawable(R.drawable.ic_round_visibility)
+        ));
+        binding.linearBody.addView(new SettingEntryClick(
+                requireContext(),
+                Constants.SETTINGS.SHOPPING_MODE.UPDATE_INTERVAL,
+                R.string.setting_shopping_mode_update_interval,
+                getString(R.string.setting_not_loaded),
+                null,
+                R.drawable.ic_round_place,
+                entry -> viewModel.getDownloadHelper().getLocations(arrayList -> {
+                    int prefLocationId = sharedPrefs.getInt(
+                            Constants.SETTINGS.PRESETS.LOCATION,
+                            Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+                    );
+                    Bundle bundle = new Bundle();
+                    arrayList.add(
+                            0,
+                            new Location(-1, getString(R.string.subtitle_none_selected))
+                    );
+                    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, arrayList);
+                    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, prefLocationId);
+                    bundle.putString(Constants.ARGUMENT.PREFERENCE, (String) entry.getTag());
+                    activity.showBottomSheet(new LocationsBottomSheet(), bundle);
+                }, this::showVolleyError).perform(UUID.randomUUID().toString())
+        ));
     }
 
     private void showCategoryPresets() {
@@ -388,8 +393,8 @@ public class SettingsFragment extends BaseFragment {
                 R.drawable.ic_round_place,
                 entry -> viewModel.getDownloadHelper().getLocations(arrayList -> {
                     int prefLocationId = sharedPrefs.getInt(
-                            Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
-                            -1
+                            Constants.SETTINGS.PRESETS.LOCATION,
+                            Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -398,7 +403,7 @@ public class SettingsFragment extends BaseFragment {
                     );
                     bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, arrayList);
                     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, prefLocationId);
-                    bundle.putString(Constants.ARGUMENT.OPTION, (String) entry.getTag());
+                    bundle.putString(Constants.ARGUMENT.PREFERENCE, (String) entry.getTag());
                     activity.showBottomSheet(new LocationsBottomSheet(), bundle);
                 }, this::showVolleyError).perform(UUID.randomUUID().toString())
         ));
@@ -411,8 +416,8 @@ public class SettingsFragment extends BaseFragment {
                 R.drawable.ic_round_category,
                 entry -> viewModel.getDownloadHelper().getProductGroups(arrayList -> {
                     int prefProductGroupId = sharedPrefs.getInt(
-                            Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                            -1
+                            Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
+                            Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -421,7 +426,7 @@ public class SettingsFragment extends BaseFragment {
                     );
                     bundle.putParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS, arrayList);
                     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, prefProductGroupId);
-                    bundle.putString(Constants.ARGUMENT.OPTION, (String) entry.getTag());
+                    bundle.putString(Constants.ARGUMENT.PREFERENCE, (String) entry.getTag());
                     activity.showBottomSheet(new ProductGroupsBottomSheet(), bundle);
                 }, this::showVolleyError).perform(UUID.randomUUID().toString())
         ));
@@ -434,8 +439,8 @@ public class SettingsFragment extends BaseFragment {
                 R.drawable.ic_round_weights,
                 entry -> viewModel.getDownloadHelper().getQuantityUnits(arrayList -> {
                     int prefQuId = sharedPrefs.getInt(
-                            Constants.PREF.PRODUCT_PRESETS_QU_ID,
-                            -1
+                            Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
+                            Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -444,26 +449,29 @@ public class SettingsFragment extends BaseFragment {
                     );
                     bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, arrayList);
                     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, prefQuId);
-                    bundle.putString(Constants.ARGUMENT.OPTION, (String) entry.getTag());
+                    bundle.putString(Constants.ARGUMENT.PREFERENCE, (String) entry.getTag());
                     activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
                 }, this::showVolleyError).perform(UUID.randomUUID().toString())
         ));
         queue.append(viewModel.getDownloadHelper().getLocations(arrayList -> {
             int prefLocationId = sharedPrefs.getInt(
-                    Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
-                    -1
+                    Constants.SETTINGS.PRESETS.LOCATION,
+                    Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
             );
             updateLocationSetting(viewModel.getLocation(arrayList, prefLocationId));
         }));
         queue.append(viewModel.getDownloadHelper().getProductGroups(arrayList -> {
             int prefProductGroupId = sharedPrefs.getInt(
-                    Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-                    -1
+                    Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
+                    Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
             );
             updateProductGroupSetting(viewModel.getProductGroup(arrayList, prefProductGroupId));
         }));
         queue.append(viewModel.getDownloadHelper().getQuantityUnits(arrayList -> {
-            int prefQuId = sharedPrefs.getInt(Constants.PREF.PRODUCT_PRESETS_QU_ID, -1);
+            int prefQuId = sharedPrefs.getInt(
+                    Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
+                    Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
+            );
             updateQuantityUnitSetting(viewModel.getQuantityUnit(arrayList, prefQuId));
         }));
     }
@@ -473,16 +481,16 @@ public class SettingsFragment extends BaseFragment {
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
-                R.string.setting_debug,
-                R.string.setting_debug_description,
-                R.drawable.ic_round_bug_report_anim,
-                Constants.PREF.DEBUG
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING,
+                getString(R.string.setting_debug),
+                getString(R.string.setting_debug_description),
+                getDrawable(R.drawable.ic_round_bug_report_anim)
         ));
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
-                R.string.setting_info_logs,
-                Constants.PREF.SHOW_INFO_LOGS
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS,
+                getString(R.string.setting_info_logs)
         ));
         binding.linearBody.addView(new SettingEntryClick(
                 requireContext(),
@@ -493,7 +501,23 @@ public class SettingsFragment extends BaseFragment {
         ));
     }
 
-    public void updateLocationSetting(Location location) {
+    private void updatePrefOnServerBoolean(String pref, boolean isChecked) {
+        sharedPrefs.edit().putBoolean(pref, isChecked).apply();
+        JSONObject body = new JSONObject();
+        try {
+            body.put("value", isChecked);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "updatePrefBoolean: " + e);
+        }
+        viewModel.getDownloadHelper().put(
+                viewModel.getGrocyApi().getUserSetting(pref),
+                body,
+                response -> {},
+                this::showVolleyError
+        );
+    }
+
+    private void updateLocationSetting(Location location) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
                 Constants.SETTINGS.PRESETS.LOCATION
         );
@@ -501,16 +525,16 @@ public class SettingsFragment extends BaseFragment {
         if(location != null) {
             entry.setTitle(location.getName());
             sharedPrefs.edit().putInt(
-                    Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
+                    Constants.SETTINGS.PRESETS.LOCATION,
                     location.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.PREF.PRODUCT_PRESETS_LOCATION_ID, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.LOCATION, -1).apply();
         }
     }
 
-    public void updateProductGroupSetting(ProductGroup productGroup) {
+    private void updateProductGroupSetting(ProductGroup productGroup) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
                 Constants.SETTINGS.PRESETS.PRODUCT_GROUP
         );
@@ -518,16 +542,16 @@ public class SettingsFragment extends BaseFragment {
         if(productGroup != null) {
             entry.setTitle(productGroup.getName());
             sharedPrefs.edit().putInt(
-                    Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
+                    Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
                     productGroup.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.PRODUCT_GROUP, -1).apply();
         }
     }
 
-    public void updateQuantityUnitSetting(QuantityUnit quantityUnit) {
+    private void updateQuantityUnitSetting(QuantityUnit quantityUnit) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
                 Constants.SETTINGS.PRESETS.QUANTITY_UNIT
         );
@@ -535,12 +559,12 @@ public class SettingsFragment extends BaseFragment {
         if(quantityUnit != null) {
             entry.setTitle(quantityUnit.getName());
             sharedPrefs.edit().putInt(
-                    Constants.PREF.PRODUCT_PRESETS_QU_ID,
+                    Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
                     quantityUnit.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.PREF.PRODUCT_PRESETS_QU_ID, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.QUANTITY_UNIT, -1).apply();
         }
     }
 
@@ -555,9 +579,7 @@ public class SettingsFragment extends BaseFragment {
                     if (debug) Log.e(TAG, "setValue: " + e);
                 }
                 viewModel.getDownloadHelper().put(
-                        viewModel.getGrocyApi().getUserSetting(
-                                Constants.PREF.PRODUCT_PRESETS_LOCATION_ID
-                        ),
+                        viewModel.getGrocyApi().getUserSetting(option),
                         body,
                         response -> updateLocationSetting((Location) value),
                         this::showVolleyError
@@ -570,9 +592,7 @@ public class SettingsFragment extends BaseFragment {
                     if (debug) Log.e(TAG, "setValue: " + e);
                 }
                 viewModel.getDownloadHelper().put(
-                        viewModel.getGrocyApi().getUserSetting(
-                                Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID
-                        ),
+                        viewModel.getGrocyApi().getUserSetting(option),
                         body,
                         response -> updateProductGroupSetting((ProductGroup) value),
                         this::showVolleyError
@@ -585,9 +605,7 @@ public class SettingsFragment extends BaseFragment {
                     if (debug) Log.e(TAG, "setValue: " + e);
                 }
                 viewModel.getDownloadHelper().put(
-                        viewModel.getGrocyApi().getUserSetting(
-                                Constants.PREF.PRODUCT_PRESETS_QU_ID
-                        ),
+                        viewModel.getGrocyApi().getUserSetting(option),
                         body,
                         response -> updateQuantityUnitSetting((QuantityUnit) value),
                         this::showVolleyError
@@ -600,18 +618,13 @@ public class SettingsFragment extends BaseFragment {
                     if(debug) Log.e(TAG, "setValue: " + e);
                 }
                 viewModel.getDownloadHelper().put(
-                        viewModel.getGrocyApi().getUserSetting(
-                                Constants.PREF.STOCK_EXPIRING_SOON_DAYS
-                        ),
+                        viewModel.getGrocyApi().getUserSetting(option),
                         body,
                         response -> {
                             SettingEntryClick entry = binding.linearBody.findViewWithTag(option);
                             entry.setTitle((String) value);
                             sharedPrefs.edit()
-                                    .putString(
-                                            Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                                            (String) value
-                                    ).apply();
+                                    .putString(option, (String) value).apply();
                         },
                         this::showVolleyError
                 );
@@ -620,7 +633,7 @@ public class SettingsFragment extends BaseFragment {
 
     private void showSettingInputBottomSheet(SettingEntryClick entry) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.OPTION, (String) entry.getTag());
+        bundle.putString(Constants.ARGUMENT.PREFERENCE, (String) entry.getTag());
         bundle.putString(Constants.ARGUMENT.TEXT, entry.getTitle());
         activity.showBottomSheet(new SettingInputBottomSheet(), bundle);
     }
@@ -632,6 +645,14 @@ public class SettingsFragment extends BaseFragment {
         } else {
             activity.showMessage(R.string.error_undefined);
         }
+    }
+
+    private void updateTheme(boolean forceDarkMode) {
+        AppCompatDelegate.setDefaultNightMode(forceDarkMode
+                ? AppCompatDelegate.MODE_NIGHT_YES
+                : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        );
+        activity.executeOnStart();
     }
 
     private boolean isFeatureEnabled(String pref) {

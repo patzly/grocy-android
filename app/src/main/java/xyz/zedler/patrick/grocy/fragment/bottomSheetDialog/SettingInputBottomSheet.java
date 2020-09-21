@@ -66,7 +66,7 @@ public class SettingInputBottomSheet extends CustomBottomSheet {
         activity = (MainActivity) requireActivity();
         Bundle bundle = requireArguments();
 
-        String option = bundle.getString(Constants.ARGUMENT.OPTION);
+        String option = bundle.getString(Constants.ARGUMENT.PREFERENCE);
         if(option == null) {
             dismiss();
             return view;
