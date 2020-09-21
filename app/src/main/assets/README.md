@@ -31,7 +31,8 @@ Im Product overview bottom sheet wird zB. "5 Packungen (2 geöff..." angezeigt, 
 - version name updated?
 - latest libs?
 - German translation complete?
-- changelog added?
+- changelog added in CHANGELOG.txt?
+- changelog added in fastlane/metadata/android/[language]/changelogs/[versionCode].txt
 
 # Conventions
 
