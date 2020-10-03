@@ -1,13 +1,8 @@
-Grocy Android ist ein quelloffener Android Client für grocy. <a href="https://grocy.info/">grocy</a> (<a href="https://github.com/grocy/grocy">Quellcode</a>) ist eine selbst gehostete Webanwendung zur Lebensmittel- und Haushaltsverwaltung.
+<p>Grocy Android ist ein quelloffener Android Client für grocy. <a href="https://grocy.info/">grocy</a> (<a href="https://github.com/grocy/grocy">Quellcode</a>) ist eine selbst gehostete Webanwendung zur Lebensmittel- und Haushaltsverwaltung.</p>
+<p>Grocy Android benutzt grocy's offizielle API, um dir eine schöne Benutzeroberfläche auf deinem Handy zu geben, zusammen mit einem schnellen Barcode-Scanner und Stapelverarbeitung. Alles was du brauchst, um deine Lebensmittel effizient zu verwalten.</p>
+<p><br><b>Diese App benötigt eine selbst gehostete Instanz der grocy-Webanwendung. Sie dient als Zusatz und kann daher keine Lebensmittel ohne einen Server verwalten. Du kannst die App aber testen, indem du die Demo-Option auf dem Anmeldebildschirm wählst.</b><br></p>
 
-Grocy Android benutzt grocy's offizielle API, um dir eine schöne Benutzeroberfläche auf deinem Handy zu geben, zusammen mit einem schnellen Barcode-Scanner und Stapelverarbeitung. Alles was du brauchst, um deine Lebensmittel effizient zu verwalten.
-
-<b>Diese App benötigt eine selbst gehostete Instanz der grocy-Webanwendung. Sie dient als Zusatz und kann daher keine Lebensmittel ohne einen Server verwalten.
-Du kannst die App aber testen, indem du die Demo-Option auf dem Anmeldebildschirm wählst.</b>
-
-<b>Fähigkeiten:</b>
-
-<ul>
+<p><b>Fähigkeiten:</b></p><ul>
    <li>Bestandsübersicht</li>
    <li>Einkaufsliste mit Offline-Unterstützung</li>
    <li>Einkaufsmodus (große Klickelemente)</li>
@@ -21,12 +16,9 @@ Du kannst die App aber testen, indem du die Demo-Option auf dem Anmeldebildschir
    <li>Kleine App-Größe (~6MB)</li>
 </ul>
 
-<b>Beteiligung:</b>
-Wenn du einen Fehler bemerkst oder Verbesserungsvorschläge hast, zögere nicht, uns in der App Feedback zu geben, eine E-Mail zu schreiben oder <a href="https://github.com/patzly/grocy-android/issues/new">ein neues Issue</a> auf GitHub zu öffnen.
-Wie die grocy-Webanwendung, kann auch dieses Projekt übersetzt werden. Bitte besuche unsere GitHub-Seite für mehr Informationen.
+<p><br><b>Beteiligung:</b></p>
+<p>Wenn du einen Fehler bemerkst oder Verbesserungsvorschläge hast, zögere nicht, uns in der App Feedback zu geben, eine E-Mail zu schreiben oder <a href="https://github.com/patzly/grocy-android/issues/new">ein neues Issue</a> auf GitHub zu öffnen. Wie die grocy-Webanwendung, kann auch dieses Projekt übersetzt werden. Bitte besuche unsere GitHub-Seite für mehr Informationen.</p>
 
-<b>Kompatibilität:</b>
-Grocy Android benötigt mindestens grocy 2.7.0 auf deinem Server.
-Es ist auch möglich, das grocy Add-on auf einem Hass.io server zu verwenden. Die In-App-Hilfe beschreibt, wie dies klappt.
-
-Wir danken dem Entwickler von grocy, Bernd Bestel, ohne dessen großartige Arbeit diese App nicht möglich wäre.
+<p><br><b>Kompatibilität:</b></p>
+<p>Grocy Android benötigt mindestens grocy 2.7.0 auf deinem Server. Es ist auch möglich, das grocy Add-on auf einem Hass.io server zu verwenden. Die In-App-Hilfe beschreibt, wie dies klappt.<br></p>
+<p>Wir danken dem Entwickler von grocy, Bernd Bestel, ohne dessen großartige Arbeit diese App nicht möglich wäre.</p>
