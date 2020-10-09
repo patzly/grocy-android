@@ -38,6 +38,8 @@
     <string name="action_clear_shopping_list">Effacer la liste de courses</string>
     <string name="action_rate">Notez sur Google Play</string>
     <string name="action_rate_description">Soutenir le développement</string>
+    <string name="action_email">Envoyer email</string>
+    <string name="action_email_description">Contacter les développeurs</string>
     <string name="action_new_issue">Ouvrir un nouveau ticket sur GitHub</string>
     <string name="action_new_issue_description">Signaler des bugs ou demander une fonctionnalité</string>
     <string name="action_get_started">Commencer</string>
@@ -63,6 +65,7 @@
     <string name="action_shopping_mode">Mode d\'achat</string>
     <string name="action_add_missing">Ajouter des produits manquants</string>
     <string name="action_purchase_all_items">Achetez tous les articles</string>
+    <string name="action_skip_entry">Passer l\'article</string>
     <string name="action_delete_shopping_list">Supprimer la liste d\'achats</string>
     <string name="action_discard_products">Jeter les produits</string>
     <string name="action_perform_purchasing_processes">Effectuer des transactions d\'achat pour les produits créés</string>
@@ -174,6 +177,7 @@
     <string name="error_handshake_description">%1$s nécessite un certificat qui n\'est pas connu ou approuvé par Android. \nLe certificat du serveur doit être signé par une autorité de certification (CA) de confiance\nPour répondre à ces exigences, vous pouvez utiliser un certificat gratuit de letsencrypt.org pour un chiffrement approprié.</string>
     <string name="error_unexpected_response_code">Code de réponse inattendu: %1$d</string>
     <string name="error_unexpected_response">Réponse inattendue du serveur</string>
+    <string name="error_no_browser">Installez un navigateur pour voir la page d\'aide</string>
     <string name="error_undefined">Une erreur est survenue</string>
 
     <string name="title_stock_overview">Aperçu des stocks</string>
@@ -214,6 +218,8 @@
     <string name="title_shopping_list_new">Nouvelle liste de courses</string>
     <string name="title_shopping_mode">Mode d\'achat</string>
     <string name="title_products_to_create">Produits à créer</string>
+    <string name="title_batch_mode_shopping_list">Liste de courses mode par lots</string>
+
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
     <!-- %1$s is a number like 1, 2, 3 -->
@@ -232,6 +238,9 @@
     <string name="subtitle_stock_entry_name">Acheté: %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">À consommer de préférence avant: %1$s ; quantité: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Article %1$dsur%2$d</string>
+
     <string name="description_batch_choose_link">Choisissez le produit auquel le code-barres sera lié.</string>
     <string name="description_batch_choose_create">Choisissez le produit auquel le code-barres sera lié ou créez-en un nouveau.</string>
     <string name="description_scan_batch_exit">De nouveaux produits ont été créés, mais ils n\'ont pas encore été envoyés au serveur car les détails requis manquent. Ouvrir les formulaires produits?</string>
@@ -355,6 +364,8 @@
     <string name="info_developers">Développeurs</string>
     <string name="info_github">Grocy Android sur GitHub</string>
     <string name="info_github_description">Code source</string>
+    <string name="info_website">Site Open Grocy</string>
+
     <string name="feature_1_title">Grocy pour Android</string>
     <string name="feature_1_description">Gestion d\'épicerie auto-hébergée pour votre maison</string>
     <string name="feature_2_title">Conception intuitive</string>
@@ -376,6 +387,8 @@
     <string name="setting_dark_mode_description">Désactivé pour la dépendance système</string>
     <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
     <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
+    <string name="setting_use_front_cam">Utiliser la caméra frontale</string>
+    <string name="setting_use_front_cam_description">Pour scanner un code barre</string>
     <string name="setting_reload_config">Recharger la configuration</string>
     <string name="setting_reload_config_description">Redémarrage de l\'application requis</string>
     <string name="setting_logout">Se déconnecter</string>
@@ -392,6 +405,7 @@
     <string name="setting_sync_off">Synchronisation désactivée</string>
     <string name="setting_not_loaded">Impossible de charger</string>
     <string name="setting_debug">Activer la journalisation</string>
+    <string name="setting_debug_description">Afficher le log des erreurs</string>
     <string name="setting_info_logs">Afficher les journaux d\'informations</string>
     <string name="setting_logs_description">Afficher le logcat de ce processus</string>
 
@@ -400,6 +414,8 @@
     <string name="setting_ask_store">Demander un magasin</string>
     <string name="setting_ask_location">Demandez l\'emplacement</string>
     <string name="setting_ask_specific_item">Demander un article spécifique</string>
+    <string name="setting_consume_all">Consomer toutes les unités d\'un article</string>
+
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://fr.demo.grocy.info</string>

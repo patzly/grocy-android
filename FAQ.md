@@ -116,7 +116,7 @@ Attention! If your Hass.io server is publicly accessible, following points are i
 <a name="faq5"></a>
 **(5) Why are my barcodes unreadable if I use the selfie camera?**
 
-Most devices have a front camera with a fixed focus for the normal distance between your eyes and the device.
+Most devices have a front camera with a fixed focus for the normal distance between your face and the device.
 With this distance, the picture resolution is sometimes too low for the scanning algorithm.
 
 <br />
