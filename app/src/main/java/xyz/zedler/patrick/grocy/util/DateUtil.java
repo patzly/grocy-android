@@ -120,58 +120,36 @@ public class DateUtil {
         } else if(days > 0) {
             if(days == 1) {
                 return context.getString(R.string.date_tomorrow);
+            } else if(days < 30) {
+                return context.getString(R.string.date_days_from_now, days);
+            } else if(days < 365) {
+                return context.getResources().getQuantityString(
+                        R.plurals.date_months_from_now,
+                        days / 30, days / 30
+                );
             } else {
-                if(days < 30) {
-                    return context.getString(R.string.date_days_from_now, days);
-                } else {
-                    if(days < 60) {
-                        return context.getString(R.string.date_month_from_now);
-                    } else {
-                        if(days < 365) {
-                            return context.getString(
-                                    R.string.date_months_from_now,
-                                    days / 30
-                            );
-                        } else {
-                            if(days < 700) { // how many days do you understand as two years?
-                                return context.getString(R.string.date_year_from_now);
-                            } else {
-                                return context.getString(
-                                        R.string.date_years_from_now,
-                                        days / 365
-                                );
-                            }
-                        }
-                    }
-                }
+                return context.getResources().getQuantityString(
+                        R.plurals.date_years_from_now,
+                        days / 365, days / 365
+                );
             }
         } else {
             if(days == -1) {
                 return context.getString(R.string.date_yesterday);
+            } else if(days > -30) {
+                return context.getString(R.string.date_days_ago, -1 * days);
+            } else if(days > -60) {
+                return context.getString(R.string.date_month_ago);
+            } else if(days > -365) {
+                return context.getResources().getQuantityString(
+                        R.plurals.date_months_ago,
+                        days  * -1 / 30, days  * -1 / 30
+                );
             } else {
-                if(days > -30) {
-                    return context.getString(R.string.date_days_ago, -1 * days);
-                } else {
-                    if(days > -60) {
-                        return context.getString(R.string.date_month_ago);
-                    } else {
-                        if(days > -365) {
-                            return context.getString(
-                                    R.string.date_months_ago,
-                                    days / 30 * -1
-                            );
-                        } else {
-                            if(days > -700) {
-                                return context.getString(R.string.date_year_ago);
-                            } else {
-                                return context.getString(
-                                        R.string.date_years_ago,
-                                        days / 365 * -1
-                                );
-                            }
-                        }
-                    }
-                }
+                return context.getResources().getQuantityString(
+                        R.plurals.date_years_ago,
+                        days * -1 / 365, days * -1 / 365
+                );
             }
         }
     }
@@ -180,45 +158,33 @@ public class DateUtil {
         if(days == 0) {
             return context.getString(R.string.date_never);
         } else if(days > 0) {
-            if(days == 1) {
-                return context.getString(R.string.date_day_one);
+            if(days < 30) {
+                return context.getResources().getQuantityString(R.plurals.date_days, days, days);
+            } if(days < 365) {
+                return context.getResources().getQuantityString(
+                        R.plurals.date_months,
+                        days / 30, days / 30
+                );
             } else {
-                if(days < 30) {
-                    return context.getString(R.string.date_days, days);
+                // Check if days are about the same as to the never expiring date
+                Calendar calendarNever = Calendar.getInstance();
+                try {
+                    Date dateNever = DATE_FORMAT.parse(Constants.DATE.NEVER_EXPIRES);
+                    if(dateNever != null) calendarNever.setTime(dateNever);
+                } catch (ParseException e) {
+                    Log.i(TAG, "getHumanFromDays: " + e);
+                }
+                long msDiff = calendarNever.getTimeInMillis()
+                        - Calendar.getInstance().getTimeInMillis();
+                long daysToNever = TimeUnit.MILLISECONDS.toDays(msDiff);
+                if(days <= daysToNever + 100 || days >= daysToNever - 100) {
+                    // deviation in server calculation possible
+                    return context.getString(R.string.date_unlimited);
                 } else {
-                    if(days < 60) {
-                        return context.getString(R.string.date_month_one);
-                    } else {
-                        if(days < 365) {
-                            return context.getString(R.string.date_months, days / 30);
-                        } else {
-                            if(days < 700) { // how many days do you understand as two years?
-                                return context.getString(R.string.date_year_one);
-                            } else {
-                                // Check if days are about the same as to the never expiring date
-                                Calendar calendarNever = Calendar.getInstance();
-                                try {
-                                    Date dateNever = DATE_FORMAT.parse(
-                                            Constants.DATE.NEVER_EXPIRES
-                                    );
-                                    if(dateNever != null) calendarNever.setTime(dateNever);
-                                } catch (ParseException e) {
-                                    Log.i(TAG, "getHumanFromDays: " + e);
-                                }
-                                long msDiff = calendarNever.getTimeInMillis()
-                                        - Calendar.getInstance().getTimeInMillis();
-                                long daysToNever = TimeUnit.MILLISECONDS.toDays(msDiff);
-                                if(days <= daysToNever + 100 || days >= daysToNever - 100) {
-                                    // deviation in server calculation possible
-                                    return context.getString(R.string.date_unlimited);
-                                } else {
-                                    return context.getString(
-                                            R.string.date_years, days / 365
-                                    );
-                                }
-                            }
-                        }
-                    }
+                    return context.getResources().getQuantityString(
+                            R.plurals.date_years,
+                            days / 365, days / 365
+                    );
                 }
             }
         } else return context.getString(R.string.date_unknown);
