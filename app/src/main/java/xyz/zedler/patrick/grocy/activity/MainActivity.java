@@ -64,7 +64,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.NavGraphDirections;
-import info.guardianproject.netcipher.proxy.OrbotHelper;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
@@ -258,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 break;
             case Constants.SHORTCUT_ACTION.ADD_ENTRY:
+                // TODO: Preselect last used shopping list!!
                 //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 Bundle bundleCreate = new Bundle();
                 bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);

@@ -228,13 +228,13 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
-        if(server.contains(".onion") && !OrbotHelper.get(this).init()) {
+        if(server.contains(".onion") && !OrbotHelper.get(requireContext()).init()) {
             showMessage(getString(R.string.error_orbot_not_installed));
-            OrbotHelper.get(this).installOrbot(this);
+            OrbotHelper.get(requireContext()).installOrbot(requireActivity());
             return;
         }
-        RequestQueueSingleton.getInstance(this).newRequestQueue(server);
-        dlHelper.reloadRequestQueue(this);
+        RequestQueueSingleton.getInstance(requireContext()).newRequestQueue(server);
+        dlHelper.reloadRequestQueue(requireActivity());
 
         binding.buttonLoginLogin.setEnabled(false);
         binding.buttonLoginDemo.setEnabled(false);
