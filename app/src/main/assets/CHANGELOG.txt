@@ -1,6 +1,7 @@
 1.9.0
 - Initial Tor Hidden Services support through Orbot
 - Updated translations
+- Bug fixes and improvements
 
 1.8.7
 - Hebrew translation (thanks Yaron!)
