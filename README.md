@@ -62,7 +62,7 @@ Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) fo
 
 ## Contribution
 
-If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues/new) in this repository.
+If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues) in this repository.
 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
