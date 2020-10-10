@@ -118,10 +118,11 @@ public class DateUtil {
         if(days == 0) {
             return context.getString(R.string.date_today);
         } else if(days > 0) {
-            if(days == 1) {
-                return context.getString(R.string.date_tomorrow);
-            } else if(days < 30) {
-                return context.getString(R.string.date_days_from_now, days);
+            if(days < 30) {
+                return context.getResources().getQuantityString(
+                        R.plurals.date_days_from_now,
+                        days, days
+                );
             } else if(days < 365) {
                 return context.getResources().getQuantityString(
                         R.plurals.date_months_from_now,
@@ -134,13 +135,12 @@ public class DateUtil {
                 );
             }
         } else {
-            if(days == -1) {
-                return context.getString(R.string.date_yesterday);
-            } else if(days > -30) {
-                return context.getString(R.string.date_days_ago, -1 * days);
-            } else if(days > -60) {
-                return context.getString(R.string.date_month_ago);
-            } else if(days > -365) {
+            if(days > -30) {
+                return context.getResources().getQuantityString(
+                        R.plurals.date_days_ago,
+                        days * -1, days * -1
+                );
+            } if(days > -365) {
                 return context.getResources().getQuantityString(
                         R.plurals.date_months_ago,
                         days  * -1 / 30, days  * -1 / 30

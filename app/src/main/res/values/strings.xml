@@ -314,12 +314,6 @@
     <string name="date_unknown">Unknown</string>
     <string name="date_unlimited">Unlimited</string>
     <string name="date_never">Never</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$d days from now</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">%1$d days ago</string>
 
     <plurals name="date_days">
         <item quantity="one">%d day</item>
@@ -338,7 +332,7 @@
 
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
     <plurals name="date_days_ago">
-        <item quantity="one">Yesterday</item>
+        <item quantity="one">%d day ago</item>
         <item quantity="other">%d days ago</item>
     </plurals>
 
@@ -352,6 +346,12 @@
     <plurals name="date_years_ago">
         <item quantity="one">%d year ago</item>
         <item quantity="other">%d years ago</item>
+    </plurals>
+
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">%d day from now</item>
+        <item quantity="other">%d days from now</item>
     </plurals>
 
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
