@@ -380,8 +380,8 @@
     <string name="category_debugging">Debugging</string>
     <string name="category_presets">Vorgaben für neue Produkte</string>
 
-    <string name="hint_server">Server URL</string>
-    <string name="hint_key">Gültiger API Schlüssel</string>
+    <string name="hint_server">Server-URL</string>
+    <string name="hint_key">Gültiger API-Schlüssel</string>
 
     <string name="setting_dark_mode">Dunkles Theme erzwingen</string>
     <string name="setting_dark_mode_description">Aus für Systemabhängigkeit</string>
