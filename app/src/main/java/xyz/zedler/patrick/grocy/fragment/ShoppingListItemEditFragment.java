@@ -468,7 +468,19 @@ public class ShoppingListItemEditFragment extends Fragment {
                 binding.autoCompleteShoppingListItemEditProduct.setText(productName);
             }
             if(shoppingLists.size() >= 1) {
-                selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
+                if(startupBundle.containsKey(Constants.ARGUMENT.SHOPPING_LIST_ID)) {
+                    selectShoppingList(startupBundle.getInt(Constants.ARGUMENT.SHOPPING_LIST_ID));
+                } else {
+                    int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
+                    if(lastId != 1 && !sharedPrefs.getBoolean(
+                            Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
+                            true
+                    )) {
+                        sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1).apply();
+                        lastId = 1;
+                    }
+                    selectShoppingList(lastId);
+                }
             } else {
                 selectShoppingList(-1);
             }
