@@ -60,6 +60,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(4) How can I use this app with Hass.io?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4)
 * [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
 * [(6) What is the APK with ML Kit as barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
+* [(7) How can I connect to my instance through Tor Hidden Service?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq7)
 
 [I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
@@ -133,6 +134,18 @@ This has many advantages:
 - No horizontal alignment of barcodes necessary
 - We never saw any recognition mistakes
 - It uses the new CameraX implementation
+
+<br />
+
+<a name="faq7"></a>
+**(7) How can I connect to my instance through Tor Hidden Service?**
+
+Simply enter your onion hostname in the server field like this:
+
+`http://myhiddenservice.onion`
+
+Orbot needs to be installed on you device and will be automatically launched if it's not running.
+Currently there can be error messages if Orbot is not connected after you press the login button.
 
 ## Support
 

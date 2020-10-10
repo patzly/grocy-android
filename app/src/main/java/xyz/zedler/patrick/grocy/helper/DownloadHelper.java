@@ -104,6 +104,11 @@ public class DownloadHelper {
         return uuidHelper;
     }
 
+    public void reloadRequestQueue(Activity activity) {
+        requestQueue = RequestQueueSingleton
+                .getInstance(activity.getApplicationContext()).getRequestQueue();
+    }
+
     public void get(
             String url,
             String tag,

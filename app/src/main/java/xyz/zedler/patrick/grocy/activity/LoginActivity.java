@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.ActivityLoginBinding;
@@ -60,6 +61,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -208,6 +210,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
+        if(!OrbotHelper.get(this).init()) {
+            showMessage(getString(R.string.error_orbot_not_installed));
+            OrbotHelper.get(this).installOrbot(this);
+            return;
+        }
+        RequestQueueSingleton.getInstance(this).newRequestQueue(server);
+        dlHelper.reloadRequestQueue(this);
+
         binding.buttonLoginLogin.setEnabled(false);
         binding.buttonLoginDemo.setEnabled(false);
         dlHelper.get(

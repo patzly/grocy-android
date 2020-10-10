@@ -141,6 +141,7 @@
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
 
     <string name="error_api_not_working">API key not working</string>
+    <string name="error_orbot_not_installed">Orbot is not installed</string>
     <string name="error_select_product">Select a product</string>
     <string name="error_empty">Required</string>
     <string name="error_empty_stock">Nothing in stock</string>

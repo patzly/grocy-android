@@ -58,6 +58,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
@@ -235,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUp(Bundle savedInstanceState) {
+        if(!OrbotHelper.get(this).init()) {
+            showMessage(Snackbar.make(
+                    binding.frameMainContainer,
+                    getString(R.string.error_orbot_not_installed),
+                    Snackbar.LENGTH_LONG
+            ));
+        }
+
         ConfigUtil.loadInfo(
                 new DownloadHelper(this, TAG),
                 grocyApi,
