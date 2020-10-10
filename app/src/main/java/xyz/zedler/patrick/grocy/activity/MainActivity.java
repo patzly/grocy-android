@@ -236,7 +236,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUp(Bundle savedInstanceState) {
-        if(!OrbotHelper.get(this).init()) {
+        String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        if(serverUrl != null && serverUrl.contains(".onion") && !OrbotHelper.get(this).init()) {
             showMessage(Snackbar.make(
                     binding.frameMainContainer,
                     getString(R.string.error_orbot_not_installed),

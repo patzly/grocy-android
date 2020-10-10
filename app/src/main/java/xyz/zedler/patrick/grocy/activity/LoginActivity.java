@@ -210,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
-        if(!OrbotHelper.get(this).init()) {
+        if(server.contains(".onion") && !OrbotHelper.get(this).init()) {
             showMessage(getString(R.string.error_orbot_not_installed));
             OrbotHelper.get(this).installOrbot(this);
             return;
