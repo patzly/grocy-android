@@ -1047,7 +1047,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             }
                         }
                         if(filteredStockEntries.size() == 1) {
-                            setEntryId(String.valueOf(filteredStockEntries.get(0).getId()));
+                            setEntryId(String.valueOf(filteredStockEntries.get(0).getStockId()));
                             askNecessaryDetails();
                             return;
                         }

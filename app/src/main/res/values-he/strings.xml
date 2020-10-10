@@ -137,6 +137,7 @@
     <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
 
     <string name="error_api_not_working">מפתח ה־API לא עובד</string>
+    <string name="error_orbot_not_installed">Orbot לא מותקן</string>
     <string name="error_select_product">נא לבחור מוצר</string>
     <string name="error_empty">נדרש</string>
     <string name="error_empty_stock">אין כלום במלאי</string>

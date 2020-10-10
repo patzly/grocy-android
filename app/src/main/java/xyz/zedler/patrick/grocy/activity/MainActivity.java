@@ -64,6 +64,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.NavGraphDirections;
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
