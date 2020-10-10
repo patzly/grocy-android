@@ -16,7 +16,7 @@
 </ul>
 
 <p><br><b>Contribution:</b></p>
-<p>If you run into a bug or miss a feature, feel free to give feedback in the app, send us an email or <a href="https://github.com/patzly/grocy-android/issues">open an issue on GitHub</a>. Like the grocy project, Grocy Android can be translated, too. Please go to our GitHub page for more information.</p>
+<p>If you run into a bug or miss a feature, feel free to give feedback in the app, send us an email or <a href="https://github.com/patzly/grocy-android/issues">open an issue</a> on GitHub. Like the grocy project, Grocy Android can be translated, too. Please go to our <a href="https://github.com/patzly/grocy-android">GitHub page</a> for more information.</p>
 
 <p><br><b>Compatibility:</b></p>
 <p>Grocy Android requires at least grocy 2.7.0 on your server. It is also possible to use the grocy Add-on on a Hass.io server. Our in-app help explains how to do that.</p>
