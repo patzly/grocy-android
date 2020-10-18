@@ -409,8 +409,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 							? dateUtil.getLocalizedDate(lastPurchased)
 							: activity.getString(R.string.date_never),
 					lastPurchased != null
-							? dateUtil.getHumanFromToday(
-									DateUtil.getDaysFromNow(productDetails.getLastPurchased()))
+							? dateUtil.getHumanForDaysFromNow(lastPurchased)
 							: null
 			);
 
@@ -445,7 +444,7 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 			)) {
 				itemShelfLife.setText(
 						activity.getString(R.string.property_average_shelf_life),
-						dateUtil.getHumanFromDays(shelfLife),
+						dateUtil.getHumanDuration(shelfLife),
 						null
 				);
 			}
