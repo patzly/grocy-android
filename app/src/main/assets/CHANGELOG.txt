@@ -3,8 +3,8 @@
 - Plural strings for better translation support
 - Fixed consume batch mode with specific entry
 - Fixed shopping list preselection with shortcut
+- Fixed shelf life duration in product overview
 - Updated translations
-- Bug fixes and improvements
 
 1.8.7
 - Hebrew translation (thanks Yaron!)
