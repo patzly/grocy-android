@@ -177,82 +177,82 @@ public class ProductOverviewBottomSheetDialogFragment extends CustomBottomSheetD
 		toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
 		toolbar.setOnMenuItemClickListener(item -> {
 			Bundle bundle = new Bundle();
-			switch (item.getItemId()) {
-				case R.id.action_add_to_shopping_list:
+			if(item.getItemId() == R.id.action_add_to_shopping_list) {
+				bundle.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.ACTION.CREATE_FROM_STOCK
+				);
+				bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+				activity.replaceFragment(
+						Constants.UI.SHOPPING_LIST_ITEM_EDIT,
+						bundle,
+						true
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume_all) {
+				((StockFragment) activity.getCurrentFragment()).performAction(
+						Constants.ACTION.CONSUME_ALL,
+						product.getId()
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume_spoiled) {
+				((StockFragment) activity.getCurrentFragment()).performAction(
+						Constants.ACTION.CONSUME_SPOILED,
+						product.getId()
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_purchase) {
+				bundle.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.ACTION.PURCHASE_THEN_STOCK
+				);
+				bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
+				activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume) {
+				bundle.putString(
+						Constants.ARGUMENT.TYPE,
+						Constants.ACTION.CONSUME_THEN_STOCK
+				);
+				bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
+				activity.replaceFragment(Constants.UI.CONSUME, bundle, true);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_edit_product) {
+				Fragment current = activity.getCurrentFragment();
+				if(current.getClass() == PurchaseFragment.class) {
 					bundle.putString(
 							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.CREATE_FROM_STOCK
+							Constants.ACTION.EDIT_THEN_PURCHASE
 					);
-					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					activity.replaceFragment(
-							Constants.UI.SHOPPING_LIST_ITEM_EDIT,
-							bundle,
-							true
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_all:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_ALL,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_spoiled:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_SPOILED,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_purchase:
+				} else if(current.getClass() == ConsumeFragment.class) {
 					bundle.putString(
 							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.PURCHASE_THEN_STOCK
+							Constants.ACTION.EDIT_THEN_CONSUME
 					);
-					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-					activity.replaceFragment(Constants.UI.PURCHASE, bundle, true);
-					dismiss();
-					return true;
-				case R.id.action_consume:
+				} else if(current.getClass() == ShoppingListItemEditFragment.class) {
 					bundle.putString(
 							Constants.ARGUMENT.TYPE,
-							Constants.ACTION.CONSUME_THEN_STOCK
+							Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT
 					);
-					bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-					activity.replaceFragment(Constants.UI.CONSUME, bundle, true);
-					dismiss();
-					return true;
-				case R.id.action_edit_product:
-					Fragment current = activity.getCurrentFragment();
-					if(current.getClass() == PurchaseFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_PURCHASE
-						);
-					} else if(current.getClass() == ConsumeFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_CONSUME
-						);
-					} else if(current.getClass() == ShoppingListItemEditFragment.class) {
-						bundle.putString(
-								Constants.ARGUMENT.TYPE,
-								Constants.ACTION.EDIT_THEN_SHOPPING_LIST_ITEM_EDIT
-						);
-					}else {
-						bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-					}
-					bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-					activity.replaceFragment(
-							Constants.UI.MASTER_PRODUCT_SIMPLE,
-							bundle,
-							true
-					);
-					dismiss();
-					return true;
+				} else {
+					bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
+				}
+				bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+				activity.replaceFragment(
+						Constants.UI.MASTER_PRODUCT_SIMPLE,
+						bundle,
+						true
+				);
+				dismiss();
+				return true;
+			} else {
+				return false;
 			}
-			return false;
 		});
 
 		// DESCRIPTION
