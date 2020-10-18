@@ -10,6 +10,9 @@
 - Hebrew translation (thanks Yaron!)
 - Bug fixes and improvements
 
+1.8.6
+- This was just a new tag for F-Droid
+
 1.8.5
 - Fixed Norwegian translation
 - Updated translations
