@@ -1,6 +1,8 @@
 1.9.0
 - Initial Tor Hidden Services support through Orbot
-- Fix bug in consume batch mode with specific entry
+- Plural strings for better translation support
+- Fixed consume batch mode with specific entry
+- Fixed shopping list preselection with shortcut
 - Updated translations
 - Bug fixes and improvements
 
