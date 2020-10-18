@@ -340,7 +340,7 @@
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
     <plurals name="date_days_from_now">
-        <item quantity="one">In %d Tag</item>
+        <item quantity="one">Morgen</item>
         <item quantity="other">In %d Tagen</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
