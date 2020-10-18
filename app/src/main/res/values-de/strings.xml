@@ -330,7 +330,7 @@
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
     <plurals name="date_months_ago">
-        <item quantity="one">Vor %d Monat</item>
+        <item quantity="one">Vor einem Monat</item>
         <item quantity="other">Vor %d Monaten</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
@@ -345,7 +345,7 @@
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
     <plurals name="date_months_from_now">
-        <item quantity="one">In %d Monat</item>
+        <item quantity="one">In einem Monat</item>
         <item quantity="other">In %d Monaten</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
