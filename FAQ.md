@@ -139,7 +139,8 @@ This has many advantages:
 
 <a name="faq7"></a>
 **(7) How can I connect to my instance through Tor Hidden Service?**
-This is only available on v1.9.0 and later.
+
+This is only available on v1.9.0 and later.  
 Simply enter your onion hostname in the server field like this:
 
 `http://myhiddenservice.onion`
