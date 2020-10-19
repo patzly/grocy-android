@@ -310,48 +310,67 @@
     <string name="date_unknown">לא ידוע</string>
     <string name="date_unlimited">בלתי מוגבל</string>
     <string name="date_never">אף פעם</string>
-    <!-- This string should contain the singular form of "day" -->
-    <string name="date_day_one">יום אחד</string>
-    <!-- This string should contain the singular form of "month" -->
-    <string name="date_month_one">חודש אחד</string>
-    <!-- This string should contain the singular form of "year" -->
-    <string name="date_year_one">שנה אחת</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
-    <string name="date_days">%1$d ימים</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
-    <string name="date_months">%1$d חודשים</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
-    <string name="date_years">%1$d שנים</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$d ימים מעכשיו</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_from_now">חודש מעכשיו</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_from_now">%1$d חודשים מעכשיו</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_from_now">שנה מעכשיו</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_from_now">%1$d שנים מעכשיו</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">לפני %1$d ימים</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_ago">לפני חודש</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_ago">לפני %1$d חודשים</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_ago">לפני שנה</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_ago">לפני %1$d שנים</string>
+
+    <plurals name="date_days">
+        <item quantity="one">יום</item>
+        <item quantity="two">יומיים</item>
+        <item quantity="many">%d ימים</item>
+        <item quantity="other">%d ימים</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">חודש</item>
+        <item quantity="two">חודשיים</item>
+        <item quantity="many">%d חודשים</item>
+        <item quantity="other">%d חודשים</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">שנה</item>
+        <item quantity="two">שנתיים</item>
+        <item quantity="many">%d שנים</item>
+        <item quantity="other">%d שנים</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">אתמול</item>
+        <item quantity="two">שלשום</item>
+        <item quantity="many">לפני %d ימים</item>
+        <item quantity="other">לפני %d ימים</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">לפני חודש</item>
+        <item quantity="two">לפני חודשיים</item>
+        <item quantity="many">לפני %d חודשים</item>
+        <item quantity="other">לפני %d חודשים</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">לפני שנה</item>
+        <item quantity="two">לפני שנתיים</item>
+        <item quantity="many">לפני %d שנים</item>
+        <item quantity="other">לפני %d שנים</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">מחר</item>
+        <item quantity="two">מחרתיים</item>
+        <item quantity="many">בעוד %d ימים מהיום</item>
+        <item quantity="other">בעוד %d ימים מהיום</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">בעוד חודש מהיום</item>
+        <item quantity="two">בעוד חודשיים מהיום</item>
+        <item quantity="many">בעוד %d חודשים מהיום</item>
+        <item quantity="other">בעוד %d חודשים מהיום</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">בעוד שנה מהיום</item>
+        <item quantity="two">בעוד שנתיים מהיום</item>
+        <item quantity="many">בעוד %d שנים מהיום</item>
+        <item quantity="other">בעוד %d שנים מהיום</item>
+    </plurals>
 
     <string name="info_acknowledgement">אנו מעוניינים להודות לבֵּרְנְד בֵּסְטֵל, שללא העבודה הנפלאה שלו היישומון הזה לא היה רואה אור.</string>
     <string name="info_intro">להציג את ההיכרות שוב</string>

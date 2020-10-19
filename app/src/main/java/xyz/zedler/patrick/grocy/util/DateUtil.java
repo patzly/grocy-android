@@ -42,7 +42,7 @@ public class DateUtil {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.ENGLISH
     );
-    private Context context;
+    private final Context context;
 
     public DateUtil(Context context) {
         this.context = context;
@@ -61,21 +61,30 @@ public class DateUtil {
 
     public static int getDaysFromNow(String dateString) {
         if(dateString == null) return 0;
-        Date current = Calendar.getInstance().getTime();
         Date date = null;
         try {
             date = DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
-            Log.e(TAG, "getDaysAway: ");
+            Log.e(TAG, "getDaysFromNow: ");
         }
         if(date == null) return 0;
-        return ((int)(date.getTime() / 86400000) - (int)(current.getTime() / 86400000)) + 1;
+        long diff = date.getTime() - getCurrentDate().getTime();
+        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     public static String getTodayWithDaysAdded(int daysToAdd) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, daysToAdd);
         return DATE_FORMAT.format(calendar.getTime());
+    }
+
+    private static Date getCurrentDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
     public String getLocalizedDate(String dateString, int format) {
@@ -154,16 +163,16 @@ public class DateUtil {
         }
     }
 
-    public String getHumanFromDays(int days) {
+    public String getHumanDuration(int days) {
         if(days == 0) {
             return context.getString(R.string.date_never);
         } else if(days > 0) {
             if(days < 30) {
                 return context.getResources().getQuantityString(R.plurals.date_days, days, days);
             } if(days < 365) {
+                int months = Math.round((float) days / 30);
                 return context.getResources().getQuantityString(
-                        R.plurals.date_months,
-                        days / 30, days / 30
+                        R.plurals.date_months, months, months
                 );
             } else {
                 // Check if days are about the same as to the never expiring date
@@ -172,18 +181,17 @@ public class DateUtil {
                     Date dateNever = DATE_FORMAT.parse(Constants.DATE.NEVER_EXPIRES);
                     if(dateNever != null) calendarNever.setTime(dateNever);
                 } catch (ParseException e) {
-                    Log.i(TAG, "getHumanFromDays: " + e);
+                    Log.i(TAG, "getHumanDuration: " + e);
                 }
-                long msDiff = calendarNever.getTimeInMillis()
-                        - Calendar.getInstance().getTimeInMillis();
-                long daysToNever = TimeUnit.MILLISECONDS.toDays(msDiff);
-                if(days <= daysToNever + 100 || days >= daysToNever - 100) {
+                long msDiff = calendarNever.getTime().getTime() - getCurrentDate().getTime();
+                long daysToNever = TimeUnit.DAYS.convert(msDiff, TimeUnit.MILLISECONDS);
+                if(days >= daysToNever - 100) {
                     // deviation in server calculation possible
                     return context.getString(R.string.date_unlimited);
                 } else {
+                    int years = Math.round((float) days / 365);
                     return context.getResources().getQuantityString(
-                            R.plurals.date_years,
-                            days / 365, days / 365
+                            R.plurals.date_years, years, years
                     );
                 }
             }

@@ -1,12 +1,18 @@
 1.9.0
+- Polish translation (thanks Marcin!)
 - Initial Tor Hidden Services support through Orbot
-- Fix bug in consume batch mode with specific entry
+- Plural strings for better translation support
+- Fixed consume batch mode with specific entry
+- Fixed shopping list preselection with shortcut
+- Fixed shelf life duration in product overview
 - Updated translations
-- Bug fixes and improvements
 
 1.8.7
 - Hebrew translation (thanks Yaron!)
 - Bug fixes and improvements
+
+1.8.6
+- This was just a new tag for F-Droid
 
 1.8.5
 - Fixed Norwegian translation
