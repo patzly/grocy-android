@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -48,6 +49,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     private Context context;
     private ArrayList<StockItem> stockItems;
+    private ArrayList<Integer> missingItemsProductIds;
     private ArrayList<String> shoppingListProductIds;
     private HashMap<Integer, QuantityUnit> quantityUnits;
     private StockItemAdapterListener listener;
@@ -58,6 +60,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public StockItemAdapter(
             Context context,
             ArrayList<StockItem> stockItems,
+            ArrayList<MissingItem> missingItems,
             HashMap<Integer, QuantityUnit> quantityUnits,
             ArrayList<String> shoppingListProductIds,
             int daysExpiringSoon,
@@ -67,6 +70,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     ) {
         this.context = context;
         this.stockItems = stockItems;
+        this.missingItemsProductIds = getMissingItemsProductIds(missingItems);
         this.quantityUnits = quantityUnits;
         this.shoppingListProductIds = shoppingListProductIds;
         this.daysExpiringSoon = daysExpiringSoon;
@@ -164,7 +168,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             );
         }
         holder.textViewAmount.setText(stringBuilderAmount);
-        if(stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()) {
+        if(missingItemsProductIds.contains(stockItem.getProductId())) {
             holder.textViewAmount.setTypeface(
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
@@ -234,10 +238,18 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     public void updateData(
             ArrayList<StockItem> stockItems,
+            ArrayList<MissingItem> missingItems,
             ArrayList<String> shoppingListProductIds
     ) {
         this.stockItems = stockItems;
+        this.missingItemsProductIds = getMissingItemsProductIds(missingItems);
         this.shoppingListProductIds = shoppingListProductIds;
+    }
+
+    private ArrayList<Integer> getMissingItemsProductIds(ArrayList<MissingItem> missingItems) {
+        ArrayList<Integer> productIds = new ArrayList<>();
+        for(MissingItem missingItem : missingItems) productIds.add(missingItem.getId());
+        return productIds;
     }
 
     @Override

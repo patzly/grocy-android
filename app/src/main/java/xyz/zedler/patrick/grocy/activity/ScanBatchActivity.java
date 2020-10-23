@@ -131,6 +131,7 @@ public class ScanBatchActivity extends AppCompatActivity
     private String currentProductName;
     private String currentDefaultStoreId;
     private String currentLastPrice;
+    private String bluetoothScannedBarcode = "";
     private int currentDefaultBestBeforeDays = 0;
     private int currentDefaultLocationId = -1;
 
@@ -1214,13 +1215,53 @@ public class ScanBatchActivity extends AppCompatActivity
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        switch(keyCode) {
+            case KeyEvent.KEYCODE_1:
+                bluetoothScannedBarcode += "1";
+                break;
+            case KeyEvent.KEYCODE_2:
+                bluetoothScannedBarcode += "2";
+                break;
+            case KeyEvent.KEYCODE_3:
+                bluetoothScannedBarcode += "3";
+                break;
+            case KeyEvent.KEYCODE_4:
+                bluetoothScannedBarcode += "4";
+                break;
+            case KeyEvent.KEYCODE_5:
+                bluetoothScannedBarcode += "5";
+                break;
+            case KeyEvent.KEYCODE_6:
+                bluetoothScannedBarcode += "6";
+                break;
+            case KeyEvent.KEYCODE_7:
+                bluetoothScannedBarcode += "7";
+                break;
+            case KeyEvent.KEYCODE_8:
+                bluetoothScannedBarcode += "8";
+                break;
+            case KeyEvent.KEYCODE_9:
+                bluetoothScannedBarcode += "9";
+                break;
+            case KeyEvent.KEYCODE_0:
+                bluetoothScannedBarcode += "0";
+                break;
+            case KeyEvent.KEYCODE_TAB:
+                if(bluetoothScannedBarcode.isEmpty()) return true;
+                barcodeRipple.pauseAnimation();
+                loadProductDetailsByBarcode(bluetoothScannedBarcode);
+                bluetoothScannedBarcode = "";
+                break;
+            default:
+                return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        }
+        return true;
     }
 
     @Override
     public void onBarcodeResult(BarcodeResult result) {
         barcodeRipple.pauseAnimation();
-
+        bluetoothScannedBarcode = "";
         loadProductDetailsByBarcode(result.getText());
     }
 

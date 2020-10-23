@@ -1,0 +1,9 @@
+• Polish translation (thanks Marcin!)
+• Initial Scanner device support (needs TAB as suffix)
+• Initial Tor Hidden Services support through Orbot
+• Fixed consume batch mode with specific entry
+• Fixed shopping list preselection with shortcut
+• Fixed amount color of missing items in stock
+• Fixed wrong filtering of missing items
+• Plural strings for better translation support
+• Updated translations
