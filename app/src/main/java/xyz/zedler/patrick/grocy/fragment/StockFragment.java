@@ -548,8 +548,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         missingStockItems.clear();
                     }
                     for(StockItem stockItem : stockItems) {
-                        if(stockItem.getProduct().getMinStockAmount() > 0) {
-                            if(stockItem.getAmount() < stockItem.getProduct().getMinStockAmount()) {
+                         if(stockItem.getProduct().getMinStockAmount() > 0) {
+                            
+                            double currentamount = stockItem.getAmount()+ stockItem.getAmountAggregated();
+
+                            if(currentamount < stockItem.getProduct().getMinStockAmount()) {
                                 missingStockItems.add(stockItem);
                             }
                         }
