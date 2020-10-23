@@ -549,8 +549,35 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     }
                     for(StockItem stockItem : stockItems) {
                          if(stockItem.getProduct().getMinStockAmount() > 0) {
-                            
-                            double currentamount = stockItem.getAmount()+ stockItem.getAmountAggregated();
+                            //current amount of the parent
+                            double currentamount = stockItem.getAmount();
+                             
+                              // for a parent, whe check in list all of the children that exist in stock
+
+                            for(StockItem children : stockItems) {
+                                //if the children have a parent
+                                if (children.getProduct().getParentProductId() != null && children.getProduct().getParentProductId() != "") {
+                                    {
+                                        if(children.getProduct().getParentProductId().length() > 0)
+                                        {
+
+                                            String childrenParentId = children.getProduct().getParentProductId();
+                                            //if the children parent Id equals the current selected item
+                                            if (Integer.parseInt(childrenParentId) == stockItem.getProductId()) {
+                                                //we make a addition of the current amount of the parent + the current Aggregated amount of the children (means amount of the children and childrens of the children) 
+                                                //cover 3 layers (parent-children-childrenOfChildren) of object tree means 95+% of usage. if someone have more than 3 layers, it's probably a conceptual mistake.
+                                                currentamount = currentamount + children.getAmountAggregated();
+
+
+                                            }
+                                        }
+
+
+                                    }
+
+                                }
+                            }
+
 
                             if(currentamount < stockItem.getProduct().getMinStockAmount()) {
                                 missingStockItems.add(stockItem);
