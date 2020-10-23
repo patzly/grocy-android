@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
@@ -789,6 +790,7 @@ public class DownloadHelper {
         private OnErrorListener onErrorListener;
         private String uuidQueue;
         private int queueSize;
+        private boolean isRunning;
 
         public Queue(OnQueueEmptyListener onQueueEmptyListener, OnErrorListener onErrorListener) {
             this.onQueueEmptyListener = onQueueEmptyListener;
@@ -796,6 +798,7 @@ public class DownloadHelper {
             queueItems = new ArrayList<>();
             uuidQueue = UUID.randomUUID().toString();
             queueSize = 0;
+            isRunning = false;
         }
 
         public void append(ArrayList<QueueItem> queueItems) {
@@ -810,18 +813,29 @@ public class DownloadHelper {
         }
 
         public void start() {
+            if(isRunning) {
+                return;
+            } else {
+                isRunning = true;
+            }
             while(!queueItems.isEmpty()) {
                 QueueItem queueItem = queueItems.remove(0);
                 queueItem.perform(response -> {
                     queueSize--;
                     if(queueSize > 0) return;
+                    isRunning = false;
                     if(onQueueEmptyListener != null) onQueueEmptyListener.execute();
                     reset();
                 }, error -> {
+                    isRunning = false;
                     if(onErrorListener != null) onErrorListener.onError(error);
                     reset();
                 }, uuidQueue);
             }
+        }
+
+        public int getSize() {
+            return queueSize;
         }
 
         private void reset() {

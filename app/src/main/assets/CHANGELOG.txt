@@ -5,6 +5,9 @@
 - Fixed consume batch mode with specific entry
 - Fixed shopping list preselection with shortcut
 - Fixed shelf life duration in product overview
+- Fixed amount color of missing items in stock
+- Fixed wrong displaying of missing items
+- Improved downloading process
 - Plural strings for better translation support
 - Updated translations
 
