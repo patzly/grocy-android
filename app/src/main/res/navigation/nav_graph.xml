@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/stockFragment">
 
     <fragment
         android:id="@+id/stockFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.StockFragment"
-        android:label="StockFragment" >
+        android:label="StockFragment"
+        tools:layout="@layout/fragment_stock" >
         <action
             android:id="@+id/action_stockFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
@@ -20,7 +23,8 @@
     <fragment
         android:id="@+id/shoppingListFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
-        android:label="ShoppingListFragment" >
+        android:label="ShoppingListFragment"
+        tools:layout="@layout/fragment_shopping_list" >
         <action
             android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
             app:destination="@id/shoppingListItemEditFragment"
@@ -43,7 +47,8 @@
     <fragment
         android:id="@+id/consumeFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
-        android:label="ConsumeFragment" >
+        android:label="ConsumeFragment"
+        tools:layout="@layout/fragment_consume" >
         <argument
             android:name="closeWhenFinished"
             app:argType="boolean"
@@ -75,7 +80,8 @@
     <fragment
         android:id="@+id/purchaseFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
-        android:label="PurchaseFragment" >
+        android:label="PurchaseFragment"
+        tools:layout="@layout/fragment_purchase" >
         <argument
             android:name="closeWhenFinished"
             app:argType="boolean"
@@ -127,11 +133,13 @@
     <activity
         android:id="@+id/settingsActivity"
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
-        android:label="SettingsActivity" />
+        android:label="SettingsActivity"
+        tools:layout="@layout/activity_settings" />
     <fragment
         android:id="@+id/masterProductsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
-        android:label="MasterProductsFragment" >
+        android:label="MasterProductsFragment"
+        tools:layout="@layout/fragment_master_products" >
         <action
             android:id="@+id/action_masterProductsFragment_to_masterProductSimpleFragment"
             app:destination="@id/masterProductSimpleFragment"
@@ -142,7 +150,8 @@
     <fragment
         android:id="@+id/masterStoresFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterStoresFragment"
-        android:label="MasterStoresFragment" >
+        android:label="MasterStoresFragment"
+        tools:layout="@layout/fragment_master_stores" >
         <action
             android:id="@+id/action_masterStoresFragment_to_masterStoreFragment"
             app:destination="@id/masterStoreFragment"
@@ -153,7 +162,8 @@
     <fragment
         android:id="@+id/masterLocationsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment"
-        android:label="MasterLocationsFragment" >
+        android:label="MasterLocationsFragment"
+        tools:layout="@layout/fragment_master_locations" >
         <action
             android:id="@+id/action_masterLocationsFragment_to_masterLocationFragment"
             app:destination="@id/masterLocationFragment"
@@ -164,7 +174,8 @@
     <fragment
         android:id="@+id/masterQuantityUnitsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment"
-        android:label="MasterQuantityUnitsFragment" >
+        android:label="MasterQuantityUnitsFragment"
+        tools:layout="@layout/fragment_master_quantity_units" >
         <action
             android:id="@+id/action_masterQuantityUnitsFragment_to_masterQuantityUnitFragment"
             app:destination="@id/masterQuantityUnitFragment"
@@ -175,7 +186,8 @@
     <fragment
         android:id="@+id/masterProductGroupsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment"
-        android:label="MasterProductGroupsFragment" >
+        android:label="MasterProductGroupsFragment"
+        tools:layout="@layout/fragment_master_product_groups" >
         <action
             android:id="@+id/action_masterProductGroupsFragment_to_masterProductGroupFragment"
             app:destination="@id/masterProductGroupFragment"
@@ -186,11 +198,13 @@
     <dialog
         android:id="@+id/feedbackBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet"
-        android:label="FeedbackBottomSheetDialogFragment" />
+        android:label="FeedbackBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_bottomsheet_feedback" />
     <fragment
         android:id="@+id/masterProductSimpleFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment"
-        android:label="MasterProductSimpleFragment" >
+        android:label="MasterProductSimpleFragment"
+        tools:layout="@layout/fragment_master_product_simple" >
         <argument
             android:name="action"
             app:argType="string" />
@@ -214,23 +228,28 @@
     <fragment
         android:id="@+id/masterLocationFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationFragment"
-        android:label="MasterLocationFragment" />
+        android:label="MasterLocationFragment"
+        tools:layout="@layout/fragment_master_location" />
     <fragment
         android:id="@+id/masterStoreFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterStoreFragment"
-        android:label="MasterStoreFragment" />
+        android:label="MasterStoreFragment"
+        tools:layout="@layout/fragment_master_store" />
     <fragment
         android:id="@+id/masterQuantityUnitFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment"
-        android:label="MasterQuantityUnitFragment" />
+        android:label="MasterQuantityUnitFragment"
+        tools:layout="@layout/fragment_master_quantity_unit" />
     <fragment
         android:id="@+id/masterProductGroupFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment"
-        android:label="MasterProductGroupFragment" />
+        android:label="MasterProductGroupFragment"
+        tools:layout="@layout/fragment_master_product_group" />
     <fragment
         android:id="@+id/shoppingListItemEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment"
-        android:label="ShoppingListItemEditFragment" >
+        android:label="ShoppingListItemEditFragment"
+        tools:layout="@layout/fragment_shopping_list_item_edit" >
         <argument
             android:name="selectedShoppingListId"
             app:argType="integer"
@@ -261,7 +280,8 @@
     <dialog
         android:id="@+id/productOverviewBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet"
-        android:label="ProductOverviewBottomSheetDialogFragment" >
+        android:label="ProductOverviewBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_bottomsheet_product_overview" >
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
             app:destination="@id/masterProductSimpleFragment"
@@ -314,7 +334,8 @@
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheet"
-        android:label="DrawerBottomSheetDialogFragment" >
+        android:label="DrawerBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_bottomsheet_drawer" >
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingListFragment"
             app:destination="@id/shoppingListFragment" />
@@ -341,7 +362,8 @@
     <dialog
         android:id="@+id/inputNameBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet"
-        android:label="InputNameBottomSheetDialogFragment" >
+        android:label="InputNameBottomSheetDialogFragment"
+        tools:layout="@layout/fragment_bottomsheet_input_name" >
         <argument
             android:name="productName"
             app:argType="string" />
@@ -355,7 +377,8 @@
     <fragment
         android:id="@+id/missingBatchItemsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment"
-        android:label="MissingBatchItemsFragment" >
+        android:label="MissingBatchItemsFragment"
+        tools:layout="@layout/fragment_missing_batch_items" >
         <argument
             android:name="missingBatchItems"
             app:argType="xyz.zedler.patrick.grocy.model.MissingBatchItem[]" />
@@ -363,7 +386,8 @@
     <fragment
         android:id="@+id/scanBatchFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanBatchFragment"
-        android:label="ScanBatchFragment" >
+        android:label="ScanBatchFragment"
+        tools:layout="@layout/fragment_scan_batch" >
         <argument
             android:name="action"
             app:argType="string" />
@@ -375,15 +399,18 @@
     <fragment
         android:id="@+id/scanInputFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanInputFragment"
-        android:label="ScanInputFragment" />
+        android:label="ScanInputFragment"
+        tools:layout="@layout/fragment_scan_input" />
     <fragment
         android:id="@+id/logFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LogFragment"
-        android:label="LogFragment" />
+        android:label="LogFragment"
+        tools:layout="@layout/fragment_log" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
-        android:label="AboutFragment" >
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about" >
         <action
             android:id="@+id/action_aboutFragment_to_featuresFragment"
             app:destination="@id/featuresFragment"
@@ -394,11 +421,13 @@
     <fragment
         android:id="@+id/shoppingListEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
-        android:label="ShoppingListEditFragment" />
+        android:label="ShoppingListEditFragment"
+        tools:layout="@layout/fragment_shopping_list_edit" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_aboutFragment"
             app:destination="@id/aboutFragment"
@@ -416,7 +445,8 @@
     <fragment
         android:id="@+id/featuresFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.FeaturesFragment"
-        android:label="FeaturesFragment" />
+        android:label="FeaturesFragment"
+        tools:layout="@layout/fragment_features" />
     <action
         android:id="@+id/action_global_featuresFragment"
         app:destination="@id/featuresFragment"
@@ -435,7 +465,8 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
-        android:label="SettingsFragment" >
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_logFragment"
             app:destination="@id/logFragment"
