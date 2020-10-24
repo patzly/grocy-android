@@ -199,7 +199,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         ) {
             holder.linearLayoutDays.setVisibility(View.VISIBLE);
             holder.textViewDays.setText(new DateUtil(context).getHumanForDaysFromNow(date));
-            if(Integer.parseInt(days) <= 5) colorDays = true;
+            if(Integer.parseInt(days) <= daysExpiringSoon) colorDays = true;
         } else {
             holder.linearLayoutDays.setVisibility(View.GONE);
             holder.textViewDays.setText(null);
