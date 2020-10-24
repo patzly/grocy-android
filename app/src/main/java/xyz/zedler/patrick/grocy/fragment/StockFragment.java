@@ -587,12 +587,14 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         for(StockItem s : stockItems) {
             stockItemHashMap.put(s.getProductId(), s); // create HashMap with all productIds of stockItems
 
+            // TODO: Remove that in v2.0.0 (in server v3.0.0, bug is fixed)
             if(DateUtil.getDaysFromNow(s.getBestBeforeDate()) == 0) {
-                // these stockItems are not in volatile items (API bug?)
+                // these stockItems are not in volatile items (API bug until 2.7.1)
                 if(!expiringItems.contains(s)) expiringItems.add(s);
             }
         }
 
+        // TODO: Remove that in v2.0.0 (in server v3.0.0, bug is fixed)
         // update of chip is necessary because number of items maybe has changed
         // (if this lambda function was executed after the one of getVolatile)
         chipExpiring.setText(
@@ -608,7 +610,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 queue.append(
                     dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
                         StockItem stockItem = new StockItem(productDetails);
-                        stockItems.add(stockItem); // add also to stock, because it's missing in this list (bug in grocy?)
+                        stockItems.add(stockItem); // add to stock list, because it's missing in the stock request
+                                                   // but the web server displays it in stock overview, so we also do it
                         missingStockItems.add(stockItem);
                     })
                 );
@@ -1258,14 +1261,9 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(activity == null) return;
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
         if(menuItem == null) return;
-        if(productGroups == null || productGroups.isEmpty()
-                || locations == null
-                || locations.isEmpty()
-        ) {
-            menuItem.setVisible(false);
-        } else {
-            menuItem.setVisible(true);
-        }
+        menuItem.setVisible(productGroups != null && !productGroups.isEmpty()
+                && locations != null
+                && !locations.isEmpty());
     }
 
     private void setMenuLocationFilters() {
