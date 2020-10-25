@@ -5,5 +5,5 @@
 • Behoben: Keine Einkaufslisten-Vorauswahl beim Shortcut
 • Behoben: Farbe von fehlenden Produkten im Bestand
 • Behoben: Falsche Filterung von fehlenden Produkten
-• Plural strings für leichtere Übersetzung
+• Plural Strings für leichtere Übersetzung
 • Übersetzungen aktualisiert
