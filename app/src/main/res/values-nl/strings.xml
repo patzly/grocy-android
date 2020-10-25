@@ -82,8 +82,6 @@
     <string name="tooltip_switch_purchase">Schakel over naar aankoopmodus</string>
     <string name="tooltip_switch_consume">Schakel over naar de consumeermodus</string>
     <string name="tooltip_switch_open">Schakel over naar de openmodus</string>
-    <string name="tooltip_demo">Je bent in demomodus.</string>
-
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d verloopt binnenkort</string>
     <!-- %1$s is the number of products which are expired -->
@@ -308,48 +306,6 @@
     <string name="date_unknown">Onbekend</string>
     <string name="date_unlimited">Onbeperkt</string>
     <string name="date_never">Nooit</string>
-    <!-- This string should contain the singular form of "day" -->
-    <string name="date_day_one">1 dag</string>
-    <!-- This string should contain the singular form of "month" -->
-    <string name="date_month_one">1 maand</string>
-    <!-- This string should contain the singular form of "year" -->
-    <string name="date_year_one">1 jaar</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
-    <string name="date_days">%1$d dagen</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
-    <string name="date_months">%1$d maanden</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
-    <string name="date_years">%1$d jaren</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">In %1$d dagen</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_from_now">In één maand</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_from_now">In %1$d maanden</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_from_now">In één jaar</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_from_now">In %1$d jaren</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">%1$d dagen geleden</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_ago">Één maand geleden</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_ago">%1$d maanden geleden</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_ago">Één jaar geleden</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_ago">%1$d jaren geleden</string>
 
     <string name="info_acknowledgement">We willen Bernd Bestel bedanken, zonder wiens geweldige werk deze app nooit mogelijk zou zijn geweest.</string>
     <string name="info_intro">Intro opnieuw afspelen</string>
