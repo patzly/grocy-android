@@ -82,8 +82,6 @@
     <string name="tooltip_switch_purchase">Byt till köp-läge</string>
     <string name="tooltip_switch_consume">Byt till konsumera-läge</string>
     <string name="tooltip_switch_open">Byt till öppna-läge</string>
-    <string name="tooltip_demo">Du är i demo-läge</string>
-
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d går snart ut</string>
     <!-- %1$s is the number of products which are expired -->
@@ -308,48 +306,6 @@
     <string name="date_unknown">Okänt</string>
     <string name="date_unlimited">Obegränsat</string>
     <string name="date_never">Aldrig</string>
-    <!-- This string should contain the singular form of "day" -->
-    <string name="date_day_one">1 dag</string>
-    <!-- This string should contain the singular form of "month" -->
-    <string name="date_month_one">1 månad</string>
-    <!-- This string should contain the singular form of "year" -->
-    <string name="date_year_one">1 år</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
-    <string name="date_days">%1$d dagar</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
-    <string name="date_months">%1$d månader</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
-    <string name="date_years">%1$d år</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$d dagar från och med nu</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_from_now">En månad från och med nu</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_from_now">%1$d månader från och med nu</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_from_now">Ett år från och med nu</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_from_now">%1$d år från och med nu</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">%1$d dagar sedan</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_ago">En månad sedan</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_ago">%1$d månader sedan</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_ago">Ett år sedan</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_ago">%1$d år sedan</string>
 
     <string name="info_acknowledgement">Vi vill tacka Bernd Bestel, utan vars fantastiska arbete denna app inte skulle kunna existera.</string>
     <string name="info_intro">Visa introduktion igen</string>
