@@ -61,6 +61,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
 * [(6) What is the APK with ML Kit as barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
 * [(7) How can I connect to my instance through Tor Hidden Service?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq7)
+* [(8) How can I use my USB or Bluetooth™ barcode scanner device?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq8)
 
 [I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
@@ -145,8 +146,20 @@ Simply enter your onion hostname in the server field like this:
 
 `http://myhiddenservice.onion`
 
-Orbot needs to be installed on you device and will be automatically launched if it's not running.
+Orbot needs to be installed on your device and will be automatically launched if it's not running.
 Currently there can be error messages if Orbot is not connected after you press the login button.
+
+<br />
+
+<a name="faq8"></a>
+**(8) How can I use my USB or Bluetooth™ barcode scanner device?**
+
+This is only available on v1.9.0 and later. Currently only possible in batch mode.  
+Connect your scanner device with your smartphone and configure it so that it uses (only!) TAB as suffix.
+Nothing else should be added (no other prefix or suffix) because else barcodes could be stored wrong.
+In later versions our app will get an option where you can configure the prefix and/or suffix and there
+will be a separate page for scanner device batch mode, because now the camera is active while using a
+scanner device.
 
 ## Support
 

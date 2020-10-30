@@ -1,9 +1,9 @@
-• Polnische Übersetung (Danke Marcin!)
+• Polnische Übersetzung (Danke Marcin!)
 • Unterstützung für Scanner-Geräte (braucht TAB als Suffix)
 • Unterstützung von Tor Hidden Services durch Orbot
 • Behoben: Fehler in Batch-Modus mit spezifischem Eintrag
 • Behoben: Keine Einkaufslisten-Vorauswahl beim Shortcut
 • Behoben: Farbe von fehlenden Produkten im Bestand
 • Behoben: Falsche Filterung von fehlenden Produkten
-• Plural strings für leichtere Übersetzung
+• Plural Strings für leichtere Übersetzung
 • Übersetzungen aktualisiert

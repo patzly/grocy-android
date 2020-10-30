@@ -239,7 +239,7 @@
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
     <string name="subtitle_stock_entry">À consommer de préférence avant: %1$s ; quantité: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
-    <string name="subtitle_entry_num_of_num">Article %1$dsur%2$d</string>
+    <string name="subtitle_entry_num_of_num">Article %1$d sur %2$d</string>
 
     <string name="description_batch_choose_link">Choisissez le produit auquel le code-barres sera lié.</string>
     <string name="description_batch_choose_create">Choisissez le produit auquel le code-barres sera lié ou créez-en un nouveau.</string>
@@ -309,48 +309,6 @@
     <string name="date_unknown">Inconnue</string>
     <string name="date_unlimited">Illimitée</string>
     <string name="date_never">Jamais</string>
-    <!-- This string should contain the singular form of "day" -->
-    <string name="date_day_one">1 jour</string>
-    <!-- This string should contain the singular form of "month" -->
-    <string name="date_month_one">1 mois</string>
-    <!-- This string should contain the singular form of "year" -->
-    <string name="date_year_one">1 an</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3 -->
-    <string name="date_days">%1$d jours</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3 -->
-    <string name="date_months">%1$d mois</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3 -->
-    <string name="date_years">%1$d années</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_from_now">%1$d jours à partir de maintenant</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_from_now">Dans un mois</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_from_now">%1$d dans quelques mois</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_from_now">Dans un an</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_from_now">%1$d il y a des années</string>
-    <!-- This string should contain the plural form of "day". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_days_ago">%1$d jours avant</string>
-    <!-- This string should contain the singular form of "month".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_month_ago">Il y a un mois</string>
-    <!-- This string should contain the plural form of "month". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_months_ago">%1$d mois avant</string>
-    <!-- This string should contain the singular form of "year".
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_year_ago">Il y a un an</string>
-    <!-- This string should contain the plural form of "year". %1$d is a number like 0, 2, 3.
-    It stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <string name="date_years_ago">%1$d années avant</string>
 
     <string name="info_acknowledgement">Nous tenons à remercier Bernd Bestel, sans le grand travail duquel cette application n\'aurait jamais été possible.</string>
     <string name="info_intro">Rejouer l\'intro</string>
