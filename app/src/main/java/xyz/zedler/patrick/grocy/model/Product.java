@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class Product implements Parcelable {
 
     @SerializedName("id")
@@ -297,6 +299,67 @@ public class Product implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id &&
+                locationId == product.locationId &&
+                quIdPurchase == product.quIdPurchase &&
+                quIdStock == product.quIdStock &&
+                enableTareWeightHandling == product.enableTareWeightHandling &&
+                defaultBestBeforeDays == product.defaultBestBeforeDays &&
+                defaultBestBeforeDaysAfterOpen == product.defaultBestBeforeDaysAfterOpen &&
+                defaultBestBeforeDaysAfterFreezing == product.defaultBestBeforeDaysAfterFreezing &&
+                defaultBestBeforeDaysAfterThawing == product.defaultBestBeforeDaysAfterThawing &&
+                allowPartialUnitsInStock == product.allowPartialUnitsInStock &&
+                notCheckStockFulfillmentForRecipes == product.notCheckStockFulfillmentForRecipes &&
+                cumulateMinStockAmountOfSubProducts == product.cumulateMinStockAmountOfSubProducts &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(description, product.description) &&
+                Objects.equals(quFactorPurchaseToStock, product.quFactorPurchaseToStock) &&
+                Objects.equals(pictureFileName, product.pictureFileName) &&
+                Objects.equals(barcode, product.barcode) &&
+                Objects.equals(minStockAmount, product.minStockAmount) &&
+                Objects.equals(rowCreatedTimestamp, product.rowCreatedTimestamp) &&
+                Objects.equals(productGroupId, product.productGroupId) &&
+                Objects.equals(tareWeight, product.tareWeight) &&
+                Objects.equals(parentProductId, product.parentProductId) &&
+                Objects.equals(calories, product.calories) &&
+                Objects.equals(storeId, product.storeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                name,
+                description,
+                locationId,
+                quIdPurchase,
+                quIdStock,
+                quFactorPurchaseToStock,
+                enableTareWeightHandling,
+                pictureFileName,
+                barcode,
+                minStockAmount,
+                defaultBestBeforeDays,
+                defaultBestBeforeDaysAfterOpen,
+                defaultBestBeforeDaysAfterFreezing,
+                defaultBestBeforeDaysAfterThawing,
+                rowCreatedTimestamp,
+                productGroupId,
+                allowPartialUnitsInStock,
+                tareWeight,
+                notCheckStockFulfillmentForRecipes,
+                parentProductId,
+                calories,
+                cumulateMinStockAmountOfSubProducts,
+                storeId
+        );
     }
 
     @NonNull

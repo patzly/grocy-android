@@ -92,7 +92,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private GrocyApi grocyApi;
     private DownloadHelper dlHelper;
     private FragmentMasterProductSimpleBinding binding;
@@ -1429,11 +1429,12 @@ public class MasterProductSimpleFragment extends BaseFragment {
         );
     }
 
-    public void deleteProduct(Product product) {
+    @Override
+    public void deleteObject(int productId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId),
                 response -> {
-                    setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+                    setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, productId);
                     activity.navigateUp();
                 },
                 error -> showErrorMessage()

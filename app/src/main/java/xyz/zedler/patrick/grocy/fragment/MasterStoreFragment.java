@@ -441,9 +441,10 @@ public class MasterStoreFragment extends BaseFragment {
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteStore(Store store) {
+    @Override
+    public void deleteObject(int storeId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.STORES, store.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.STORES, storeId),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );

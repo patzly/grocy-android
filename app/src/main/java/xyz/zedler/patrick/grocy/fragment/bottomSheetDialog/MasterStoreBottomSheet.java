@@ -26,14 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ListItem;
@@ -79,19 +78,14 @@ public class MasterStoreBottomSheet extends CustomBottomSheet {
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_master_store);
 		toolbar.setOnMenuItemClickListener(item -> {
-			Fragment fragmentCurrent = activity.getCurrentFragment();
-			if(fragmentCurrent.getClass() != MasterStoresFragment.class) return false;
-			switch (item.getItemId()) {
-				case R.id.action_edit:
-					((MasterStoresFragment) fragmentCurrent).editStore(store);
-					dismiss();
-					return true;
-				case R.id.action_delete:
-					((MasterStoresFragment) fragmentCurrent).checkForUsage(store);
-					dismiss();
-					return true;
+			BaseFragment fragmentCurrent = activity.getCurrentFragment();
+			if(item.getItemId() == R.id.action_edit) {
+				fragmentCurrent.editObject(store);
+			} else if(item.getItemId() == R.id.action_delete) {
+				fragmentCurrent.deleteObjectSafely(store);
 			}
-			return false;
+			dismiss();
+			return true;
 		});
 
 		setData();

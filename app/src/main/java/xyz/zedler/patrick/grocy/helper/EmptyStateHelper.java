@@ -22,36 +22,34 @@ package xyz.zedler.patrick.grocy.helper;
 import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.StringRes;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.PartialEmptyBinding;
-import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.StockFragment;
 
 public class EmptyStateHelper {
 
-    private Fragment fragment;
     private PartialEmptyBinding partialEmptyBinding;
-    private Handler handler;
+    private final Handler handler;
     private Runnable displayEmpty;
     private Runnable displayNoSearchResults;
     private Runnable displayNoFilterResults;
+    @StringRes private final int emptyTitle;
+    @StringRes private final int emptySubtitle;
 
-    public EmptyStateHelper(Fragment fragment, PartialEmptyBinding partialEmptyBinding) {
+    public EmptyStateHelper(
+            PartialEmptyBinding partialEmptyBinding,
+            @StringRes int emptyTitle,
+            @StringRes int emptySubtitle
+    ) {
         this.partialEmptyBinding = partialEmptyBinding;
-        this.fragment = fragment;
         this.handler = new android.os.Handler();
         this.displayEmpty = displayEmpty();
         this.displayNoSearchResults = displayNoSearchResults();
         this.displayNoFilterResults = displayNoFilterResults();
+        this.emptyTitle = emptyTitle;
+        this.emptySubtitle = emptySubtitle;
     }
 
     public void clearState() {
@@ -93,32 +91,8 @@ public class EmptyStateHelper {
     private Runnable displayEmpty() {
         return () -> {
             partialEmptyBinding.imageEmpty.setImageResource(R.drawable.illustration_toast);
-
-            TextView title = partialEmptyBinding.textEmptyTitle;
-            if(fragment.getClass() == StockFragment.class) {
-                title.setText(R.string.error_empty_stock);
-            } else if(fragment.getClass() == MasterLocationsFragment.class) {
-                title.setText(R.string.error_empty_locations);
-            } else if(fragment.getClass() == MasterProductGroupsFragment.class) {
-                title.setText(R.string.error_empty_product_groups);
-            } else if(fragment.getClass() == MasterProductsFragment.class) {
-                title.setText(R.string.error_empty_products);
-            } else if(fragment.getClass() == MasterQuantityUnitsFragment.class) {
-                title.setText(R.string.error_empty_qu);
-            } else if(fragment.getClass() == MasterStoresFragment.class) {
-                title.setText(R.string.error_empty_stores);
-            } else if(fragment.getClass() == ShoppingListFragment.class) {
-                title.setText(R.string.error_empty_shopping_list);
-            }
-
-            TextView subtitle = partialEmptyBinding.textEmptySubtitle;
-            if(fragment.getClass() == StockFragment.class) {
-                subtitle.setText(R.string.error_empty_stock_sub);
-            } else if(fragment.getClass() == ShoppingListFragment.class) {
-                subtitle.setText(R.string.error_empty_shopping_list_sub);
-            } else {
-                subtitle.setText(R.string.error_empty_master_data_sub);
-            }
+            partialEmptyBinding.textEmptyTitle.setText(emptyTitle);
+            partialEmptyBinding.textEmptySubtitle.setText(emptySubtitle);
         };
     }
 

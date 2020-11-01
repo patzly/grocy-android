@@ -236,10 +236,13 @@ public final class Constants {
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
         public final static String PRODUCT_NAME = "product_name";
+        public final static String OBJECT_NAME = "object_name";
+        public final static String OBJECT_ID = "object_id";
         public final static String DEMO_CHOSEN = "demo_chosen";
         public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
+        public final static String ENTITY_TEXT = "entity_text";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
         public final static String PRODUCT_ID = "product_id";

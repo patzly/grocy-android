@@ -47,11 +47,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
@@ -67,7 +63,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
     private MainActivity activity;
     private View view;
     private SharedPreferences sharedPrefs;
-    private ClickUtil clickUtil = new ClickUtil();
+    private final ClickUtil clickUtil = new ClickUtil();
 
     @NonNull
     @Override
@@ -127,12 +123,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
             select(R.id.linear_drawer_consume, R.id.text_drawer_consume, false);
         } else if(currentFragment instanceof PurchaseFragment) {
             select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase, false);
-        } else if(currentFragment instanceof MasterProductsFragment
-                || currentFragment instanceof MasterLocationsFragment
-                || currentFragment instanceof MasterStoresFragment
-                || currentFragment instanceof MasterQuantityUnitsFragment
-                || currentFragment instanceof MasterProductGroupsFragment
-        ) {
+        } else if(currentFragment instanceof MasterObjectListFragment) {
             select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data, true);
         }
 

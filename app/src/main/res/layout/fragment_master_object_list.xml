@@ -12,14 +12,14 @@
         android:background="@color/primary">
 
         <LinearLayout
-            android:id="@+id/linear_master_quantity_units_app_bar_default"
+            android:id="@+id/linear_master_object_list_app_bar_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame_master_quantity_units_back"
+                android:id="@+id/frame_master_object_list_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -42,11 +42,11 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="@string/property_quantity_units"
                 android:layout_marginEnd="16dp"
                 android:textAlignment="viewStart"
                 android:fontFamily="@font/roboto_mono_bold"
@@ -55,7 +55,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_master_quantity_units_app_bar_search"
+            android:id="@+id/linear_master_object_list_app_bar_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -64,7 +64,7 @@
             android:baselineAligned="false">
 
             <FrameLayout
-                android:id="@+id/frame_master_quantity_units_search_close"
+                android:id="@+id/frame_master_object_list_search_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -87,7 +87,7 @@
             </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_master_quantity_units_search"
+                android:id="@+id/text_input_master_object_list_search"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                 android:layout_marginEnd="72dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_master_quantity_units_search"
+                    android:id="@+id/edit_text_master_object_list_search"
                     style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_master_quantity_units"
+        android:id="@+id/swipe_master_object_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
@@ -136,30 +136,14 @@
                 android:layout_marginBottom="?actionBarSize"
                 layout="@layout/partial_error"/>
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_master_quantity_units"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_master_object_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="100dp">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_master_quantity_units"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never"
-                        android:nestedScrollingEnabled="false"
-                        android:clipToPadding="false"/>
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="100dp"
+                android:overScrollMode="never"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

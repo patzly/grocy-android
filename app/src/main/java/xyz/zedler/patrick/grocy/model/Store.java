@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class Store implements Parcelable {
 
     @SerializedName("id")
@@ -91,6 +93,22 @@ public class Store implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Store store = (Store) o;
+        return id == store.id &&
+                Objects.equals(name, store.name) &&
+                Objects.equals(description, store.description) &&
+                Objects.equals(rowCreatedTimestamp, store.rowCreatedTimestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, rowCreatedTimestamp);
     }
 
     @NonNull

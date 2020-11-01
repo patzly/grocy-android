@@ -40,11 +40,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -56,7 +52,7 @@ public class MasterDataBottomSheet extends CustomBottomSheet implements View.OnC
     private MainActivity activity;
     private View view;
     private SharedPreferences sharedPrefs;
-    private ClickUtil clickUtil = new ClickUtil();
+    private final ClickUtil clickUtil = new ClickUtil();
 
     @NonNull
     @Override
@@ -90,17 +86,17 @@ public class MasterDataBottomSheet extends CustomBottomSheet implements View.OnC
 
         Fragment currentFragment = activity.getCurrentFragment();
 
-        if(currentFragment instanceof MasterProductsFragment) {
+        /*if(currentFragment instanceof MasterProductsFragment) {
             select(R.id.linear_master_data_products, R.id.text_master_data_products);
         } else if(currentFragment instanceof MasterLocationsFragment) {
             select(R.id.linear_master_data_locations, R.id.text_master_data_locations);
         } else if(currentFragment instanceof MasterStoresFragment) {
             select(R.id.linear_master_data_stores, R.id.text_master_data_stores);
-        } else if(currentFragment instanceof MasterQuantityUnitsFragment) {
+        } else if(currentFragment instanceof MasterObjectListFragment) {
             select(R.id.linear_master_data_quantity_units, R.id.text_master_data_quantity_units);
         } else if(currentFragment instanceof MasterProductGroupsFragment) {
             select(R.id.linear_master_data_product_groups, R.id.text_master_data_product_groups);
-        }
+        }*/ // TODO: Delete
 
         hideDisabledFeatures();
 
@@ -116,26 +112,20 @@ public class MasterDataBottomSheet extends CustomBottomSheet implements View.OnC
     public void onClick(View v) {
         if(clickUtil.isDisabled()) return;
 
-        switch(v.getId()) {
-            case R.id.linear_master_data_products:
-                navigate(R.id.masterProductsFragment);
-                break;
-            case R.id.linear_master_data_locations:
-                navigate(R.id.masterLocationsFragment);
-                break;
-            case R.id.linear_master_data_stores:
-                navigate(R.id.masterStoresFragment);
-                break;
-            case R.id.linear_master_data_quantity_units:
-                navigate(R.id.masterQuantityUnitsFragment);
-                break;
-            case R.id.linear_master_data_product_groups:
-                navigate(R.id.masterProductGroupsFragment);
-                break;
+        if(v.getId() == R.id.linear_master_data_products) {
+            navigate(GrocyApi.ENTITY.PRODUCTS);
+        } else if(v.getId() == R.id.linear_master_data_locations) {
+            navigate(GrocyApi.ENTITY.LOCATIONS);
+        } else if(v.getId() == R.id.linear_master_data_stores) {
+            navigate(GrocyApi.ENTITY.STORES);
+        } else if(v.getId() == R.id.linear_master_data_quantity_units) {
+            navigate(GrocyApi.ENTITY.QUANTITY_UNITS);
+        } else if(v.getId() == R.id.linear_master_data_product_groups) {
+            navigate(GrocyApi.ENTITY.PRODUCT_GROUPS);
         }
     }
 
-    private void navigate(int fragmentId) {
+    private void navigate(String entity) {
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
         builder.setPopUpTo(R.id.stockFragment, false);
@@ -144,9 +134,11 @@ public class MasterDataBottomSheet extends CustomBottomSheet implements View.OnC
         } else {
             builder.setExitAnim(R.anim.slide_no);
         }
+        Bundle args = new Bundle();
+        args.putString("entity", entity);
         NavHostFragment.findNavController(this).navigate(
-                fragmentId,
-                null,
+                R.id.masterObjectListFragment,
+                args,
                 builder.build()
         );
         dismiss();

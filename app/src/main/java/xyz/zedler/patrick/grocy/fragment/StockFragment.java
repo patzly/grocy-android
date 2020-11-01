@@ -226,7 +226,11 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                         return true;
                     } return false;
                 });
-        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
+        emptyStateHelper = new EmptyStateHelper(
+                binding.linearEmpty,
+                R.string.error_empty_stock,
+                R.string.error_empty_stock_sub
+        );
 
         // APP BAR BEHAVIOR
 

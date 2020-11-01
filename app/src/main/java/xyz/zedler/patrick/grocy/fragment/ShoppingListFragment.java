@@ -233,7 +233,11 @@ public class ShoppingListFragment extends BaseFragment implements
                         return true;
                     } return false;
                 });
-        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
+        emptyStateHelper = new EmptyStateHelper(
+                binding.linearEmpty,
+                R.string.error_empty_shopping_list,
+                R.string.error_empty_shopping_list_sub
+        );
 
         // APP BAR BEHAVIOR
 

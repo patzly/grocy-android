@@ -50,6 +50,12 @@ public class BaseFragment extends Fragment {
 
     public void clearFields() {}
 
+    public void editObject(Object object) {}
+
+    public void deleteObjectSafely(Object object) {}
+
+    public void deleteObject(int objectId) {}
+
     public void updateConnectivity(boolean isOnline) {}
 
     public void enableLoginButtons() {}

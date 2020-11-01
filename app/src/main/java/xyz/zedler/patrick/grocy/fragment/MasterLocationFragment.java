@@ -463,9 +463,10 @@ public class MasterLocationFragment extends BaseFragment {
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteLocation(Location location) {
+    @Override
+    public void deleteObject(int locationId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, location.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, locationId),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );

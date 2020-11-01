@@ -149,15 +149,10 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
         // BUNDLE WHEN EDIT
 
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editQuantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-            // FILL
-            if(editQuantityUnit != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        editQuantityUnit = MasterQuantityUnitFragmentArgs
+                .fromBundle(requireArguments()).getQuantityUnit();
+        if(editQuantityUnit != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }
@@ -471,9 +466,10 @@ public class MasterQuantityUnitFragment extends BaseFragment {
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteQuantityUnit(QuantityUnit quantityUnit) {
+    @Override
+    public void deleteObject(int quantityUnitId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnit.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnitId),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );

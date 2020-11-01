@@ -135,66 +135,6 @@
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
         android:label="SettingsActivity"
         tools:layout="@layout/activity_settings" />
-    <fragment
-        android:id="@+id/masterProductsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductsFragment"
-        android:label="MasterProductsFragment"
-        tools:layout="@layout/fragment_master_products" >
-        <action
-            android:id="@+id/action_masterProductsFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/masterStoresFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterStoresFragment"
-        android:label="MasterStoresFragment"
-        tools:layout="@layout/fragment_master_stores" >
-        <action
-            android:id="@+id/action_masterStoresFragment_to_masterStoreFragment"
-            app:destination="@id/masterStoreFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/masterLocationsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment"
-        android:label="MasterLocationsFragment"
-        tools:layout="@layout/fragment_master_locations" >
-        <action
-            android:id="@+id/action_masterLocationsFragment_to_masterLocationFragment"
-            app:destination="@id/masterLocationFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/masterQuantityUnitsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment"
-        android:label="MasterQuantityUnitsFragment"
-        tools:layout="@layout/fragment_master_quantity_units" >
-        <action
-            android:id="@+id/action_masterQuantityUnitsFragment_to_masterQuantityUnitFragment"
-            app:destination="@id/masterQuantityUnitFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/masterProductGroupsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment"
-        android:label="MasterProductGroupsFragment"
-        tools:layout="@layout/fragment_master_product_groups" >
-        <action
-            android:id="@+id/action_masterProductGroupsFragment_to_masterProductGroupFragment"
-            app:destination="@id/masterProductGroupFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
     <dialog
         android:id="@+id/feedbackBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet"
@@ -229,22 +169,46 @@
         android:id="@+id/masterLocationFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationFragment"
         android:label="MasterLocationFragment"
-        tools:layout="@layout/fragment_master_location" />
+        tools:layout="@layout/fragment_master_location" >
+        <argument
+            android:name="location"
+            app:argType="xyz.zedler.patrick.grocy.model.Location"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/masterStoreFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterStoreFragment"
         android:label="MasterStoreFragment"
-        tools:layout="@layout/fragment_master_store" />
+        tools:layout="@layout/fragment_master_store" >
+        <argument
+            android:name="store"
+            app:argType="xyz.zedler.patrick.grocy.model.Store"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/masterQuantityUnitFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment"
         android:label="MasterQuantityUnitFragment"
-        tools:layout="@layout/fragment_master_quantity_unit" />
+        tools:layout="@layout/fragment_master_quantity_unit" >
+        <argument
+            android:name="quantityUnit"
+            app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/masterProductGroupFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment"
         android:label="MasterProductGroupFragment"
-        tools:layout="@layout/fragment_master_product_group" />
+        tools:layout="@layout/fragment_master_product_group" >
+        <argument
+            android:name="productGroup"
+            app:argType="xyz.zedler.patrick.grocy.model.ProductGroup"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/shoppingListItemEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment"
@@ -493,5 +457,44 @@
             app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_left"
             app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/masterObjectListFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment"
+        android:label="MasterObjectListFragment"
+        tools:layout="@layout/fragment_master_object_list" >
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterLocationFragment"
+            app:destination="@id/masterLocationFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterStoreFragment"
+            app:destination="@id/masterStoreFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterQuantityUnitFragment"
+            app:destination="@id/masterQuantityUnitFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterProductGroupFragment"
+            app:destination="@id/masterProductGroupFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterProductSimpleFragment"
+            app:destination="@id/masterProductSimpleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
+        <argument
+            android:name="entity"
+            app:argType="string" />
     </fragment>
 </navigation>

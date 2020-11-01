@@ -316,6 +316,54 @@ public class DownloadHelper {
         delete(url, uuidHelper, onResponse, onError);
     }
 
+    public QueueItem getObjects(
+            OnObjectsResponseListener onResponseListener,
+            OnErrorListener onErrorListener,
+            String grocyEntity
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getObjects(grocyEntity),
+                        uuid,
+                        response -> {
+                            Type type;
+                            if(grocyEntity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
+                                type = new TypeToken<List<QuantityUnit>>(){}.getType();
+                            } else if(grocyEntity.equals(GrocyApi.ENTITY.LOCATIONS)) {
+                                type = new TypeToken<List<Location>>(){}.getType();
+                            } else if(grocyEntity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
+                                type = new TypeToken<List<ProductGroup>>(){}.getType();
+                            } else if(grocyEntity.equals(GrocyApi.ENTITY.STORES)) {
+                                type = new TypeToken<List<Store>>(){}.getType();
+                            } else {
+                                type = new TypeToken<List<Product>>(){}.getType();
+                            }
+                            ArrayList<Object> objects = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download Objects: " + objects);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(objects);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getObjects(OnObjectsResponseListener onResponseListener, String grocyEntity) {
+        return getObjects(onResponseListener, null, grocyEntity);
+    }
+
     public QueueItem getProductGroups(
             OnProductGroupsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -933,6 +981,10 @@ public class DownloadHelper {
             // UUID is for cancelling the requests; should be uuidHelper from above
             perform(null, null, uuid);
         }
+    }
+
+    public interface OnObjectsResponseListener {
+        void onResponse(ArrayList<Object> arrayList);
     }
 
     public interface OnProductGroupsResponseListener {

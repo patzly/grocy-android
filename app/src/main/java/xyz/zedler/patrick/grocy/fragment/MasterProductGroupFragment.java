@@ -450,9 +450,10 @@ public class MasterProductGroupFragment extends BaseFragment {
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteProductGroup(ProductGroup productGroup) {
+    @Override
+    public void deleteObject(int productGroupId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
                 response -> activity.dismissFragment(),
                 error -> showErrorMessage()
         );

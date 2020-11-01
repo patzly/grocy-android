@@ -167,6 +167,7 @@
     <string name="error_invalid_amount">Invalid amount</string>
     <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
     <string name="error_invalid_factor">Invalid factor</string>
+    <string name="error_check_usage">Could not check for usage</string>
     <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
     <string name="error_bounds_min_max">Between %1$s and %2$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->

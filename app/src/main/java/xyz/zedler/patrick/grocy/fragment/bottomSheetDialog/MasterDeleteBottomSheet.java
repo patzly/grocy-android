@@ -27,27 +27,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.MasterLocationFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterLocationsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductGroupsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterProductsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitsFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterStoreFragment;
-import xyz.zedler.patrick.grocy.fragment.MasterStoresFragment;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDeleteBottomSheet extends CustomBottomSheet {
@@ -55,12 +40,6 @@ public class MasterDeleteBottomSheet extends CustomBottomSheet {
     private final static String TAG = MasterDeleteBottomSheet.class.getSimpleName();
 
     private MainActivity activity;
-
-    private Product product;
-    private Location location;
-    private Store store;
-    private QuantityUnit quantityUnit;
-    private ProductGroup productGroup;
 
     @NonNull
     @Override
@@ -81,49 +60,9 @@ public class MasterDeleteBottomSheet extends CustomBottomSheet {
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        String textType = "";
-        String textName = "";
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            String type = bundle.getString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT);
-            switch (type) {
-                case Constants.ARGUMENT.LOCATION:
-                    location = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
-                    if(location != null) {
-                        textType = activity.getString(R.string.property_location);
-                        textName = location.getName();
-                    }
-                    break;
-                case Constants.ARGUMENT.STORE:
-                    store = bundle.getParcelable(Constants.ARGUMENT.STORE);
-                    if(store != null) {
-                        textType = activity.getString(R.string.property_store);
-                        textName = store.getName();
-                    }
-                    break;
-                case Constants.ARGUMENT.QUANTITY_UNIT:
-                    quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-                    if(quantityUnit != null) {
-                        textType = activity.getString(R.string.property_quantity_unit);
-                        textName = quantityUnit.getName();
-                    }
-                    break;
-                case Constants.ARGUMENT.PRODUCT_GROUP:
-                    productGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
-                    if(productGroup != null) {
-                        textType = activity.getString(R.string.property_product_group);
-                        textName = productGroup.getName();
-                    }
-                    break;
-                default:
-                    product = bundle.getParcelable(Constants.ARGUMENT.PRODUCT);
-                    if(product != null) {
-                        textType = activity.getString(R.string.property_product);
-                        textName = product.getName();
-                    }
-            }
-        }
+        String textType = requireArguments().getString(Constants.ARGUMENT.ENTITY_TEXT);
+        String textName = requireArguments().getString(Constants.ARGUMENT.OBJECT_NAME);
+        int objectId = requireArguments().getInt(Constants.ARGUMENT.OBJECT_ID);
 
         TextView textView = view.findViewById(R.id.text_master_delete_question);
         textView.setText(
@@ -135,28 +74,8 @@ public class MasterDeleteBottomSheet extends CustomBottomSheet {
         );
 
         view.findViewById(R.id.button_master_delete_delete).setOnClickListener(v -> {
-            Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == MasterProductsFragment.class) {
-                ((MasterProductsFragment) current).deleteProduct(product);
-            } else if(current.getClass() == MasterProductSimpleFragment.class) {
-                ((MasterProductSimpleFragment) current).deleteProduct(product);
-            } else if(current.getClass() == MasterLocationsFragment.class) {
-                ((MasterLocationsFragment) current).deleteLocation(location);
-            } else if(current.getClass() == MasterLocationFragment.class) {
-                ((MasterLocationFragment) current).deleteLocation(location);
-            } else if(current.getClass() == MasterStoresFragment.class) {
-                ((MasterStoresFragment) current).deleteStore(store);
-            } else if(current.getClass() == MasterStoreFragment.class) {
-                ((MasterStoreFragment) current).deleteStore(store);
-            } else if(current.getClass() == MasterQuantityUnitsFragment.class) {
-                ((MasterQuantityUnitsFragment) current).deleteQuantityUnit(quantityUnit);
-            } else if(current.getClass() == MasterQuantityUnitFragment.class) {
-                ((MasterQuantityUnitFragment) current).deleteQuantityUnit(quantityUnit);
-            } else if(current.getClass() == MasterProductGroupsFragment.class) {
-                ((MasterProductGroupsFragment) current).deleteProductGroup(productGroup);
-            } else if(current.getClass() == MasterProductGroupFragment.class) {
-                ((MasterProductGroupFragment) current).deleteProductGroup(productGroup);
-            }
+            BaseFragment currentFragment = activity.getCurrentFragment();
+            currentFragment.deleteObject(objectId);
             dismiss();
         });
 

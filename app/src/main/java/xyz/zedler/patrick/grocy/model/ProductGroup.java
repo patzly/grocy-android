@@ -30,6 +30,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "product_group_table")
 public class ProductGroup extends GroupedListItem implements Parcelable {
 
@@ -115,6 +117,21 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     @Override
     public int getType() {
         return TYPE_HEADER;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductGroup that = (ProductGroup) o;
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description);
     }
 
     @NonNull
