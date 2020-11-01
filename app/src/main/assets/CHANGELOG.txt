@@ -1,3 +1,6 @@
+1.9.1
+- Czech translation (thanks Radim!)
+
 1.9.0
 - Polish translation (thanks Marcin!)
 - Initial Scanner device support (needs TAB as suffix)
