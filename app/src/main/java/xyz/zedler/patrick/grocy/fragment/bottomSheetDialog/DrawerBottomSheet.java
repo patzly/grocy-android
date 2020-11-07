@@ -95,14 +95,14 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
             navigate(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
                             Constants.ACTION.CONSUME
-                    ), true
+                    )
             );
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
             navigate(NavGraphDirections.actionGlobalScanBatchFragment(
                             Constants.ACTION.PURCHASE
-                    ), true
+                    )
             );
         });
 
@@ -144,28 +144,30 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         switch(v.getId()) {
             case R.id.linear_drawer_shopping_list:
                 navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToShoppingListFragment(), true);
+                        .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
                 break;
             case R.id.linear_drawer_consume:
                 navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToConsumeFragment(), true);
+                        .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
                 break;
             case R.id.linear_drawer_purchase:
                 navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToPurchaseFragment(), true);
+                        .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
                 break;
             case R.id.linear_drawer_master_data:
-                dismiss();
-                activity.showBottomSheet(new MasterDataBottomSheet(), null);
+                navigate(DrawerBottomSheetDirections
+                        .actionDrawerBottomSheetDialogFragmentToMasterDataOverviewFragment());
+                /*dismiss();
+                activity.showBottomSheet(new MasterDataBottomSheet(), null);*/
                 break;
             case R.id.linear_settings:
                 IconUtil.start(view, R.id.image_settings);
                 new Handler().postDelayed(() -> navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToSettingsActivity(), true), 300);
+                        .actionDrawerBottomSheetDialogFragmentToSettingsActivity()), 300);
                 break;
             case R.id.linear_feedback:
                 navigate(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToSettingsFragment(), true);
+                        .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
                 break;
             case R.id.linear_help:
                 IconUtil.start(view, R.id.image_help);
@@ -184,11 +186,11 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         }
     }
 
-    private void navigate(NavDirections directions, boolean popUp) {
+    private void navigate(NavDirections directions) {
 
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-        if(popUp) builder.setPopUpTo(R.id.stockFragment, false);
+        if(true) builder.setPopUpTo(R.id.stockFragment, false);
         if(! (activity.getCurrentFragment() instanceof StockFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         } else {

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,6 +41,7 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.transition.TransitionInflater;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -137,6 +139,17 @@ public class MasterObjectListFragment extends BaseFragment
                 title = R.string.property_stores;
         }
         binding.title.setText(title);
+
+        String transitionName = MasterObjectListFragmentArgs
+                .fromBundle(requireArguments()).getTransitionName();
+        if(!TextUtils.isEmpty(transitionName)) {
+            binding.title.setTransitionName(transitionName);
+            setSharedElementEnterTransition(
+                    TransitionInflater.from(requireContext())
+                            .inflateTransition(android.R.transition.move)
+            );
+        }
+
         return binding.getRoot();
     }
 

@@ -321,6 +321,9 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_masterDataOverviewFragment"
+            app:destination="@id/masterDataOverviewFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog
@@ -496,5 +499,23 @@
         <argument
             android:name="entity"
             app:argType="string" />
+        <argument
+            android:name="transitionName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/masterDataOverviewFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterDataOverviewFragment"
+        android:label="MasterDataOverviewFragment"
+        tools:layout="@layout/fragment_master_data_overview" >
+        <action
+            android:id="@+id/action_masterDataOverviewFragment_to_masterObjectListFragment"
+            app:destination="@id/masterObjectListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 </navigation>

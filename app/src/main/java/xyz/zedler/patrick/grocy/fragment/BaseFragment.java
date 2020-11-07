@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -69,6 +70,10 @@ public class BaseFragment extends Fragment {
 
     void navigate(NavDirections directions) {
         findNavController().navigate(directions);
+    }
+
+    void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+        findNavController().navigate(directions, navigatorExtras);
     }
 
     /**
