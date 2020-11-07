@@ -29,13 +29,16 @@ import androidx.annotation.Nullable;
 import androidx.navigation.fragment.FragmentNavigator;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterDataOverviewFragment extends BaseFragment {
 
     private final static String TAG = MasterDataOverviewFragment.class.getSimpleName();
 
+    private MainActivity activity;
     private FragmentMasterDataOverviewBinding binding;
 
     @Override
@@ -61,6 +64,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) requireActivity();
+
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
                         .actionMasterDataOverviewFragmentToMasterObjectListFragment(
@@ -110,6 +115,23 @@ public class MasterDataOverviewFragment extends BaseFragment {
                         binding.titleStores,
                         getString(R.string.transition_overview_stores)
                 ).build())
+        );
+
+        // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(binding.scroll);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.GONE,
+                R.menu.menu_empty,
+                animated,
+                () -> {}
         );
     }
 

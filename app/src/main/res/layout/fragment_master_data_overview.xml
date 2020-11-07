@@ -118,180 +118,188 @@
         android:layout_marginTop="?android:actionBarSize"
         android:overScrollMode="never">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:overScrollMode="never">
 
-            <include
-                android:id="@+id/linear_empty"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_empty"/>
+                android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/relative_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_error"/>
+                <include
+                    android:id="@+id/linear_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?actionBarSize"
+                    layout="@layout/partial_empty"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="16dp"
-                android:paddingBottom="80dp"
-                android:orientation="vertical">
+                <include
+                    android:id="@+id/relative_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="?actionBarSize"
+                    layout="@layout/partial_error"/>
 
                 <LinearLayout
-                    android:id="@+id/linear_products"
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="80dp"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/image"
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_widgets"
-                        tools:ignore="ContentDescription" />
+                    <LinearLayout
+                        android:id="@+id/linear_products"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <ImageView
+                            android:id="@+id/image"
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_widgets"
+                            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            android:id="@+id/title_products"
-                            android:text="@string/property_products"
-                            style="@style/Theme.Grocy.ListItem.Title"
-                            android:transitionName="@string/transition_overview_products" />
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
-                        <TextView
-                            android:id="@+id/count_products"
-                            android:text="Count: 5"
-                            style="@style/Theme.Grocy.ListItem.Description" />
+                            <TextView
+                                android:id="@+id/title_products"
+                                android:text="@string/property_products"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:transitionName="@string/transition_overview_products" />
+
+                            <TextView
+                                android:id="@+id/count_products"
+                                android:text="Count: 5"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_locations"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_place"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:id="@+id/title_locations"
+                                android:text="@string/property_locations"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:transitionName="@string/transition_overview_locations" />
+
+                            <TextView
+                                android:id="@+id/count_locations"
+                                android:text="Count: 8"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_stores"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_store"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:id="@+id/title_stores"
+                                android:text="@string/property_stores"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:transitionName="@string/transition_overview_stores" />
+
+                            <TextView
+                                android:id="@+id/count_stores"
+                                android:text="Count: 8"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_quantity_units"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_weights"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:id="@+id/title_quantity_units"
+                                android:text="@string/property_quantity_units"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:transitionName="@string/transition_overview_qus" />
+
+                            <TextView
+                                android:id="@+id/count_quantity_units"
+                                android:text="Count: 7"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_product_groups"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_category"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:id="@+id/title_product_groups"
+                                android:text="@string/property_product_groups"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:transitionName="@string/transition_overview_product_groups" />
+
+                            <TextView
+                                android:id="@+id/count_product_groups"
+                                android:text="Count: 8"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/linear_locations"
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                    <ImageView
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_place"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                        <TextView
-                            android:id="@+id/title_locations"
-                            android:text="@string/property_locations"
-                            style="@style/Theme.Grocy.ListItem.Title"
-                            android:transitionName="@string/transition_overview_locations" />
-
-                        <TextView
-                            android:id="@+id/count_locations"
-                            android:text="Count: 8"
-                            style="@style/Theme.Grocy.ListItem.Description" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear_stores"
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_store"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                        <TextView
-                            android:id="@+id/title_stores"
-                            android:text="@string/property_stores"
-                            style="@style/Theme.Grocy.ListItem.Title"
-                            android:transitionName="@string/transition_overview_stores" />
-
-                        <TextView
-                            android:id="@+id/count_stores"
-                            android:text="Count: 8"
-                            style="@style/Theme.Grocy.ListItem.Description" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear_quantity_units"
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_weights"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                        <TextView
-                            android:id="@+id/title_quantity_units"
-                            android:text="@string/property_quantity_units"
-                            style="@style/Theme.Grocy.ListItem.Title"
-                            android:transitionName="@string/transition_overview_qus" />
-
-                        <TextView
-                            android:id="@+id/count_quantity_units"
-                            android:text="Count: 7"
-                            style="@style/Theme.Grocy.ListItem.Description" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear_product_groups"
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/Theme.Grocy.ListItem.Icon"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_category"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                        <TextView
-                            android:id="@+id/title_product_groups"
-                            android:text="@string/property_product_groups"
-                            style="@style/Theme.Grocy.ListItem.Title"
-                            android:transitionName="@string/transition_overview_product_groups" />
-
-                        <TextView
-                            android:id="@+id/count_product_groups"
-                            android:text="Count: 8"
-                            style="@style/Theme.Grocy.ListItem.Description" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
