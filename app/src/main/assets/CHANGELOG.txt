@@ -1,5 +1,7 @@
 1.9.1
-- Czech translation (thanks Radim!)
+- Czech translation (thanks translations!)
+- Portuguese (Brazil) translation
+- Updated translations
 
 1.9.0
 - Polish translation (thanks Marcin!)
