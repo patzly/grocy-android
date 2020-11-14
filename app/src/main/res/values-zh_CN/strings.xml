@@ -1,0 +1,415 @@
+<resources>
+
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in purchase screen for example. -->
+    <string name="action_purchase">采购</string>
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
+    <string name="action_consume">消耗</string>
+    <!-- This is an action – in English, it contains a verb. -->
+    <string name="action_consume_all">消耗全部</string>
+
+    <string name="action_consume_one_spoiled">消耗1作为损耗</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">消耗%2$s中的1%1$s</string>
+    <string name="action_open">标记为已打开</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">打开%2$s中的1%1$s</string>
+    <string name="action_edit_product">编辑产品</string>
+    <string name="action_shopping_list_add">加入购物清单</string>
+
+    <string name="action_back">返回</string>
+    <string name="action_search">搜索</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_next">下一个</string>
+    <string name="action_new">新的</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_prev">上一个</string>
+    <string name="action_send_feedback">发送反馈</string>
+    <string name="action_reset">重启</string>
+    <string name="action_reload">刷新</string>
+    <string name="action_top_scroll">滚动到顶部</string>
+    <string name="action_send">发送</string>
+    <string name="action_close">关闭</string>
+    <string name="action_scan">扫描</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_add">添加</string>
+    <string name="action_clear">清除</string>
+    <string name="action_clear_shopping_list">清空购物清单</string>
+    <string name="action_rate">在Google Play上评分</string>
+    <string name="action_rate_description">支持发展</string>
+    <string name="action_email">发送邮件</string>
+    <string name="action_email_description">联系开发者</string>
+    <string name="action_new_issue">在GitHub上打开新issue </string>
+    <string name="action_new_issue_description">报告错误或请求功能</string>
+    <string name="action_get_started">入门</string>
+    <string name="action_ascending">升序</string>
+    <string name="action_filter">筛选</string>
+    <string name="action_sort">排序</string>
+    <string name="action_undo">撤消</string>
+    <string name="action_retry">重试</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_delete">删除</string>
+    <string name="action_save">保存</string>
+    <string name="action_logout">退出</string>
+    <string name="action_restart">重启</string>
+    <string name="action_show_extended">显示扩展形式</string>
+    <string name="action_batch_mode">批处理模式</string>
+    <string name="action_create">创建</string>
+    <string name="action_link">链接</string>
+    <string name="action_open_forms">打开表格</string>
+    <string name="action_open_scanner">打开扫描仪</string>
+    <string name="action_discard">丢弃</string>
+    <string name="action_toggle_done">切换完成</string>
+    <string name="action_edit_notes">编辑注释</string>
+    <string name="action_shopping_mode">购物模式</string>
+    <string name="action_add_missing">添加缺少的产品</string>
+    <string name="action_purchase_all_items">购买所有物品</string>
+    <string name="action_skip_entry">跳过输入</string>
+    <string name="action_delete_shopping_list">删除购物清单</string>
+    <string name="action_discard_products">丢弃产品</string>
+    <string name="action_perform_purchasing_processes">执行创建产品的采购交易</string>
+    <string name="action_create_key">创建密钥</string>
+    <string name="action_login">登录</string>
+    <string name="action_use_demo_account">使用演示账户</string>
+    <string name="action_ignore">忽略</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">全部</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">完成</string>
+
+    <string name="tooltip_new_products_count">新产品数量</string>
+    <string name="tooltip_switch_purchase">切换至购买模式</string>
+    <string name="tooltip_switch_consume">切换至消费模式</string>
+    <string name="tooltip_switch_open">切换到打开模式</string>
+    <string name="tooltip_demo">您处于演示模式</string>
+
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">%1$d即将到期</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">%1$d已过期</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">最低%1$d.库存数量</string>
+    <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
+    <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s作为损耗</string>
+    <string name="msg_opened">标记%3$s中的%1$s%2$s为已打开</string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d未完成</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">已保存采购%1$s</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">%1$s没有库存</string>
+    <string name="msg_no_connection">未连接</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">%1$s无库存位置</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">%1$s没有库存条目</string>
+    <string name="msg_not_found">产品未找到</string>
+    <string name="msg_undone_transaction">撤消交易</string>
+    <string name="msg_failed_to_sync">同步条目失败</string>
+    <string name="msg_synced">条目同步成功</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">已将缺少的产品添加到%1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">成功清除空%1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">成功删除%1$s</string>
+    <string name="msg_barcode_duplicate">条形码已存在</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">删除%1$s“%2$s”？</string>
+    <string name="msg_master_delete_stock">该产品仍有库存</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">这个%1$s还在用</string>
+    <string name="msg_item_marked_as_done">将项目标记为已完成</string>
+    <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
+    <string name="msg_batch_no_products">无需创建新产品</string>
+    <string name="msg_batch_tare_weight"> 产品不支持批处理模式：启用皮重处理</string>
+    <string name="msg_purchase_transactions_done">完成创建产品的购买交易</string>
+    <string name="msg_no_purchase_transactions">没有待处理的购买交易</string>
+    <string name="msg_compatibility">此应用版本与服务器上的常规版本不兼容。\n \n当前服务器版本：%1$s\n\n必填：\nMin。伺服器版本：%2$s\nMax。服务器版本：%3$s\n\n如果忽略此警告，可能会导致数据丢失（不太可能）和崩溃（可能）。\n已警告您！</string>
+    <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
+    <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
+    <string name="msg_restart">需要重新启动应用程序才能正确应用当前的Grocy配置。</string>
+    <string name="msg_features">在“关于”中再次开始介绍</string>
+    <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
+    <string name="msg_point_at_barcode">将相机对准条形码</string>
+
+    <string name="error_api_not_working">API密钥不起作用</string>
+    <string name="error_orbot_not_installed">未安装Orbot</string>
+    <string name="error_select_product">选择产品</string>
+    <string name="error_empty">必填项</string>
+    <string name="error_empty_stock">无货</string>
+    <string name="error_empty_stock_sub">去购买一些产品</string>
+    <string name="error_empty_shopping_list">空的购物清单</string>
+    <string name="error_empty_shopping_list_sub">添加您需要的一些产品</string>
+    <string name="error_empty_master_data_sub">使用下面的按钮创建</string>
+    <string name="error_empty_locations">没有位置</string>
+    <string name="error_empty_product_groups">没有产品组</string>
+    <string name="error_empty_products">没有产品</string>
+    <string name="error_empty_qu">没有数量单位</string>
+    <string name="error_empty_stores">没有商店</string>
+    <string name="error_search"> 没有搜索结果</string>
+    <string name="error_search_sub">尝试其他条款</string>
+    <string name="error_filter">无内容显示</string>
+    <string name="error_filter_sub">尝试其他过滤器</string>
+    <string name="error_duplicate">已经存在</string>
+    <string name="error_parent">不能成为自己的父类</string>
+    <string name="error_invalid_product">产品无效</string>
+    <string name="error_invalid_url">URL无效</string>
+    <string name="error_invalid_amount">金额无效</string>
+    <string name="error_invalid_best_before_days">使用-1表示永不过期</string>
+    <string name="error_invalid_factor">无效因素</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">介于%1$s和%2$s之间</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">等于或高于%1$s</string>
+    <string name="error_offline">离线</string>
+    <string name="error_name_exists">名称已存在</string>
+    <string name="error_offline_subtitle">检查您的连接，然后重试</string>
+    <string name="error_unknown">哎呀！</string>
+    <string name="error_not_grocy_instance">不是有效的grocy实例</string>
+    <string name="error_timeout">超时错误</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">无法连接到%1$s</string>
+    <string name="error_handshake">缺少证书</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$s需要Android未知或不信任的证书。\n服务器证书必须由受信任的证书颁发机构（CA）签名\n要满足这些要求，您可以使用letencrypt.org提供的免费证书进行正确的加密。</string>
+    <string name="error_unexpected_response_code">意外的响应代码：%1$d</string>
+    <string name="error_unexpected_response">意外的服务器响应</string>
+    <string name="error_no_browser">安装网络浏览器以显示帮助页面</string>
+    <string name="error_undefined">发生错误</string>
+
+    <string name="title_stock_overview">库存总览</string>
+    <string name="title_purchase">采购</string>
+    <string name="title_consume">消耗</string>
+    <string name="title_product_overview">产品总览</string>
+    <string name="title_product">产品</string>
+    <string name="title_master_data">主数据</string>
+    <string name="title_stock_entries">库存条目</string>
+    <string name="title_shopping_list">购物清单</string>
+    <string name="title_feedback">反馈</string>
+    <string name="title_settings">设置</string>
+    <string name="title_about">关于</string>
+    <string name="title_info">信息</string>
+    <string name="title_help">帮助</string>
+    <string name="title_logs">日志</string>
+    <string name="title_link_barcode">将条形码链接到产品</string>
+    <string name="title_batch_scan_exit">填写产品表格？</string>
+    <string name="title_batch_missing_exit">返回扫描仪？</string>
+    <string name="title_link_barcode_to_existing">将条形码链接到现有产品？</string>
+    <string name="title_link_barcode_or_create">将条形码链接到现有产品还是用它创建新产品？</string>
+    <string name="title_compatibility">兼容性问题</string>
+    <string name="title_logout">从Grocy注销？</string>
+    <string name="title_restart">重新启动Grocy？</string>
+    <string name="title_logout_demo">从演示模式退出？</string>
+    <string name="title_batch_config">批处理模式配置</string>
+    <string name="title_manage_master_data">管理主数据</string>
+
+    <string name="title_spoiled">损坏</string>
+    <string name="title_use_specific">使用特定的库存物料</string>
+    <string name="title_is_total_price">总价</string>
+    <string name="title_stock_entry_no_specific">没有特定条目</string>
+    <string name="title_shopping_list_ungrouped">未分组</string>
+    <string name="title_list_entry">列表条目</string>
+    <string name="title_edit_list_entry">编辑列表条目</string>
+    <string name="title_create_list_entry">创建列表条目</string>
+    <string name="title_shopping_list_edit">修改购物清单</string>
+    <string name="title_shopping_list_new">新购物清单</string>
+    <string name="title_shopping_mode">购物模式</string>
+    <string name="title_products_to_create">产品创造</string>
+    <string name="title_batch_mode_shopping_list">购物清单批处理模式</string>
+
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s%2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(%1$s已打开)</string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">%1$s有存货的地方</string>
+    <string name="subtitle_default">默认</string>
+    <string name="subtitle_none_selected">未选择</string>
+    <string name="subtitle_empty">空</string>
+    <string name="subtitle_done">完成</string>
+    <string name="subtitle_undone">未完成</string>
+    <string name="subtitle_never_expires">永不过期</string>
+    <string name="subtitle_selected">已选</string>
+    <string name="subtitle_stock_entry_no_specific">先到期，然后先入先出</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">购买：%1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">保质期：%1$s；数量：%2$s；%3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">条目%2$d之%1$d</string>
+
+    <string name="description_batch_choose_link">选择将要链接条形码的产品</string>
+    <string name="description_batch_choose_create">选择将要链接条形码的产品或创建一个新的条形码</string>
+    <string name="description_scan_batch_exit">已经创建了新产品，但是由于缺少所需的详细信息，因此尚未将其发送到服务器。打开产品表格？</string>
+    <string name="description_missing_batch_exit">某些购买交易尚未发送到服务器。丢弃它们还是返回扫描仪？</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">创建名称为“%1$s”的新产品？</string>
+    <string name="description_clear_shopping_list">您要删除全部还是仅删除已完成的项目？</string>
+
+    <string name="property_name">名称</string>
+    <string name="property_name_singular">名称（单数形式）</string>
+    <string name="property_name_plural">名称（复数形式）</string>
+    <string name="property_product">产品</string>
+    <string name="property_products">产品</string>
+    <string name="property_product_name">产品名称</string>
+    <string name="property_parent_product">父产品</string>
+    <string name="property_description">描述</string>
+    <string name="property_note">注释</string>
+    <string name="property_status">状态</string>
+    <string name="property_amount">数量</string>
+    <string name="property_seconds">秒</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d秒</string>
+    <string name="property_amount_min_stock">最小库存量</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">量单位%1$s</string>
+    <string name="property_price">价格</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">价格单位%1$s</string>
+    <string name="property_quantity_unit">数量单位</string>
+    <string name="property_quantity_units">数量单位</string>
+    <string name="property_qu_purchase">数量单位购买</string>
+    <string name="property_qu_stock">数量单位库存</string>
+    <string name="property_qu_factor">库存采购</string>
+    <string name="property_barcode">条形码</string>
+    <string name="property_barcodes">条形码</string>
+    <string name="property_bbd">保质期</string>
+    <string name="property_bbd_next">下个保质期</string>
+    <string name="property_bb_days">保质期</string>
+    <string name="property_bb_days_default">默认保质期</string>
+    <string name="property_bb_days_default_opened">默认开封后保质期</string>
+    <string name="property_location">位置</string>
+    <string name="property_location_default">默认位置</string>
+    <string name="property_notes">笔记</string>
+    <string name="property_locations">位置</string>
+    <string name="property_store">商店</string>
+    <string name="property_store_unknown">未知商店</string>
+    <string name="property_store_default">默认商店</string>
+    <string name="property_stores">商店</string>
+    <string name="property_shopping_list">购物清单</string>
+    <string name="property_shopping_lists">购物清单</string>
+    <string name="property_last_purchased">上次购买</string>
+    <string name="property_last_used">上次使用</string>
+    <string name="property_last_price">最新价格</string>
+    <string name="property_average_shelf_life">平均保质期</string>
+    <string name="property_spoil_rate">损坏率</string>
+    <string name="property_price_history">历史价格</string>
+    <string name="property_product_group">产品组</string>
+    <string name="property_product_groups">产品组</string>
+    <string name="property_opened">打开</string>
+    <string name="property_not_opened">没开</string>
+    <string name="property_is_freezer">是冰柜</string>
+
+    <string name="date_yesterday">昨天</string>
+    <string name="date_today">今天</string>
+    <string name="date_tomorrow">明天</string>
+    <string name="date_unknown">未知</string>
+    <string name="date_unlimited">无限</string>
+    <string name="date_never">从不</string>
+
+    <plurals name="date_days">
+        <item quantity="other">%d天</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="other">%d月</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="other">%d年</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="other">%d天前</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="other">%d个月前</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="other">%d年前</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="other">从现在起%d天</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="other">从现在起%d个月</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="other">从现在起%d年</item>
+    </plurals>
+
+    <string name="info_acknowledgement">我们要感谢Bernd Bestel，没有他的出色工作，这个应用程序将永远不可能实现。</string>
+    <string name="info_intro">重播介绍</string>
+    <string name="info_intro_description">展示功能</string>
+    <string name="info_material_components_built_with">Built with</string>
+    <string name="info_version">版本</string>
+    <string name="info_grocy_version">Grocy版本</string>
+    <string name="info_grocy_version_incompatible">未支持</string>
+    <string name="info_changelog">更新日志</string>
+    <string name="info_changelog_description">有什么新消息？</string>
+    <string name="info_developers">开发者</string>
+    <string name="info_github">GitHub上的Grocy Android</string>
+    <string name="info_github_description">源代码</string>
+    <string name="info_website">打开Grocy网站</string>
+
+    <string name="feature_1_title">适用于Android的Grocy</string>
+    <string name="feature_1_description">自托管杂货店管理</string>
+    <string name="feature_2_title">Intuitive design</string>
+    <string name="feature_2_description">一键打开并消费</string>
+    <string name="feature_3_title">强劲的批处理</string>
+    <string name="feature_3_description">几秒钟内即可扫描整个购买</string>
+
+    <string name="category_licenses">开源许可证</string>
+    <string name="category_general">通用</string>
+    <string name="category_purchase_consume">购买&amp; 消耗</string>
+    <string name="category_server">服务器</string>
+    <string name="category_debugging">调试</string>
+    <string name="category_presets">新产品预设</string>
+
+    <string name="hint_server">服务器URL</string>
+    <string name="hint_key">有效的API密钥</string>
+
+    <string name="setting_dark_mode">强制暗模式</string>
+    <string name="setting_dark_mode_description">关闭系统的依赖</string>
+    <string name="setting_open_food_facts">使用公开食品事实</string>
+    <string name="setting_open_food_facts_description">从条形码获取信息</string>
+    <string name="setting_use_front_cam">使用前置摄像头</string>
+    <string name="setting_use_front_cam_description">用于条形码扫描</string>
+    <string name="setting_reload_config">重新加载配置</string>
+    <string name="setting_reload_config_description">需要重启应用</string>
+    <string name="setting_logout">退出</string>
+    <string name="setting_logout_description">返回登录页面</string>
+    <string name="setting_list_indicator">表明列表条目</string>
+    <string name="setting_list_indicator_description">如果产品在购物清单上，则显示蓝点</string>
+    <string name="setting_shopping_mode_update_interval">购物模式更新间隔</string>
+    <string name="setting_keep_screen_on">保持屏幕开启</string>
+    <string name="setting_keep_screen_on_description">在购物模式下</string>
+    <string name="setting_expiring_soon_days">即将过期</string>
+    <string name="setting_default_amount_purchase">默认购买金额</string>
+    <string name="setting_default_amount_consume">默认消费量</string>
+    <string name="setting_empty_value">空</string>
+    <string name="setting_sync_off">同步关闭</string>
+    <string name="setting_not_loaded">无法加载</string>
+    <string name="setting_debug">启用日志记录</string>
+    <string name="setting_debug_description">在日志中显示错误</string>
+    <string name="setting_info_logs">显示信息日志</string>
+    <string name="setting_logs_description">显示此过程的日志</string>
+
+    <string name="setting_ask_best_before_date">询问保质期</string>
+    <string name="setting_ask_price">询问价格</string>
+    <string name="setting_ask_store">询问商店</string>
+    <string name="setting_ask_location">询问位置</string>
+    <string name="setting_ask_specific_item">询问特定项目</string>
+    <string name="setting_consume_all">消费产品的所有物品</string>
+
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
+    <string name="url_grocy_demo">https://zh-tw.demo.grocy.info</string>
+    </resources>
