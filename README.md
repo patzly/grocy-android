@@ -69,7 +69,7 @@ You can help translating this project at [Transifex](https://www.transifex.com/g
 Translations which reached a completion level of 80% will be included in releases.
 
 <a href="https://www.transifex.com/grocy-android/grocy-android">
-<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A..........-t-t9bnqWZLh&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x157&cht=bhs&chxl=0%3A%7CHungarian%7CKorean+%28Korea%29%7CItalian%7CFrench%7CSwedish%7CDutch%7CEnglish%7CGerman%7CNorwegian+Bokm%C3%A5l%7CSpanish%7CHebrew%7C1%3A%7C18%25%7C35%25%7C62%25%7C96%25%7C98%25%7C98%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C" alt="Translation status" />
+<img src="https://www.transifex.com/projects/p/grocy-android/resource/app-src-main-res-values-strings-xml--master/chart/image_png" alt="Translation status" />
 </a>
 
 ## About
