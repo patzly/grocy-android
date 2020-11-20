@@ -70,7 +70,7 @@ Translations which reached a completion level of 80% will be included in release
 
 
 <a href="https://www.transifex.com/projects/p/grocy-android/resource/app-src-main-res-values-strings-xml--master/chart/image_png">
-<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A................-E-E8y8yyjXC&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CKorean+%28Korea%29%7CItalian%7CDutch%7CSwedish%7CFrench%7CNorwegian+Bokm%C3%A5l%7CSpanish%7CPortuguese+%28Brazil%29%7CHebrew%7CEnglish%7CPolish%7CChinese+%28China%29%7CCzech%7CGerman%7C1%3A%7C36%25%7C79%25%7C95%25%7C95%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
+<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A................-E-E9b8y8ygo&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CSwedish%7CDutch%7CItalian%7CFrench%7CNorwegian+Bokm%C3%A5l%7CPortuguese+%28Brazil%29%7CChinese+%28China%29%7CCzech%7CEnglish%7CPolish%7CHebrew%7CGerman%7CSpanish%7C1%3A%7C51%25%7C95%25%7C95%25%7C96%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
 </a></br>
 <a href="https://www.transifex.com/grocy-android/grocy-android">View translations</a><br/>
 
