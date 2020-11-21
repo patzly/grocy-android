@@ -40,19 +40,16 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
-import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
@@ -88,7 +85,6 @@ public class ShoppingListFragment extends BaseFragment implements
     private AppBarBehaviorNew appBarBehavior;
     private ClickUtil clickUtil;
     private FragmentShoppingListBinding binding;
-    private SwipeBehavior swipeBehavior;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -182,38 +178,6 @@ public class ShoppingListFragment extends BaseFragment implements
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recycler.setItemAnimator(new ItemAnimator());
-
-        if(swipeBehavior == null) {
-            swipeBehavior = new SwipeBehavior(activity) {
-                @Override
-                public void instantiateUnderlayButton(
-                        RecyclerView.ViewHolder viewHolder,
-                        List<UnderlayButton> underlayButtons
-                ) {
-                    if(viewHolder.getItemViewType() == GroupedListItem.TYPE_ENTRY) {
-
-                        underlayButtons.add(new UnderlayButton(
-                                R.drawable.ic_round_done,
-                                position -> toggleDoneStatus(position-1)
-                        ));
-
-                        // check if item has product or is only note
-                        if(viewHolder.getAdapterPosition() == -1
-                                || ((ShoppingListItem) viewModel.getFilteredGroupedListItems()
-                                .get(viewHolder.getAdapterPosition()-1))
-                                .getProduct() == null
-                                || viewModel.isOffline()
-                        ) return;
-
-                        underlayButtons.add(new UnderlayButton(
-                                R.drawable.ic_round_local_grocery_store,
-                                position -> purchaseItem(position)
-                        ));
-                    }
-                }
-            };
-            swipeBehavior.attachToRecyclerView(binding.recycler);
-        }
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             binding.progressbar.setVisibility(state ? View.VISIBLE : View.GONE);
