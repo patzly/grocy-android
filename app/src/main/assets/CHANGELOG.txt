@@ -4,6 +4,7 @@
 - Chinese (China) translation
 - Italian translation
 - App now trusts Android user certificates (thanks murizorun!)
+- Fixed purchase workflow in missing batch items view
 - Updated translations
 
 1.9.0
