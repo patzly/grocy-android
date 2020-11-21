@@ -379,7 +379,13 @@ public class MissingBatchItemsFragment extends Fragment
             return;
         }
 
-        MissingBatchItem missingBatchItem = missingBatchItems.get(0);
+        int indexNextOnServer = 0;
+        for(int i=0; i < missingBatchItems.size(); i++) {
+            indexNextOnServer = i;
+            if(missingBatchItems.get(i).getIsOnServer()) break;
+        }
+
+        MissingBatchItem missingBatchItem = missingBatchItems.get(indexNextOnServer);
         ArrayList<BatchPurchaseEntry> batchPurchaseEntries = missingBatchItem.getPurchaseEntries();
 
         if(batchPurchaseEntries.size() < 1) {
