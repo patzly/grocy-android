@@ -467,7 +467,7 @@ public class MissingBatchItemsFragment extends Fragment
         binding.linearError.buttonErrorRetry.setVisibility(View.GONE);
 
         View viewIn = binding.linearError.linearError;
-        View viewOut = binding.recyclerMissingBatchItems;
+        View viewOut = binding.scrollMissingBatchItems;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
@@ -481,7 +481,7 @@ public class MissingBatchItemsFragment extends Fragment
                 binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
                 break;
             case Constants.STATE.NONE:
-                viewIn = binding.recyclerMissingBatchItems;
+                viewIn = binding.scrollMissingBatchItems;
                 viewOut = binding.linearError.linearError;
                 break;
         }
