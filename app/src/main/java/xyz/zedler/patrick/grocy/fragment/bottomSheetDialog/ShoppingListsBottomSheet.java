@@ -96,7 +96,7 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
                 dismiss();
-                activity.navigateUp();
+                activity.navigateUp(); // TODO
             });
         }
 
@@ -105,21 +105,8 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
 
     @Override
     public void onItemRowClicked(int position) {
-        /*if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == ShoppingListFragment.class) {
-                ((ShoppingListFragment) currentFragment).selectShoppingList(
-                        shoppingLists.get(position).getId()
-                );
-            } else if(currentFragment.getClass() == ShoppingListItemEditFragment.class) {
-                ((ShoppingListItemEditFragment) currentFragment).selectShoppingList(
-                        shoppingLists.get(position).getId()
-                );
-            }
-        } else if(activity.getClass() == ShoppingActivity.class) {
-            ((ShoppingActivity) activity).selectShoppingList(shoppingLists.get(position).getId());
-        }
-        dismiss();*/
+        activity.getCurrentFragment().selectShoppingList(shoppingLists.get(position).getId());
+        dismiss();
     }
 
     @NonNull

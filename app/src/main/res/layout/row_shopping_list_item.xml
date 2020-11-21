@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_shopping_list_item_container"
+    android:id="@+id/container"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/text_shopping_list_item_name"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -22,7 +22,7 @@
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     <TextView
-        android:id="@+id/text_shopping_list_note_as_name"
+        android:id="@+id/note_as_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -39,7 +39,7 @@
         android:gravity="bottom">
 
         <TextView
-            android:id="@+id/text_shopping_list_item_amount"
+            android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
@@ -49,7 +49,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linear_shopping_list_note"
+        android:id="@+id/note_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -58,7 +58,7 @@
         android:gravity="bottom">
 
         <TextView
-            android:id="@+id/text_shopping_list_note"
+            android:id="@+id/note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"

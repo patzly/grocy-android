@@ -68,16 +68,16 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 */
 
 public class DownloadHelper {
-    private GrocyApi grocyApi;
+    private final GrocyApi grocyApi;
     private RequestQueue requestQueue;
-    private Gson gson;
-    private SimpleDateFormat dateTimeFormat;
-    private String uuidHelper;
-    private OnLoadingListener onLoadingListener;
+    private final Gson gson;
+    private final SimpleDateFormat dateTimeFormat;
+    private final String uuidHelper;
+    private final OnLoadingListener onLoadingListener;
 
-    private ArrayList<Queue> queueArrayList;
-    private String tag;
-    private boolean debug;
+    private final ArrayList<Queue> queueArrayList;
+    private final String tag;
+    private final boolean debug;
     private int loadingRequests;
 
     public DownloadHelper(
@@ -106,20 +106,16 @@ public class DownloadHelper {
     // cancel all requests
     public void destroy() {
         for(Queue queue : queueArrayList) {
-            queue.reset();
+            queue.reset(true);
         }
         requestQueue.cancelAll(uuidHelper);
-        resetLoadingRequests();
-    }
-
-    private void resetLoadingRequests() {
-        this.loadingRequests = 0;
-        if(onLoadingListener != null) onLoadingListener.onLoadingChanged(false);
     }
 
     private void onRequestLoading() {
         loadingRequests += 1;
-        if(onLoadingListener != null) onLoadingListener.onLoadingChanged(true);
+        if(onLoadingListener != null && loadingRequests == 1) {
+            onLoadingListener.onLoadingChanged(true);
+        }
     }
 
     private void onRequestFinished() {
@@ -155,8 +151,15 @@ public class DownloadHelper {
                     onRequestFinished();
                     onError.onError(error);
                 }
-        );
+        ) {
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
+        };
         if(tag != null) request.setTag(tag);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -198,8 +201,15 @@ public class DownloadHelper {
                 params.put("User-Agent", userAgent);
                 return params;
             }
+
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
         };
         request.setTag(uuidHelper);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -225,8 +235,15 @@ public class DownloadHelper {
                     onRequestFinished();
                     onError.onError(error);
                 }
-        );
+        ) {
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
+        };
         request.setTag(uuidHelper);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -246,8 +263,15 @@ public class DownloadHelper {
                     onRequestFinished();
                     onError.onError(error);
                 }
-        );
+        ) {
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
+        };
         request.setTag(uuidHelper);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -273,8 +297,15 @@ public class DownloadHelper {
                     onRequestFinished();
                     onError.onError(error);
                 }
-        );
+        ) {
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
+        };
         request.setTag(uuidHelper);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -299,8 +330,15 @@ public class DownloadHelper {
                     onRequestFinished();
                     onError.onError(error);
                 }
-        );
+        ) {
+            @Override
+            public void cancel() {
+                super.cancel();
+                onRequestFinished();
+            }
+        };
         request.setTag(tag);
+        request.setShouldCache(false);
         onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -333,7 +371,7 @@ public class DownloadHelper {
                         uuid,
                         response -> {
                             Type type;
-                            if(grocyEntity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
+                            if(grocyEntity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) { // Don't change to switch-case!
                                 type = new TypeToken<List<QuantityUnit>>(){}.getType();
                             } else if(grocyEntity.equals(GrocyApi.ENTITY.LOCATIONS)) {
                                 type = new TypeToken<List<Location>>(){}.getType();
@@ -797,6 +835,10 @@ public class DownloadHelper {
         };
     }
 
+    public QueueItem editShoppingListItem(int itemId, JSONObject body) {
+        return editShoppingListItem(itemId, body, null, null);
+    }
+
     public QueueItem editShoppingListItem(
             int itemId,
             JSONObject body,
@@ -902,10 +944,10 @@ public class DownloadHelper {
     }
 
     public class Queue {
-        private ArrayList<QueueItem> queueItems;
-        private OnQueueEmptyListener onQueueEmptyListener;
-        private OnErrorListener onErrorListener;
-        private String uuidQueue;
+        private final ArrayList<QueueItem> queueItems;
+        private final OnQueueEmptyListener onQueueEmptyListener;
+        private final OnErrorListener onErrorListener;
+        private final String uuidQueue;
         private int queueSize;
         private boolean isRunning;
 
@@ -935,6 +977,10 @@ public class DownloadHelper {
             } else {
                 isRunning = true;
             }
+            if(queueItems.isEmpty()) {
+                onQueueEmptyListener.execute();
+                return;
+            }
             while(!queueItems.isEmpty()) {
                 QueueItem queueItem = queueItems.remove(0);
                 queueItem.perform(response -> {
@@ -942,11 +988,11 @@ public class DownloadHelper {
                     if(queueSize > 0) return;
                     isRunning = false;
                     if(onQueueEmptyListener != null) onQueueEmptyListener.execute();
-                    reset();
+                    reset(false);
                 }, error -> {
                     isRunning = false;
                     if(onErrorListener != null) onErrorListener.onError(error);
-                    reset();
+                    reset(true);
                 }, uuidQueue);
             }
         }
@@ -955,8 +1001,8 @@ public class DownloadHelper {
             return queueSize;
         }
 
-        private void reset() {
-            requestQueue.cancelAll(uuidQueue);
+        public void reset(boolean cancelAll) {
+            if(cancelAll) requestQueue.cancelAll(uuidQueue);
             queueItems.clear();
             queueSize = 0;
         }

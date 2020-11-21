@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="?actionBarSize"
-                    layout="@layout/partial_error"/>
+                    layout="@layout/info_fullscreen"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

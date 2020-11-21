@@ -456,21 +456,21 @@ public class MissingBatchItemsFragment extends BaseFragment
     private void setError(String state, boolean animated) {
         errorState = state;
 
-        binding.relativeError.buttonErrorRetry.setVisibility(View.GONE);
+        binding.relativeError.retry.setVisibility(View.GONE);
 
         View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollMissingBatchItems;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
-                binding.relativeError.imageError.setImageResource(R.drawable.illustration_broccoli);
-                binding.relativeError.textErrorTitle.setText(R.string.error_offline);
-                binding.relativeError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                binding.relativeError.image.setImageResource(R.drawable.illustration_broccoli);
+                binding.relativeError.title.setText(R.string.error_offline);
+                binding.relativeError.subtitle.setText(R.string.error_offline_subtitle);
                 break;
             case Constants.STATE.ERROR:
-                binding.relativeError.imageError.setImageResource(R.drawable.illustration_popsicle);
-                binding.relativeError.textErrorTitle.setText(R.string.error_unknown);
-                binding.relativeError.textErrorSubtitle.setText(R.string.error_undefined);
+                binding.relativeError.image.setImageResource(R.drawable.illustration_popsicle);
+                binding.relativeError.title.setText(R.string.error_unknown);
+                binding.relativeError.subtitle.setText(R.string.error_undefined);
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollMissingBatchItems;

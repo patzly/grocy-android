@@ -8,8 +8,7 @@
     android:layout_marginBottom="?actionBarSize"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:background="@color/background"
-    android:visibility="gone">
+    android:background="@color/background">
 
     <View android:id="@+id/dummy"
         android:layout_height="0dp"
@@ -26,14 +25,14 @@
         android:paddingEnd="0dp">
 
         <ImageView
-            android:id="@+id/image_error"
+            android:id="@+id/image"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/text_error_title"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -42,7 +41,7 @@
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
         <TextView
-            android:id="@+id/text_error_subtitle"
+            android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -61,7 +60,7 @@
         android:paddingEnd="48dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_error_retry"
+            android:id="@+id/retry"
             style="@style/Widget.Grocy.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +70,7 @@
             android:text="@string/action_retry"/>
 
         <TextView
-            android:id="@+id/text_error_exact"
+            android:id="@+id/exact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

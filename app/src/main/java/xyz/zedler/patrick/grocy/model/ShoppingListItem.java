@@ -56,7 +56,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     private int done;
 
     @ColumnInfo(name = "done_synced")
+    @SerializedName("done_synced")
     private int doneSynced = -1;  // state of param "done" on server during time of last sync
+                                  // -1 means that the "done" was not edited since sync
 
     @ColumnInfo(name = "product_id")
     @SerializedName("product_id")
@@ -78,6 +80,34 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     private int isMissing;  // needs to be integer because of min. API level
 
     public ShoppingListItem() {}
+
+    private ShoppingListItem( // for clone
+              int id,
+              String productId,
+              String note,
+              double amount,
+              int shoppingListId,
+              int done,
+              int doneSynced,
+              String productName,
+              String productDescription,
+              String productGroupId,
+              int productQuIdPurchase,
+              int isMissing
+    ) {
+        this.id = id;
+        this.productId = productId;
+        this.note = note;
+        this.amount = amount;
+        this.shoppingListId = shoppingListId;
+        this.done = done;
+        this.doneSynced = doneSynced;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productGroupId = productGroupId;
+        this.productQuIdPurchase = productQuIdPurchase;
+        this.isMissing = isMissing;
+    }
 
     private ShoppingListItem(Parcel parcel) {
         id = parcel.readInt();
@@ -285,5 +315,23 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @Override
     public String toString() {
         return "ShoppingListItem(" + id + ", " + productName + ")";
+    }
+
+    @NonNull
+    public ShoppingListItem getClone() {
+        return new ShoppingListItem(
+                this.id,
+                this.productId,
+                this.note,
+                this.amount,
+                this.shoppingListId,
+                this.done,
+                this.doneSynced,
+                this.productName,
+                this.productDescription,
+                this.productGroupId,
+                this.productQuIdPurchase,
+                this.isMissing
+        );
     }
 }

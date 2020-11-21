@@ -138,6 +138,10 @@ public class FilterChip extends LinearLayout {
         cardView.setCardBackgroundColor(color);
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
     public void setActive(boolean active) {
         isActive = active;
 

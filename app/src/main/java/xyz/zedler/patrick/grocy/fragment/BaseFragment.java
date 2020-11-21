@@ -59,9 +59,34 @@ public class BaseFragment extends Fragment {
 
     public void updateConnectivity(boolean isOnline) {}
 
+    public void selectShoppingList(int id) {}
+
     public void enableLoginButtons() {}
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {}
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if(nextAnim == 0) return null;
+
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(enter) BaseFragment.this.onAnimationEnd();
+            }
+        });
+
+        return anim;
+    }
+
+    void onAnimationEnd() {}
 
     @NonNull
     NavController findNavController() {

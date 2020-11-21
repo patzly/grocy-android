@@ -22,7 +22,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
                 ProductGroup.class,
                 QuantityUnit.class
         },
-        version = 5
+        version = 6
 )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;

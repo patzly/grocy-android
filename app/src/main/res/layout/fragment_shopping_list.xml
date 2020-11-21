@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,140 +8,161 @@
     android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:actionBarSize"
-        android:background="@color/primary">
+        android:background="@color/primary"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
-            <LinearLayout
-                android:id="@+id/linear_shopping_list_app_bar_default"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true">
 
-                <FrameLayout
-                    android:id="@+id/frame_shopping_list_back"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_back"
-                    android:tooltipText="@string/action_back"
-                    android:focusable="true"
-                    tools:targetApi="o">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_arrow_back" />
-
-                </FrameLayout>
-
-                <TableLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                <LinearLayout
+                    android:id="@+id/app_bar_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:actionBarSize"
                     android:gravity="center_vertical"
-                    android:shrinkColumns="0">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
-                    <TableRow
-                        android:layout_width="match_parent"
+                    <FrameLayout
+                        android:id="@+id/frame_shopping_list_back"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:contentDescription="@string/action_back"
+                        android:tooltipText="@string/action_back"
+                        android:focusable="true"
+                        tools:targetApi="o">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_arrow_back" />
+
+                    </FrameLayout>
+
+                    <TableLayout
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        tools:ignore="UselessParent">
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:shrinkColumns="0">
 
-                        <TextView
-                            android:id="@+id/text_shopping_list_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="@string/title_shopping_list"
-                            android:fontFamily="@font/roboto_mono_bold"
-                            android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:ignore="UselessParent">
 
-                        <xyz.zedler.patrick.grocy.view.ActionButton
-                            android:id="@+id/button_shopping_list_lists"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            app:icon="@drawable/ic_round_expand_more"
-                            app:tint="@color/icon"/>
+                            <TextView
+                                android:id="@+id/text_shopping_list_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="@string/title_shopping_list"
+                                android:fontFamily="@font/roboto_mono_bold"
+                                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-                    </TableRow>
+                            <xyz.zedler.patrick.grocy.view.ActionButton
+                                android:id="@+id/button_shopping_list_lists"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|center_vertical"
+                                android:paddingStart="4dp"
+                                android:paddingEnd="4dp"
+                                app:icon="@drawable/ic_round_expand_more"
+                                app:tint="@color/icon"/>
 
-                </TableLayout>
+                        </TableRow>
 
-            </LinearLayout>
+                    </TableLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_shopping_list_app_bar_search"
-                android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:baselineAligned="false">
+                </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/frame_shopping_list_search_close"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_close"
-                    android:tooltipText="@string/action_close"
-                    android:focusable="true"
-                    tools:targetApi="o">
+                <LinearLayout
+                    android:id="@+id/app_bar_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:actionBarSize"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:baselineAligned="false">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_close" />
+                    <FrameLayout
+                        android:id="@+id/frame_shopping_list_search_close"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:contentDescription="@string/action_close"
+                        android:tooltipText="@string/action_close"
+                        android:focusable="true"
+                        tools:targetApi="o">
 
-                </FrameLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_close" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_shopping_list_search"
-                    style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="72dp">
+                    </FrameLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_text_shopping_list_search"
-                        style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/text_input_shopping_list_search"
+                        style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionSearch"
-                        android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                        android:singleLine="true"
-                        android:textColor="@color/on_background" />
+                        android:layout_weight="1"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="72dp">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_shopping_list_search"
+                            style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionSearch"
+                            android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+                            android:singleLine="true"
+                            android:textColor="@color/on_background" />
 
-            </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                    android:id="@+id/progressbar"
+                    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    app:mpb_useIntrinsicPadding="false"
+                    app:mpb_progressStyle="horizontal"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone"
+                    android:indeterminate="true"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/linear_offline_error"
@@ -167,18 +188,38 @@
 
         </LinearLayout>
 
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_shopping_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:layout_below="@id/app_bar"
+        android:animateLayoutChanges="true">
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:paddingBottom="120dp"
+                android:overScrollMode="never"
+                android:clipToPadding="false" />
+
+        </FrameLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <include
                 android:id="@+id/linear_empty"
@@ -188,59 +229,8 @@
                 android:layout_marginBottom="?actionBarSize"
                 layout="@layout/partial_empty"/>
 
-            <include
-                android:id="@+id/relative_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_error"/>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_shopping_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:overScrollMode="never">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="120dp">
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:overScrollMode="ifContentScrolls">
-
-                        <LinearLayout
-                            android:id="@+id/linear_shopping_list_filter_container"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"/>
-
-                    </HorizontalScrollView>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_shopping_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="8dp"
-                        android:overScrollMode="never"
-                        android:nestedScrollingEnabled="false"
-                        android:clipToPadding="false"/>
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

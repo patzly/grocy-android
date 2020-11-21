@@ -53,7 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
-import xyz.zedler.patrick.grocy.helper.ErrorFullscreenHelper;
+import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -80,7 +80,7 @@ public class PurchaseFragment extends BaseFragment {
     private PurchaseFragmentArgs args;
     private FragmentPurchaseBinding binding;
     private PurchaseViewModel viewModel;
-    private ErrorFullscreenHelper errorFullscreenHelper;
+    private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
     public View onCreateView(
@@ -95,9 +95,9 @@ public class PurchaseFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(errorFullscreenHelper != null) {
-            errorFullscreenHelper.destroyInstance();
-            errorFullscreenHelper = null;
+        if(infoFullscreenHelper != null) {
+            infoFullscreenHelper.destroyInstance();
+            infoFullscreenHelper = null;
         }
         binding = null;
     }
@@ -114,13 +114,13 @@ public class PurchaseFragment extends BaseFragment {
 
         dateUtil = new DateUtil(activity);
 
-        errorFullscreenHelper = new ErrorFullscreenHelper(binding.partialError);
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
 
         // INITIALIZE VIEWS
 
         binding.framePurchaseBack.setOnClickListener(v -> activity.navigateUp());
 
-        binding.linearPurchaseShoppingListItem.linearShoppingListItemContainer.setBackground(
+        binding.linearPurchaseShoppingListItem.container.setBackground(
                 ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
         );
 
@@ -134,11 +134,6 @@ public class PurchaseFragment extends BaseFragment {
         );
         binding.swipePurchase.setOnRefreshListener(() -> {
             binding.swipePurchase.setRefreshing(false);
-            viewModel.refresh(args);
-        });
-
-        binding.partialError.buttonErrorRetry.setOnClickListener(v -> {
-            viewModel.getErrorFullscreenLive().setValue(null);
             viewModel.refresh(args);
         });
 
@@ -329,9 +324,9 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     public void observeStates() {
-        viewModel.getErrorFullscreenLive().observe(
+        viewModel.getInfoFullscreenLive().observe(
                 getViewLifecycleOwner(),
-                errorFullscreen -> errorFullscreenHelper.setError(errorFullscreen)
+                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
                 binding.progressbarPurchase.setVisibility(isDownloading ? View.VISIBLE : View.GONE)

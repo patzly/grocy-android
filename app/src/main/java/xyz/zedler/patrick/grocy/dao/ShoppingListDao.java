@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.dao;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -32,6 +33,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 @Dao
 public interface ShoppingListDao {
     @Query("SELECT * FROM shopping_list_table")
+    LiveData<List<ShoppingList>> getAllLive();
+
+    @Query("SELECT * FROM shopping_list_table")
     List<ShoppingList> getAll();
 
     @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
@@ -43,10 +47,10 @@ public interface ShoppingListDao {
     @Query("SELECT COUNT(*) FROM shopping_list_table")
     int count();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ShoppingList> shoppingLists);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ShoppingList shoppingList);
 
     @Delete

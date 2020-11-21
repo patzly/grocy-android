@@ -48,6 +48,10 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     @SerializedName("description")
     private String description;
 
+    @Ignore
+    @SerializedName("display_divider")
+    private int displayDivider = 1;
+
     /**
      * First element in bottomSheet selection: NONE (id = null)
      */
@@ -57,12 +61,21 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         this.name = name;
     }
 
+    @Ignore
+    public ProductGroup(int id, String name, String description, int displayDivider) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.displayDivider = displayDivider;
+    }
+
     public ProductGroup() {}  // for Room
 
     public ProductGroup(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
+        displayDivider = parcel.readInt();
     }
 
     @Override
@@ -70,6 +83,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
+        dest.writeInt(displayDivider);
     }
 
     public static final Creator<ProductGroup> CREATOR = new Creator<ProductGroup>() {
@@ -109,6 +123,18 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         this.description = description;
     }
 
+    public int getDisplayDivider() {
+        return displayDivider;
+    }
+
+    public void setDisplayDivider(int display) {
+        displayDivider = display;
+    }
+
+    public void setDisplayDivider(boolean display) {
+        displayDivider = display ? 1 : 0;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -126,17 +152,23 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         ProductGroup that = (ProductGroup) o;
         return id == that.id &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description);
+                Objects.equals(description, that.description) &&
+                displayDivider == that.displayDivider;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description);
+        return Objects.hash(id, name, description, displayDivider);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ProductGroup(" + name + ')';
+    }
+
+    @NonNull
+    public ProductGroup getClone() {
+        return new ProductGroup(this.id, this.name, this.description, this.displayDivider);
     }
 }

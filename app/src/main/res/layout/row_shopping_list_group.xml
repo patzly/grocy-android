@@ -9,13 +9,13 @@
     android:gravity="center_vertical">
 
     <View
-        android:id="@+id/view_shopping_list_group_divider"
+        android:id="@+id/divider"
         style="@style/Theme.Grocy.Divider"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="0dp"/>
 
     <TextView
-        android:id="@+id/text_shopping_list_group_name"
+        android:id="@+id/name"
         style="@style/Theme.Grocy.Category"
         android:textAlignment="viewStart"
         android:layout_width="match_parent"

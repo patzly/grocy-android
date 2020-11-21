@@ -83,6 +83,7 @@
         android:overScrollMode="never">
 
         <FrameLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -424,10 +425,6 @@
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
-            <include
-                android:id="@+id/partial_error"
-                layout="@layout/partial_error"/>
 
         </FrameLayout>
 

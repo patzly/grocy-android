@@ -45,8 +45,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.ErrorFullscreen;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -83,7 +83,7 @@ public class PurchaseViewModel extends AndroidViewModel {
     private MutableLiveData<String> bestBeforeDateLive;
     private MutableLiveData<String> priceLive;
     private MutableLiveData<String> amountLive;
-    private MutableLiveData<ErrorFullscreen> errorFullscreenLive;
+    private MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private MutableLiveData<Integer> storeIdLive;
     private MutableLiveData<Integer> locationIdLive;
     private MutableLiveData<Integer> shoppingListItemPosLive;
@@ -118,7 +118,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         amountLive = new MutableLiveData<>();
         priceLive = new MutableLiveData<>();
-        errorFullscreenLive = new MutableLiveData<>();
+        infoFullscreenLive = new MutableLiveData<>();
         storeIdLive = new MutableLiveData<>(-1);
         locationIdLive = new MutableLiveData<>(-1);
         shoppingListItemPosLive = new MutableLiveData<>(-1);
@@ -133,7 +133,13 @@ public class PurchaseViewModel extends AndroidViewModel {
         if(netUtil.isOnline()) {
             downloadData(args);
         } else {
-            errorFullscreenLive.setValue(new ErrorFullscreen(ErrorFullscreen.OFFLINE));
+            infoFullscreenLive.setValue(new InfoFullscreen(
+                    InfoFullscreen.ERROR_OFFLINE,
+                    () -> {
+                        getInfoFullscreenLive().setValue(null);
+                        refresh(args);
+                    })
+            );
         }
     }
 
@@ -186,8 +192,13 @@ public class PurchaseViewModel extends AndroidViewModel {
     private void onDownloadError(VolleyError error) {
         // TODO: If there was an error, queue gets cancelled, but loading bar is still there (-> DownloadHelper)
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        errorFullscreenLive.setValue(
-                new ErrorFullscreen(ErrorFullscreen.NETWORK, error.getLocalizedMessage())
+        infoFullscreenLive.setValue(new InfoFullscreen(
+                InfoFullscreen.ERROR_NETWORK,
+                error.getLocalizedMessage(),
+                () -> {
+                    getInfoFullscreenLive().setValue(null);
+                    refresh(null); // TODO
+                })
         );
     }
 
@@ -632,8 +643,8 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public MutableLiveData<ErrorFullscreen> getErrorFullscreenLive() {
-        return errorFullscreenLive;
+    public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
+        return infoFullscreenLive;
     }
 
     public void addQueueEmptyAction(Runnable runnable) {

@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.helper;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
+import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
 import android.widget.TextView;
@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 public class ShoppingListHelper {
 
     public static ArrayList<GroupedListItem> groupItems(
-            Activity activity,
+            Context context,
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
@@ -56,7 +56,7 @@ public class ShoppingListHelper {
         HashMap<ProductGroup, Collection<ShoppingListItem>> sortedShoppingListItems = new HashMap<>();
         ProductGroup ungrouped = new ProductGroup(
                 -1,
-                activity.getString(R.string.title_shopping_list_ungrouped)
+                context.getString(R.string.title_shopping_list_ungrouped)
         );
         // sort displayedItems by productGroup
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
@@ -84,7 +84,9 @@ public class ShoppingListHelper {
         // create list with groups (headers) and entries
         ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
         for(ProductGroup productGroup : sortedProductGroups) {
-            groupedListItems.add(productGroup);
+            ProductGroup clonedProductGroup = productGroup.getClone(); // clone is necessary because else adapter contains
+            groupedListItems.add(clonedProductGroup);                  // same productGroup objects and could not calculate diff properly
+            clonedProductGroup.setDisplayDivider(groupedListItems.get(0) != clonedProductGroup);
             Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
             assert items != null;
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
@@ -103,7 +105,7 @@ public class ShoppingListHelper {
         }
         if(notes != null && notes.toString().trim().isEmpty()) notes = null;
         if(shoppingList != null && notes != null) {
-            ProductGroup p = new ProductGroup(-1, activity.getString(R.string.property_notes));
+            ProductGroup p = new ProductGroup(-1, context.getString(R.string.property_notes));
             groupedListItems.add(p);
             groupedListItems.add(new ShoppingListBottomNotes(notes));
         }

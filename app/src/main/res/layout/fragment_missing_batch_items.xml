@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_error"/>
+                layout="@layout/info_fullscreen"/>
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_missing_batch_items"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_shopping_list_item_container"
+    android:id="@+id/container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/text_shopping_list_item_name"
+        android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -23,7 +23,7 @@
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     <TextView
-        android:id="@+id/text_shopping_list_note_as_name"
+        android:id="@+id/note_as_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -34,7 +34,7 @@
         android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     <LinearLayout
-        android:id="@+id/linear_shopping_list_note"
+        android:id="@+id/note_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,7 +42,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/text_shopping_list_note"
+            android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="150dp"
@@ -50,18 +50,10 @@
             android:textStyle="italic"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
 
-        <View
-            android:layout_width="3dp"
-            android:layout_height="3dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:backgroundTint="@color/on_background_secondary"
-            android:background="@drawable/shape_is_on_shopping_list"/>
-
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text_shopping_list_item_amount"
+        android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
