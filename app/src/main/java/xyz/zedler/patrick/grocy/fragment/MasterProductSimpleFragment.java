@@ -919,7 +919,7 @@ public class MasterProductSimpleFragment extends Fragment {
             editTextName.setText(editProduct.getName());
             // parent product
             Product parentProduct = null;
-            if(editProduct.getParentProductId() != null) {
+            if(NumUtil.isStringInt(editProduct.getParentProductId())) {
                 parentProduct = getProduct(Integer.parseInt(editProduct.getParentProductId()));
             }
             if(parentProduct != null) {
@@ -1072,7 +1072,7 @@ public class MasterProductSimpleFragment extends Fragment {
             }
         }
         editTextDays.setText(createProductObj.getDefaultBestBeforeDays());
-        if(createProductObj.getDefaultLocationId() != null) {
+        if(NumUtil.isStringInt(createProductObj.getDefaultLocationId())) {
             selectLocation(Integer.parseInt(createProductObj.getDefaultLocationId()));
         }
     }
@@ -1387,7 +1387,7 @@ public class MasterProductSimpleFragment extends Fragment {
         textViewLocation.setText(R.string.subtitle_none_selected);
         selectedLocationId = -1;
 
-        if(createProductObj != null && createProductObj.getDefaultLocationId() != null) {
+        if(createProductObj != null && NumUtil.isStringInt(createProductObj.getDefaultLocationId())) {
             selectLocation(Integer.parseInt(createProductObj.getDefaultLocationId()));
         }
 
