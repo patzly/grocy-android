@@ -1,0 +1,11 @@
+[main]
+host = https://www.transifex.com
+
+[grocy-android.app-src-main-res-values-strings-xml--master]
+file_filter = app/src/main/res/values-<lang>/strings.xml
+minimum_perc = 80
+source_file = app/src/main/res/values/strings.xml
+source_lang = en
+lang_map = pt_PT: pt-rPT, pt_BR: pt-rBR, zh_CN: zh-rCN, zh_TW: zh-rTW, ko_KR: ko-rKR, el_GR: el-rGR
+type = ANDROID
+
