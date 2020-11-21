@@ -3,6 +3,7 @@
 - Portuguese (Brazil) translation
 - Chinese (China) translation
 - Italian translation
+- App now trusts Android user certificates (thanks murizorun!)
 - Updated translations
 
 1.9.0
