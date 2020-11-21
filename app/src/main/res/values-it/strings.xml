@@ -1,0 +1,412 @@
+<resources>
+
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in purchase screen for example. -->
+    <string name="action_purchase">Acquista</string>
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
+    <string name="action_consume">Consuma</string>
+    <!-- This is an action – in English, it contains a verb. -->
+    <string name="action_consume_all">Consuma tutto</string>
+
+    <string name="action_consume_one_spoiled">Consuma 1 come avariato</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">Consuma 1 %1$s di %2$s</string>
+    <string name="action_open">Segna come aperto</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">Apri 1 %1$s di %2$s</string>
+    <string name="action_edit_product">Modifica prodotto</string>
+    <string name="action_shopping_list_add">Aggiungi alla lista della spesa</string>
+
+    <string name="action_back">Indietro</string>
+    <string name="action_search">Cerca</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_next">Avanti</string>
+    <string name="action_new">Nuovo</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_prev">Indietro</string>
+    <string name="action_send_feedback">Invia feedback</string>
+    <string name="action_reset">Resetta</string>
+    <string name="action_reload">Ricarica</string>
+    <string name="action_top_scroll">Torna in cima</string>
+    <string name="action_send">Invia</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_scan">Scansiona</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="action_add">Aggiungi</string>
+    <string name="action_clear">Cancella</string>
+    <string name="action_clear_shopping_list">Cancella la lista della spesa</string>
+    <string name="action_rate">Vota sul Google Play</string>
+    <string name="action_rate_description">Supporta lo sviluppo</string>
+    <string name="action_email">Invia email</string>
+    <string name="action_email_description">Contatta lo sviluppatore</string>
+    <string name="action_new_issue">Apri una nuova discussione su GitHub </string>
+    <string name="action_new_issue_description">Segnala un errore o richiedi una funzionalità</string>
+    <string name="action_get_started">Inizia</string>
+    <string name="action_ascending">ascendente</string>
+    <string name="action_filter">Filtra</string>
+    <string name="action_sort">Ordina</string>
+    <string name="action_undo">Annulla</string>
+    <string name="action_retry">Riprova</string>
+    <string name="action_edit">Modifica</string>
+    <string name="action_delete">Elimina</string>
+    <string name="action_save">Salva</string>
+    <string name="action_logout">Esci</string>
+    <string name="action_restart">Riavvia</string>
+    <string name="action_show_extended">Mostra modalità estesa</string>
+    <string name="action_batch_mode">Modalità non interattiva</string>
+    <string name="action_create">Crea</string>
+    <string name="action_link">Collega</string>
+    <string name="action_open_forms">Apri modulo</string>
+    <string name="action_open_scanner">Apri lo scanner</string>
+    <string name="action_discard">Scarta</string>
+    <string name="action_toggle_done">Segna come fatto</string>
+    <string name="action_edit_notes">Modifica note</string>
+    <string name="action_shopping_mode">Modalità spesa</string>
+    <string name="action_add_missing">Aggiungi prodotto mancante</string>
+    <string name="action_purchase_all_items">Compra tutti gli articoli</string>
+    <string name="action_skip_entry">Salta la voce</string>
+    <string name="action_delete_shopping_list">Elimina lista della spesa</string>
+    <string name="action_discard_products">Scarta prodotti</string>
+    <string name="action_perform_purchasing_processes">Esegui le transazioni degli acquisti per i prodotti creati</string>
+    <string name="action_create_key">Crea chiave</string>
+    <string name="action_login">Entra</string>
+    <string name="action_use_demo_account">Usa account demo</string>
+    <string name="action_ignore">Ignora</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">Tutto</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">Fatto</string>
+
+    <string name="tooltip_new_products_count">Numero di nuovi prodotti</string>
+    <string name="tooltip_switch_purchase">Passa alla modalità acquista</string>
+    <string name="tooltip_switch_consume">Passa alla modalità consuma</string>
+    <string name="tooltip_switch_open">Passa alla modalità apri</string>
+    <string name="tooltip_demo">Sei nella modalità demo</string>
+
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">%1$d in scadenza</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">%1$d scaduti</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">%1$d sotto quantità minima in dispensa</string>
+    <string name="msg_consumed">Consumato %1$s %2$s di %3$s</string>
+    <string name="msg_consumed_spoiled">Consumato %1$s %2$s di %3$s come avariato</string>
+    <string name="msg_opened">Segna %1$s %2$s di %3$s come aperto</string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d annulla</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">L\'acquisto di %1$s è stato salvato</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">Aquistato %1$s %2$s di %3$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">Questo %1$s non è disponibile</string>
+    <string name="msg_no_connection">Nessuna connessione</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">Nessuna posizione in dispensa per %1$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">%1$s non in dispensa</string>
+    <string name="msg_not_found">Prodotto non trovato</string>
+    <string name="msg_undone_transaction">Transazione annullata</string>
+    <string name="msg_failed_to_sync">Sincronizzazione delle voci fallita</string>
+    <string name="msg_synced">Voci sincronizzate correttamente</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">I prodotti mancanti sono stati aggiunti a %1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">%1$s pulita correttamente</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">%1$s eliminata correttamente</string>
+    <string name="msg_barcode_duplicate">Codice a barre già esistente</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">Eliminare %1$s \"%2$s\"?</string>
+    <string name="msg_master_delete_stock">Questo prodotto è ancora presente in dispensa</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">Questo %1$s è ancora utilizzato</string>
+    <string name="msg_item_marked_as_done">Segna come fatto</string>
+    <string name="msg_item_marked_as_undone">Segna da fare</string>
+    <string name="msg_batch_no_products">Nessun nuovo prodotto deve essere creato</string>
+    <string name="msg_no_purchase_transactions">Nessun acquisto in sospeso</string>
+    <string name="msg_compatibility">Questa versione dell\'applicazione non è compatibile con la versione di grocy sul server.\n\n Versione del server corrente: %1$s\n\n Richiesta:\nVersione minima del server: %2$s\nVersione massima del server:%3$s\n\nSe ignori questo avertimento, si potrebbe verificare perdita di dati (improbabile) e crashes (probabile).\n Sei stato avvertito!</string>
+    <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
+    <string name="msg_logout_demo">Stai utilizzando l\'istanza di prova di grocy su <u>https://grocy.info</u>.\n\n<b>Nessun cambiamento verrà salvato!\n Questi rimangono pubblichi finché il server non li sovrascrive automaticamente.</b>\n\nNella schermata di accesso puoi inserire l\'indirizzo del tuo server.</string>
+    <string name="msg_restart">È necessario riaprire l\'app per applicare correttamente la configurazione corrente di Grocy</string>
+    <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
+    <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
+
+    <string name="error_api_not_working">La chiave API non funziona</string>
+    <string name="error_orbot_not_installed">Orbot non è installato</string>
+    <string name="error_select_product">Seleziona un prodotto</string>
+    <string name="error_empty">Richiesto</string>
+    <string name="error_empty_stock">Niente a magazzino</string>
+    <string name="error_empty_stock_sub">Vai ad acquistare alcuni prodotti</string>
+    <string name="error_empty_shopping_list">La lista della spesa è vuota</string>
+    <string name="error_empty_shopping_list_sub">Aggiungi alcuni prodotti che ti servono</string>
+    <string name="error_empty_master_data_sub">Creane con il pulsante sottostante</string>
+    <string name="error_empty_locations">Nessuna posizione</string>
+    <string name="error_empty_product_groups">Nessun gruppo di prodotti</string>
+    <string name="error_empty_products">Nessun prodotto</string>
+    <string name="error_empty_qu">Nessuna unità di misura</string>
+    <string name="error_empty_stores">Nessun negozio</string>
+    <string name="error_search">Nessun risultato di ricerca</string>
+    <string name="error_search_sub">Prova con altri termini</string>
+    <string name="error_filter">Nulla da visualizzare</string>
+    <string name="error_filter_sub">Prova con altri filtri</string>
+    <string name="error_duplicate">Già esistente</string>
+    <string name="error_parent">Non può essere il proprio genitore</string>
+    <string name="error_invalid_product">Prodotto non valido</string>
+    <string name="error_invalid_url">URL non valido</string>
+    <string name="error_invalid_amount">Quantità non valida</string>
+    <string name="error_invalid_best_before_days">Usa -1 se non scade mai</string>
+    <string name="error_invalid_factor">Valore invalido</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">Tra %1$s e %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">Uguale o maggiore a %1$s</string>
+    <string name="error_offline">Disconnesso</string>
+    <string name="error_name_exists">Nome già esistente</string>
+    <string name="error_offline_subtitle">Controlla la connessione e riprova</string>
+    <string name="error_unknown">Oops!</string>
+    <string name="error_not_grocy_instance">Non è una istanza valida di grocy</string>
+    <string name="error_timeout">Tempo di connessione scaduto</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">Connessione a %1$s fallita</string>
+    <string name="error_handshake">Certificato mancante</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$s richiede un certificato che è sconosciuto o non riconosciuto come sicuro da Android.\nIl certificato del server deve essere firmato da un\'autorità di certificato (CA) sicura\nPer soddisfare questi requisiti, puoi usare un certificato gratuito da letsencrypt.org con la crittografia adatta.</string>
+    <string name="error_unexpected_response_code">Codice di risposta inaspettato: %1$d</string>
+    <string name="error_unexpected_response">Risposta del server inaspettata</string>
+    <string name="error_no_browser">Installa un browser per visualizzare la pagina di aiuto</string>
+    <string name="error_undefined">Si è verificato un errore</string>
+
+    <string name="title_stock_overview">Riepilogo della dispensa</string>
+    <string name="title_purchase">Acquista</string>
+    <string name="title_consume">Consuma</string>
+    <string name="title_product_overview">Riepilogo dei prodotti</string>
+    <string name="title_product">Prodotto</string>
+    <string name="title_master_data">Dati</string>
+    <string name="title_stock_entries">Voci nella dispensa</string>
+    <string name="title_shopping_list">Lista della spesa</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="title_about">Riguardo a</string>
+    <string name="title_info">Informazioni</string>
+    <string name="title_help">Aiuto</string>
+    <string name="title_logs">File di registro</string>
+    <string name="title_link_barcode">Collega codice a barre con un prodotto</string>
+    <string name="title_batch_scan_exit">Riempire i campi del prodotto?</string>
+    <string name="title_batch_missing_exit">Tornare allo scanner?</string>
+    <string name="title_link_barcode_to_existing">Collegare il codice a barre ad un prodotto esistente?</string>
+    <string name="title_link_barcode_or_create">Collegare il codice a barre ad un prodotto esistente o crearne uno nuovo con esso?</string>
+    <string name="title_compatibility">Problemi di compatibilità</string>
+    <string name="title_logout">Uscire da Grocy?</string>
+    <string name="title_restart">Riavviare Grocy?</string>
+    <string name="title_logout_demo">Uscire dalla modalità demo?</string>
+    <string name="title_batch_config">Configurazione della modalità non interattiva</string>
+    <string name="title_manage_master_data">Gestisci dati</string>
+
+    <string name="title_spoiled">Avariato</string>
+    <string name="title_use_specific">Usa un articolo specifico della dispensa</string>
+    <string name="title_is_total_price">è il prezzo totale</string>
+    <string name="title_stock_entry_no_specific">È il prezzo totale</string>
+    <string name="title_shopping_list_ungrouped">Non raggruppato</string>
+    <string name="title_list_entry">Voce della lista</string>
+    <string name="title_edit_list_entry">Modifica voce della lista</string>
+    <string name="title_create_list_entry">Crea una voce nella lista</string>
+    <string name="title_shopping_list_edit">Modifica lista della spesa</string>
+    <string name="title_shopping_list_new">Crea lista della spesa</string>
+    <string name="title_shopping_mode">Modalità spesa</string>
+    <string name="title_products_to_create">Prodotti da creare</string>
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s %2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(%1$s aperto/i)</string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">Dove %1$s è in dispensa</string>
+    <string name="subtitle_default">Predefinito</string>
+    <string name="subtitle_none_selected">Niente è selezionato</string>
+    <string name="subtitle_empty">Vuoto</string>
+    <string name="subtitle_done">Fatto</string>
+    <string name="subtitle_undone">Annullato</string>
+    <string name="subtitle_never_expires">Non scade mai</string>
+    <string name="subtitle_selected">Selezionato</string>
+    <string name="subtitle_stock_entry_no_specific">Il primo che scade per primo, poi il primo ad entrare è il primo ad uscire</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">Comprato il: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">Da consumare preferibilmente entro: %1$s; quantità %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Voce %1$d di %2$d</string>
+
+    <string name="description_batch_choose_link">Scegli il prodotto a cui collegare il codice a barre.</string>
+    <string name="description_batch_choose_create">Scegli o crea il prodotto a cui collegare il codice a barre</string>
+    <string name="description_scan_batch_exit">I nuovi prodotti sono stati creati, ma non sono stati ancora mandati al server perché mancano dei dettagli necessari. Aprire la scheda prodotto?</string>
+    <string name="description_missing_batch_exit">Alcuni acquisti non sono ancora stati inviati al server. Scartarli o tornare allo scanner?</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">Creare un nuovo prodotto con il nome \"%1$s\"?</string>
+    <string name="description_clear_shopping_list">Vuoi cancellare tutte le voce o solo quelle già completate?</string>
+
+    <string name="property_name">Nome</string>
+    <string name="property_name_singular">Nome (forma singolare)</string>
+    <string name="property_name_plural">Nome (forma plurale)</string>
+    <string name="property_product">Prodotto</string>
+    <string name="property_products">Prodotti</string>
+    <string name="property_product_name">Nome prodotto</string>
+    <string name="property_parent_product">Prodotto genitore</string>
+    <string name="property_description">Descrizione</string>
+    <string name="property_note">Note</string>
+    <string name="property_status">Stato</string>
+    <string name="property_amount">Quantità</string>
+    <string name="property_seconds">Secondi</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$d secondi</string>
+    <string name="property_amount_min_stock">Quantità minima in dispensa</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">Quantità in %1$s</string>
+    <string name="property_price">Prezzo</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">Prezzo in %1$s</string>
+    <string name="property_quantity_unit">Unità di misura</string>
+    <string name="property_quantity_units">Unità di misura</string>
+    <string name="property_qu_purchase">Unità di acquisto</string>
+    <string name="property_qu_stock">Unità di dispensa</string>
+    <string name="property_qu_factor">Pezzi nella confezione</string>
+    <string name="property_barcode">Codice a barre</string>
+    <string name="property_barcodes">Codici a barre</string>
+    <string name="property_bbd">Data di scadenza</string>
+    <string name="property_bbd_next">Prossima data di scadenza</string>
+    <string name="property_bb_days">Da consumarsi preferibilmente entro giorni</string>
+    <string name="property_bb_days_default">Scadenza predefinita</string>
+    <string name="property_bb_days_default_opened">Dopo aperto da consumarsi preferibilmente entro</string>
+    <string name="property_location">Posizione</string>
+    <string name="property_location_default">Posizione predefinita</string>
+    <string name="property_notes">Note</string>
+    <string name="property_locations">Posizioni</string>
+    <string name="property_store">Negozio</string>
+    <string name="property_store_unknown">Negozio sconosciuto</string>
+    <string name="property_store_default">Negozio predefinito</string>
+    <string name="property_stores">Negozi</string>
+    <string name="property_shopping_list">Lista della spesa</string>
+    <string name="property_shopping_lists">Liste della spesa</string>
+    <string name="property_last_purchased">Acquistato l\'ultima volta</string>
+    <string name="property_last_used">Usato l\'ultima volta</string>
+    <string name="property_last_price">Ultimo prezzo</string>
+    <string name="property_price_history">Cronologia prezzo</string>
+    <string name="property_product_group">Gruppo del prodotto</string>
+    <string name="property_product_groups">Gruppi prodotti</string>
+    <string name="property_opened">aperto</string>
+    <string name="property_not_opened">non aperto</string>
+    <string name="property_is_freezer">È congelato</string>
+
+    <string name="date_yesterday">Ieri</string>
+    <string name="date_today">Oggi</string>
+    <string name="date_tomorrow">Domani</string>
+    <string name="date_unknown">Sconosciuto</string>
+    <string name="date_unlimited">Senza limiti</string>
+    <string name="date_never">Mai</string>
+
+    <plurals name="date_days">
+        <item quantity="one">%d giorno</item>
+        <item quantity="other">%d giorni</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">%d mese</item>
+        <item quantity="other">%d mesi</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">%d anno</item>
+        <item quantity="other">%d anni</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">%d giorno fa</item>
+        <item quantity="other">%d giorni fa</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">%d mese fa</item>
+        <item quantity="other">%d mesi fa</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">%d anno fa</item>
+        <item quantity="other">%d anni fa</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">%d giorno da oggi</item>
+        <item quantity="other">%d giorni da oggi</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">%d mese da oggi</item>
+        <item quantity="other">%d mesi da oggi</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">%d anno da oggi</item>
+        <item quantity="other">%d anni da oggi</item>
+    </plurals>
+
+    <string name="info_acknowledgement">Vogliamo ringraziare Berd Bestel che senza il suo duro lavoro questa app non esisterebbe</string>
+    <string name="info_intro">Rivedi l\'introduzione</string>
+    <string name="info_intro_description">Dimostra funzionalità</string>
+    <string name="info_version">Versione</string>
+    <string name="info_grocy_version">Versione di Grocy</string>
+    <string name="info_grocy_version_incompatible">Non supportato</string>
+    <string name="info_changelog">Modifiche</string>
+    <string name="info_changelog_description">Novità</string>
+    <string name="info_developers">Sviluppatori</string>
+    <string name="info_github">Grocy Android su GitHub</string>
+    <string name="info_github_description">Codice sorgente</string>
+    <string name="info_website">Apri sito internet di Grocy</string>
+
+    <string name="feature_1_title">Grocy per Android</string>
+    <string name="feature_1_description">Gestionale per la tua dispensa domestica self-hosted</string>
+    <string name="feature_2_title">Design intuitivo</string>
+    <string name="feature_2_description">Apri e consuma con uno swipe</string>
+    <string name="feature_3_description">Scansiona tutti i tuoi acquisti in pochi secondi</string>
+
+    <string name="category_licenses">Apri licenze del codice sorgente</string>
+    <string name="category_general">Generale</string>
+    <string name="category_purchase_consume">Compra e consuma</string>
+    <string name="category_server">Server</string>
+    <string name="category_debugging">Debugging</string>
+    <string name="category_presets">Impostazioni predefinite per nuovi prodotti</string>
+
+    <string name="hint_server">URL server</string>
+    <string name="hint_key">Chiave API valida</string>
+
+    <string name="setting_dark_mode">Attiva modalità scura</string>
+    <string name="setting_open_food_facts">Usa Open Food Facts</string>
+    <string name="setting_open_food_facts_description">Informazioni dal codice a barre</string>
+    <string name="setting_use_front_cam">Usa la telecamera frontale</string>
+    <string name="setting_use_front_cam_description">Per scansionare il codice a barre</string>
+    <string name="setting_reload_config">Ricarica la configurazione</string>
+    <string name="setting_reload_config_description">Necessario riavviare l\'app</string>
+    <string name="setting_logout">Esci</string>
+    <string name="setting_logout_description">Torna alla pagina di login</string>
+    <string name="setting_list_indicator_description">Indica con un cerchietto blu se nella lista della spesa</string>
+    <string name="setting_shopping_mode_update_interval">Intervallo di aggiornamento modalità spesa</string>
+    <string name="setting_keep_screen_on">Mantieni lo schermo acceso</string>
+    <string name="setting_keep_screen_on_description">Quando in modalità spesa</string>
+    <string name="setting_expiring_soon_days">Numero di giorni per essere in scadenza</string>
+    <string name="setting_default_amount_purchase">Quantità predefinita per acquista</string>
+    <string name="setting_default_amount_consume">Quantità predefinità per consuma</string>
+    <string name="setting_empty_value">Vuoto</string>
+    <string name="setting_sync_off">Sincronizzazione spenta</string>
+    <string name="setting_not_loaded">Caricamento fallito</string>
+    <string name="setting_debug">Attiva logging</string>
+    <string name="setting_debug_description">Mostra errori nei log</string>
+    <string name="setting_info_logs">Mostra log di informazione</string>
+    <string name="setting_logs_description">Mostra logcat di questo processo</string>
+
+    <string name="setting_ask_best_before_date">Richiedi data di scadenza</string>
+    <string name="setting_ask_price">Richiedi prezzo</string>
+    <string name="setting_ask_store">Richiedi negozio</string>
+    <string name="setting_ask_location">Richiedi posizione</string>
+    <string name="setting_consume_all">Consuma tutti gli articoli del prodotto</string>
+
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
+    <string name="url_grocy_demo">https://it.demo.grocy.info</string>
+    </resources>

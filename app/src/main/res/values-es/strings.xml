@@ -137,6 +137,7 @@
     <string name="msg_point_at_barcode">Apunta tu cámara al código de barras.</string>
 
     <string name="error_api_not_working">La clave de la API no está funcionando</string>
+    <string name="error_orbot_not_installed">Orbot no está instalado</string>
     <string name="error_select_product">Selecciona un producto</string>
     <string name="error_empty">Requerido</string>
     <string name="error_empty_stock">Nada en stock</string>
@@ -309,6 +310,49 @@
     <string name="date_unknown">Desconocido</string>
     <string name="date_unlimited">Ilimitado</string>
     <string name="date_never">Nunca</string>
+
+    <plurals name="date_days">
+        <item quantity="one">%d dia</item>
+        <item quantity="other">%d dias</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">%d mes</item>
+        <item quantity="other">%d meses</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">%d año</item>
+        <item quantity="other">%d años</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">Hace %d dia</item>
+        <item quantity="other">Hace %d dias</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">Hace %d mes</item>
+        <item quantity="other">Hace %d meses</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">Hace %d año</item>
+        <item quantity="other">Hace %d años</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">En %d día</item>
+        <item quantity="other">En %d dias</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">En %d mes</item>
+        <item quantity="other">En %d meses</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">En %d año</item>
+        <item quantity="other">En %d años</item>
+    </plurals>
 
     <string name="info_acknowledgement">Nos gustaría agradecerle a Bernd Bestel, sin su gran trabajo esta aplicación nunca hubiera sido posible.</string>
     <string name="info_intro">Repetir la introducción</string>
