@@ -47,6 +47,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
@@ -208,10 +209,19 @@ public class BatchChooseBottomSheetDialogFragment extends CustomBottomSheetDialo
             dlHelper.get(
                     OpenFoodFactsApi.getProduct(barcode),
                     response -> {
+                        String language = Locale.getDefault().getLanguage();
+                        String country = Locale.getDefault().getCountry();
+                        String both = language + "_" + country;
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONObject product = jsonObject.getJSONObject("product");
-                            String name = product.getString("product_name");
+                            String name = product.optString("product_name_" + both);
+                            if(name.isEmpty()) {
+                                name = product.optString("product_name_" + language);
+                            }
+                            if(name.isEmpty()) {
+                                name = product.optString("product_name");
+                            }
                             autoCompleteTextViewProduct.setText(name);
                             if(debug) Log.i(TAG, "onCreateView: OpenFoodFacts = " + name);
                         } catch (JSONException e) {

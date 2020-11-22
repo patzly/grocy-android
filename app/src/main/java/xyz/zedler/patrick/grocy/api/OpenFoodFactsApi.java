@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 import xyz.zedler.patrick.grocy.R;
 
 public class OpenFoodFactsApi {
@@ -35,6 +37,17 @@ public class OpenFoodFactsApi {
 
     private static String getUrl(String command) {
         return "https://world.openfoodfacts.org/api/v0/" + command;
+    }
+
+    public String getLanguageCode() {
+        String language = Locale.getDefault().getLanguage();
+        String country = Locale.getDefault().getCountry();
+        if(language.isEmpty()) return null;
+        if(country.isEmpty()) {
+            return language;
+        } else {
+            return language + "_" + country;
+        }
     }
 
     // PRODUCT

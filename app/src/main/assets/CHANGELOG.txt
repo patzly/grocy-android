@@ -4,6 +4,7 @@
 - Chinese (China) translation
 - Italian translation
 - App now trusts Android user certificates (thanks murizorun!)
+- Names from Open Food Facts are in device language if possible
 - Fixed purchase workflow in missing batch items view
 - Fixed crash after rotation in product edit view
 - Updated translations
