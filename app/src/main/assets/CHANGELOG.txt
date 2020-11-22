@@ -7,6 +7,8 @@
 - Names from Open Food Facts are in device language if possible
 - Fixed purchase workflow in missing batch items view
 - Fixed crash after rotation in product edit view
+- Fixed crash in shopping list with empty locationId
+- Fixed Purchase & Consume of product with space on start/end
 - Updated translations
 
 1.9.0

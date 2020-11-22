@@ -220,7 +220,7 @@ public class PurchaseFragment extends Fragment {
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
-                        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
+                        String input = binding.autoCompletePurchaseProduct.getText().toString();
                         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
@@ -820,7 +820,7 @@ public class PurchaseFragment extends Fragment {
 
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
-        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
+        String input = binding.autoCompletePurchaseProduct.getText().toString();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE_THEN_PURCHASE);
