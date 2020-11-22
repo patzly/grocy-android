@@ -38,7 +38,7 @@ public class Product implements Parcelable {
     private String description;
 
     @SerializedName("location_id")
-    private int locationId;
+    private String locationId;
 
     @SerializedName("qu_id_purchase")
     private int quIdPurchase; // quantity unit
@@ -118,7 +118,7 @@ public class Product implements Parcelable {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
-        locationId = parcel.readInt();
+        locationId = parcel.readString();
         quIdPurchase = parcel.readInt();
         quIdStock = parcel.readInt();
         quFactorPurchaseToStock = parcel.readString();
@@ -146,7 +146,7 @@ public class Product implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeInt(locationId);
+        dest.writeString(locationId);
         dest.writeInt(quIdPurchase);
         dest.writeInt(quIdStock);
         dest.writeString(quFactorPurchaseToStock);
@@ -195,7 +195,10 @@ public class Product implements Parcelable {
     }
 
     public int getLocationId() {
-        return locationId;
+        if(locationId == null || locationId.isEmpty()) {
+            return -1;
+        }
+        return Integer.parseInt(locationId);
     }
 
     public int getQuIdStock() {
