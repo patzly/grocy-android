@@ -55,6 +55,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -166,6 +167,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         clickUtil = new ClickUtil();
         animUtil = new AnimUtil();
+
+        Log.i(TAG, "onViewCreated: " + Locale.getDefault());
 
         // PREFERENCES
 

@@ -127,7 +127,10 @@ public class MasterProductsFragment extends Fragment
             binding.recyclerMasterProducts.animate().cancel();
             binding = null;
         }
-        dlHelper.destroy();
+        if(dlHelper != null) {
+            dlHelper.destroy();
+            dlHelper = null;
+        }
     }
 
     @Override

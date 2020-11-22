@@ -5,6 +5,7 @@
 - Italian translation
 - App now trusts Android user certificates (thanks murizorun!)
 - Fixed purchase workflow in missing batch items view
+- Fixed crash after rotation in product edit view
 - Updated translations
 
 1.9.0
