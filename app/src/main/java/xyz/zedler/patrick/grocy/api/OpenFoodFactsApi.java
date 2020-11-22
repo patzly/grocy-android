@@ -39,17 +39,6 @@ public class OpenFoodFactsApi {
         return "https://world.openfoodfacts.org/api/v0/" + command;
     }
 
-    public String getLanguageCode() {
-        String language = Locale.getDefault().getLanguage();
-        String country = Locale.getDefault().getCountry();
-        if(language.isEmpty()) return null;
-        if(country.isEmpty()) {
-            return language;
-        } else {
-            return language + "_" + country;
-        }
-    }
-
     // PRODUCT
 
     /**
