@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -68,6 +70,8 @@ public class CompatibilityBottomSheet extends CustomBottomSheet {
             return view;
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
         ArrayList<String> supportedVersions = getArguments().getStringArrayList(
                 Constants.ARGUMENT.SUPPORTED_VERSIONS
         );
@@ -88,13 +92,20 @@ public class CompatibilityBottomSheet extends CustomBottomSheet {
         });
 
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
-            String server = getArguments().getString(Constants.ARGUMENT.SERVER);
-            String key = getArguments().getString(Constants.ARGUMENT.KEY);
-            boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
-            activity.getCurrentFragment().requestLogin(server, key, false, isDemo);
-            activity.getCurrentFragment().enableLoginButtons();
+            prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
+                    .apply();
+
+            if(activity instanceof LoginActivity) {
+                String server = getArguments().getString(Constants.ARGUMENT.SERVER);
+                String key = getArguments().getString(Constants.ARGUMENT.KEY);
+                boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
+                activity.getCurrentFragment().requestLogin(server, key, false, isDemo);
+                activity.getCurrentFragment().enableLoginButtons();
+            }
             dismiss();
         });
+
+        setCancelable(false);
 
         return view;
     }

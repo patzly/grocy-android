@@ -377,7 +377,12 @@ public class MissingBatchItemsFragment extends BaseFragment
             return;
         }
 
-        MissingBatchItem missingBatchItem = missingBatchItems.get(0);
+        int indexNextOnServer = 0;
+        while(indexNextOnServer < missingBatchItems.size()-1 && !missingBatchItems.get(indexNextOnServer).getIsOnServer()) {
+            indexNextOnServer++;
+        }
+
+        MissingBatchItem missingBatchItem = missingBatchItems.get(indexNextOnServer);
         ArrayList<BatchPurchaseEntry> batchPurchaseEntries = missingBatchItem.getPurchaseEntries();
 
         if(batchPurchaseEntries.size() < 1) {
@@ -391,6 +396,7 @@ public class MissingBatchItemsFragment extends BaseFragment
         // TODO: There should be an error in the UI
         if(missingBatchItem.getProductId() == null) return;
 
+        final int indexNextOnServerFinal = indexNextOnServer;
         purchaseProduct(
                 Integer.parseInt(missingBatchItem.getProductId()),
                 batchPurchaseEntry.getLocationId(),
@@ -401,14 +407,12 @@ public class MissingBatchItemsFragment extends BaseFragment
                     if(batchPurchaseEntries.isEmpty()) return;
                     batchPurchaseEntries.remove(0);
                     if(batchPurchaseEntries.isEmpty() && !missingBatchItems.isEmpty()) {
-                        missingBatchItems.remove(0);
-                        missingBatchItemAdapter.notifyItemRemoved(0);
+                        missingBatchItems.remove(indexNextOnServerFinal);
+                        missingBatchItemAdapter.notifyItemRemoved(indexNextOnServerFinal);
                     }
                     updateFab();
                     if(getReadyPurchaseEntriesSize() == 0) {
-                        showMessage(
-                                activity.getString(R.string.msg_purchase_transactions_done)
-                        );
+                        showMessage(activity.getString(R.string.msg_purchase_transactions_done));
                     } else {
                         doOnePurchaseRequest();
                     }

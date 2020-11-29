@@ -75,7 +75,7 @@ public class LoginFragment extends BaseFragment {
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
     private DownloadHelper dlHelper;
-    private ClickUtil clickUtil = new ClickUtil();
+    private final ClickUtil clickUtil = new ClickUtil();
 
     @Override
     public View onCreateView(
@@ -263,6 +263,8 @@ public class LoginFragment extends BaseFragment {
                                 )
                         );
                         if(checkVersion && !supportedVersions.contains(grocyVersion)) {
+                            sharedPrefs.edit().remove(Constants.PREF.VERSION_COMPATIBILITY_IGNORED)
+                                    .apply();
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.SERVER, server);
                             bundle.putString(Constants.ARGUMENT.KEY, key);

@@ -197,7 +197,6 @@ public class ConsumeFragment extends BaseFragment {
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         String input = binding.autoCompleteConsumeProduct.getText().toString();
-                        input = input.trim();
                         if(!productNames.isEmpty() && productNames.contains(input)) {
                             Product product = getProductFromName(input);
                             if(product != null) loadProductDetails(product.getId());
@@ -670,7 +669,7 @@ public class ConsumeFragment extends BaseFragment {
     }
 
     private boolean isFormIncomplete() {
-        String input = binding.autoCompleteConsumeProduct.getText().toString().trim();
+        String input = binding.autoCompleteConsumeProduct.getText().toString();
         if(!productNames.isEmpty() && !productNames.contains(input) && !input.isEmpty()) {
             binding.textInputConsumeProduct.setError(
                     activity.getString(R.string.error_invalid_product)

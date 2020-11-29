@@ -11,11 +11,4 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
-    <item
-        android:id="@+id/action_extended"
-        android:title="@string/action_show_extended"
-        android:icon="@drawable/ic_round_post_add"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
-
 </menu>

@@ -161,7 +161,7 @@ public class PurchaseFragment extends BaseFragment {
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_NEXT) {
                         clearInputFocus();
-                        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
+                        String input = binding.autoCompletePurchaseProduct.getText().toString();
                         if(viewModel.getProductNames() != null
                                 && !viewModel.getProductNames().isEmpty()
                                 && !viewModel.getProductNames().contains(input)
@@ -624,7 +624,7 @@ public class PurchaseFragment extends BaseFragment {
 
     private boolean isFormIncomplete() {
         boolean isIncomplete = false;
-        String input = binding.autoCompletePurchaseProduct.getText().toString().trim();
+        String input = binding.autoCompletePurchaseProduct.getText().toString();
         if(viewModel.getProductNames() != null && !viewModel.getProductNames().isEmpty()
                 && !viewModel.getProductNames().contains(input) && !input.isEmpty()
         ) {

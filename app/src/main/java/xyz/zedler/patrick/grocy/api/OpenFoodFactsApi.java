@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 import xyz.zedler.patrick.grocy.R;
 
 public class OpenFoodFactsApi {

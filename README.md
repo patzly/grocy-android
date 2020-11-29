@@ -4,6 +4,8 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
+**[Currently slow development]**
+
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
@@ -70,7 +72,7 @@ Translations which reached a completion level of 80% will be included in release
 
 
 <a href="https://www.transifex.com/projects/p/grocy-android/resource/app-src-main-res-values-strings-xml--master/chart/image_png">
-<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A................-E-E9b8y8ygo&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CSwedish%7CDutch%7CItalian%7CFrench%7CNorwegian+Bokm%C3%A5l%7CPortuguese+%28Brazil%29%7CChinese+%28China%29%7CCzech%7CEnglish%7CPolish%7CHebrew%7CGerman%7CSpanish%7C1%3A%7C51%25%7C95%25%7C95%25%7C96%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
+<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A................-E-E9b8y8ynq&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CSwedish%7CDutch%7CItalian%7CFrench%7CNorwegian+Bokm%C3%A5l%7CChinese+%28China%29%7CSpanish%7CCzech%7CPolish%7CHebrew%7CGerman%7CEnglish%7CPortuguese+%28Brazil%29%7C1%3A%7C62%25%7C95%25%7C95%25%7C96%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
 </a></br>
 <a href="https://www.transifex.com/grocy-android/grocy-android">View translations</a><br/>
 
