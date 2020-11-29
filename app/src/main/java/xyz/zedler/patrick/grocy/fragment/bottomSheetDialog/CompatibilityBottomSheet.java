@@ -95,10 +95,10 @@ public class CompatibilityBottomSheet extends CustomBottomSheet {
             prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
                     .apply();
 
-            if(activity instanceof LoginActivity) {
-                String server = getArguments().getString(Constants.ARGUMENT.SERVER);
-                String key = getArguments().getString(Constants.ARGUMENT.KEY);
-                boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
+            String server = getArguments().getString(Constants.ARGUMENT.SERVER);
+            String key = getArguments().getString(Constants.ARGUMENT.KEY);
+            boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
+            if(server != null) {
                 activity.getCurrentFragment().requestLogin(server, key, false, isDemo);
                 activity.getCurrentFragment().enableLoginButtons();
             }

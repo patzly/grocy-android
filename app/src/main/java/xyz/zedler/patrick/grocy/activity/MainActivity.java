@@ -73,16 +73,15 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.LoginFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
-import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                             if(!isDemo() && !sharedPrefs.getBoolean(
                                     Constants.PREF.UPDATE_INFO_READ,
                                     false
-                            )) showBottomSheet(new UpdateInfoBottomSheetDialogFragment(), null);
+                            )) showBottomSheet(new UpdateInfoBottomSheet(), null);
                             return;
                         }
 
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                                 supportedVersions
                         );
                         showBottomSheet(
-                                new CompatibilityBottomSheetDialogFragment(),
+                                new CompatibilityBottomSheet(),
                                 bundle
                         );
                     },
@@ -323,28 +322,30 @@ public class MainActivity extends AppCompatActivity {
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
                 if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
-                binding.bottomAppBar.changeMenu(
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId);
+                /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
-                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-                binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
+                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);*/
+                //binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
                 if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
-                binding.bottomAppBar.changeMenu(
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId);
+                /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
                 );
-                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-                binding.bottomAppBar.hideNavigationIcon(animated);
+                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);*/
+                //binding.bottomAppBar.hideNavigationIcon(animated);
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB.POSITION.GONE:
                 if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
-                binding.bottomAppBar.changeMenu(
+                /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
-                );
-                binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
+                );*/
+                //binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
