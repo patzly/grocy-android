@@ -978,7 +978,7 @@ public class DownloadHelper {
                 isRunning = true;
             }
             if(queueItems.isEmpty()) {
-                onQueueEmptyListener.execute();
+                if(onQueueEmptyListener != null) onQueueEmptyListener.execute();
                 return;
             }
             while(!queueItems.isEmpty()) {
