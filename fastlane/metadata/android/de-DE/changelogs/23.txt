@@ -1,0 +1,10 @@
+• Tschechische & portugiesische Übersetzung (Danke Übersetzer!)
+• Chinesische & italienische Übersetzung
+• App vertraut nun Android-Benutzerzertifikaten (Danke murizorun!) (#15)
+• Namen von Open Food Facts sollten nun in Gerätesprache sein (#211)
+• Verbesserte Kompatibilitätswarnung (#196) & Neue Updatewarnung (#223)
+• Behoben: purchase workflow in missing batch items view (#225)
+• Behoben: Absturz nach Drehung in Produktbearbeitung (#214)
+• Behoben: Absturz in Einkaufsliste mit leerer locationId (#226)
+• Behoben: Einkauf & Verbrauch eines Produkts mit Lücke am Namen (#219)
+• Übersetzungen aktualisiert
