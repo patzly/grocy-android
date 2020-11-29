@@ -66,6 +66,7 @@ public final class Constants {
         public final static String SHOW_INFO_LOGS = "info_logs";
 
         public final static String INTRO_SHOWN = "intro_shown";
+        public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     }
 
     public final static class URL {

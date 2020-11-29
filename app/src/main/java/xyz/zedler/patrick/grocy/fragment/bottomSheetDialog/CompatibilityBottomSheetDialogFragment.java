@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.LoginActivity;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDialogFragment {
@@ -69,6 +72,8 @@ public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDia
             return view;
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
         ArrayList<String> supportedVersions = getArguments().getStringArrayList(
                 Constants.ARGUMENT.SUPPORTED_VERSIONS
         );
@@ -87,13 +92,21 @@ public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDia
             dismiss();
             ((LoginActivity) activity).enableLoginButtons();
         });
+        if(activity instanceof MainActivity) {
+            view.findViewById(R.id.button_compatibility_cancel).setVisibility(View.GONE);
+        }
 
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
-            String server = getArguments().getString(Constants.ARGUMENT.SERVER);
-            String key = getArguments().getString(Constants.ARGUMENT.KEY);
-            boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
-            ((LoginActivity) activity).requestLogin(server, key, false, isDemo);
-            ((LoginActivity) activity).enableLoginButtons();
+            prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
+                    .apply();
+
+            if(activity instanceof LoginActivity) {
+                String server = getArguments().getString(Constants.ARGUMENT.SERVER);
+                String key = getArguments().getString(Constants.ARGUMENT.KEY);
+                boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
+                ((LoginActivity) activity).requestLogin(server, key, false, isDemo);
+                ((LoginActivity) activity).enableLoginButtons();
+            }
             dismiss();
         });
 

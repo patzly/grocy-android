@@ -56,6 +56,8 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
@@ -80,6 +82,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
@@ -249,7 +252,35 @@ public class MainActivity extends AppCompatActivity {
                 new DownloadHelper(this, TAG),
                 grocyApi,
                 sharedPrefs,
-                null,
+                () -> {
+                    String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, "");
+                    if(version.isEmpty()) return;
+                    ArrayList<String> supportedVersions = new ArrayList<>(
+                            Arrays.asList(
+                                    getResources().getStringArray(
+                                            R.array.compatible_grocy_versions
+                                    )
+                            )
+                    );
+                    if(supportedVersions.contains(version)) return;
+
+                    // If user already ignored warning, do not display again
+                    String ignoredVersion = sharedPrefs.getString(
+                            Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
+                    );
+                    if(ignoredVersion != null && ignoredVersion.equals(version)) return;
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.ARGUMENT.VERSION, version);
+                    bundle.putStringArrayList(
+                            Constants.ARGUMENT.SUPPORTED_VERSIONS,
+                            supportedVersions
+                    );
+                    showBottomSheet(
+                            new CompatibilityBottomSheetDialogFragment(),
+                            bundle
+                    );
+                },
                 null
         );
 

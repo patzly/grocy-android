@@ -245,6 +245,8 @@ public class LoginActivity extends AppCompatActivity {
                                 )
                         );
                         if(checkVersion && !supportedVersions.contains(grocyVersion)) {
+                            sharedPrefs.edit().remove(Constants.PREF.VERSION_COMPATIBILITY_IGNORED)
+                                    .apply();
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.ARGUMENT.SERVER, server);
                             bundle.putString(Constants.ARGUMENT.KEY, key);

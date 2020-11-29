@@ -1,14 +1,12 @@
-1.9.1
-- Czech translation (thanks contributors!)
-- Portuguese (Brazil) translation
-- Chinese (China) translation
-- Italian translation
-- App now trusts Android user certificates (thanks murizorun!)
-- Names from Open Food Facts are in device language if possible
-- Fixed purchase workflow in missing batch items view
-- Fixed crash after rotation in product edit view
-- Fixed crash in shopping list with empty locationId
-- Fixed Purchase & Consume of product with space on start/end
+1.10.0
+- Czech, Portuguese, Chinese & Italian translation (thanks translators!)
+- App now trusts Android user certificates (thanks murizorun!) (#15)
+- Names from Open Food Facts are in device language if possible (#211)
+- Improved compatibility warning (#196)
+- Fixed purchase workflow in missing batch items view (#225)
+- Fixed crash after rotation in product edit view (#214)
+- Fixed crash in shopping list with empty locationId (#226)
+- Fixed Purchase & Consume of product with space on start/end (#219)
 - Updated translations
 
 1.9.0
