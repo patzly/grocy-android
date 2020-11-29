@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private DownloadHelper dlHelper;
     private FragmentManager fragmentManager;
     private ActivityLoginBinding binding;
-    private ClickUtil clickUtil = new ClickUtil();
+    private final ClickUtil clickUtil = new ClickUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -86,6 +86,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DrawerBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitMissingBatchBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
@@ -262,7 +263,13 @@ public class MainActivity extends AppCompatActivity {
                                     )
                             )
                     );
-                    if(supportedVersions.contains(version)) return;
+                    if(supportedVersions.contains(version)) {
+                        if(!isDemo() && !sharedPrefs.getBoolean(
+                                Constants.PREF.UPDATE_INFO_READ,
+                                false
+                        )) showBottomSheet(new UpdateInfoBottomSheetDialogFragment(), null);
+                        return;
+                    }
 
                     // If user already ignored warning, do not display again
                     String ignoredVersion = sharedPrefs.getString(

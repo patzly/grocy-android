@@ -2,7 +2,7 @@
 - Czech, Portuguese, Chinese & Italian translation (thanks translators!)
 - App now trusts Android user certificates (thanks murizorun!) (#15)
 - Names from Open Food Facts are in device language if possible (#211)
-- Improved compatibility warning (#196)
+- Improved compatibility warning (#196) & added update warning (#223)
 - Fixed purchase workflow in missing batch items view (#225)
 - Fixed crash after rotation in product edit view (#214)
 - Fixed crash in shopping list with empty locationId (#226)

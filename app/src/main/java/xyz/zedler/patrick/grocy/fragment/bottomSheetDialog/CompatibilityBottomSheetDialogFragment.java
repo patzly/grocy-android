@@ -110,6 +110,8 @@ public class CompatibilityBottomSheetDialogFragment extends CustomBottomSheetDia
             dismiss();
         });
 
+        setCancelable(false);
+
         return view;
     }
 
