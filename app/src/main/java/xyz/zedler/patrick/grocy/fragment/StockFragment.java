@@ -379,7 +379,8 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 Constants.FAB.POSITION.CENTER,
                 R.menu.menu_stock,
                 animated,
-                this::setUpBottomMenu
+                this::setUpBottomMenu,
+                TAG
         );
         activity.updateFab(
                 R.drawable.ic_round_barcode_scan,

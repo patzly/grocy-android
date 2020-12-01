@@ -47,7 +47,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
-public class CustomBottomAppBar extends com.google.android.material.bottomappbar.BottomAppBar {
+public class CustomBottomAppBar extends CopyBottomAppBar {
 
 	private final static String TAG = "CustomBottomAppBar";
 

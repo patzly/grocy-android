@@ -36,7 +36,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -92,7 +91,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         });
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
-            navigate(DrawerBottomSheetDirections
+            navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
                             Constants.ACTION.CONSUME
                     )
@@ -100,7 +99,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         });
 
         view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
-            navigate(NavGraphDirections.actionGlobalScanBatchFragment(
+            navigateCustom(NavGraphDirections.actionGlobalScanBatchFragment(
                             Constants.ACTION.PURCHASE
                     )
             );
@@ -143,30 +142,30 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
 
         switch(v.getId()) {
             case R.id.linear_drawer_shopping_list:
-                navigate(DrawerBottomSheetDirections
+                navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
                 break;
             case R.id.linear_drawer_consume:
-                navigate(DrawerBottomSheetDirections
+                navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
                 break;
             case R.id.linear_drawer_purchase:
-                navigate(DrawerBottomSheetDirections
+                navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
                 break;
             case R.id.linear_drawer_master_data:
-                navigate(DrawerBottomSheetDirections
+                navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToMasterDataOverviewFragment());
                 /*dismiss();
                 activity.showBottomSheet(new MasterDataBottomSheet(), null);*/
                 break;
             case R.id.linear_settings:
                 IconUtil.start(view, R.id.image_settings);
-                new Handler().postDelayed(() -> navigate(DrawerBottomSheetDirections
+                new Handler().postDelayed(() -> navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToSettingsActivity()), 300);
                 break;
             case R.id.linear_feedback:
-                navigate(DrawerBottomSheetDirections
+                navigateCustom(DrawerBottomSheetDirections
                         .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
                 break;
             case R.id.linear_help:
@@ -186,7 +185,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         }
     }
 
-    private void navigate(NavDirections directions) {
+    private void navigateCustom(NavDirections directions) {
 
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
@@ -197,10 +196,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
             builder.setExitAnim(R.anim.slide_no);
         }
         dismiss();
-        NavHostFragment.findNavController(this).navigate(
-                directions,
-                builder.build()
-        );
+        navigate(directions, builder.build());
     }
 
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {

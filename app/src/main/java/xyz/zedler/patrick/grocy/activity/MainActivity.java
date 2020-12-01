@@ -57,7 +57,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -82,6 +81,7 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.view.CopyBottomAppBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -319,10 +319,23 @@ public class MainActivity extends AppCompatActivity {
             boolean animated,
             Runnable onMenuChanged
     ) {
+        updateBottomAppBar(newFabPosition, newMenuId, animated, onMenuChanged, "not given");
+    }
+
+    public void updateBottomAppBar(
+            int newFabPosition,
+            @MenuRes int newMenuId,
+            boolean animated,
+            Runnable onMenuChanged,
+            String tag
+    ) {
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
-                if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId);
+                if(!binding.fabMain.isShown()) binding.fabMain.show();
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
+                //binding.bottomAppBar.replaceMenu(newMenuId);
+                //new Handler().postDelayed(onMenuChanged, 3000);
+                //onMenuChanged.run();
                 /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );
@@ -331,8 +344,11 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
-                if(binding.fabMain.isOrWillBeHidden()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId);
+                if(!binding.fabMain.isShown()) binding.fabMain.show();
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId, onMenuChanged);
+                //binding.bottomAppBar.replaceMenu(newMenuId);
+                //new Handler().postDelayed(onMenuChanged, 3000);
+                //onMenuChanged.run();
                 /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
                 );
@@ -341,7 +357,9 @@ public class MainActivity extends AppCompatActivity {
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB.POSITION.GONE:
-                if(binding.fabMain.isOrWillBeShown()) binding.fabMain.hide();
+                if(binding.fabMain.isShown()) binding.fabMain.hide();
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
+                //onMenuChanged.run();
                 /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
                 );*/

@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
@@ -96,7 +97,8 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
                 dismiss();
-                activity.navigateUp(); // TODO
+                navigate(ShoppingListFragmentDirections
+                        .actionShoppingListFragmentToShoppingListEditFragment());
             });
         }
 

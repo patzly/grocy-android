@@ -8,6 +8,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigator;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -37,5 +42,22 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
 
             BottomSheetBehavior.from(sheet).setPeekHeight(metrics.heightPixels / 2);
         });
+    }
+
+    @NonNull
+    NavController findNavController() {
+        return NavHostFragment.findNavController(this);
+    }
+
+    void navigate(NavDirections directions) {
+        findNavController().navigate(directions);
+    }
+
+    void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+        findNavController().navigate(directions, navigatorExtras);
+    }
+
+    void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
+        findNavController().navigate(directions, navOptions);
     }
 }

@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.animation.LayoutTransition;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -167,10 +166,7 @@ public class ShoppingListFragment extends BaseFragment implements
         binding.swipeShoppingList.setColorSchemeColors(
                 ContextCompat.getColor(activity, R.color.secondary)
         );
-        binding.swipeShoppingList.setOnRefreshListener(() -> {
-            binding.swipeShoppingList.setRefreshing(false);
-            viewModel.downloadData();
-        });
+        binding.swipeShoppingList.setOnRefreshListener(() -> viewModel.downloadData());
 
         if(savedInstanceState == null) binding.recycler.scrollTo(0, 0);
 
@@ -180,7 +176,7 @@ public class ShoppingListFragment extends BaseFragment implements
         binding.recycler.setItemAnimator(new ItemAnimator());
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-            binding.progressbar.setVisibility(state ? View.VISIBLE : View.GONE);
+            binding.swipeShoppingList.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
 
@@ -191,13 +187,13 @@ public class ShoppingListFragment extends BaseFragment implements
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
             appBarOfflineInfo(offline);
-            activity.updateBottomAppBar(
+            /*activity.updateBottomAppBar( TODO
                     Constants.FAB.POSITION.CENTER,
                     offline ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
                     getArguments() == null || getArguments()
                             .getBoolean(Constants.ARGUMENT.ANIMATED, true),
                     this::setUpBottomMenu
-            );
+            );*/
         });
 
         viewModel.getSelectedShoppingListIdLive().observe(getViewLifecycleOwner(), id -> {
@@ -260,11 +256,8 @@ public class ShoppingListFragment extends BaseFragment implements
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        updateUI(ShoppingListFragmentArgs.fromBundle(getArguments()).getAnimateStart()
                 && savedInstanceState == null); // TODO: When going back to this fragment, FAB is not animated
-
-        setArguments(null);
     }
 
     private void updateUI(boolean animated) {
@@ -275,7 +268,8 @@ public class ShoppingListFragment extends BaseFragment implements
                 Constants.FAB.POSITION.CENTER,
                 viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
                 animated,
-                this::setUpBottomMenu
+                this::setUpBottomMenu,
+                TAG
         );
         activity.updateFab(
                 R.drawable.ic_round_add_anim,
@@ -289,9 +283,6 @@ public class ShoppingListFragment extends BaseFragment implements
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if(appBarBehavior != null) appBarBehavior.saveInstanceState(outState);
-    }
-
-    public void refresh() {
     }
 
     private void showShoppingListsBottomSheet() {
@@ -500,14 +491,6 @@ public class ShoppingListFragment extends BaseFragment implements
         if(!online == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!online);
         viewModel.downloadData();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Constants.REQUEST.SHOPPING_MODE) {
-            refresh();
-        }
     }
 
     private void hideDisabledFeatures() {

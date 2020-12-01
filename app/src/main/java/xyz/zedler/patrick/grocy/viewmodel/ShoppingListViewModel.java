@@ -241,6 +241,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
             currentQueueLoading = null;
         }
         if(isOffline()) { // skip downloading and update recyclerview
+            isLoadingLive.setValue(false);
             updateFilteredShoppingListItems();
             return;
         }

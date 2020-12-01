@@ -77,16 +77,12 @@ public class ShoppingListClearBottomSheet extends CustomBottomSheet {
             dismiss();
             fragment.clearAllItems(
                     shoppingList,
-                    () -> {
-                        showMessage(
-                                activity.getString(
-                                        R.string.msg_shopping_list_cleared,
-                                        shoppingList.getName()
-                                )
-                        );
-                        // reload now empty list
-                        fragment.refresh();
-                    });
+                    () -> showMessage(
+                            activity.getString(
+                                    R.string.msg_shopping_list_cleared,
+                                    shoppingList.getName()
+                            )
+                    ));
         });
 
         view.findViewById(R.id.button_clear_shopping_list_done).setOnClickListener(v -> {
