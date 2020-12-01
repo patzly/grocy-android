@@ -46,7 +46,7 @@ Among other great things it contains breaking changes in the API, which means th
 \n\nAgain in 'easy' language:
 \n• Grocy Android 1.x.x requires grocy Server 2.7.1
 \n• Grocy Android 2.x.x requires grocy Server 3.0.0 or higher
-\n\nCurrently you are using Grocy Android 1.10.0 on this device."
+\n\nCurrently you are using Grocy Android 1.10.1 on this device."
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 

@@ -1,0 +1,1 @@
+• Hotfix, welcher HTTP mit Klartext wieder erlaubt (#252)
