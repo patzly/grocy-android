@@ -1,3 +1,6 @@
+1.10.1
+- Hotfix which allows HTTP traffic again (#252)
+
 1.10.0
 - Czech, Portuguese, Chinese & Italian translation (thanks translators!)
 - App now trusts Android user certificates (thanks murizorun!) (#15)
