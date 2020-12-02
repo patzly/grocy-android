@@ -9,15 +9,16 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="top"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
 
         <ImageView
             android:id="@+id/image_features_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
@@ -25,8 +26,8 @@
 
         <ImageView
             android:id="@+id/image_features_focused"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
@@ -34,8 +35,8 @@
 
         <ImageView
             android:id="@+id/image_features_rotate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
@@ -43,8 +44,8 @@
 
         <ImageView
             android:id="@+id/image_features_front"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
@@ -54,9 +55,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="1"
         android:gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
@@ -77,8 +77,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:textAlignment="center"
             android:fontFamily="@font/roboto_mono_regular"
             android:lineSpacingExtra="8sp"

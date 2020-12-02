@@ -1,3 +1,5 @@
+• Fixed clipped text in onboarding
+
 1.10.1
 • Hotfix which allows HTTP cleartext traffic again (#252)
 
