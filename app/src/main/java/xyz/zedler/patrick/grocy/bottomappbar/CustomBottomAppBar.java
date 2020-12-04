@@ -1,4 +1,4 @@
-package xyz.zedler.patrick.grocy.view;
+package xyz.zedler.patrick.grocy.bottomappbar;
 
 /*
     This file is part of Grocy Android.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.zedler.patrick.grocy.view;
+package xyz.zedler.patrick.grocy.bottomappbar;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -55,8 +55,6 @@ import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton.OnVisibilityChangedListener;
-import com.google.android.material.internal.ThemeEnforcement;
-import com.google.android.material.resources.MaterialResources;
 import com.google.android.material.shape.EdgeTreatment;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.MaterialShapeUtils;

@@ -22,7 +22,7 @@
 
     </FrameLayout>
 
-    <xyz.zedler.patrick.grocy.view.CustomBottomAppBar
+    <xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
 
         </FrameLayout>
 
-    </xyz.zedler.patrick.grocy.view.CustomBottomAppBar>
+    </xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main"

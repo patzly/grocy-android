@@ -81,7 +81,7 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
-import xyz.zedler.patrick.grocy.view.CopyBottomAppBar;
+import xyz.zedler.patrick.grocy.bottomappbar.CopyBottomAppBar;
 
 public class MainActivity extends AppCompatActivity {
 

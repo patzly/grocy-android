@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.zedler.patrick.grocy.view;
+package xyz.zedler.patrick.grocy.bottomappbar;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;

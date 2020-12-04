@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package xyz.zedler.patrick.grocy.view;
+package xyz.zedler.patrick.grocy.bottomappbar;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.view.View;
-import android.view.ViewOverlay;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
-@RequiresApi(18)
-class ViewOverlayApi18 implements ViewOverlayImpl {
+class ViewGroupOverlayApi14 extends ViewOverlayApi14 implements ViewGroupOverlayImpl {
 
-  private final ViewOverlay viewOverlay;
+  ViewGroupOverlayApi14(Context context, ViewGroup hostView, View requestingView) {
+    super(context, hostView, requestingView);
+  }
 
-  ViewOverlayApi18(@NonNull View view) {
-    viewOverlay = view.getOverlay();
+  static ViewGroupOverlayApi14 createFrom(ViewGroup viewGroup) {
+    return (ViewGroupOverlayApi14) ViewOverlayApi14.createFrom(viewGroup);
   }
 
   @Override
-  public void add(@NonNull Drawable drawable) {
-    viewOverlay.add(drawable);
+  public void add(@NonNull View view) {
+    overlayViewGroup.add(view);
   }
 
   @Override
-  public void remove(@NonNull Drawable drawable) {
-    viewOverlay.remove(drawable);
+  public void remove(@NonNull View view) {
+    overlayViewGroup.remove(view);
   }
 }

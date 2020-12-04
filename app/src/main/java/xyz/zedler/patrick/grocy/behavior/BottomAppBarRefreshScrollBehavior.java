@@ -40,7 +40,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
-import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
+import xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar;
 
 public class BottomAppBarRefreshScrollBehavior {
 
