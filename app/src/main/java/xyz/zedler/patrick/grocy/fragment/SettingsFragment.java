@@ -648,6 +648,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void updateTheme(boolean forceDarkMode) {
+        sharedPrefs.edit().putBoolean(Constants.PREF.DARK_MODE, forceDarkMode).apply();
         AppCompatDelegate.setDefaultNightMode(forceDarkMode
                 ? AppCompatDelegate.MODE_NIGHT_YES
                 : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
