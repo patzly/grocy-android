@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
@@ -1433,6 +1434,11 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 
     @NonNull

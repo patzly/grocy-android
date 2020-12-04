@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -54,6 +55,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -68,6 +70,7 @@ import xyz.zedler.patrick.grocy.NavGraphDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
+import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.LoginFragment;
@@ -81,7 +84,6 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
-import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -159,8 +161,9 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
 
         navController.addOnDestinationChangedListener((controller, dest, args) -> {
-            boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
             // conditional navigation
+            boolean newDestIsLogin = false;
+            boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
             if(!introShown && isServerUrlEmpty()) {
                 controller.navigate(R.id.action_global_loginFragment);
                 controller.navigate(R.id.action_global_featuresFragment);
@@ -168,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
                 controller.navigate(R.id.action_global_featuresFragment);
             } else if((dest.getId() != R.id.loginFragment
                     && dest.getId() != R.id.aboutFragment
-                    && dest.getId() != R.id.featuresFragment)
+                    && dest.getId() != R.id.featuresFragment
+                    && dest.getId() != R.id.settingsFragment)
                     && isServerUrlEmpty()
             ) {
                 controller.navigate(R.id.action_global_loginFragment);
+                newDestIsLogin = true;
             }
-            if(dest.getId() != R.id.loginFragment && dest.getId() != R.id.aboutFragment) {
-                setStatusBarColor(R.color.primary);
-            }
+
             if(isServerUrlEmpty()) {
                 binding.bottomAppBar.setVisibility(View.GONE);
                 binding.fabMain.hide();
@@ -184,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomAppBar.setVisibility(View.VISIBLE);
                 setNavBarColor(R.color.primary);
             }
+
+            setProperNavBarDividerColor(dest, newDestIsLogin);
         });
 
         // BOTTOM APP BAR
@@ -569,6 +574,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFabIcon(Drawable icon) {
         binding.fabMain.setImageDrawable(icon);
+    }
+
+    /**
+     * If SDK version is 28 or higher this tints the navBarDivider.
+     */
+    private void setNavBarDividerColor(@ColorRes int color) {
+        if(Build.VERSION.SDK_INT >= 28) {
+            getWindow().setNavigationBarDividerColor(ContextCompat.getColor(this, color));
+        } else if(debug) Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
+    }
+
+    private void setProperNavBarDividerColor(NavDestination dest, boolean newDestIsLogin) {
+        if(binding.bottomAppBar.getVisibility() == View.GONE) {
+            int orientation = getResources().getConfiguration().orientation;
+            if(orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if(dest.getId() == R.id.loginFragment || newDestIsLogin) {
+                    setNavBarDividerColor(R.color.transparent);
+                } else {
+                    setNavBarDividerColor(R.color.stroke_secondary);
+                }
+            } else {
+                setNavBarDividerColor(R.color.stroke_secondary);
+            }
+        }
     }
 
     public void executeOnStart() {

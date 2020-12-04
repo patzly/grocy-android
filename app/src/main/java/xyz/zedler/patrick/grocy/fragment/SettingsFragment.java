@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -120,16 +121,18 @@ public class SettingsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding.frameBack.setOnClickListener(v -> activity.navigateUp());
 
-        activity.showHideDemoIndicator(this, true);
-        activity.getScrollBehavior().setUpScroll(binding.scroll);
-        activity.getScrollBehavior().setHideOnScroll(true);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
-                R.menu.menu_empty,
-                false,
-                () -> {}
-        );
-        activity.binding.fabMain.hide();
+        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+            activity.showHideDemoIndicator(this, true);
+            activity.getScrollBehavior().setUpScroll(binding.scroll);
+            activity.getScrollBehavior().setHideOnScroll(true);
+            activity.updateBottomAppBar(
+                    Constants.FAB.POSITION.GONE,
+                    R.menu.menu_empty,
+                    false,
+                    () -> {}
+            );
+            activity.binding.fabMain.hide();
+        }
 
         setForPreviousFragment(Constants.ARGUMENT.ANIMATED, false);
 
@@ -659,5 +662,10 @@ public class SettingsFragment extends BaseFragment {
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return false;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 }

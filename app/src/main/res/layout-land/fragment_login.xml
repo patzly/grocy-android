@@ -63,6 +63,13 @@
                     app:icon="@drawable/ic_round_open_in_browser_anim"
                     app:tint="@color/icon"/>
 
+                <xyz.zedler.patrick.grocy.view.ActionButton
+                    android:id="@+id/button_login_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_round_settings_anim"
+                    app:tint="@color/icon"/>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -123,7 +130,7 @@
                     android:id="@+id/button_login_key"
                     style="@style/Widget.Grocy.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
@@ -134,7 +141,7 @@
                     android:id="@+id/button_login_login"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"

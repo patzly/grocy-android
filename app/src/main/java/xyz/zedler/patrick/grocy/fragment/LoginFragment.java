@@ -214,6 +214,13 @@ public class LoginFragment extends BaseFragment {
             binding.buttonLoginWebsite.startIconAnimation();
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
         });
+
+        binding.buttonLoginSettings.setTooltipText(getString(R.string.title_settings));
+        binding.buttonLoginSettings.setOnClickListener(v -> {
+            if(clickUtil.isDisabled()) return;
+            binding.buttonLoginSettings.startIconAnimation();
+            navigate(LoginFragmentDirections.actionLoginFragmentToSettingsFragment());
+        });
     }
 
     @Override
