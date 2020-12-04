@@ -16,6 +16,7 @@
 
 package xyz.zedler.patrick.grocy.bottomappbar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -83,6 +84,7 @@ public class MaterialResources {
    * Returns the {@link ColorStateList} from the given {@link TintTypedArray} attributes. The
    * resource can include themeable attributes, regardless of API level.
    */
+  @SuppressLint("RestrictedApi")
   @Nullable
   public static ColorStateList getColorStateList(
       @NonNull Context context, @NonNull TintTypedArray attributes, @StyleableRes int index) {
@@ -134,6 +136,7 @@ public class MaterialResources {
    *
    * <p>You only need this if you are drawing text manually. Normally, TextView takes care of this.
    */
+  @SuppressLint("RestrictedApi")
   @Nullable
   public static TextAppearance getTextAppearance(
       @NonNull Context context, @NonNull TypedArray attributes, @StyleableRes int index) {
