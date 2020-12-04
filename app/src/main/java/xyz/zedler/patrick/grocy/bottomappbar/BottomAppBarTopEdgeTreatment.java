@@ -36,7 +36,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  * less than 180 degrees that does not start or finish with a vertical path. This vertical offset
  * must be positive.
  */
-public class CopyBottomAppBarTopEdgeTreatment extends EdgeTreatment implements Cloneable {
+public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Cloneable {
 
   private static final int ARC_QUARTER = 90;
   private static final int ARC_HALF = 180;
@@ -58,7 +58,7 @@ public class CopyBottomAppBarTopEdgeTreatment extends EdgeTreatment implements C
    *     being cradled. An offset of 0 indicates the vertical center of the {@link
    *     FloatingActionButton} is positioned on the top edge.
    */
-  public CopyBottomAppBarTopEdgeTreatment(
+  public BottomAppBarTopEdgeTreatment(
       float fabMargin, float roundedCornerRadius, float cradleVerticalOffset) {
     this.fabMargin = fabMargin;
     this.roundedCornerRadius = roundedCornerRadius;

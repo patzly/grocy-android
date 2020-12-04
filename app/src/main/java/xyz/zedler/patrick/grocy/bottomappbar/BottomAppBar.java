@@ -46,7 +46,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewCompat.NestedScrollType;
 import androidx.core.view.ViewCompat.ScrollAxis;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.customview.view.AbsSavedState;
 
 import com.google.android.material.R;
@@ -71,17 +70,17 @@ import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wra
 
 /**
  * The Bottom App Bar is an extension of Toolbar that supports a shaped background that "cradles" an
- * attached {@link FloatingActionButton}. A FAB is anchored to {@link CopyBottomAppBar} by calling
+ * attached {@link FloatingActionButton}. A FAB is anchored to {@link BottomAppBar} by calling
  * {@link CoordinatorLayout.LayoutParams#setAnchorId(int)}, or by setting {@code app:layout_anchor}
  * on the FAB in xml.
  *
  * <p>Note: The Material Design Guidelines caution against using an {@link
- * ExtendedFloatingActionButton} with a {@link CopyBottomAppBar}, so there is limited support for that
- * use case. {@link ExtendedFloatingActionButton} can be anchored to the {@link CopyBottomAppBar}, but
+ * ExtendedFloatingActionButton} with a {@link BottomAppBar}, so there is limited support for that
+ * use case. {@link ExtendedFloatingActionButton} can be anchored to the {@link BottomAppBar}, but
  * currently animations and the cutout are not supported.
  *
  * <p>There are two modes which determine where the FAB is shown relative to the {@link
- * CopyBottomAppBar}. {@link #FAB_ALIGNMENT_MODE_CENTER} mode is the primary mode with the FAB is
+ * BottomAppBar}. {@link #FAB_ALIGNMENT_MODE_CENTER} mode is the primary mode with the FAB is
  * centered. {@link #FAB_ALIGNMENT_MODE_END} is the secondary mode with the FAB on the side.
  *
  * <p>Do not use the {@code android:background} attribute or call {@code BottomAppBar.setBackground}
@@ -93,17 +92,8 @@ import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wra
  * attribute to the correct color. For example, if the background of the BottomAppBar is {@code
  * colorSurface}, as it is in the default style, you should set {@code materialThemeOverlay} to
  * {@code @style/ThemeOverlay.MaterialComponents.BottomAppBar.Surface}.
- *
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_backgroundTint
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_fabAlignmentMode
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_fabAnimationMode
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_fabCradleMargin
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_fabCradleRoundedCornerRadius
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_fabCradleVerticalOffset
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_hideOnScroll
- * @attr ref com.google.android.material.R.styleable#BottomAppBar_paddingBottomSystemWindowInsets
  */
-public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
+public class BottomAppBar extends Toolbar implements AttachedBehavior {
 
   private static final int DEF_STYLE_RES = R.style.Widget_MaterialComponents_BottomAppBar;
 
@@ -162,15 +152,15 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
 
   /** Callback to be invoked when the BottomAppBar is animating. */
   interface AnimationListener {
-    void onAnimationStart(CopyBottomAppBar bar);
+    void onAnimationStart(BottomAppBar bar);
 
-    void onAnimationEnd(CopyBottomAppBar bar);
+    void onAnimationEnd(BottomAppBar bar);
   }
 
   /**
-   * If the {@link FloatingActionButton} is actually cradled in the {@link CopyBottomAppBar} or if the
+   * If the {@link FloatingActionButton} is actually cradled in the {@link BottomAppBar} or if the
    * {@link FloatingActionButton} is detached which will happen when the {@link
-   * FloatingActionButton} is not visible, or when the {@link CopyBottomAppBar} is scrolled off the
+   * FloatingActionButton} is not visible, or when the {@link BottomAppBar} is scrolled off the
    * screen.
    */
   private boolean fabAttached = true;
@@ -229,15 +219,15 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
         }
       };
 
-  public CopyBottomAppBar(@NonNull Context context) {
+  public BottomAppBar(@NonNull Context context) {
     this(context, null, 0);
   }
 
-  public CopyBottomAppBar(@NonNull Context context, @Nullable AttributeSet attrs) {
+  public BottomAppBar(@NonNull Context context, @Nullable AttributeSet attrs) {
     this(context, attrs, R.attr.bottomAppBarStyle);
   }
 
-  public CopyBottomAppBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+  public BottomAppBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(wrap(context, attrs, defStyleAttr, DEF_STYLE_RES), attrs, defStyleAttr);
     // Ensure we are using the correctly themed context rather than the context that was passed in.
     context = getContext();
@@ -274,7 +264,7 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
         getResources().getDimensionPixelOffset(R.dimen.mtrl_bottomappbar_fabOffsetEndMode);
 
     EdgeTreatment topEdgeTreatment =
-        new CopyBottomAppBarTopEdgeTreatment(fabCradleMargin, fabCornerRadius, fabVerticalOffset);
+        new BottomAppBarTopEdgeTreatment(fabCradleMargin, fabCornerRadius, fabVerticalOffset);
     ShapeAppearanceModel shapeAppearanceModel =
         ShapeAppearanceModel.builder().setTopEdge(topEdgeTreatment).build();
     materialShapeDrawable.setShapeAppearanceModel(shapeAppearanceModel);
@@ -290,42 +280,34 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
         attrs,
         defStyleAttr,
         DEF_STYLE_RES,
-        new ViewUtils.OnApplyWindowInsetsListener() {
+            (view, insets, initialPadding) -> {
+              // Just read the insets here. doOnApplyWindowInsets will apply the padding under the
+              // hood.
+              boolean leftInsetsChanged = false;
+              boolean rightInsetsChanged = false;
+              if (paddingBottomSystemWindowInsets) {
+                bottomInset = insets.getSystemWindowInsetBottom();
+              }
+              if (paddingLeftSystemWindowInsets) {
+                leftInsetsChanged = leftInset != insets.getSystemWindowInsetLeft();
+                leftInset = insets.getSystemWindowInsetLeft();
+              }
+              if (paddingRightSystemWindowInsets) {
+                rightInsetsChanged = rightInset != insets.getSystemWindowInsetRight();
+                rightInset = insets.getSystemWindowInsetRight();
+              }
 
-          @NonNull
-          @Override
-          public WindowInsetsCompat onApplyWindowInsets(
-              View view,
-              @NonNull WindowInsetsCompat insets,
-              @NonNull ViewUtils.RelativePadding initialPadding) {
-            // Just read the insets here. doOnApplyWindowInsets will apply the padding under the
-            // hood.
-            boolean leftInsetsChanged = false;
-            boolean rightInsetsChanged = false;
-            if (paddingBottomSystemWindowInsets) {
-              bottomInset = insets.getSystemWindowInsetBottom();
-            }
-            if (paddingLeftSystemWindowInsets) {
-              leftInsetsChanged = leftInset != insets.getSystemWindowInsetLeft();
-              leftInset = insets.getSystemWindowInsetLeft();
-            }
-            if (paddingRightSystemWindowInsets) {
-              rightInsetsChanged = rightInset != insets.getSystemWindowInsetRight();
-              rightInset = insets.getSystemWindowInsetRight();
-            }
+              // We may need to change the position of the cutout or the action menu if the side
+              // insets have changed.
+              if (leftInsetsChanged || rightInsetsChanged) {
+                cancelAnimations();
 
-            // We may need to change the position of the cutout or the action menu if the side
-            // insets have changed.
-            if (leftInsetsChanged || rightInsetsChanged) {
-              cancelAnimations();
+                setCutoutState();
+                setActionMenuViewPosition();
+              }
 
-              setCutoutState();
-              setActionMenuViewPosition();
-            }
-
-            return insets;
-          }
-        });
+              return insets;
+            });
   }
 
   /**
@@ -452,29 +434,29 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   /**
-   * Returns true if the {@link CopyBottomAppBar} should hide when a {@link
+   * Returns true if the {@link BottomAppBar} should hide when a {@link
    * androidx.core.view.NestedScrollingChild} is scrolled. This is handled by {@link
-   * CopyBottomAppBar.Behavior}.
+   * BottomAppBar.Behavior}.
    */
   public boolean getHideOnScroll() {
     return hideOnScroll;
   }
 
   /**
-   * Sets if the {@link CopyBottomAppBar} should hide when a {@link
+   * Sets if the {@link BottomAppBar} should hide when a {@link
    * androidx.core.view.NestedScrollingChild} is scrolled. This is handled by {@link
-   * CopyBottomAppBar.Behavior}.
+   * BottomAppBar.Behavior}.
    */
   public void setHideOnScroll(boolean hide) {
     hideOnScroll = hide;
   }
 
-  /** Animates the {@link CopyBottomAppBar} so it hides off the screen. */
+  /** Animates the {@link BottomAppBar} so it hides off the screen. */
   public void performHide() {
     getBehavior().slideDown(this);
   }
 
-  /** Animates the {@link CopyBottomAppBar} so it is shown on the screen. */
+  /** Animates the {@link BottomAppBar} so it is shown on the screen. */
   public void performShow() {
     getBehavior().slideUp(this);
   }
@@ -536,8 +518,8 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   /**
-   * Sets the fab diameter. This will be called automatically by the {@link CopyBottomAppBar.Behavior}
-   * if the fab is anchored to this {@link CopyBottomAppBar}.
+   * Sets the fab diameter. This will be called automatically by the {@link BottomAppBar.Behavior}
+   * if the fab is anchored to this {@link BottomAppBar}.
    */
   boolean setFabDiameter(@Px int diameter) {
     if (diameter != getTopEdgeTreatment().getFabDiameter()) {
@@ -834,13 +816,8 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
       @FabAlignmentMode final int fabAlignmentMode,
       final boolean fabAttached,
       boolean shouldWaitForMenuReplacement) {
-    Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
-        actionMenuView.setTranslationX(
-            getActionMenuViewTranslationX(actionMenuView, fabAlignmentMode, fabAttached));
-      }
-    };
+    Runnable runnable = () -> actionMenuView.setTranslationX(
+        getActionMenuViewTranslationX(actionMenuView, fabAlignmentMode, fabAttached));
     if (shouldWaitForMenuReplacement) {
       // Wait to ensure the actionMenuView has had it's menu inflated and is able to correctly
       // measure it's width before calculating and translating X.
@@ -918,8 +895,8 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   @NonNull
-  private CopyBottomAppBarTopEdgeTreatment getTopEdgeTreatment() {
-    return (CopyBottomAppBarTopEdgeTreatment)
+  private BottomAppBarTopEdgeTreatment getTopEdgeTreatment() {
+    return (BottomAppBarTopEdgeTreatment)
         materialShapeDrawable.getShapeAppearanceModel().getTopEdge();
   }
 
@@ -1017,14 +994,14 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   /**
-   * Behavior designed for use with {@link CopyBottomAppBar} instances. Its main function is to link a
+   * Behavior designed for use with {@link BottomAppBar} instances. Its main function is to link a
    * dependent {@link FloatingActionButton} so that it can be shown docked in the cradle.
    */
-  public static class Behavior extends HideBottomViewOnScrollBehavior<CopyBottomAppBar> {
+  public static class Behavior extends HideBottomViewOnScrollBehavior<BottomAppBar> {
 
     @NonNull private final Rect fabContentRect;
 
-    private WeakReference<CopyBottomAppBar> viewRef;
+    private WeakReference<BottomAppBar> viewRef;
 
     private int originalBottomMargin;
 
@@ -1041,7 +1018,7 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
               int oldTop,
               int oldRight,
               int oldBottom) {
-            CopyBottomAppBar child = viewRef.get();
+            BottomAppBar child = viewRef.get();
 
             // If the child BAB no longer exists, remove the listener.
             if (child == null || !(v instanceof FloatingActionButton)) {
@@ -1096,7 +1073,7 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
 
     @Override
     public boolean onLayoutChild(
-            @NonNull CoordinatorLayout parent, @NonNull CopyBottomAppBar child, int layoutDirection) {
+            @NonNull CoordinatorLayout parent, @NonNull BottomAppBar child, int layoutDirection) {
       viewRef = new WeakReference<>(child);
 
       View dependentView = child.findDependentView();
@@ -1133,7 +1110,7 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
     @Override
     public boolean onStartNestedScroll(
         @NonNull CoordinatorLayout coordinatorLayout,
-        @NonNull CopyBottomAppBar child,
+        @NonNull BottomAppBar child,
         @NonNull View directTargetChild,
         @NonNull View target,
         @ScrollAxis int axes,
@@ -1196,7 +1173,6 @@ public class CopyBottomAppBar extends Toolbar implements AttachedBehavior {
             return new SavedState(in, loader);
           }
 
-          @Nullable
           @Override
           public SavedState createFromParcel(@NonNull Parcel in) {
             return new SavedState(in, null);

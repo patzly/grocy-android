@@ -81,7 +81,7 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
-import xyz.zedler.patrick.grocy.bottomappbar.CopyBottomAppBar;
+import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
                 if(!binding.fabMain.isShown()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
                 //binding.bottomAppBar.replaceMenu(newMenuId);
                 //new Handler().postDelayed(onMenuChanged, 3000);
                 //onMenuChanged.run();
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.FAB.POSITION.END:
                 if(!binding.fabMain.isShown()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId, onMenuChanged);
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId, onMenuChanged);
                 //binding.bottomAppBar.replaceMenu(newMenuId);
                 //new Handler().postDelayed(onMenuChanged, 3000);
                 //onMenuChanged.run();
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.FAB.POSITION.GONE:
                 if(binding.fabMain.isShown()) binding.fabMain.hide();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(CopyBottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
+                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
                 //onMenuChanged.run();
                 /*binding.bottomAppBar.changeMenu(
                         newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged

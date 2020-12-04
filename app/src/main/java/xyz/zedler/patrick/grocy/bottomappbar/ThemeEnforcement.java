@@ -16,7 +16,6 @@
 
 package xyz.zedler.patrick.grocy.bottomappbar;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -28,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.StyleRes;
 import androidx.annotation.StyleableRes;
-import androidx.appcompat.widget.TintTypedArray;
 
 import com.google.android.material.R;
 
@@ -36,8 +34,6 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
 /**
  * Utility methods to check Theme compatibility with components.
- *
- * @hide
  */
 @RestrictTo(LIBRARY_GROUP)
 public final class ThemeEnforcement {
@@ -82,46 +78,6 @@ public final class ThemeEnforcement {
 
     // Then, safely retrieve the styled attribute information.
     return context.obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes);
-  }
-
-  /**
-   * Safely retrieve styled attribute information in this Context's theme using {@link
-   * TintTypedArray}, after checking whether the theme is compatible with
-   * the component's given style.
-   *
-   * <p>Set a component's {@link R.attr#enforceMaterialTheme enforceMaterialTheme} attribute to
-   * <code>true</code> to ensure that the Context's theme inherits from {@link
-   * R.style#Theme_MaterialComponents Theme.MaterialComponents}. For example, you'll want to do this
-   * if the component uses a new attribute defined in <code>Theme.MaterialComponents</code> like
-   * {@link R.attr#colorSecondary colorSecondary}.
-   *
-   * <p>New components should prefer to use {@link #obtainStyledAttributes(Context, AttributeSet,
-   * int[], int, int, int...)}, and use
-   * {@link com.google.android.material.resources.MaterialResources}
-   * as a replacement for the functionality in {@link TintTypedArray}.
-   *
-   * <p>If {@link R.attr#enforceTextAppearance} attribute is set to <code>true</code> and
-   * textAppearanceResIndices parameter is specified and has non-negative values, this will also
-   * check that a valid TextAppearance is set on this component for the text appearance resources
-   * passed in.
-   */
-  @SuppressLint("RestrictedApi")
-  public static TintTypedArray obtainTintedStyledAttributes(
-      @NonNull Context context,
-      AttributeSet set,
-      @NonNull @StyleableRes int[] attrs,
-      @AttrRes int defStyleAttr,
-      @StyleRes int defStyleRes,
-      @StyleableRes int... textAppearanceResIndices) {
-
-    // First, check for a compatible theme.
-    checkCompatibleTheme(context, set, defStyleAttr, defStyleRes);
-
-    // Then, check that a textAppearance is set if enforceTextAppearance attribute is true
-    checkTextAppearance(context, set, attrs, defStyleAttr, defStyleRes, textAppearanceResIndices);
-
-    // Then, safely retrieve the styled attribute information.
-    return TintTypedArray.obtainStyledAttributes(context, set, attrs, defStyleAttr, defStyleRes);
   }
 
   private static void checkCompatibleTheme(
@@ -218,14 +174,6 @@ public final class ThemeEnforcement {
 
   public static void checkMaterialTheme(@NonNull Context context) {
     checkTheme(context, MATERIAL_CHECK_ATTRS, MATERIAL_THEME_NAME);
-  }
-
-  public static boolean isAppCompatTheme(@NonNull Context context) {
-    return isTheme(context, APPCOMPAT_CHECK_ATTRS);
-  }
-
-  public static boolean isMaterialTheme(@NonNull Context context) {
-    return isTheme(context, MATERIAL_CHECK_ATTRS);
   }
 
   private static boolean isTheme(@NonNull Context context, @NonNull int[] themeAttributes) {

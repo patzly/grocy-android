@@ -47,7 +47,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
-public class CustomBottomAppBar extends CopyBottomAppBar {
+public class CustomBottomAppBar extends BottomAppBar {
 
 	private final static String TAG = "CustomBottomAppBar";
 

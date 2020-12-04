@@ -16,24 +16,13 @@
 
 package xyz.zedler.patrick.grocy.bottomappbar;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.WindowInsets;
-import android.view.inputmethod.InputMethodManager;
 
-import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
@@ -46,54 +35,14 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
 /**
  * Utils class for custom views.
- *
- * @hide
  */
 @RestrictTo(LIBRARY_GROUP)
 public class ViewUtils {
 
   private ViewUtils() {}
 
-  public static PorterDuff.Mode parseTintMode(int value, PorterDuff.Mode defaultMode) {
-    switch (value) {
-      case 3:
-        return PorterDuff.Mode.SRC_OVER;
-      case 5:
-        return PorterDuff.Mode.SRC_IN;
-      case 9:
-        return PorterDuff.Mode.SRC_ATOP;
-      case 14:
-        return PorterDuff.Mode.MULTIPLY;
-      case 15:
-        return PorterDuff.Mode.SCREEN;
-      case 16:
-        return PorterDuff.Mode.ADD;
-      default:
-        return defaultMode;
-    }
-  }
-
   public static boolean isLayoutRtl(View view) {
     return ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
-  }
-
-  public static float dpToPx(@NonNull Context context, @Dimension(unit = Dimension.DP) int dp) {
-    Resources r = context.getResources();
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-  }
-
-  public static void requestFocusAndShowKeyboard(@NonNull final View view) {
-    view.requestFocus();
-    view.post(
-        new Runnable() {
-          @Override
-          public void run() {
-            InputMethodManager inputMethodManager =
-                (InputMethodManager)
-                    view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-          }
-        });
   }
 
   /**
@@ -146,15 +95,6 @@ public class ViewUtils {
    * automatically apply inset padding based on view attributes.
    */
   public static void doOnApplyWindowInsets(
-      @NonNull View view, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    doOnApplyWindowInsets(view, attrs, defStyleAttr, defStyleRes, null);
-  }
-
-  /**
-   * Wrapper around {@link androidx.core.view.OnApplyWindowInsetsListener} that can
-   * automatically apply inset padding based on view attributes.
-   */
-  public static void doOnApplyWindowInsets(
       @NonNull View view,
       @Nullable AttributeSet attrs,
       int defStyleAttr,
@@ -175,37 +115,30 @@ public class ViewUtils {
 
     doOnApplyWindowInsets(
         view,
-        new OnApplyWindowInsetsListener() {
-          @NonNull
-          @Override
-          public WindowInsetsCompat onApplyWindowInsets(
-              View view,
-              @NonNull WindowInsetsCompat insets,
-              @NonNull RelativePadding initialPadding) {
-            if (paddingBottomSystemWindowInsets) {
-              initialPadding.bottom += insets.getSystemWindowInsetBottom();
-            }
-            boolean isRtl = isLayoutRtl(view);
-            if (paddingLeftSystemWindowInsets) {
-              if (isRtl) {
-                initialPadding.end += insets.getSystemWindowInsetLeft();
-              } else {
-                initialPadding.start += insets.getSystemWindowInsetLeft();
+            (view1, insets, initialPadding) -> {
+              if (paddingBottomSystemWindowInsets) {
+                initialPadding.bottom += insets.getSystemWindowInsetBottom();
               }
-            }
-            if (paddingRightSystemWindowInsets) {
-              if (isRtl) {
-                initialPadding.start += insets.getSystemWindowInsetRight();
-              } else {
-                initialPadding.end += insets.getSystemWindowInsetRight();
+              boolean isRtl = isLayoutRtl(view1);
+              if (paddingLeftSystemWindowInsets) {
+                if (isRtl) {
+                  initialPadding.end += insets.getSystemWindowInsetLeft();
+                } else {
+                  initialPadding.start += insets.getSystemWindowInsetLeft();
+                }
               }
-            }
-            initialPadding.applyToView(view);
-            return listener != null
-                ? listener.onApplyWindowInsets(view, insets, initialPadding)
-                : insets;
-          }
-        });
+              if (paddingRightSystemWindowInsets) {
+                if (isRtl) {
+                  initialPadding.start += insets.getSystemWindowInsetRight();
+                } else {
+                  initialPadding.end += insets.getSystemWindowInsetRight();
+                }
+              }
+              initialPadding.applyToView(view1);
+              return listener != null
+                  ? listener.onApplyWindowInsets(view1, insets, initialPadding)
+                  : insets;
+            });
   }
 
   /**
@@ -224,13 +157,11 @@ public class ViewUtils {
     // Set an actual OnApplyWindowInsetsListener which proxies to the given callback, also passing
     // in the original padding state.
     ViewCompat.setOnApplyWindowInsetsListener(
-        view,
-        new androidx.core.view.OnApplyWindowInsetsListener() {
-          @Override
-          public WindowInsetsCompat onApplyWindowInsets(View view, WindowInsetsCompat insets) {
-            return listener.onApplyWindowInsets(view, insets, new RelativePadding(initialPadding));
-          }
-        });
+            view,
+            (view1, insets) -> listener.onApplyWindowInsets(
+                    view1, insets, new RelativePadding(initialPadding)
+            )
+    );
     // Request some insets.
     requestApplyInsetsWhenAttached(view);
   }
@@ -256,35 +187,6 @@ public class ViewUtils {
     }
   }
 
-  /**
-   * Returns the absolute elevation of the parent of the provided {@code view}, or in other words,
-   * the sum of the elevations of all ancestors of the {@code view}.
-   */
-  public static float getParentAbsoluteElevation(@NonNull View view) {
-    float absoluteElevation = 0;
-    ViewParent viewParent = view.getParent();
-    while (viewParent instanceof View) {
-      absoluteElevation += ViewCompat.getElevation((View) viewParent);
-      viewParent = viewParent.getParent();
-    }
-    return absoluteElevation;
-  }
-
-  /**
-   * Backward-compatible {@link View#getOverlay()}. TODO(b/144937975): Remove and use the official
-   * version from androidx when it's available.
-   */
-  @Nullable
-  public static ViewOverlayImpl getOverlay(@Nullable View view) {
-    if (view == null) {
-      return null;
-    }
-    if (VERSION.SDK_INT >= 18) {
-      return new ViewOverlayApi18(view);
-    }
-    return ViewOverlayApi14.createFrom(view);
-  }
-
   /** Returns the content view that is the parent of the provided view. */
   @Nullable
   public static ViewGroup getContentView(@Nullable View view) {
@@ -307,36 +209,5 @@ public class ViewUtils {
     }
 
     return null;
-  }
-
-  /**
-   * Returns the content view overlay that can be used to add drawables on top of all other views.
-   */
-  @Nullable
-  public static ViewOverlayImpl getContentViewOverlay(@NonNull View view) {
-    return getOverlay(getContentView(view));
-  }
-
-  public static void addOnGlobalLayoutListener(
-      @Nullable View view, @NonNull OnGlobalLayoutListener victim) {
-    if (view != null) {
-      view.getViewTreeObserver().addOnGlobalLayoutListener(victim);
-    }
-  }
-
-  public static void removeOnGlobalLayoutListener(
-      @Nullable View view, @NonNull OnGlobalLayoutListener victim) {
-    if (view != null) {
-      removeOnGlobalLayoutListener(view.getViewTreeObserver(), victim);
-    }
-  }
-
-  public static void removeOnGlobalLayoutListener(
-      @NonNull ViewTreeObserver viewTreeObserver, @NonNull OnGlobalLayoutListener victim) {
-    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-      viewTreeObserver.removeOnGlobalLayoutListener(victim);
-    } else {
-      viewTreeObserver.removeGlobalOnLayoutListener(victim);
-    }
   }
 }

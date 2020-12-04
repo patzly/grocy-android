@@ -27,14 +27,10 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 import androidx.core.view.ViewCompat;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 class ViewOverlayApi14 implements ViewOverlayImpl {
 
@@ -260,23 +256,6 @@ class ViewOverlayApi14 implements ViewOverlayImpl {
       requestingView.getLocationOnScreen(hostViewLocation);
       offset[0] = hostViewLocation[0] - contentViewLocation[0];
       offset[1] = hostViewLocation[1] - contentViewLocation[1];
-    }
-
-    /** @hide */
-    @RestrictTo(LIBRARY_GROUP_PREFIX)
-    protected ViewParent invalidateChildInParentFast(int left, int top, Rect dirty) {
-      if (hostView != null && invalidateChildInParentFastMethod != null) {
-        try {
-          int[] offset = new int[2];
-          getOffset(offset);
-          invalidateChildInParentFastMethod.invoke(hostView, left, top, dirty);
-        } catch (IllegalAccessException e) {
-          e.printStackTrace();
-        } catch (InvocationTargetException e) {
-          e.printStackTrace();
-        }
-      }
-      return null;
     }
 
     @SuppressWarnings("deprecation")
