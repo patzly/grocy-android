@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.repository.AppRepository;
+import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ShoppingListViewModel extends AndroidViewModel {
@@ -67,7 +67,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
     private final EventHandler eventHandler;
-    private final AppRepository repository;
+    private final ShoppingListRepository repository;
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -99,7 +99,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
         eventHandler = new EventHandler();
-        repository = new AppRepository(application);
+        repository = new ShoppingListRepository(application);
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);

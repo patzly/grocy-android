@@ -26,10 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
-import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
-import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
-import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -38,23 +34,12 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
-public class AppRepository {
-    private AppDatabase appDatabase;
-    private ShoppingListDao shoppingListDao;
-    private ShoppingListItemDao shoppingListItemDao;
-    private ProductGroupDao productGroupDao;
-    private QuantityUnitDao quantityUnitDao;
+public class ShoppingListRepository {
+    private final AppDatabase appDatabase;
 
-    public AppRepository(Application application) {
+    public ShoppingListRepository(Application application) {
         this.appDatabase = AppDatabase.getAppDatabase(application);
-        this.shoppingListDao = appDatabase.shoppingListDao();
-        this.shoppingListItemDao = appDatabase.shoppingListItemDao();
-        this.productGroupDao = appDatabase.productGroupDao();
-        this.quantityUnitDao = appDatabase.quantityUnitDao();
     }
-
-    // repository.loadFromDatabase(shoppingListData -> groupItems());
-    // repository.updateDatabase(shoppingListData, updatedData -> groupItems());
 
     public interface ShoppingListDataListener {
         void actionFinished(
@@ -66,7 +51,10 @@ public class AppRepository {
     }
 
     public interface ShoppingListDataUpdatedListener {
-        void actionFinished(ArrayList<ShoppingListItem> offlineChangedItems, HashMap<Integer, ShoppingListItem> serverItemsHashMap);
+        void actionFinished(
+                ArrayList<ShoppingListItem> offlineChangedItems,
+                HashMap<Integer, ShoppingListItem> serverItemsHashMap
+        );
     }
 
     public interface ShoppingListItemsInsertedListener {
@@ -115,7 +103,16 @@ public class AppRepository {
             ArrayList<MissingItem> missingItems,
             ShoppingListDataUpdatedListener listener
     ) {
-        new updateAsyncTask(appDatabase, shoppingListItems, shoppingLists, productGroups, quantityUnits, products, missingItems, listener).execute();
+        new updateAsyncTask(
+                appDatabase,
+                shoppingListItems,
+                shoppingLists,
+                productGroups,
+                quantityUnits,
+                products,
+                missingItems,
+                listener
+        ).execute();
     }
 
     private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -234,66 +231,4 @@ public class AppRepository {
             if(listener != null) listener.actionFinished();
         }
     }
-
-    /*public void getAllShoppingListData() {
-        new overwriteAsyncTask(shoppingListItemDao).execute();
-    }
-
-    private static class getAllDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final ShoppingListItemDao shoppingListItemDao;
-        private ArrayList<ShoppingListItem> shoppingListItems;
-
-        getAsyncTask(ShoppingListItemDao dao) {
-            shoppingListItemDao = dao;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            shoppingListItems = shoppingListItemDao.getAll();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }*/
-
-    /*public void insertShoppingListItem(ShoppingListItem shoppingListItem) {
-        new overwriteAsyncTask(shoppingListItemDao).execute(shoppingListItem);
-    }*/
-
-    /*public void deleteItem(DataItem dataItem) {
-        new deleteAsyncTask(mDataDao).execute(dataItem);
-    }
-
-    private static class deleteAsyncTask extends AsyncTask<DataItem, Void, Void> {
-        private DataDAO mAsyncTaskDao;
-        deleteAsyncTask(DataDAO dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final DataItem... params) {
-            mAsyncTaskDao.deleteItem(params[0]);
-            return null;
-        }
-    }
-
-    public void deleteItemById(Long idItem) {
-        new deleteByIdAsyncTask(mDataDao).execute(idItem);
-    }
-
-    private static class deleteByIdAsyncTask extends AsyncTask<Long, Void, Void> {
-        private DataDAO mAsyncTaskDao;
-        deleteByIdAsyncTask(DataDAO dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Long... params) {
-            mAsyncTaskDao.deleteByItemId(params[0]);
-            return null;
-        }
-    }*/
 }
