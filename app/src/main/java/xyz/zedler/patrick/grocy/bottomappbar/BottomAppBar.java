@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -54,6 +55,8 @@ import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton.OnVisibilityChangedListener;
+import com.google.android.material.internal.ThemeEnforcement;
+import com.google.android.material.resources.MaterialResources;
 import com.google.android.material.shape.EdgeTreatment;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.MaterialShapeUtils;
@@ -232,11 +235,11 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     // Ensure we are using the correctly themed context rather than the context that was passed in.
     context = getContext();
 
-    TypedArray a =
+    @SuppressLint("RestrictedApi") TypedArray a =
         ThemeEnforcement.obtainStyledAttributes(
             context, attrs, R.styleable.BottomAppBar, defStyleAttr, DEF_STYLE_RES);
 
-    ColorStateList backgroundTint =
+    @SuppressLint("RestrictedApi") ColorStateList backgroundTint =
         MaterialResources.getColorStateList(context, a, R.styleable.BottomAppBar_backgroundTint);
 
     int elevation = a.getDimensionPixelSize(R.styleable.BottomAppBar_elevation, 0);
