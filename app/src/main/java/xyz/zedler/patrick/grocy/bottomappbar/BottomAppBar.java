@@ -56,6 +56,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton.OnVisibilityChangedListener;
 import com.google.android.material.internal.ThemeEnforcement;
+import com.google.android.material.internal.ViewUtils;
 import com.google.android.material.resources.MaterialResources;
 import com.google.android.material.shape.EdgeTreatment;
 import com.google.android.material.shape.MaterialShapeDrawable;
@@ -230,6 +231,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     this(context, attrs, R.attr.bottomAppBarStyle);
   }
 
+  @SuppressLint("RestrictedApi")
   public BottomAppBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(wrap(context, attrs, defStyleAttr, DEF_STYLE_RES), attrs, defStyleAttr);
     // Ensure we are using the correctly themed context rather than the context that was passed in.
@@ -771,7 +773,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   private float getFabTranslationX(@FabAlignmentMode int fabAlignmentMode) {
-    boolean isRtl = ViewUtils.isLayoutRtl(this);
+    @SuppressLint("RestrictedApi") boolean isRtl = ViewUtils.isLayoutRtl(this);
     if (fabAlignmentMode == FAB_ALIGNMENT_MODE_END) {
       int systemEndInset = isRtl ? leftInset : rightInset;
       int totalEndInset = fabOffsetEndMode + systemEndInset;
@@ -844,7 +846,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
       return 0;
     }
 
-    boolean isRtl = ViewUtils.isLayoutRtl(this);
+    @SuppressLint("RestrictedApi") boolean isRtl = ViewUtils.isLayoutRtl(this);
     int toolbarLeftContentEnd = isRtl ? getMeasuredWidth() : 0;
 
     // Calculate the inner side of the Toolbar's Gravity.START contents.
@@ -1055,7 +1057,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
               fabLayoutParams.bottomMargin = child.getBottomInset() + minBottomMargin;
               fabLayoutParams.leftMargin = child.getLeftInset();
               fabLayoutParams.rightMargin = child.getRightInset();
-              boolean isRtl = ViewUtils.isLayoutRtl(fab);
+              @SuppressLint("RestrictedApi") boolean isRtl = ViewUtils.isLayoutRtl(fab);
               if (isRtl) {
                 fabLayoutParams.leftMargin += child.fabOffsetEndMode;
               } else {
