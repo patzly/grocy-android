@@ -256,8 +256,7 @@ public class ShoppingListFragment extends BaseFragment implements
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         // UPDATE UI
-        updateUI(ShoppingListFragmentArgs.fromBundle(getArguments()).getAnimateStart()
-                && savedInstanceState == null); // TODO: When going back to this fragment, FAB is not animated
+        updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart());
     }
 
     private void updateUI(boolean animated) {
@@ -268,8 +267,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 Constants.FAB.POSITION.CENTER,
                 viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
                 animated,
-                this::setUpBottomMenu,
-                TAG
+                this::setUpBottomMenu
         );
         activity.updateFab(
                 R.drawable.ic_round_add_anim,

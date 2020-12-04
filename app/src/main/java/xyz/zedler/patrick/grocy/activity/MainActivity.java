@@ -159,16 +159,17 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
 
         navController.addOnDestinationChangedListener((controller, dest, args) -> {
+            boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
             // conditional navigation
-            if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)
-                    && isServerUrlEmpty()
-            ) {
+            if(!introShown && isServerUrlEmpty()) {
                 controller.navigate(R.id.action_global_loginFragment);
                 controller.navigate(R.id.action_global_featuresFragment);
-            } else if(!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
+            } else if(!introShown) {
                 controller.navigate(R.id.action_global_featuresFragment);
-            } else if((dest.getId() != R.id.loginFragment && dest.getId() != R.id.aboutFragment
-                    && dest.getId() != R.id.featuresFragment) && isServerUrlEmpty()
+            } else if((dest.getId() != R.id.loginFragment
+                    && dest.getId() != R.id.aboutFragment
+                    && dest.getId() != R.id.featuresFragment)
+                    && isServerUrlEmpty()
             ) {
                 controller.navigate(R.id.action_global_loginFragment);
             }
@@ -319,54 +320,31 @@ public class MainActivity extends AppCompatActivity {
             boolean animated,
             Runnable onMenuChanged
     ) {
-        updateBottomAppBar(newFabPosition, newMenuId, animated, onMenuChanged, "not given");
+        updateBottomAppBar(newFabPosition, newMenuId, onMenuChanged);
     }
 
     public void updateBottomAppBar(
             int newFabPosition,
             @MenuRes int newMenuId,
-            boolean animated,
-            Runnable onMenuChanged,
-            String tag
+            Runnable onMenuChanged
     ) {
+        int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
                 if(!binding.fabMain.isShown()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
-                //binding.bottomAppBar.replaceMenu(newMenuId);
-                //new Handler().postDelayed(onMenuChanged, 3000);
-                //onMenuChanged.run();
-                /*binding.bottomAppBar.changeMenu(
-                        newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
-                );
-                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);*/
-                //binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
                 if(!binding.fabMain.isShown()) binding.fabMain.show();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_END, newMenuId, onMenuChanged);
-                //binding.bottomAppBar.replaceMenu(newMenuId);
-                //new Handler().postDelayed(onMenuChanged, 3000);
-                //onMenuChanged.run();
-                /*binding.bottomAppBar.changeMenu(
-                        newMenuId, CustomBottomAppBar.MENU_START, animated, onMenuChanged
-                );
-                binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);*/
-                //binding.bottomAppBar.hideNavigationIcon(animated);
+                mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
             case Constants.FAB.POSITION.GONE:
                 if(binding.fabMain.isShown()) binding.fabMain.hide();
-                binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER, newMenuId, onMenuChanged);
-                //onMenuChanged.run();
-                /*binding.bottomAppBar.changeMenu(
-                        newMenuId, CustomBottomAppBar.MENU_END, animated, onMenuChanged
-                );*/
-                //binding.bottomAppBar.showNavigationIcon(R.drawable.ic_round_menu_anim, animated);
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
         }
+        binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(mode, newMenuId, onMenuChanged);
     }
 
     public void updateFab(
@@ -428,8 +406,6 @@ public class MainActivity extends AppCompatActivity {
         navController.navigateUp();
         binding.bottomAppBar.show();
     }
-
-    public void replaceFragment(String fragmentNew, Bundle bundle, boolean animated) {}
 
     public void dismissFragment() {}
 
