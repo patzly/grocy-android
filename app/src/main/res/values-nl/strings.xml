@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Voer inkooptransacties uit voor gecreëerde producten</string>
     <string name="action_create_key">Sleutel aanmaken</string>
     <string name="action_login">Inloggen</string>
-    <string name="action_use_demo_account">Demo-account proberen</string>
+    <string name="action_try_demo_instance">Demo-account proberen</string>
     <string name="action_ignore">Negeer</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alle</string>

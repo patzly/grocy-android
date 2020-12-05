@@ -67,6 +67,10 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class LoginFragment extends BaseFragment {
 
+    public final static int PAGE_DEMO_OR_OWN = 0;
+    public final static int PAGE_QR_CODE_SCAN = 1;
+    public final static int PAGE_SERVER_FORM = 2;
+
     final static String TAG = LoginFragment.class.getSimpleName();
     private final static boolean DEBUG = false;
 

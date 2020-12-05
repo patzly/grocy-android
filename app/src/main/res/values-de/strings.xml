@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
     <string name="action_create_key">Schlüssel erstellen</string>
     <string name="action_login">Anmelden</string>
-    <string name="action_use_demo_account">Demo-Account probieren</string>
+    <string name="action_try_demo_instance">Demo-Account probieren</string>
     <string name="action_ignore">Ignorieren</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alle</string>

@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">ביצוע העברות רכישה למוצרים שנוצרו</string>
     <string name="action_create_key">יצירת מפתח</string>
     <string name="action_login">כניסה</string>
-    <string name="action_use_demo_account">להשתמש בחשבון לדוגמה</string>
+    <string name="action_try_demo_instance">להשתמש בחשבון לדוגמה</string>
     <string name="action_ignore">התעלמות</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">הכול</string>

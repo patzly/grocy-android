@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/action_use_demo_account" />
+                android:text="@string/action_try_demo_instance" />
 
         </LinearLayout>
 
