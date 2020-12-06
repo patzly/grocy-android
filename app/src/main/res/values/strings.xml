@@ -4,6 +4,10 @@
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
+    <!-- Here you can append your name, but please only if you have translated some strings.
+     Append your name with the prefix <br/> (means newline) if there are already some other names.-->
+    <string name="language_translators"></string>
+
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->
     <string name="action_purchase">Purchase</string>
@@ -381,6 +385,7 @@
     <string name="info_changelog">Changelog</string>
     <string name="info_changelog_description">What\'s new?</string>
     <string name="info_developers">Developers</string>
+    <string name="info_translators">Translators for this language</string>
     <string name="info_github">Grocy Android on GitHub</string>
     <string name="info_github_description">Source code</string>
     <string name="info_website">Open Grocy website</string>

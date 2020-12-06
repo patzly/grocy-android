@@ -56,6 +56,10 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             Bundle savedInstanceState
     ) {
         binding = FragmentAboutBinding.inflate(inflater, container, false);
+
+        if(binding.translators.getText().toString().trim().isEmpty()) {
+            binding.linearTranslators.setVisibility(View.GONE);
+        }
         return binding.getRoot();
     }
 
@@ -74,7 +78,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         setOnClickListeners(
                 R.id.linear_intro,
                 R.id.linear_changelog,
-                R.id.linear_developer,
+                R.id.linear_developers,
                 R.id.linear_github,
                 R.id.linear_license_material_components,
                 R.id.linear_license_material_icons,
@@ -121,8 +125,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                 IconUtil.start(activity, R.id.image_changelog);
                 showTextBottomSheet("CHANGELOG", R.string.info_changelog, 0);
                 break;
-            case R.id.linear_developer:
-                IconUtil.start(activity, R.id.image_developer);
+            case R.id.linear_developers:
+                IconUtil.start(activity, R.id.image_developers);
                 new Handler().postDelayed(
                         () -> startActivity(
                                 new Intent(

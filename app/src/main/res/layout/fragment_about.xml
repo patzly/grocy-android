@@ -138,11 +138,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_developer"
+                android:id="@+id/linear_developers"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
 
                 <ImageView
-                    android:id="@+id/image_developer"
+                    android:id="@+id/image_developers"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     android:src="@drawable/ic_round_person_anim"
                     tools:ignore="ContentDescription" />
@@ -156,6 +156,33 @@
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/app_developer" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_translators"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
+
+                <ImageView
+                    android:id="@+id/image_translators"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_person_anim"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.OverLine"
+                        android:singleLine="false"
+                        android:text="@string/info_translators" />
+
+                    <TextView
+                        android:id="@+id/translators"
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/language_translators"
+                        android:maxLines="9"/>
 
                 </LinearLayout>
 
