@@ -71,6 +71,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class LoginFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener{
@@ -145,6 +146,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
                 bindingPage0.demoInstance.setEnabled(false);
                 navigate(LoginFragmentDirections.actionLoginFragmentSelf().setPage(PAGE_QR_CODE_SCAN));
             });
+            setupBottomButtons();
             return;
         } else if(getPageType() == PAGE_QR_CODE_SCAN) {
             bindingPage1.enterManually.setOnClickListener(v -> {
@@ -165,7 +167,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
             return;
         }
 
-        // INITIALIZE VIEWS
+        // PAGE TYPE is PAGE_SERVER_FORM
 
         if(credentials.getString(Constants.PREF.SERVER_URL, null) != null) {
             bindingPage2.editTextLoginServer.setText(
@@ -259,54 +261,68 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
             }
         });
 
-        bindingPage2.buttonLoginHelp.setTooltipText(getString(R.string.title_help));
-        bindingPage2.buttonLoginHelp.setOnClickListener(v -> {
+        setupBottomButtons();
+    }
+
+    private void updatePrefixRadioButtons(String input) {
+        bindingPage2.https.setChecked(input.contains("https://"));
+        bindingPage2.http.setChecked(input.contains("http://"));
+    }
+
+    private void setupBottomButtons() {
+        if(getPageType() != 2 && getPageType() != 0) return;
+        ActionButton help = getPageType() == 2 ? bindingPage2.buttonLoginHelp
+                : bindingPage0.buttonLoginHelp;
+        ActionButton feedback = getPageType() == 2 ? bindingPage2.buttonLoginFeedback
+                : bindingPage0.buttonLoginFeedback;
+        ActionButton about = getPageType() == 2 ? bindingPage2.buttonLoginAbout
+                : bindingPage0.buttonLoginAbout;
+        ActionButton website = getPageType() == 2 ? bindingPage2.buttonLoginWebsite
+                : bindingPage0.buttonLoginWebsite;
+        ActionButton settings = getPageType() == 2 ? bindingPage2.buttonLoginSettings
+                : bindingPage0.buttonLoginSettings;
+        View container = getPageType() == 2 ? bindingPage2.coordinatorContainer
+                : bindingPage0.coordinateContainer;
+
+        help.setTooltipText(getString(R.string.title_help));
+        help.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            bindingPage2.buttonLoginHelp.startIconAnimation();
+            help.startIconAnimation();
             new Handler().postDelayed(() -> {
                 boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
                 if(!success) {
                     Snackbar.make(
-                            bindingPage2.coordinatorContainer,
+                            container,
                             R.string.error_no_browser,
                             Snackbar.LENGTH_LONG
                     ).show();
                 }
             }, 300);
         });
-
-        bindingPage2.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
-        bindingPage2.buttonLoginFeedback.setOnClickListener(v -> {
+        feedback.setTooltipText(getString(R.string.title_feedback));
+        feedback.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            bindingPage2.buttonLoginFeedback.startIconAnimation();
+            feedback.startIconAnimation();
             activity.showBottomSheet(new FeedbackBottomSheet(), null);
         });
-
-        bindingPage2.buttonLoginAbout.setTooltipText(getString(R.string.title_about_this_app));
-        bindingPage2.buttonLoginAbout.setOnClickListener(v -> {
+        about.setTooltipText(getString(R.string.title_about_this_app));
+        about.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            bindingPage2.buttonLoginAbout.startIconAnimation();
+            about.startIconAnimation();
             navigate(LoginFragmentDirections.actionLoginFragmentToAboutFragment());
         });
-
-        bindingPage2.buttonLoginWebsite.setTooltipText(getString(R.string.info_website));
-        bindingPage2.buttonLoginWebsite.setOnClickListener(v -> {
+        website.setTooltipText(getString(R.string.info_website));
+        website.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            bindingPage2.buttonLoginWebsite.startIconAnimation();
+            website.startIconAnimation();
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
         });
-
-        bindingPage2.buttonLoginSettings.setTooltipText(getString(R.string.title_settings));
-        bindingPage2.buttonLoginSettings.setOnClickListener(v -> {
+        settings.setTooltipText(getString(R.string.title_settings));
+        settings.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            bindingPage2.buttonLoginSettings.startIconAnimation();
+            settings.startIconAnimation();
             navigate(LoginFragmentDirections.actionLoginFragmentToSettingsFragment());
         });
-    }
-
-    private void updatePrefixRadioButtons(String input) {
-        bindingPage2.https.setChecked(input.contains("https://"));
-        bindingPage2.http.setChecked(input.contains("http://"));
     }
 
     @Override
@@ -352,7 +368,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
                             bindingPage2.textInputLoginServer.setError(
                                 getString(R.string.error_not_grocy_instance)
                             );
-                            bindingPage2.buttonLoginLogin.setEnabled(true);
+                            enableLoginButtons();
                         } else {
                             showMessage(R.string.error_not_grocy_instance);
                         }
@@ -459,9 +475,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
                     } else {
                         showMessage(getString(R.string.error_undefined) + ": " + error);
                     }
-                    if(getPageType() == 2) {
-                        bindingPage2.buttonLoginLogin.setEnabled(true);
-                    }
+                    enableLoginButtons();
                     if(getPageType() != PAGE_SERVER_FORM) {
                         navigate(LoginFragmentDirections.actionLoginFragmentSelf()
                                 .setPage(PAGE_SERVER_FORM));
