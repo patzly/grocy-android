@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coordinator_login_container"
+    android:id="@+id/coordinator_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -83,12 +83,30 @@
             android:paddingStart="32dp"
             android:paddingEnd="48dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/https"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="HTTPS"/>
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/http"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HTTP"/>
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_login_server"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="4dp"
                 android:hint="@string/hint_server"
                 app:helperTextEnabled="true"
@@ -149,15 +167,6 @@
                     android:text="@string/action_login" />
 
             </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_login_demo"
-                style="@style/Widget.Grocy.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/action_try_demo_instance" />
 
         </LinearLayout>
 

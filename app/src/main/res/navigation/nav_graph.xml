@@ -398,7 +398,7 @@
         android:id="@+id/loginFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login_page_2" >
         <action
             android:id="@+id/action_loginFragment_to_aboutFragment"
             app:destination="@id/aboutFragment"
@@ -411,6 +411,17 @@
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <argument
+            android:name="page"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_loginFragment_self"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <action
         android:id="@+id/action_global_loginFragment"

@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 
@@ -43,6 +45,9 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.google.android.material.snackbar.Snackbar;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,18 +59,21 @@ import info.guardianproject.netcipher.proxy.OrbotHelper;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.databinding.FragmentLoginBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentLoginPage0Binding;
+import xyz.zedler.patrick.grocy.databinding.FragmentLoginPage1Binding;
+import xyz.zedler.patrick.grocy.databinding.FragmentLoginPage2Binding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
-public class LoginFragment extends BaseFragment {
+public class LoginFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener{
 
     public final static int PAGE_DEMO_OR_OWN = 0;
     public final static int PAGE_QR_CODE_SCAN = 1;
@@ -74,11 +82,14 @@ public class LoginFragment extends BaseFragment {
     final static String TAG = LoginFragment.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private FragmentLoginBinding binding;
+    private FragmentLoginPage0Binding bindingPage0;
+    private FragmentLoginPage1Binding bindingPage1;
+    private FragmentLoginPage2Binding bindingPage2;
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
     private SharedPreferences credentials;
     private DownloadHelper dlHelper;
+    private ScanInputCaptureManager capture;
     private final ClickUtil clickUtil = new ClickUtil();
 
     @Override
@@ -87,17 +98,28 @@ public class LoginFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        if(getPageType() == PAGE_DEMO_OR_OWN) {
+            bindingPage0 = FragmentLoginPage0Binding.inflate(inflater, container, false);
+            return bindingPage0.getRoot();
+        } else if(getPageType() == PAGE_QR_CODE_SCAN) {
+            bindingPage1 = FragmentLoginPage1Binding.inflate(inflater, container, false);
+            return bindingPage1.getRoot();
+        } else {
+            bindingPage2 = FragmentLoginPage2Binding.inflate(inflater, container, false);
+            return bindingPage2.getRoot();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         dlHelper.destroy();
-        binding = null;
+        bindingPage0 = null;
+        bindingPage1 = null;
+        bindingPage2 = null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
@@ -112,46 +134,106 @@ public class LoginFragment extends BaseFragment {
 
         dlHelper = new DownloadHelper(activity, TAG);
 
+        if(getPageType() == PAGE_DEMO_OR_OWN) {
+            bindingPage0.demoInstance.setOnClickListener(v -> {
+                bindingPage0.ownInstance.setEnabled(false);
+                bindingPage0.demoInstance.setEnabled(false);
+                requestLogin(getString(R.string.url_grocy_demo), "", true, true);
+            });
+            bindingPage0.ownInstance.setOnClickListener(v -> {
+                bindingPage0.ownInstance.setEnabled(false);
+                bindingPage0.demoInstance.setEnabled(false);
+                navigate(LoginFragmentDirections.actionLoginFragmentSelf().setPage(PAGE_QR_CODE_SCAN));
+            });
+            return;
+        } else if(getPageType() == PAGE_QR_CODE_SCAN) {
+            bindingPage1.enterManually.setOnClickListener(v -> {
+                bindingPage1.enterManually.setEnabled(false);
+                navigate(LoginFragmentDirections.actionLoginFragmentSelf().setPage(PAGE_SERVER_FORM));
+            });
+
+            DecoratedBarcodeView barcodeScannerView = bindingPage1.barcodeScanInput;
+            barcodeScannerView.setTorchOff();
+            CameraSettings cameraSettings = new CameraSettings();
+            cameraSettings.setRequestedCameraId(
+                    sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+            );
+            barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
+
+            capture = new ScanInputCaptureManager(activity, barcodeScannerView, this);
+            capture.decode();
+            return;
+        }
+
         // INITIALIZE VIEWS
 
         if(credentials.getString(Constants.PREF.SERVER_URL, null) != null) {
-            binding.editTextLoginServer.setText(
+            bindingPage2.editTextLoginServer.setText(
                     credentials.getString(Constants.PREF.SERVER_URL, null)
             );
         }
-        binding.editTextLoginKey.addTextChangedListener(new TextWatcher() {
+        bindingPage2.editTextLoginKey.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                if(binding.textInputLoginKey.isErrorEnabled()) {
-                    binding.textInputLoginKey.setErrorEnabled(false);
+                if(bindingPage2.textInputLoginKey.isErrorEnabled()) {
+                    bindingPage2.textInputLoginKey.setErrorEnabled(false);
                 }
             }
         });
 
         if(credentials.getString(Constants.PREF.API_KEY, null) != null) {
-            binding.editTextLoginKey.setText(
+            bindingPage2.editTextLoginKey.setText(
                     credentials.getString(Constants.PREF.API_KEY, null)
             );
         }
-        binding.editTextLoginServer.addTextChangedListener(new TextWatcher() {
+        bindingPage2.editTextLoginServer.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                if(binding.textInputLoginServer.isErrorEnabled()) {
-                    binding.textInputLoginServer.setErrorEnabled(false);
+                if(s != null) updatePrefixRadioButtons(s.toString());
+                if(bindingPage2.textInputLoginServer.isErrorEnabled()) {
+                    bindingPage2.textInputLoginServer.setErrorEnabled(false);
                 }
             }
         });
+        if(bindingPage2.editTextLoginServer.getText() != null) {
+            updatePrefixRadioButtons(bindingPage2.editTextLoginServer.getText().toString());
+        }
 
-        binding.buttonLoginKey.setOnClickListener(v -> {
+        bindingPage2.https.setOnClickListener(v -> {
+            if(bindingPage2.editTextLoginServer.getText() == null) {
+                bindingPage2.editTextLoginServer.setText("https://");
+                return;
+            }
+            String input = bindingPage2.editTextLoginServer.getText().toString();
+            if(!input.contains("https://") && !input.contains("http://")) {
+                bindingPage2.editTextLoginServer.setText("https://" + input);
+            } else if(input.contains("http://")) {
+                bindingPage2.editTextLoginServer.setText(input.replace("http://", "https://"));
+            }
+        });
+        bindingPage2.http.setOnClickListener(v -> {
+            if(bindingPage2.editTextLoginServer.getText() == null) {
+                bindingPage2.editTextLoginServer.setText("http://");
+                return;
+            }
+            String input = bindingPage2.editTextLoginServer.getText().toString();
+            if(!input.contains("https://") && !input.contains("http://")) {
+                bindingPage2.editTextLoginServer.setText("http://" + input);
+            } else if(input.contains("https://")) {
+                bindingPage2.editTextLoginServer.setText(input.replace("https://", "http://"));
+            }
+        });
+
+        bindingPage2.buttonLoginKey.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             if(getServer().isEmpty()) {
-                binding.textInputLoginServer.setError(getString(R.string.error_empty));
+                bindingPage2.textInputLoginServer.setError(getString(R.string.error_empty));
             } else if(!URLUtil.isValidUrl(getServer())) {
-                binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
+                bindingPage2.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
-                binding.textInputLoginServer.setErrorEnabled(false);
+                bindingPage2.textInputLoginServer.setErrorEnabled(false);
 
                 Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
                 Uri uri = Uri.parse(getServer() + "/manageapikeys");
@@ -160,37 +242,32 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
-        binding.buttonLoginLogin.setOnClickListener(v -> {
+        bindingPage2.buttonLoginLogin.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
 
             // remove old errors
-            binding.textInputLoginServer.setErrorEnabled(false);
-            binding.textInputLoginKey.setErrorEnabled(false);
+            bindingPage2.textInputLoginServer.setErrorEnabled(false);
+            bindingPage2.textInputLoginKey.setErrorEnabled(false);
 
             String server = getServer();
             if(server.isEmpty()) {
-                binding.textInputLoginServer.setError(getString(R.string.error_empty));
+                bindingPage2.textInputLoginServer.setError(getString(R.string.error_empty));
             } else if(!URLUtil.isNetworkUrl(server)) {
-                binding.textInputLoginServer.setError(getString(R.string.error_invalid_url));
+                bindingPage2.textInputLoginServer.setError(getString(R.string.error_invalid_url));
             } else {
                 requestLogin(server, getKey(), true, false);
             }
         });
 
-        binding.buttonLoginDemo.setOnClickListener(v -> {
+        bindingPage2.buttonLoginHelp.setTooltipText(getString(R.string.title_help));
+        bindingPage2.buttonLoginHelp.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            requestLogin(getString(R.string.url_grocy_demo), "", true, true);
-        });
-
-        binding.buttonLoginHelp.setTooltipText(getString(R.string.title_help));
-        binding.buttonLoginHelp.setOnClickListener(v -> {
-            if(clickUtil.isDisabled()) return;
-            binding.buttonLoginHelp.startIconAnimation();
+            bindingPage2.buttonLoginHelp.startIconAnimation();
             new Handler().postDelayed(() -> {
                 boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
                 if(!success) {
                     Snackbar.make(
-                            binding.coordinatorLoginContainer,
+                            bindingPage2.coordinatorContainer,
                             R.string.error_no_browser,
                             Snackbar.LENGTH_LONG
                     ).show();
@@ -198,38 +275,46 @@ public class LoginFragment extends BaseFragment {
             }, 300);
         });
 
-        binding.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
-        binding.buttonLoginFeedback.setOnClickListener(v -> {
+        bindingPage2.buttonLoginFeedback.setTooltipText(getString(R.string.title_feedback));
+        bindingPage2.buttonLoginFeedback.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            binding.buttonLoginFeedback.startIconAnimation();
+            bindingPage2.buttonLoginFeedback.startIconAnimation();
             activity.showBottomSheet(new FeedbackBottomSheet(), null);
         });
 
-        binding.buttonLoginAbout.setTooltipText(getString(R.string.title_about_this_app));
-        binding.buttonLoginAbout.setOnClickListener(v -> {
+        bindingPage2.buttonLoginAbout.setTooltipText(getString(R.string.title_about_this_app));
+        bindingPage2.buttonLoginAbout.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            binding.buttonLoginAbout.startIconAnimation();
+            bindingPage2.buttonLoginAbout.startIconAnimation();
             navigate(LoginFragmentDirections.actionLoginFragmentToAboutFragment());
         });
 
-        binding.buttonLoginWebsite.setTooltipText(getString(R.string.info_website));
-        binding.buttonLoginWebsite.setOnClickListener(v -> {
+        bindingPage2.buttonLoginWebsite.setTooltipText(getString(R.string.info_website));
+        bindingPage2.buttonLoginWebsite.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            binding.buttonLoginWebsite.startIconAnimation();
+            bindingPage2.buttonLoginWebsite.startIconAnimation();
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
         });
 
-        binding.buttonLoginSettings.setTooltipText(getString(R.string.title_settings));
-        binding.buttonLoginSettings.setOnClickListener(v -> {
+        bindingPage2.buttonLoginSettings.setTooltipText(getString(R.string.title_settings));
+        bindingPage2.buttonLoginSettings.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
-            binding.buttonLoginSettings.startIconAnimation();
+            bindingPage2.buttonLoginSettings.startIconAnimation();
             navigate(LoginFragmentDirections.actionLoginFragmentToSettingsFragment());
         });
+    }
+
+    private void updatePrefixRadioButtons(String input) {
+        bindingPage2.https.setChecked(input.contains("https://"));
+        bindingPage2.http.setChecked(input.contains("http://"));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(getPageType() == PAGE_QR_CODE_SCAN) {
+            capture.onResume();
+        }
         activity.getWindow().setStatusBarColor(ResourcesCompat.getColor(
                 getResources(),
                 R.color.background,
@@ -238,27 +323,39 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(getPageType() == PAGE_QR_CODE_SCAN) {
+            capture.onPause();
+        }
+    }
+
+    @Override
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
         if(server.contains(".onion") && !OrbotHelper.get(requireContext()).init()) {
-            showMessage(getString(R.string.error_orbot_not_installed));
+            showMessage(R.string.error_orbot_not_installed);
             OrbotHelper.get(requireContext()).installOrbot(requireActivity());
             return;
         }
         RequestQueueSingleton.getInstance(requireContext()).newRequestQueue(server);
         dlHelper.reloadRequestQueue(requireActivity());
 
-        binding.buttonLoginLogin.setEnabled(false);
-        binding.buttonLoginDemo.setEnabled(false);
+        if(getPageType() == 2) {
+            bindingPage2.buttonLoginLogin.setEnabled(false);
+        }
         dlHelper.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
                     Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
-                        binding.textInputLoginServer.setError(
+                        if(getPageType() == 2) {
+                            bindingPage2.textInputLoginServer.setError(
                                 getString(R.string.error_not_grocy_instance)
-                        );
-                        binding.buttonLoginLogin.setEnabled(true);
-                        binding.buttonLoginDemo.setEnabled(true);
+                            );
+                            bindingPage2.buttonLoginLogin.setEnabled(true);
+                        } else {
+                            showMessage(R.string.error_not_grocy_instance);
+                        }
                         openHomeAssistantHelp(server);
                         return;
                     }
@@ -311,7 +408,13 @@ public class LoginFragment extends BaseFragment {
                 error -> {
                     Log.e(TAG, "requestLogin: VolleyError: " + error);
                     if(error instanceof AuthFailureError) {
-                        binding.textInputLoginKey.setError(getString(R.string.error_api_not_working));
+                        if(getPageType() == 2) {
+                            bindingPage2.textInputLoginKey.setError(
+                                    getString(R.string.error_api_not_working)
+                            );
+                        } else {
+                            showMessage(R.string.error_api_not_working);
+                        }
                         openHomeAssistantHelp(server);
                     } else if(error instanceof NoConnectionError) {
                         if(error.toString().contains("SSLHandshakeException")) {
@@ -326,18 +429,26 @@ public class LoginFragment extends BaseFragment {
                             );
                             activity.showBottomSheet(new MessageBottomSheet(), bundle);
                         } else if(error.toString().contains("Invalid host")) {
-                            binding.textInputLoginServer.setError(
-                                    getString(R.string.error_invalid_url)
-                            );
+                            if(getPageType() == 2) {
+                                bindingPage2.textInputLoginServer.setError(
+                                        getString(R.string.error_invalid_url)
+                                );
+                            } else {
+                                showMessage(R.string.error_invalid_url);
+                            }
                         } else {
                             showMessage(getString(R.string.error_failed_to_connect_to, server));
                         }
                     } else if(error instanceof ServerError && error.networkResponse != null) {
                         int code = error.networkResponse.statusCode;
                         if (code == 404) {
-                            binding.textInputLoginServer.setError(
-                                    getString(R.string.error_not_grocy_instance)
-                            );
+                            if(getPageType() == 2) {
+                                bindingPage2.textInputLoginServer.setError(
+                                        getString(R.string.error_not_grocy_instance)
+                                );
+                            } else {
+                                showMessage(R.string.error_not_grocy_instance);
+                            }
                         } else {
                             showMessage(getString(R.string.error_unexpected_response_code, code));
                         }
@@ -348,14 +459,23 @@ public class LoginFragment extends BaseFragment {
                     } else {
                         showMessage(getString(R.string.error_undefined) + ": " + error);
                     }
-                    binding.buttonLoginLogin.setEnabled(true);
-                    binding.buttonLoginDemo.setEnabled(true);
+                    if(getPageType() == 2) {
+                        bindingPage2.buttonLoginLogin.setEnabled(true);
+                    }
+                    if(getPageType() != PAGE_SERVER_FORM) {
+                        navigate(LoginFragmentDirections.actionLoginFragmentSelf()
+                                .setPage(PAGE_SERVER_FORM));
+                    }
                 }
         );
     }
 
     @Override
     public boolean onBackPressed() {
+        if(getPageType() == PAGE_SERVER_FORM || getPageType() == PAGE_QR_CODE_SCAN) {
+            activity.navigateUp();
+            return true;
+        }
         activity.finish();
         return true;
     }
@@ -365,8 +485,8 @@ public class LoginFragment extends BaseFragment {
                 new DownloadHelper(requireActivity(), TAG),
                 new GrocyApi(requireContext()),
                 sharedPrefs,
-                () -> activity.navigateUp(),
-                error -> activity.navigateUp()
+                () -> findNavController().popBackStack(R.id.stockFragment, false),
+                error -> findNavController().popBackStack(R.id.stockFragment, false)
         );
     }
 
@@ -382,7 +502,7 @@ public class LoginFragment extends BaseFragment {
             );
             if(!success) {
                 Snackbar.make(
-                        binding.coordinatorLoginContainer,
+                        bindingPage2.coordinatorContainer,
                         R.string.error_no_browser,
                         Snackbar.LENGTH_LONG
                 ).show();
@@ -392,23 +512,63 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public void enableLoginButtons() {
-        binding.buttonLoginLogin.setEnabled(true);
-        binding.buttonLoginDemo.setEnabled(true);
+        if(getPageType() != 2) return;
+        bindingPage2.buttonLoginLogin.setEnabled(true);
+    }
+
+    @Override
+    public void onBarcodeResult(BarcodeResult result) {
+        if(result.getText().isEmpty()) {
+            resumeScanningAndDecoding();
+            return;
+        }
+        String[] resultSplit = result.getText().split("\\|");
+        if(resultSplit.length != 2) {
+            showMessage(R.string.error_api_qr_code);
+            resumeScanningAndDecoding();
+            return;
+        }
+        String apiURL = resultSplit[0];
+        String serverURL = apiURL.replace("/api", "");
+        String apiKey = resultSplit[1];
+        requestLogin(serverURL, apiKey, true, false);
+    }
+
+    private void resumeScanningAndDecoding() {
+        capture.onResume();
+        new Handler().postDelayed(() -> {
+            if(getPageType() == PAGE_QR_CODE_SCAN && bindingPage1 == null) return;
+            capture.decode();
+        }, 1000);
     }
 
     private String getServer() {
-        Editable server = binding.editTextLoginServer.getText();
+        Editable server = bindingPage2.editTextLoginServer.getText();
         if(server == null) return "";
         return server.toString().replaceAll("/+$", "").trim();
     }
 
     private String getKey() {
-        Editable key = binding.editTextLoginKey.getText();
+        Editable key = bindingPage2.editTextLoginKey.getText();
         if(key == null) return "";
         return key.toString().trim();
     }
 
     private void showMessage(String text) {
-        Snackbar.make(binding.coordinatorLoginContainer, text, Snackbar.LENGTH_LONG).show();
+        if(getPageType() == 0) {
+            Snackbar.make(bindingPage0.coordinateContainer, text, Snackbar.LENGTH_LONG).show();
+        } else if(getPageType() == 1) {
+            Snackbar.make(bindingPage1.relativeContainer, text, Snackbar.LENGTH_LONG).show();
+        } else if(getPageType() == 2) {
+            Snackbar.make(bindingPage2.coordinatorContainer, text, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void showMessage(@StringRes int text) {
+        showMessage(getString(text));
+    }
+
+    private int getPageType() {
+        return LoginFragmentArgs.fromBundle(requireArguments()).getPage();
     }
 }
