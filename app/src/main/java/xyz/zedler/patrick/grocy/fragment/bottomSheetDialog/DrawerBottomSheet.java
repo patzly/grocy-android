@@ -140,48 +140,38 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
     public void onClick(View v) {
         if(clickUtil.isDisabled()) return;
 
-        switch(v.getId()) {
-            case R.id.linear_drawer_shopping_list:
-                navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
-                break;
-            case R.id.linear_drawer_consume:
-                navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
-                break;
-            case R.id.linear_drawer_purchase:
-                navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
-                break;
-            case R.id.linear_drawer_master_data:
-                navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToMasterDataOverviewFragment());
-                /*dismiss();
-                activity.showBottomSheet(new MasterDataBottomSheet(), null);*/
-                break;
-            case R.id.linear_settings:
-                IconUtil.start(view, R.id.image_settings);
-                new Handler().postDelayed(() -> navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToSettingsActivity()), 300);
-                break;
-            case R.id.linear_feedback:
-                navigateCustom(DrawerBottomSheetDirections
-                        .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
-                break;
-            case R.id.linear_help:
-                IconUtil.start(view, R.id.image_help);
-                new Handler().postDelayed(() -> {
-                    dismiss();
-                    boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
-                    if(!success) {
-                        Snackbar.make(
-                                activity.binding.frameMainContainer,
-                                R.string.error_no_browser,
-                                Snackbar.LENGTH_LONG
-                        ).show();
-                    }
-                }, 300);
-                break;
+        if(v.getId() == R.id.linear_drawer_shopping_list) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
+        } else if(v.getId() == R.id.linear_drawer_consume) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
+        } else if(v.getId() == R.id.linear_drawer_purchase) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
+        } else if(v.getId() == R.id.linear_drawer_master_data) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToMasterDataOverviewFragment());
+        } else if(v.getId() == R.id.linear_settings) {
+            IconUtil.start(view, R.id.image_settings);
+            new Handler().postDelayed(() -> navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToSettingsActivity()), 300);
+        } else if(v.getId() == R.id.linear_feedback) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
+        } else if(v.getId() == R.id.linear_help) {
+            IconUtil.start(view, R.id.image_help);
+            new Handler().postDelayed(() -> {
+                dismiss();
+                boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
+                if(!success) {
+                    Snackbar.make(
+                            activity.binding.frameMainContainer,
+                            R.string.error_no_browser,
+                            Snackbar.LENGTH_LONG
+                    ).show();
+                }
+            }, 300);
         }
     }
 
