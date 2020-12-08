@@ -1,4 +1,6 @@
-• Fixed clipped text in onboarding
+1.10.2
+• Fixed layout for text on features pages
+• Fixed amount with factor on missing batch items page (#258)
 
 1.10.1
 • Hotfix which allows HTTP cleartext traffic again (#252)

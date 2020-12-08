@@ -1273,6 +1273,10 @@ public class MasterProductSimpleFragment extends Fragment {
                                     Constants.ARGUMENT.PRODUCT_ID,
                                     response.getInt("created_object_id")
                             );
+                            bundle.putInt(
+                                    Constants.ARGUMENT.FACTOR,
+                                    quantityUnitFactor
+                            );
                             activity.dismissFragment(bundle);
                         } catch (JSONException e) {
                             if(debug) Log.e(TAG, "saveProduct: " + e.toString());

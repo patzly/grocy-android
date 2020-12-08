@@ -234,14 +234,15 @@ public class MissingBatchItemsFragment extends Fragment
                         oldCreateProduct.getProductName()
                 );
                 String productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
+                int factor = bundle.getInt(Constants.ARGUMENT.FACTOR);
                 assert missingBatchItem != null;
                 missingBatchItem.setProductName(productName);
                 missingBatchItem.setIsOnServer(true);
                 missingBatchItem.setProductId(bundle.getInt(Constants.ARGUMENT.PRODUCT_ID));
+                missingBatchItem.setFactor(factor);
                 missingBatchItemAdapter.notifyItemChanged(
                         missingBatchItems.indexOf(missingBatchItem)
                 );
-                updateFab();
                 break;
             }
             case Constants.ACTION.EDIT_THEN_PURCHASE_BATCH: {
@@ -266,6 +267,7 @@ public class MissingBatchItemsFragment extends Fragment
                 break;
             }
         }
+        updateFab();
     }
 
     private void refresh() {
@@ -405,6 +407,7 @@ public class MissingBatchItemsFragment extends Fragment
                 batchPurchaseEntry.getStoreId(),
                 batchPurchaseEntry.getPrice(),
                 batchPurchaseEntry.getBestBeforeDate(),
+                missingBatchItem.getFactor(),
                 response -> {
                     if(batchPurchaseEntries.isEmpty()) return;
                     batchPurchaseEntries.remove(0);
@@ -429,12 +432,13 @@ public class MissingBatchItemsFragment extends Fragment
             String storeId,
             String price,
             String bestBeforeDate,
+            int factor,
             OnResponseListener responseListener,
             OnErrorListener errorListener
     ) {
         JSONObject body = new JSONObject();
         try {
-            body.put("amount", 1);
+            body.put("amount", factor); // purchase to stock factor
             body.put("transaction_type", "purchase");
             if(bestBeforeDate != null && !bestBeforeDate.isEmpty()) {
                 body.put("best_before_date", bestBeforeDate);
