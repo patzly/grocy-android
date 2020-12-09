@@ -32,7 +32,7 @@ public class MissingBatchItem implements Parcelable {
     private String defaultStoreId;
     private String productId;
     private String lastPrice;
-    private int defaultBestBeforeDays, defaultLocationId = -1, isOnServer = 0;
+    private int defaultBestBeforeDays, defaultLocationId = -1, isOnServer = 0, factor = 1;
     private boolean isDefaultBestBeforeDaysSet = false;
     private ArrayList<BatchPurchaseEntry> batchPurchaseEntries = new ArrayList<>();
 
@@ -54,6 +54,7 @@ public class MissingBatchItem implements Parcelable {
         parcel.readList(batchPurchaseEntries, BatchPurchaseEntry.class.getClassLoader());
         isOnServer = parcel.readInt();
         productId = parcel.readString();
+        factor = parcel.readInt();
     }
 
     @Override
@@ -66,6 +67,7 @@ public class MissingBatchItem implements Parcelable {
         dest.writeList(batchPurchaseEntries);
         dest.writeInt(isOnServer);
         dest.writeString(productId);
+        dest.writeInt(factor);
     }
 
     public static final Creator<MissingBatchItem> CREATOR = new Creator<MissingBatchItem>() {
@@ -160,6 +162,14 @@ public class MissingBatchItem implements Parcelable {
 
     public void setLastPrice(String lastPrice) {
         this.lastPrice = lastPrice;
+    }
+
+    public int getFactor() {
+        return factor;
+    }
+
+    public void setFactor(int factor) {
+        this.factor = factor;
     }
 
     @Override

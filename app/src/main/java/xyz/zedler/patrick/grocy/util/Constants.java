@@ -260,6 +260,7 @@ public final class Constants {
         public final static String BUNDLE = "bundle";
         public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
         public final static String PRICE = "price";
+        public final static String FACTOR = "factor";
         public final static String AMOUNT = "amount";
         public final static String TEXT = "text";
         public final static String FILE = "file";
