@@ -235,7 +235,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         return selectedShoppingListIdLive;
     }
 
-    public void downloadData() {
+    public void downloadData(@Nullable String dbChangedTime) {
         if(currentQueueLoading != null) {
             currentQueueLoading.reset(true);
             currentQueueLoading = null;
@@ -245,22 +245,71 @@ public class ShoppingListViewModel extends AndroidViewModel {
             updateFilteredShoppingListItems();
             return;
         }
+        if(dbChangedTime == null) {
+            dlHelper.getTimeDbChanged((DownloadHelper.OnStringResponseListener) this::downloadData, () -> onDownloadError(null));
+            return;
+        }
+
+        // get last offline db-changed-time values
+        String lastTimeShoppingListItems = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+        String lastTimeShoppingLists = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+        String lastTimeProductGroups = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+        String lastTimeQuantityUnits = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        String lastTimeProducts = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        String lastTimeMissingItems = sharedPrefs
+                .getString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
+
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        queue.append(
-                dlHelper.getShoppingListItems(
-                        shoppingListItems -> this.shoppingListItems = shoppingListItems
-                ), dlHelper.getShoppingLists(
-                        shoppingLists -> this.shoppingLists = shoppingLists
-                ), dlHelper.getProductGroups(
-                        productGroups -> this.productGroups = productGroups
-                ), dlHelper.getQuantityUnits(
-                        quantityUnits -> this.quantityUnits = quantityUnits
-                ), dlHelper.getVolatile(
-                        (expiring, expired, missing) -> this.missingItems = missing
-                ), dlHelper.getProducts(products -> this.products = products)
-        );
+        if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
+            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
+                this.shoppingListItems = shoppingListItems;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download, it's up to date.");
+        if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
+            queue.append(dlHelper.getShoppingLists(shoppingLists -> {
+                this.shoppingLists = shoppingLists;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download, it's up to date.");
+        if(lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
+            queue.append(dlHelper.getProductGroups(productGroups -> {
+                this.productGroups = productGroups;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download, it's up to date.");
+        if(lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
+            queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
+                this.quantityUnits = quantityUnits;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download, it's up to date.");
+        if(lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
+            queue.append(dlHelper.getProducts(products -> {
+                this.products = products;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped Products download, it's up to date.");
+        if(lastTimeMissingItems == null || !lastTimeMissingItems.equals(dbChangedTime)) {
+            queue.append(dlHelper.getVolatile((expiring, expired, missing) -> {
+                this.missingItems = missing;
+                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime).apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped Volatile download, VolatileMissing is up to date.");
+
+        if(queue.isEmpty()) return;
+
         currentQueueLoading = queue;
         queue.start();
+    }
+
+    public void downloadData() {
+        downloadData(null);
     }
 
     private void onQueueEmpty() {
@@ -320,8 +369,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         );
     }
 
-    private void onDownloadError(VolleyError error) {
-        // TODO: If there was an error, queue gets cancelled, but loading bar is still there (-> DownloadHelper)
+    private void onDownloadError(@Nullable VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         showMessage(getString(R.string.msg_no_connection));
         if(!isOffline()) setOfflineLive(true);

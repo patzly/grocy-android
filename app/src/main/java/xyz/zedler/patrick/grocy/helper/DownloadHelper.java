@@ -904,6 +904,27 @@ public class DownloadHelper {
         );
     }
 
+    public void getTimeDbChanged(
+            OnStringResponseListener onResponseListener,
+            OnSimpleErrorListener onErrorListener
+    ) {
+        get(
+                grocyApi.getDbChangedTime(),
+                uuidHelper,
+                response -> {
+                    try {
+                        JSONObject body = new JSONObject(response);
+                        String dateStr = body.getString("changed_time");
+                        onResponseListener.onResponse(dateStr);
+                    } catch (JSONException e) {
+                        if(debug) Log.e(tag, "getTimeDbChanged: " + e);
+                        onErrorListener.onError();
+                    }
+                },
+                error -> onErrorListener.onError()
+        );
+    }
+
     public QueueItem getStringData(
             String url,
             OnResponseListener onResponseListener,
@@ -1001,6 +1022,10 @@ public class DownloadHelper {
             return queueSize;
         }
 
+        public boolean isEmpty() {
+            return queueSize == 0;
+        }
+
         public void reset(boolean cancelAll) {
             if(cancelAll) requestQueue.cancelAll(uuidQueue);
             queueItems.clear();
@@ -1087,6 +1112,10 @@ public class DownloadHelper {
 
     public interface OnDateResponseListener {
         void onResponse(Date date);
+    }
+
+    public interface OnStringResponseListener {
+        void onResponse(String response);
     }
 
     public interface OnErrorListener {

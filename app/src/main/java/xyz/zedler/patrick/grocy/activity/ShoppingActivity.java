@@ -516,7 +516,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             return;
         }
 
-        dlHelper.getTimeDbChanged(date -> {
+        dlHelper.getTimeDbChanged((DownloadHelper.OnDateResponseListener) date -> {
             boolean syncNeeded = this.lastSynced == null || this.lastSynced.before(date);
             JSONObject body = new JSONObject();
             try {
@@ -534,7 +534,7 @@ public class ShoppingActivity extends AppCompatActivity implements
                         } else {
                             updateDoneStatus(shoppingListItem, true);
                             dlHelper.getTimeDbChanged(
-                                    date1 -> lastSynced = date1,
+                                    (DownloadHelper.OnDateResponseListener) date1 -> lastSynced = date1,
                                     () -> lastSynced = Calendar.getInstance().getTime()
                             );
                             lastSynced = Calendar.getInstance().getTime();
@@ -582,7 +582,7 @@ public class ShoppingActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 dlHelper.getTimeDbChanged(
-                        date -> {
+                        (DownloadHelper.OnDateResponseListener) date -> {
                             if(!netUtil.isOnline()) {
                                 loadOfflineData();
                             } else if(lastSynced == null || lastSynced.before(date)) {
