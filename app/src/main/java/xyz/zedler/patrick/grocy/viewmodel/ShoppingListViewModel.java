@@ -264,43 +264,50 @@ public class ShoppingListViewModel extends AndroidViewModel {
         String lastTimeMissingItems = sharedPrefs
                 .getString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
 
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
             queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
                 this.shoppingListItems = shoppingListItems;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download, it's up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download");
         if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
             queue.append(dlHelper.getShoppingLists(shoppingLists -> {
                 this.shoppingLists = shoppingLists;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download, it's up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download");
         if(lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
             queue.append(dlHelper.getProductGroups(productGroups -> {
                 this.productGroups = productGroups;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download, it's up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download");
         if(lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
             queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
                 this.quantityUnits = quantityUnits;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download, it's up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download");
         if(lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
             queue.append(dlHelper.getProducts(products -> {
                 this.products = products;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Products download, it's up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped Products download");
         if(lastTimeMissingItems == null || !lastTimeMissingItems.equals(dbChangedTime)) {
             queue.append(dlHelper.getVolatile((expiring, expired, missing) -> {
                 this.missingItems = missing;
-                sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime).apply();
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime);
+                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Volatile download, VolatileMissing is up to date.");
+        } else if(debug) Log.i(TAG, "downloadData: skipped Volatile download");
 
         if(queue.isEmpty()) return;
 
