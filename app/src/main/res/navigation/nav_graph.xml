@@ -525,6 +525,12 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_masterObjectListFragment_to_masterProductFragment"
+            app:destination="@id/masterProductFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/masterDataOverviewFragment"
@@ -539,4 +545,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
+    <fragment
+        android:id="@+id/masterProductFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductFragment"
+        android:label="MasterProductFragment"
+        tools:layout="@layout/fragment_master_product"/>
 </navigation>

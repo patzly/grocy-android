@@ -326,9 +326,7 @@ public class MasterObjectListFragment extends BaseFragment
                             break;
                         case GrocyApi.ENTITY.PRODUCTS:
                             navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterProductSimpleFragment(
-                                            Constants.ACTION.CREATE
-                                    ));
+                                    .actionMasterObjectListFragmentToMasterProductFragment());
                     }
                 }
         );
