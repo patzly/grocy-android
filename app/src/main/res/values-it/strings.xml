@@ -125,11 +125,14 @@
     <string name="msg_item_marked_as_done">Segna come fatto</string>
     <string name="msg_item_marked_as_undone">Segna da fare</string>
     <string name="msg_batch_no_products">Nessun nuovo prodotto deve essere creato</string>
+    <string name="msg_batch_tare_weight">Il prodotto non supporta la modalità non interattiva: gestione del peso della tara abilitato</string>
+    <string name="msg_purchase_transactions_done">Terminate le transazioni degli acquisti per i prodotti creati</string>
     <string name="msg_no_purchase_transactions">Nessun acquisto in sospeso</string>
     <string name="msg_compatibility">Questa versione dell\'applicazione non è compatibile con la versione di grocy sul server.\n\n Versione del server corrente: %1$s\n\n Richiesta:\nVersione minima del server: %2$s\nVersione massima del server:%3$s\n\nSe ignori questo avertimento, si potrebbe verificare perdita di dati (improbabile) e crashes (probabile).\n Sei stato avvertito!</string>
     <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
     <string name="msg_logout_demo">Stai utilizzando l\'istanza di prova di grocy su <u>https://grocy.info</u>.\n\n<b>Nessun cambiamento verrà salvato!\n Questi rimangono pubblichi finché il server non li sovrascrive automaticamente.</b>\n\nNella schermata di accesso puoi inserire l\'indirizzo del tuo server.</string>
     <string name="msg_restart">È necessario riaprire l\'app per applicare correttamente la configurazione corrente di Grocy</string>
+    <string name="msg_features">Visualizza nuovamente l\'introduzione in \"Riguardo a\"</string>
     <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
     <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
 
@@ -216,6 +219,8 @@
     <string name="title_shopping_list_new">Crea lista della spesa</string>
     <string name="title_shopping_mode">Modalità spesa</string>
     <string name="title_products_to_create">Prodotti da creare</string>
+    <string name="title_batch_mode_shopping_list">Modalità non interattiva della lista della spesa</string>
+
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
     <!-- %1$s is a number like 1, 2, 3 -->
@@ -290,6 +295,8 @@
     <string name="property_last_purchased">Acquistato l\'ultima volta</string>
     <string name="property_last_used">Usato l\'ultima volta</string>
     <string name="property_last_price">Ultimo prezzo</string>
+    <string name="property_average_shelf_life">Durata media della dispensa</string>
+    <string name="property_spoil_rate">Tasso di scadenza</string>
     <string name="property_price_history">Cronologia prezzo</string>
     <string name="property_product_group">Gruppo del prodotto</string>
     <string name="property_product_groups">Gruppi prodotti</string>
@@ -350,6 +357,7 @@
     <string name="info_acknowledgement">Vogliamo ringraziare Berd Bestel che senza il suo duro lavoro questa app non esisterebbe</string>
     <string name="info_intro">Rivedi l\'introduzione</string>
     <string name="info_intro_description">Dimostra funzionalità</string>
+    <string name="info_material_components_built_with">Sviluppato con</string>
     <string name="info_version">Versione</string>
     <string name="info_grocy_version">Versione di Grocy</string>
     <string name="info_grocy_version_incompatible">Non supportato</string>
@@ -364,6 +372,7 @@
     <string name="feature_1_description">Gestionale per la tua dispensa domestica self-hosted</string>
     <string name="feature_2_title">Design intuitivo</string>
     <string name="feature_2_description">Apri e consuma con uno swipe</string>
+    <string name="feature_3_title">Potente processo non interattivo</string>
     <string name="feature_3_description">Scansiona tutti i tuoi acquisti in pochi secondi</string>
 
     <string name="category_licenses">Apri licenze del codice sorgente</string>
@@ -377,6 +386,7 @@
     <string name="hint_key">Chiave API valida</string>
 
     <string name="setting_dark_mode">Attiva modalità scura</string>
+    <string name="setting_dark_mode_description">Spento per dipendenze di sistema</string>
     <string name="setting_open_food_facts">Usa Open Food Facts</string>
     <string name="setting_open_food_facts_description">Informazioni dal codice a barre</string>
     <string name="setting_use_front_cam">Usa la telecamera frontale</string>
@@ -385,6 +395,7 @@
     <string name="setting_reload_config_description">Necessario riavviare l\'app</string>
     <string name="setting_logout">Esci</string>
     <string name="setting_logout_description">Torna alla pagina di login</string>
+    <string name="setting_list_indicator">Indica una voce della lista</string>
     <string name="setting_list_indicator_description">Indica con un cerchietto blu se nella lista della spesa</string>
     <string name="setting_shopping_mode_update_interval">Intervallo di aggiornamento modalità spesa</string>
     <string name="setting_keep_screen_on">Mantieni lo schermo acceso</string>
@@ -404,6 +415,7 @@
     <string name="setting_ask_price">Richiedi prezzo</string>
     <string name="setting_ask_store">Richiedi negozio</string>
     <string name="setting_ask_location">Richiedi posizione</string>
+    <string name="setting_ask_specific_item">Richiede un elemento specifico</string>
     <string name="setting_consume_all">Consuma tutti gli articoli del prodotto</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
