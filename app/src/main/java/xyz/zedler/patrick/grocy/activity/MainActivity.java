@@ -336,11 +336,11 @@ public class MainActivity extends AppCompatActivity {
         int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
         switch (newFabPosition) {
             case Constants.FAB.POSITION.CENTER:
-                if(!binding.fabMain.isShown()) binding.fabMain.show();
+                if(!binding.fabMain.isShown() && !isServerUrlEmpty()) binding.fabMain.show();
                 scrollBehavior.setTopScrollVisibility(true);
                 break;
             case Constants.FAB.POSITION.END:
-                if(!binding.fabMain.isShown()) binding.fabMain.show();
+                if(!binding.fabMain.isShown() && !isServerUrlEmpty()) binding.fabMain.show();
                 mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
                 scrollBehavior.setTopScrollVisibility(false);
                 break;
