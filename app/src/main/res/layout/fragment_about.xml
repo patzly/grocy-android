@@ -239,6 +239,27 @@
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
+                    android:src="@drawable/ic_round_date_range"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.OverLine"
+                        android:text="@string/info_dev_beginning" />
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/info_dev_beginning_date" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Theme.Grocy.ListItem.TwoLine">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginEnd="24dp"

@@ -376,6 +376,8 @@
     <string name="info_acknowledgement">We\'d like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
     <string name="info_intro">Replay intro</string>
     <string name="info_intro_description">Showcasing features</string>
+    <string name="info_dev_beginning">Beginning of development</string>
+    <string name="info_dev_beginning_date">April 2020</string>
     <string name="info_material_components_built_with">Built with</string>
     <string name="info_material_components" translatable="false">Material Components</string>
     <string name="info_version">Version</string>
