@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@color/primary">
+        android:layout_height="wrap_content"
+        android:minHeight="?android:actionBarSize"
+        android:background="@color/primary"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
         <LinearLayout
             android:id="@+id/linear_master_object_list_app_bar_default"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?android:actionBarSize"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -55,67 +61,35 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_master_object_list_app_bar_search"
+            android:id="@+id/linear_offline_error"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:baselineAligned="false">
+            android:background="@color/retro_red_bg_black"
+            android:gravity="center"
+            android:alpha="0.9"
+            android:visibility="gone">
 
-            <FrameLayout
-                android:id="@+id/frame_master_object_list_search_close"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_close"
-                android:tooltipText="@string/action_close"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_close" />
-
-            </FrameLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_master_object_list_search"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="72dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_master_object_list_search"
-                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                    android:singleLine="true"
-                    android:textColor="@color/on_background" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:text="@string/error_offline"/>
 
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_master_object_list"
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
+        android:layout_below="@id/app_bar"
+        android:animateLayoutChanges="true"
         android:overScrollMode="never">
 
         <androidx.core.widget.NestedScrollView
@@ -125,6 +99,7 @@
             android:overScrollMode="never">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -172,7 +147,6 @@
 
                             <TextView
                                 android:id="@+id/count_products"
-                                android:text="Count: 5"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -201,7 +175,6 @@
 
                             <TextView
                                 android:id="@+id/count_locations"
-                                android:text="Count: 8"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -230,7 +203,6 @@
 
                             <TextView
                                 android:id="@+id/count_stores"
-                                android:text="Count: 8"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -259,7 +231,6 @@
 
                             <TextView
                                 android:id="@+id/count_quantity_units"
-                                android:text="Count: 7"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -288,7 +259,6 @@
 
                             <TextView
                                 android:id="@+id/count_product_groups"
-                                android:text="Count: 8"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -303,4 +273,4 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

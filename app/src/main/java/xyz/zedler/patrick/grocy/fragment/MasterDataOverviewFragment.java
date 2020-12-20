@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +27,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
+import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
 
@@ -40,6 +44,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
     private MainActivity activity;
     private FragmentMasterDataOverviewBinding binding;
+    private MasterDataOverviewViewModel viewModel;
+    private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
     public View onCreateView(
@@ -56,7 +62,10 @@ public class MasterDataOverviewFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        if(infoFullscreenHelper != null) {
+            infoFullscreenHelper.destroyInstance();
+            infoFullscreenHelper = null;
+        }
         if(binding != null) {
             binding = null;
         }
@@ -66,6 +75,10 @@ public class MasterDataOverviewFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
 
+        viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
+        viewModel.setOfflineLive(!activity.isOnline());
+
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.coordinatorContainer);
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
                         .actionMasterDataOverviewFragmentToMasterObjectListFragment(
@@ -117,6 +130,22 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 ).build())
         );
 
+        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
+            binding.swipe.setRefreshing(state);
+            if(!state) viewModel.setCurrentQueueLoading(null);
+        });
+
+        viewModel.getInfoFullscreenLive().observe(
+                getViewLifecycleOwner(),
+                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+        );
+
+        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
+
+        binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+
+        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
+
         // UPDATE UI
         updateUI((getArguments() == null
                 || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
@@ -133,6 +162,19 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 animated,
                 () -> {}
         );
+    }
+
+    @Override
+    public void updateConnectivity(boolean online) {
+        if(!online == viewModel.isOffline()) return;
+        viewModel.setOfflineLive(!online);
+        viewModel.downloadData();
+    }
+
+    private void appBarOfflineInfo(boolean visible) {
+        boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
+        if(visible == currentState) return;
+        binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @NonNull

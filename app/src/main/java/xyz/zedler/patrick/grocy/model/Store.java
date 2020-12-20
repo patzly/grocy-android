@@ -23,22 +23,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+@Entity(tableName = "store_table")
 public class Store implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
@@ -88,6 +97,18 @@ public class Store implements Parcelable {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
     }
 
     @Override

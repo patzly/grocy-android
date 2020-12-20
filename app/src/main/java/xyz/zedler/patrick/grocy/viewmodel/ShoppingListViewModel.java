@@ -123,11 +123,13 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (shoppingListItems, shoppingLists, productGroups, quantityUnits) -> {
+                (shoppingListItems, shoppingLists, productGroups, quantityUnits, products, missingItems) -> {
                     this.shoppingListItems = shoppingListItems;
                     this.shoppingLists = shoppingLists;
                     this.productGroups = productGroups;
                     this.quantityUnits = quantityUnits;
+                    this.products = products;
+                    this.missingItems = missingItems;
                     updateFilteredShoppingListItems();
                     if(downloadAfterLoading) downloadData();
                 }
@@ -214,10 +216,6 @@ public class ShoppingListViewModel extends AndroidViewModel {
         return filteredGroupedListItemsLive;
     }
 
-    public ArrayList<GroupedListItem> getFilteredGroupedListItems() {
-        return filteredGroupedListItemsLive.getValue();
-    }
-
     public int getItemsMissingCount() {
         return itemsMissingCount;
     }
@@ -235,6 +233,10 @@ public class ShoppingListViewModel extends AndroidViewModel {
         return selectedShoppingListIdLive;
     }
 
+    private String getLastTime(String sharedPref) {
+        return sharedPrefs.getString(sharedPref, null);
+    }
+
     public void downloadData(@Nullable String dbChangedTime) {
         if(currentQueueLoading != null) {
             currentQueueLoading.reset(true);
@@ -246,23 +248,20 @@ public class ShoppingListViewModel extends AndroidViewModel {
             return;
         }
         if(dbChangedTime == null) {
-            dlHelper.getTimeDbChanged((DownloadHelper.OnStringResponseListener) this::downloadData, () -> onDownloadError(null));
+            dlHelper.getTimeDbChanged(
+                    (DownloadHelper.OnStringResponseListener) this::downloadData,
+                    () -> onDownloadError(null)
+            );
             return;
         }
 
         // get last offline db-changed-time values
-        String lastTimeShoppingListItems = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-        String lastTimeShoppingLists = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-        String lastTimeProductGroups = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        String lastTimeQuantityUnits = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        String lastTimeProducts = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-        String lastTimeMissingItems = sharedPrefs
-                .getString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
+        String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
+        String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
+        String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
+        String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
+        String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
+        String lastTimeMissingItems = getLastTime(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
 
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
@@ -534,7 +533,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
     public void deleteItem(int movedPosition) {
         ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(movedPosition > currentList.size()-1) {
+        if(currentList == null || movedPosition > currentList.size()-1) {
             showErrorMessage(); // TODO: Test error messages
             return;
         }

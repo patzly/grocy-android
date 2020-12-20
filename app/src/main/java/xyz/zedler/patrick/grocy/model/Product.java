@@ -23,82 +23,111 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+@Entity(tableName = "product_table")
 public class Product implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "location_id")
     @SerializedName("location_id")
     private String locationId;
 
+    @ColumnInfo(name = "qu_id_purchase")
     @SerializedName("qu_id_purchase")
     private int quIdPurchase; // quantity unit
 
+    @ColumnInfo(name = "qu_id_stock")
     @SerializedName("qu_id_stock")
     private int quIdStock; // quantity unit
 
+    @ColumnInfo(name = "qu_factor_purchase_to_stock")
     @SerializedName("qu_factor_purchase_to_stock")
     private String quFactorPurchaseToStock; // quantity unit
 
+    @ColumnInfo(name = "enable_tare_weight_handling")
     @SerializedName("enable_tare_weight_handling")
     private int enableTareWeightHandling;
 
+    @ColumnInfo(name = "picture_file_name")
     @SerializedName("picture_file_name")
     private String pictureFileName;
 
+    @ColumnInfo(name = "barcode")
     @SerializedName("barcode")
     private String barcode;
 
+    @ColumnInfo(name = "min_stock_amount")
     @SerializedName("min_stock_amount")
     private String minStockAmount;
 
+    @ColumnInfo(name = "default_best_before_days")
     @SerializedName("default_best_before_days")
     private int defaultBestBeforeDays;
 
+    @ColumnInfo(name = "default_best_before_days_after_open")
     @SerializedName("default_best_before_days_after_open")
     private int defaultBestBeforeDaysAfterOpen;
 
+    @ColumnInfo(name = "default_best_before_days_after_freezing")
     @SerializedName("default_best_before_days_after_freezing")
     private int defaultBestBeforeDaysAfterFreezing;
 
+    @ColumnInfo(name = "default_best_before_days_after_thawing")
     @SerializedName("default_best_before_days_after_thawing")
     private int defaultBestBeforeDaysAfterThawing;
 
+    @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
+    @ColumnInfo(name = "product_group_id")
     @SerializedName("product_group_id")
     private String productGroupId;
 
+    @ColumnInfo(name = "allow_partial_units_in_stock")
     @SerializedName("allow_partial_units_in_stock")
     private int allowPartialUnitsInStock;
 
+    @ColumnInfo(name = "tare_weight")
     @SerializedName("tare_weight")
     private String tareWeight;
 
+    @ColumnInfo(name = "not_check_stock_fulfillment_for_recipes")
     @SerializedName("not_check_stock_fulfillment_for_recipes")
     private int notCheckStockFulfillmentForRecipes;
 
+    @ColumnInfo(name = "parent_product_id")
     @SerializedName("parent_product_id")
     private String parentProductId; /// STRING: null for empty
 
+    @ColumnInfo(name = "calories")
     @SerializedName("calories")
     private String calories;
 
+    @ColumnInfo(name = "cumulate_min_stock_amount_of_sub_products")
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
     private int cumulateMinStockAmountOfSubProducts;
 
+    @ColumnInfo(name = "shopping_location_id")
     @SerializedName("shopping_location_id")
     private String storeId;
 
@@ -196,11 +225,15 @@ public class Product implements Parcelable {
         return description;
     }
 
-    public int getLocationId() {
+    public int getLocationIdInt() {
         if(locationId == null || locationId.isEmpty()) {
             return -1;
         }
         return Integer.parseInt(locationId);
+    }
+
+    public String getLocationId() {
+        return locationId;
     }
 
     public int getQuIdStock() {
@@ -215,12 +248,16 @@ public class Product implements Parcelable {
         return quIdPurchase;
     }
 
-    public double getQuFactorPurchaseToStock() {
+    public double getQuFactorPurchaseToStockDouble() {
         if(quFactorPurchaseToStock == null || quFactorPurchaseToStock.isEmpty()) {
             return 1;
         } else {
             return Double.parseDouble(quFactorPurchaseToStock);
         }
+    }
+
+    public String getQuFactorPurchaseToStock() {
+        return quFactorPurchaseToStock;
     }
 
     public int getEnableTareWeightHandling() {
@@ -231,7 +268,7 @@ public class Product implements Parcelable {
         return barcode;
     }
 
-    public double getMinStockAmount() {
+    public double getMinStockAmountDouble() {
         if(minStockAmount == null || minStockAmount.isEmpty()) {
             return 0;
         } else {
@@ -267,7 +304,7 @@ public class Product implements Parcelable {
         return allowPartialUnitsInStock;
     }
 
-    public double getTareWeight() {
+    public double getTareWeightDouble() {
         if(tareWeight == null || tareWeight.isEmpty()) {
             return 0;
         } else {
@@ -283,7 +320,7 @@ public class Product implements Parcelable {
         return parentProductId;
     }
 
-    public double getCalories() {
+    public double getCaloriesDouble() {
         if(calories == null || calories.isEmpty()) {
             return 0;
         } else {
@@ -297,6 +334,114 @@ public class Product implements Parcelable {
 
     public String getStoreId() {
         return storeId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
+    }
+
+    public void setQuIdPurchase(int quIdPurchase) {
+        this.quIdPurchase = quIdPurchase;
+    }
+
+    public void setQuIdStock(int quIdStock) {
+        this.quIdStock = quIdStock;
+    }
+
+    public void setQuFactorPurchaseToStock(String quFactorPurchaseToStock) {
+        this.quFactorPurchaseToStock = quFactorPurchaseToStock;
+    }
+
+    public void setEnableTareWeightHandling(int enableTareWeightHandling) {
+        this.enableTareWeightHandling = enableTareWeightHandling;
+    }
+
+    public void setPictureFileName(String pictureFileName) {
+        this.pictureFileName = pictureFileName;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void setMinStockAmount(String minStockAmount) {
+        this.minStockAmount = minStockAmount;
+    }
+
+    public void setDefaultBestBeforeDays(int defaultBestBeforeDays) {
+        this.defaultBestBeforeDays = defaultBestBeforeDays;
+    }
+
+    public void setDefaultBestBeforeDaysAfterOpen(int defaultBestBeforeDaysAfterOpen) {
+        this.defaultBestBeforeDaysAfterOpen = defaultBestBeforeDaysAfterOpen;
+    }
+
+    public void setDefaultBestBeforeDaysAfterFreezing(int defaultBestBeforeDaysAfterFreezing) {
+        this.defaultBestBeforeDaysAfterFreezing = defaultBestBeforeDaysAfterFreezing;
+    }
+
+    public void setDefaultBestBeforeDaysAfterThawing(int defaultBestBeforeDaysAfterThawing) {
+        this.defaultBestBeforeDaysAfterThawing = defaultBestBeforeDaysAfterThawing;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
+    }
+
+    public void setProductGroupId(String productGroupId) {
+        this.productGroupId = productGroupId;
+    }
+
+    public void setAllowPartialUnitsInStock(int allowPartialUnitsInStock) {
+        this.allowPartialUnitsInStock = allowPartialUnitsInStock;
+    }
+
+    public void setTareWeight(String tareWeight) {
+        this.tareWeight = tareWeight;
+    }
+
+    public void setNotCheckStockFulfillmentForRecipes(int notCheckStockFulfillmentForRecipes) {
+        this.notCheckStockFulfillmentForRecipes = notCheckStockFulfillmentForRecipes;
+    }
+
+    public void setParentProductId(String parentProductId) {
+        this.parentProductId = parentProductId;
+    }
+
+    public String getMinStockAmount() {
+        return minStockAmount;
+    }
+
+    public String getTareWeight() {
+        return tareWeight;
+    }
+
+    public String getCalories() {
+        return calories;
+    }
+
+    public void setCalories(String calories) {
+        this.calories = calories;
+    }
+
+    public void setCumulateMinStockAmountOfSubProducts(int cumulateMinStockAmountOfSubProducts) {
+        this.cumulateMinStockAmountOfSubProducts = cumulateMinStockAmountOfSubProducts;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     @Override

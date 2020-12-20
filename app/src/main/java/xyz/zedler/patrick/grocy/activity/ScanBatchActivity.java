@@ -400,7 +400,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             currentProductDetails.getProduct().getStoreId(),
                             currentProductDetails.getLastPrice(),
                             currentProductDetails.getProduct().getDefaultBestBeforeDays(),
-                            currentProductDetails.getProduct().getLocationId()
+                            currentProductDetails.getProduct().getLocationIdInt()
                     );
 
                     if(currentProductDetails.getProduct().getEnableTareWeightHandling() == 1) {
@@ -622,7 +622,7 @@ public class ScanBatchActivity extends AppCompatActivity
     public void purchaseProduct() {
         // TODO: NullPointerException with price bottom sheet, where does it appear?
         JSONObject body = new JSONObject();
-        double amountMultiplied = currentProductDetails.getProduct().getQuFactorPurchaseToStock();
+        double amountMultiplied = currentProductDetails.getProduct().getQuFactorPurchaseToStockDouble();
         try {
             body.put("amount", amountMultiplied);
             body.put("transaction_type", "purchase");

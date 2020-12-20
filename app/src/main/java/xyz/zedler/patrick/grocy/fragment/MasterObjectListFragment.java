@@ -745,7 +745,7 @@ public class MasterObjectListFragment extends BaseFragment
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
                 bundle.putParcelable(
                         Constants.ARGUMENT.LOCATION,
-                        locationsMap.get(product.getLocationId())
+                        locationsMap.get(product.getLocationIdInt())
                 );
                 bundle.putParcelable(
                         Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
@@ -814,7 +814,7 @@ public class MasterObjectListFragment extends BaseFragment
                         && product.getQuIdStock() != objectId
                         && product.getQuIdPurchase() != objectId
                         || entity.equals(GrocyApi.ENTITY.LOCATIONS)
-                        && product.getLocationId() == objectId
+                        && product.getLocationIdInt() == objectId
                         || entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)
                         && NumUtil.isStringInt(product.getProductGroupId())
                         && Integer.parseInt(product.getProductGroupId()) == objectId

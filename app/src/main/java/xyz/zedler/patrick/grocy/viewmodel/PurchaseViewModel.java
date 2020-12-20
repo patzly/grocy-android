@@ -284,7 +284,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         ProductDetails productDetails = getProductDetails();
         Product product = productDetails.getProduct();
         double amount = NumUtil.toDouble(getAmount());
-        double amountMultiplied = amount * product.getQuFactorPurchaseToStock();
+        double amountMultiplied = amount * product.getQuFactorPurchaseToStockDouble();
         JSONObject body = new JSONObject();
         try {
             body.put("amount", amountMultiplied);
@@ -333,7 +333,7 @@ public class PurchaseViewModel extends AndroidViewModel {
                         amountAdded = amountMultiplied;
                     } else {
                         // calculate difference of amount if tare weight handling enabled
-                        amountAdded = amountMultiplied - product.getTareWeight()
+                        amountAdded = amountMultiplied - product.getTareWeightDouble()
                                 - productDetails.getStockAmount();
                     }
 
@@ -515,7 +515,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         if(getProductDetails() == null || !isTareWeightEnabled(getProductDetails())) {
             minAmount = 1;
         } else {
-            minAmount = getProductDetails().getProduct().getTareWeight();
+            minAmount = getProductDetails().getProduct().getTareWeightDouble();
             minAmount += getProductDetails().getStockAmount();
         }
         return minAmount;

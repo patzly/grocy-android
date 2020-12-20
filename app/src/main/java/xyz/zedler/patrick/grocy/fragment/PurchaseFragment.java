@@ -329,7 +329,7 @@ public class PurchaseFragment extends BaseFragment {
                 infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-                binding.progressbarPurchase.setVisibility(isDownloading ? View.VISIBLE : View.GONE)
+                binding.swipePurchase.setRefreshing(isDownloading)
         );
         viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
             if(date == null) {

@@ -1,5 +1,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
@@ -7,6 +8,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -99,6 +102,23 @@ public class BaseFragment extends Fragment {
 
     void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
         findNavController().navigate(directions, navigatorExtras);
+    }
+
+    void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
+        findNavController().navigate(directions, navOptions);
+    }
+
+    void navigate(@IdRes int resId) {
+        findNavController().navigate(resId);
+    }
+
+    void navigate(@IdRes int resId, @NonNull NavOptions navOptions) {
+        findNavController().navigate(resId, null, navOptions);
+    }
+
+    @SuppressLint("RestrictedApi")
+    int getBackStackSize() {
+        return findNavController().getBackStack().size();
     }
 
     /**

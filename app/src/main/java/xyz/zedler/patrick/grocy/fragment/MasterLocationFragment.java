@@ -442,7 +442,7 @@ public class MasterLocationFragment extends BaseFragment {
     public void checkForUsage(Location location) {
         if(!products.isEmpty()) {
             for(Product product : products) {
-                if(product.getLocationId() == location.getId()) {
+                if(product.getLocationIdInt() == location.getId()) {
                     activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,

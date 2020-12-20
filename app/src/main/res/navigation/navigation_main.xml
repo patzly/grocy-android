@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/stockFragment">
+    android:id="@+id/navigation_main"
+    tools:ignore="InvalidNavigation">
 
     <fragment
         android:id="@+id/stockFragment"
@@ -434,7 +434,17 @@
         android:id="@+id/featuresFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.FeaturesFragment"
         android:label="FeaturesFragment"
-        tools:layout="@layout/fragment_features" />
+        tools:layout="@layout/fragment_features" >
+        <action
+            android:id="@+id/action_featuresFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right"
+            app:popUpTo="@id/navigation_main"
+            app:popUpToInclusive="true" />
+    </fragment>
     <action
         android:id="@+id/action_global_featuresFragment"
         app:destination="@id/featuresFragment"

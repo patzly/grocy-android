@@ -674,7 +674,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         if(filterLocationId != -1) {
             ArrayList<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
-                if(filterLocationId == stockItem.getProduct().getLocationId()) {
+                if(filterLocationId == stockItem.getProduct().getLocationIdInt()) {
                     tempItems.add(stockItem);
                 }
             }
@@ -956,7 +956,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                             productId,
                             stockItem.getProduct().getEnableTareWeightHandling() == 0
                                     ? stockItem.getAmount()
-                                    : stockItem.getProduct().getTareWeight(),
+                                    : stockItem.getProduct().getTareWeightDouble(),
                             false
                     );
                 }
@@ -1025,12 +1025,12 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     StockItem stockItemNew = new StockItem(productDetails);
 
                     if(!undo && stockItemNew.getAmount() == 0
-                            && stockItemNew.getProduct().getMinStockAmount() == 0
+                            && stockItemNew.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.remove(index);
                         stockItemAdapter.notifyItemRemoved(index);
                     } else if(undo && stockItemOld.getAmount() == 0
-                            && stockItemOld.getProduct().getMinStockAmount() == 0
+                            && stockItemOld.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.add(index, stockItemNew);
                         stockItemAdapter.notifyItemInserted(index);
@@ -1391,7 +1391,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     private void showProductOverview(StockItem stockItem) {
         if(stockItem == null) return;
         QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
-        Location location = getLocation(stockItem.getProduct().getLocationId());
+        Location location = getLocation(stockItem.getProduct().getLocationIdInt());
         navigate(StockFragmentDirections
                 .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
                 .setShowActions(true)

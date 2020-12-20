@@ -957,13 +957,13 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 }
             }
             // location
-            Location location = getLocation(editProduct.getLocationId());
+            Location location = getLocation(editProduct.getLocationIdInt());
             if(location != null) {
                 textViewLocation.setText(location.getName());
             }
-            selectedLocationId = editProduct.getLocationId();
+            selectedLocationId = editProduct.getLocationIdInt();
             // min stock amount
-            editTextMinAmount.setText(NumUtil.trim(editProduct.getMinStockAmount()));
+            editTextMinAmount.setText(NumUtil.trim(editProduct.getMinStockAmountDouble()));
             // best before days
             editTextDays.setText(String.valueOf(editProduct.getDefaultBestBeforeDays()));
             // product group
@@ -985,7 +985,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
                 selectedQUStockId = quantityUnitStock.getId();
             }
             // quantity unit factor
-            editTextQUFactor.setText(NumUtil.trim(editProduct.getQuFactorPurchaseToStock()));
+            editTextQUFactor.setText(NumUtil.trim(editProduct.getQuFactorPurchaseToStockDouble()));
         }
     }
 

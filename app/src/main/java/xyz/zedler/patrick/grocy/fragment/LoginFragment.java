@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.AuthFailureError;
@@ -499,9 +500,20 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
                 new DownloadHelper(requireActivity(), TAG),
                 new GrocyApi(requireContext()),
                 sharedPrefs,
-                () -> findNavController().popBackStack(R.id.stockFragment, false),
-                error -> findNavController().popBackStack(R.id.stockFragment, false)
+                this::navigateToStartDestination,
+                error -> navigateToStartDestination()
         );
+    }
+
+    private void navigateToStartDestination() {
+        activity.updateStartDestination();
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_from_right);
+        builder.setExitAnim(R.anim.slide_to_left);
+        builder.setPopEnterAnim(R.anim.slide_from_left);
+        builder.setPopExitAnim(R.anim.slide_to_right);
+        builder.setPopUpTo(R.id.navigation_main, true);
+        navigate(findNavController().getGraph().getStartDestination(), builder.build());
     }
 
     private void openHomeAssistantHelp(String server) {

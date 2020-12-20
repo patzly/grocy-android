@@ -23,25 +23,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+@Entity(tableName = "location_table")
 public class Location implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
+    @ColumnInfo(name = "is_freezer")
     @SerializedName("is_freezer")
     private int isFreezer;
 
@@ -94,6 +104,30 @@ public class Location implements Parcelable {
 
     public int getIsFreezer() {
         return isFreezer;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
+    }
+
+    public void setIsFreezer(int isFreezer) {
+        this.isFreezer = isFreezer;
     }
 
     @Override

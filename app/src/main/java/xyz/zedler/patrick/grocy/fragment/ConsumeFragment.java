@@ -58,7 +58,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.NavGraphDirections;
+import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
@@ -729,7 +729,7 @@ public class ConsumeFragment extends BaseFragment {
                     } else {
                         // calculate difference of amount if tare weight handling enabled
                         amountConsumed = productDetails.getStockAmount() - amount
-                                + productDetails.getProduct().getTareWeight();
+                                + productDetails.getProduct().getTareWeightDouble();
                     }
 
                     Snackbar snackbar = Snackbar.make(
@@ -809,7 +809,7 @@ public class ConsumeFragment extends BaseFragment {
                     } else {
                         // calculate difference of amount if tare weight handling enabled
                         amountConsumed = productDetails.getStockAmount() - amount
-                                + productDetails.getProduct().getTareWeight();
+                                + productDetails.getProduct().getTareWeightDouble();
                     }
 
                     Snackbar snackbar = Snackbar.make(
@@ -982,8 +982,8 @@ public class ConsumeFragment extends BaseFragment {
                 }
             }
         } else {
-            minAmount = productDetails.getProduct().getTareWeight();
-            maxAmount = productDetails.getProduct().getTareWeight()
+            minAmount = productDetails.getProduct().getTareWeightDouble();
+            maxAmount = productDetails.getProduct().getTareWeightDouble()
                     + productDetails.getStockAmount();
         }
     }
@@ -1053,7 +1053,7 @@ public class ConsumeFragment extends BaseFragment {
         MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
         menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
         if(menuItemBatch != null) menuItemBatch.setOnMenuItemClickListener(item -> {
-            navigate(NavGraphDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME));
+            navigate(NavigationMainDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME));
             return true;
         });
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);

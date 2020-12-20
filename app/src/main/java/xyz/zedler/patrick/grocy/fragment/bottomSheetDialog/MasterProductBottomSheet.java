@@ -164,7 +164,7 @@ public class MasterProductBottomSheet extends CustomBottomSheet {
 		// MIN STOCK AMOUNT
 		itemMinStockAmount.setText(
 				activity.getString(R.string.property_amount_min_stock),
-				NumUtil.trim(product.getMinStockAmount())
+				NumUtil.trim(product.getMinStockAmountDouble())
 		);
 
 		// QUANTITY UNIT PURCHASE
@@ -190,7 +190,7 @@ public class MasterProductBottomSheet extends CustomBottomSheet {
 		// QUANTITY UNIT FACTOR
 		itemQuFactor.setText(
 				activity.getString(R.string.property_qu_factor),
-				NumUtil.trim(product.getQuFactorPurchaseToStock())
+				NumUtil.trim(product.getQuFactorPurchaseToStockDouble())
 		);
 
 		// PRODUCT GROUP

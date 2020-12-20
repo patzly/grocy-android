@@ -20,7 +20,7 @@ package xyz.zedler.patrick.grocy.helper;
 */
 
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
@@ -29,14 +29,14 @@ import xyz.zedler.patrick.grocy.view.InfoFullscreenView;
 
 public class InfoFullscreenHelper {
 
-    private FrameLayout frameLayout;
+    private ViewGroup viewGroup;
     private InfoFullscreenView infoFullscreenView;
 
     private static final int ANIMATION_DURATION = 125;
     private static final int INFO_FULLSCREEN_VIEW_ID = 39253513;
 
-    public InfoFullscreenHelper(FrameLayout frameLayout) {
-        this.frameLayout = frameLayout;
+    public InfoFullscreenHelper(ViewGroup viewGroup) {
+        this.viewGroup = viewGroup;
     }
 
     public void setInfo(InfoFullscreen infoFullscreen) {
@@ -46,7 +46,7 @@ public class InfoFullscreenHelper {
             return;
         }
         this.infoFullscreenView = new InfoFullscreenView(
-                frameLayout.getContext(),
+                viewGroup.getContext(),
                 infoFullscreen.getType(),
                 infoFullscreen.getExact(),
                 infoFullscreen.getClickListener()
@@ -56,15 +56,15 @@ public class InfoFullscreenHelper {
     }
 
     private void clearState(@Nullable Runnable runnable) {
-        View view = frameLayout.findViewById(INFO_FULLSCREEN_VIEW_ID);
+        View view = viewGroup.findViewById(INFO_FULLSCREEN_VIEW_ID);
         if(view == null) {
             if(runnable != null) runnable.run();
             return;
         }
         view.animate().alpha(0).setDuration(ANIMATION_DURATION)
                 .withEndAction(() -> {
-                    if(frameLayout == null) return;
-                    frameLayout.removeView(view);
+                    if(viewGroup == null) return;
+                    viewGroup.removeView(view);
                     if(runnable != null) runnable.run();
                 }).start();
     }
@@ -73,9 +73,9 @@ public class InfoFullscreenHelper {
         clearState(() -> {
             infoFullscreenView.setAlpha(0);
             if(infoFullscreenView.isInForeground()) {
-                frameLayout.addView(infoFullscreenView);
+                viewGroup.addView(infoFullscreenView);
             } else {
-                frameLayout.addView(infoFullscreenView, 0);
+                viewGroup.addView(infoFullscreenView, 0);
             }
             infoFullscreenView.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
         });
@@ -86,6 +86,6 @@ public class InfoFullscreenHelper {
             infoFullscreenView.animate().cancel();
             infoFullscreenView = null;
         }
-        frameLayout = null;
+        viewGroup = null;
     }
 }
