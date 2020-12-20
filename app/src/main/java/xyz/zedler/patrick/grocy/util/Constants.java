@@ -92,6 +92,9 @@ public final class Constants {
         public final static class APPEARANCE {
             public final static String DARK_MODE = "dark_mode";
         }
+        public final static class BEHAVIOR {
+            public final static String START_DESTINATION = "start_destination";
+        }
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";
             public final static String FRONT_CAM = "front_cam";

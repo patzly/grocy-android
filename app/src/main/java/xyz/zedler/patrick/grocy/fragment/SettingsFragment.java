@@ -97,6 +97,8 @@ public class SettingsFragment extends BaseFragment {
             showCategoryServer();
         } else if(category.equals(Constants.SETTINGS.APPEARANCE.class.getSimpleName())) {
             showCategoryAppearance();
+        } else if(category.equals(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())) {
+            showCategoryBehavior();
         } else if(category.equals(Constants.SETTINGS.SCANNER.class.getSimpleName())) {
             showCategoryScanner();
         } else if(category.equals(Constants.SETTINGS.STOCK.class.getSimpleName())) {
@@ -152,6 +154,12 @@ public class SettingsFragment extends BaseFragment {
                 R.string.category_appearance,
                 R.drawable.ic_round_dark_mode_on_anim,
                 () -> goTo(Constants.SETTINGS.APPEARANCE.class.getSimpleName())
+        ));
+        binding.linearBody.addView(new SettingCategory(
+                requireContext(),
+                R.string.category_behavior,
+                R.drawable.ic_round_dark_mode_on_anim,
+                () -> goTo(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())
         ));
         binding.linearBody.addView(new SettingCategory(
                 requireContext(),
@@ -276,6 +284,20 @@ public class SettingsFragment extends BaseFragment {
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.APPEARANCE.DARK_MODE,
+                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
+                getString(R.string.setting_dark_mode),
+                getString(R.string.setting_dark_mode_description),
+                R.drawable.ic_round_dark_mode_off_anim,
+                R.drawable.ic_round_dark_mode_on_anim,
+                this::updateTheme
+        ));
+    }
+
+    private void showCategoryBehavior() {
+        binding.appBarTitle.setText(R.string.category_behavior);
+        binding.linearBody.addView(new SettingEntrySwitch(
+                requireContext(),
+                Constants.SETTINGS.BEHAVIOR.START_DESTINATION,
                 Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
                 getString(R.string.setting_dark_mode),
                 getString(R.string.setting_dark_mode_description),
