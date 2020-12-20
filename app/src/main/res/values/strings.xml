@@ -259,6 +259,9 @@
     <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Entry %1$d of %2$d</string>
+    <!-- %1$s is a number -->
+    <string name="subtitle_count">Count: %1$d</string>
+    <string name="subtitle_count_unknown">Count: Unknown</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>

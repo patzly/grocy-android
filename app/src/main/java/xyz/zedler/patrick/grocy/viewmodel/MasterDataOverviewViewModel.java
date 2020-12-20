@@ -63,11 +63,11 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
 
-    private ArrayList<Store> stores;
-    private ArrayList<Location> locations;
-    private ArrayList<ProductGroup> productGroups;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<Product> products;
+    private MutableLiveData<ArrayList<Store>> storesLive;
+    private MutableLiveData<ArrayList<Location>> locationsLive;
+    private MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
+    private MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
+    private MutableLiveData<ArrayList<Product>> productsLive;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -86,16 +86,21 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
+        storesLive = new MutableLiveData<>();
+        locationsLive = new MutableLiveData<>();
+        productGroupsLive = new MutableLiveData<>();
+        quantityUnitsLive = new MutableLiveData<>();
+        productsLive = new MutableLiveData<>();
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
                 (stores, locations, productGroups, quantityUnits, products) -> {
-                    this.stores = stores;
-                    this.locations = locations;
-                    this.productGroups = productGroups;
-                    this.quantityUnits = quantityUnits;
-                    this.products = products;
+                    this.storesLive.setValue(stores);
+                    this.locationsLive.setValue(locations);
+                    this.productGroupsLive.setValue(productGroups);
+                    this.quantityUnitsLive.setValue(quantityUnits);
+                    this.productsLive.setValue(products);
                     if(downloadAfterLoading) downloadData();
                 }
         );
@@ -134,35 +139,35 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         if(lastTimeStores == null || !lastTimeStores.equals(dbChangedTime)) {
             queue.append(dlHelper.getStores(stores -> {
-                this.stores = stores;
+                //this.storesLive. = stores;
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
                 editPrefs.apply();
             }));
         } else if(debug) Log.i(TAG, "downloadData: skipped Stores download");
         if(lastTimeLocations == null || !lastTimeLocations.equals(dbChangedTime)) {
             queue.append(dlHelper.getLocations(locations -> {
-                this.locations = locations;
+                this.locationsLive.setValue(locations);
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
                 editPrefs.apply();
             }));
         } else if(debug) Log.i(TAG, "downloadData: skipped Locations download");
         if(lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
             queue.append(dlHelper.getProductGroups(productGroups -> {
-                this.productGroups = productGroups;
+                this.productGroupsLive.setValue(productGroups);
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
                 editPrefs.apply();
             }));
         } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download");
         if(lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
             queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
-                this.quantityUnits = quantityUnits;
+                this.quantityUnitsLive.setValue(quantityUnits);
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
                 editPrefs.apply();
             }));
         } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download");
         if(lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
             queue.append(dlHelper.getProducts(products -> {
-                this.products = products;
+                this.productsLive.setValue(products);
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
                 editPrefs.apply();
             }));
@@ -181,11 +186,11 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
         repository.updateDatabase(
-                this.stores,
-                this.locations,
-                this.productGroups,
-                this.quantityUnits,
-                this.products,
+                this.storesLive.getValue(),
+                this.locationsLive.getValue(),
+                this.productGroupsLive.getValue(),
+                this.quantityUnitsLive.getValue(),
+                this.productsLive.getValue(),
                 () -> {}
         );
     }
@@ -217,6 +222,27 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     @NonNull
     public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
         return infoFullscreenLive;
+    }
+
+    @NonNull
+    public MutableLiveData<ArrayList<Store>> getStoresLive() {
+        return storesLive;
+    }
+
+    public MutableLiveData<ArrayList<Location>> getLocationsLive() {
+        return locationsLive;
+    }
+
+    public MutableLiveData<ArrayList<ProductGroup>> getProductGroupsLive() {
+        return productGroupsLive;
+    }
+
+    public MutableLiveData<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
+        return quantityUnitsLive;
+    }
+
+    public MutableLiveData<ArrayList<Product>> getProductsLive() {
+        return productsLive;
     }
 
     public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {

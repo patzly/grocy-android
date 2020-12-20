@@ -17,14 +17,13 @@
         android:animateLayoutChanges="true">
 
         <LinearLayout
-            android:id="@+id/linear_master_object_list_app_bar_default"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame_master_object_list_back"
+                android:id="@+id/back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"

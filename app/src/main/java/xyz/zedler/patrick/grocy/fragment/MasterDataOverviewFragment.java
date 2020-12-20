@@ -78,6 +78,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
         viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
         viewModel.setOfflineLive(!activity.isOnline());
 
+        binding.back.setOnClickListener(v -> activity.navigateUp());
+
         infoFullscreenHelper = new InfoFullscreenHelper(binding.coordinatorContainer);
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
@@ -141,6 +143,43 @@ public class MasterDataOverviewFragment extends BaseFragment {
         );
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
+
+        viewModel.getProductsLive().observe(
+                getViewLifecycleOwner(),
+                products -> binding.countProducts.setText(
+                        products != null ? getString(R.string.subtitle_count, products.size())
+                                : getString(R.string.subtitle_count_unknown)
+                )
+        );
+        viewModel.getLocationsLive().observe(
+                getViewLifecycleOwner(),
+                locations -> binding.countLocations.setText(
+                        locations != null ? getString(R.string.subtitle_count, locations.size())
+                                : getString(R.string.subtitle_count_unknown)
+                )
+        );
+        viewModel.getLocationsLive().observe(
+                getViewLifecycleOwner(),
+                locations -> binding.countStores.setText(
+                        locations != null ? getString(R.string.subtitle_count, locations.size())
+                                : getString(R.string.subtitle_count_unknown)
+                )
+        );
+        viewModel.getStoresLive().observe(
+                getViewLifecycleOwner(),
+                stores -> binding.countQuantityUnits.setText(
+                        stores != null ? getString(R.string.subtitle_count, stores.size())
+                                : getString(R.string.subtitle_count_unknown)
+                )
+        );
+        viewModel.getProductGroupsLive().observe(
+                getViewLifecycleOwner(),
+                productGroups -> binding.countProductGroups.setText(
+                        productGroups != null
+                                ? getString(R.string.subtitle_count, productGroups.size())
+                                : getString(R.string.subtitle_count_unknown)
+                )
+        );
 
         binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
