@@ -146,9 +146,8 @@ public class InfoFullscreenView extends RelativeLayout {
         } else {
             binding.title.setVisibility(View.GONE);
         }
-        /*if(subtitle != -1) {
+        if(subtitle != -1) {
             binding.subtitle.setText(subtitle);
-            if(subtitle == R.string.error_offline_subtitle) binding.subtitle.setText("REODFODOMjmisdfimjsdmijsfjmiscfijmcfijrjjhjhzrjhntzhbrtrtrzrebgoerwjhbgowrgbworegbuworgfuhwfoubwneofbwofbweoufbwoefubwnovubvoubnsfkovbrfovujbdfvobjfovhbefdikvghbdsfkigbefgikhbrefvikhdsbervikwrhbvikwhbviwkhbvrikwrhbfvikewrgbikwergvikvbrmscfijmscfsicdjfsicfdmjicsmfmicfijmsdfsijmdcsicjmdsdifcjsijmcfijcmfjicsmfctrtrgdtrgdtrgdgdtrbtrbdbrtdtrdtrnjfjnfnjfzftbjnftjznrbtjrntjntbjhdbhbgdgddbdbgdbgdbgbdfgdbfgdbfgdfgbbgfjismjicmfsiscfdjimjcsfijmpcfijmcfsijmcfdijmpcfdijmpcfipjmcfijmpfcdijmpcfijmpcfijmpcfijmpcfijmpcfijmpcfijmpcfijmpcfijmpcfijmpcfijmcfsijmcfijcfdijmcfijmpcfijcmfdscfdimicfdsjdfsijimjcpfmijpcfmijcfdijmcfdjmidjmipcfmijpcsijmpcfijmpcsdijmpcf");
             binding.subtitle.setVisibility(View.VISIBLE);
         } else {
             binding.subtitle.setVisibility(View.GONE);
@@ -158,7 +157,7 @@ public class InfoFullscreenView extends RelativeLayout {
             binding.exact.setVisibility(View.VISIBLE);
         } else {
             binding.exact.setVisibility(View.GONE);
-        }*/
+        }
         if(clickListener != null) {
             binding.retry.setOnClickListener(v -> clickListener.onClicked());
         }
