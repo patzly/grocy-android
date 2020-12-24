@@ -81,6 +81,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
         binding.back.setOnClickListener(v -> activity.navigateUp());
 
         infoFullscreenHelper = new InfoFullscreenHelper(binding.coordinatorContainer);
+
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
                         .actionMasterDataOverviewFragmentToMasterObjectListFragment(
@@ -181,6 +182,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 )
         );
 
+        // for offline info in app bar
         binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);

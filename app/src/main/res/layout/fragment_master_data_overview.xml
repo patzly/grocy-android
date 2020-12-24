@@ -91,30 +91,16 @@
         android:animateLayoutChanges="true"
         android:overScrollMode="never">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll"
+        <FrameLayout
+            android:id="@+id/coordinator_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:layout_height="match_parent">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/coordinator_container"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include
-                    android:id="@+id/linear_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="?actionBarSize"
-                    layout="@layout/partial_empty"/>
-
-                <include
-                    android:id="@+id/relative_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="?actionBarSize"
-                    layout="@layout/info_fullscreen"/>
+                android:layout_height="match_parent"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -266,9 +252,9 @@
 
                 </LinearLayout>
 
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </androidx.core.widget.NestedScrollView>
 
-        </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -21,9 +21,12 @@ package xyz.zedler.patrick.grocy.helper;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.Nullable;
 
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.view.InfoFullscreenView;
 
@@ -32,7 +35,7 @@ public class InfoFullscreenHelper {
     private ViewGroup viewGroup;
     private InfoFullscreenView infoFullscreenView;
 
-    private static final int ANIMATION_DURATION = 125;
+    private static final int ANIMATION_DURATION = 300;
     private static final int INFO_FULLSCREEN_VIEW_ID = 39253513;
 
     public InfoFullscreenHelper(ViewGroup viewGroup) {
@@ -40,10 +43,20 @@ public class InfoFullscreenHelper {
     }
 
     public void setInfo(InfoFullscreen infoFullscreen) {
+        setInfo(infoFullscreen, false);
+    }
+
+    public void setInfo(InfoFullscreen infoFullscreen, boolean slide) {
+        Animation animation;
         if(infoFullscreen == null) {
+            animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_out_up);
+            animation.setDuration(ANIMATION_DURATION);
             this.infoFullscreenView = null;
-            clearState(null);
+            clearState(null, slide ? animation : null);
             return;
+        } else {
+            animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_in_down);
+            animation.setDuration(ANIMATION_DURATION);
         }
         this.infoFullscreenView = new InfoFullscreenView(
                 viewGroup.getContext(),
@@ -52,33 +65,56 @@ public class InfoFullscreenHelper {
                 infoFullscreen.getClickListener()
         );
         this.infoFullscreenView.setId(INFO_FULLSCREEN_VIEW_ID);
-        startAnimation();
+        startAnimation(slide ? animation : null);
     }
 
-    private void clearState(@Nullable Runnable runnable) {
+    private void clearState(
+            @Nullable OnClearedListener onCleared,
+            @Nullable Animation specificAnim
+    ) {
         View view = viewGroup.findViewById(INFO_FULLSCREEN_VIEW_ID);
         if(view == null) {
-            if(runnable != null) runnable.run();
+            if(onCleared != null) onCleared.cleared(true);
             return;
         }
-        view.animate().alpha(0).setDuration(ANIMATION_DURATION)
-                .withEndAction(() -> {
+        if(specificAnim != null) {
+            specificAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override public void onAnimationStart(Animation animation) {}
+                @Override public void onAnimationRepeat(Animation animation) {}
+                @Override public void onAnimationEnd(Animation animation) {
                     if(viewGroup == null) return;
                     viewGroup.removeView(view);
-                    if(runnable != null) runnable.run();
-                }).start();
+                    if(onCleared != null) onCleared.cleared(false);
+                }
+            });
+            view.startAnimation(specificAnim);
+        } else {
+            view.animate().alpha(0).setDuration(ANIMATION_DURATION / 2)
+                    .withEndAction(() -> {
+                        if(viewGroup == null) return;
+                        viewGroup.removeView(view);
+                        if(onCleared != null) onCleared.cleared(false);
+                    }).start();
+        }
     }
 
-    private void startAnimation() {
-        clearState(() -> {
+    private void startAnimation(@Nullable Animation additionalAnim) {
+        clearState(skipped -> {
             infoFullscreenView.setAlpha(0);
             if(infoFullscreenView.isInForeground()) {
                 viewGroup.addView(infoFullscreenView);
             } else {
                 viewGroup.addView(infoFullscreenView, 0);
             }
-            infoFullscreenView.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
-        });
+            int duration;
+            if(additionalAnim != null && skipped) {
+                infoFullscreenView.startAnimation(additionalAnim);
+                duration = ANIMATION_DURATION / 2;
+            } else {
+                duration = ANIMATION_DURATION / 2;
+            }
+            infoFullscreenView.animate().alpha(1).setDuration(duration).start();
+        }, null);
     }
 
     public void destroyInstance() {
@@ -87,5 +123,9 @@ public class InfoFullscreenHelper {
             infoFullscreenView = null;
         }
         viewGroup = null;
+    }
+
+    private interface OnClearedListener {
+        void cleared(boolean skipped);
     }
 }

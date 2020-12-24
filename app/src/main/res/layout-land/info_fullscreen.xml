@@ -1,82 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relative_error"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="?actionBarSize"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:fillViewport="true">
 
-    <View android:id="@+id/dummy"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:layout_centerInParent="true"/>
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/relative_error"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_alignEnd="@id/dummy"
-        android:paddingStart="32dp"
-        android:paddingEnd="0dp">
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="?actionBarSize">
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
+        <View android:id="@+id/dummy"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_centerInParent="true"/>
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:fontFamily="@font/roboto_mono_medium"
-            android:textSize="18sp"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
-
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignStart="@id/dummy"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:paddingStart="32dp"
-        android:paddingEnd="48dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/retry"
-            style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/action_retry"/>
+            android:layout_alignEnd="@id/dummy"
+            android:paddingStart="32dp"
+            android:paddingEnd="0dp">
 
-        <TextView
-            android:id="@+id/exact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textSize="18sp"
+                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@id/dummy"
+            android:orientation="vertical"
             android:gravity="center"
-            android:visibility="gone"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"/>
+            android:paddingStart="32dp"
+            android:paddingEnd="48dp">
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry"
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/action_retry"/>
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/exact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

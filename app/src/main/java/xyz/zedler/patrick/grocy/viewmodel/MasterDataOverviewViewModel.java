@@ -115,9 +115,8 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
             currentQueueLoading.reset(true);
             currentQueueLoading = null;
         }
-        if(isOffline()) { // skip downloading and update recyclerview
+        if(isOffline()) { // skip downloading
             isLoadingLive.setValue(false);
-            //updateFilteredShoppingListItems(); todo?
             return;
         }
         if(dbChangedTime == null) {
@@ -139,7 +138,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         if(lastTimeStores == null || !lastTimeStores.equals(dbChangedTime)) {
             queue.append(dlHelper.getStores(stores -> {
-                //this.storesLive. = stores;
+                this.storesLive.setValue(stores);
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
                 editPrefs.apply();
             }));
