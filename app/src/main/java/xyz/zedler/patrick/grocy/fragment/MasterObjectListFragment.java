@@ -52,7 +52,6 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -66,7 +65,6 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
@@ -83,13 +81,7 @@ public class MasterObjectListFragment extends BaseFragment
     private FragmentMasterObjectListBinding binding;
     private MasterObjectListViewModel viewModel;
 
-    private ArrayList<Object> objects;
-    private ArrayList<Object> filteredObjects;
-    private ArrayList<Object> displayedObjects;
-    private ArrayList<ProductGroup> productGroups;
-
     private String entity;
-    private String search;
 
     @Override
     public View onCreateView(
@@ -173,14 +165,29 @@ public class MasterObjectListFragment extends BaseFragment
             if(objects == null) return;
             if(objects.isEmpty()) {
                 InfoFullscreen info;
-                /*if(viewModel.isSearchActive()) {
+                if(viewModel.isSearchActive()) {
                     info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-                } else if(viewModel.getFilterState() != -1) {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
                 } else {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
+                    int fullscreenType;
+                    switch (entity) {
+                        case GrocyApi.ENTITY.PRODUCTS:
+                            fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCTS;
+                            break;
+                        case GrocyApi.ENTITY.QUANTITY_UNITS:
+                            fullscreenType = InfoFullscreen.INFO_EMPTY_QUS;
+                            break;
+                        case GrocyApi.ENTITY.LOCATIONS:
+                            fullscreenType = InfoFullscreen.INFO_EMPTY_LOCATIONS;
+                            break;
+                        case GrocyApi.ENTITY.PRODUCT_GROUPS:
+                            fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCT_GROUPS;
+                            break;
+                        default: // STORES
+                            fullscreenType = InfoFullscreen.INFO_EMPTY_STORES;
+                    }
+                    info = new InfoFullscreen(fullscreenType);
                 }
-                viewModel.getInfoFullscreenLive().setValue(info);*/
+                viewModel.getInfoFullscreenLive().setValue(info);
             } else {
                 viewModel.getInfoFullscreenLive().setValue(null);
             }
@@ -207,14 +214,7 @@ public class MasterObjectListFragment extends BaseFragment
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
-        // INITIALIZE VARIABLES
-
-        objects = new ArrayList<>();
-        filteredObjects = new ArrayList<>();
-        displayedObjects = new ArrayList<>();
-        productGroups = new ArrayList<>();
-
-        search = "";
+        if(savedInstanceState == null) viewModel.deleteSearch(); // delete search if navigating back from other fragment
 
         // INITIALIZE VIEWS
 
@@ -224,21 +224,23 @@ public class MasterObjectListFragment extends BaseFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                search = s != null ? s.toString() : "";
-                searchObjects(search);
+                if(appBarBehavior.isPrimaryLayout()) return;
+                viewModel.setSearch(s != null ? s.toString() : "");
             }
         });
         binding.editTextSearch.setOnEditorActionListener(
                 (TextView v, int actionId, KeyEvent event) -> {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        Editable search = binding.editTextSearch.getText();
-                        searchObjects(search != null ? search.toString() : "");
                         activity.hideKeyboard();
                         return true;
                     } return false;
                 });
 
         infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
+        viewModel.getInfoFullscreenLive().observe(
+                getViewLifecycleOwner(),
+                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+        );
 
         // APP BAR BEHAVIOR
 
@@ -247,13 +249,10 @@ public class MasterObjectListFragment extends BaseFragment
                 R.id.app_bar_default,
                 R.id.app_bar_search
         );
+        if(viewModel.isSearchActive()) appBarBehavior.switchToSecondary();
 
         binding.recycler.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
+                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recycler.setItemAnimator(new DefaultItemAnimator());
         binding.recycler.setAdapter(new MasterPlaceholderAdapter());
@@ -309,63 +308,6 @@ public class MasterObjectListFragment extends BaseFragment
         );
     }
 
-    private void filterObjects() {
-        filteredObjects = objects;
-        // SEARCH
-        if(!search.isEmpty()) { // active search
-            searchObjects(search);
-        } else {
-            // EMPTY STATES
-            /*if(filteredObjects.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
-                infoFullscreenHelper.setEmpty();
-            } else {
-                infoFullscreenHelper.clearState();
-            }*/
-            // SORTING
-            /*if(displayedObjects != filteredObjects || isRestoredInstance) {
-                displayedObjects = filteredObjects;
-                sortObjects();
-            }
-            isRestoredInstance = false;*/
-        }
-        /*if(debug) Log.i(
-                TAG, "filterQuantityUnits: filteredQuantityUnits = " + filteredObjects
-        );*/
-    }
-
-    private void searchObjects(String search) {
-        search = search.toLowerCase();
-        //if(debug) Log.i(TAG, "searchObjects: search = " + search);
-        this.search = search;
-        if(search.isEmpty()) {
-            filterObjects();
-        } else { // only if search contains something
-            ArrayList<Object> searchedObjects = new ArrayList<>();
-            for(Object object : filteredObjects) {
-                String name = ObjectUtil.getObjectName(object, entity);
-                String description = ObjectUtil.getObjectDescription(object, entity);
-                name = name != null ? name.toLowerCase() : "";
-                description = description != null ? description.toLowerCase() : "";
-                if(name.contains(search) || description.contains(search)) {
-                    searchedObjects.add(object);
-                }
-            }
-            /*if(searchedObjects.isEmpty() && errorState.equals(Constants.STATE.NONE)) {
-                infoFullscreenHelper.setNoSearchResults();
-            } else {
-                infoFullscreenHelper.clearState();
-            }*/
-            if(displayedObjects != searchedObjects) {
-                displayedObjects = searchedObjects;
-                //sortObjects();
-            }
-            /*if(debug) Log.i(
-                    TAG,
-                    "searchObjects: searchedObjects = " + searchedObjects
-            );*/
-        }
-    }
-
     private void filterProductGroup(ProductGroup productGroup) {
         /*if(filterProductGroupId != productGroup.getId()) {
             if(debug) Log.i(TAG, "filterProductGroup: " + productGroup);
@@ -416,23 +358,8 @@ public class MasterObjectListFragment extends BaseFragment
         }*/
     }
 
-    private void setMenuProductGroupFilters() {
-        MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
-        if(menuItem == null) return;
-        SubMenu menuProductGroups = menuItem.getSubMenu();
-        menuProductGroups.clear();
-        SortUtil.sortProductGroupsByName(productGroups, true);
-        for(ProductGroup productGroup : productGroups) {
-            menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
-                //filterProductGroup(productGroup); TODO
-                return true;
-            });
-        }
-        menuItem.setVisible(!productGroups.isEmpty());
-    }
-
     public void setUpBottomMenu() {
-        // SORTING
+        // sorting
         MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
         itemSort.setIcon(
                 viewModel.isSortAscending()
@@ -452,7 +379,7 @@ public class MasterObjectListFragment extends BaseFragment
             return true;
         });
 
-        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) setMenuProductGroupFilters();
+        // search
         MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
         if(search == null) return;
         search.setOnMenuItemClickListener(item -> {
@@ -460,6 +387,28 @@ public class MasterObjectListFragment extends BaseFragment
             setUpSearch();
             return true;
         });
+
+        // product group filter
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
+            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
+            if(menuItem == null) return;
+            SubMenu menuProductGroups = menuItem.getSubMenu();
+            menuProductGroups.clear();
+            ArrayList<ProductGroup> productGroups = viewModel.getProductGroups();
+            if(productGroups != null && !productGroups.isEmpty()) {
+                ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
+                SortUtil.sortProductGroupsByName(sorted, true);
+                for(ProductGroup pg : sorted) {
+                    menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
+                        //filterProductGroup(productGroup); TODO
+                        return true;
+                    });
+                }
+                menuItem.setVisible(true);
+            } else {
+                menuItem.setVisible(false);
+            }
+        }
     }
 
     @Override
@@ -500,7 +449,7 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     private void setUpSearch() {
-        if(search.isEmpty()) { // only if no search is active
+        if(!viewModel.isSearchActive()) { // only if no search is active
             appBarBehavior.switchToSecondary();
             binding.editTextSearch.setText("");
         }
@@ -515,22 +464,14 @@ public class MasterObjectListFragment extends BaseFragment
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         binding.editTextSearch.setText("");
-        filterObjects();
+        viewModel.setSearch(null);
 
         setIsSearchVisible(false);
     }
 
     @Override
     public void deleteObjectSafely(Object object) {
-        deleteObjectSafely(object);
-    }
-
-    private void showMasterDeleteBottomSheet(String entityText, String objectName, int objectId) {
-        Bundle argsBundle = new Bundle();
-        argsBundle.putString(Constants.ARGUMENT.ENTITY_TEXT, entityText);
-        argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
-        argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
-        activity.showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
+        viewModel.deleteObjectSafely(object);
     }
 
     @Override

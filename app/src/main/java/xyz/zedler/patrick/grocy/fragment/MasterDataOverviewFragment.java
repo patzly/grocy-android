@@ -84,8 +84,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
         binding.back.setOnClickListener(v -> activity.navigateUp());
 
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
                         .actionMasterDataOverviewFragmentToMasterObjectListFragment(
@@ -156,6 +154,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
             }
         });
 
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
         viewModel.getInfoFullscreenLive().observe(
                 getViewLifecycleOwner(),
                 infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)

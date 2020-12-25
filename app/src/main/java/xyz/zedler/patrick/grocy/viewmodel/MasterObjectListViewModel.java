@@ -41,6 +41,7 @@ import java.util.Collections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CustomBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBottomSheet;
@@ -82,8 +83,9 @@ public class MasterObjectListViewModel extends AndroidViewModel {
     private ArrayList<Location> locations;
 
     private DownloadHelper.Queue currentQueueLoading;
-    private final boolean debug;
     private boolean sortAscending;
+    private String search;
+    private final boolean debug;
     private final String entity;
 
     public MasterObjectListViewModel(@NonNull Application application, String entity) {
@@ -236,9 +238,26 @@ public class MasterObjectListViewModel extends AndroidViewModel {
     }
 
     public void displayItems() {
-        ArrayList<Object> newItems = new ArrayList<>(objects);
-        sortObjectsByName(newItems);
-        displayedItemsLive.setValue(newItems);
+        // filter items
+        ArrayList<Object> filteredItems;
+        if(search != null && !search.isEmpty()) {
+            filteredItems = new ArrayList<>();
+            for(Object object : objects) {
+                String name = ObjectUtil.getObjectName(object, entity);
+                String description = ObjectUtil.getObjectDescription(object, entity);
+                name = name != null ? name.toLowerCase() : "";
+                description = description != null ? description.toLowerCase() : "";
+                if(name.contains(search) || description.contains(search)) {
+                    filteredItems.add(object);
+                }
+            }
+        } else {
+            filteredItems = new ArrayList<>(objects);
+        }
+
+        // sort items
+        sortObjectsByName(filteredItems);
+        displayedItemsLive.setValue(filteredItems);
     }
 
     public void sortObjectsByName(ArrayList<Object> objects) {
@@ -372,6 +391,14 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         );*/
     }
 
+    private void showMasterDeleteBottomSheet(String entityText, String objectName, int objectId) {
+        Bundle argsBundle = new Bundle();
+        argsBundle.putString(Constants.ARGUMENT.ENTITY_TEXT, entityText);
+        argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
+        argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
+        showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
+    }
+
     /**
      * Returns index in the displayed items.
      * Used for providing a safe and up-to-date value
@@ -421,6 +448,11 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         return null;
     }
 
+    @Nullable
+    public ArrayList<ProductGroup> getProductGroups() {
+        return productGroups;
+    }
+
     public void setSortAscending(boolean ascending) {
         this.sortAscending = ascending;
         displayItems();
@@ -428,6 +460,19 @@ public class MasterObjectListViewModel extends AndroidViewModel {
 
     public boolean isSortAscending() {
         return sortAscending;
+    }
+
+    public boolean isSearchActive() {
+        return search != null;
+    }
+
+    public void setSearch(@Nullable String search) {
+        if(search != null) this.search = search.toLowerCase();
+        displayItems();
+    }
+
+    public void deleteSearch() {
+        search = null;
     }
 
     @NonNull
