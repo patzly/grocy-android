@@ -26,6 +26,8 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.view.InfoFullscreenView;
@@ -47,6 +49,15 @@ public class InfoFullscreenHelper {
     }
 
     public void setInfo(InfoFullscreen infoFullscreen, boolean slide) {
+        View oldView = viewGroup.findViewById(INFO_FULLSCREEN_VIEW_ID);
+        if(oldView != null && infoFullscreen != null) {
+            // if info texts and type are the same, skip update
+            InfoFullscreenView oldFullscreenView = (InfoFullscreenView) oldView;
+            if(oldFullscreenView.getType() == infoFullscreen.getType()
+                    && Objects.equals(oldFullscreenView.getExact(), infoFullscreen.getExact())
+            ) return;
+        }
+
         Animation animation;
         if(infoFullscreen == null) {
             animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_out_up);

@@ -37,6 +37,8 @@ import static xyz.zedler.patrick.grocy.model.InfoFullscreen.*;
 public class InfoFullscreenView extends RelativeLayout {
 
     private boolean inForeground;
+    private int type;
+    private String exact;
 
     public InfoFullscreenView(@NonNull Context context) {
         super(context);
@@ -54,6 +56,9 @@ public class InfoFullscreenView extends RelativeLayout {
                 this,
                 true
         );
+
+        this.type = type;
+        this.exact = exact;
 
         @DrawableRes int picture = -1;
         @StringRes int title = -1;
@@ -166,5 +171,14 @@ public class InfoFullscreenView extends RelativeLayout {
 
     public boolean isInForeground() {
         return inForeground;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    @Nullable
+    public String getExact() {
+        return exact;
     }
 }
