@@ -9,27 +9,24 @@
     android:focusable="true"
     android:fillViewport="true">
 
-    <RelativeLayout
-        android:id="@+id/relative_error"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_marginBottom="?actionBarSize">
-
-        <View android:id="@+id/dummy"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:layout_centerInParent="true"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_marginBottom="?actionBarSize"
+        android:baselineAligned="false"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:layout_weight="0.5"
             android:gravity="center"
-            android:layout_alignEnd="@id/dummy"
-            android:paddingStart="32dp"
-            android:paddingEnd="0dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <ImageView
                 android:id="@+id/image"
@@ -58,19 +55,20 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignStart="@id/dummy"
             android:orientation="vertical"
+            android:layout_weight="0.5"
             android:gravity="center"
-            android:paddingStart="32dp"
-            android:paddingEnd="48dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/retry"
                 style="@style/Widget.Grocy.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
@@ -78,6 +76,7 @@
 
             <TextView
                 android:id="@+id/exact"
+                android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -86,6 +85,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

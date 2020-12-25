@@ -144,11 +144,19 @@ public class DownloadHelper {
                 Request.Method.GET,
                 url,
                 response -> {
-                    onRequestFinished();
+                    if(!getLoadingExceptions().contains(url)) {
+                        onRequestFinished();
+                    } else {
+                        onLoadingListener.onLoadingChanged(false);
+                    }
                     onResponse.onResponse(response);
                 },
                 error -> {
-                    onRequestFinished();
+                    if(!getLoadingExceptions().contains(url)) {
+                        onRequestFinished();
+                    } else {
+                        onLoadingListener.onLoadingChanged(false);
+                    }
                     onError.onError(error);
                 }
         ) {
@@ -160,11 +168,17 @@ public class DownloadHelper {
         };
         if(tag != null) request.setTag(tag);
         request.setShouldCache(false);
-        onRequestLoading();
+        if(!getLoadingExceptions().contains(url)) onRequestLoading();
         int socketTimeout = 30000;//30 seconds - timeout
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(policy);
         requestQueue.add(request);
+    }
+
+    private ArrayList<String> getLoadingExceptions() {
+        ArrayList<String> exceptions = new ArrayList<>();
+        exceptions.add(grocyApi.getDbChangedTime());
+        return exceptions;
     }
 
     // for single requests without a queue

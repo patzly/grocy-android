@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,19 +7,24 @@
     android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@color/primary">
+        android:layout_height="wrap_content"
+        android:minHeight="?android:actionBarSize"
+        android:background="@color/primary"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
         <LinearLayout
-            android:id="@+id/linear_master_object_list_app_bar_default"
+            android:id="@+id/app_bar_default"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?android:actionBarSize"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/frame_master_object_list_back"
+                android:id="@+id/back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -55,16 +60,16 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_master_object_list_app_bar_search"
+            android:id="@+id/app_bar_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?android:actionBarSize"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone"
             android:baselineAligned="false">
 
             <FrameLayout
-                android:id="@+id/frame_master_object_list_search_close"
+                android:id="@+id/search_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
@@ -87,7 +92,7 @@
             </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_master_object_list_search"
+                android:id="@+id/text_input_search"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -96,7 +101,7 @@
                 android:layout_marginEnd="72dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_master_object_list_search"
+                    android:id="@+id/edit_text_search"
                     style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,35 +114,45 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linear_offline_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/retro_red_bg_black"
+            android:gravity="center"
+            android:alpha="0.9"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:text="@string/error_offline"/>
+
+        </LinearLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_master_object_list"
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
+        android:layout_below="@id/app_bar"
+        android:animateLayoutChanges="true"
         android:overScrollMode="never">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <FrameLayout
+            android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/linear_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_empty"/>
-
-            <include
-                android:id="@+id/relative_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/info_fullscreen"/>
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_master_object_list"
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
@@ -145,8 +160,8 @@
                 android:paddingBottom="100dp"
                 android:overScrollMode="never"/>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

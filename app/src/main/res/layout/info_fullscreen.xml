@@ -1,80 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:fillViewport="true">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:layout_centerInParent="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-        <RelativeLayout
-            android:id="@+id/relative_error"
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:textAlignment="center"
+            android:layout_margin="16dp"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/action_retry" />
+
+        <TextView
+            android:id="@+id/exact"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="?actionBarSize">
+            android:layout_height="?actionBarSize"/>
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_above="@+id/title"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="12dp"
-                tools:ignore="ContentDescription" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:layout_centerInParent="true"
-                android:textAlignment="center"
-                android:layout_margin="40dp"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/retry"
-                style="@style/Widget.Grocy.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/subtitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_retry" />
-
-            <TextView
-                android:id="@+id/exact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/retry"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
-
-        </RelativeLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>

@@ -21,16 +21,37 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Bundle;
 
-public abstract class Event {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-    public final static int SNACKBAR_MESSAGE = 0;
-    public final static int PURCHASE_SUCCESS = 2;
-    public final static int BARCODE_UNKNOWN = 4;
-    public final static int BOTTOM_SHEET = 6;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CustomBottomSheet;
 
-    abstract public int getType();
+public class BottomSheetEvent extends Event {
 
-    public Bundle getBundle() {
-        return null;
+    private final CustomBottomSheet bottomSheet;
+    private final Bundle bundle;
+
+    public BottomSheetEvent(@NonNull CustomBottomSheet bottomSheet, @Nullable Bundle bundle) {
+        this.bottomSheet = bottomSheet;
+        this.bundle = bundle;
     }
+
+    public BottomSheetEvent(@NonNull CustomBottomSheet bottomSheet) {
+        this(bottomSheet, null);
+    }
+
+    public CustomBottomSheet getBottomSheet() {
+        return bottomSheet;
+    }
+
+    @Override
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    @Override
+    public int getType() {
+        return Event.BOTTOM_SHEET;
+    }
+
 }

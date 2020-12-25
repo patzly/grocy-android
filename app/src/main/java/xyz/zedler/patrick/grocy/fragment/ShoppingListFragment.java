@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
@@ -174,6 +175,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recycler.setItemAnimator(new ItemAnimator());
+        binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             binding.swipeShoppingList.setRefreshing(state);

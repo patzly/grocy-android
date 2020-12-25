@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
@@ -35,7 +36,10 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -80,7 +84,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
 
         binding.back.setOnClickListener(v -> activity.navigateUp());
 
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.coordinatorContainer);
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
 
         binding.linearProducts.setOnClickListener(v -> navigate(
                 MasterDataOverviewFragmentDirections
@@ -137,6 +141,20 @@ public class MasterDataOverviewFragment extends BaseFragment {
             binding.swipe.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
+        binding.swipe.setOnRefreshListener(() -> viewModel.downloadData());
+        binding.swipe.setProgressBackgroundColorSchemeColor(
+                ContextCompat.getColor(activity, R.color.surface)
+        );
+        binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
+
+        viewModel.getEventHandler().observe(getViewLifecycleOwner(), (EventHandler.EventObserver) event -> {
+            if(event.getType() == Event.SNACKBAR_MESSAGE) {
+                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+                        activity,
+                        activity.binding.frameMainContainer
+                ));
+            }
+        });
 
         viewModel.getInfoFullscreenLive().observe(
                 getViewLifecycleOwner(),
@@ -159,17 +177,18 @@ public class MasterDataOverviewFragment extends BaseFragment {
                                 : getString(R.string.subtitle_count_unknown)
                 )
         );
-        viewModel.getLocationsLive().observe(
+        viewModel.getStoresLive().observe(
                 getViewLifecycleOwner(),
-                locations -> binding.countStores.setText(
-                        locations != null ? getString(R.string.subtitle_count, locations.size())
+                stores -> binding.countStores.setText(
+                        stores != null ? getString(R.string.subtitle_count, stores.size())
                                 : getString(R.string.subtitle_count_unknown)
                 )
         );
-        viewModel.getStoresLive().observe(
+        viewModel.getQuantityUnitsLive().observe(
                 getViewLifecycleOwner(),
-                stores -> binding.countQuantityUnits.setText(
-                        stores != null ? getString(R.string.subtitle_count, stores.size())
+                quantityUnits -> binding.countQuantityUnits.setText(
+                        quantityUnits != null
+                                ? getString(R.string.subtitle_count, quantityUnits.size())
                                 : getString(R.string.subtitle_count_unknown)
                 )
         );

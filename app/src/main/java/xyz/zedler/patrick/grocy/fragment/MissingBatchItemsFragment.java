@@ -466,7 +466,7 @@ public class MissingBatchItemsFragment extends BaseFragment
 
         binding.relativeError.retry.setVisibility(View.GONE);
 
-        View viewIn = binding.relativeError.relativeError;
+        /*View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollMissingBatchItems;
 
         switch (state) {
@@ -486,7 +486,7 @@ public class MissingBatchItemsFragment extends BaseFragment
                 break;
         }
 
-        animUtil.replaceViews(viewIn, viewOut, animated);
+        animUtil.replaceViews(viewIn, viewOut, animated);*/
     }
 
     private void showMessage(String msg) {

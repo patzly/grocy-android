@@ -196,8 +196,10 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
     private void onDownloadError(@Nullable VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        showMessage(getString(R.string.msg_no_connection));
-        if(!isOffline()) setOfflineLive(true);
+        String exact = error == null ? null : error.getLocalizedMessage();
+        infoFullscreenLive.setValue(
+                new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, this::downloadData)
+        );
     }
 
     @NonNull

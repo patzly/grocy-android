@@ -92,7 +92,7 @@
         android:overScrollMode="never">
 
         <FrameLayout
-            android:id="@+id/coordinator_container"
+            android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
