@@ -36,7 +36,6 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -55,7 +54,6 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
-    private final GrocyApi grocyApi;
     private final EventHandler eventHandler;
     private final MasterDataOverviewRepository repository;
 
@@ -63,11 +61,11 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
 
-    private MutableLiveData<ArrayList<Store>> storesLive;
-    private MutableLiveData<ArrayList<Location>> locationsLive;
-    private MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
-    private MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
-    private MutableLiveData<ArrayList<Product>> productsLive;
+    private final MutableLiveData<ArrayList<Store>> storesLive;
+    private final MutableLiveData<ArrayList<Location>> locationsLive;
+    private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
+    private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
+    private final MutableLiveData<ArrayList<Product>> productsLive;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -80,7 +78,6 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-        grocyApi = new GrocyApi(getApplication());
         eventHandler = new EventHandler();
         repository = new MasterDataOverviewRepository(application);
 
