@@ -315,7 +315,7 @@ public class MasterObjectListViewModel extends AndroidViewModel {
     }
 
     public void deleteObjectSafely(Object object) {
-        /*String objectName = ObjectUtil.getObjectName(object, entity);
+        String objectName = ObjectUtil.getObjectName(object, entity);
         int objectId = ObjectUtil.getObjectId(object, entity);
         int entityStrId;
         switch (entity) {
@@ -334,61 +334,49 @@ public class MasterObjectListViewModel extends AndroidViewModel {
             default: // STORES
                 entityStrId = R.string.property_store;
         }
-        String entityText = activity.getString(entityStrId);
+        String entityText = getString(entityStrId);
 
         if(!entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-            for(Object p : products) {
-                Product product = (Product) p;
-                if(entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)
-                        && product.getQuIdStock() != objectId
-                        && product.getQuIdPurchase() != objectId
-                        || entity.equals(GrocyApi.ENTITY.LOCATIONS)
-                        && product.getLocationIdInt() == objectId
-                        || entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)
-                        && NumUtil.isStringInt(product.getProductGroupId())
-                        && Integer.parseInt(product.getProductGroupId()) == objectId
-                        || entity.equals(GrocyApi.ENTITY.STORES)
-                        && NumUtil.isStringInt(product.getStoreId())
-                        && Integer.parseInt(product.getStoreId()) == objectId
-                ) continue;
-
-                activity.showSnackbar(
-                        Snackbar.make(
-                                activity.binding.frameMainContainer,
-                                activity.getString(R.string.msg_master_delete_usage, entityText),
-                                Snackbar.LENGTH_LONG
-                        )
-                );
-                return;
-            }
-            showMasterDeleteBottomSheet(entityText, objectName, objectId);
+            dlHelper.getProducts(products -> {
+                for(Object p : products) {
+                    Product product = (Product) p;
+                    if(entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)
+                            && product.getQuIdStock() != objectId
+                            && product.getQuIdPurchase() != objectId
+                            || entity.equals(GrocyApi.ENTITY.LOCATIONS)
+                            && product.getLocationIdInt() == objectId
+                            || entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)
+                            && NumUtil.isStringInt(product.getProductGroupId())
+                            && Integer.parseInt(product.getProductGroupId()) == objectId
+                            || entity.equals(GrocyApi.ENTITY.STORES)
+                            && NumUtil.isStringInt(product.getStoreId())
+                            && Integer.parseInt(product.getStoreId()) == objectId
+                    ) {
+                        showMessage(getString(R.string.msg_master_delete_usage, entityText));
+                        return;
+                    }
+                }
+                showMasterDeleteBottomSheet(entityText, objectName, objectId);
+            }, error -> showMessage(getString(R.string.error_network)))
+                    .perform(dlHelper.getUuid());
         } else { // PRODUCTS
             dlHelper.getProductDetails(ObjectUtil.getObjectId(object, entity), productDetails -> {
                 if(productDetails != null && productDetails.getStockAmount() == 0) {
                     showMasterDeleteBottomSheet(entityText, objectName, objectId);
                 } else {
-                    showMessage(activity.getString(R.string.msg_master_delete_stock));
+                    showMessage(getString(R.string.msg_master_delete_stock));
                 }
-            }, error -> showMessage(activity.getString(R.string.error_check_usage)))
+            }, error -> showMessage(getString(R.string.error_check_usage)))
                     .perform(dlHelper.getUuid());
-        }*/
+        }
     }
 
     public void deleteObject(int objectId) {
-        /*dlHelper.delete(
+        dlHelper.delete(
                 grocyApi.getObject(entity, objectId),
-                response -> {
-                    int index = getObjectPosition(objectId);
-                    if(index != -1) {
-                        displayedObjects.remove(index);
-                        masterObjectListAdapter.notifyItemRemoved(index);
-                    } else {
-                        // object not found, fall back to complete refresh
-                        refresh();
-                    }
-                },
+                response -> downloadData(),
                 error -> showMessage(getString(R.string.error_undefined))
-        );*/
+        );
     }
 
     private void showMasterDeleteBottomSheet(String entityText, String objectName, int objectId) {
@@ -397,21 +385,6 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
         argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
         showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
-    }
-
-    /**
-     * Returns index in the displayed items.
-     * Used for providing a safe and up-to-date value
-     * e.g. when the items are filtered/sorted before server responds
-     */
-    private int getObjectPosition(int quantityUnitId) {
-        if(displayedItemsLive.getValue() == null) return 0;
-        for(int i = 0; i < displayedItemsLive.getValue().size(); i++) {
-            if(ObjectUtil.getObjectId(displayedItemsLive.getValue().get(i), entity) == quantityUnitId) {
-                return i;
-            }
-        }
-        return 0;
     }
 
     @Nullable
