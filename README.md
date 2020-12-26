@@ -4,7 +4,9 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**[Currently slow development]**
+**Version 2.0.0 will come in ~2 weeks but maybe it takes some time to test it before release.  
+Meanwhile you can use the web interface of grocy if you want to use the new server v3.0.0 .  
+Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
@@ -48,15 +50,21 @@ Stay tuned!
 
 ## Compatibility
 
-Grocy Android requires at least Android 5.0 Lollipop on your device and [grocy](https://github.com/grocy/grocy/releases) `2.7.0` on your server.  
+The developer of the grocy [server application](https://github.com/grocy/grocy) has released a new version `3.0.0` at the end of December 2020.  
+Among other great things it contains breaking changes in the API, which means that this unofficial Android app will not work properly after updating the server to version `3.0.0`.  
+So if you want to continue using this Android app as usual, you should wait for our update to `v2.0.0` before updating your server to version `3.0.0`.
+Version `v2.0.0` of our app will probably be released in early 2021 and will then no longer support grocy server version `2.7.1`.  
+Again in 'easy' language:
+- Grocy Android `v1.x.x` requires grocy Server `2.7.1`
+- Grocy Android `v2.x.x` requires grocy Server `3.0.0` or higher
+
+Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
 
 It is also possible to use the grocy Add-on on a [Hass.io](https://www.home-assistant.io/hassio/) server. Click [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4) for instructions.
 
 **Self-signed certificates are not supported at the moment.**  
 Right now, the server certificate has to be signed by a [certificate authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). This CA has to be public and trusted by Android.  
 To meet these requirements, you can use a free certificate from [letsencrypt.org](https://letsencrypt.org/) for proper `https` encryption.
-
-Grocy Android will work properly on devices without any Google service installed.
 
 ## FAQ
 
