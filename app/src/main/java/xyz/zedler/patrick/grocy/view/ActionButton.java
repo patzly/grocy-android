@@ -118,6 +118,11 @@ public class ActionButton extends LinearLayout {
     }
 
     @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        frameLayoutButton.setOnTouchListener(l);
+    }
+
+    @Override
     public void setTooltipText(@Nullable CharSequence tooltipText) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             frameLayoutButton.setTooltipText(tooltipText);

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 public class BaseFragment extends Fragment {
 
@@ -59,6 +61,13 @@ public class BaseFragment extends Fragment {
     public void deleteObjectSafely(Object object) {}
 
     public void deleteObject(int objectId) {}
+
+    public void deleteShoppingList(ShoppingList shoppingList) {}
+
+    @Nullable
+    public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
+        return null;
+    }
 
     public void updateConnectivity(boolean isOnline) {}
 

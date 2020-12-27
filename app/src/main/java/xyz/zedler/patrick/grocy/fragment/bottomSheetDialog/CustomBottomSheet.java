@@ -34,14 +34,22 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
             if(dialog == null) return;
 
-            View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if(sheet == null) return;
-
             DisplayMetrics metrics = new DisplayMetrics();
             ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-            BottomSheetBehavior.from(sheet).setPeekHeight(metrics.heightPixels / 2);
+            BottomSheetBehavior<View> behavior = getBehavior();
+            if(behavior == null) return;
+
+            behavior.setPeekHeight(metrics.heightPixels / 2);
         });
+    }
+
+    @Nullable
+    BottomSheetBehavior<View> getBehavior() {
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if(sheet == null) return null;
+        return BottomSheetBehavior.from(sheet);
     }
 
     @NonNull

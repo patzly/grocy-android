@@ -428,10 +428,12 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    public void showMessage(String message) {
+        showSnackbar(Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG));
+    }
+
     public void showMessage(@StringRes int message) {
-        showSnackbar(
-                Snackbar.make(binding.frameMainContainer, getString(message), Snackbar.LENGTH_LONG)
-        );
+        showMessage(getString(message));
     }
 
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {

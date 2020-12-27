@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.repository;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -240,5 +242,9 @@ public class ShoppingListRepository {
         protected void onPostExecute(Void aVoid) {
             if(listener != null) listener.actionFinished();
         }
+    }
+
+    public LiveData<List<ShoppingList>> getShoppingListsLive() {
+        return appDatabase.shoppingListDao().getAllLive();
     }
 }

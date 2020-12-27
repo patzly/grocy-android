@@ -393,7 +393,13 @@
         android:id="@+id/shoppingListEditFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
         android:label="ShoppingListEditFragment"
-        tools:layout="@layout/fragment_shopping_list_edit" />
+        tools:layout="@layout/fragment_shopping_list_edit" >
+        <argument
+            android:name="shoppingList"
+            app:argType="xyz.zedler.patrick.grocy.model.ShoppingList"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"

@@ -560,14 +560,26 @@ public class ShoppingListViewModel extends AndroidViewModel {
         );
     }
 
+    public void safeDeleteShoppingList(ShoppingList shoppingList) {
+        if(shoppingList == null) {
+            showMessage(getString(R.string.error_undefined));
+            return;
+        }
+        clearAllItems(
+                shoppingList,
+                () -> deleteShoppingList(shoppingList)
+        );
+    }
+
     public void deleteShoppingList(ShoppingList shoppingList) {
+        int selectedShoppingListId = getSelectedShoppingListId();
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("list_id", getSelectedShoppingListId());
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "deleteShoppingList: delete list: " + e);
         }
-
         dlHelper.delete(
                 grocyApi.getObject(
                         GrocyApi.ENTITY.SHOPPING_LISTS,
@@ -578,8 +590,9 @@ public class ShoppingListViewModel extends AndroidViewModel {
                             getString(R.string.msg_shopping_list_deleted, shoppingList.getName())
                     );
                     shoppingLists.remove(shoppingList);
-                    selectShoppingList(1);
-
+                    if(selectedShoppingListId == shoppingList.getId()) {
+                        selectShoppingList(1);
+                    }
                     tidyUpItems(itemsChanged -> downloadData());
                 },
                 error -> {
@@ -599,7 +612,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
     ) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("list_id", getSelectedShoppingListId());
+            jsonObject.put("list_id", shoppingList.getId());
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "clearShoppingList: " + e);
         }

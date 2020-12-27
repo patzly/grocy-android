@@ -207,6 +207,28 @@
         <item name="cornerRadius">6dp</item>
     </style>
 
+    <!-- ProgressBar -->
+    <style
+        name="Widget.Grocy.ProgressBar.Horizontal"
+        parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_height">4dp</item>
+        <item name="android:progressDrawable">@drawable/progress_bar</item>
+    </style>
+
+    <style
+        name="Widget.Grocy.ProgressBar.Horizontal.Red"
+        parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_height">4dp</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
+    </style>
+
+    <style
+        name="Widget.Grocy.ProgressBar.Circular"
+        parent="@android:style/Widget.ProgressBar.Large">
+        <item name="android:progressDrawable">@drawable/progress_bar_circular</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_bar_circular</item>
+    </style>
+
     <!-- Category -->
     <style name="Theme.Grocy.Category" parent="">
         <item name="android:layout_width">wrap_content</item>

@@ -36,6 +36,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -434,35 +435,6 @@ public class ShoppingListFragment extends BaseFragment implements
                 return true;
             });
         }
-
-        MenuItem editShoppingList = activity.getBottomMenu().findItem(
-                R.id.action_edit_shopping_list
-        );
-        if(editShoppingList != null) {
-            editShoppingList.setOnMenuItemClickListener(item -> {
-                ShoppingList shoppingList = viewModel.getSelectedShoppingList();
-                if(shoppingList == null) {
-                    showMessage(activity.getString(R.string.error_undefined));
-                    return true;
-                }
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.EDIT);
-                bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
-                //activity.replaceFragment(Constants.UI.SHOPPING_LIST_EDIT, bundle, true); //TODO
-                return true;
-            });
-        }
-
-        MenuItem deleteShoppingList = activity.getBottomMenu().findItem(
-                R.id.action_delete_shopping_list
-        );
-        if(deleteShoppingList != null) {
-            deleteShoppingList.setVisible(viewModel.getSelectedShoppingListId() != 1);
-            deleteShoppingList.setOnMenuItemClickListener(item -> {
-                viewModel.safeDeleteCurrentShoppingList();
-                return true;
-            });
-        }
     }
 
     public void clearAllItems(ShoppingList shoppingList, Runnable onResponse) {
@@ -471,6 +443,16 @@ public class ShoppingListFragment extends BaseFragment implements
 
     public void clearDoneItems(ShoppingList shoppingList) {
         viewModel.clearDoneItems(shoppingList);
+    }
+
+    @Override
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        viewModel.safeDeleteShoppingList(shoppingList);
+    }
+
+    @Override
+    public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
+        return viewModel.getSelectedShoppingListIdLive();
     }
 
     @Override
