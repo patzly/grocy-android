@@ -66,7 +66,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
 
 public class MasterObjectListFragment extends BaseFragment
@@ -200,8 +199,7 @@ public class MasterObjectListFragment extends BaseFragment
             }
         });
 
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(),
-                (EventHandler.EventObserver) event -> {
+        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
                 SnackbarMessage msg = (SnackbarMessage) event;
                 Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);

@@ -422,8 +422,6 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
     public void selectShoppingList(int shoppingListId) {
         if(shoppingListId == getSelectedShoppingListId()) return;
-        ShoppingList shoppingList = getSelectedShoppingList();
-        if(shoppingList == null) return;
         sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
         selectedShoppingListIdLive.setValue(shoppingListId);
         updateFilteredShoppingListItems();

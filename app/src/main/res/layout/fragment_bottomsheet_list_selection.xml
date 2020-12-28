@@ -79,8 +79,6 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="true"
         android:overScrollMode="ifContentScrolls"
-        android:scrollbars="none"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
+        android:scrollbars="none"/>
 
 </LinearLayout>

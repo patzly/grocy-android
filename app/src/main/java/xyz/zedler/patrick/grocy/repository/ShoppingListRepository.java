@@ -244,7 +244,82 @@ public class ShoppingListRepository {
         }
     }
 
+    public interface ShoppingListsListener {
+        void actionFinished(ArrayList<ShoppingList> shoppingLists);
+    }
+
+    public void loadShoppingListsFromDatabase(ShoppingListsListener listener) {
+        new loadShoppingListsAsyncTask(appDatabase, listener).execute();
+    }
+
+    private static class loadShoppingListsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final ShoppingListsListener listener;
+
+        private ArrayList<ShoppingList> shoppingLists;
+
+        loadShoppingListsAsyncTask(AppDatabase appDatabase, ShoppingListsListener listener) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished(shoppingLists);
+        }
+    }
+
     public LiveData<List<ShoppingList>> getShoppingListsLive() {
         return appDatabase.shoppingListDao().getAllLive();
+    }
+
+    public interface ShoppingListsUpdatedListener {
+        void actionFinished();
+    }
+
+    public void updateDatabase(
+            ArrayList<ShoppingList> shoppingLists,
+            ShoppingListsUpdatedListener listener
+    ) {
+        new updateShoppingListsAsyncTask(
+                appDatabase,
+                shoppingLists,
+                listener
+        ).execute();
+    }
+
+    private static class updateShoppingListsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final ShoppingListsUpdatedListener listener;
+
+        private final ArrayList<ShoppingList> shoppingLists;
+
+        updateShoppingListsAsyncTask(
+                AppDatabase appDatabase,
+                ArrayList<ShoppingList> shoppingLists,
+                ShoppingListsUpdatedListener listener
+        ) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+            this.shoppingLists = shoppingLists;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            appDatabase.shoppingListDao().deleteAll();
+            appDatabase.shoppingListDao().insertAll(shoppingLists);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished();
+        }
     }
 }

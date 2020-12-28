@@ -27,6 +27,8 @@ public abstract class Event {
     public final static int PURCHASE_SUCCESS = 2;
     public final static int BARCODE_UNKNOWN = 4;
     public final static int BOTTOM_SHEET = 6;
+    public final static int NAVIGATE_UP = 8;
+    public final static int SET_SHOPPING_LIST_ID = 10;
 
     abstract public int getType();
 

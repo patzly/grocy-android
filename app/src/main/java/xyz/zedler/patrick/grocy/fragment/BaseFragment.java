@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
@@ -136,7 +137,7 @@ public class BaseFragment extends Fragment {
      * @param key (String): identifier for value
      * @param observerListener (ObserverListener): observer for callback after value was received
      */
-    void getFromLastFragment(String key, ObserverListener observerListener) {
+    void getFromThisFragment(String key, ObserverListener observerListener) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
@@ -161,7 +162,7 @@ public class BaseFragment extends Fragment {
      * @return Object: the value or null, if no data was set
      */
     @Nullable
-    Object getFromLastFragmentNow(String key) {
+    Object getFromThisFragmentNow(String key) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         return backStackEntry.getSavedStateHandle().get(key);
@@ -197,6 +198,12 @@ public class BaseFragment extends Fragment {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().remove(key);
+    }
+
+    NavDestination getPreviousDestination() {
+        NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
+        assert backStackEntry != null;
+        return backStackEntry.getDestination();
     }
 
     @Nullable

@@ -603,6 +603,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void startIconAnimation(View view, boolean hasFocus) {
+        if(!hasFocus) return;
+        IconUtil.start(view);
+    }
+
     public void executeOnStart() {
         onStart();
     }

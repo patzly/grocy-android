@@ -31,7 +31,7 @@ import xyz.zedler.patrick.grocy.model.Event;
  */
 public class EventHandler extends SingleLiveEvent<Event> {
 
-    public void observe(LifecycleOwner owner, final EventObserver observer) {
+    public void observeEvent(LifecycleOwner owner, final EventObserver observer) {
         super.observe(owner, t -> {
             if (t == null) {
                 return;

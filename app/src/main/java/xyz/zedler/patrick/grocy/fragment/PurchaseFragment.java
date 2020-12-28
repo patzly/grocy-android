@@ -67,7 +67,6 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
-import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment {
@@ -470,8 +469,7 @@ public class PurchaseFragment extends BaseFragment {
                 clearFields();
             }
         });
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(),
-                (EventHandler.EventObserver) event -> {
+        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
                 activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
                         activity,
@@ -511,7 +509,7 @@ public class PurchaseFragment extends BaseFragment {
             binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
         }
 
-        getFromLastFragment(Constants.ARGUMENT.BARCODE, barcode -> {
+        getFromThisFragment(Constants.ARGUMENT.BARCODE, barcode -> {
             if(viewModel.getIsDownloading()) {
                 viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetailsByBarcode((String) barcode)
@@ -520,7 +518,7 @@ public class PurchaseFragment extends BaseFragment {
                 viewModel.loadProductDetailsByBarcode((String) barcode);
             }
         });
-        getFromLastFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
+        getFromThisFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
             if(viewModel.getIsDownloading()) {
                 viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetails((Integer) productId)

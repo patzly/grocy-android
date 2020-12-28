@@ -39,7 +39,6 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -145,7 +144,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
         );
         binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(), (EventHandler.EventObserver) event -> {
+        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
                 activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
                         activity,

@@ -71,7 +71,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.viewmodel.EventHandler;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class ShoppingListFragment extends BaseFragment implements
@@ -178,6 +177,12 @@ public class ShoppingListFragment extends BaseFragment implements
         binding.recycler.setItemAnimator(new ItemAnimator());
         binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
+        Object forcedSelectedId = getFromThisFragmentNow(Constants.ARGUMENT.SELECTED_ID);
+        if(forcedSelectedId != null) {
+            viewModel.selectShoppingList((Integer) forcedSelectedId);
+            removeForThisFragment(Constants.ARGUMENT.SELECTED_ID);
+        }
+
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             binding.swipeShoppingList.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
@@ -242,15 +247,14 @@ public class ShoppingListFragment extends BaseFragment implements
             }
         });
 
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(),
-                (EventHandler.EventObserver) event -> {
-                    if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                                activity,
-                                activity.binding.frameMainContainer
-                        ));
-                    }
-                });
+        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+            if(event.getType() == Event.SNACKBAR_MESSAGE) {
+                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+                        activity,
+                        activity.binding.frameMainContainer
+                ));
+            }
+        });
 
         hideDisabledFeatures();
 
