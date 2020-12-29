@@ -129,6 +129,12 @@ public class ActionButton extends LinearLayout {
         }
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        frameLayoutButton.setEnabled(enabled);
+        frameLayoutButton.setClickable(enabled);
+    }
+
     public void startIconAnimation() {
         try {
             ((Animatable) imageViewIcon.getDrawable()).start();

@@ -130,8 +130,8 @@ public class ShoppingListFragment extends BaseFragment implements
 
         // INITIALIZE VIEWS
 
-        binding.textShoppingListTitle.setOnClickListener(v -> showShoppingListsBottomSheet());
-        binding.buttonShoppingListLists.setOnClickListener(v -> showShoppingListsBottomSheet());
+        binding.tableTitleAppBar.setOnClickListener(v -> showShoppingListsBottomSheet());
+        binding.buttonShoppingListLists.setEnabled(false);
 
         binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
         binding.frameShoppingListSearchClose.setOnClickListener(v -> dismissSearch());
