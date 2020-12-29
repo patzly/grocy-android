@@ -19,9 +19,11 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.graphics.drawable.Animatable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,8 +43,6 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.lang.ref.WeakReference;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -55,12 +56,13 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 public class ShoppingListsBottomSheet extends CustomBottomSheet
         implements ShoppingListAdapter.ShoppingListAdapterListener {
 
+    private final static int DELETE_CONFIRMATION_DURATION = 2000;
     private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();
 
     private MainActivity activity;
 
-    private ProgressBar progressConfirmation;
-    private ConfirmationProgressTask confirmationProgressTask;
+    private ProgressBar progressConfirm;
+    private ValueAnimator confirmProgressAnimator;
 
     @NonNull
     @Override
@@ -133,16 +135,16 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
             });
         }
 
-        progressConfirmation = view.findViewById(R.id.progress_confirmation);
+        progressConfirm = view.findViewById(R.id.progress_confirmation);
 
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        if(confirmationProgressTask != null) {
-            confirmationProgressTask.cancel(true);
-            confirmationProgressTask = null;
+        if(confirmProgressAnimator != null) {
+            confirmProgressAnimator.cancel();
+            confirmProgressAnimator = null;
         }
         super.onDestroyView();
     }
@@ -173,99 +175,60 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
 
     private void showAndStartProgress(View buttonView, ShoppingList shoppingList) {
         TransitionManager.beginDelayedTransition((ViewGroup) getView());
-        progressConfirmation.setVisibility(View.VISIBLE);
-        if(confirmationProgressTask != null) {
-            confirmationProgressTask.cancel(true);
-            confirmationProgressTask = null;
+        progressConfirm.setVisibility(View.VISIBLE);
+        int startValue = 0;
+        if(confirmProgressAnimator != null) {
+            startValue = progressConfirm.getProgress();
+            if(startValue == 100) startValue = 0;
+            confirmProgressAnimator.removeAllListeners();
+            confirmProgressAnimator.cancel();
+            confirmProgressAnimator = null;
         }
-        confirmationProgressTask = new ConfirmationProgressTask(
-                (ViewGroup) getView(),
-                progressConfirmation,
-                () -> {
+        confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
+        confirmProgressAnimator.setDuration(DELETE_CONFIRMATION_DURATION
+                * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
+        confirmProgressAnimator.addUpdateListener(
+                animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
+        );
+        confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                int currentProgress = progressConfirm.getProgress();
+                if(currentProgress == progressConfirm.getMax()) {
+                    TransitionManager.beginDelayedTransition((ViewGroup) requireView());
+                    progressConfirm.setVisibility(View.GONE);
                     ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
                     ((Animatable) buttonImage.getDrawable()).start();
                     activity.getCurrentFragment().deleteShoppingList(shoppingList);
+                    return;
                 }
-        );
-        confirmationProgressTask.execute();
+                confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
+                confirmProgressAnimator.setDuration((DELETE_CONFIRMATION_DURATION / 2)
+                        * currentProgress / progressConfirm.getMax());
+                confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
+                confirmProgressAnimator.addUpdateListener(
+                        anim -> progressConfirm.setProgress((Integer)anim.getAnimatedValue())
+                );
+                confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        TransitionManager.beginDelayedTransition((ViewGroup) requireView());
+                        progressConfirm.setVisibility(View.GONE);
+                    }
+                });
+                confirmProgressAnimator.start();
+            }
+        });
+        confirmProgressAnimator.start();
     }
 
     private void hideAndStopProgress() {
-        if(confirmationProgressTask != null) confirmationProgressTask.setDirectionForward(false);
-
-        if(progressConfirmation.getProgress() != 100) {
-            Snackbar.make(getView(), "Keep pressing to confirm", Snackbar.LENGTH_SHORT).show(); // TODO: String
-        }
-    }
-
-    public static class ConfirmationProgressTask extends AsyncTask<Void, Integer, Void> {
-        private final WeakReference<ViewGroup> container;
-        private final WeakReference<ProgressBar> progressBar;
-        private final OnFinishedListener onFinishedListener;
-        private boolean directionForward;
-        private int progress;
-
-        public ConfirmationProgressTask(
-                ViewGroup viewGroup,
-                ProgressBar progressBar,
-                OnFinishedListener onFinishedListener
-        ) {
-            this.container = new WeakReference<>(viewGroup);
-            this.progressBar = new WeakReference<>(progressBar);
-            this.onFinishedListener = onFinishedListener;
-            this.directionForward = true;
-            this.progress = 0;
+        if(confirmProgressAnimator != null) {
+            confirmProgressAnimator.cancel();
         }
 
-        @Override
-        protected void onPreExecute() {
-            if(progressBar.get() != null) progressBar.get().setProgress(0);
-        }
-
-        @Override
-        protected Void doInBackground(Void... aVoid) {
-            while (0 <= progress && progress <= 100) {
-                if(directionForward) {
-                    progress++;
-                } else {
-                    progress = progress - 5;
-                }
-                publishProgress(progress);
-                if(!wait10Millis()) break;
-            }
-
-            return null;
-        }
-
-        public void setDirectionForward(boolean forward) {
-            this.directionForward = forward;
-        }
-
-        private boolean wait10Millis() {
-            try {
-                Thread.sleep(10);
-                return true;
-            } catch (InterruptedException e) {
-                return false;
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... integers) {
-            int progress = integers[0];
-            if(progressBar.get() != null) progressBar.get().setProgress(progress);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(container.get() == null || progressBar.get() == null) return;
-            TransitionManager.beginDelayedTransition(container.get());
-            progressBar.get().setVisibility(View.GONE);
-            if(progress >= 100) onFinishedListener.finished();
-        }
-
-        public interface OnFinishedListener {
-            void finished();
+        if(progressConfirm.getProgress() != 100) {
+            Snackbar.make(getView(), R.string.msg_press_hold_confirm, Snackbar.LENGTH_SHORT).show();
         }
     }
 

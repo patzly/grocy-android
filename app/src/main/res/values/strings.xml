@@ -145,6 +145,7 @@
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
+    <string name="msg_press_hold_confirm">Press and hold to confirm</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>

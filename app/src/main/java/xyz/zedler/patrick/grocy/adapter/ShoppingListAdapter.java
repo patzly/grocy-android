@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -114,90 +113,15 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     }
 
     public void updateData(List<ShoppingList> shoppingListsNew, int selectedIdNew) {
-        ShoppingListAdapter.DiffCallback diffCallback = new ShoppingListAdapter.DiffCallback(
-                shoppingListsNew,
-                this.shoppingLists,
-                selectedIdNew,
-                this.selectedId
-        );
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         shoppingLists.clear();
         shoppingLists.addAll(shoppingListsNew);
         this.selectedId = selectedIdNew;
-        diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
     public void updateSelectedId(int selectedIdNew) {
-        ShoppingListAdapter.DiffCallback diffCallback = new ShoppingListAdapter.DiffCallback(
-                selectedIdNew,
-                this.selectedId,
-                this.shoppingLists
-        );
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.selectedId = selectedIdNew;
-        diffResult.dispatchUpdatesTo(this);
-    }
-
-    static class DiffCallback extends DiffUtil.Callback {
-        List<ShoppingList> oldItems;
-        List<ShoppingList> newItems;
-        int selectedIdOld;
-        int selectedIdNew;
-
-        public DiffCallback(
-                List<ShoppingList> newItems,
-                List<ShoppingList> oldItems,
-                int selectedIdNew,
-                int selectedIdOld
-        ) {
-            this.newItems = newItems;
-            this.oldItems = oldItems;
-            this.selectedIdNew = selectedIdNew;
-            this.selectedIdOld = selectedIdOld;
-        }
-
-        public DiffCallback(
-                int selectedIdNew,
-                int selectedIdOld,
-                List<ShoppingList> oldItems
-        ) {
-            this.selectedIdNew = selectedIdNew;
-            this.selectedIdOld = selectedIdOld;
-            this.oldItems = oldItems;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldItems.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            if(newItems == null) return oldItems.size(); // for second constructor used for selectedId update
-            return newItems.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, false);
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, true);
-        }
-
-        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-            if(newItems != null) {
-                ShoppingList newItem = newItems.get(newItemPos);
-                ShoppingList oldItem = oldItems.get(oldItemPos);
-                return compareContent
-                        ? newItem.equals(oldItem) && selectedIdOld == selectedIdNew
-                        : newItem.getId() == oldItem.getId();
-            } else {
-                return !compareContent || selectedIdOld == selectedIdNew;
-            }
-        }
+        notifyDataSetChanged();
     }
 
     @Override
