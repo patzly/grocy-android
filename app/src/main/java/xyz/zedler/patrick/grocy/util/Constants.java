@@ -92,6 +92,12 @@ public final class Constants {
         public final static class APPEARANCE {
             public final static String DARK_MODE = "dark_mode";
         }
+        public final static class NETWORK {
+            public final static String ORBOT = "orbot";
+            public final static String SOCKS_PROXY = "socks_proxy";
+            public final static String LOADING_CIRCLE = "loading_circle";
+            public final static String LOADING_TIMEOUT = "loading_timeout";
+        }
         public final static class BEHAVIOR {
             public final static String START_DESTINATION = "start_destination";
         }
