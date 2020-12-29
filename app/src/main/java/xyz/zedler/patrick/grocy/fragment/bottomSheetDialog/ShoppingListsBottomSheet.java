@@ -47,6 +47,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
@@ -101,10 +102,13 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(new ShoppingPlaceholderAdapter());
 
         repository.getShoppingListsLive().observe(getViewLifecycleOwner(), shoppingLists -> {
             if(shoppingLists == null) return;
-            if(recyclerView.getAdapter() == null) {
+            if(recyclerView.getAdapter() == null
+                    || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
+            ) {
                 recyclerView.setAdapter(new ShoppingListAdapter(
                         shoppingLists,
                         selectedIdLive.getValue(),
@@ -119,7 +123,9 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
         });
 
         selectedIdLive.observe(getViewLifecycleOwner(), selectedId -> {
-            if(recyclerView.getAdapter() == null) return;
+            if(recyclerView.getAdapter() == null
+                    || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
+            ) return;
             ((ShoppingListAdapter) recyclerView.getAdapter()).updateSelectedId(
                     selectedIdLive.getValue()
             );

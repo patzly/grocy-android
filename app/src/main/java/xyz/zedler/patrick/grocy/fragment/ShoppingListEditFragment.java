@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import xyz.zedler.patrick.grocy.R;
@@ -75,11 +74,6 @@ public class ShoppingListEditFragment extends BaseFragment {
         binding.setViewModel(viewModel);
         binding.setActivity(activity);
         binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        binding.swipe.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {

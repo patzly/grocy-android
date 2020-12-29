@@ -396,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
             if(!handled) super.onBackPressed();
             if(!isServerUrlEmpty()) binding.bottomAppBar.show();
         }
+        hideKeyboard();
     }
 
     @Override
@@ -411,6 +412,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         navController.navigateUp();
         binding.bottomAppBar.show();
+        hideKeyboard();
     }
 
     public void dismissFragment() {}

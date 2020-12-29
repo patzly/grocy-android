@@ -74,6 +74,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
         android:overScrollMode="never"
+        app:progressBackgroundColor="@{@color/surface}"
+        app:progressForegroundColor="@{@color/secondary}"
         app:setRefreshing="@{viewModel.isLoadingLive}"
         app:onRefreshListener="@{() -> viewModel.downloadData()}">
 
@@ -106,8 +108,7 @@
                         android:id="@+id/text_input_name"
                         style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                         android:hint="@string/property_name"
-                        app:errorText="@{formData.nameErrorLive}"
-                        app:errorActivity="@{activity}">
+                        app:errorText="@{formData.nameErrorLive}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edit_text_name"

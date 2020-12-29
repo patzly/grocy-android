@@ -1,11 +1,6 @@
 package xyz.zedler.patrick.grocy.model;
 
-import android.app.Activity;
-
-import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
@@ -58,19 +53,6 @@ public class FormDataShoppingListEdit {
         }
         nameErrorLive.setValue(null);
         return true;
-    }
-
-    @BindingAdapter({"errorText", "errorActivity"})
-    public static void setErrorMessage(
-            TextInputLayout view,
-            MutableLiveData<Integer> errorMessage,
-            Activity activity
-    ) {
-        if(errorMessage.getValue() != null) {
-            view.setError(activity.getString(errorMessage.getValue()));
-        } else if(view.isErrorEnabled()) {
-            view.setErrorEnabled(false);
-        }
     }
 
     public boolean isFormValid() {
