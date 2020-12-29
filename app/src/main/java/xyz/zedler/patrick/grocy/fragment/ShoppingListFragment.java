@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020 by Patrick Zedler & Dominic Zedler
 */
 
-import android.animation.LayoutTransition;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -130,7 +129,9 @@ public class ShoppingListFragment extends BaseFragment implements
 
         // INITIALIZE VIEWS
 
-        binding.tableTitleAppBar.setOnClickListener(v -> showShoppingListsBottomSheet());
+        binding.tableTitleAppBar.setOnClickListener(
+                v -> activity.showBottomSheet(new ShoppingListsBottomSheet())
+        );
         binding.buttonShoppingListLists.setEnabled(false);
 
         binding.frameShoppingListBack.setOnClickListener(v -> activity.onBackPressed());
@@ -193,16 +194,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
 
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            appBarOfflineInfo(offline);
-            /*activity.updateBottomAppBar( TODO
-                    Constants.FAB.POSITION.CENTER,
-                    offline ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
-                    getArguments() == null || getArguments()
-                            .getBoolean(Constants.ARGUMENT.ANIMATED, true),
-                    this::setUpBottomMenu
-            );*/
-        });
+        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
         viewModel.getSelectedShoppingListIdLive().observe(getViewLifecycleOwner(), id -> {
             setUpBottomMenu(); // to hide delete action if necessary
@@ -258,12 +250,10 @@ public class ShoppingListFragment extends BaseFragment implements
 
         hideDisabledFeatures();
 
-        binding.swipeShoppingList.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
-        // UPDATE UI
-        updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart());
+        updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
+                && savedInstanceState == null);
     }
 
     private void updateUI(boolean animated) {
@@ -288,19 +278,6 @@ public class ShoppingListFragment extends BaseFragment implements
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if(appBarBehavior != null) appBarBehavior.saveInstanceState(outState);
-    }
-
-    private void showShoppingListsBottomSheet() {
-        ArrayList<ShoppingList> shoppingLists = viewModel.getShoppingLists();
-        if(shoppingLists == null) return;
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.ARGUMENT.SHOPPING_LISTS, shoppingLists);
-        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getSelectedShoppingListId());
-        bundle.putBoolean(
-                Constants.ARGUMENT.SHOW_OFFLINE,
-                viewModel.isOffline() || isFeatureMultipleListsDisabled()
-        );
-        activity.showBottomSheet(new ShoppingListsBottomSheet(), bundle);
     }
 
     @Override
@@ -473,10 +450,16 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     @Override
-    public void updateConnectivity(boolean online) {
-        if(!online == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!online);
-        viewModel.downloadData();
+    public void updateConnectivity(boolean isOnline) {
+        if(!isOnline == viewModel.isOffline()) return;
+        if(isOnline && viewModel.isOffline()) viewModel.downloadData();
+        viewModel.setOfflineLive(!isOnline);
+        activity.updateBottomAppBar(
+                isOnline ? Constants.FAB.POSITION.CENTER : Constants.FAB.POSITION.GONE,
+                isOnline ? R.menu.menu_shopping_list : R.menu.menu_shopping_list_offline,
+                true,
+                this::setUpBottomMenu
+        );
     }
 
     private void hideDisabledFeatures() {

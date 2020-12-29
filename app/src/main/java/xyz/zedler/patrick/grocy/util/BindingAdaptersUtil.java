@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.animation.LayoutTransition;
+
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
@@ -45,5 +47,11 @@ public class BindingAdaptersUtil {
     @BindingAdapter({"progressForegroundColor"})
     public static void setColorSchemeColors(SwipeRefreshLayout view, @ColorInt int color) {
         view.setColorSchemeColors(color);
+    }
+
+    @BindingAdapter({"transitionTypeChanging"})
+    public static void setTransitionTypeChanging(SwipeRefreshLayout view, boolean enabled) {
+        if(!enabled) return;
+        view.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
     }
 }

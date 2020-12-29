@@ -33,7 +33,9 @@ import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListEditBinding;
+import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -46,6 +48,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     private MainActivity activity;
     private FragmentShoppingListEditBinding binding;
     private ShoppingListEditViewModel viewModel;
+    private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
     public View onCreateView(
@@ -89,6 +92,19 @@ public class ShoppingListEditFragment extends BaseFragment {
                     setForPreviousFragment(Constants.ARGUMENT.SELECTED_ID, id);
                 }
             }
+        });
+
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
+        viewModel.getInfoFullscreenLive().observe(
+                getViewLifecycleOwner(),
+                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+        );
+
+        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
+            InfoFullscreen infoFullscreen = offline
+                    ? new InfoFullscreen(InfoFullscreen.ERROR_OFFLINE)
+                    : null;
+            viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
         if(savedInstanceState == null) {
@@ -143,6 +159,13 @@ public class ShoppingListEditFragment extends BaseFragment {
 
     private ShoppingList getStartupShoppingList() {
         return ShoppingListEditFragmentArgs.fromBundle(requireArguments()).getShoppingList();
+    }
+
+    @Override
+    public void updateConnectivity(boolean isOnline) {
+        if(viewModel.isOffline() == !isOnline) return;
+        if(isOnline && viewModel.isOffline()) viewModel.downloadData();
+        viewModel.setOfflineLive(!isOnline);
     }
 
     @NonNull

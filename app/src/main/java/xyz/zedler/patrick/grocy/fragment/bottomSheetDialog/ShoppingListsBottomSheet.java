@@ -23,6 +23,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,8 +35,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,8 +85,12 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
         );
 
         activity = (MainActivity) getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        assert activity != null;
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        boolean multipleListsFeature = sharedPrefs.getBoolean(
+                Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
+        );
 
         MutableLiveData<Integer> selectedIdLive = activity.getCurrentFragment()
                 .getSelectedShoppingListIdLive();
@@ -132,7 +139,7 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
         });
 
         ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
-        if(!bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
+        if(activity.isOnline() && multipleListsFeature) {
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
                 dismiss();
@@ -163,6 +170,10 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
 
     @Override
     public void onClickEdit(ShoppingList shoppingList) {
+        if(!activity.isOnline()) {
+            showMessage(R.string.error_offline);
+            return;
+        }
         dismiss();
         navigate(ShoppingListFragmentDirections
                 .actionShoppingListFragmentToShoppingListEditFragment()
@@ -172,9 +183,14 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
     @Override
     public void onTouchDelete(View view, MotionEvent event, ShoppingList shoppingList) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(!activity.isOnline()) {
+                showMessage(R.string.error_offline);
+                return;
+            }
             showAndStartProgress(view, shoppingList);
         } else if(event.getAction() == MotionEvent.ACTION_UP
                 || event.getAction() == MotionEvent.ACTION_CANCEL) {
+            if(!activity.isOnline()) return;
             hideAndStopProgress();
         }
     }
@@ -234,8 +250,12 @@ public class ShoppingListsBottomSheet extends CustomBottomSheet
         }
 
         if(progressConfirm.getProgress() != 100) {
-            Snackbar.make(getView(), R.string.msg_press_hold_confirm, Snackbar.LENGTH_SHORT).show();
+            showMessage(R.string.msg_press_hold_confirm);
         }
+    }
+
+    private void showMessage(@StringRes int message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @NonNull

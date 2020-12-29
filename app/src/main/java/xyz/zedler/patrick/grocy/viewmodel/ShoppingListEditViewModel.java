@@ -170,6 +170,10 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     }
 
     public void saveShoppingList() {
+        if(offlineLive.getValue()) {
+            showMessage(getString(R.string.error_offline));
+            return;
+        }
         if(!formData.isFormValid()) return;
 
         String name = formData.getNameLive().getValue().trim();

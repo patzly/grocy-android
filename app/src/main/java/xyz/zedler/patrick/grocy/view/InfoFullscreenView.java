@@ -166,7 +166,7 @@ public class InfoFullscreenView extends RelativeLayout {
         if(clickListener != null) {
             binding.retry.setOnClickListener(v -> clickListener.onClicked());
         }
-        binding.retry.setVisibility(inForeground ? View.VISIBLE : View.GONE);
+        binding.retry.setVisibility(clickListener != null ? View.VISIBLE : View.GONE);
     }
 
     public boolean isInForeground() {

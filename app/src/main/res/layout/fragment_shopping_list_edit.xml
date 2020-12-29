@@ -79,54 +79,61 @@
         app:setRefreshing="@{viewModel.isLoadingLive}"
         app:onRefreshListener="@{() -> viewModel.downloadData()}">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll"
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="90dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:overScrollMode="never">
 
                 <LinearLayout
-                    style="@style/Theme.Grocy.ListItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingTop="8dp"
-                    android:paddingBottom="0dp">
+                    android:paddingBottom="90dp"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/image_name"
-                        style="@style/Theme.Grocy.ListItem.Icon.Top"
-                        android:src="@drawable/ic_round_label_anim"
-                        android:layout_marginTop="16sp"
-                        tools:ignore="ContentDescription" />
+                    <LinearLayout
+                        style="@style/Theme.Grocy.ListItem"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="0dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/text_input_name"
-                        style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                        android:hint="@string/property_name"
-                        app:errorText="@{formData.nameErrorLive}">
+                        <ImageView
+                            android:id="@+id/image_name"
+                            style="@style/Theme.Grocy.ListItem.Icon.Top"
+                            android:src="@drawable/ic_round_label_anim"
+                            android:layout_marginTop="16sp"
+                            tools:ignore="ContentDescription" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edit_text_name"
-                            android:text="@={formData.nameLive}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/on_background"
-                            android:inputType="text|textCapSentences"
-                            android:afterTextChanged="@{() -> formData.isNameValid()}"
-                            app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/text_input_name"
+                            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                            android:hint="@string/property_name"
+                            app:errorText="@{formData.nameErrorLive}">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_name"
+                                android:text="@={formData.nameLive}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/on_background"
+                                android:inputType="text|textCapSentences"
+                                android:afterTextChanged="@{() -> formData.isNameValid()}"
+                                app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
-        </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
