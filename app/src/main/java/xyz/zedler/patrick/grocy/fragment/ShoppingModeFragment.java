@@ -22,9 +22,11 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,12 +38,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
@@ -61,7 +64,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
 public class ShoppingModeFragment extends BaseFragment implements
-        ShoppingListItemAdapter.ShoppingListItemAdapterListener {
+        ShoppingModeItemAdapter.ShoppingModeItemClickListener {
 
     private final static String TAG = ShoppingModeFragment.class.getSimpleName();
 
@@ -71,6 +74,10 @@ public class ShoppingModeFragment extends BaseFragment implements
     private ClickUtil clickUtil;
     private FragmentShoppingModeBinding binding;
     private InfoFullscreenHelper infoFullscreenHelper;
+    private Timer timer;
+    private TimerTask timerTask;
+
+    private boolean debug = false;
 
     @Override
     public View onCreateView(
@@ -113,20 +120,14 @@ public class ShoppingModeFragment extends BaseFragment implements
         infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
         clickUtil = new ClickUtil();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         if(savedInstanceState == null) binding.recycler.scrollTo(0, 0);
 
         binding.recycler.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        binding.recycler.setItemAnimator(new ItemAnimator());
         binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
-
-        Object forcedSelectedId = getFromThisFragmentNow(Constants.ARGUMENT.SELECTED_ID);
-        if(forcedSelectedId != null) {
-            viewModel.selectShoppingList((Integer) forcedSelectedId);
-            removeForThisFragment(Constants.ARGUMENT.SELECTED_ID);
-        }
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             if(!state) viewModel.setCurrentQueueLoading(null);
@@ -156,24 +157,15 @@ public class ShoppingModeFragment extends BaseFragment implements
             } else {
                 viewModel.getInfoFullscreenLive().setValue(null);
             }
-            if(binding.recycler.getAdapter() instanceof ShoppingListItemAdapter) {
-                ((ShoppingListItemAdapter) binding.recycler.getAdapter()).updateData(
-                        items,
-                        viewModel.getQuantityUnits(),
-                        viewModel.getItemsMissingCount(),
-                        viewModel.getItemsUndoneCount()
-                );
+            if(binding.recycler.getAdapter() instanceof ShoppingModeItemAdapter) {
+                ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateList(items); // TODO: Update also quantity units because a new item can have a new one | and also shoppinglists because of bottom notes
             } else {
                 binding.recycler.setAdapter(
-                        new ShoppingListItemAdapter(
+                        new ShoppingModeItemAdapter(
                                 requireContext(),
                                 items,
                                 viewModel.getQuantityUnits(),
-                                this,
-                                viewModel.getFilterState(),
-                                state -> viewModel.onFilterChanged(state),
-                                viewModel.getItemsMissingCount(),
-                                viewModel.getItemsUndoneCount()
+                                this
                         )
                 );
             }
@@ -196,10 +188,41 @@ public class ShoppingModeFragment extends BaseFragment implements
                 && savedInstanceState == null);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        keepScreenOnIfNecessary(true);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        keepScreenOnIfNecessary(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(timer != null) timer.cancel();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int seconds = sharedPrefs.getInt(
+                Constants.SETTINGS.SHOPPING_MODE.UPDATE_INTERVAL,
+                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
+        );
+        if(seconds == 0) return;
+        timer = new Timer();
+        initTimerTask();
+        timer.schedule(timerTask, seconds*1000, seconds*1000);
+    }
+
     private void updateUI(boolean animated) {
         activity.showHideDemoIndicator(this, animated);
-        activity.getScrollBehavior().setUpScroll(binding.recycler);
-        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.getScrollBehavior().setUpScroll(null);
+        activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.GONE,
                 R.menu.menu_shopping_list,
@@ -223,37 +246,12 @@ public class ShoppingModeFragment extends BaseFragment implements
         );
     }
 
-    public void toggleDoneStatus(int movedPosition) {
-        viewModel.toggleDoneStatus(movedPosition);
-    }
-
-    public void editItem(int movedPosition) {
-        ShoppingListItem shoppingListItem = viewModel.getShoppingListItemAtPos(movedPosition);
-        navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
-                .setShoppingListItem(shoppingListItem));
+    public void toggleDoneStatus(int position) {
+        viewModel.toggleDoneStatus(position);
     }
 
     public void saveNotes(Spanned notes) {
         viewModel.saveNotes(notes);
-    }
-
-    public void purchaseItem(int movedPosition) {
-        ShoppingListItem shoppingListItem = viewModel.getShoppingListItemAtPos(movedPosition);
-        if(viewModel.isOffline() || shoppingListItem == null) return;
-        navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
-                .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
-                .setCloseWhenFinished(true));
-    }
-
-    public void deleteItem(int movedPosition) {
-        viewModel.deleteItem(movedPosition);
-    }
-
-    public void addItem() {
-        navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
-                .setSelectedShoppingListId(viewModel.getSelectedShoppingListId()));
     }
 
     private void showNotesEditor() {
@@ -297,13 +295,12 @@ public class ShoppingModeFragment extends BaseFragment implements
     @Override
     public void onItemRowClicked(int position) {
         if(clickUtil.isDisabled()) return;
-        int movedPosition = position - 1;
         ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive()
                 .getValue();
         if(groupedListItems == null) return;
-        GroupedListItem groupedListItem = groupedListItems.get(movedPosition);
+        GroupedListItem groupedListItem = groupedListItems.get(position);
         if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
-            showItemBottomSheet(groupedListItem, movedPosition);
+            toggleDoneStatus(position);
         } else if(!viewModel.isOffline()) {  // Click on bottom notes
             showNotesEditor();
         }
@@ -361,6 +358,32 @@ public class ShoppingModeFragment extends BaseFragment implements
 
     private boolean isFeatureMultipleListsDisabled() {
         return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
+    }
+
+    private void initTimerTask() {
+        if(timerTask != null) timerTask.cancel();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if(debug) Log.i(TAG, "auto sync shopping list (but may skip download)");
+                viewModel.downloadData();
+            }
+        };
+    }
+
+    private void keepScreenOnIfNecessary(boolean keepOn) {
+        if(activity == null) activity = (MainActivity) requireActivity();
+        if(sharedPrefs == null) sharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(activity);
+        boolean necessary = sharedPrefs.getBoolean(
+                Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON,
+                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.KEEP_SCREEN_ON
+        );
+        if(necessary && keepOn) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     @NonNull

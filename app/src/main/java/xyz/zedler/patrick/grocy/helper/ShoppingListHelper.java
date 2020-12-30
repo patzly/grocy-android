@@ -29,8 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.ShoppingItemAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -112,6 +110,85 @@ public class ShoppingListHelper {
         return groupedListItems;
     }
 
+    public static ArrayList<GroupedListItem> groupItemsShoppingMode(
+            Context context,
+            ArrayList<ShoppingListItem> shoppingListItems,
+            ArrayList<ProductGroup> productGroups,
+            ArrayList<ShoppingList> shoppingLists,
+            int selectedShoppingListId,
+            boolean showNotes
+    ) {
+        HashMap<String, ProductGroup> productGroupHashMap = new HashMap<>();
+        for(ProductGroup p : productGroups) productGroupHashMap.put(String.valueOf(p.getId()), p);
+        HashMap<ProductGroup, Collection<ShoppingListItem>> sortedShoppingListItems = new HashMap<>();
+        ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
+        ProductGroup ungrouped = new ProductGroup(
+                -1,
+                context.getString(R.string.title_shopping_list_ungrouped)
+        );
+        // sort displayedItems by productGroup
+        for(ShoppingListItem shoppingListItem : shoppingListItems) {
+            if(shoppingListItem.getDone() == 1) {
+                doneItems.add(shoppingListItem);
+                continue;
+            }
+            String groupId = null;
+            ProductGroup productGroup = null;
+            Product product = shoppingListItem.getProduct();
+            if(product != null) groupId = product.getProductGroupId();
+            if(groupId != null && groupId.isEmpty()) groupId = null;
+            if(groupId != null) productGroup = productGroupHashMap.get(groupId);
+            if(groupId == null || productGroup == null) productGroup = ungrouped;
+            Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
+            if(items == null) {
+                items = new ArrayList<>();
+                sortedShoppingListItems.put(productGroup, items);
+            }
+            items.add(shoppingListItem);
+        }
+        // sort product groups
+        ArrayList<ProductGroup> sortedProductGroups = new ArrayList<>(sortedShoppingListItems.keySet());
+        SortUtil.sortProductGroupsByName(sortedProductGroups, true);
+        if(sortedProductGroups.contains(ungrouped)) {
+            sortedProductGroups.remove(ungrouped);
+            sortedProductGroups.add(ungrouped);
+        }
+        // create list with groups (headers) and entries
+        ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+        for(ProductGroup productGroup : sortedProductGroups) {
+            ProductGroup clonedProductGroup = productGroup.getClone(); // clone is necessary because else adapter contains
+            groupedListItems.add(clonedProductGroup);                  // same productGroup objects and could not calculate diff properly
+            clonedProductGroup.setDisplayDivider(groupedListItems.get(0) != clonedProductGroup);
+            Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
+            assert items != null;
+            ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
+            SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
+            groupedListItems.addAll(itemsOneGroup);
+        }
+        if(!showNotes) return groupedListItems;
+        // add bottom notes if they are not empty
+        HashMap<Integer, ShoppingList> shoppingListHashMap = new HashMap<>();
+        for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
+        ShoppingList shoppingList = shoppingListHashMap.get(selectedShoppingListId);
+        Spanned notes = null;
+        if(shoppingList != null && shoppingList.getNotes() != null) {
+            Spanned spanned = Html.fromHtml(shoppingList.getNotes().trim());
+            notes = (Spanned) TextUtil.trimCharSequence(spanned);
+        }
+        if(notes != null && notes.toString().trim().isEmpty()) notes = null;
+        if(shoppingList != null && notes != null) {
+            ProductGroup p = new ProductGroup(-1, context.getString(R.string.property_notes));
+            groupedListItems.add(p);
+            groupedListItems.add(new ShoppingListBottomNotes(notes));
+        }
+        if(!doneItems.isEmpty()) {
+            ProductGroup p = new ProductGroup(-2, "Erledigt");
+            groupedListItems.add(p);
+            groupedListItems.addAll(doneItems);
+        }
+        return groupedListItems;
+    }
+
     public static void changeAppBarTitle(
             TextView textTitle,
             ActionButton buttonLists,
@@ -127,70 +204,5 @@ public class ShoppingListHelper {
         buttonLists.animate().alpha(0).withEndAction(
                 () -> buttonLists.animate().alpha(1).setDuration(150).start()
         ).setDuration(150).start();
-    }
-
-    private static ArrayList<GroupedListItem> removeItemFromList(
-            ShoppingListItemAdapter shoppingListItemAdapter,
-            ShoppingItemAdapter shoppingItemAdapter,
-            ArrayList<GroupedListItem> groupedListItems,
-            int position
-    ) {
-        ArrayList<GroupedListItem> removedItems = new ArrayList<>();
-        if(position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() > position+1
-                && groupedListItems.get(position+1).getType()
-                == GroupedListItem.TYPE_HEADER
-                || position-1 >= 0
-                && groupedListItems.get(position-1).getType()
-                == GroupedListItem.TYPE_HEADER
-                && groupedListItems.size() == position+1
-        ) {
-            removedItems.add(groupedListItems.get(position - 1));
-            removedItems.add(groupedListItems.get(position));
-            groupedListItems.remove(position);
-            groupedListItems.remove(position - 1);
-            if(shoppingListItemAdapter != null) {
-                shoppingListItemAdapter.notifyItemRangeRemoved(position -1, 2);
-            } else if(shoppingItemAdapter != null) {
-                shoppingItemAdapter.notifyItemRangeRemoved(position -1, 2);
-            }
-        } else {
-            removedItems.add(groupedListItems.get(position));
-            groupedListItems.remove(position);
-            if(shoppingListItemAdapter != null) {
-                shoppingListItemAdapter.notifyItemRemoved(position);
-            } else if(shoppingItemAdapter != null) {
-                shoppingItemAdapter.notifyItemRemoved(position);
-            }
-        }
-        return removedItems;
-    }
-
-    public static void removeItemFromList(
-            ShoppingListItemAdapter shoppingListItemAdapter,
-            ArrayList<GroupedListItem> groupedListItems,
-            int position
-    ) {
-        removeItemFromList(
-                shoppingListItemAdapter,
-                null,
-                groupedListItems,
-                position
-        );
-    }
-
-    public static ArrayList<GroupedListItem> removeItemFromList(
-            ShoppingItemAdapter shoppingItemAdapter,
-            ArrayList<GroupedListItem> groupedListItems,
-            int position
-    ) {
-        return removeItemFromList(
-                null,
-                shoppingItemAdapter,
-                groupedListItems,
-                position
-        );
     }
 }

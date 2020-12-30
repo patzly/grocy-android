@@ -411,7 +411,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     @Override
     public int getItemCount() {
-        return groupedListItems != null ? groupedListItems.size() + 1 : 1;
+        return groupedListItems.size() + 1;
     }
 
     public interface ShoppingListItemAdapterListener {
@@ -554,7 +554,6 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                 || this.itemsUndoneCount != itemsUndoneCount) {
             this.itemsMissingCount = itemsMissingCount;
             this.itemsUndoneCount = itemsUndoneCount;
-            Log.i(TAG, "updateData: " + itemsUndoneCount);
             notifyItemChanged(0); // update viewHolder with filter row
         }
 

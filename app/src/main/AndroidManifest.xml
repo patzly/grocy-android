@@ -39,8 +39,6 @@
 
         <activity android:name=".activity.SettingsActivity"/>
 
-        <activity android:name=".activity.ShoppingActivity"/>
-
         <activity
             android:name=".activity.ScanBatchActivity"
             android:theme="@style/Theme.Grocy.Camera"

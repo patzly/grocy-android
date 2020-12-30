@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
                 //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                startActivity(new Intent(this, ShoppingActivity.class));
+                //startActivity(new Intent(this, ShoppingActivity.class));
                 break;
         }
         getIntent().setAction(null);

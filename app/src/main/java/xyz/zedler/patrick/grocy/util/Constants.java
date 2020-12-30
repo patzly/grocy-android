@@ -143,7 +143,7 @@ public final class Constants {
             public final static String EXPIRING_SOON_DAYS = "5";
         }
         public final static class SHOPPING_MODE {
-            public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
+            public final static int UPDATE_INTERVAL = 10;
             public final static boolean KEEP_SCREEN_ON = true;
         }
         public final static class PURCHASE_CONSUME {

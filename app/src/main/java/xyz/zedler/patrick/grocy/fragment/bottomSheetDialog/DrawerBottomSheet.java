@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +43,6 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ShoppingActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
@@ -86,8 +84,9 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
-            dismiss();
-            activity.startActivity(new Intent(activity, ShoppingActivity.class));
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToShoppingModeFragment()
+            );
         });
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {

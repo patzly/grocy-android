@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
@@ -134,7 +133,6 @@ public class ShoppingListFragment extends BaseFragment implements
         binding.recycler.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        binding.recycler.setItemAnimator(new ItemAnimator());
         binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
         Object forcedSelectedId = getFromThisFragmentNow(Constants.ARGUMENT.SELECTED_ID);

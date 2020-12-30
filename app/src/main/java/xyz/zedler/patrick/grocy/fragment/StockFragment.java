@@ -60,7 +60,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
@@ -305,7 +304,6 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         binding.recyclerStock.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
         if(swipeBehavior == null) {

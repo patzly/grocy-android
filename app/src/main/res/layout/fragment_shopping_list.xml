@@ -98,7 +98,7 @@
                             android:paddingEnd="4dp"
                             app:icon="@drawable/ic_round_expand_more"
                             app:tint="@color/icon"
-                            app:enabled="@{true}"/>
+                            app:enabled="@{false}"/>
 
                     </TableRow>
 

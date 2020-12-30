@@ -334,6 +334,9 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_masterDataOverviewFragment"
             app:destination="@id/masterDataOverviewFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingModeFragment"
+            app:destination="@id/shoppingModeFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog

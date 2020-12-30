@@ -142,7 +142,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
     public void updateFilteredShoppingListItems() {
         filteredGroupedListItemsLive.setValue(
-                ShoppingListHelper.groupItems(
+                ShoppingListHelper.groupItemsShoppingMode(
                         getApplication(),
                         getFilteredShoppingListItems(),
                         this.productGroups,
@@ -428,13 +428,13 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         updateFilteredShoppingListItems();
     }
 
-    public void toggleDoneStatus(int movedPosition) { // movedPosition follows the numbering of groupedListItems (without the filter row)
+    public void toggleDoneStatus(int position) {
         ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(currentList == null || movedPosition > currentList.size()-1) {
+        if(currentList == null || position > currentList.size()-1) {
             showErrorMessage();
             return;
         }
-        ShoppingListItem shoppingListItem = ((ShoppingListItem) currentList.get(movedPosition))
+        ShoppingListItem shoppingListItem = ((ShoppingListItem) currentList.get(position))
                 .getClone();
 
         if(shoppingListItem.getDoneSynced() == -1) {
