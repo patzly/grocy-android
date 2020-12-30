@@ -164,10 +164,14 @@ public class MainActivity extends AppCompatActivity {
         updateStartDestination();
 
         navController.addOnDestinationChangedListener((controller, dest, args) -> {
-            if(isServerUrlEmpty()) {
+            if(isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment) {
                 binding.bottomAppBar.setVisibility(View.GONE);
                 binding.fabMain.hide();
-                setNavBarColor(R.color.background);
+                if(isServerUrlEmpty()) {
+                    setNavBarColor(R.color.background);
+                } else {
+                    setNavBarColor(R.color.primary);
+                }
             } else {
                 binding.bottomAppBar.setVisibility(View.VISIBLE);
                 setNavBarColor(R.color.primary);

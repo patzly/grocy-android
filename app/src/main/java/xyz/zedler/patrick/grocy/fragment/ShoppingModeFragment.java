@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,9 +42,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.animator.ItemAnimator;
-import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
-import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
+import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
@@ -61,21 +58,18 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
-import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
-public class ShoppingListFragment extends BaseFragment implements
+public class ShoppingModeFragment extends BaseFragment implements
         ShoppingListItemAdapter.ShoppingListItemAdapterListener {
 
-    private final static String TAG = ShoppingListFragment.class.getSimpleName();
+    private final static String TAG = ShoppingModeFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private ShoppingListViewModel viewModel;
-    private AppBarBehaviorNew appBarBehavior;
+    private ShoppingModeViewModel viewModel;
     private ClickUtil clickUtil;
-    private FragmentShoppingListBinding binding;
+    private FragmentShoppingModeBinding binding;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -84,7 +78,7 @@ public class ShoppingListFragment extends BaseFragment implements
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentShoppingListBinding.inflate(inflater, container, false);
+        binding = FragmentShoppingModeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -108,7 +102,7 @@ public class ShoppingListFragment extends BaseFragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
-        viewModel = new ViewModelProvider(this).get(ShoppingListViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ShoppingModeViewModel.class);
         viewModel.setOfflineLive(!activity.isOnline());
         if(savedInstanceState == null) viewModel.resetSearch();
         binding.setViewModel(viewModel);
@@ -119,15 +113,6 @@ public class ShoppingListFragment extends BaseFragment implements
         infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
         clickUtil = new ClickUtil();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-        // APP BAR BEHAVIOR
-
-        appBarBehavior = new AppBarBehaviorNew(
-                activity,
-                binding.appBarDefault,
-                binding.appBarSearch,
-                savedInstanceState
-        );
 
         if(savedInstanceState == null) binding.recycler.scrollTo(0, 0);
 
@@ -207,7 +192,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
-        updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
+        updateUI(ShoppingModeFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
                 && savedInstanceState == null);
     }
 
@@ -216,23 +201,11 @@ public class ShoppingListFragment extends BaseFragment implements
         activity.getScrollBehavior().setUpScroll(binding.recycler);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
-                Constants.FAB.POSITION.CENTER,
-                viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
+                Constants.FAB.POSITION.GONE,
+                R.menu.menu_shopping_list,
                 animated,
-                this::setUpBottomMenu
+                () -> {}
         );
-        activity.updateFab(
-                R.drawable.ic_round_add_anim,
-                R.string.action_add,
-                Constants.FAB.TAG.ADD,
-                animated,
-                this::addItem
-        );
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(appBarBehavior != null) appBarBehavior.saveInstanceState(outState);
     }
 
     @Override
@@ -303,85 +276,6 @@ public class ShoppingListFragment extends BaseFragment implements
         activity.showBottomSheet(new ShoppingListsBottomSheet());
     }
 
-    public void setUpBottomMenu() {
-        if(activity == null) return; // Fixes crash on theme change
-        MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
-        if(search != null) {
-            search.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                setUpSearch();
-                return true;
-            });
-        }
-
-        MenuItem shoppingMode = activity.getBottomMenu().findItem(R.id.action_shopping_mode);
-        if(shoppingMode != null) {
-            shoppingMode.setOnMenuItemClickListener(item -> {
-                navigate(ShoppingListFragmentDirections
-                        .actionShoppingListFragmentToShoppingModeFragment());
-                return true;
-            });
-        }
-
-        MenuItem addMissing = activity.getBottomMenu().findItem(R.id.action_add_missing);
-        if(addMissing != null) {
-            addMissing.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                viewModel.addMissingItems();
-                return true;
-            });
-        }
-
-        MenuItem purchaseItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
-        if(purchaseItems != null) {
-            purchaseItems.setOnMenuItemClickListener(item -> {
-                ArrayList<ShoppingListItem> shoppingListItemsSelected
-                        = viewModel.getFilteredShoppingListItems();
-                if(shoppingListItemsSelected == null) {
-                    showMessage(activity.getString(R.string.error_undefined));
-                    return true;
-                }
-                if(shoppingListItemsSelected.isEmpty()) {
-                    showMessage(activity.getString(R.string.error_empty_shopping_list));
-                    return true;
-                }
-                ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
-                SortUtil.sortShoppingListItemsByName(listItems, true);
-                ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
-                for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
-                navigate(ShoppingListFragmentDirections
-                        .actionShoppingListFragmentToPurchaseFragment()
-                        .setShoppingListItems(array)
-                        .setCloseWhenFinished(true));
-                return true;
-            });
-        }
-
-        MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
-        if(editNotes != null) {
-            editNotes.setOnMenuItemClickListener(item -> {
-                showNotesEditor();
-                return true;
-            });
-        }
-
-        MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
-        if(clear != null) {
-            clear.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                ShoppingList shoppingList = viewModel.getSelectedShoppingList();
-                if(shoppingList == null) {
-                    showMessage(activity.getString(R.string.error_undefined));
-                    return true;
-                }
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
-                activity.showBottomSheet(new ShoppingListClearBottomSheet(), bundle);
-                return true;
-            });
-        }
-    }
-
     public void clearAllItems(ShoppingList shoppingList, Runnable onResponse) {
         viewModel.clearAllItems(shoppingList, onResponse);
     }
@@ -420,12 +314,6 @@ public class ShoppingListFragment extends BaseFragment implements
         if(!isOnline == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!isOnline);
         if(isOnline) viewModel.downloadData();
-        activity.updateBottomAppBar(
-                isOnline ? Constants.FAB.POSITION.CENTER : Constants.FAB.POSITION.GONE,
-                isOnline ? R.menu.menu_shopping_list : R.menu.menu_shopping_list_offline,
-                true,
-                this::setUpBottomMenu
-        );
     }
 
     private void hideDisabledFeatures() {
@@ -463,25 +351,6 @@ public class ShoppingListFragment extends BaseFragment implements
             bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
             activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
         }
-    }
-
-    private void setUpSearch() {
-        if(!isSearchVisible()) {
-            appBarBehavior.switchToSecondary();
-            binding.editTextShoppingListSearch.setText("");
-        }
-        binding.textInputShoppingListSearch.requestFocus();
-        activity.showKeyboard(binding.editTextShoppingListSearch);
-
-        setIsSearchVisible(true);
-    }
-
-    @Override
-    public void dismissSearch() {
-        appBarBehavior.switchToPrimary();
-        activity.hideKeyboard();
-        binding.editTextShoppingListSearch.setText("");
-        setIsSearchVisible(false);
     }
 
     private void showMessage(String msg) {

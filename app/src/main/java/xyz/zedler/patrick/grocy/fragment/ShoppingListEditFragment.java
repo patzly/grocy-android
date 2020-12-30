@@ -100,6 +100,10 @@ public class ShoppingListEditFragment extends BaseFragment {
                 infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
 
+        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
+            if(!isLoading) viewModel.setCurrentQueueLoading(null);
+        });
+
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
             InfoFullscreen infoFullscreen = offline
                     ? new InfoFullscreen(InfoFullscreen.ERROR_OFFLINE)

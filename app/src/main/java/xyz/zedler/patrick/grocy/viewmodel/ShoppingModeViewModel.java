@@ -58,9 +58,9 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ShoppingListViewModel extends AndroidViewModel {
+public class ShoppingModeViewModel extends AndroidViewModel {
 
-    private static final String TAG = ShoppingListViewModel.class.getSimpleName();
+    private static final String TAG = ShoppingModeViewModel.class.getSimpleName();
     private static final int DEFAULT_SHOPPING_LIST_ID = 1;
 
     private final SharedPreferences sharedPrefs;
@@ -89,7 +89,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
     private int itemsUndoneCount;
     private final boolean debug;
 
-    public ShoppingListViewModel(@NonNull Application application) {
+    public ShoppingModeViewModel(@NonNull Application application) {
         super(application);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());

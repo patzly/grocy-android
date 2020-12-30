@@ -20,12 +20,14 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.animation.LayoutTransition;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class BindingAdaptersUtil {
@@ -53,5 +55,18 @@ public class BindingAdaptersUtil {
     public static void setTransitionTypeChanging(SwipeRefreshLayout view, boolean enabled) {
         if(!enabled) return;
         view.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+    }
+
+    @BindingAdapter("onSearchClickInSoftKeyboard")
+    public static void setOnSearchClickInSoftKeyboardListener(
+            TextInputEditText view,
+            Runnable listener
+    ) {
+        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                listener.run();
+                return true;
+            } return false;
+        });
     }
 }

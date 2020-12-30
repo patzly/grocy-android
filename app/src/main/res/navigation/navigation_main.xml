@@ -47,6 +47,12 @@
             android:name="animateStart"
             app:argType="boolean"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_shoppingListFragment_to_shoppingModeFragment"
+            app:destination="@id/shoppingModeFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/consumeFragment"
@@ -570,4 +576,14 @@
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductFragment"
         android:label="MasterProductFragment"
         tools:layout="@layout/fragment_master_product"/>
+    <fragment
+        android:id="@+id/shoppingModeFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment"
+        android:label="ShoppingModeFragment"
+        tools:layout="@layout/fragment_shopping_mode" >
+        <argument
+            android:name="animateStart"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>
