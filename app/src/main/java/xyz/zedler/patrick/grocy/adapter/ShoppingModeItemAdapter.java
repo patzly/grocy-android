@@ -20,7 +20,7 @@ package xyz.zedler.patrick.grocy.adapter;
 */
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +50,6 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
     private final static String TAG = ShoppingModeItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    private final Context context;
     private final ArrayList<GroupedListItem> groupedListItems;
     private final ArrayList<QuantityUnit> quantityUnits;
     private final ShoppingModeItemClickListener listener;
@@ -116,12 +116,10 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
     }
 
     public ShoppingModeItemAdapter(
-            Context context,
             ArrayList<GroupedListItem> groupedListItems,
             ArrayList<QuantityUnit> quantityUnits,
             ShoppingModeItemClickListener listener
     ) {
-        this.context = context;
         this.groupedListItems = new ArrayList<>(groupedListItems);
         this.quantityUnits = quantityUnits;
         this.listener = listener;
@@ -135,6 +133,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
         private final TextView textViewNote;
         private final TextView textViewNoteName;
         private final TextView textViewBottomNotes;
+        private final View viewGroupSeparator;
 
         public ViewHolder(View view) {
             super(view);
@@ -145,6 +144,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             textViewNoteName = view.findViewById(R.id.text_shopping_note_as_name);
             textViewBottomNotes = view.findViewById(R.id.text_shopping_bottom_notes);
             textViewGroupName = view.findViewById(R.id.text_shopping_group_name);
+            viewGroupSeparator = view.findViewById(R.id.separator);
         }
     }
 
@@ -192,7 +192,31 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
         int type = getItemViewType(position);
         if (type == GroupedListItem.TYPE_HEADER) {
-            holder.textViewGroupName.setText(((ProductGroup) groupedListItem).getName());
+            String productGroupName = ((ProductGroup) groupedListItem).getName();
+            holder.textViewGroupName.setText(productGroupName);
+            if(!productGroupName.equals(holder.textViewGroupName.getContext()
+                    .getString(R.string.subtitle_done))
+            ) {
+                holder.textViewGroupName.setTextColor(ContextCompat.getColor(
+                        holder.textViewGroupName.getContext(), R.color.retro_green_fg
+                ));
+                holder.viewGroupSeparator.setBackgroundTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                                holder.textViewGroupName.getContext(),
+                                R.color.retro_green_fg
+                        )
+                ));
+            } else {
+                holder.textViewGroupName.setTextColor(ContextCompat.getColor(
+                        holder.textViewGroupName.getContext(), R.color.retro_yellow_fg
+                ));
+                holder.viewGroupSeparator.setBackgroundTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                                holder.textViewGroupName.getContext(),
+                                R.color.retro_yellow_fg
+                        )
+                ));
+            }
             return;
         }
         if(type == GroupedListItem.TYPE_BOTTOM_NOTES) {
@@ -200,7 +224,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
                     ((ShoppingListBottomNotes) groupedListItem).getNotes()
             );
             holder.textViewBottomNotes.setOnClickListener(
-                    view -> listener.onItemRowClicked(position)
+                    view -> listener.onItemRowClicked(groupedListItem)
             );
             return;
         }
@@ -248,7 +272,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             }
 
             holder.textViewAmount.setText(
-                    context.getString(
+                    holder.textViewAmount.getContext().getString(
                             R.string.subtitle_amount,
                             NumUtil.trim(shoppingListItem.getAmount()),
                             shoppingListItem.getAmount() == 1
@@ -318,7 +342,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
         // CONTAINER
 
-        holder.cardViewContainer.setOnClickListener(view -> listener.onItemRowClicked(position));
+        holder.cardViewContainer.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
 
     }
 
@@ -328,6 +352,6 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
     }
 
     public interface ShoppingModeItemClickListener {
-        void onItemRowClicked(int position);
+        void onItemRowClicked(GroupedListItem groupedListItem);
     }
 }

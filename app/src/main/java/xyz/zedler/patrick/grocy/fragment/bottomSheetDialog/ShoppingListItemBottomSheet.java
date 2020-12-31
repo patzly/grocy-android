@@ -47,7 +47,6 @@ public class ShoppingListItemBottomSheet extends CustomBottomSheet {
 
 	private MainActivity activity;
 	private String productName, quantityUnit;
-	private int position;
 	private ShoppingListItem shoppingListItem;
 	private ListItem itemName, itemAmount, itemNote, itemStatus;
 
@@ -81,7 +80,6 @@ public class ShoppingListItemBottomSheet extends CustomBottomSheet {
 		productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
 		quantityUnit = bundle.getString(Constants.ARGUMENT.QUANTITY_UNIT);
 		shoppingListItem = bundle.getParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM);
-		position = bundle.getInt(Constants.ARGUMENT.POSITION);
 
 		// VIEWS
 
@@ -97,23 +95,22 @@ public class ShoppingListItemBottomSheet extends CustomBottomSheet {
 		toolbar.setOnMenuItemClickListener(item -> {
 			Fragment fragmentCurrent = activity.getCurrentFragment();
 			if(fragmentCurrent.getClass() != ShoppingListFragment.class) return false;
-			switch (item.getItemId()) {
-				case R.id.action_toggle_done:
-					((ShoppingListFragment) fragmentCurrent).toggleDoneStatus(position);
-					dismiss();
-					return true;
-				case R.id.action_purchase:
-					((ShoppingListFragment) fragmentCurrent).purchaseItem(position);
-					dismiss();
-					return true;
-				case R.id.action_edit:
-					((ShoppingListFragment) fragmentCurrent).editItem(position);
-					dismiss();
-					return true;
-				case R.id.action_delete:
-					((ShoppingListFragment) fragmentCurrent).deleteItem(position);
-					dismiss();
-					return true;
+			if(item.getItemId() == R.id.action_toggle_done) {
+				((ShoppingListFragment) fragmentCurrent).toggleDoneStatus(shoppingListItem);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_purchase) {
+				((ShoppingListFragment) fragmentCurrent).purchaseItem(shoppingListItem);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_edit) {
+				((ShoppingListFragment) fragmentCurrent).editItem(shoppingListItem);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_delete) {
+				((ShoppingListFragment) fragmentCurrent).deleteItem(shoppingListItem);
+				dismiss();
+				return true;
 			}
 			return false;
 		});

@@ -428,14 +428,12 @@ public class ShoppingListViewModel extends AndroidViewModel {
         updateFilteredShoppingListItems();
     }
 
-    public void toggleDoneStatus(int movedPosition) { // movedPosition follows the numbering of groupedListItems (without the filter row)
-        ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(currentList == null || movedPosition > currentList.size()-1) {
+    public void toggleDoneStatus(ShoppingListItem listItem) {
+        if(listItem == null) {
             showErrorMessage();
             return;
         }
-        ShoppingListItem shoppingListItem = ((ShoppingListItem) currentList.get(movedPosition))
-                .getClone();
+        ShoppingListItem shoppingListItem = listItem.getClone();
 
         if(shoppingListItem.getDoneSynced() == -1) {
             shoppingListItem.setDoneSynced(shoppingListItem.getDone());
@@ -528,13 +526,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         );
     }
 
-    public void deleteItem(int movedPosition) {
-        ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(currentList == null || movedPosition > currentList.size()-1) {
-            showErrorMessage();
-            return;
-        }
-        ShoppingListItem shoppingListItem = (ShoppingListItem) currentList.get(movedPosition);
+    public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
                 response -> loadFromDatabase(false),

@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,9 +36,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,7 +44,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -54,8 +51,6 @@ import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -76,6 +71,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     private InfoFullscreenHelper infoFullscreenHelper;
     private Timer timer;
     private TimerTask timerTask;
+    private Handler handler;
 
     private boolean debug = false;
 
@@ -111,7 +107,6 @@ public class ShoppingModeFragment extends BaseFragment implements
         activity = (MainActivity) requireActivity();
         viewModel = new ViewModelProvider(this).get(ShoppingModeViewModel.class);
         viewModel.setOfflineLive(!activity.isOnline());
-        if(savedInstanceState == null) viewModel.resetSearch();
         binding.setViewModel(viewModel);
         binding.setActivity(activity);
         binding.setFragment(this);
@@ -121,6 +116,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         clickUtil = new ClickUtil();
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+        handler = new Handler();
 
         if(savedInstanceState == null) binding.recycler.scrollTo(0, 0);
 
@@ -145,14 +141,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
             if(items == null) return;
             if(items.isEmpty()) {
-                InfoFullscreen info;
-                if(viewModel.isSearchActive()) {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-                } else if(viewModel.getFilterState() != -1) {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-                } else {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
-                }
+                InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
                 viewModel.getInfoFullscreenLive().setValue(info);
             } else {
                 viewModel.getInfoFullscreenLive().setValue(null);
@@ -162,7 +151,6 @@ public class ShoppingModeFragment extends BaseFragment implements
             } else {
                 binding.recycler.setAdapter(
                         new ShoppingModeItemAdapter(
-                                requireContext(),
                                 items,
                                 viewModel.getQuantityUnits(),
                                 this
@@ -216,7 +204,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         if(seconds == 0) return;
         timer = new Timer();
         initTimerTask();
-        timer.schedule(timerTask, seconds*1000, seconds*1000);
+        timer.schedule(timerTask, 2000, seconds*1000);
     }
 
     private void updateUI(boolean animated) {
@@ -246,8 +234,8 @@ public class ShoppingModeFragment extends BaseFragment implements
         );
     }
 
-    public void toggleDoneStatus(int position) {
-        viewModel.toggleDoneStatus(position);
+    public void toggleDoneStatus(ShoppingListItem shoppingListItem) {
+        viewModel.toggleDoneStatus(shoppingListItem);
     }
 
     public void saveNotes(Spanned notes) {
@@ -274,34 +262,19 @@ public class ShoppingModeFragment extends BaseFragment implements
         activity.showBottomSheet(new ShoppingListsBottomSheet());
     }
 
-    public void clearAllItems(ShoppingList shoppingList, Runnable onResponse) {
-        viewModel.clearAllItems(shoppingList, onResponse);
-    }
-
-    public void clearDoneItems(ShoppingList shoppingList) {
-        viewModel.clearDoneItems(shoppingList);
-    }
-
-    @Override
-    public void deleteShoppingList(ShoppingList shoppingList) {
-        viewModel.safeDeleteShoppingList(shoppingList);
-    }
-
     @Override
     public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
         return viewModel.getSelectedShoppingListIdLive();
     }
 
     @Override
-    public void onItemRowClicked(int position) {
+    public void onItemRowClicked(GroupedListItem groupedListItem) {
         if(clickUtil.isDisabled()) return;
-        ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive()
-                .getValue();
-        if(groupedListItems == null) return;
-        GroupedListItem groupedListItem = groupedListItems.get(position);
+        if(groupedListItem == null) return;
         if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
-            toggleDoneStatus(position);
-        } else if(!viewModel.isOffline()) {  // Click on bottom notes
+            toggleDoneStatus((ShoppingListItem) groupedListItem);
+        } else if(!viewModel.isOffline()
+                && groupedListItem.getType() == GroupedListItem.TYPE_BOTTOM_NOTES) {  // Click on bottom notes
             showNotesEditor();
         }
     }
@@ -320,42 +293,6 @@ public class ShoppingModeFragment extends BaseFragment implements
         }
     }
 
-    private void showItemBottomSheet(GroupedListItem groupedListItem, int position) {
-        if(groupedListItem != null) {
-            ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItem;
-            Product product = shoppingListItem.getProduct();
-
-            Bundle bundle = new Bundle();
-            if(product != null) {
-                bundle.putString(
-                        Constants.ARGUMENT.PRODUCT_NAME,
-                        shoppingListItem.getProduct().getName()
-                );
-                QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(
-                        shoppingListItem.getProduct().getQuIdPurchase()
-                );
-                if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
-                    bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
-                } else if(quantityUnit != null) {
-                    bundle.putString(
-                            Constants.ARGUMENT.QUANTITY_UNIT,
-                            quantityUnit.getNamePlural()
-                    );
-                }
-            }
-            bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
-            bundle.putInt(Constants.ARGUMENT.POSITION, position);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
-            activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
-        }
-    }
-
-    private void showMessage(String msg) {
-        activity.showSnackbar(
-                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
-        );
-    }
-
     private boolean isFeatureMultipleListsDisabled() {
         return !sharedPrefs.getBoolean(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true);
     }
@@ -366,7 +303,7 @@ public class ShoppingModeFragment extends BaseFragment implements
             @Override
             public void run() {
                 if(debug) Log.i(TAG, "auto sync shopping list (but may skip download)");
-                viewModel.downloadData();
+                handler.post(() -> viewModel.downloadData());
             }
         };
     }

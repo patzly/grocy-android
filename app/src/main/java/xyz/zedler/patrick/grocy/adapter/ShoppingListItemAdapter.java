@@ -211,7 +211,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     parent,
                     false
             );
-            FilterRowViewHolder viewHolder = new FilterRowViewHolder(
+            return new FilterRowViewHolder(
                     binding,
                     context,
                     filterState,
@@ -220,7 +220,6 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                         filterListenerOutput.onChanged(state);
                     }
             );
-            return viewHolder;
         } else if(viewType == GroupedListItem.TYPE_HEADER) {
             return new ShoppingListGroupViewHolder(
                     RowShoppingListGroupBinding.inflate(
@@ -283,7 +282,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     ((ShoppingListBottomNotes) groupedListItem).getNotes()
             );
             holder.binding.container.setOnClickListener(
-                    view -> listener.onItemRowClicked(viewHolder.getAdapterPosition())
+                    view -> listener.onItemRowClicked(groupedListItem)
             );
             return;
         }
@@ -404,7 +403,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         // CONTAINER
 
         binding.container.setOnClickListener(
-                view -> listener.onItemRowClicked(viewHolder.getAdapterPosition())
+                view -> listener.onItemRowClicked(groupedListItem)
         );
 
     }
@@ -415,7 +414,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     }
 
     public interface ShoppingListItemAdapterListener {
-        void onItemRowClicked(int position);
+        void onItemRowClicked(GroupedListItem groupedListItem);
     }
 
     // Only for PurchaseFragment

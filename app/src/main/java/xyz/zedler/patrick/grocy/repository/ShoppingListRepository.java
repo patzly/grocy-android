@@ -189,6 +189,10 @@ public class ShoppingListRepository {
                         && offlineItem.getDoneSynced() != -1
                         && offlineItem.getDone() != offlineItem.getDoneSynced()
                         && offlineItem.getDone() != serverItem.getDone()
+                        || serverItem != null
+                        && serverItem.getDoneSynced() != -1  // server database hasn't changed
+                        && offlineItem.getDoneSynced() != -1
+                        && offlineItem.getDone() != offlineItem.getDoneSynced()
                 ) itemsToSync.add(offlineItem);
             }
 

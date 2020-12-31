@@ -41,7 +41,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
@@ -83,10 +82,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     private ArrayList<MissingItem> missingItems;
 
     private DownloadHelper.Queue currentQueueLoading;
-    private String searchInput;
-    private int filterState;
-    private int itemsMissingCount;
-    private int itemsUndoneCount;
     private final boolean debug;
 
     public ShoppingModeViewModel(@NonNull Application application) {
@@ -105,10 +100,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         offlineLive = new MutableLiveData<>(false);
         selectedShoppingListIdLive = new MutableLiveData<>(1);
         filteredGroupedListItemsLive = new MutableLiveData<>();
-
-        filterState = ShoppingListItemAdapter.FILTER_NOTHING;
-        itemsMissingCount = 0;
-        itemsUndoneCount = 0;
 
         int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
         if(lastId != DEFAULT_SHOPPING_LIST_ID
@@ -148,7 +139,10 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                         this.productGroups,
                         this.shoppingLists,
                         getSelectedShoppingListId(),
-                        true
+                        sharedPrefs.getBoolean(
+                                Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
+                                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
+                        )
                 )
         );
         selectedShoppingListIdLive.setValue(selectedShoppingListIdLive.getValue());
@@ -159,74 +153,16 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         if(this.shoppingListItems == null) return null;
 
         ArrayList<ShoppingListItem> filteredShoppingListItems = new ArrayList<>();
-        itemsMissingCount = 0;
-        itemsUndoneCount = 0;
 
         for(ShoppingListItem shoppingListItem : this.shoppingListItems) {
             if(shoppingListItem.getShoppingListId() != getSelectedShoppingListId()) continue;
-            if(shoppingListItem.isMissing()) itemsMissingCount += 1;
-            if(shoppingListItem.isUndone()) itemsUndoneCount += 1;
-
-            boolean searchContainsItem = true;
-            if(searchInput != null && !searchInput.isEmpty()) {
-                String name;
-                String description = null;
-                if(shoppingListItem.getProduct() != null) {
-                    name = shoppingListItem.getProduct().getName();
-                    description = shoppingListItem.getProduct().getDescription();
-                } else {
-                    name = shoppingListItem.getNote();
-                }
-                name = name != null ? name.toLowerCase() : "";
-                description = description != null ? description.toLowerCase() : "";
-                if(!name.contains(searchInput) && !description.contains(searchInput)) {
-                    searchContainsItem = false;
-                }
-            }
-            if(!searchContainsItem) continue;
-
-            if(filterState == ShoppingListItemAdapter.FILTER_NOTHING
-                    || filterState == ShoppingListItemAdapter.FILTER_MISSING
-                    && shoppingListItem.isMissing()
-                    || filterState == ShoppingListItemAdapter.FILTER_UNDONE
-                    && shoppingListItem.isUndone()
-            ) filteredShoppingListItems.add(shoppingListItem);
+            filteredShoppingListItems.add(shoppingListItem);
         }
         return filteredShoppingListItems;
     }
 
-    public boolean isSearchActive() {
-        return searchInput != null && !searchInput.isEmpty();
-    }
-
-    public int getFilterState() {
-        return filterState;
-    }
-
-    public void onFilterChanged(int state) {
-        this.filterState = state;
-        updateFilteredShoppingListItems();
-    }
-
-    public void resetSearch() {
-        searchInput = null;
-    }
-
     public MutableLiveData<ArrayList<GroupedListItem>> getFilteredGroupedListItemsLive() {
         return filteredGroupedListItemsLive;
-    }
-
-    public int getItemsMissingCount() {
-        return itemsMissingCount;
-    }
-
-    public int getItemsUndoneCount() {
-        return itemsUndoneCount;
-    }
-
-    public void updateSearchInput(String input) {
-        this.searchInput = input.toLowerCase();
-        updateFilteredShoppingListItems();
     }
 
     public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
@@ -256,7 +192,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         }
 
         // get last offline db-changed-time values
-        //String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
+        String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
         String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
         String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
         String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
@@ -265,11 +201,13 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        queue.append(dlHelper.getShoppingListItems(shoppingListItems -> { // always download for proper sync
-            this.shoppingListItems = shoppingListItems;
-            editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
-            editPrefs.apply();
-        }));
+        if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
+            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> { // always download for proper sync
+                this.shoppingListItems = shoppingListItems;
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
+                editPrefs.apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download");
         if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
             queue.append(dlHelper.getShoppingLists(shoppingLists -> {
                 this.shoppingLists = shoppingLists;
@@ -328,6 +266,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                 this.products,
                 this.missingItems,
                 (itemsToSync, serverItemHashMap) -> {
+                    Log.i(TAG, "onQueueEmpty: itemsToSync: " + itemsToSync.size());
                     if(itemsToSync.isEmpty()) {
                         tidyUpItems(itemsChanged -> {
                             if(itemsChanged) {
@@ -428,14 +367,12 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         updateFilteredShoppingListItems();
     }
 
-    public void toggleDoneStatus(int position) {
-        ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(currentList == null || position > currentList.size()-1) {
+    public void toggleDoneStatus(ShoppingListItem listItem) {
+        if(listItem == null) {
             showErrorMessage();
             return;
         }
-        ShoppingListItem shoppingListItem = ((ShoppingListItem) currentList.get(position))
-                .getClone();
+        ShoppingListItem shoppingListItem = listItem.getClone();
 
         if(shoppingListItem.getDoneSynced() == -1) {
             shoppingListItem.setDoneSynced(shoppingListItem.getDone());
@@ -472,36 +409,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         );
     }
 
-    public void addMissingItems() {
-        ShoppingList shoppingList = getSelectedShoppingList();
-        if(shoppingList == null) {
-            showMessage(getString(R.string.error_undefined));
-            return;
-        }
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("list_id", getSelectedShoppingListId());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "setUpBottomMenu: add missing: " + e);
-        }
-        dlHelper.post(
-                grocyApi.addMissingProducts(),
-                jsonObject,
-                response -> showMessage(getString(
-                        R.string.msg_added_missing_products,
-                        shoppingList.getName()
-                )),
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(
-                            TAG, "setUpBottomMenu: add missing "
-                                    + shoppingList.getName()
-                                    + ": " + error
-                    );
-                }
-        );
-    }
-
     public void saveNotes(Spanned notes) {
         JSONObject body = new JSONObject();
 
@@ -526,119 +433,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                     downloadData();
                 }
         );
-    }
-
-    public void deleteItem(int movedPosition) {
-        ArrayList<GroupedListItem> currentList = filteredGroupedListItemsLive.getValue();
-        if(currentList == null || movedPosition > currentList.size()-1) {
-            showErrorMessage();
-            return;
-        }
-        ShoppingListItem shoppingListItem = (ShoppingListItem) currentList.get(movedPosition);
-        dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
-                response -> loadFromDatabase(false),
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(TAG, "deleteItem: " + error);
-                }
-        );
-    }
-
-    public void safeDeleteShoppingList(ShoppingList shoppingList) {
-        if(shoppingList == null) {
-            showMessage(getString(R.string.error_undefined));
-            return;
-        }
-        clearAllItems(
-                shoppingList,
-                () -> deleteShoppingList(shoppingList)
-        );
-    }
-
-    public void deleteShoppingList(ShoppingList shoppingList) {
-        int selectedShoppingListId = getSelectedShoppingListId();
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("list_id", getSelectedShoppingListId());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "deleteShoppingList: delete list: " + e);
-        }
-        dlHelper.delete(
-                grocyApi.getObject(
-                        GrocyApi.ENTITY.SHOPPING_LISTS,
-                        shoppingList.getId()
-                ),
-                response -> {
-                    showMessage(
-                            getString(R.string.msg_shopping_list_deleted, shoppingList.getName())
-                    );
-                    shoppingLists.remove(shoppingList);
-                    if(selectedShoppingListId == shoppingList.getId()) {
-                        selectShoppingList(1);
-                    }
-                    tidyUpItems(itemsChanged -> downloadData());
-                },
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(
-                            TAG, "deleteShoppingList: delete "
-                                    + shoppingList.getName() + ": " + error
-                    );
-                    downloadData();
-                }
-        );
-    }
-
-    public void clearAllItems(
-            ShoppingList shoppingList,
-            Runnable onResponse
-    ) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("list_id", shoppingList.getId());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "clearShoppingList: " + e);
-        }
-        dlHelper.post(
-                grocyApi.clearShoppingList(),
-                jsonObject,
-                response -> {
-                    if(onResponse != null) onResponse.run();
-                },
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(
-                            TAG, "clearShoppingList: "
-                                    + shoppingList.getName()
-                                    + ": " + error
-                    );
-                }
-        );
-    }
-
-    public void clearDoneItems(ShoppingList shoppingList) {
-        DownloadHelper.Queue queue = dlHelper.newQueue(
-                () -> {
-                    showMessage(
-                            getString(
-                                    R.string.msg_shopping_list_cleared,
-                                    shoppingList.getName()
-                            )
-                    );
-                    downloadData();
-                }, volleyError -> {
-                    showMessage(getString(R.string.error_undefined));
-                    downloadData();
-                }
-        );
-        for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(shoppingListItem.getShoppingListId() != shoppingList.getId()) continue;
-            if(shoppingListItem.getDone() == 0) continue;
-            queue.append(dlHelper.deleteShoppingListItem(shoppingListItem.getId()));
-        }
-        queue.start();
     }
 
     @Nullable

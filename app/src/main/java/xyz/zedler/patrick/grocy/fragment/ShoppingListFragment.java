@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -248,12 +247,12 @@ public class ShoppingListFragment extends BaseFragment implements
         );
     }
 
-    public void toggleDoneStatus(int movedPosition) {
-        viewModel.toggleDoneStatus(movedPosition);
+    public void toggleDoneStatus(@NonNull ShoppingListItem shoppingListItem) {
+        viewModel.toggleDoneStatus(shoppingListItem);
     }
 
-    public void editItem(int movedPosition) {
-        ShoppingListItem shoppingListItem = viewModel.getShoppingListItemAtPos(movedPosition);
+    public void editItem(@NonNull ShoppingListItem shoppingListItem) {
+        if(showOfflineError()) return;
         navigate(ShoppingListFragmentDirections
                 .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
                 .setShoppingListItem(shoppingListItem));
@@ -263,16 +262,23 @@ public class ShoppingListFragment extends BaseFragment implements
         viewModel.saveNotes(notes);
     }
 
-    public void purchaseItem(int movedPosition) {
-        ShoppingListItem shoppingListItem = viewModel.getShoppingListItemAtPos(movedPosition);
-        if(viewModel.isOffline() || shoppingListItem == null) return;
+    public void purchaseItem(@NonNull ShoppingListItem shoppingListItem) {
+        if(showOfflineError()) return;
         navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
                 .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
                 .setCloseWhenFinished(true));
     }
 
-    public void deleteItem(int movedPosition) {
-        viewModel.deleteItem(movedPosition);
+    public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
+        if(showOfflineError()) return;
+        viewModel.deleteItem(shoppingListItem);
+    }
+
+    private boolean showOfflineError() {
+        if(viewModel.isOffline()) {
+            showMessage(getString(R.string.error_offline));
+            return true;
+        } return false;
     }
 
     public void addItem() {
@@ -399,15 +405,11 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     @Override
-    public void onItemRowClicked(int position) {
+    public void onItemRowClicked(GroupedListItem groupedListItem) {
         if(clickUtil.isDisabled()) return;
-        int movedPosition = position - 1;
-        ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive()
-                .getValue();
-        if(groupedListItems == null) return;
-        GroupedListItem groupedListItem = groupedListItems.get(movedPosition);
+        if(groupedListItem == null) return;
         if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
-            showItemBottomSheet(groupedListItem, movedPosition);
+            showItemBottomSheet((ShoppingListItem) groupedListItem);
         } else if(!viewModel.isOffline()) {  // Click on bottom notes
             showNotesEditor();
         }
@@ -433,34 +435,30 @@ public class ShoppingListFragment extends BaseFragment implements
         }
     }
 
-    private void showItemBottomSheet(GroupedListItem groupedListItem, int position) {
-        if(groupedListItem != null) {
-            ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItem;
-            Product product = shoppingListItem.getProduct();
+    private void showItemBottomSheet(ShoppingListItem shoppingListItem) {
+        if(shoppingListItem == null) return;
 
-            Bundle bundle = new Bundle();
-            if(product != null) {
+        Bundle bundle = new Bundle();
+        if(shoppingListItem.getProduct() != null) {
+            bundle.putString(
+                    Constants.ARGUMENT.PRODUCT_NAME,
+                    shoppingListItem.getProduct().getName()
+            );
+            QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(
+                    shoppingListItem.getProduct().getQuIdPurchase()
+            );
+            if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
+                bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
+            } else if(quantityUnit != null) {
                 bundle.putString(
-                        Constants.ARGUMENT.PRODUCT_NAME,
-                        shoppingListItem.getProduct().getName()
+                        Constants.ARGUMENT.QUANTITY_UNIT,
+                        quantityUnit.getNamePlural()
                 );
-                QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(
-                        shoppingListItem.getProduct().getQuIdPurchase()
-                );
-                if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
-                    bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
-                } else if(quantityUnit != null) {
-                    bundle.putString(
-                            Constants.ARGUMENT.QUANTITY_UNIT,
-                            quantityUnit.getNamePlural()
-                    );
-                }
             }
-            bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
-            bundle.putInt(Constants.ARGUMENT.POSITION, position);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
-            activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
         }
+        bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
+        bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
+        activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
     }
 
     private void setUpSearch() {

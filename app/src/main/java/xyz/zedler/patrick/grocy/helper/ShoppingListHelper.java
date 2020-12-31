@@ -116,7 +116,7 @@ public class ShoppingListHelper {
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
             int selectedShoppingListId,
-            boolean showNotes
+            boolean showDoneItems
     ) {
         HashMap<String, ProductGroup> productGroupHashMap = new HashMap<>();
         for(ProductGroup p : productGroups) productGroupHashMap.put(String.valueOf(p.getId()), p);
@@ -165,7 +165,6 @@ public class ShoppingListHelper {
             SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
             groupedListItems.addAll(itemsOneGroup);
         }
-        if(!showNotes) return groupedListItems;
         // add bottom notes if they are not empty
         HashMap<Integer, ShoppingList> shoppingListHashMap = new HashMap<>();
         for(ShoppingList s : shoppingLists) shoppingListHashMap.put(s.getId(), s);
@@ -181,8 +180,8 @@ public class ShoppingListHelper {
             groupedListItems.add(p);
             groupedListItems.add(new ShoppingListBottomNotes(notes));
         }
-        if(!doneItems.isEmpty()) {
-            ProductGroup p = new ProductGroup(-2, "Erledigt");
+        if(!doneItems.isEmpty() && showDoneItems) {
+            ProductGroup p = new ProductGroup(-2, context.getString(R.string.subtitle_done));
             groupedListItems.add(p);
             groupedListItems.addAll(doneItems);
         }
