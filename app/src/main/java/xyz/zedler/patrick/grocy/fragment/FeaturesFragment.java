@@ -143,7 +143,7 @@ public class FeaturesFragment extends BaseFragment {
             activity.showMessage(R.string.msg_features);
             sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
         }
-        if(getBackStackSize() == 2){
+        if(getBackStackSize() == 2){ // TODO: Better condition
             navigate(FeaturesFragmentDirections.actionFeaturesFragmentToLoginFragment());
             return true;
         } else {

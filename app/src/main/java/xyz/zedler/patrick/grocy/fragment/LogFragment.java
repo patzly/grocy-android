@@ -72,17 +72,17 @@ public class LogFragment extends BaseFragment {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
 
-        binding.frameLogBack.setOnClickListener(v -> activity.onBackPressed());
-
-        activity.showHideDemoIndicator(this, true);
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
-                R.menu.menu_log,
-                true,
-                this::setUpBottomMenu
-        );
+        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+            activity.showHideDemoIndicator(this, true);
+            activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
+            activity.getScrollBehavior().setHideOnScroll(false);
+            activity.updateBottomAppBar(
+                    Constants.FAB.POSITION.GONE,
+                    R.menu.menu_log,
+                    true,
+                    this::setUpBottomMenu
+            );
+        }
 
         setLog(showInfo);
     }
