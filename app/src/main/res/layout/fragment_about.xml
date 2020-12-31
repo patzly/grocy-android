@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+    </data>
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -31,7 +38,8 @@
                 android:contentDescription="@string/action_back"
                 android:tooltipText="@string/action_back"
                 android:focusable="true"
-                tools:targetApi="o">
+                tools:targetApi="o"
+                android:onClick="@{() -> activity.navigateUp()}">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -163,7 +171,8 @@
 
             <LinearLayout
                 android:id="@+id/linear_translators"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable">
+                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
+                android:visibility="@{translators.getText().toString().trim().length() > 0 ? View.VISIBLE : View.GONE}">
 
                 <ImageView
                     android:id="@+id/image_translators"
@@ -433,3 +442,4 @@
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -5,7 +5,7 @@
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
     <!-- Here you can append your name, but please only if you have translated some strings.
-     Append your name with the prefix <br/> (means newline) if there are already some other names.-->
+     Append your name with the prefix \n (means newline) if there are already some other names.-->
     <string name="language_translators"></string>
 
     <!-- This is an action – in English, it contains a verb.
