@@ -87,10 +87,8 @@ public class ShoppingListEditFragment extends BaseFragment {
             } else if(event.getType() == Event.NAVIGATE_UP) {
                 activity.navigateUp();
             } else if(event.getType() == Event.SET_SHOPPING_LIST_ID) {
-                if(getPreviousDestination().getId() == R.id.shoppingListFragment) {
-                    int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
-                    setForPreviousFragment(Constants.ARGUMENT.SELECTED_ID, id);
-                }
+                int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
+                setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
             }
         });
 

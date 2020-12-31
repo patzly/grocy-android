@@ -137,7 +137,7 @@ public class BaseFragment extends Fragment {
      * @param key (String): identifier for value
      * @param observerListener (ObserverListener): observer for callback after value was received
      */
-    void getFromThisFragment(String key, ObserverListener observerListener) {
+    void getFromThisDestination(String key, ObserverListener observerListener) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
@@ -156,45 +156,57 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * Returns data from last fragment (which was in backStack on the top of the current one)
-     * immediately. The last fragment stored this data with <code>setForPreviousFragment</code>.
+     * Returns data from last destination (which was in backStack on the top of the current one)
+     * immediately. The last destination stored this data with <code>setForPreviousDestination</code>.
      * @param key (String): identifier for value
      * @return Object: the value or null, if no data was set
      */
     @Nullable
-    Object getFromThisFragmentNow(String key) {
+    Object getFromThisDestinationNow(String key) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         return backStackEntry.getSavedStateHandle().get(key);
     }
 
     /**
-     * Set data for previous fragment (which is in backStack below the current one)
+     * Set data for previous destination (which is in backStack below the current one)
      * @param key (String): identifier for value
      * @param value (Object): the value to store
      */
-    void setForPreviousFragment(String key, Object value) {
+    void setForPreviousDestination(String key, Object value) {
         NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().set(key, value);
     }
 
     /**
-     * Set data for this fragment (which is on top of the backStack)
+     * Set data for this destination (which is on top of the backStack)
      * @param key (String): identifier for value
      * @param value (Object): the value to store
      */
-    void setForThisFragment(String key, Object value) {
+    void setForThisDestination(String key, Object value) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().set(key, value);
     }
 
     /**
-     * Remove set data of this fragment (which is on top of the backStack)
+     * Set data for any destination (if multiple instances are in backStack, the topmost one)
+     * @param destinationId (int): identifier for destination
+     * @param key (String): identifier for value
+     * @param value (Object): the value to store
+     */
+    void setForDestination(@IdRes int destinationId, String key, Object value) {
+        NavBackStackEntry backStackEntry = findNavController().getBackStackEntry(destinationId);
+        if(backStackEntry == null) return;
+        backStackEntry.getSavedStateHandle().set(key, value);
+    }
+
+    /**
+     * Remove set data of this destination (which is on top of the backStack)
      * @param key (String): identifier for value
      */
-    void removeForThisFragment(String key) {
+    void removeForThisDestination(String key) {
         NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
         assert backStackEntry != null;
         backStackEntry.getSavedStateHandle().remove(key);

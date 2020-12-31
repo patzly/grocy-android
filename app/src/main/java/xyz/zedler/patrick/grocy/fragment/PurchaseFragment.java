@@ -458,14 +458,14 @@ public class PurchaseFragment extends BaseFragment {
         });
         viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
             if(productDetails != null) {
-                setForThisFragment( // for loading selected product after process death
+                setForThisDestination( // for loading selected product after process death
                         Constants.ARGUMENT.PRODUCT_ID,
                         productDetails.getProduct().getId()
                 );
                 fillWithProductDetails(productDetails);
                 viewModel.writeDefaultValues();
             } else {
-                removeForThisFragment(Constants.ARGUMENT.PRODUCT_ID);
+                removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
                 clearFields();
             }
         });
@@ -509,7 +509,7 @@ public class PurchaseFragment extends BaseFragment {
             binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
         }
 
-        getFromThisFragment(Constants.ARGUMENT.BARCODE, barcode -> {
+        getFromThisDestination(Constants.ARGUMENT.BARCODE, barcode -> {
             if(viewModel.getIsDownloading()) {
                 viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetailsByBarcode((String) barcode)
@@ -518,7 +518,7 @@ public class PurchaseFragment extends BaseFragment {
                 viewModel.loadProductDetailsByBarcode((String) barcode);
             }
         });
-        getFromThisFragment(Constants.ARGUMENT.PRODUCT_ID, productId -> {
+        getFromThisDestination(Constants.ARGUMENT.PRODUCT_ID, productId -> {
             if(viewModel.getIsDownloading()) {
                 viewModel.addQueueEmptyAction(
                         () -> viewModel.loadProductDetails((Integer) productId)

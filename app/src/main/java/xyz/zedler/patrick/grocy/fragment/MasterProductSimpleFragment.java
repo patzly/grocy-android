@@ -1241,8 +1241,8 @@ public class MasterProductSimpleFragment extends BaseFragment {
                     grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, editProduct.getId()),
                     jsonObject,
                     response -> {
-                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
-                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                        setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, editProduct.getId());
+                        setForPreviousDestination(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         activity.navigateUp();
                     },
                     error -> {
@@ -1263,8 +1263,8 @@ public class MasterProductSimpleFragment extends BaseFragment {
                             showErrorMessage();
                             return;
                         }
-                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, createdObjectId);
-                        setForPreviousFragment(Constants.ARGUMENT.PRODUCT_NAME, productName);
+                        setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, createdObjectId);
+                        setForPreviousDestination(Constants.ARGUMENT.PRODUCT_NAME, productName);
                         activity.navigateUp();
                     },
                     error -> {
@@ -1444,7 +1444,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId),
                 response -> {
-                    setForPreviousFragment(Constants.ARGUMENT.PRODUCT_ID, productId);
+                    setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, productId);
                     activity.navigateUp();
                 },
                 error -> showErrorMessage()

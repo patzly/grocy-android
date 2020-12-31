@@ -39,7 +39,7 @@ public class AppBarBehaviorNew {
 
 	private final View viewPrimary;
 	private final View viewSecondary;
-	private boolean isPrimary;
+	private boolean isPrimary = true;
 	private final boolean debug;
 
 	public AppBarBehaviorNew(Activity activity, View primary, View secondary, Bundle savedState) {

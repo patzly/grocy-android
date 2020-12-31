@@ -138,7 +138,7 @@ public class SettingsFragment extends BaseFragment {
             activity.binding.fabMain.hide();
         }
 
-        setForPreviousFragment(Constants.ARGUMENT.ANIMATED, false);
+        setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
 
         queue.start();
     }

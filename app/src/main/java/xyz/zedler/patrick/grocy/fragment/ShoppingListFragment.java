@@ -108,7 +108,6 @@ public class ShoppingListFragment extends BaseFragment implements
         activity = (MainActivity) requireActivity();
         viewModel = new ViewModelProvider(this).get(ShoppingListViewModel.class);
         viewModel.setOfflineLive(!activity.isOnline());
-        if(savedInstanceState == null) viewModel.resetSearch();
         binding.setViewModel(viewModel);
         binding.setActivity(activity);
         binding.setFragment(this);
@@ -127,17 +126,20 @@ public class ShoppingListFragment extends BaseFragment implements
                 savedInstanceState
         );
 
-        if(savedInstanceState == null) binding.recycler.scrollTo(0, 0);
-
         binding.recycler.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
         binding.recycler.setAdapter(new ShoppingPlaceholderAdapter());
 
-        Object forcedSelectedId = getFromThisFragmentNow(Constants.ARGUMENT.SELECTED_ID);
+        if(savedInstanceState == null) {
+            binding.recycler.scrollToPosition(0);
+            viewModel.resetSearch();
+        }
+
+        Object forcedSelectedId = getFromThisDestinationNow(Constants.ARGUMENT.SELECTED_ID);
         if(forcedSelectedId != null) {
             viewModel.selectShoppingList((Integer) forcedSelectedId);
-            removeForThisFragment(Constants.ARGUMENT.SELECTED_ID);
+            removeForThisDestination(Constants.ARGUMENT.SELECTED_ID);
         }
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {

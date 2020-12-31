@@ -316,7 +316,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         updateUI(requireArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true)
                 && savedInstanceState == null);
 
-        getFromThisFragment(Constants.ARGUMENT.PRODUCT_NAME, productName -> {
+        getFromThisDestination(Constants.ARGUMENT.PRODUCT_NAME, productName -> {
             // TODO: Prioritize productName over args.getProductName(), no idea yet
         });
     }

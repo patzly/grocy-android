@@ -24,7 +24,7 @@
         android:id="@+id/shoppingListFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
         android:label="ShoppingListFragment"
-        tools:layout="@layout/fragment_shopping_list" >
+        tools:layout="@layout/fragment_shopping_list">
         <action
             android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
             app:destination="@id/shoppingListItemEditFragment"
@@ -45,14 +45,17 @@
             app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="animateStart"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_shoppingListFragment_to_shoppingModeFragment"
             app:destination="@id/shoppingModeFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="grocy://shoppinglist" />
     </fragment>
     <fragment
         android:id="@+id/consumeFragment"
@@ -583,10 +586,13 @@
         android:id="@+id/shoppingModeFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment"
         android:label="ShoppingModeFragment"
-        tools:layout="@layout/fragment_shopping_mode" >
+        tools:layout="@layout/fragment_shopping_mode">
         <argument
             android:name="animateStart"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="grocy://shoppinglist/shoppingmode" />
     </fragment>
 </navigation>

@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -313,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 //replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundleCreate, false);
                 break;
             case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
+                navController.navigate(Uri.parse("grocy://shoppinglist/shoppingmode"));
                 //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
                 //startActivity(new Intent(this, ShoppingActivity.class));
                 break;
