@@ -385,8 +385,9 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 R.string.action_scan,
                 Constants.FAB.TAG.SCAN,
                 animated,
-                () -> navigate(StockFragmentDirections
-                        .actionGlobalScanBatchFragment(Constants.ACTION.CONSUME))
+                () -> {
+                    navigateDeepLink(getString(R.string.deep_link_masterProductFragment));
+                }
         );
     }
 

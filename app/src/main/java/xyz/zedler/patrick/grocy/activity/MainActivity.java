@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +44,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -59,7 +56,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
@@ -70,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
@@ -134,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         networkReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+                assert navHostFragment != null;
+                if(navHostFragment.getChildFragmentManager().getFragments().size() == 0) return;
                 getCurrentFragment().updateConnectivity(netUtil.isOnline());
             }
         };
@@ -194,52 +192,39 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setUpTopScroll(R.id.fab_scroll);
         scrollBehavior.setHideOnScroll(true);
 
+        Runnable onSuccessConfigLoad = () -> {
+            String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
+            if(version == null || version.isEmpty()) return;
+            ArrayList<String> supportedVersions = new ArrayList<>(
+                    Arrays.asList(getResources().getStringArray(R.array.compatible_grocy_versions))
+            );
+            if(supportedVersions.contains(version)) {
+                if(!isDemo() && !sharedPrefs.getBoolean(
+                        Constants.PREF.UPDATE_INFO_READ,
+                        false
+                )) showBottomSheet(new UpdateInfoBottomSheet(), null);
+                return;
+            }
+
+            // If user already ignored warning, do not display again
+            String ignoredVersion = sharedPrefs.getString(
+                    Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
+            );
+            if(ignoredVersion != null && ignoredVersion.equals(version)) return;
+
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.VERSION, version);
+            bundle.putStringArrayList(Constants.ARGUMENT.SUPPORTED_VERSIONS, supportedVersions);
+            showBottomSheet(new CompatibilityBottomSheet(), bundle);
+        };
         if(!isServerUrlEmpty()) {
             ConfigUtil.loadInfo(
                     new DownloadHelper(this, TAG),
                     grocyApi,
                     sharedPrefs,
-                    () -> {
-                        String version = sharedPrefs.getString(
-                                Constants.PREF.GROCY_VERSION,
-                                null
-                        );
-                        if(version == null || version.isEmpty()) return;
-                        ArrayList<String> supportedVersions = new ArrayList<>(
-                                Arrays.asList(
-                                        getResources().getStringArray(
-                                                R.array.compatible_grocy_versions
-                                        )
-                                )
-                        );
-                        if(supportedVersions.contains(version)) {
-                            if(!isDemo() && !sharedPrefs.getBoolean(
-                                    Constants.PREF.UPDATE_INFO_READ,
-                                    false
-                            )) showBottomSheet(new UpdateInfoBottomSheet(), null);
-                            return;
-                        }
-
-                        // If user already ignored warning, do not display again
-                        String ignoredVersion = sharedPrefs.getString(
-                                Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
-                        );
-                        if(ignoredVersion != null && ignoredVersion.equals(version)) return;
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.VERSION, version);
-                        bundle.putStringArrayList(
-                                Constants.ARGUMENT.SUPPORTED_VERSIONS,
-                                supportedVersions
-                        );
-                        showBottomSheet(
-                                new CompatibilityBottomSheet(),
-                                bundle
-                        );
-                    },
+                    onSuccessConfigLoad,
                     null
             );
-            handleShortcutAction();
         }
     }
 
@@ -259,68 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         if(networkReceiver != null) unregisterReceiver(networkReceiver);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == Constants.REQUEST.SCAN_BATCH
-                && resultCode == Activity.RESULT_OK
-                && data != null
-        ) {
-            NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-                    .findFragmentById(R.id.nav_host_fragment);
-            assert navHostFragment != null;
-            NavController navController = navHostFragment.getNavController();
-            /*navController.navigate((new NavDirections);
-            replaceFragment(
-                    Constants.UI.MISSING_BATCH_ITEMS,
-                    data.getParcelableArrayListExtra(Constants.ARGUMENT.BUNDLE),
-                    true
-            );*/
-        }
-    }
-
-    public void handleShortcutAction() {
-        if(getIntent() == null || getIntent().getAction() == null) return;
-
-        // no animation for shortcut fragments
-        Bundle bundleNoAnim = new Bundle();
-        bundleNoAnim.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-
-        switch (getIntent().getAction()) {
-            case Constants.SHORTCUT_ACTION.CONSUME:
-                navController.navigate(
-                        NavigationMainDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME)
-                );
-                break;
-            case Constants.SHORTCUT_ACTION.PURCHASE:
-                navController.navigate(
-                        NavigationMainDirections.actionGlobalScanBatchFragment(Constants.ACTION.PURCHASE)
-                );
-                break;
-            case Constants.SHORTCUT_ACTION.SHOPPING_LIST:
-                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                break;
-            case Constants.SHORTCUT_ACTION.ADD_ENTRY:
-                // TODO: Preselect last used shopping list!!
-                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                Bundle bundleCreate = new Bundle();
-                bundleCreate.putString(Constants.ARGUMENT.TYPE, Constants.ACTION.CREATE);
-                bundleCreate.putBoolean(Constants.ARGUMENT.ANIMATED, false);
-                //replaceFragment(Constants.UI.SHOPPING_LIST_ITEM_EDIT, bundleCreate, false);
-                break;
-            case Constants.SHORTCUT_ACTION.SHOPPING_MODE:
-                navController.navigate(Uri.parse("grocy://shoppinglist/shoppingmode"));
-                //replaceFragment(Constants.UI.SHOPPING_LIST, bundleNoAnim, false);
-                //startActivity(new Intent(this, ShoppingActivity.class));
-                break;
-        }
-        getIntent().setAction(null);
+        super.onDestroy();
     }
 
     public BottomAppBarRefreshScrollBehavior getScrollBehavior() {

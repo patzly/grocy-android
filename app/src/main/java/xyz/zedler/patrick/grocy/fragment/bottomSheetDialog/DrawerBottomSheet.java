@@ -150,7 +150,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
                     .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
         } else if(v.getId() == R.id.linear_drawer_master_data) {
             navigateCustom(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToMasterDataOverviewFragment());
+                    .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
         } else if(v.getId() == R.id.linear_settings) {
             IconUtil.start(view, R.id.image_settings);
             new Handler().postDelayed(() -> navigateCustom(DrawerBottomSheetDirections

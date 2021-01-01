@@ -20,6 +20,8 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.UUID;
 
 import xyz.zedler.patrick.grocy.R;
@@ -49,10 +52,12 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.SettingCategory;
@@ -71,6 +76,7 @@ public class SettingsFragment extends BaseFragment {
     private SettingsViewModel viewModel;
     private SharedPreferences sharedPrefs;
     private DownloadHelper.Queue queue;
+    private ClickUtil clickUtil;
     private boolean debug;
 
     @Override
@@ -84,6 +90,7 @@ public class SettingsFragment extends BaseFragment {
         SettingsFragmentArgs args = SettingsFragmentArgs.fromBundle(requireArguments());
         viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        clickUtil = new ClickUtil(); // TODO: Clickutil on every entry
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         queue = viewModel.getDownloadHelper().newQueue(
                 null,
@@ -327,6 +334,43 @@ public class SettingsFragment extends BaseFragment {
                 R.drawable.ic_round_dark_mode_on_anim,
                 this::updateTheme
         ));
+        binding.linearBody.addView(new SettingEntryClick(
+                requireContext(),
+                Constants.SETTINGS.BEHAVIOR.SHORTCUTS,
+                R.string.setting_manage_shortcuts,
+                R.string.subtitle_none_selected,
+                R.drawable.ic_round_edit, // TODO: Icon
+                entry -> {
+                    if(clickUtil.isDisabled()) return;
+                    activity.showBottomSheet(new ShortcutsBottomSheet());
+                }
+        ));
+        updateShortcuts();
+    }
+
+    @Override
+    public void updateShortcuts() {
+        String subtitleShortcuts;
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
+            StringBuilder shortcutLabels = new StringBuilder();
+            for(ShortcutInfo shortcutInfo : shortcutInfos) {
+                shortcutLabels.append(shortcutInfo.getShortLabel());
+                if(shortcutInfo != shortcutInfos.get(shortcutInfos.size()-1)) {
+                    shortcutLabels.append(", ");
+                }
+            }
+            if(shortcutLabels.length() != 0) {
+                subtitleShortcuts = shortcutLabels.toString();
+            } else {
+                subtitleShortcuts = getString(R.string.subtitle_none_selected);
+            }
+        } else {
+            subtitleShortcuts = getString(R.string.subtitle_shortcuts_not_supported);
+        }
+        View view = binding.linearBody.findViewWithTag(Constants.SETTINGS.BEHAVIOR.SHORTCUTS);
+        ((SettingEntryClick) view).setDescription(subtitleShortcuts);
     }
 
     private void showCategoryScanner() {

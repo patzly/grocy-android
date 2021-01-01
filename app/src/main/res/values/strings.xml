@@ -142,6 +142,8 @@
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
     <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
+    <string name="msg_shortcuts">You can enable 4 shortcuts.</string>
+    <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
     <string name="msg_features">Start intro again in \"About\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
@@ -263,6 +265,7 @@
     <!-- %1$s is a number -->
     <string name="subtitle_count">Count: %1$d</string>
     <string name="subtitle_count_unknown">Count: Unknown</string>
+    <string name="subtitle_shortcuts_not_supported">Not supported</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
@@ -428,6 +431,7 @@
     <string name="setting_reload_config_description">App restart required</string>
     <string name="setting_logout">Logout</string>
     <string name="setting_logout_description">Return to login page</string>
+    <string name="setting_manage_shortcuts">Manage shortcuts</string>
     <string name="setting_list_indicator">Indicate list entry</string>
     <string name="setting_list_indicator_description">Show blue dot if product is on a shopping list</string>
     <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>

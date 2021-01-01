@@ -100,6 +100,7 @@ public final class Constants {
         }
         public final static class BEHAVIOR {
             public final static String START_DESTINATION = "start_destination";
+            public final static String SHORTCUTS = "shortcuts";
         }
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";

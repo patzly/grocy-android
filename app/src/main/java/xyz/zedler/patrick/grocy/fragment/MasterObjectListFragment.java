@@ -57,7 +57,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -439,10 +438,11 @@ public class MasterObjectListFragment extends BaseFragment
                         .setStore((Store) object));
                 break;
             case GrocyApi.ENTITY.PRODUCTS:
-                navigate(MasterObjectListFragmentDirections
+                break;
+                /*navigate(MasterObjectListFragmentDirections
                         .actionMasterObjectListFragmentToMasterProductSimpleFragment(
                                 Constants.ACTION.EDIT
-                        ).setProduct((Product) object));
+                        ).setProduct((Product) object));*/
         }
     }
 

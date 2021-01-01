@@ -163,6 +163,10 @@ public class SettingEntryClick extends LinearLayout {
         return binding.title.getText().toString();
     }
 
+    public void setDescription(String description) {
+        binding.description.setText(description);
+    }
+
     public interface OnClickListener {
         void execute(SettingEntryClick view);
     }
