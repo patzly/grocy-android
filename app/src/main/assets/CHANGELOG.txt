@@ -3,7 +3,7 @@
 • Not compatible anymore with grocy version 2.7.1
 • New overview, settings, product & external scanner pages
 • Lots of new options for configuration (check them out)
-• Improved loading speed with database storage
+• Improved loading speed by use of database
 • Smooth & consistent navigation between pages
 • Many internal code changes & improvements
 • Fixed layout for text on features pages
