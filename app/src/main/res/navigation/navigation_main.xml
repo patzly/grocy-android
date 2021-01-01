@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    tools:ignore="InvalidNavigation">
+    tools:ignore="InvalidNavigation"
+    app:startDestination="@id/overviewStartFragment">
 
     <fragment
         android:id="@+id/stockFragment"
@@ -484,4 +485,9 @@
             app:uri="grocy://shoppinglist/shoppingmode" />
     </fragment>
     <include app:graph="@navigation/navigation_master_objects" />
+    <fragment
+        android:id="@+id/overviewStartFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.OverviewStartFragment"
+        android:label="OverviewStartFragment"
+        tools:layout="@layout/fragment_overview_start"/>
 </navigation>

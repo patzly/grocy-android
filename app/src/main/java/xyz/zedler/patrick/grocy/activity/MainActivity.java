@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(isServerUrlEmpty()){
             graph.setStartDestination(R.id.loginFragment);
         } else {
-            graph.setStartDestination(R.id.stockFragment);
+            graph.setStartDestination(R.id.overviewStartFragment);
         }
         navController.setGraph(graph);
     }

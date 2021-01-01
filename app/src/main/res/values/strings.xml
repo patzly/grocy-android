@@ -199,6 +199,7 @@
     <string name="error_no_browser">Install a web browser to display the help webpage</string>
     <string name="error_undefined">An error occurred</string>
 
+    <string name="title_overview">Overview</string>
     <string name="title_stock_overview">Stock overview</string>
     <string name="title_purchase">Purchase</string>
     <string name="title_consume">Consume</string>
