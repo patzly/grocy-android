@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -84,7 +85,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(
-                v -> navigateCustom(R.id.shoppingModeFragment)
+                v -> navigateDeepLink(getString(R.string.deep_link_shoppingModeFragment))
         );
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
@@ -187,6 +188,20 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         }
         dismiss();
         navigate(directions, builder.build());
+    }
+
+    @Override
+    void navigateDeepLink(@NonNull String uri) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+        builder.setPopUpTo(R.id.overviewStartFragment, false);
+        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+            builder.setExitAnim(R.anim.slide_out_down);
+        } else {
+            builder.setExitAnim(R.anim.slide_no);
+        }
+        dismiss();
+        findNavController().navigate(Uri.parse(uri), builder.build());
     }
 
     private void navigateCustom(@IdRes int direction) {

@@ -429,7 +429,7 @@
             android:id="@+id/settingsFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
             android:label="SettingsFragment"
-            tools:layout="@layout/fragment_settings" >
+            tools:layout="@layout/fragment_settings">
             <action
                 android:id="@+id/action_settingsFragment_to_logFragment"
                 app:destination="@id/logFragment"
@@ -439,9 +439,9 @@
                 app:popExitAnim="@anim/slide_to_right" />
             <argument
                 android:name="showCategory"
+                android:defaultValue="@null"
                 app:argType="string"
-                app:nullable="true"
-                android:defaultValue="@null" />
+                app:nullable="true" />
             <action
                 android:id="@+id/action_settingsFragment_self"
                 app:destination="@id/settingsFragment"
@@ -456,6 +456,9 @@
                 app:exitAnim="@anim/slide_to_left"
                 app:popEnterAnim="@anim/slide_from_left"
                 app:popExitAnim="@anim/slide_to_right" />
+            <deepLink
+                android:id="@+id/deepLink3"
+                app:uri="@string/deep_link_settingsFragment" />
         </fragment>
         <fragment
             android:id="@+id/logFragment"
@@ -466,7 +469,11 @@
             android:id="@+id/aboutFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
             android:label="AboutFragment"
-            tools:layout="@layout/fragment_about" />
+            tools:layout="@layout/fragment_about">
+            <deepLink
+                android:id="@+id/deepLink8"
+                app:uri="@string/deep_link_aboutFragment" />
+        </fragment>
     </navigation>
     <navigation
         android:id="@+id/navigation_master_objects"

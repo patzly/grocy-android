@@ -1,7 +1,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Activity;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -38,7 +38,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
             if(dialog == null) return;
 
             DisplayMetrics metrics = new DisplayMetrics();
-            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
             BottomSheetBehavior<View> behavior = getBehavior();
             if(behavior == null) return;
@@ -50,6 +50,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     BottomSheetBehavior<View> getBehavior() {
         BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        if(dialog == null) return null;
         View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if(sheet == null) return null;
         return BottomSheetBehavior.from(sheet);
@@ -86,5 +87,13 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
 
     void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
         findNavController().navigate(destination, null, navOptions);
+    }
+
+    void navigateDeepLink(@NonNull String uri) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up)
+                .setPopExitAnim(R.anim.slide_out_down)
+                .setExitAnim(R.anim.slide_no);
+        findNavController().navigate(Uri.parse(uri), builder.build());
     }
 }

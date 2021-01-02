@@ -2,6 +2,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
@@ -136,6 +137,14 @@ public class BaseFragment extends Fragment {
 
     void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
         findNavController().navigate(destination, null, navOptions);
+    }
+
+    void navigateDeepLink(@NonNull String uri) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up)
+                .setPopExitAnim(R.anim.slide_out_down)
+                .setExitAnim(R.anim.slide_no);
+        findNavController().navigate(Uri.parse(uri), builder.build());
     }
 
     @SuppressLint("RestrictedApi")

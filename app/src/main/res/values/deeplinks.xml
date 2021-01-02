@@ -7,5 +7,7 @@
     <string name="deep_link_purchaseFragment">grocy://purchaseFragment</string>
     <string name="deep_link_consumeFragment">grocy://consumeFragment</string>
     <string name="deep_link_batchModeFragment">grocy://batchModeFragment</string>
+    <string name="deep_link_settingsFragment">grocy://settingsFragment</string>
+    <string name="deep_link_aboutFragment">grocy://aboutFragment</string>
 
 </resources>

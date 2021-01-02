@@ -124,9 +124,18 @@ public class OverviewStartFragment extends BaseFragment {
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.GONE,
-                R.menu.menu_empty,
+                R.menu.menu_stock,
                 animated,
                 () -> {}
+        );
+        activity.updateFab(
+                R.drawable.ic_round_barcode_scan,
+                R.string.action_scan,
+                Constants.FAB.TAG.SCAN,
+                animated,
+                () -> {
+                    navigate(R.id.navigation_shopping);
+                }
         );
     }
 
