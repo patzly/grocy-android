@@ -45,15 +45,18 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     private final List<ShoppingList> shoppingLists;
     private int selectedId;
     private final ShoppingListAdapterListener listener;
+    private final boolean showActions;
 
     public ShoppingListAdapter(
             List<ShoppingList> shoppingLists,
             int selectedId,
-            ShoppingListAdapterListener listener
+            ShoppingListAdapterListener listener,
+            boolean showActions
     ) {
         this.shoppingLists = new ArrayList<>(shoppingLists);
         this.selectedId = selectedId;
         this.listener = listener;
+        this.showActions = showActions;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -110,6 +113,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         });
 
         holder.edit.setOnClickListener(v -> listener.onClickEdit(shoppingList));
+
+        if(!showActions) {
+            holder.delete.setVisibility(View.GONE);
+            holder.edit.setVisibility(View.GONE);
+        }
     }
 
     public void updateData(List<ShoppingList> shoppingListsNew, int selectedIdNew) {

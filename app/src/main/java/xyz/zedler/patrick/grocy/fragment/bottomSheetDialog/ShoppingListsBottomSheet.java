@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
@@ -119,7 +120,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
                 recyclerView.setAdapter(new ShoppingListAdapter(
                         shoppingLists,
                         selectedIdLive.getValue(),
-                        this
+                        this,
+                        activity.getCurrentFragment() instanceof ShoppingListFragment
                 ));
             } else {
                 ((ShoppingListAdapter) recyclerView.getAdapter()).updateData(
@@ -139,7 +141,9 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
         });
 
         ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
-        if(activity.isOnline() && multipleListsFeature) {
+        if(activity.isOnline() && multipleListsFeature
+                && activity.getCurrentFragment() instanceof ShoppingListFragment
+        ) {
             buttonNew.setVisibility(View.VISIBLE);
             buttonNew.setOnClickListener(v -> {
                 dismiss();
