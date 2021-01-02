@@ -267,10 +267,9 @@ public class ShoppingListFragment extends BaseFragment implements
 
     public void purchaseItem(@NonNull ShoppingListItem shoppingListItem) {
         if(showOfflineError()) return;
-        navigate(R.id.purchaseFragment,
-                new PurchaseFragmentArgs.Builder()
-                        .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
-                        .setCloseWhenFinished(true).build().toBundle());
+        navigate(R.id.purchaseFragment, new PurchaseFragmentArgs.Builder()
+                .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
+                .setCloseWhenFinished(true).build().toBundle());
     }
 
     public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
