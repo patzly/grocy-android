@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="deep_link_masterProductFragment">grocy://masterProductFragment</string>
     <string name="deep_link_shoppingListFragment">grocy://shoppingListFragment</string>
+    <string name="deep_link_shoppingListItemEditFragment">grocy://shoppingListItemEditFragment</string>
+    <string name="deep_link_shoppingModeFragment">grocy://shoppingModeFragment</string>
+    <string name="deep_link_purchaseFragment">grocy://purchaseFragment</string>
+    <string name="deep_link_consumeFragment">grocy://consumeFragment</string>
+    <string name="deep_link_batchModeFragment">grocy://batchModeFragment</string>
 
 </resources>

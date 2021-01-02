@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class CompatibilityBottomSheet extends CustomBottomSheet {
+public class CompatibilityBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = CompatibilityBottomSheet.class.getSimpleName();
 

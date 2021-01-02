@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -196,8 +197,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         binding.textInputShoppingListItemEditProduct.setErrorIconDrawable(null);
         binding.textInputShoppingListItemEditProduct.setEndIconOnClickListener(
-                v -> navigate(ShoppingListItemEditFragmentDirections
-                        .actionShoppingListItemEditFragmentToScanInputFragment())
+                v -> navigate(R.id.scanInputFragment)
         );
         binding.autoCompleteShoppingListItemEditProduct.setOnFocusChangeListener(
                 (View v, boolean hasFocus) -> {
@@ -763,9 +763,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                         .toString()
                         .trim();
                 if(productDetails != null && input.equals(productDetails.getProduct().getName())) {
-                    navigate(ShoppingListItemEditFragmentDirections
-                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
-                            .setProductDetails(productDetails));
+                    navigate(R.id.productOverviewBottomSheetDialogFragment,
+                            new ProductOverviewBottomSheetArgs.Builder()
+                                    .setProductDetails(productDetails).build().toBundle());
                 } else {
                     Product product = getProductFromName(input);
                     if(product != null) {
@@ -777,9 +777,10 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                                             new TypeToken<ProductDetails>() {
                                             }.getType()
                                     );
-                                    navigate(ShoppingListItemEditFragmentDirections
-                                            .actionShoppingListItemEditFragmentToProductOverviewBottomSheetDialogFragment()
-                                            .setProductDetails(productDetails));
+                                    navigate(R.id.productOverviewBottomSheetDialogFragment,
+                                            new ProductOverviewBottomSheetArgs.Builder()
+                                                    .setProductDetails(productDetails)
+                                                    .build().toBundle());
                                 }, error -> {
                                 }
                         );

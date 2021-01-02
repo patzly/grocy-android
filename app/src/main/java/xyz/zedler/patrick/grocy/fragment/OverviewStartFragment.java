@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -140,6 +141,11 @@ public class OverviewStartFragment extends BaseFragment {
         boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
         if(visible == currentState) return;
         binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 
     @NonNull

@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
-public class MasterLocationBottomSheet extends CustomBottomSheet {
+public class MasterLocationBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = MasterLocationBottomSheet.class.getSimpleName();
 

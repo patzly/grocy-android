@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
@@ -18,13 +19,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import xyz.zedler.patrick.grocy.R;
+
 
 /**
  * This is an extended BottomSheetDialogFragment class. The one overridden method fixes the
  * weird behavior of bottom sheets in landscape mode. All bottom sheets in this app should use this
  * extended class to apply the fix.
  */
-public class CustomBottomSheet extends BottomSheetDialogFragment {
+public class BaseBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,5 +70,21 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
 
     void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
         findNavController().navigate(directions, navOptions);
+    }
+
+    void navigate(@IdRes int destination) {
+        navigate(destination, (Bundle) null);
+    }
+
+    void navigate(@IdRes int destination, Bundle arguments) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up)
+                .setPopExitAnim(R.anim.slide_out_down)
+                .setExitAnim(R.anim.slide_no);
+        findNavController().navigate(destination, arguments, builder.build());
+    }
+
+    void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
+        findNavController().navigate(destination, null, navOptions);
     }
 }

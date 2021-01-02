@@ -256,7 +256,8 @@ public class ShoppingListFragment extends BaseFragment implements
     public void editItem(@NonNull ShoppingListItem shoppingListItem) {
         if(showOfflineError()) return;
         navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
+                .actionShoppingListFragmentToShoppingListItemEditFragment()
+                .setAction(Constants.ACTION.EDIT)
                 .setShoppingListItem(shoppingListItem));
     }
 
@@ -266,9 +267,10 @@ public class ShoppingListFragment extends BaseFragment implements
 
     public void purchaseItem(@NonNull ShoppingListItem shoppingListItem) {
         if(showOfflineError()) return;
-        navigate(ShoppingListFragmentDirections.actionShoppingListFragmentToPurchaseFragment()
-                .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
-                .setCloseWhenFinished(true));
+        navigate(R.id.purchaseFragment,
+                new PurchaseFragmentArgs.Builder()
+                        .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
+                        .setCloseWhenFinished(true).build().toBundle());
     }
 
     public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
@@ -285,7 +287,8 @@ public class ShoppingListFragment extends BaseFragment implements
 
     public void addItem() {
         navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
+                .actionShoppingListFragmentToShoppingListItemEditFragment()
+                .setAction(Constants.ACTION.CREATE)
                 .setSelectedShoppingListId(viewModel.getSelectedShoppingListId()));
     }
 
@@ -355,10 +358,10 @@ public class ShoppingListFragment extends BaseFragment implements
                 SortUtil.sortShoppingListItemsByName(listItems, true);
                 ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
                 for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
-                navigate(ShoppingListFragmentDirections
-                        .actionShoppingListFragmentToPurchaseFragment()
-                        .setShoppingListItems(array)
-                        .setCloseWhenFinished(true));
+                navigate(R.id.purchaseFragment,
+                        new PurchaseFragmentArgs.Builder()
+                                .setShoppingListItems(array)
+                                .setCloseWhenFinished(true).build().toBundle());
                 return true;
             });
         }

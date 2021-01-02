@@ -217,7 +217,7 @@ public final class Constants {
         public final static String CONSUME_ALL = "action_consume_all";
         public final static String CONSUME_SPOILED = "action_consume_spoiled";
         public final static String PURCHASE = "action_purchase";
-        public final static String CREATE = "action_create";
+        public final static String CREATE = "action_create"; // raw string is also used in navigation_main.xml
         public final static String EDIT = "action_edit";
         public final static String LINK = "action_link";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";

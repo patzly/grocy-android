@@ -32,7 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 
-public class ExitMissingBatchBottomSheet extends CustomBottomSheet {
+public class ExitMissingBatchBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = ExitMissingBatchBottomSheet.class.getSimpleName();
 

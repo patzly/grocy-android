@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
-public class TextEditBottomSheet extends CustomBottomSheet {
+public class TextEditBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = TextEditBottomSheet.class.getSimpleName();
 

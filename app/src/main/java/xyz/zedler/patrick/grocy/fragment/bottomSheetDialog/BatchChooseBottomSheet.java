@@ -59,7 +59,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BatchChooseBottomSheet extends CustomBottomSheet {
+public class BatchChooseBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = BatchChooseBottomSheet.class.getSimpleName();
 

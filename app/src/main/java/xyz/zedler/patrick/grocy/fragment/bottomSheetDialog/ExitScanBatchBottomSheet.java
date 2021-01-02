@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ExitScanBatchBottomSheet extends CustomBottomSheet {
+public class ExitScanBatchBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = ExitScanBatchBottomSheet.class.getSimpleName();
 

@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
-public class ShoppingListItemBottomSheet extends CustomBottomSheet {
+public class ShoppingListItemBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = ShoppingListItemBottomSheet.class.getSimpleName();
 

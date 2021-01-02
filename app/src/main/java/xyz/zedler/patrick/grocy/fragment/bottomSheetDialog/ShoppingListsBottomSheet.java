@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class ShoppingListsBottomSheet extends CustomBottomSheet
+public class ShoppingListsBottomSheet extends BaseBottomSheet
         implements ShoppingListAdapter.ShoppingListAdapterListener {
 
     private final static int DELETE_CONFIRMATION_DURATION = 2000;

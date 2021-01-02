@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
-public class MasterQuantityUnitBottomSheet extends CustomBottomSheet {
+public class MasterQuantityUnitBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = MasterQuantityUnitBottomSheet.class.getSimpleName();
 

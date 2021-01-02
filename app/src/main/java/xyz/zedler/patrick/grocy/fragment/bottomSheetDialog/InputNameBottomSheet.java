@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class InputNameBottomSheet extends CustomBottomSheet {
+public class InputNameBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = InputNameBottomSheet.class.getSimpleName();
 

@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class QuantityUnitsBottomSheet extends CustomBottomSheet
+public class QuantityUnitsBottomSheet extends BaseBottomSheet
         implements QuantityUnitAdapter.QuantityUnitAdapterListener {
 
     private final static String TAG = QuantityUnitsBottomSheet.class.getSimpleName();

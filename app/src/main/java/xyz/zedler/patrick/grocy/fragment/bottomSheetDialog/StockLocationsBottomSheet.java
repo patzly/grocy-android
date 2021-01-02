@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class StockLocationsBottomSheet extends CustomBottomSheet
+public class StockLocationsBottomSheet extends BaseBottomSheet
         implements StockLocationAdapter.StockLocationAdapterListener {
 
     private final static String TAG = StockLocationsBottomSheet.class.getSimpleName();

@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class TextBottomSheet extends CustomBottomSheet {
+public class TextBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = TextBottomSheet.class.getSimpleName();
 	private boolean debug;

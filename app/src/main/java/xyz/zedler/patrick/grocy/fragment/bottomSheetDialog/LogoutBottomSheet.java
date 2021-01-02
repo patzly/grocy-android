@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 
-public class LogoutBottomSheet extends CustomBottomSheet {
+public class LogoutBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = LogoutBottomSheet.class.getSimpleName();
 

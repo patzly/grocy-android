@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 
-public class ShortcutsBottomSheet extends CustomBottomSheet {
+public class ShortcutsBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = ShortcutsBottomSheet.class.getSimpleName();
 
@@ -153,6 +153,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
             }
         }
 
+        shortcutManager.removeAllDynamicShortcuts();
         shortcutManager.setDynamicShortcuts(shortcutInfos);
         activity.getCurrentFragment().updateShortcuts();
         dismiss();
@@ -171,7 +172,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutAddToShoppingList(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
+        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListItemEditFragment));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setClass(requireContext(), MainActivity.class);
         return new ShortcutInfo.Builder(requireContext(), ADD_TO_SHOPPING_LIST)
@@ -182,7 +183,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutShoppingMode(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
+        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingModeFragment));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setClass(requireContext(), MainActivity.class);
         return new ShortcutInfo.Builder(requireContext(), SHOPPING_MODE)
@@ -193,7 +194,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutPurchase(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
+        Uri uri = Uri.parse(getString(R.string.deep_link_purchaseFragment));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setClass(requireContext(), MainActivity.class);
         return new ShortcutInfo.Builder(requireContext(), PURCHASE)
@@ -204,7 +205,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutConsume(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
+        Uri uri = Uri.parse(getString(R.string.deep_link_consumeFragment));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setClass(requireContext(), MainActivity.class);
         return new ShortcutInfo.Builder(requireContext(), CONSUME)
@@ -215,7 +216,7 @@ public class ShortcutsBottomSheet extends CustomBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutBatchMode(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
+        Uri uri = Uri.parse(getString(R.string.deep_link_batchModeFragment));
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setClass(requireContext(), MainActivity.class);
         return new ShortcutInfo.Builder(requireContext(), BATCH_MODE)

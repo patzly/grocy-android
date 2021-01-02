@@ -37,7 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class FeedbackBottomSheet extends CustomBottomSheet {
+public class FeedbackBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = FeedbackBottomSheet.class.getSimpleName();
 

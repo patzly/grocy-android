@@ -42,7 +42,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BatchConfigBottomSheet extends CustomBottomSheet {
+public class BatchConfigBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = BatchConfigBottomSheet.class.getSimpleName();
 

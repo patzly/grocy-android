@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ShoppingListClearBottomSheet extends CustomBottomSheet {
+public class ShoppingListClearBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = ShoppingListClearBottomSheet.class.getSimpleName();
 

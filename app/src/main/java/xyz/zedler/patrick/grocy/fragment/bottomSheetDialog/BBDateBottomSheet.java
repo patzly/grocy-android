@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BBDateBottomSheet extends CustomBottomSheet {
+public class BBDateBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = BBDateBottomSheet.class.getSimpleName();
 

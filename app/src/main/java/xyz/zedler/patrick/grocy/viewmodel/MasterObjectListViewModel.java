@@ -40,7 +40,7 @@ import java.util.Collections;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CustomBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
@@ -492,7 +492,7 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         eventHandler.setValue(snackbarMessage);
     }
 
-    private void showBottomSheet(CustomBottomSheet bottomSheet, Bundle bundle) {
+    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
         eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
     }
 

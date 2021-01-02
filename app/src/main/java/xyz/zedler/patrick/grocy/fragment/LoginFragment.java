@@ -310,7 +310,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
         about.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             about.startIconAnimation();
-            navigate(LoginFragmentDirections.actionLoginFragmentToAboutFragment());
+            navigate(R.id.aboutFragment);
         });
         website.setTooltipText(getString(R.string.info_website));
         website.setOnClickListener(v -> {
@@ -322,7 +322,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
         settings.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             settings.startIconAnimation();
-            navigate(LoginFragmentDirections.actionLoginFragmentToSettingsFragment());
+            navigate(R.id.settingsFragment);
         });
     }
 

@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class LocationsBottomSheet extends CustomBottomSheet
+public class LocationsBottomSheet extends BaseBottomSheet
         implements LocationAdapter.LocationAdapterListener {
 
     private final static String TAG = LocationsBottomSheet.class.getSimpleName();

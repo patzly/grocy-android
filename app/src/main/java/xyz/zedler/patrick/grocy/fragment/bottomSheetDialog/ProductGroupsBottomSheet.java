@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ProductGroupsBottomSheet extends CustomBottomSheet
+public class ProductGroupsBottomSheet extends BaseBottomSheet
         implements ProductGroupAdapter.ProductGroupAdapterListener {
 
     private final static String TAG = ProductGroupsBottomSheet.class.getSimpleName();

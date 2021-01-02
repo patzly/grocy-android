@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class SettingInputBottomSheet extends CustomBottomSheet {
+public class SettingInputBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = SettingInputBottomSheet.class.getSimpleName();
 

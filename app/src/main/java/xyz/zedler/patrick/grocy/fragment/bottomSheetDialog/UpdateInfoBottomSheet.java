@@ -35,7 +35,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class UpdateInfoBottomSheet extends CustomBottomSheet {
+public class UpdateInfoBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = "UpdateInfoBottomSheet";
 

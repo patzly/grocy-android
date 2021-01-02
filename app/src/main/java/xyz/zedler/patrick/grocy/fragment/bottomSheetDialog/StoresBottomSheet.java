@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class StoresBottomSheet extends CustomBottomSheet
+public class StoresBottomSheet extends BaseBottomSheet
         implements StoreAdapter.StoreAdapterListener {
 
     private final static String TAG = StoresBottomSheet.class.getSimpleName();

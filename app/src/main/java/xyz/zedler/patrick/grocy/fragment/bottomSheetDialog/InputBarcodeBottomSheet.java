@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class InputBarcodeBottomSheet extends CustomBottomSheet {
+public class InputBarcodeBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = InputBarcodeBottomSheet.class.getSimpleName();
 

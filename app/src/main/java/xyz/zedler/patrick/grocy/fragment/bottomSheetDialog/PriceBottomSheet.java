@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class PriceBottomSheet extends CustomBottomSheet {
+public class PriceBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = PriceBottomSheet.class.getSimpleName();
 

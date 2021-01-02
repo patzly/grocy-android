@@ -34,7 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class MessageBottomSheet extends CustomBottomSheet {
+public class MessageBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = MessageBottomSheet.class.getSimpleName();
 

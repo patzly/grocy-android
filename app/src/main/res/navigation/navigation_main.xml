@@ -22,56 +22,19 @@
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
-        android:id="@+id/shoppingListFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
-        android:label="ShoppingListFragment"
-        tools:layout="@layout/fragment_shopping_list">
-        <action
-            android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
-            app:destination="@id/shoppingListItemEditFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <action
-            android:id="@+id/action_shoppingListFragment_to_purchaseFragment"
-            app:destination="@id/purchaseFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <action
-            android:id="@+id/action_shoppingListFragment_to_shoppingListEditFragment"
-            app:destination="@id/shoppingListEditFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <argument
-            android:name="animateStart"
-            android:defaultValue="true"
-            app:argType="boolean" />
-        <action
-            android:id="@+id/action_shoppingListFragment_to_shoppingModeFragment"
-            app:destination="@id/shoppingModeFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="grocy://shoppingListFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/consumeFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
         android:label="ConsumeFragment"
-        tools:layout="@layout/fragment_consume" >
+        tools:layout="@layout/fragment_consume">
         <argument
             android:name="closeWhenFinished"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="productName"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_consumeFragment_to_inputNameBottomSheetDialogFragment"
             app:destination="@id/inputNameBottomSheetDialogFragment" />
@@ -90,28 +53,31 @@
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
+        <deepLink
+            android:id="@+id/deepLink4"
+            app:uri="@string/deep_link_consumeFragment" />
     </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
         android:label="PurchaseFragment"
-        tools:layout="@layout/fragment_purchase" >
+        tools:layout="@layout/fragment_purchase">
         <argument
             android:name="closeWhenFinished"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="productName"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_purchaseFragment_to_inputNameBottomSheetDialogFragment"
             app:destination="@id/inputNameBottomSheetDialogFragment" />
         <argument
             android:name="amount"
-            app:argType="string"
             android:defaultValue="@null"
+            app:argType="string"
             app:nullable="true" />
         <action
             android:id="@+id/action_purchaseFragment_to_productOverviewBottomSheetDialogFragment"
@@ -136,13 +102,16 @@
             app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="shoppingListItems"
+            android:defaultValue="@null"
             app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem[]"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="animateStart"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <deepLink
+            android:id="@+id/deepLink5"
+            app:uri="@string/deep_link_purchaseFragment" />
     </fragment>
     <activity
         android:id="@+id/settingsActivity"
@@ -179,79 +148,41 @@
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
-    <fragment
-        android:id="@+id/shoppingListItemEditFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment"
-        android:label="ShoppingListItemEditFragment"
-        tools:layout="@layout/fragment_shopping_list_item_edit" >
-        <argument
-            android:name="selectedShoppingListId"
-            app:argType="integer"
-            android:defaultValue="-1" />
-        <argument
-            android:name="action"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_shoppingListItemEditFragment_to_productOverviewBottomSheetDialogFragment"
-            app:destination="@id/productOverviewBottomSheetDialogFragment" />
-        <argument
-            android:name="productName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="shoppingListItem"
-            app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <action
-            android:id="@+id/action_shoppingListItemEditFragment_to_scanInputFragment"
-            app:destination="@id/scanInputFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
     <dialog
         android:id="@+id/productOverviewBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet"
         android:label="ProductOverviewBottomSheetDialogFragment"
-        tools:layout="@layout/fragment_bottomsheet_product_overview" >
+        tools:layout="@layout/fragment_bottomsheet_product_overview">
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
             app:destination="@id/masterProductSimpleFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_no"
             app:popExitAnim="@anim/slide_out_down" />
-        <action
-            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_shoppingListItemEditFragment"
-            app:destination="@id/shoppingListItemEditFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="productDetails"
+            android:defaultValue="@null"
             app:argType="xyz.zedler.patrick.grocy.model.ProductDetails"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="stockItem"
+            android:defaultValue="@null"
             app:argType="xyz.zedler.patrick.grocy.model.StockItem"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="quantityUnit"
+            android:defaultValue="@null"
             app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="location"
+            android:defaultValue="@null"
             app:argType="xyz.zedler.patrick.grocy.model.Location"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="showActions"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
             app:destination="@id/consumeFragment"
@@ -272,7 +203,7 @@
         tools:layout="@layout/fragment_bottomsheet_drawer" >
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingListFragment"
-            app:destination="@id/shoppingListFragment" />
+            app:destination="@id/navigation_shopping" />
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_purchaseFragment"
             app:destination="@id/purchaseFragment" />
@@ -290,13 +221,13 @@
             app:destination="@id/scanBatchFragment" />
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_drawerBottomSheetDialogFragment_to_shoppingModeFragment"
-            app:destination="@id/shoppingModeFragment" />
+            app:destination="@id/navigation_settings" />
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_navigation_master_objects"
             app:destination="@id/navigation_master_objects" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockFragment"
+            app:destination="@id/stockFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <dialog
@@ -327,14 +258,17 @@
         android:id="@+id/scanBatchFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanBatchFragment"
         android:label="ScanBatchFragment"
-        tools:layout="@layout/fragment_scan_batch" >
+        tools:layout="@layout/fragment_scan_batch">
         <argument
             android:name="action"
             app:argType="string" />
         <argument
             android:name="startAnimated"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <deepLink
+            android:id="@+id/deepLink6"
+            app:uri="@string/deep_link_batchModeFragment" />
     </fragment>
     <fragment
         android:id="@+id/scanInputFragment"
@@ -342,54 +276,10 @@
         android:label="ScanInputFragment"
         tools:layout="@layout/fragment_scan_input" />
     <fragment
-        android:id="@+id/logFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.LogFragment"
-        android:label="LogFragment"
-        tools:layout="@layout/fragment_log" />
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
-        android:label="AboutFragment"
-        tools:layout="@layout/fragment_about" >
-        <action
-            android:id="@+id/action_aboutFragment_to_featuresFragment"
-            app:destination="@id/featuresFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/shoppingListEditFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
-        android:label="ShoppingListEditFragment"
-        tools:layout="@layout/fragment_shopping_list_edit" >
-        <argument
-            android:name="shoppingList"
-            app:argType="xyz.zedler.patrick.grocy.model.ShoppingList"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="animateStart"
-            app:argType="boolean"
-            android:defaultValue="true" />
-    </fragment>
-    <fragment
         android:id="@+id/loginFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login_page_2" >
-        <action
-            android:id="@+id/action_loginFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <action
-            android:id="@+id/action_loginFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="page"
             app:argType="integer"
@@ -440,54 +330,254 @@
         app:popUpTo="@id/stockFragment"
         app:popUpToInclusive="false" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
-        android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" >
-        <action
-            android:id="@+id/action_settingsFragment_to_logFragment"
-            app:destination="@id/logFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
-        <argument
-            android:name="showCategory"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <action
-            android:id="@+id/action_settingsFragment_self"
-            app:destination="@id/settingsFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
-        <action
-            android:id="@+id/action_settingsFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
-    </fragment>
-    <fragment
-        android:id="@+id/shoppingModeFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment"
-        android:label="ShoppingModeFragment"
-        tools:layout="@layout/fragment_shopping_mode">
-        <argument
-            android:name="animateStart"
-            android:defaultValue="true"
-            app:argType="boolean" />
-        <deepLink
-            android:id="@+id/deepLink2"
-            app:uri="grocy://shoppinglist/shoppingmode" />
-    </fragment>
-    <include app:graph="@navigation/navigation_master_objects" />
-    <fragment
         android:id="@+id/overviewStartFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.OverviewStartFragment"
         android:label="OverviewStartFragment"
         tools:layout="@layout/fragment_overview_start"/>
+    <navigation android:id="@+id/navigation_shopping"
+        app:startDestination="@id/shoppingListFragment">
+        <fragment
+            android:id="@+id/shoppingListFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"
+            android:label="ShoppingListFragment"
+            tools:layout="@layout/fragment_shopping_list">
+            <action
+                android:id="@+id/action_shoppingListFragment_to_shoppingListItemEditFragment"
+                app:destination="@id/shoppingListItemEditFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <action
+                android:id="@+id/action_shoppingListFragment_to_shoppingListEditFragment"
+                app:destination="@id/shoppingListEditFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <argument
+                android:name="animateStart"
+                android:defaultValue="true"
+                app:argType="boolean" />
+            <action
+                android:id="@+id/action_shoppingListFragment_to_shoppingModeFragment"
+                app:destination="@id/shoppingModeFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <deepLink
+                android:id="@+id/deepLink"
+                app:uri="@string/deep_link_shoppingListFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/shoppingListItemEditFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragment"
+            android:label="ShoppingListItemEditFragment"
+            tools:layout="@layout/fragment_shopping_list_item_edit">
+            <argument
+                android:name="selectedShoppingListId"
+                android:defaultValue="-1"
+                app:argType="integer" />
+            <argument
+                android:name="action"
+                app:argType="string"
+                android:defaultValue="action_create"/>
+            <argument
+                android:name="productName"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="shoppingListItem"
+                android:defaultValue="@null"
+                app:argType="xyz.zedler.patrick.grocy.model.ShoppingListItem"
+                app:nullable="true" />
+            <deepLink
+                android:id="@+id/deepLink7"
+                app:uri="@string/deep_link_shoppingListItemEditFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/shoppingListEditFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.ShoppingListEditFragment"
+            android:label="ShoppingListEditFragment"
+            tools:layout="@layout/fragment_shopping_list_edit">
+            <argument
+                android:name="shoppingList"
+                android:defaultValue="@null"
+                app:argType="xyz.zedler.patrick.grocy.model.ShoppingList"
+                app:nullable="true" />
+            <argument
+                android:name="animateStart"
+                android:defaultValue="true"
+                app:argType="boolean" />
+        </fragment>
+        <fragment
+            android:id="@+id/shoppingModeFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment"
+            android:label="ShoppingModeFragment"
+            tools:layout="@layout/fragment_shopping_mode">
+            <argument
+                android:name="animateStart"
+                android:defaultValue="true"
+                app:argType="boolean" />
+            <deepLink
+                android:id="@+id/deepLink2"
+                app:uri="@string/deep_link_shoppingModeFragment" />
+        </fragment>
+    </navigation>
+    <navigation android:id="@+id/navigation_settings"
+        app:startDestination="@id/settingsFragment">
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
+            android:label="SettingsFragment"
+            tools:layout="@layout/fragment_settings" >
+            <action
+                android:id="@+id/action_settingsFragment_to_logFragment"
+                app:destination="@id/logFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right" />
+            <argument
+                android:name="showCategory"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <action
+                android:id="@+id/action_settingsFragment_self"
+                app:destination="@id/settingsFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right" />
+            <action
+                android:id="@+id/action_settingsFragment_to_aboutFragment"
+                app:destination="@id/aboutFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right" />
+        </fragment>
+        <fragment
+            android:id="@+id/logFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.LogFragment"
+            android:label="LogFragment"
+            tools:layout="@layout/fragment_log" />
+        <fragment
+            android:id="@+id/aboutFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.AboutFragment"
+            android:label="AboutFragment"
+            tools:layout="@layout/fragment_about" />
+    </navigation>
+    <navigation
+        android:id="@+id/navigation_master_objects"
+        app:startDestination="@id/masterDataOverviewFragment">
+
+        <fragment
+            android:id="@+id/masterDataOverviewFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterDataOverviewFragment"
+            android:label="MasterDataOverviewFragment"
+            tools:layout="@layout/fragment_master_data_overview" >
+            <action
+                android:id="@+id/action_masterDataOverviewFragment_to_masterObjectListFragment"
+                app:destination="@id/masterObjectListFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterObjectListFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment"
+            android:label="MasterObjectListFragment"
+            tools:layout="@layout/fragment_master_object_list" >
+            <action
+                android:id="@+id/action_masterObjectListFragment_to_masterLocationFragment"
+                app:destination="@id/masterLocationFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <action
+                android:id="@+id/action_masterObjectListFragment_to_masterStoreFragment"
+                app:destination="@id/masterStoreFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <action
+                android:id="@+id/action_masterObjectListFragment_to_masterQuantityUnitFragment"
+                app:destination="@id/masterQuantityUnitFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <action
+                android:id="@+id/action_masterObjectListFragment_to_masterProductGroupFragment"
+                app:destination="@id/masterProductGroupFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+            <argument
+                android:name="entity"
+                app:argType="string" />
+            <argument
+                android:name="transitionName"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <action
+                android:id="@+id/action_masterObjectListFragment_to_masterProductFragment"
+                app:destination="@id/masterProductFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:exitAnim="@anim/slide_no"
+                app:popExitAnim="@anim/slide_out_down" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterLocationFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterLocationFragment"
+            android:label="MasterLocationFragment"
+            tools:layout="@layout/fragment_master_location" >
+            <argument
+                android:name="location"
+                app:argType="xyz.zedler.patrick.grocy.model.Location"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterStoreFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterStoreFragment"
+            android:label="MasterStoreFragment"
+            tools:layout="@layout/fragment_master_store" >
+            <argument
+                android:name="store"
+                app:argType="xyz.zedler.patrick.grocy.model.Store"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterQuantityUnitFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterQuantityUnitFragment"
+            android:label="MasterQuantityUnitFragment"
+            tools:layout="@layout/fragment_master_quantity_unit" >
+            <argument
+                android:name="quantityUnit"
+                app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterProductGroupFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterProductGroupFragment"
+            android:label="MasterProductGroupFragment"
+            tools:layout="@layout/fragment_master_product_group" >
+            <argument
+                android:name="productGroup"
+                app:argType="xyz.zedler.patrick.grocy.model.ProductGroup"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterProductFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterProductFragment"
+            android:label="MasterProductFragment"
+            tools:layout="@layout/fragment_master_product"/>
+
+    </navigation>
 </navigation>

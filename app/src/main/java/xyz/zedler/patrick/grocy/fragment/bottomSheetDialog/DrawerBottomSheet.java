@@ -45,15 +45,15 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
+import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
-public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClickListener {
+public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickListener {
 
     private final static String TAG = DrawerBottomSheet.class.getSimpleName();
 
@@ -83,11 +83,9 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(v -> {
-            navigateCustom(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToShoppingModeFragment()
-            );
-        });
+        view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(
+                v -> navigateCustom(R.id.shoppingModeFragment)
+        );
 
         view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
             navigateCustom(DrawerBottomSheetDirections
@@ -105,6 +103,7 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
         });
 
         setOnClickListeners(
+                R.id.linear_drawer_stock,
                 R.id.linear_drawer_shopping_list,
                 R.id.linear_drawer_consume,
                 R.id.linear_drawer_purchase,
@@ -139,7 +138,10 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
     public void onClick(View v) {
         if(clickUtil.isDisabled()) return;
 
-        if(v.getId() == R.id.linear_drawer_shopping_list) {
+        if(v.getId() == R.id.linear_drawer_stock) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToStockFragment());
+        } else if(v.getId() == R.id.linear_drawer_shopping_list) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
         } else if(v.getId() == R.id.linear_drawer_consume) {
@@ -175,17 +177,29 @@ public class DrawerBottomSheet extends CustomBottomSheet implements View.OnClick
     }
 
     private void navigateCustom(NavDirections directions) {
-
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-        if(true) builder.setPopUpTo(R.id.stockFragment, false);
-        if(! (activity.getCurrentFragment() instanceof StockFragment)) {
+        builder.setPopUpTo(R.id.overviewStartFragment, false);
+        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         } else {
             builder.setExitAnim(R.anim.slide_no);
         }
         dismiss();
         navigate(directions, builder.build());
+    }
+
+    private void navigateCustom(@IdRes int direction) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+        builder.setPopUpTo(R.id.overviewStartFragment, false);
+        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+            builder.setExitAnim(R.anim.slide_out_down);
+        } else {
+            builder.setExitAnim(R.anim.slide_no);
+        }
+        dismiss();
+        navigate(direction, builder.build());
     }
 
     private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {

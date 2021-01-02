@@ -2,7 +2,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -114,14 +114,6 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(directions);
     }
 
-    void navigateDeepLink(String uri) {
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_in_up)
-                .setPopExitAnim(R.anim.slide_out_down)
-                .setExitAnim(R.anim.slide_no);
-        findNavController().navigate(Uri.parse(uri), builder.build());
-    }
-
     void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
         findNavController().navigate(directions, navigatorExtras);
     }
@@ -130,12 +122,20 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(directions, navOptions);
     }
 
-    void navigate(@IdRes int resId) {
-        findNavController().navigate(resId);
+    void navigate(@IdRes int destination) {
+        navigate(destination, (Bundle) null);
     }
 
-    void navigate(@IdRes int resId, @NonNull NavOptions navOptions) {
-        findNavController().navigate(resId, null, navOptions);
+    void navigate(@IdRes int destination, Bundle arguments) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up)
+                .setPopExitAnim(R.anim.slide_out_down)
+                .setExitAnim(R.anim.slide_no);
+        findNavController().navigate(destination, arguments, builder.build());
+    }
+
+    void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
+        findNavController().navigate(destination, null, navOptions);
     }
 
     @SuppressLint("RestrictedApi")

@@ -51,6 +51,7 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -69,7 +70,7 @@ import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
-public class ProductOverviewBottomSheet extends CustomBottomSheet {
+public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = ProductOverviewBottomSheet.class.getSimpleName();
 
@@ -170,56 +171,54 @@ public class ProductOverviewBottomSheet extends CustomBottomSheet {
 		);
 		toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
 		toolbar.setOnMenuItemClickListener(item -> {
-			switch (item.getItemId()) {
-				case R.id.action_add_to_shopping_list:
-					NavHostFragment.findNavController(this).navigate(
-							ProductOverviewBottomSheetDirections
-									.actionProductOverviewBottomSheetDialogFragmentToShoppingListItemEditFragment(
-											Constants.ACTION.CREATE
-									).setProductName(product.getName()));
-					dismiss();
-					return true;
-				case R.id.action_consume_all:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_ALL,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume_spoiled:
-					((StockFragment) activity.getCurrentFragment()).performAction(
-							Constants.ACTION.CONSUME_SPOILED,
-							product.getId()
-					);
-					dismiss();
-					return true;
-				case R.id.action_purchase:
-					NavHostFragment.findNavController(this).navigate(
-							ProductOverviewBottomSheetDirections
-									.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
-									.setCloseWhenFinished(true)
-									.setProductName(product.getName()) // TODO: Doesn't work yet
-					);
-					dismiss();
-					return true;
-				case R.id.action_consume:
-					NavHostFragment.findNavController(this).navigate(
-							ProductOverviewBottomSheetDirections
-									.actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
-									.setCloseWhenFinished(true)
-									.setProductName(product.getName())
-					);
-					dismiss();
-					return true;
-				case R.id.action_edit_product:
-					NavHostFragment.findNavController(this).navigate(
-							ProductOverviewBottomSheetDirections
-									.actionProductOverviewBottomSheetDialogFragmentToMasterProductSimpleFragment(
-											Constants.ACTION.EDIT
-									).setProduct(product)
-					);
-					dismiss();
-					return true;
+			if(item.getItemId() == R.id.action_add_to_shopping_list) {
+				navigate(R.id.shoppingListItemEditFragment,
+						new ShoppingListItemEditFragmentArgs.Builder()
+								.setAction(Constants.ACTION.CREATE)
+								.setProductName(product.getName()).build().toBundle());
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume_all) {
+				((StockFragment) activity.getCurrentFragment()).performAction(
+						Constants.ACTION.CONSUME_ALL,
+						product.getId()
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume_spoiled) {
+				((StockFragment) activity.getCurrentFragment()).performAction(
+						Constants.ACTION.CONSUME_SPOILED,
+						product.getId()
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_purchase) {
+				NavHostFragment.findNavController(this).navigate(
+						ProductOverviewBottomSheetDirections
+								.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
+								.setCloseWhenFinished(true)
+								.setProductName(product.getName()) // TODO: Doesn't work yet
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_consume) {
+				NavHostFragment.findNavController(this).navigate(
+						ProductOverviewBottomSheetDirections
+								.actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
+								.setCloseWhenFinished(true)
+								.setProductName(product.getName())
+				);
+				dismiss();
+				return true;
+			} else if(item.getItemId() == R.id.action_edit_product) {
+				NavHostFragment.findNavController(this).navigate(
+						ProductOverviewBottomSheetDirections
+								.actionProductOverviewBottomSheetDialogFragmentToMasterProductSimpleFragment(
+										Constants.ACTION.EDIT
+								).setProduct(product)
+				);
+				dismiss();
+				return true;
 			}
 			return false;
 		});

@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
-public class MasterProductGroupBottomSheet extends CustomBottomSheet {
+public class MasterProductGroupBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = MasterProductGroupBottomSheet.class.getSimpleName();
 
