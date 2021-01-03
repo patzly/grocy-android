@@ -8,8 +8,10 @@ import androidx.room.RoomDatabase;
 
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
+import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
+import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
@@ -17,8 +19,10 @@ import xyz.zedler.patrick.grocy.dao.StoreDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -32,9 +36,11 @@ import xyz.zedler.patrick.grocy.model.Store;
                 QuantityUnit.class,
                 Store.class,
                 Location.class,
-                MissingItem.class
+                MissingItem.class,
+                QuantityUnitConversion.class,
+                ProductBarcode.class
         },
-        version = 7
+        version = 8
 )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
@@ -54,6 +60,10 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract LocationDao locationDao();
 
     public abstract MissingItemDao missingItemDao();
+
+    public abstract QuantityUnitConversionDao quantityUnitConversionDao();
+
+    public abstract ProductBarcodeDao productBarcodeDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {

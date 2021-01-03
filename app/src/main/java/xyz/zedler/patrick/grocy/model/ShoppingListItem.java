@@ -51,6 +51,10 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @SerializedName("shopping_list_id")
     private int shoppingListId;
 
+    @ColumnInfo(name = "qu_id")
+    @SerializedName("qu_id")
+    private String quId;
+
     @ColumnInfo(name = "done")
     @SerializedName("done")
     private int done;
@@ -79,6 +83,10 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @ColumnInfo(name = "is_missing")
     private int isMissing;  // needs to be integer because of min. API level
 
+    @ColumnInfo(name = "row_created_timestamp")
+    @SerializedName("row_created_timestamp")
+    private String rowCreatedTimestamp;
+
     public ShoppingListItem() {}
 
     private ShoppingListItem( // for clone
@@ -87,6 +95,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
               String note,
               double amount,
               int shoppingListId,
+              String quId,
               int done,
               int doneSynced,
               String productName,
@@ -100,6 +109,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.note = note;
         this.amount = amount;
         this.shoppingListId = shoppingListId;
+        this.quId = quId;
         this.done = done;
         this.doneSynced = doneSynced;
         this.productName = productName;
@@ -115,6 +125,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         note = parcel.readString();
         amount = parcel.readDouble();
         shoppingListId = parcel.readInt();
+        quId = parcel.readString();
         done = parcel.readInt();
         doneSynced = parcel.readInt();
         productName = parcel.readString();
@@ -131,6 +142,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeString(note);
         dest.writeDouble(amount);
         dest.writeInt(shoppingListId);
+        dest.writeString(quId);
         dest.writeInt(done);
         dest.writeInt(doneSynced);
         dest.writeString(productName);
@@ -283,6 +295,22 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.isMissing = isMissing;
     }
 
+    public String getQuId() {
+        return quId;
+    }
+
+    public void setQuId(String quId) {
+        this.quId = quId;
+    }
+
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -303,12 +331,13 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 shoppingListId == that.shoppingListId &&
                 done == that.done &&
                 Objects.equals(note, that.note) &&
-                Objects.equals(productId, that.productId);
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(quId, that.quId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, note, amount, shoppingListId, done, productId);
+        return Objects.hash(id, note, amount, shoppingListId, quId, done, productId);
     }
 
     @NonNull
@@ -325,6 +354,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 this.note,
                 this.amount,
                 this.shoppingListId,
+                this.quId,
                 this.done,
                 this.doneSynced,
                 this.productName,

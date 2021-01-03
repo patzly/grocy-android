@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 7,
-    "identityHash": "1b535f1a024349e475fdc24f60891fae",
+    "version": 8,
+    "identityHash": "c984f4b988e64e1d9a2d2c268c67f3dc",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "shopping_list_item_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `note` TEXT, `amount` REAL NOT NULL, `shopping_list_id` INTEGER NOT NULL, `done` INTEGER NOT NULL, `done_synced` INTEGER NOT NULL, `product_id` TEXT, `product_name` TEXT, `product_description` TEXT, `product_group_id` TEXT, `product_qu_id_purchase` INTEGER NOT NULL, `is_missing` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `note` TEXT, `amount` REAL NOT NULL, `shopping_list_id` INTEGER NOT NULL, `qu_id` TEXT, `done` INTEGER NOT NULL, `done_synced` INTEGER NOT NULL, `product_id` TEXT, `product_name` TEXT, `product_description` TEXT, `product_group_id` TEXT, `product_qu_id_purchase` INTEGER NOT NULL, `is_missing` INTEGER NOT NULL, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -63,6 +63,12 @@
             "columnName": "shopping_list_id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "quId",
+            "columnName": "qu_id",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "done",
@@ -111,6 +117,12 @@
             "columnName": "is_missing",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -487,12 +499,130 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "quantity_unit_conversion_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` INTEGER NOT NULL, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromQuId",
+            "columnName": "from_qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toQuId",
+            "columnName": "to_qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "factor",
+            "columnName": "factor",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "product_barcode_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `product_id` INTEGER NOT NULL, `barcode` TEXT, `qu_id` TEXT, `amount` TEXT, `shopping_location_id` TEXT, `last_price` TEXT, `note` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "barcode",
+            "columnName": "barcode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quId",
+            "columnName": "qu_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shoppingLocationId",
+            "columnName": "shopping_location_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastPrice",
+            "columnName": "last_price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b535f1a024349e475fdc24f60891fae')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c984f4b988e64e1d9a2d2c268c67f3dc')"
     ]
   }
 }
