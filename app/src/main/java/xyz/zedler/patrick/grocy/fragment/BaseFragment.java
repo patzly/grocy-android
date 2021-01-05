@@ -26,11 +26,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 public class BaseFragment extends Fragment {
 
     private boolean isSearchVisible = false;
+    private final MutableLiveData<Boolean> workflowEnabled = new MutableLiveData<>(false);
 
     public boolean isSearchVisible() {
         return isSearchVisible;
@@ -41,6 +43,25 @@ public class BaseFragment extends Fragment {
     }
 
     public void dismissSearch() {}
+
+    public boolean isWorkflowEnabled() {
+        return workflowEnabled.getValue();
+    }
+
+    public MutableLiveData<Boolean> getWorkflowEnabled() {
+        return workflowEnabled;
+    }
+
+    public void setWorkflowEnabled(boolean enabled) {
+        workflowEnabled.setValue(enabled);
+    }
+
+    public boolean toggleWorkflowEnabled() {
+        workflowEnabled.setValue(!isWorkflowEnabled());
+        return true;
+    }
+
+    public void onBottomSheetDismissed() {}
 
     public boolean onBackPressed() {
         return false;
@@ -73,9 +94,15 @@ public class BaseFragment extends Fragment {
         return null;
     }
 
+    public int getSelectedQuantityUnitId() {
+        return -1;
+    }
+
     public void updateConnectivity(boolean isOnline) {}
 
-    public void selectShoppingList(int id) {}
+    public void selectShoppingList(ShoppingList shoppingList) {}
+
+    public void selectQuantityUnit(QuantityUnit quantityUnit) {}
 
     public void updateShortcuts() {}
 
@@ -123,7 +150,7 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(directions, navOptions);
     }
 
-    void navigate(@IdRes int destination) {
+    public void navigate(@IdRes int destination) {
         navigate(destination, (Bundle) null);
     }
 

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.animation.LayoutTransition;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.ColorInt;
@@ -27,8 +28,14 @@ import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
+
+import xyz.zedler.patrick.grocy.adapter.MatchProductsArrayAdapter;
+import xyz.zedler.patrick.grocy.model.Product;
 
 public class BindingAdaptersUtil {
 
@@ -36,6 +43,15 @@ public class BindingAdaptersUtil {
     public static void setErrorMessage(TextInputLayout view, MutableLiveData<Integer> errorMsg) {
         if(errorMsg.getValue() != null) {
             view.setError(view.getContext().getString(errorMsg.getValue()));
+        } else if(view.isErrorEnabled()) {
+            view.setErrorEnabled(false);
+        }
+    }
+
+    @BindingAdapter({"errorText"})
+    public static void setErrorMessageStr(TextInputLayout view, MutableLiveData<String> errorMsg) {
+        if(errorMsg.getValue() != null) {
+            view.setError(errorMsg.getValue());
         } else if(view.isErrorEnabled()) {
             view.setErrorEnabled(false);
         }
@@ -52,9 +68,14 @@ public class BindingAdaptersUtil {
     }
 
     @BindingAdapter({"transitionTypeChanging"})
-    public static void setTransitionTypeChanging(SwipeRefreshLayout view, boolean enabled) {
+    public static void setTransitionTypeChanging(ViewGroup view, boolean enabled) {
         if(!enabled) return;
         view.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+    }
+
+    @BindingAdapter({"productList"})
+    public static void setProductList(MaterialAutoCompleteTextView view, List<Product> items) {
+        view.setAdapter(new MatchProductsArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, items));
     }
 
     @BindingAdapter("onSearchClickInSoftKeyboard")
@@ -64,6 +85,19 @@ public class BindingAdaptersUtil {
     ) {
         view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                listener.run();
+                return true;
+            } return false;
+        });
+    }
+
+    @BindingAdapter("onDoneClickInSoftKeyboard")
+    public static void setOnDoneClickInSoftKeyboardListener(
+            TextInputEditText view,
+            Runnable listener
+    ) {
+        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 listener.run();
                 return true;
             } return false;

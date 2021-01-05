@@ -21,25 +21,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -71,9 +67,9 @@ public class DownloadHelper {
     private final GrocyApi grocyApi;
     private RequestQueue requestQueue;
     private final Gson gson;
-    private final SimpleDateFormat dateTimeFormat;
     private final String uuidHelper;
     private final OnLoadingListener onLoadingListener;
+    private final SharedPreferences sharedPrefs;
 
     private final ArrayList<Queue> queueArrayList;
     private final String tag;
@@ -86,14 +82,12 @@ public class DownloadHelper {
             OnLoadingListener onLoadingListener
     ) {
         this.tag = tag;
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         gson = new Gson();
         requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
         grocyApi = new GrocyApi(application);
         uuidHelper = UUID.randomUUID().toString();
-        dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         queueArrayList = new ArrayList<>();
         loadingRequests = 0;
         this.onLoadingListener = onLoadingListener;
@@ -488,6 +482,92 @@ public class DownloadHelper {
         return getQuantityUnits(onResponseListener, null);
     }
 
+    public QueueItem updateQuantityUnits(
+            String dbChangedTime,
+            OnQuantityUnitsResponseListener onResponseListener
+    ) {
+        OnQuantityUnitsResponseListener newOnResponseListener = conversions -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(conversions);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getQuantityUnits(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped QuantityUnits download");
+            return null;
+        }
+    }
+
+    public QueueItem getQuantityUnitConversions(
+            OnQuantityUnitConversionsResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<List<QuantityUnitConversion>>(){}.getType();
+                            ArrayList<QuantityUnitConversion> conversions
+                                    = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download QuantityUnitConversions: "
+                                    + conversions);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(conversions);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getQuantityUnitConversions(
+            OnQuantityUnitConversionsResponseListener onResponseListener
+    ) {
+        return getQuantityUnitConversions(onResponseListener, null);
+    }
+
+    public QueueItem updateQuantityUnitConversions(
+            String dbChangedTime,
+            OnQuantityUnitConversionsResponseListener onResponseListener
+    ) {
+        OnQuantityUnitConversionsResponseListener newOnResponseListener = conversions -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(conversions);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getQuantityUnitConversions(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped QuantityUnitConversions download");
+            return null;
+        }
+    }
+
     public QueueItem getLocations(
             OnLocationsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -560,6 +640,85 @@ public class DownloadHelper {
         return getProducts(onResponseListener, null);
     }
 
+    public QueueItem updateProducts(
+            String dbChangedTime,
+            OnProductsResponseListener onResponseListener
+    ) {
+        OnProductsResponseListener newOnResponseListener = products -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(products);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_PRODUCTS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getProducts(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped Products download");
+            return null;
+        }
+    }
+
+    public QueueItem getProductBarcodes(
+            OnProductBarcodesResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<List<ProductBarcode>>(){}.getType();
+                            ArrayList<ProductBarcode> barcodes
+                                    = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download Barcodes: " + barcodes);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(barcodes);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getProductBarcodes(OnProductBarcodesResponseListener onResponseListener) {
+        return getProductBarcodes(onResponseListener, null);
+    }
+
+    public QueueItem updateProductBarcodes(
+            String dbChangedTime,
+            OnProductBarcodesResponseListener onResponseListener
+    ) {
+        OnProductBarcodesResponseListener newOnResponseListener = barcodes -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(barcodes);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getProductBarcodes(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped ProductsBarcodes download");
+            return null;
+        }
+    }
+
     public QueueItem getStockItems(
             OnStockItemsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -611,35 +770,43 @@ public class DownloadHelper {
                         grocyApi.getStockVolatile(),
                         uuid,
                         response -> {
-                            if(debug) Log.i(tag, "downloadVolatile: success");
-                            ArrayList<StockItem> expiringItems = new ArrayList<>();
+                            if(debug) Log.i(tag, "download Volatile: success");
+                            ArrayList<StockItem> dueItems = new ArrayList<>();
+                            ArrayList<StockItem> overdueItems = new ArrayList<>();
                             ArrayList<StockItem> expiredItems = new ArrayList<>();
                             ArrayList<MissingItem> missingItems = new ArrayList<>();
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 // Parse first part of volatile array: expiring products
-                                expiringItems = gson.fromJson(
-                                        jsonObject.getJSONArray("expiring_products").toString(),
+                                dueItems = gson.fromJson(
+                                        jsonObject.getJSONArray("due_products").toString(),
                                         new TypeToken<List<StockItem>>(){}.getType()
                                 );
-                                if(debug) Log.i(tag, "downloadVolatile: expiring = " + expiringItems);
-                                // Parse second part of volatile array: expired products
+                                if(debug) Log.i(tag, "download Volatile: due = " + dueItems);
+                                // Parse second part of volatile array: overdue products
+                                overdueItems = gson.fromJson(
+                                        jsonObject.getJSONArray("overdue_products").toString(),
+                                        new TypeToken<List<StockItem>>(){}.getType()
+                                );
+                                if(debug) Log.i(tag, "download Volatile: overdue = " + overdueItems);
+                                // Parse third part of volatile array: expired products
                                 expiredItems = gson.fromJson(
                                         jsonObject.getJSONArray("expired_products").toString(),
                                         new TypeToken<List<StockItem>>(){}.getType()
                                 );
-                                if(debug) Log.i(tag, "downloadVolatile: expired = " + expiredItems);
-                                // Parse third part of volatile array: missing products
+                                if(debug) Log.i(tag, "download Volatile: expired = " + overdueItems);
+                                // Parse fourth part of volatile array: missing products
                                 missingItems = gson.fromJson(
                                         jsonObject.getJSONArray("missing_products").toString(),
                                         new TypeToken<List<MissingItem>>(){}.getType()
                                 );
-                                if(debug) Log.i(tag, "downloadVolatile: missing = " + missingItems);
+                                if(debug) Log.i(tag, "download Volatile: missing = " + missingItems);
                             } catch (JSONException e) {
-                                if(debug) Log.e(tag, "downloadVolatile: " + e);
+                                if(debug) Log.e(tag, "download Volatile: " + e);
                             }
                             if(onResponseListener != null) {
-                                onResponseListener.onResponse(expiringItems, expiredItems, missingItems);
+                                onResponseListener.onResponse(dueItems, overdueItems,
+                                        expiredItems, missingItems);
                             }
                             if(responseListener != null) responseListener.onResponse(response);
                         },
@@ -770,6 +937,27 @@ public class DownloadHelper {
         return getShoppingLists(onResponseListener, null);
     }
 
+    public QueueItem updateShoppingLists(
+            String dbChangedTime,
+            OnShoppingListsResponseListener onResponseListener
+    ) {
+        OnShoppingListsResponseListener newOnResponseListener = shoppingListItems -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(shoppingListItems);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getShoppingLists(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped ShoppingLists download");
+            return null;
+        }
+    }
+
     public QueueItem getStores(
             OnStoresResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -897,28 +1085,6 @@ public class DownloadHelper {
     }
 
     public void getTimeDbChanged(
-            OnDateResponseListener onResponseListener,
-            OnSimpleErrorListener onErrorListener
-    ) {
-        get(
-                grocyApi.getDbChangedTime(),
-                uuidHelper,
-                response -> {
-                    try {
-                        JSONObject body = new JSONObject(response);
-                        String dateStr = body.getString("changed_time");
-                        Date date = dateTimeFormat.parse(dateStr);
-                        onResponseListener.onResponse(date);
-                    } catch (JSONException | ParseException e) {
-                        if(debug) Log.e(tag, "getTimeDbChanged: " + e);
-                        onErrorListener.onError();
-                    }
-                },
-                error -> onErrorListener.onError()
-        );
-    }
-
-    public void getTimeDbChanged(
             OnStringResponseListener onResponseListener,
             OnSimpleErrorListener onErrorListener
     ) {
@@ -995,14 +1161,12 @@ public class DownloadHelper {
             isRunning = false;
         }
 
-        public void append(ArrayList<QueueItem> queueItems) {
-            this.queueItems.addAll(queueItems);
-            queueSize += queueItems.size();
-        }
-
         public Queue append(QueueItem... queueItems) {
-            this.queueItems.addAll(Arrays.asList(queueItems));
-            queueSize += queueItems.length;
+            for(QueueItem queueItem : queueItems) {
+                if(queueItem == null) continue;
+                this.queueItems.add(queueItem);
+                queueSize++;
+            }
             return this;
         }
 
@@ -1080,6 +1244,10 @@ public class DownloadHelper {
         void onResponse(ArrayList<QuantityUnit> arrayList);
     }
 
+    public interface OnQuantityUnitConversionsResponseListener {
+        void onResponse(ArrayList<QuantityUnitConversion> arrayList);
+    }
+
     public interface OnLocationsResponseListener {
         void onResponse(ArrayList<Location> arrayList);
     }
@@ -1088,13 +1256,18 @@ public class DownloadHelper {
         void onResponse(ArrayList<Product> arrayList);
     }
 
+    public interface OnProductBarcodesResponseListener {
+        void onResponse(ArrayList<ProductBarcode> arrayList);
+    }
+
     public interface OnStockItemsResponseListener {
         void onResponse(ArrayList<StockItem> arrayList);
     }
 
     public interface OnVolatileResponseListener {
         void onResponse(
-                ArrayList<StockItem> expiring,
+                ArrayList<StockItem> due,
+                ArrayList<StockItem> overdue,
                 ArrayList<StockItem> expired,
                 ArrayList<MissingItem> missing
         );
@@ -1122,10 +1295,6 @@ public class DownloadHelper {
 
     public interface OnJSONResponseListener {
         void onResponse(JSONObject response);
-    }
-
-    public interface OnDateResponseListener {
-        void onResponse(Date date);
     }
 
     public interface OnStringResponseListener {

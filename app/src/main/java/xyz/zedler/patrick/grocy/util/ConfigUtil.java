@@ -127,8 +127,8 @@ public class ConfigUtil {
                     Constants.PREF.PRODUCT_PRESETS_QU_ID,
                     jsonObject.getInt("product_presets_qu_id")
             ).putString(
-                    Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                    jsonObject.getString("stock_expring_soon_days")
+                    Constants.PREF.STOCK_DUE_SOON_DAYS,
+                    jsonObject.getString("stock_due_soon_days")
             ).putString(
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                     jsonObject.getString("stock_default_purchase_amount")

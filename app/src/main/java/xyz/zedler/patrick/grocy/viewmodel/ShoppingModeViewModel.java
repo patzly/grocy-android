@@ -237,7 +237,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
             }));
         } else if(debug) Log.i(TAG, "downloadData: skipped Products download");
         if(lastTimeMissingItems == null || !lastTimeMissingItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getVolatile((expiring, expired, missing) -> {
+            queue.append(dlHelper.getVolatile((due, overdue, expired, missing) -> {
                 this.missingItems = missing;
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime);
                 editPrefs.apply();
@@ -360,7 +360,8 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         return selectedShoppingListIdLive.getValue();
     }
 
-    public void selectShoppingList(int shoppingListId) {
+    public void selectShoppingList(ShoppingList shoppingList) {
+        int shoppingListId = shoppingList.getId();
         if(shoppingListId == getSelectedShoppingListId()) return;
         sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
         selectedShoppingListIdLive.setValue(shoppingListId);

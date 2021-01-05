@@ -245,7 +245,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 
 		String days = sharedPrefs.getString(
-				Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+				Constants.PREF.STOCK_DUE_SOON_DAYS,
 				String.valueOf(5)
 		);
 		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
@@ -442,10 +442,10 @@ public class SettingsActivity extends AppCompatActivity
 				Bundle bundleExpiringSoonDays = new Bundle();
 				bundleExpiringSoonDays.putString(
 						Constants.ARGUMENT.TYPE,
-						Constants.PREF.STOCK_EXPIRING_SOON_DAYS
+						Constants.PREF.STOCK_DUE_SOON_DAYS
 				);
 				bundleExpiringSoonDays.putString(
-						Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+						Constants.PREF.STOCK_DUE_SOON_DAYS,
 						textViewExpiringSoonDays.getText().toString()
 				);
 				showBottomSheet(
@@ -855,12 +855,12 @@ public class SettingsActivity extends AppCompatActivity
 			if(debug) Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
 		dlHelper.put(
-				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
+				grocyApi.getUserSetting(Constants.PREF.STOCK_DUE_SOON_DAYS),
 				body,
 				response -> {
 					textViewExpiringSoonDays.setText(days);
 					sharedPrefs.edit()
-							.putString(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, days)
+							.putString(Constants.PREF.STOCK_DUE_SOON_DAYS, days)
 							.apply();
 				},
 				error -> {

@@ -64,4 +64,18 @@ public class NumUtil {
             return false;
         }
     }
+
+    public static boolean isStringNum(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException ex) {
+            try {
+                Double.parseDouble(s);
+                return true;
+            } catch (NumberFormatException ex1) {
+                return false;
+            }
+        }
+    }
 }

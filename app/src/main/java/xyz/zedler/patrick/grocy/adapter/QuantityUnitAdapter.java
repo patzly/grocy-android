@@ -39,24 +39,24 @@ public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapte
 
     private final static String TAG = QuantityUnitAdapter.class.getSimpleName();
 
-    private ArrayList<QuantityUnit> quantityUnits;
-    private int selectedId;
-    private QuantityUnitAdapterListener listener;
+    private final ArrayList<QuantityUnit> quantityUnits;
+    private final int selectedId;
+    private final QuantityUnitAdapterListener listener;
 
     public QuantityUnitAdapter(
             ArrayList<QuantityUnit> quantityUnits,
-            int selectedId,
+            Object selectedId,
             QuantityUnitAdapterListener listener
     ) {
         this.quantityUnits = quantityUnits;
-        this.selectedId = selectedId;
+        this.selectedId = selectedId != null ? (Integer) selectedId : -1;
         this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer;
-        private TextView textViewName;
-        private ImageView imageViewSelected;
+        private final LinearLayout linearLayoutContainer;
+        private final TextView textViewName;
+        private final ImageView imageViewSelected;
 
         public ViewHolder(View view) {
             super(view);

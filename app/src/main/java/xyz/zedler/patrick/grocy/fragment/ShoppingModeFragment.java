@@ -220,8 +220,8 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
 
     @Override
-    public void selectShoppingList(int shoppingListId) {
-        viewModel.selectShoppingList(shoppingListId);
+    public void selectShoppingList(ShoppingList shoppingList) {
+        viewModel.selectShoppingList(shoppingList);
     }
 
     private void changeAppBarTitle(int selectedShoppingListId) {

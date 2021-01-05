@@ -59,7 +59,7 @@ public class ExitScanBatchBottomSheet extends BaseBottomSheet {
         );
 
         activity = (MainActivity) getActivity();
-        assert activity != null && getArguments() != null;
+        assert activity != null;
 
         activity.getCurrentFragment().pauseScan();
 

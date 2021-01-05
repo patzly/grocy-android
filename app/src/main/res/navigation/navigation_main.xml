@@ -393,6 +393,10 @@
             <deepLink
                 android:id="@+id/deepLink7"
                 app:uri="@string/deep_link_shoppingListItemEditFragment" />
+            <argument
+                android:name="animateStart"
+                app:argType="boolean"
+                android:defaultValue="true" />
         </fragment>
         <fragment
             android:id="@+id/shoppingListEditFragment"

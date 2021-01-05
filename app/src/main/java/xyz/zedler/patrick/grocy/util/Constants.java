@@ -40,7 +40,7 @@ public final class Constants {
 
         // DO NOT EDIT THE FOLLOWING STRINGS, THEY ARE FOR SERVER SYNC STUFF
         // (but you can edit the variable names)
-        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expring_soon_days";
+        public final static String STOCK_DUE_SOON_DAYS = "stock_due_soon_days";
         public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
         public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
         public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
@@ -68,7 +68,9 @@ public final class Constants {
         public final static String DB_LAST_TIME_SHOPPING_LISTS = "db_last_time_shopping_lists";
         public final static String DB_LAST_TIME_PRODUCT_GROUPS = "db_last_time_product_groups";
         public final static String DB_LAST_TIME_QUANTITY_UNITS = "db_last_time_quantity_units";
+        public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
         public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
+        public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
         public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
 
         public final static String DARK_MODE = "force_dark_mode";

@@ -49,12 +49,12 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     public ShoppingListAdapter(
             List<ShoppingList> shoppingLists,
-            int selectedId,
+            Object selectedId,
             ShoppingListAdapterListener listener,
             boolean showActions
     ) {
         this.shoppingLists = new ArrayList<>(shoppingLists);
-        this.selectedId = selectedId;
+        this.selectedId = selectedId != null ? (Integer) selectedId : -1;
         this.listener = listener;
         this.showActions = showActions;
     }
@@ -120,15 +120,15 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public void updateData(List<ShoppingList> shoppingListsNew, int selectedIdNew) {
+    public void updateData(List<ShoppingList> shoppingListsNew, Object selectedIdNew) {
         shoppingLists.clear();
         shoppingLists.addAll(shoppingListsNew);
-        this.selectedId = selectedIdNew;
+        this.selectedId = selectedIdNew != null ? (Integer) selectedIdNew : -1;
         notifyDataSetChanged();
     }
 
-    public void updateSelectedId(int selectedIdNew) {
-        this.selectedId = selectedIdNew;
+    public void updateSelectedId(Object selectedIdNew) {
+        this.selectedId = selectedIdNew != null ? (Integer) selectedIdNew : -1;
         notifyDataSetChanged();
     }
 

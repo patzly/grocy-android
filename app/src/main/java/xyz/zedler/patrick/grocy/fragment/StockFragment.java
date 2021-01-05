@@ -165,7 +165,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         String days = sharedPrefs.getString(
-                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                Constants.PREF.STOCK_DUE_SOON_DAYS,
                 String.valueOf(5)
         );
         if(days == null) days = String.valueOf(5);
@@ -543,8 +543,8 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     updateMenuFilterVisibility();
                 }),
                 dlHelper.getStockItems(stockItems -> this.stockItems = stockItems),
-                dlHelper.getVolatile((expiring, expired, missing) -> {
-                    expiringItems = expiring;
+                dlHelper.getVolatile((due, overdue, expired, missing) -> {
+                    expiringItems = overdue;
                     expiredItems = expired;
                     missingItems = missing;
                     chipExpiring.setText(

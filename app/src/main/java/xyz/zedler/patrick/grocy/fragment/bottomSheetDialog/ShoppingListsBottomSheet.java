@@ -23,6 +23,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
@@ -85,8 +86,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         boolean multipleListsFeature = sharedPrefs.getBoolean(
@@ -168,7 +168,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
 
     @Override
     public void onItemRowClicked(ShoppingList shoppingList) {
-        activity.getCurrentFragment().selectShoppingList(shoppingList.getId());
+        activity.getCurrentFragment().selectShoppingList(shoppingList);
         dismiss();
     }
 
@@ -260,6 +260,12 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
 
     private void showMessage(@StringRes int message) {
         Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        activity.getCurrentFragment().onBottomSheetDismissed();
+        super.onDismiss(dialog);
     }
 
     @NonNull
