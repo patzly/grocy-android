@@ -82,6 +82,8 @@
     <string name="tooltip_switch_purchase">Byt till köp-läge</string>
     <string name="tooltip_switch_consume">Byt till konsumera-läge</string>
     <string name="tooltip_switch_open">Byt till öppna-läge</string>
+    <string name="tooltip_demo">Du är i demoläge</string>
+
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d går snart ut</string>
     <!-- %1$s is the number of products which are expired -->
@@ -135,6 +137,7 @@
     <string name="msg_point_at_barcode">Rikta kameran mot steckkoden</string>
 
     <string name="error_api_not_working">API-nyckel fungerar inte</string>
+    <string name="error_orbot_not_installed">Orbot är inte installerad</string>
     <string name="error_select_product">Välj en produkt</string>
     <string name="error_empty">Krävs</string>
     <string name="error_empty_stock">Ingenting i lager</string>
@@ -175,6 +178,7 @@
     <string name="error_handshake_description">%1$s kräver ett certifikat som inte är känt eller betrott av Android.\nServerns certifikat måste vara signerat av en betrodd certifikatutfärdare (CA)\nFör att uppfylla dessa krav kan du använda ett gratis certifikat från letsencrypt.org för att säkra anslutningen.</string>
     <string name="error_unexpected_response_code">Oväntad svarskod: %1$d</string>
     <string name="error_unexpected_response">Oväntat svar från servern</string>
+    <string name="error_no_browser">Installera en webbläsare för att visa hjälphemsidan</string>
     <string name="error_undefined">Ett fel uppstod</string>
 
     <string name="title_stock_overview">Lageröversikt</string>
@@ -307,6 +311,49 @@
     <string name="date_unlimited">Obegränsat</string>
     <string name="date_never">Aldrig</string>
 
+    <plurals name="date_days">
+        <item quantity="one">%d dag</item>
+        <item quantity="other">%d dagar</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">%d månad</item>
+        <item quantity="other">%d månader</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">%d år</item>
+        <item quantity="other">%d år</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">%d dag sedan</item>
+        <item quantity="other">%d dagar sedan</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">%d månad sedan</item>
+        <item quantity="other">%d månader sedan</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">%d år sedan</item>
+        <item quantity="other">%d år sedan</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">%d dag från och med nu</item>
+        <item quantity="other">%d dagar från och med nu</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">%d månad från och med nu</item>
+        <item quantity="other">%d månader från och med nu</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">%d år från och med nu</item>
+        <item quantity="other">%d år från och med nu</item>
+    </plurals>
+
     <string name="info_acknowledgement">Vi vill tacka Bernd Bestel, utan vars fantastiska arbete denna app inte skulle kunna existera.</string>
     <string name="info_intro">Visa introduktion igen</string>
     <string name="info_intro_description">Demonstrera funktioner</string>
@@ -319,6 +366,8 @@
     <string name="info_developers">Utvecklare</string>
     <string name="info_github">Grocy Android på GitHub</string>
     <string name="info_github_description">Källkod</string>
+    <string name="info_website">Öppna Grocy-hemsidan</string>
+
     <string name="feature_1_title">Grocy för Android</string>
     <string name="feature_1_description">Lokalt hostad livsmedelshantering för ditt hem</string>
     <string name="feature_2_title">Intuitiv design</string>
@@ -358,6 +407,7 @@
     <string name="setting_sync_off">Synkronisering av</string>
     <string name="setting_not_loaded">Kunde inte läsas in</string>
     <string name="setting_debug">Aktivera loggning</string>
+    <string name="setting_debug_description">Visa fel i loggarna</string>
     <string name="setting_info_logs">Visa informationsloggar</string>
     <string name="setting_logs_description">Visa logcat-loggar för denna process</string>
 
