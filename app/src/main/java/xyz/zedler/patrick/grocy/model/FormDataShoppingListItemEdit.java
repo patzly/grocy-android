@@ -20,8 +20,10 @@ package xyz.zedler.patrick.grocy.model;
 */
 
 import android.content.Context;
+import android.os.Handler;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -56,8 +58,10 @@ public class FormDataShoppingListItemEdit {
     private final LiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
     private final MutableLiveData<QuantityUnit> quantityUnitLive;
     private final LiveData<String> quantityUnitNameLive;
+    private final MutableLiveData<Boolean> quantityUnitErrorLive;
     private final MutableLiveData<String> noteLive;
     private final MutableLiveData<Integer> noteErrorLive;
+    private boolean filledWithShoppingListItem;
 
     public FormDataShoppingListItemEdit(Context contextWeak) {
         this.contextWeak = new WeakReference<>(contextWeak);
@@ -78,16 +82,18 @@ public class FormDataShoppingListItemEdit {
         barcodeLive = new MutableLiveData<>();
         amountLive = new MutableLiveData<>();
         amountErrorLive = new MutableLiveData<>();
-        quantityUnitsFactorsLive = new MutableLiveData<>(new HashMap<>());
+        quantityUnitsFactorsLive = new MutableLiveData<>();
         quantityUnitsLive = Transformations.map(
                 quantityUnitsFactorsLive,
-                quantityUnitsFactors -> new ArrayList<>(quantityUnitsFactors.keySet())
+                quantityUnitsFactors -> quantityUnitsFactors != null
+                        ? new ArrayList<>(quantityUnitsFactors.keySet()) : null
         );
         quantityUnitLive = new MutableLiveData<>();
         quantityUnitNameLive = Transformations.map(
                 quantityUnitLive,
                 quantityUnit -> quantityUnit != null ? quantityUnit.getName() : null
         );
+        quantityUnitErrorLive = new MutableLiveData<>(false);
         amountHintLive = Transformations.map(
                 quantityUnitLive,
                 quantityUnit -> quantityUnit != null ? this.contextWeak.get().getString(
@@ -100,6 +106,7 @@ public class FormDataShoppingListItemEdit {
         amountHelperLive.addSource(quantityUnitLive, i -> amountHelperLive.setValue(getAmountHelpText()));
         noteLive = new MutableLiveData<>();
         noteErrorLive = new MutableLiveData<>();
+        filledWithShoppingListItem = false;
     }
 
     public MutableLiveData<ShoppingList> getShoppingListLive() {
@@ -195,6 +202,19 @@ public class FormDataShoppingListItemEdit {
         return quantityUnitNameLive;
     }
 
+    public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
+        return quantityUnitErrorLive;
+    }
+
+    private boolean isQuantityUnitValid() {
+        if(quantityUnitLive.getValue() == null) {
+            quantityUnitErrorLive.setValue(true);
+            return false;
+        }
+        quantityUnitErrorLive.setValue(false);
+        return true;
+    }
+
     private QuantityUnit getStockQuantityUnit() {
         HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
         if(hashMap == null || !hashMap.containsValue((double) -1)) return null;
@@ -206,8 +226,7 @@ public class FormDataShoppingListItemEdit {
     private String getAmountHelpText() {
         QuantityUnit stock = getStockQuantityUnit();
         QuantityUnit current = quantityUnitLive.getValue();
-        if(!isAmountValid()) return null;
-        assert amountLive.getValue() != null && quantityUnitsFactorsLive.getValue() != null;
+        if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
 
         if(stock != null && current != null && stock.getId() != current.getId()) {
             HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
@@ -244,9 +263,43 @@ public class FormDataShoppingListItemEdit {
         return productNamesLive;
     }
 
+    public boolean isFilledWithShoppingListItem() {
+         return filledWithShoppingListItem;
+    }
+
+    public void setFilledWithShoppingListItem(boolean filled) {
+        this.filledWithShoppingListItem = filled;
+    }
+
     public boolean isFormValid() {
-        boolean valid = isAmountValid(); // then "valid = valid && isBlaValid"...
+        boolean valid = isAmountValid();
+        valid = valid && isQuantityUnitValid();
         return valid;
+    }
+
+    public ShoppingListItem fillShoppingListItem(@Nullable ShoppingListItem item) {
+        Product product = productLive.getValue();
+        QuantityUnit unit = quantityUnitLive.getValue();
+        if(item == null) item = new ShoppingListItem();
+        item.setShoppingListId(shoppingListLive.getValue().getId());
+        item.setProductId(product != null ? String.valueOf(product.getId()) : null);
+        item.setAmount(Double.parseDouble(amountLive.getValue()));
+        item.setQuId(unit != null ? String.valueOf(quantityUnitLive.getValue().getId()) : null);
+        item.setNote(noteLive.getValue());
+        return item;
+    }
+
+    public void clearForm() {
+        productLive.setValue(null);
+        productNameLive.setValue(null);
+        amountLive.setValue(null);
+        quantityUnitsFactorsLive.setValue(null);
+        quantityUnitLive.setValue(null);
+        noteLive.setValue(null);
+        new Handler().postDelayed(() -> {
+            amountErrorLive.setValue(null);
+            quantityUnitErrorLive.setValue(false);
+        }, 50);
     }
 
     private String getString(@StringRes int res) {

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,7 +41,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.NetworkResponse;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,7 +51,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
@@ -159,6 +159,17 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                     ? new InfoFullscreen(InfoFullscreen.ERROR_OFFLINE)
                     : null;
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
+        });
+
+        getWorkflowEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
+            if(isEnabled) {
+                binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                binding.editTextShoppingListItemEditNote.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            } else {
+                binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                binding.editTextShoppingListItemEditNote.setImeOptions(EditorInfo.IME_ACTION_NONE);
+            }
+            clearInputFocus();
         });
 
         // PREFERENCES
@@ -315,20 +326,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         activity.hideKeyboard();
         binding.textInputShoppingListItemEditProduct.clearFocus();
         binding.textInputShoppingListItemEditAmount.clearFocus();
-    }
-
-    private void loadProductDetails(int productId) {
-        if(true) return;
-        dlHelper.get(
-                grocyApi.getStockProductDetails(productId),
-                response -> {
-                    productDetails = gson.fromJson(
-                            response,
-                            new TypeToken<ProductDetails>(){}.getType()
-                    );
-                    fillWithProductDetails();
-                }, error -> {}
-        );
+        binding.textInputShoppingListItemEditNote.clearFocus();
+        binding.shoppingListContainer.clearFocus();
+        binding.quantityUnitContainer.clearFocus();
     }
 
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -341,42 +341,21 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     }
 
     public void focusNextView() {
-        if(!isWorkflowEnabled()) return;
-        FocusFinder.getInstance()
-                .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN)
-                .requestFocus();
+        if(!isWorkflowEnabled()) {
+            clearInputFocus();
+            return;
+        }
+        View nextView = FocusFinder.getInstance()
+                .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
+        if(nextView == null) {
+            clearInputFocus();
+            return;
+        }
+        nextView.requestFocus();
+        if(nextView instanceof EditText) {
+            activity.showKeyboard((EditText) nextView);
+        }
     }
-
-    private void loadProductDetailsByBarcode(String barcode) {
-        binding.swipe.setRefreshing(true);
-        dlHelper.get(
-                grocyApi.getStockProductByBarcode(barcode),
-                response -> {
-                    binding.swipe.setRefreshing(false);
-                    productDetails = gson.fromJson(
-                            response,
-                            new TypeToken<ProductDetails>(){}.getType()
-                    );
-                    fillWithProductDetails();
-                }, error -> {
-                    NetworkResponse response = error.networkResponse;
-                    if(response != null && response.statusCode == 400) {
-                        binding.autoCompleteShoppingListItemEditProduct.setText(barcode);
-                        nameAutoFilled = true;
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.BARCODES, barcode);
-                        activity.showBottomSheet(
-                                new InputBarcodeBottomSheet(), bundle
-                        );
-                    } else {
-                        showErrorMessage();
-                    }
-                    binding.swipe.setRefreshing(false);
-                }
-        );
-    }
-
-
 
     private boolean isFormIncomplete() {
         String input = binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim();
@@ -412,32 +391,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         return null;
     }
 
-    private ArrayList<String> getProductNames() {
-        ArrayList<String> names = new ArrayList<>();
-        if(products != null) {
-            for(Product product : products) {
-                names.add(product.getName());
-            }
-        }
-        return names;
-    }
-
     @Override
     public void onBottomSheetDismissed() {
         focusNextView();
-    }
-
-    public void setShoppingListToNull() {
-        viewModel.getFormData().getShoppingListLive().setValue(null);
-    }
-
-    private ShoppingList getShoppingList(int shoppingListId) {
-        if(shoppingListId == -1) return null;
-        for(ShoppingList shoppingList : shoppingLists) {
-            if(shoppingList.getId() == shoppingListId) {
-                return shoppingList;
-            }
-        } return null;
     }
 
     public void showShoppingListsBottomSheet() {
@@ -479,10 +435,10 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemDelete, menuItemDetails;
+        MenuItem menuItemDelete, menuItemDetails, menuItemClear;
         menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
         if(menuItemDelete != null) {
-            menuItemDelete.setVisible(args.getAction().equals(Constants.ACTION.EDIT));
+            menuItemDelete.setVisible(viewModel.isActionEdit());
             if(menuItemDelete.isVisible()) {
                 menuItemDelete.setOnMenuItemClickListener(item -> {
                     ((Animatable) menuItemDelete.getIcon()).start();
@@ -542,6 +498,14 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                         showErrorMessage();
                     }
                 }
+                return true;
+            });
+        }
+
+        menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
+        if(menuItemClear != null) {
+            menuItemClear.setOnMenuItemClickListener(item -> {
+                viewModel.getFormData().clearForm();
                 return true;
             });
         }

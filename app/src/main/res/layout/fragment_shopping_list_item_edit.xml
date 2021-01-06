@@ -94,6 +94,7 @@
                 android:overScrollMode="never">
 
                 <LinearLayout
+                    android:id="@+id/shopping_list_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"
@@ -158,7 +159,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:inputType="textCapSentences|textNoSuggestions"
+                                android:inputType="text|textCapSentences|textNoSuggestions"
                                 android:imeOptions="actionNext"
                                 android:completionThreshold="1"
                                 android:popupBackground="@drawable/bg_auto_complete"
@@ -258,11 +259,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/dddd"
+                        android:id="@+id/quantity_unit_container"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:focusableInTouchMode="true"
-                        app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}"
-                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet()}">
+                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet()}"
+                        app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -273,6 +274,7 @@
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
+                                android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}"
                                 android:text="@string/property_quantity_unit" />
 
                             <TextView
@@ -306,8 +308,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:inputType="text|textCapSentences|textMultiLine"
-                                android:text="@={formData.noteLive}"/>
+                                android:text="@={formData.noteLive}"
+                                app:onDoneClickInSoftKeyboard="@{() -> fragment.setWorkflowEnabled(false)}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 

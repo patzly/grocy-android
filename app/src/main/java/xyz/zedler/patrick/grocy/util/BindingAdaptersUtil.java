@@ -103,4 +103,17 @@ public class BindingAdaptersUtil {
             } return false;
         });
     }
+
+    @BindingAdapter("onNextClickInSoftKeyboard")
+    public static void setOnNextClickInSoftKeyboardListener(
+            TextInputEditText view,
+            Runnable listener
+    ) {
+        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                listener.run();
+                return true;
+            } return false;
+        });
+    }
 }
