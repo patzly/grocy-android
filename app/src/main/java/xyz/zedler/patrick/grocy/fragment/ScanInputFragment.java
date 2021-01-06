@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.navigation.NavBackStackEntry;
 import androidx.preference.PreferenceManager;
 
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -157,9 +156,7 @@ public class ScanInputFragment extends BaseFragment
     public void onBarcodeResult(BarcodeResult result) {
         if(result.getText().isEmpty()) resumeScan();
         barcodeRipple.pauseAnimation();
-        NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
-        assert backStackEntry != null;
-        backStackEntry.getSavedStateHandle().set(Constants.ARGUMENT.BARCODE, result.getText());
+        setForPreviousDestination(Constants.ARGUMENT.BARCODE, result.getText());
         activity.navigateUp();
     }
 

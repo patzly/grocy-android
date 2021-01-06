@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.util;
 import android.animation.LayoutTransition;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
@@ -29,7 +30,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class BindingAdaptersUtil {
 
     @BindingAdapter("onSearchClickInSoftKeyboard")
     public static void setOnSearchClickInSoftKeyboardListener(
-            TextInputEditText view,
+            EditText view,
             Runnable listener
     ) {
         view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
@@ -93,7 +93,7 @@ public class BindingAdaptersUtil {
 
     @BindingAdapter("onDoneClickInSoftKeyboard")
     public static void setOnDoneClickInSoftKeyboardListener(
-            TextInputEditText view,
+            EditText view,
             Runnable listener
     ) {
         view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
@@ -106,7 +106,7 @@ public class BindingAdaptersUtil {
 
     @BindingAdapter("onNextClickInSoftKeyboard")
     public static void setOnNextClickInSoftKeyboardListener(
-            TextInputEditText view,
+            EditText view,
             Runnable listener
     ) {
         view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {

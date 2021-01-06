@@ -122,6 +122,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
                         selectedIdLive.getValue(),
                         this,
                         activity.getCurrentFragment() instanceof ShoppingListFragment
+                                && activity.isOnline()
                 ));
             } else {
                 ((ShoppingListAdapter) recyclerView.getAdapter()).updateData(

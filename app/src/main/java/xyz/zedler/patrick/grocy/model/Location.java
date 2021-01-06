@@ -53,7 +53,7 @@ public class Location implements Parcelable {
 
     @ColumnInfo(name = "is_freezer")
     @SerializedName("is_freezer")
-    private int isFreezer;
+    private String isFreezer;
 
     public Location(int id, String name) {
         this.id = id;
@@ -65,7 +65,7 @@ public class Location implements Parcelable {
         name = parcel.readString();
         description = parcel.readString();
         rowCreatedTimestamp = parcel.readString();
-        isFreezer = parcel.readInt();
+        isFreezer = parcel.readString();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Location implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(rowCreatedTimestamp);
-        dest.writeInt(isFreezer);
+        dest.writeString(isFreezer);
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -102,8 +102,12 @@ public class Location implements Parcelable {
         return description;
     }
 
-    public int getIsFreezer() {
+    public String getIsFreezer() {
         return isFreezer;
+    }
+
+    public int getIsFreezerInt() {
+        return isFreezer == null || isFreezer.isEmpty() ? 0 : Integer.parseInt(isFreezer);
     }
 
     public void setId(int id) {
@@ -126,7 +130,7 @@ public class Location implements Parcelable {
         this.rowCreatedTimestamp = rowCreatedTimestamp;
     }
 
-    public void setIsFreezer(int isFreezer) {
+    public void setIsFreezer(String isFreezer) {
         this.isFreezer = isFreezer;
     }
 

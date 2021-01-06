@@ -41,7 +41,11 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -267,6 +271,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
                 if(unitFactors != null && unitFactors.containsKey(quantityUnit)) {
                     Double factor = unitFactors.get(quantityUnit);
                     assert factor != null;
+                    if(factor == -1) factor = product.getQuFactorPurchaseToStockDouble();
                     formData.getAmountLive().setValue(NumUtil.trim(amount * factor));
                 } else {
                     formData.getAmountLive().setValue(NumUtil.trim(amount));
@@ -283,7 +288,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         formData.setFilledWithShoppingListItem(true);
     }
 
-    public HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
+    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
         QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
         QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
 
@@ -313,6 +318,38 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         return unitFactors;
     }
 
+    public void setProduct(Product product) {
+        if(product == null) return;
+        formData.getProductLive().setValue(product);
+        setProductQuantityUnitsAndFactors(product);
+        formData.isFormValid();
+    }
+
+    public void onBarcodeRecognized(String barcode) {
+        Product product = getProductFromBarcode(barcode);
+        if(product != null) {
+            setProduct(product);
+        } else {
+            formData.getBarcodeLive().setValue(barcode);
+        }
+    }
+
+    public Product checkProductInput() {
+        formData.isProductNameValid();
+        String input = formData.getProductNameLive().getValue();
+        if(input == null || input.isEmpty()) return null;
+        Product product = getProductFromName(input);
+        if(product != null) {
+            setProduct(product);
+        } else {
+            showBottomSheet(
+                    new InputNameBottomSheet(),
+                    new InputNameBottomSheetArgs.Builder(input).build().toBundle()
+            );
+        }
+        return product;
+    }
+
     private QuantityUnit getQuantityUnit(int id) {
         for(QuantityUnit quantityUnit : quantityUnits) {
             if(quantityUnit.getId() == id) return quantityUnit;
@@ -333,6 +370,18 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     public Product getProduct(int id) {
         for(Product product : products) {
             if(product.getId() == id) return product;
+        } return null;
+    }
+
+    private Product getProductFromName(String name) {
+        for(Product product : products) {
+            if(product.getName().equals(name)) return product;
+        } return null;
+    }
+
+    private Product getProductFromBarcode(String barcode) {
+        for(ProductBarcode code : barcodes) {
+            if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
         } return null;
     }
 
@@ -383,6 +432,10 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
     private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
         eventHandler.setValue(snackbarMessage);
+    }
+
+    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
+        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
     }
 
     private void sendEvent(int type) {

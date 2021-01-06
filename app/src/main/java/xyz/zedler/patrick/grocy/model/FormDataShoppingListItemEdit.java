@@ -93,7 +93,10 @@ public class FormDataShoppingListItemEdit {
                 quantityUnitLive,
                 quantityUnit -> quantityUnit != null ? quantityUnit.getName() : null
         );
-        quantityUnitErrorLive = new MutableLiveData<>(false);
+        quantityUnitErrorLive = (MutableLiveData<Boolean>) Transformations.map(
+                quantityUnitLive,
+                quantityUnit -> !isQuantityUnitValid()
+        );
         amountHintLive = Transformations.map(
                 quantityUnitLive,
                 quantityUnit -> quantityUnit != null ? this.contextWeak.get().getString(
@@ -153,19 +156,6 @@ public class FormDataShoppingListItemEdit {
         return amountHintLive;
     }
 
-    public boolean isAmountValid() {
-        if(amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-            amountErrorLive.setValue(getString(R.string.error_empty));
-            return false;
-        }
-        if(!NumUtil.isStringNum(amountLive.getValue())) {
-            amountErrorLive.setValue(getString(R.string.error_invalid_amount));
-            return false;
-        }
-        amountErrorLive.setValue(null);
-        return true;
-    }
-
     public void moreAmount(ImageView view) {
         IconUtil.start(view);
         if(amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
@@ -206,15 +196,6 @@ public class FormDataShoppingListItemEdit {
         return quantityUnitErrorLive;
     }
 
-    private boolean isQuantityUnitValid() {
-        if(quantityUnitLive.getValue() == null) {
-            quantityUnitErrorLive.setValue(true);
-            return false;
-        }
-        quantityUnitErrorLive.setValue(false);
-        return true;
-    }
-
     private QuantityUnit getStockQuantityUnit() {
         HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
         if(hashMap == null || !hashMap.containsValue((double) -1)) return null;
@@ -227,6 +208,7 @@ public class FormDataShoppingListItemEdit {
         QuantityUnit stock = getStockQuantityUnit();
         QuantityUnit current = quantityUnitLive.getValue();
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
+        assert amountLive.getValue() != null;
 
         if(stock != null && current != null && stock.getId() != current.getId()) {
             HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
@@ -271,20 +253,62 @@ public class FormDataShoppingListItemEdit {
         this.filledWithShoppingListItem = filled;
     }
 
+    public boolean isProductNameValid() {
+        if(productNameLive.getValue() == null || productNameLive.getValue().isEmpty()) {
+            productNameErrorLive.setValue(R.string.error_empty);
+            return false;
+        }
+        productNameErrorLive.setValue(null);
+        return true;
+    }
+
+    public boolean isAmountValid() {
+        if(amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
+            amountErrorLive.setValue(getString(R.string.error_empty));
+            return false;
+        }
+        if(!NumUtil.isStringNum(amountLive.getValue())) {
+            amountErrorLive.setValue(getString(R.string.error_invalid_amount));
+            return false;
+        }
+        if(Double.parseDouble(amountLive.getValue()) <= 0) {
+            amountErrorLive.setValue(contextWeak.get().getString(
+                    R.string.error_bounds_higher, String.valueOf(0)
+            ));
+            return false;
+        }
+        amountErrorLive.setValue(null);
+        return true;
+    }
+
+    private boolean isQuantityUnitValid() {
+        if(quantityUnitLive.getValue() == null) {
+            quantityUnitErrorLive.setValue(true);
+            return false;
+        }
+        quantityUnitErrorLive.setValue(false);
+        return true;
+    }
+
     public boolean isFormValid() {
-        boolean valid = isAmountValid();
-        valid = valid && isQuantityUnitValid();
+        boolean valid = isProductNameValid();
+        valid = isAmountValid() && valid;
+        valid = isQuantityUnitValid() && valid;
         return valid;
     }
 
     public ShoppingListItem fillShoppingListItem(@Nullable ShoppingListItem item) {
+        if(!isFormValid()) return null;
+        ShoppingList shoppingList = shoppingListLive.getValue();
         Product product = productLive.getValue();
+        String amount = amountLive.getValue();
         QuantityUnit unit = quantityUnitLive.getValue();
+        assert shoppingList != null && amount != null;
         if(item == null) item = new ShoppingListItem();
-        item.setShoppingListId(shoppingListLive.getValue().getId());
+        item.setShoppingListId(shoppingList.getId());
         item.setProductId(product != null ? String.valueOf(product.getId()) : null);
-        item.setAmount(Double.parseDouble(amountLive.getValue()));
-        item.setQuId(unit != null ? String.valueOf(quantityUnitLive.getValue().getId()) : null);
+        item.setAmount(Double.parseDouble(amount));
+        item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
         item.setNote(noteLive.getValue());
         return item;
     }
@@ -292,11 +316,13 @@ public class FormDataShoppingListItemEdit {
     public void clearForm() {
         productLive.setValue(null);
         productNameLive.setValue(null);
+        barcodeLive.setValue(null);
         amountLive.setValue(null);
         quantityUnitsFactorsLive.setValue(null);
         quantityUnitLive.setValue(null);
         noteLive.setValue(null);
         new Handler().postDelayed(() -> {
+            productNameErrorLive.setValue(null);
             amountErrorLive.setValue(null);
             quantityUnitErrorLive.setValue(false);
         }, 50);

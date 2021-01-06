@@ -588,7 +588,11 @@
             android:id="@+id/masterProductFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.MasterProductFragment"
             android:label="MasterProductFragment"
-            tools:layout="@layout/fragment_master_product"/>
+            tools:layout="@layout/fragment_master_product">
+            <deepLink
+                android:id="@+id/deepLink9"
+                app:uri="@string/deep_link_masterProductFragment" />
+        </fragment>
 
     </navigation>
 </navigation>

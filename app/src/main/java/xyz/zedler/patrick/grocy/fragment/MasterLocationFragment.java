@@ -361,7 +361,7 @@ public class MasterLocationFragment extends BaseFragment {
             // description
             binding.editTextMasterLocationDescription.setText(editLocation.getDescription());
             // is freezer
-            binding.checkboxMasterLocationFreezer.setChecked(editLocation.getIsFreezer() == 1);
+            binding.checkboxMasterLocationFreezer.setChecked(editLocation.getIsFreezerInt() == 1);
         }
     }
 

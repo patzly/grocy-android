@@ -181,6 +181,8 @@
     <string name="error_bounds_min_max">Between %1$s and %2$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->
     <string name="error_bounds_min">Equal to or higher than %1$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_higher">Higher than %1$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
     <string name="error_name_exists">Name already exists</string>

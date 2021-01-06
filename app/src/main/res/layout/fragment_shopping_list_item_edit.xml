@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
         <import type="xyz.zedler.patrick.grocy.R"/>
@@ -14,8 +16,6 @@
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -165,7 +165,9 @@
                                 android:popupBackground="@drawable/bg_auto_complete"
                                 android:text="@={formData.productNameLive}"
                                 android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
-                                app:productList="@{formData.productsLive}"/>
+                                android:afterTextChanged="@{() -> formData.isProductNameValid()}"
+                                app:productList="@{formData.productsLive}"
+                                app:onNextClickInSoftKeyboard="@{() -> fragment.onProductInputNextClick()}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -274,12 +276,12 @@
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
-                                android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}"
-                                android:text="@string/property_quantity_unit" />
+                                android:text="@string/property_quantity_unit"
+                                android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}" />
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.Title"
-                                android:text="@{formData.quantityUnitNameLive ?? @string/subtitle_none_selected}"/>
+                                android:text="@{formData.quantityUnitNameLive ?? @string/subtitle_none_selected}" />
 
                         </LinearLayout>
 

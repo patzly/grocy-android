@@ -27,14 +27,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
-import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputNameBottomSheet extends BaseBottomSheet {
 
@@ -76,11 +74,12 @@ public class InputNameBottomSheet extends BaseBottomSheet {
                     null,
                     null
             );
-            NavHostFragment.findNavController(this).navigate(
+            /*NavHostFragment.findNavController(this).navigate(
                     InputNameBottomSheetDirections
                             .actionInputNameBottomSheetDialogFragmentToMasterProductSimpleFragment(
                                     Constants.ACTION.CREATE
-                            ).setCreateProductObject(createProduct));
+                            ).setCreateProductObject(createProduct));*/
+            navigateDeepLink(getString(R.string.deep_link_masterProductFragment));
             dismiss();
         });
 
