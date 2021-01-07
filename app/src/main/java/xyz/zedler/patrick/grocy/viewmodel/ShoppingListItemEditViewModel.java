@@ -325,10 +325,15 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     private JSONObject getJsonFromShoppingListItem(ShoppingListItem item) {
         JSONObject json = new JSONObject();
         try {
+            Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
+            Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
+            Object note = item.getNote() == null || item.getNote().isEmpty()
+                    ? JSONObject.NULL : item.getNote();
             json.put("shopping_list_id", item.getShoppingListId());
             json.put("amount", item.getAmount());
-            json.put("product_id", item.getProductId());
-            json.put("note", item.getNote());
+            json.put("qu_id", quId);
+            json.put("product_id", productId);
+            json.put("note", note);
         } catch (JSONException e) {
             if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
         }
