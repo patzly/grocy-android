@@ -41,7 +41,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataShoppingListItemEdit {
     private final WeakReference<Context> contextWeak;
-    private final MutableLiveData<ArrayList<String>> productNamesLive;
     private final MutableLiveData<ShoppingList> shoppingListLive;
     private final LiveData<String> shoppingListNameLive;
     private final MutableLiveData<Integer> shoppingListIdLive;
@@ -65,7 +64,6 @@ public class FormDataShoppingListItemEdit {
 
     public FormDataShoppingListItemEdit(Context contextWeak) {
         this.contextWeak = new WeakReference<>(contextWeak);
-        productNamesLive = new MutableLiveData<>(new ArrayList<>());
         shoppingListLive = new MutableLiveData<>();
         shoppingListNameLive = Transformations.map(
                 shoppingListLive,
@@ -239,10 +237,6 @@ public class FormDataShoppingListItemEdit {
 
     public MutableLiveData<ArrayList<Product>> getProductsLive() {
         return productsLive;
-    }
-
-    public MutableLiveData<ArrayList<String>> getProductNamesLive() {
-        return productNamesLive;
     }
 
     public boolean isFilledWithShoppingListItem() {

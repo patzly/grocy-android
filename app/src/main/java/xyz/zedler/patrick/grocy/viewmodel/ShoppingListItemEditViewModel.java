@@ -153,13 +153,13 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
                 }), dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
                     formData.getProductsLive().setValue(products);
-                }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
-                    this.unitConversions = conversions;
-                }), dlHelper.updateProductBarcodes(dbChangedTime, barcodes -> {
-                    this.barcodes = barcodes;
-                }), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
-                    this.quantityUnits = quantityUnits;
-                })
+                }), dlHelper.updateQuantityUnitConversions(
+                        dbChangedTime, conversions -> this.unitConversions = conversions
+                ), dlHelper.updateProductBarcodes(
+                        dbChangedTime, barcodes -> this.barcodes = barcodes
+                ), dlHelper.updateQuantityUnits(
+                        dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+                )
         );
         if(queue.isEmpty()) return;
 
@@ -198,7 +198,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
                     jsonObject,
                     response -> {
                         //editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        sendEvent(Event.NAVIGATE_UP);
+                        navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -211,7 +211,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
                     jsonObject,
                     response -> {
                         //editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        sendEvent(Event.NAVIGATE_UP);
+                        navigateUp();
                     },
                     error -> {
                         showErrorMessage();
@@ -428,20 +428,10 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
     }
 
-    private void sendEvent(int type) {
+    private void navigateUp() {
         eventHandler.setValue(new Event() {
             @Override
-            public int getType() {return type;}
-        });
-    }
-
-    private void sendEvent(int type, Bundle bundle) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-
-            @Override
-            public Bundle getBundle() {return bundle;}
+            public int getType() {return Event.NAVIGATE_UP;}
         });
     }
 
@@ -457,10 +447,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
     private String getString(@StringRes int resId) {
         return getApplication().getString(resId);
-    }
-
-    private String getString(@StringRes int resId, Object... formatArgs) {
-        return getApplication().getString(resId, formatArgs);
     }
 
     @Override
