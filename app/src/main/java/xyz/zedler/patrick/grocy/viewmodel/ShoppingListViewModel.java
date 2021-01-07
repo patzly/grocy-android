@@ -256,7 +256,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         }
 
         // get last offline db-changed-time values
-        //String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
+        String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
         String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
         String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
         String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
@@ -265,11 +265,13 @@ public class ShoppingListViewModel extends AndroidViewModel {
 
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        queue.append(dlHelper.getShoppingListItems(shoppingListItems -> { // always download for proper sync
-            this.shoppingListItems = shoppingListItems;
-            editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
-            editPrefs.apply();
-        }));
+        if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
+            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
+                this.shoppingListItems = shoppingListItems;
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
+                editPrefs.apply();
+            }));
+        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download");
         if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
             queue.append(dlHelper.getShoppingLists(shoppingLists -> {
                 this.shoppingLists = shoppingLists;

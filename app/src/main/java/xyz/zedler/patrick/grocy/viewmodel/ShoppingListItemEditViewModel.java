@@ -35,6 +35,9 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -182,43 +185,24 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     }
 
     public void saveItem() {
-        /*if(isFormIncomplete()) return;
+        if(!formData.isFormValid()) return;
 
-        editProductBarcodes();
+        ShoppingListItem item = null;
+        if(isActionEdit) item = args.getShoppingListItem();
+        item = formData.fillShoppingListItem(item);
+        JSONObject jsonObject = getJsonFromShoppingListItem(item);
 
-        JSONObject jsonObject = new JSONObject();
-        try {
-            Editable amountEdit = binding.editTextShoppingListItemEditAmount.getText();
-            String amount = (amountEdit != null ? amountEdit : "").toString().trim();
-            jsonObject.put("shopping_list_id", selectedShoppingListId);
-            jsonObject.put("amount", amount);
-            Product product = getProductFromName(
-                    binding.autoCompleteShoppingListItemEditProduct.getText().toString().trim()
-            );
-            if(product != null) {
-                jsonObject.put("product_id", product.getId());
-            } else {
-                jsonObject.put("product_id", "");
-            }
-            Editable note = binding.editTextShoppingListItemEditNote.getText();
-            assert note != null;
-            jsonObject.put("note", note.toString().trim());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "saveShoppingListItem: " + e);
-        }
-        if(args.getAction().equals(Constants.ACTION.EDIT)) {
-            ShoppingListItem shoppingListItem = args.getShoppingListItem();
-            assert shoppingListItem != null;
+        if(isActionEdit) {
             dlHelper.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
+                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
                     jsonObject,
                     response -> {
-                        editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        activity.navigateUp();
+                        //editProductBarcodes(); // ADD BARCODES TO PRODUCT
+                        sendEvent(Event.NAVIGATE_UP);
                     },
                     error -> {
                         showErrorMessage();
-                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveItem: " + error);
                     }
             );
         } else {
@@ -226,27 +210,15 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
                     grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
                     jsonObject,
                     response -> {
-                        editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        activity.navigateUp();
+                        //editProductBarcodes(); // ADD BARCODES TO PRODUCT
+                        sendEvent(Event.NAVIGATE_UP);
                     },
                     error -> {
                         showErrorMessage();
-                        if(debug) Log.e(TAG, "saveShoppingListItem: " + error);
+                        if(debug) Log.e(TAG, "saveItem: " + error);
                     }
             );
-        }*/
-    }
-
-    private ArrayList<String> getProductNames(ArrayList<Product> products) {
-        ArrayList<String> productNames = new ArrayList<>();
-        for(Product product : products) productNames.add(product.getName());
-        return productNames;
-    }
-
-    public void setShoppingListForPreviousFragment(int selectedId) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
-        sendEvent(Event.SET_SHOPPING_LIST_ID, bundle);
+        }
     }
 
     private void fillWithSoppingListItemIfNecessary() {
@@ -266,7 +238,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             formData.getProductNameLive().setValue(product.getName());
             HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
 
-            if(item.getQuId() != null) {
+            if(item.getQuId() != null && !item.getQuId().isEmpty()) {
                 QuantityUnit quantityUnit = getQuantityUnit(Integer.parseInt(item.getQuId()));
                 if(unitFactors != null && unitFactors.containsKey(quantityUnit)) {
                     Double factor = unitFactors.get(quantityUnit);
@@ -348,6 +320,19 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             );
         }
         return product;
+    }
+
+    private JSONObject getJsonFromShoppingListItem(ShoppingListItem item) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("shopping_list_id", item.getShoppingListId());
+            json.put("amount", item.getAmount());
+            json.put("product_id", item.getProductId());
+            json.put("note", item.getNote());
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
+        }
+        return json;
     }
 
     private QuantityUnit getQuantityUnit(int id) {

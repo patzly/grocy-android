@@ -202,7 +202,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> { // always download for proper sync
+            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
                 this.shoppingListItems = shoppingListItems;
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
                 editPrefs.apply();

@@ -187,9 +187,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> {
-                    viewModel.getFormData().isFormValid();
-                }
+                () -> viewModel.saveItem()
         );
     }
 
@@ -285,7 +283,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         if(menuItemDelete != null) {
             menuItemDelete.setVisible(viewModel.isActionEdit());
             menuItemDelete.setOnMenuItemClickListener(item -> {
-                if(viewModel.isActionEdit()) return true;
+                if(!viewModel.isActionEdit()) return true;
                 ((Animatable) menuItemDelete.getIcon()).start();
                 ShoppingListItem shoppingListItem = args.getShoppingListItem();
                 assert shoppingListItem != null;
@@ -294,7 +292,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                                 GrocyApi.ENTITY.SHOPPING_LIST,
                                 shoppingListItem.getId()
                         ),
-                        response -> activity.dismissFragment(),
+                        response -> activity.navigateUp(),
                         error -> showErrorMessage()
                 );
                 return true;
@@ -304,7 +302,10 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             menuItemDetails.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemDetails);
                 Product product = viewModel.checkProductInput();
-                if(product == null) return true;
+                if(product == null) {
+                    showMessage(getString(R.string.error_no_product_selected));
+                    return true;
+                }
                 dlHelper.getProductDetails(product.getId(), details -> activity.showBottomSheet(
                         new ProductOverviewBottomSheet(),
                         new ProductOverviewBottomSheetArgs.Builder()

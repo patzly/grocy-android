@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -310,7 +311,8 @@ public class MainActivity extends AppCompatActivity {
     ) {
         replaceFabIcon(icon, tag, animated);
         binding.fabMain.setOnClickListener(v -> {
-            IconUtil.start(binding.fabMain.getDrawable());
+            Drawable drawable = binding.fabMain.getDrawable();
+            if(drawable instanceof AnimationDrawable) IconUtil.start(drawable);
             onClick.run();
         });
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

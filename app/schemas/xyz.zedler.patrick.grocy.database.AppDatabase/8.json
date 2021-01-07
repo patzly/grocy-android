@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "c984f4b988e64e1d9a2d2c268c67f3dc",
+    "identityHash": "734df1af45e6d2ac63b7a2ca065c6132",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -420,7 +420,7 @@
       },
       {
         "tableName": "location_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `row_created_timestamp` TEXT, `is_freezer` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `row_created_timestamp` TEXT, `is_freezer` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -449,8 +449,8 @@
           {
             "fieldPath": "isFreezer",
             "columnName": "is_freezer",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -622,7 +622,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c984f4b988e64e1d9a2d2c268c67f3dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '734df1af45e6d2ac63b7a2ca065c6132')"
     ]
   }
 }

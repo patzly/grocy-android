@@ -189,6 +189,33 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/quantity_unit_container"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:focusableInTouchMode="true"
+                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet()}"
+                        app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:src="@drawable/ic_round_weights"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.OverLine"
+                                android:text="@string/property_quantity_unit"
+                                android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}" />
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:text="@{formData.quantityUnitNameLive ?? @string/subtitle_none_selected}" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -257,33 +284,6 @@
                             app:icon="@drawable/ic_round_expand_more"
                             app:tint="@color/icon"
                             app:dense="true"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/quantity_unit_container"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:focusableInTouchMode="true"
-                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet()}"
-                        app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}">
-
-                        <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_weights"
-                            tools:ignore="ContentDescription" />
-
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
-
-                            <TextView
-                                style="@style/Theme.Grocy.ListItem.OverLine"
-                                android:text="@string/property_quantity_unit"
-                                android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}" />
-
-                            <TextView
-                                style="@style/Theme.Grocy.ListItem.Title"
-                                android:text="@{formData.quantityUnitNameLive ?? @string/subtitle_none_selected}" />
-
-                        </LinearLayout>
 
                     </LinearLayout>
 

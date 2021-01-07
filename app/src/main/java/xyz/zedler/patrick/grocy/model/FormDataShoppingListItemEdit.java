@@ -254,11 +254,10 @@ public class FormDataShoppingListItemEdit {
     }
 
     public boolean isProductNameValid() {
-        if(productNameLive.getValue() == null || productNameLive.getValue().isEmpty()) {
-            productNameErrorLive.setValue(R.string.error_empty);
-            return false;
+        if(productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
+            if(productLive.getValue() != null) productLive.setValue(null);
+            if(quantityUnitLive.getValue() != null) quantityUnitLive.setValue(null);
         }
-        productNameErrorLive.setValue(null);
         return true;
     }
 
@@ -282,7 +281,7 @@ public class FormDataShoppingListItemEdit {
     }
 
     private boolean isQuantityUnitValid() {
-        if(quantityUnitLive.getValue() == null) {
+        if(productLive.getValue() != null && quantityUnitLive.getValue() == null) {
             quantityUnitErrorLive.setValue(true);
             return false;
         }
@@ -302,14 +301,22 @@ public class FormDataShoppingListItemEdit {
         ShoppingList shoppingList = shoppingListLive.getValue();
         Product product = productLive.getValue();
         String amount = amountLive.getValue();
+        String note = noteLive.getValue();
         QuantityUnit unit = quantityUnitLive.getValue();
+        HashMap<QuantityUnit, Double> unitFactors = quantityUnitsFactorsLive.getValue();
+        Double factor = unitFactors != null ? unitFactors.get(unit) : null;
+        if(factor != null && factor == -1 && product != null) {
+            factor = product.getQuFactorPurchaseToStockDouble();
+        }
+
         assert shoppingList != null && amount != null;
         if(item == null) item = new ShoppingListItem();
+        double amountDouble = Double.parseDouble(amount);
         item.setShoppingListId(shoppingList.getId());
         item.setProductId(product != null ? String.valueOf(product.getId()) : null);
-        item.setAmount(Double.parseDouble(amount));
         item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
-        item.setNote(noteLive.getValue());
+        item.setAmount(factor != null ? amountDouble / factor : amountDouble);
+        item.setNote(note != null ? note.trim() : null);
         return item;
     }
 
