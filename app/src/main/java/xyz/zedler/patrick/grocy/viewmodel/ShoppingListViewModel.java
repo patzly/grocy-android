@@ -535,9 +535,10 @@ public class ShoppingListViewModel extends AndroidViewModel {
     public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
-                response -> loadFromDatabase(false),
+                response -> loadFromDatabase(true),
                 error -> {
                     showMessage(getString(R.string.error_undefined));
+                    loadFromDatabase(true);
                     if(debug) Log.e(TAG, "deleteItem: " + error);
                 }
         );

@@ -35,7 +35,6 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -47,6 +46,8 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -190,16 +191,13 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         ShoppingListItem item = null;
         if(isActionEdit) item = args.getShoppingListItem();
         item = formData.fillShoppingListItem(item);
-        JSONObject jsonObject = getJsonFromShoppingListItem(item);
+        JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
 
         if(isActionEdit) {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
                     jsonObject,
-                    response -> {
-                        //editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        navigateUp();
-                    },
+                    response -> saveProductBarcodeAndNavigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveItem: " + error);
@@ -209,16 +207,26 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
                     jsonObject,
-                    response -> {
-                        //editProductBarcodes(); // ADD BARCODES TO PRODUCT
-                        navigateUp();
-                    },
+                    response -> saveProductBarcodeAndNavigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveItem: " + error);
                     }
             );
         }
+    }
+
+    private void saveProductBarcodeAndNavigateUp() {
+        ProductBarcode productBarcode = formData.fillProductBarcode(null);
+        if(productBarcode.getBarcode() == null) {
+            navigateUp();
+            return;
+        }
+        dlHelper.addProductBarcode(
+                ProductBarcode.getJsonFromProductBarcode(productBarcode, debug, TAG),
+                this::navigateUp,
+                error -> navigateUp()
+        ).perform(dlHelper.getUuid());
     }
 
     private void fillWithSoppingListItemIfNecessary() {
@@ -306,11 +314,30 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         }
     }
 
+    public void showProductDetailsBottomSheet() {
+        Product product = checkProductInput();
+        if(product == null) {
+            showMessage(getString(R.string.error_no_product_selected));
+            return;
+        }
+        dlHelper.getProductDetails(product.getId(), details -> showBottomSheet(
+                new ProductOverviewBottomSheet(),
+                new ProductOverviewBottomSheetArgs.Builder()
+                        .setProductDetails(details).build().toBundle()
+        )).perform(dlHelper.getUuid());
+    }
+
     public Product checkProductInput() {
         formData.isProductNameValid();
         String input = formData.getProductNameLive().getValue();
         if(input == null || input.isEmpty()) return null;
         Product product = getProductFromName(input);
+
+        Product currentProduct = formData.getProductLive().getValue();
+        if(currentProduct != null && currentProduct.getId() == product.getId()) {
+            return product;
+        }
+
         if(product != null) {
             setProduct(product);
         } else {
@@ -320,24 +347,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             );
         }
         return product;
-    }
-
-    private JSONObject getJsonFromShoppingListItem(ShoppingListItem item) {
-        JSONObject json = new JSONObject();
-        try {
-            Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
-            Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
-            Object note = item.getNote() == null || item.getNote().isEmpty()
-                    ? JSONObject.NULL : item.getNote();
-            json.put("shopping_list_id", item.getShoppingListId());
-            json.put("amount", item.getAmount());
-            json.put("qu_id", quId);
-            json.put("product_id", productId);
-            json.put("note", note);
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
-        }
-        return json;
     }
 
     private QuantityUnit getQuantityUnit(int id) {

@@ -42,8 +42,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -155,6 +153,10 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         // necessary because else getValue() doesn't give current value (?)
         viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {});
+
+        viewModel.getFormData().getBarcodeLive().observe(
+                getViewLifecycleOwner(), barcode -> viewModel.getFormData().isFormValid()
+        );
 
         String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);
         if(barcode != null) {
@@ -301,16 +303,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         if(menuItemDetails != null) {
             menuItemDetails.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemDetails);
-                Product product = viewModel.checkProductInput();
-                if(product == null) {
-                    showMessage(getString(R.string.error_no_product_selected));
-                    return true;
-                }
-                dlHelper.getProductDetails(product.getId(), details -> activity.showBottomSheet(
-                        new ProductOverviewBottomSheet(),
-                        new ProductOverviewBottomSheetArgs.Builder()
-                        .setProductDetails(details).build().toBundle()
-                )).perform(dlHelper.getUuid());
+                viewModel.showProductDetailsBottomSheet();
                 return true;
             });
         }

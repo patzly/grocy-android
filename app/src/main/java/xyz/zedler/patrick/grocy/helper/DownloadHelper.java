@@ -134,7 +134,7 @@ public class DownloadHelper {
     public void get(
             String url,
             String tag,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError
     ) {
         CustomStringRequest request = new CustomStringRequest(
@@ -155,7 +155,7 @@ public class DownloadHelper {
     public void get(
             String url,
             String tag,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError,
             boolean noLoadingProgress
     ) {
@@ -178,7 +178,7 @@ public class DownloadHelper {
     // for single requests without a queue
     public void get(
             String url,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError
     ) {
         get(url, uuidHelper, onResponse, onError);
@@ -187,7 +187,7 @@ public class DownloadHelper {
     // GET requests with modified user-agent
     public void get(
             String url,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError,
             String userAgent
     ) {
@@ -227,7 +227,7 @@ public class DownloadHelper {
         requestQueue.add(request);
     }
 
-    public void post(String url, OnResponseListener onResponse, OnErrorListener onError) {
+    public void post(String url, OnStringResponseListener onResponse, OnErrorListener onError) {
         CustomStringRequest request = new CustomStringRequest(
                 Request.Method.POST,
                 url,
@@ -266,7 +266,7 @@ public class DownloadHelper {
     public void delete(
             String url,
             String tag,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError
     ) {
         CustomStringRequest request = new CustomStringRequest(
@@ -285,7 +285,7 @@ public class DownloadHelper {
 
     public void delete(
             String url,
-            OnResponseListener onResponse,
+            OnStringResponseListener onResponse,
             OnErrorListener onError
     ) {
         delete(url, uuidHelper, onResponse, onError);
@@ -299,7 +299,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -346,7 +346,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -382,7 +382,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -441,7 +441,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -504,7 +504,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -540,7 +540,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -597,7 +597,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -648,6 +648,37 @@ public class DownloadHelper {
         }
     }
 
+    public QueueItemJson addProductBarcode(
+            JSONObject jsonObject,
+            OnResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItemJson() {
+            @Override
+            public void perform(
+                    @Nullable OnJSONResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                post(
+                        grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+                        jsonObject,
+                        response -> {
+                            if(debug) Log.i(tag, "added ProductBarcode");
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse();
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
     public QueueItem getStockItems(
             OnStockItemsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -655,7 +686,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -691,7 +722,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -760,7 +791,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -799,7 +830,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -837,7 +868,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -894,7 +925,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -925,7 +956,7 @@ public class DownloadHelper {
 
     public void deleteProduct(
             int productId,
-            OnResponseListener onResponseListener,
+            OnStringResponseListener onResponseListener,
             OnErrorListener onErrorListener
     ) {
         delete(
@@ -944,7 +975,7 @@ public class DownloadHelper {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -980,13 +1011,13 @@ public class DownloadHelper {
 
     public QueueItem deleteShoppingListItem(
             int itemId,
-            OnResponseListener onResponseListener,
+            OnStringResponseListener onResponseListener,
             OnErrorListener onErrorListener
     ) {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -1037,13 +1068,13 @@ public class DownloadHelper {
 
     public QueueItem getStringData(
             String url,
-            OnResponseListener onResponseListener,
+            OnStringResponseListener onResponseListener,
             OnErrorListener onErrorListener
     ) {
         return new QueueItem() {
             @Override
             public void perform(
-                    @Nullable OnResponseListener responseListener,
+                    @Nullable OnStringResponseListener responseListener,
                     @Nullable OnErrorListener errorListener,
                     @Nullable String uuid
             ) {
@@ -1070,7 +1101,7 @@ public class DownloadHelper {
         };
     }
 
-    public QueueItem getStringData(String url, OnResponseListener onResponseListener) {
+    public QueueItem getStringData(String url, OnStringResponseListener onResponseListener) {
         return getStringData(url, onResponseListener, null);
     }
 
@@ -1150,15 +1181,29 @@ public class DownloadHelper {
         return queue;
     }
 
-    public abstract static class QueueItem {
+    public abstract static class BaseQueueItem { }
+
+    public abstract static class QueueItem extends BaseQueueItem {
         public abstract void perform(
-                OnResponseListener responseListener,
+                OnStringResponseListener responseListener,
                 OnErrorListener errorListener,
                 String uuid
         );
         public void perform(String uuid) {
             // UUID is for cancelling the requests; should be uuidHelper from above
             perform(null, null, uuid);
+        }
+    }
+
+    public abstract static class QueueItemJson extends BaseQueueItem {
+        public abstract void perform(
+                OnJSONResponseListener responseListener,
+                OnErrorListener errorListener,
+                String uuid
+        );
+        public void perform(String uuid) {
+            // UUID is for cancelling the requests; should be uuidHelper from above
+            perform((OnJSONResponseListener) null, null, uuid);
         }
     }
 
@@ -1219,7 +1264,7 @@ public class DownloadHelper {
         void onResponse(ArrayList<Store> arrayList);
     }
 
-    public interface OnResponseListener {
+    public interface OnStringResponseListener {
         void onResponse(String response);
     }
 
@@ -1227,8 +1272,8 @@ public class DownloadHelper {
         void onResponse(JSONObject response);
     }
 
-    public interface OnStringResponseListener {
-        void onResponse(String response);
+    public interface OnResponseListener {
+        void onResponse();
     }
 
     public interface OnErrorListener {

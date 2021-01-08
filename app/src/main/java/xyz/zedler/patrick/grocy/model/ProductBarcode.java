@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -29,6 +30,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -210,6 +214,34 @@ public class ProductBarcode implements Parcelable {
     public int hashCode() {
         return Objects.hash(id, productId, barcode, quId, amount, shoppingLocationId,
                 lastPrice, note, rowCreatedTimestamp);
+    }
+
+    public static JSONObject getJsonFromProductBarcode(ProductBarcode productBarcode, boolean debug, String TAG) {
+        JSONObject json = new JSONObject();
+        try {
+            Object quId = productBarcode.getQuId() != null && !productBarcode.getQuId().isEmpty()
+                    ? productBarcode.getQuId() : JSONObject.NULL;
+            Object note = productBarcode.getNote() != null && !productBarcode.getNote().isEmpty()
+                    ? productBarcode.getNote() : JSONObject.NULL;
+            Object lastPrice = productBarcode.getLastPrice() != null
+                    && !productBarcode.getLastPrice().isEmpty()
+                    ? productBarcode.getLastPrice() : JSONObject.NULL;
+            Object storeId = productBarcode.getShoppingLocationId() != null
+                    ? productBarcode.getShoppingLocationId() : JSONObject.NULL;
+            Object amount = productBarcode.getAmount() != null
+                    && !productBarcode.getAmount().isEmpty()
+                    ? productBarcode.getAmount() : JSONObject.NULL ;
+            json.put("product_id", productBarcode.getProductId());
+            json.put("barcode", productBarcode.getBarcode());
+            json.put("qu_id", quId);
+            json.put("amount", amount);
+            json.put("shopping_location_id", storeId);
+            json.put("last_price", lastPrice);
+            json.put("note", note);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "getJsonFromProductBarcode: " + e);
+        }
+        return json;
     }
 
     @NonNull

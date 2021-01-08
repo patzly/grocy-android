@@ -252,6 +252,15 @@ public class FormDataShoppingListItemEdit {
             if(productLive.getValue() != null) productLive.setValue(null);
             if(quantityUnitLive.getValue() != null) quantityUnitLive.setValue(null);
         }
+        if(barcodeLive.getValue() != null && productLive.getValue() == null) {
+            productNameErrorLive.setValue(R.string.error_empty);
+            return false;
+        }
+        if((noteLive.getValue() == null || noteLive.getValue().isEmpty()) && productLive.getValue() == null) {
+            productNameErrorLive.setValue(R.string.error_empty);
+            return false;
+        }
+        productNameErrorLive.setValue(null);
         return true;
     }
 
@@ -312,6 +321,18 @@ public class FormDataShoppingListItemEdit {
         item.setAmount(factor != null ? amountDouble / factor : amountDouble);
         item.setNote(note != null ? note.trim() : null);
         return item;
+    }
+
+    public ProductBarcode fillProductBarcode(@Nullable ProductBarcode productBarcode) {
+        if(!isFormValid()) return null;
+        String barcode = barcodeLive.getValue();
+        Product product = productLive.getValue();
+
+        if(productBarcode == null) productBarcode = new ProductBarcode();
+        if(product == null) return productBarcode;
+        productBarcode.setProductId(product.getId());
+        productBarcode.setBarcode(barcode);
+        return productBarcode;
     }
 
     public void clearForm() {

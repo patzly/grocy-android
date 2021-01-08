@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -28,6 +29,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -363,5 +367,23 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 this.productQuIdPurchase,
                 this.isMissing
         );
+    }
+
+    public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean debug, String TAG) {
+        JSONObject json = new JSONObject();
+        try {
+            Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
+            Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
+            Object note = item.getNote() == null || item.getNote().isEmpty()
+                    ? JSONObject.NULL : item.getNote();
+            json.put("shopping_list_id", item.getShoppingListId());
+            json.put("amount", item.getAmount());
+            json.put("qu_id", quId);
+            json.put("product_id", productId);
+            json.put("note", note);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
+        }
+        return json;
     }
 }
