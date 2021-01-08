@@ -138,6 +138,12 @@ public final class Constants {
         public final static class APPEARANCE {
             public final static boolean DARK_MODE_DEFAULT = false;
         }
+        public final static class NETWORK {
+            public final static String ORBOT = "orbot";
+            public final static String SOCKS_PROXY = "socks_proxy";
+            public final static String LOADING_CIRCLE = "loading_circle";
+            public final static int LOADING_TIMEOUT = 30;
+        }
         public final static class SCANNER {
             public final static boolean FOOD_FACTS = false;
             public final static boolean FRONT_CAM = false;

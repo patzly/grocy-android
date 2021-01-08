@@ -8,12 +8,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,9 +19,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -42,6 +37,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
+import xyz.zedler.patrick.grocy.web.CustomStringRequest;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 /*
@@ -73,7 +69,9 @@ public class DownloadHelper {
 
     private final ArrayList<Queue> queueArrayList;
     private final String tag;
+    private final String apiKey;
     private final boolean debug;
+    private final int timeoutSeconds;
     private int loadingRequests;
 
     public DownloadHelper(
@@ -87,10 +85,15 @@ public class DownloadHelper {
         gson = new Gson();
         requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
         grocyApi = new GrocyApi(application);
+        apiKey = sharedPrefs.getString(Constants.PREF.API_KEY, "");
         uuidHelper = UUID.randomUUID().toString();
         queueArrayList = new ArrayList<>();
         loadingRequests = 0;
         this.onLoadingListener = onLoadingListener;
+        timeoutSeconds = sharedPrefs.getInt(
+                Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
+                Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
+        );
     }
 
     public DownloadHelper(Activity activity, String tag) {
@@ -134,45 +137,42 @@ public class DownloadHelper {
             OnResponseListener onResponse,
             OnErrorListener onError
     ) {
-        StringRequest request = new StringRequest(
+        CustomStringRequest request = new CustomStringRequest(
                 Request.Method.GET,
                 url,
-                response -> {
-                    if(!getLoadingExceptions().contains(url)) {
-                        onRequestFinished();
-                    } else {
-                        onLoadingListener.onLoadingChanged(false);
-                    }
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    if(!getLoadingExceptions().contains(url)) {
-                        onRequestFinished();
-                    } else {
-                        onLoadingListener.onLoadingChanged(false);
-                    }
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        if(tag != null) request.setTag(tag);
-        request.setShouldCache(false);
-        if(!getLoadingExceptions().contains(url)) onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
+                apiKey,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                tag
+        );
+        onRequestLoading();
         requestQueue.add(request);
     }
 
-    private ArrayList<String> getLoadingExceptions() {
-        ArrayList<String> exceptions = new ArrayList<>();
-        exceptions.add(grocyApi.getDbChangedTime());
-        return exceptions;
+    // for requests without loading progress (set noLoadingProgress=true)
+    public void get(
+            String url,
+            String tag,
+            OnResponseListener onResponse,
+            OnErrorListener onError,
+            boolean noLoadingProgress
+    ) {
+        CustomStringRequest request = new CustomStringRequest(
+                Request.Method.GET,
+                url,
+                apiKey,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                tag,
+                noLoadingProgress,
+                onLoadingListener
+        );
+        if(!noLoadingProgress) onRequestLoading();
+        requestQueue.add(request);
     }
 
     // for single requests without a queue
@@ -191,37 +191,18 @@ public class DownloadHelper {
             OnErrorListener onError,
             String userAgent
     ) {
-        StringRequest request = new StringRequest(
+        CustomStringRequest request = new CustomStringRequest(
                 Request.Method.GET,
                 url,
-                response -> {
-                    onRequestFinished();
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    onRequestFinished();
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("User-Agent", userAgent);
-                return params;
-            }
-
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        request.setTag(uuidHelper);
-        request.setShouldCache(false);
+                apiKey,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                uuidHelper,
+                userAgent
+        );
         onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
         requestQueue.add(request);
     }
 
@@ -234,56 +215,30 @@ public class DownloadHelper {
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(
                 Request.Method.POST,
                 url,
+                apiKey,
                 json,
-                response -> {
-                    onRequestFinished();
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    onRequestFinished();
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        request.setTag(uuidHelper);
-        request.setShouldCache(false);
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                uuidHelper
+        );
         onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
         requestQueue.add(request);
     }
 
     public void post(String url, OnResponseListener onResponse, OnErrorListener onError) {
-        StringRequest request = new StringRequest(
+        CustomStringRequest request = new CustomStringRequest(
                 Request.Method.POST,
                 url,
-                response -> {
-                    onRequestFinished();
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    onRequestFinished();
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        request.setTag(uuidHelper);
-        request.setShouldCache(false);
+                apiKey,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                uuidHelper
+        );
         onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
         requestQueue.add(request);
     }
 
@@ -296,28 +251,15 @@ public class DownloadHelper {
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(
                 Request.Method.PUT,
                 url,
+                apiKey,
                 json,
-                response -> {
-                    onRequestFinished();
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    onRequestFinished();
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        request.setTag(uuidHelper);
-        request.setShouldCache(false);
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                uuidHelper
+        );
         onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
         requestQueue.add(request);
     }
 
@@ -327,30 +269,17 @@ public class DownloadHelper {
             OnResponseListener onResponse,
             OnErrorListener onError
     ) {
-        StringRequest request = new StringRequest(
+        CustomStringRequest request = new CustomStringRequest(
                 Request.Method.DELETE,
                 url,
-                response -> {
-                    onRequestFinished();
-                    onResponse.onResponse(response);
-                },
-                error -> {
-                    onRequestFinished();
-                    onError.onError(error);
-                }
-        ) {
-            @Override
-            public void cancel() {
-                super.cancel();
-                onRequestFinished();
-            }
-        };
-        request.setTag(tag);
-        request.setShouldCache(false);
+                apiKey,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                tag
+        );
         onRequestLoading();
-        int socketTimeout = 30000;//30 seconds - timeout
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);
         requestQueue.add(request);
     }
 
@@ -1101,7 +1030,8 @@ public class DownloadHelper {
                         onErrorListener.onError();
                     }
                 },
-                error -> onErrorListener.onError()
+                error -> onErrorListener.onError(),
+                true
         );
     }
 

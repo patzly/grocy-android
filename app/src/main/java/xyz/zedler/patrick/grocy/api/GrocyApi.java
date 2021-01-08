@@ -31,8 +31,9 @@ public class GrocyApi {
 
     private final static String TAG = GrocyApi.class.getSimpleName();
 
-    private SharedPreferences sharedPrefs;
-    private Context context;
+    private final SharedPreferences sharedPrefs;
+    private final Context context;
+    private String baseUrl;
 
     public final static class ENTITY {
         public final static String PRODUCTS = "products";
@@ -50,8 +51,6 @@ public class GrocyApi {
         public final static String MEAL_PLAN = "meal_plan";
     }
 
-    private String baseUrl, apiKey;
-
     public GrocyApi(Context context) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
@@ -63,17 +62,20 @@ public class GrocyApi {
                 Constants.PREF.SERVER_URL,
                 context.getString(R.string.url_grocy_demo)
         );
-        apiKey = "?GROCY-API-KEY=" + sharedPrefs.getString(Constants.PREF.API_KEY, "");
     }
 
     private String getUrl(String command) {
-        return baseUrl + "/api" + command + apiKey;
+        return baseUrl + "/api" + command;
     }
 
     private String getUrl(String command, String... params) {
         StringBuilder url = new StringBuilder(getUrl(command));
+        if(params.length > 0) url.append("?");
         for(String param : params) {
-            url.append("&").append(param);
+            url.append(param);
+            if(!param.equals(params[params.length - 1])) {
+                url.append("&");
+            };
         }
         return url.toString();
     }
