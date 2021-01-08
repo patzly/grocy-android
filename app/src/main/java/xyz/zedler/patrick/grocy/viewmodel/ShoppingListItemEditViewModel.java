@@ -301,6 +301,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     public void setProduct(Product product) {
         if(product == null) return;
         formData.getProductLive().setValue(product);
+        formData.getProductNameLive().setValue(product.getName());
         setProductQuantityUnitsAndFactors(product);
         formData.isFormValid();
     }
