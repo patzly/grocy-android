@@ -36,15 +36,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -52,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -63,24 +58,13 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private final static String TAG = ShoppingListItemEditFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private GrocyApi grocyApi;
-    private DownloadHelper dlHelper;
-    private ShoppingListItemEditFragmentArgs args;
     private FragmentShoppingListItemEditBinding binding;
     private ShoppingListItemEditViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentShoppingListItemEditBinding.inflate(
-                inflater,
-                container,
-                false
-        );
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
+        binding = FragmentShoppingListItemEditBinding.inflate(inflater, group, false);
         return binding.getRoot();
     }
 
@@ -88,13 +72,13 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        dlHelper.destroy();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
-        args = ShoppingListItemEditFragmentArgs.fromBundle(requireArguments());
+        ShoppingListItemEditFragmentArgs args = ShoppingListItemEditFragmentArgs
+                .fromBundle(requireArguments());
         viewModel = new ViewModelProvider(this, new ShoppingListItemEditViewModel
                 .ShoppingListItemEditViewModelFactory(activity.getApplication(), args)
         ).get(ShoppingListItemEditViewModel.class);
@@ -163,11 +147,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             removeForThisDestination(Constants.ARGUMENT.BARCODE);
             viewModel.onBarcodeRecognized(barcode); // TODO: Request focus in product field if barcode was written in chip
         }
-
-        // WEB
-
-        grocyApi = activity.getGrocy();
-        dlHelper = new DownloadHelper(activity, TAG);
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
@@ -243,15 +222,11 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         activity.showBottomSheet(new ShoppingListsBottomSheet());
     }
 
-    public void showQuantityUnitsBottomSheet() {
+    public void showQuantityUnitsBottomSheet(boolean hasFocus) {
+        if(!hasFocus) return;
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, viewModel.getFormData().getQuantityUnitsLive().getValue());
         activity.showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
-    }
-
-    public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-        if(!hasFocus) return;
-        showQuantityUnitsBottomSheet();
     }
 
     @Nullable
@@ -285,18 +260,8 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         if(menuItemDelete != null) {
             menuItemDelete.setVisible(viewModel.isActionEdit());
             menuItemDelete.setOnMenuItemClickListener(item -> {
-                if(!viewModel.isActionEdit()) return true;
                 ((Animatable) menuItemDelete.getIcon()).start();
-                ShoppingListItem shoppingListItem = args.getShoppingListItem();
-                assert shoppingListItem != null;
-                dlHelper.delete(
-                        grocyApi.getObject(
-                                GrocyApi.ENTITY.SHOPPING_LIST,
-                                shoppingListItem.getId()
-                        ),
-                        response -> activity.navigateUp(),
-                        error -> showErrorMessage()
-                );
+                viewModel.deleteItem();
                 return true;
             });
         }
@@ -314,16 +279,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 return true;
             });
         }
-    }
-
-    private void showMessage(String msg) {
-        activity.showSnackbar(
-                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
-        );
-    }
-
-    private void showErrorMessage() {
-        showMessage(activity.getString(R.string.error_undefined));
     }
 
     @Override

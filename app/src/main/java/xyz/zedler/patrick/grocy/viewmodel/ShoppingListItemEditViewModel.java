@@ -328,6 +328,20 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         )).perform(dlHelper.getUuid());
     }
 
+    public void deleteItem() {
+        if(!isActionEdit()) return;
+        ShoppingListItem shoppingListItem = args.getShoppingListItem();
+        assert shoppingListItem != null;
+        dlHelper.delete(
+                grocyApi.getObject(
+                        GrocyApi.ENTITY.SHOPPING_LIST,
+                        shoppingListItem.getId()
+                ),
+                response -> navigateUp(),
+                error -> showErrorMessage()
+        );
+    }
+
     public Product checkProductInput() {
         formData.isProductNameValid();
         String input = formData.getProductNameLive().getValue();

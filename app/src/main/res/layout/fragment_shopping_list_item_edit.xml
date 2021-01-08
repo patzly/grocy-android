@@ -192,7 +192,7 @@
                         android:id="@+id/quantity_unit_container"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:focusableInTouchMode="true"
-                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet()}"
+                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet(true)}"
                         app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}">
 
                         <ImageView
