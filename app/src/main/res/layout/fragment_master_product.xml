@@ -280,7 +280,7 @@
                     style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:alpha="0.5">
+                    android:alpha="0.4">
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"
@@ -315,7 +315,7 @@
                     style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:alpha="0.5">
+                    android:alpha="0.4">
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"

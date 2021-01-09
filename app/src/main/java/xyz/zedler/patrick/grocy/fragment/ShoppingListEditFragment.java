@@ -103,9 +103,10 @@ public class ShoppingListEditFragment extends BaseFragment {
         });
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            InfoFullscreen infoFullscreen = offline
-                    ? new InfoFullscreen(InfoFullscreen.ERROR_OFFLINE)
-                    : null;
+            InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
+                    InfoFullscreen.ERROR_OFFLINE,
+                    () -> updateConnectivity(true)
+            ) : null;
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
@@ -165,9 +166,9 @@ public class ShoppingListEditFragment extends BaseFragment {
 
     @Override
     public void updateConnectivity(boolean isOnline) {
-        if(viewModel.isOffline() == !isOnline) return;
-        if(isOnline && viewModel.isOffline()) viewModel.downloadData();
+        if(!isOnline == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!isOnline);
+        if(isOnline) viewModel.downloadData();
     }
 
     @NonNull
