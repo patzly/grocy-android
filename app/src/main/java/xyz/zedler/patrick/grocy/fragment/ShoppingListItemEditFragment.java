@@ -36,6 +36,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
@@ -90,9 +92,9 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity, activity.binding.frameMainContainer
-                ));
+                SnackbarMessage message = (SnackbarMessage) event;
+                Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+                activity.showSnackbar(snack);
             } else if(event.getType() == Event.NAVIGATE_UP) {
                 activity.navigateUp();
             } else if(event.getType() == Event.SET_SHOPPING_LIST_ID) {
@@ -115,9 +117,10 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         });
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            InfoFullscreen infoFullscreen = offline
-                    ? new InfoFullscreen(InfoFullscreen.ERROR_OFFLINE)
-                    : null;
+            InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
+                    InfoFullscreen.ERROR_OFFLINE,
+                    () -> viewModel.downloadData()
+            ) : null;
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 

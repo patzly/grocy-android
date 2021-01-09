@@ -113,40 +113,6 @@
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"
-                        android:src="@drawable/ic_round_place"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                        <TextView
-                            android:text="Default location"
-                            style="@style/Theme.Grocy.ListItem.Title" />
-
-                        <TextView
-                            android:text="Location, Store"
-                            style="@style/Theme.Grocy.ListItem.Description" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_marginStart="16dp"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:src="@drawable/ic_round_expand_more"
-                        android:rotation="-90"
-                        tools:ignore="ContentDescription"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/Theme.Grocy.ListItem.Icon"
                         android:src="@drawable/ic_round_ac_unit"
                         tools:ignore="ContentDescription" />
 
@@ -181,17 +147,17 @@
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"
-                        android:src="@drawable/ic_round_barcode"
+                        android:src="@drawable/ic_round_place"
                         tools:ignore="ContentDescription" />
 
                     <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                         <TextView
-                            android:text="Barcodes"
+                            android:text="Default location"
                             style="@style/Theme.Grocy.ListItem.Title" />
 
                         <TextView
-                            android:text="Linked with amount"
+                            android:text="Location, Store"
                             style="@style/Theme.Grocy.ListItem.Description" />
 
                     </LinearLayout>
@@ -293,8 +259,78 @@
                             style="@style/Theme.Grocy.ListItem.Title" />
 
                         <TextView
-                            android:text="Stock, Purchase default, Conversions"
+                            android:text="Stock, Purchase default"
                             style="@style/Theme.Grocy.ListItem.Description" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_marginStart="16dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/ic_round_expand_more"
+                        android:rotation="-90"
+                        tools:ignore="ContentDescription"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5">
+
+                    <ImageView
+                        style="@style/Theme.Grocy.ListItem.Icon"
+                        android:src="@drawable/ic_round_barcode"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                        <TextView
+                            android:text="Barcodes"
+                            style="@style/Theme.Grocy.ListItem.Title" />
+
+                        <TextView
+                            android:text="Product is not on server"
+                            style="@style/Theme.Grocy.ListItem.Description"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_marginStart="16dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/ic_round_expand_more"
+                        android:rotation="-90"
+                        tools:ignore="ContentDescription"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5">
+
+                    <ImageView
+                        style="@style/Theme.Grocy.ListItem.Icon"
+                        android:src="@drawable/ic_round_scale_anim"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                        <TextView
+                            android:text="QU conversions"
+                            style="@style/Theme.Grocy.ListItem.Title"/>
+
+                        <TextView
+                            android:text="Product is not on server"
+                            style="@style/Theme.Grocy.ListItem.Description"/>
 
                     </LinearLayout>
 
