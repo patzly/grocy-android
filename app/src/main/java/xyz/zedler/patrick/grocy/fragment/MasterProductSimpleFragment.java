@@ -965,7 +965,7 @@ public class MasterProductSimpleFragment extends BaseFragment {
             // min stock amount
             editTextMinAmount.setText(NumUtil.trim(editProduct.getMinStockAmountDouble()));
             // best before days
-            editTextDays.setText(String.valueOf(editProduct.getDefaultBestBeforeDays()));
+            editTextDays.setText(String.valueOf(editProduct.getDefaultDueDays()));
             // product group
             ProductGroup productGroup = getProductGroup(editProduct.getProductGroupId());
             if(productGroup != null) {

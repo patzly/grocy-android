@@ -138,7 +138,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
             binding.swipe.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadData());
+        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
         binding.swipe.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );

@@ -256,8 +256,7 @@ public class ShoppingListFragment extends BaseFragment implements
     public void editItem(@NonNull ShoppingListItem shoppingListItem) {
         if(showOfflineError()) return;
         navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment()
-                .setAction(Constants.ACTION.EDIT)
+                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
                 .setShoppingListItem(shoppingListItem));
     }
 
@@ -286,8 +285,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
     public void addItem() {
         navigate(ShoppingListFragmentDirections
-                .actionShoppingListFragmentToShoppingListItemEditFragment()
-                .setAction(Constants.ACTION.CREATE)
+                .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
                 .setSelectedShoppingListId(viewModel.getSelectedShoppingListId()));
     }
 

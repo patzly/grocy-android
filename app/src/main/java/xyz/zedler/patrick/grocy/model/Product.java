@@ -19,17 +19,21 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
+
+import xyz.zedler.patrick.grocy.util.Constants;
 
 @Entity(tableName = "product_table")
 public class Product implements Parcelable {
@@ -81,19 +85,19 @@ public class Product implements Parcelable {
 
     @ColumnInfo(name = "default_best_before_days")
     @SerializedName("default_best_before_days")
-    private int defaultBestBeforeDays;
+    private int defaultDueDays;
 
     @ColumnInfo(name = "default_best_before_days_after_open")
     @SerializedName("default_best_before_days_after_open")
-    private int defaultBestBeforeDaysAfterOpen;
+    private int defaultDueDaysAfterOpen;
 
     @ColumnInfo(name = "default_best_before_days_after_freezing")
     @SerializedName("default_best_before_days_after_freezing")
-    private int defaultBestBeforeDaysAfterFreezing;
+    private int defaultDueDaysAfterFreezing;
 
     @ColumnInfo(name = "default_best_before_days_after_thawing")
     @SerializedName("default_best_before_days_after_thawing")
-    private int defaultBestBeforeDaysAfterThawing;
+    private int defaultDueDaysAfterThawing;
 
     @ColumnInfo(name = "picture_file_name")
     @SerializedName("picture_file_name")
@@ -121,11 +125,11 @@ public class Product implements Parcelable {
 
     @ColumnInfo(name = "cumulate_min_stock_amount_of_sub_products")
     @SerializedName("cumulate_min_stock_amount_of_sub_products")
-    private int cumulateMinStockAmountOfSubProducts;
+    private int accumulateSubProductsMinStockAmount;
 
     @ColumnInfo(name = "due_type")
     @SerializedName("due_type")
-    private int dueType;
+    private int dueDateType;
 
     @ColumnInfo(name = "quick_consume_amount")
     @SerializedName("quick_consume_amount")
@@ -139,6 +143,49 @@ public class Product implements Parcelable {
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
+    public Product() {}  // for Room
+
+    @Ignore
+    public Product(SharedPreferences sharedPrefs) {
+        int presetLocationId = sharedPrefs.getInt(
+                Constants.SETTINGS.PRESETS.LOCATION,
+                Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+        );
+        int presetProductGroupId = sharedPrefs.getInt(
+                Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
+                Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
+        );
+        int presetQuId = sharedPrefs.getInt(
+                Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
+                Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
+        );
+        name = null;  // initialize default values (used in masterProductFragment)
+        active = 1;
+        parentProductId = null;
+        description = null;
+        locationId = presetLocationId == -1 ? null : String.valueOf(presetLocationId);
+        storeId = null;
+        minStockAmount = String.valueOf(0);
+        accumulateSubProductsMinStockAmount = 0;
+        dueDateType = 1;
+        defaultDueDays = 0;
+        defaultDueDaysAfterOpen = 0;
+        productGroupId = presetProductGroupId == -1 ? null : String.valueOf(presetProductGroupId);
+        quIdStock = presetQuId;
+        quIdPurchase = presetQuId;
+        quFactorPurchaseToStock = String.valueOf(1);
+        enableTareWeightHandling = 0;
+        tareWeight = String.valueOf(0);
+        notCheckStockFulfillmentForRecipes = 0;
+        calories = String.valueOf(0);
+        defaultDueDaysAfterFreezing = 0;
+        defaultDueDaysAfterThawing = 0;
+        quickConsumeAmount = String.valueOf(1);
+        hideOnStockOverview = 0;
+        // TODO: Use sharedPrefs for values which can be configured in settings (like default location etc...)
+    }
+
+    @Ignore
     public Product(
             int id,
             String name,
@@ -153,6 +200,7 @@ public class Product implements Parcelable {
         this.productGroupId = productGroupId;
     }
 
+    @Ignore
     public Product(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
@@ -165,18 +213,18 @@ public class Product implements Parcelable {
         quIdStock = parcel.readInt();
         quFactorPurchaseToStock = parcel.readString();
         minStockAmount = parcel.readString();
-        defaultBestBeforeDays = parcel.readInt();
-        defaultBestBeforeDaysAfterOpen = parcel.readInt();
-        defaultBestBeforeDaysAfterFreezing = parcel.readInt();
-        defaultBestBeforeDaysAfterThawing = parcel.readInt();
+        defaultDueDays = parcel.readInt();
+        defaultDueDaysAfterOpen = parcel.readInt();
+        defaultDueDaysAfterFreezing = parcel.readInt();
+        defaultDueDaysAfterThawing = parcel.readInt();
         pictureFileName = parcel.readString();
         enableTareWeightHandling = parcel.readInt();
         tareWeight = parcel.readString();
         notCheckStockFulfillmentForRecipes = parcel.readInt();
         parentProductId = parcel.readString();
         calories = parcel.readString();
-        cumulateMinStockAmountOfSubProducts = parcel.readInt();
-        dueType = parcel.readInt();
+        accumulateSubProductsMinStockAmount = parcel.readInt();
+        dueDateType = parcel.readInt();
         quickConsumeAmount = parcel.readString();
         hideOnStockOverview = parcel.readInt();
         rowCreatedTimestamp = parcel.readString();
@@ -195,18 +243,18 @@ public class Product implements Parcelable {
         dest.writeInt(quIdStock);
         dest.writeString(quFactorPurchaseToStock);
         dest.writeString(minStockAmount);
-        dest.writeInt(defaultBestBeforeDays);
-        dest.writeInt(defaultBestBeforeDaysAfterOpen);
-        dest.writeInt(defaultBestBeforeDaysAfterFreezing);
-        dest.writeInt(defaultBestBeforeDaysAfterThawing);
+        dest.writeInt(defaultDueDays);
+        dest.writeInt(defaultDueDaysAfterOpen);
+        dest.writeInt(defaultDueDaysAfterFreezing);
+        dest.writeInt(defaultDueDaysAfterThawing);
         dest.writeString(pictureFileName);
         dest.writeInt(enableTareWeightHandling);
         dest.writeString(tareWeight);
         dest.writeInt(notCheckStockFulfillmentForRecipes);
         dest.writeString(parentProductId);
         dest.writeString(calories);
-        dest.writeInt(cumulateMinStockAmountOfSubProducts);
-        dest.writeInt(dueType);
+        dest.writeInt(accumulateSubProductsMinStockAmount);
+        dest.writeInt(dueDateType);
         dest.writeString(quickConsumeAmount);
         dest.writeInt(hideOnStockOverview);
         dest.writeString(rowCreatedTimestamp);
@@ -289,20 +337,20 @@ public class Product implements Parcelable {
         }
     }
 
-    public int getDefaultBestBeforeDays() {
-        return defaultBestBeforeDays;
+    public int getDefaultDueDays() {
+        return defaultDueDays;
     }
 
-    public int getDefaultBestBeforeDaysAfterOpen() {
-        return defaultBestBeforeDaysAfterOpen;
+    public int getDefaultDueDaysAfterOpen() {
+        return defaultDueDaysAfterOpen;
     }
 
-    public int getDefaultBestBeforeDaysAfterFreezing() {
-        return defaultBestBeforeDaysAfterFreezing;
+    public int getDefaultDueDaysAfterFreezing() {
+        return defaultDueDaysAfterFreezing;
     }
 
-    public int getDefaultBestBeforeDaysAfterThawing() {
-        return defaultBestBeforeDaysAfterThawing;
+    public int getDefaultDueDaysAfterThawing() {
+        return defaultDueDaysAfterThawing;
     }
 
     public String getRowCreatedTimestamp() {
@@ -342,8 +390,8 @@ public class Product implements Parcelable {
         }
     }
 
-    public int getCumulateMinStockAmountOfSubProducts() {
-        return cumulateMinStockAmountOfSubProducts;
+    public int getAccumulateSubProductsMinStockAmount() {
+        return accumulateSubProductsMinStockAmount;
     }
 
     public String getStoreId() {
@@ -393,20 +441,20 @@ public class Product implements Parcelable {
         this.minStockAmount = minStockAmount;
     }
 
-    public void setDefaultBestBeforeDays(int defaultBestBeforeDays) {
-        this.defaultBestBeforeDays = defaultBestBeforeDays;
+    public void setDefaultDueDays(int defaultDueDays) {
+        this.defaultDueDays = defaultDueDays;
     }
 
-    public void setDefaultBestBeforeDaysAfterOpen(int defaultBestBeforeDaysAfterOpen) {
-        this.defaultBestBeforeDaysAfterOpen = defaultBestBeforeDaysAfterOpen;
+    public void setDefaultDueDaysAfterOpen(int defaultDueDaysAfterOpen) {
+        this.defaultDueDaysAfterOpen = defaultDueDaysAfterOpen;
     }
 
-    public void setDefaultBestBeforeDaysAfterFreezing(int defaultBestBeforeDaysAfterFreezing) {
-        this.defaultBestBeforeDaysAfterFreezing = defaultBestBeforeDaysAfterFreezing;
+    public void setDefaultDueDaysAfterFreezing(int defaultDueDaysAfterFreezing) {
+        this.defaultDueDaysAfterFreezing = defaultDueDaysAfterFreezing;
     }
 
-    public void setDefaultBestBeforeDaysAfterThawing(int defaultBestBeforeDaysAfterThawing) {
-        this.defaultBestBeforeDaysAfterThawing = defaultBestBeforeDaysAfterThawing;
+    public void setDefaultDueDaysAfterThawing(int defaultDueDaysAfterThawing) {
+        this.defaultDueDaysAfterThawing = defaultDueDaysAfterThawing;
     }
 
     public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
@@ -448,8 +496,8 @@ public class Product implements Parcelable {
         this.calories = calories;
     }
 
-    public void setCumulateMinStockAmountOfSubProducts(int cumulateMinStockAmountOfSubProducts) {
-        this.cumulateMinStockAmountOfSubProducts = cumulateMinStockAmountOfSubProducts;
+    public void setAccumulateSubProductsMinStockAmount(int accumulateSubProductsMinStockAmount) {
+        this.accumulateSubProductsMinStockAmount = accumulateSubProductsMinStockAmount;
     }
 
     public void setStoreId(String storeId) {
@@ -460,16 +508,20 @@ public class Product implements Parcelable {
         return active;
     }
 
+    public boolean isActive() {
+        return active == 1;
+    }
+
     public void setActive(int active) {
         this.active = active;
     }
 
-    public int getDueType() {
-        return dueType;
+    public int getDueDateType() {
+        return dueDateType;
     }
 
-    public void setDueType(int dueType) {
-        this.dueType = dueType;
+    public void setDueDateType(int dueDateType) {
+        this.dueDateType = dueDateType;
     }
 
     public String getQuickConsumeAmount() {
@@ -502,14 +554,14 @@ public class Product implements Parcelable {
                 active == product.active &&
                 quIdPurchase == product.quIdPurchase &&
                 quIdStock == product.quIdStock &&
-                defaultBestBeforeDays == product.defaultBestBeforeDays &&
-                defaultBestBeforeDaysAfterOpen == product.defaultBestBeforeDaysAfterOpen &&
-                defaultBestBeforeDaysAfterFreezing == product.defaultBestBeforeDaysAfterFreezing &&
-                defaultBestBeforeDaysAfterThawing == product.defaultBestBeforeDaysAfterThawing &&
+                defaultDueDays == product.defaultDueDays &&
+                defaultDueDaysAfterOpen == product.defaultDueDaysAfterOpen &&
+                defaultDueDaysAfterFreezing == product.defaultDueDaysAfterFreezing &&
+                defaultDueDaysAfterThawing == product.defaultDueDaysAfterThawing &&
                 enableTareWeightHandling == product.enableTareWeightHandling &&
                 notCheckStockFulfillmentForRecipes == product.notCheckStockFulfillmentForRecipes &&
-                cumulateMinStockAmountOfSubProducts == product.cumulateMinStockAmountOfSubProducts &&
-                dueType == product.dueType &&
+                accumulateSubProductsMinStockAmount == product.accumulateSubProductsMinStockAmount &&
+                dueDateType == product.dueDateType &&
                 hideOnStockOverview == product.hideOnStockOverview &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
@@ -530,11 +582,11 @@ public class Product implements Parcelable {
     public int hashCode() {
         return Objects.hash(id, name, description, productGroupId, active, locationId, storeId,
                 quIdPurchase, quIdStock, quFactorPurchaseToStock, minStockAmount,
-                defaultBestBeforeDays, defaultBestBeforeDaysAfterOpen,
-                defaultBestBeforeDaysAfterFreezing, defaultBestBeforeDaysAfterThawing,
+                defaultDueDays, defaultDueDaysAfterOpen,
+                defaultDueDaysAfterFreezing, defaultDueDaysAfterThawing,
                 pictureFileName, enableTareWeightHandling, tareWeight,
                 notCheckStockFulfillmentForRecipes, parentProductId, calories,
-                cumulateMinStockAmountOfSubProducts, dueType, quickConsumeAmount,
+                accumulateSubProductsMinStockAmount, dueDateType, quickConsumeAmount,
                 hideOnStockOverview, rowCreatedTimestamp);
     }
 

@@ -201,6 +201,7 @@
     <string name="error_unexpected_response_code">Unexpected response code: %1$d</string>
     <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_no_browser">Install a web browser to display the help webpage</string>
+    <string name="error_barcode_not_linked">Barcode is not linked to a product</string>
     <string name="error_undefined">An error occurred</string>
 
     <string name="title_overview">Overview</string>
@@ -211,6 +212,8 @@
     <string name="title_barcode_input">Barcode input</string>
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
+    <string name="title_product_create">Create product</string>
+    <string name="title_product_edit">Edit product</string>
     <string name="title_master_data">Master data</string>
     <string name="title_stock_entries">Stock entries</string>
     <string name="title_shopping_list">Shopping list</string>
@@ -246,6 +249,7 @@
     <string name="title_shopping_mode">Shopping mode</string>
     <string name="title_products_to_create">Products to create</string>
     <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
+    <string name="title_product_cat_optional">Optional properties</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -273,6 +277,8 @@
     <string name="subtitle_shortcuts_not_supported">Not supported</string>
     <!-- %1$s is an amount, %2$s is a quantity unit -->
     <string name="subtitle_amount_compare">That\'s the same as %1$s %2$s.</string>
+    <string name="subtitle_product_hidden">Product is hidden</string>
+    <string name="subtitle_product_not_hidden">Product is not hidden</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
@@ -336,6 +342,10 @@
     <string name="property_opened">opened</string>
     <string name="property_not_opened">not opened</string>
     <string name="property_is_freezer">Is freezer</string>
+    <!-- kcal (kilo calories) is a unit for energy -->
+    <string name="property_energy">Energy (kcal)</string>
+    <string name="property_active">Active</string>
+    <string name="property_never_show">Never show on stock overview</string>
 
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>

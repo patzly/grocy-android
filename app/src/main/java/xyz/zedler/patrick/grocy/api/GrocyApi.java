@@ -90,6 +90,13 @@ public class GrocyApi {
     }
 
     /**
+     * Returns all objects of the given entity and filter
+     */
+    public String getObjectsEqualValue(String entity, String field, String value) {
+        return getUrl("/objects/" + entity + "?query%5B%5D=" + field + "%3D" + value);
+    }
+
+    /**
      * Returns a single object of the given entity
      */
     public String getObject(String entity, int id) {

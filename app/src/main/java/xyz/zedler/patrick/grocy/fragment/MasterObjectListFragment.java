@@ -151,7 +151,7 @@ public class MasterObjectListFragment extends BaseFragment
             binding.swipe.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadData());
+        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
         // for offline info in app bar
         binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         binding.swipe.setProgressBackgroundColorSchemeColor(
@@ -299,7 +299,7 @@ public class MasterObjectListFragment extends BaseFragment
                             break;
                         case GrocyApi.ENTITY.PRODUCTS:
                             navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterProductFragment());
+                                    .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
                     }
                 }
         );

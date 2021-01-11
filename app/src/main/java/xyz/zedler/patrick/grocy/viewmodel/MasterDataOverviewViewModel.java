@@ -179,6 +179,17 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
         downloadData(null);
     }
 
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.apply();
+        downloadData();
+    }
+
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
         repository.updateDatabase(

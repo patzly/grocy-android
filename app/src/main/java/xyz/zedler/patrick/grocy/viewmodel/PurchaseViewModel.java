@@ -242,7 +242,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         if(productDetails == null) return;
 
         // BBD
-        int defaultBestBeforeDays = productDetails.getProduct().getDefaultBestBeforeDays();
+        int defaultBestBeforeDays = productDetails.getProduct().getDefaultDueDays();
         if(defaultBestBeforeDays < 0) {
             bestBeforeDateLive.setValue(Constants.DATE.NEVER_EXPIRES);
         } else if (defaultBestBeforeDays == 0) {

@@ -45,6 +45,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
@@ -122,6 +123,8 @@ public class BaseFragment extends Fragment {
     public void selectShoppingList(ShoppingList shoppingList) {}
 
     public void selectQuantityUnit(QuantityUnit quantityUnit) {}
+
+    public void selectProductGroup(ProductGroup productGroup) {}
 
     public void updateShortcuts() {}
 
@@ -264,7 +267,12 @@ public class BaseFragment extends Fragment {
      * @param value (Object): the value to store
      */
     void setForDestination(@IdRes int destinationId, String key, Object value) {
-        NavBackStackEntry backStackEntry = findNavController().getBackStackEntry(destinationId);
+        NavBackStackEntry backStackEntry;
+        try {
+            backStackEntry = findNavController().getBackStackEntry(destinationId);
+        } catch (IllegalArgumentException e) {
+            backStackEntry = null;
+        }
         if(backStackEntry == null) return;
         backStackEntry.getSavedStateHandle().set(key, value);
     }

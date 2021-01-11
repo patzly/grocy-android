@@ -173,8 +173,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 		toolbar.setOnMenuItemClickListener(item -> {
 			if(item.getItemId() == R.id.action_add_to_shopping_list) {
 				navigate(R.id.shoppingListItemEditFragment,
-						new ShoppingListItemEditFragmentArgs.Builder()
-								.setAction(Constants.ACTION.CREATE)
+						new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
 								.setProductName(product.getName()).build().toBundle());
 				dismiss();
 				return true;

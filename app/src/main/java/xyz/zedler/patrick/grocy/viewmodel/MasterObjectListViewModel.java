@@ -145,7 +145,7 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         }
         if(dbChangedTime == null) {
             dlHelper.getTimeDbChanged(
-                    (DownloadHelper.OnStringResponseListener) this::downloadData,
+                    this::downloadData,
                     () -> onDownloadError(null)
             );
             return;
@@ -171,7 +171,11 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         if((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
                 && (lastTimeLocations == null || !lastTimeLocations.equals(dbChangedTime))) {
             queue.append(dlHelper.getLocations(locations -> {
-                objects = (ArrayList<Object>) (Object) locations;
+                if(entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
+                    objects = (ArrayList<Object>) (Object) locations;
+                } else {
+                    this.locations = locations;
+                }
                 editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
                 editPrefs.apply();
             }));
@@ -217,6 +221,17 @@ public class MasterObjectListViewModel extends AndroidViewModel {
 
     public void downloadData() {
         downloadData(null);
+    }
+
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.apply();
+        downloadData();
     }
 
     private void onQueueEmpty() {

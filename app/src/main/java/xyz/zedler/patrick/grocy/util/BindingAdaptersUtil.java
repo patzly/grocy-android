@@ -75,6 +75,7 @@ public class BindingAdaptersUtil {
 
     @BindingAdapter({"productList"})
     public static void setProductList(MaterialAutoCompleteTextView view, List<Product> items) {
+        if(items == null) return;
         view.setAdapter(new MatchProductsArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, items));
     }
 

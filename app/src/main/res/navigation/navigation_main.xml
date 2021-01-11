@@ -378,8 +378,7 @@
                 app:argType="integer" />
             <argument
                 android:name="action"
-                app:argType="string"
-                android:defaultValue="action_create"/>
+                app:argType="string" />
             <argument
                 android:name="productName"
                 android:defaultValue="@null"
@@ -592,6 +591,38 @@
             <deepLink
                 android:id="@+id/deepLink9"
                 app:uri="@string/deep_link_masterProductFragment" />
+            <argument
+                android:name="product"
+                app:argType="xyz.zedler.patrick.grocy.model.Product"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="action"
+                app:argType="string" />
+            <action
+                android:id="@+id/action_masterProductFragment_to_masterProductCatOptionalFragment"
+                app:destination="@id/masterProductCatOptionalFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right" />
+        </fragment>
+        <fragment
+            android:id="@+id/masterProductCatOptionalFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatOptionalFragment"
+            android:label="MasterProductCatOptionalFragment"
+            tools:layout="@layout/fragment_master_product_cat_optional">
+            <argument
+                android:name="product"
+                app:argType="xyz.zedler.patrick.grocy.model.Product"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="action"
+                app:argType="string" />
+            <argument
+                android:name="categoriesInvalid"
+                app:argType="integer[]" />
         </fragment>
 
     </navigation>

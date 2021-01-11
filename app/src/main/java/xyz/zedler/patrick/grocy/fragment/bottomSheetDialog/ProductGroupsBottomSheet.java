@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +37,7 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
-import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -50,7 +46,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheet
 
     private final static String TAG = ProductGroupsBottomSheet.class.getSimpleName();
 
-    private Activity activity;
+    private MainActivity activity;
     private ArrayList<ProductGroup> productGroups;
 
     @NonNull
@@ -69,7 +65,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheet
                 R.layout.fragment_bottomsheet_list_selection, container, false
         );
 
-        activity = requireActivity();
+        activity = (MainActivity) requireActivity();
 
         productGroups = requireArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
         int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
@@ -97,21 +93,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheet
 
     @Override
     public void onItemRowClicked(int position) {
-        if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-                ((MasterProductSimpleFragment) currentFragment).selectProductGroup(
-                        productGroups.get(position).getId()
-                );
-            }
-        } else if(activity.getClass() == SettingsActivity.class) {
-            int productGroupId = productGroups.get(position).getId();
-            ((SettingsActivity) activity).setProductGroup(productGroupId);
-        }
-        ((MainActivity) activity).getCurrentFragment().setOption(
-                productGroups.get(position),
-                requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
-        );
+        activity.getCurrentFragment().selectProductGroup(productGroups.get(position));
 
         dismiss();
     }

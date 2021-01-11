@@ -375,6 +375,27 @@ public class DownloadHelper {
         return getProductGroups(onResponseListener, null);
     }
 
+    public QueueItem updateProductGroups(
+            String dbChangedTime,
+            OnProductGroupsResponseListener onResponseListener
+    ) {
+        OnProductGroupsResponseListener newOnResponseListener = productGroups -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(productGroups);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getProductGroups(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped ProductGroups download");
+            return null;
+        }
+    }
+
     public QueueItem getQuantityUnits(
             OnQuantityUnitsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -667,6 +688,44 @@ public class DownloadHelper {
                             if(debug) Log.i(tag, "added ProductBarcode");
                             if(onResponseListener != null) {
                                 onResponseListener.onResponse();
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getSingleFilteredProductBarcode(
+            String barcode,
+            OnProductBarcodeResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnStringResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getObjectsEqualValue(
+                                GrocyApi.ENTITY.PRODUCT_BARCODES, "barcode", barcode
+                        ),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<List<ProductBarcode>>(){}.getType();
+                            ArrayList<ProductBarcode> barcodes
+                                    = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download filtered Barcodes: " + barcodes);
+                            if(onResponseListener != null) {
+                                ProductBarcode barcode = !barcodes.isEmpty()
+                                        ? barcodes.get(0) : null; // take first object
+                                onResponseListener.onResponse(barcode);
                             }
                             if(responseListener != null) responseListener.onResponse(response);
                         },
@@ -1233,6 +1292,10 @@ public class DownloadHelper {
 
     public interface OnProductBarcodesResponseListener {
         void onResponse(ArrayList<ProductBarcode> arrayList);
+    }
+
+    public interface OnProductBarcodeResponseListener {
+        void onResponse(ProductBarcode productBarcode);
     }
 
     public interface OnStockItemsResponseListener {

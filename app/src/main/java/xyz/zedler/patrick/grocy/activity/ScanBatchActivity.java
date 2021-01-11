@@ -399,7 +399,7 @@ public class ScanBatchActivity extends AppCompatActivity
                             currentProductDetails.getProduct().getName(),
                             currentProductDetails.getProduct().getStoreId(),
                             currentProductDetails.getLastPrice(),
-                            currentProductDetails.getProduct().getDefaultBestBeforeDays(),
+                            currentProductDetails.getProduct().getDefaultDueDays(),
                             currentProductDetails.getProduct().getLocationIdInt()
                     );
 

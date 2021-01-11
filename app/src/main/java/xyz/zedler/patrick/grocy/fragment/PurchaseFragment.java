@@ -180,7 +180,7 @@ public class PurchaseFragment extends BaseFragment {
             Bundle bundle = new Bundle();
             bundle.putString(
                     Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
-                    String.valueOf(productDetails.getProduct().getDefaultBestBeforeDays())
+                    String.valueOf(productDetails.getProduct().getDefaultDueDays())
             );
             bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
             activity.showBottomSheet(new BBDateBottomSheet(), bundle);
