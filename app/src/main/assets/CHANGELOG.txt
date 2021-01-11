@@ -1,6 +1,6 @@
 2.0.0
-• Compatible with grocy version 3.0.0 and higher
-• Not compatible anymore with grocy version 2.7.1
+• Compatible with grocy version 3.0.x
+• Not compatible anymore with grocy version 2.7.x
 • New overview, settings, product & external scanner pages
 • Lots of new options for configuration (check them out)
 • New login flow for QR codes from grocy server

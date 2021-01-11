@@ -310,6 +310,7 @@ public class SettingsFragment extends BaseFragment {
 
     private void showCategoryNetwork() {
         binding.appBarTitle.setText(R.string.category_network);
+        // TODO: Timeout option
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.APPEARANCE.DARK_MODE,
