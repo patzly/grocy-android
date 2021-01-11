@@ -40,16 +40,6 @@ You can try it using the demo option available on the login screen.
 * Low data usage
 * Small app size (~6MB)
 
-## Coming up
-
-* Smooth navigation & better UI overview with Navigation component
-* Less code & easier maintainance with ViewModels and LiveData
-* Almost all Activities will be Fragments
-* Extended product editing
-* Cleaned up settings
-
-Stay tuned!
-
 ## Compatibility
 
 The developer of the grocy [server application](https://github.com/grocy/grocy) has released a new version `3.0.0` at the end of December 2020.  
