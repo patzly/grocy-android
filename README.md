@@ -40,16 +40,6 @@ You can try it using the demo option available on the login screen.
 * Low data usage
 * Small app size (~6MB)
 
-## Coming up
-
-* Smooth navigation & better UI overview with Navigation component
-* Less code & easier maintainance with ViewModels and LiveData
-* Almost all Activities will be Fragments
-* Extended product editing
-* Cleaned up settings
-
-Stay tuned!
-
 ## Compatibility
 
 The developer of the grocy [server application](https://github.com/grocy/grocy) has released a new version `3.0.0` at the end of December 2020.  
@@ -82,7 +72,7 @@ Translations which reached a completion level of 80% will be included in release
 
 
 <a href="https://www.transifex.com/projects/p/grocy-android/resource/app-src-main-res-values-strings-xml--master/chart/image_png">
-<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A................-E-E9b8y8ynq&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CSwedish%7CDutch%7CItalian%7CFrench%7CNorwegian+Bokm%C3%A5l%7CChinese+%28China%29%7CSpanish%7CCzech%7CPolish%7CHebrew%7CGerman%7CEnglish%7CPortuguese+%28Brazil%29%7C1%3A%7C62%25%7C95%25%7C95%25%7C96%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
+<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A......................-E-Eq3&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CNorwegian+Bokm%C3%A5l%7CDutch%7CPortuguese+%28Brazil%29%7CSpanish%7CCzech%7CPolish%7CHebrew%7CGerman%7CItalian%7CEnglish%7CSwedish%7CFrench%7CChinese+%28China%29%7C1%3A%7C67%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
 </a></br>
 <a href="https://www.transifex.com/grocy-android/grocy-android">View translations</a><br/>
 
