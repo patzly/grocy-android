@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +41,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -114,12 +113,8 @@ public class StoresBottomSheet extends BaseBottomSheet
     @Override
     public void onItemRowClicked(int position) {
         if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).selectStore(
-                        stores.get(position).getId()
-                );
-            }
+            BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            currentFragment.selectStore(stores.get(position));
         } else if(activity.getClass() == ScanBatchActivity.class) {
             String storeId = String.valueOf(stores.get(position).getId());
             ((ScanBatchActivity) activity).setStoreId(storeId);

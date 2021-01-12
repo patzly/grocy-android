@@ -57,6 +57,7 @@ public class NumUtil {
     }
 
     public static boolean isStringInt(String s) {
+        if(s == null || s.isEmpty()) return false;
         try {
             Integer.parseInt(s);
             return true;

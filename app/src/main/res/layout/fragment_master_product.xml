@@ -147,7 +147,7 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Optional properties"
+                                android:text="@string/title_product_cat_optional"
                                 style="@style/Theme.Grocy.ListItem.Title"
                                 android:textColor="@{formData.catOptionalErrorLive ? @color/retro_red : @color/on_background}"/>
 
@@ -170,6 +170,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_location"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -182,8 +183,9 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Default location"
-                                style="@style/Theme.Grocy.ListItem.Title" />
+                                android:text="@string/title_product_cat_location"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:textColor="@{formData.catLocationErrorLive ? @color/retro_red : @color/on_background}"/>
 
                             <TextView
                                 android:text="Location, Store"
@@ -220,7 +222,7 @@
                                 style="@style/Theme.Grocy.ListItem.Title" />
 
                             <TextView
-                                android:text="Default days, after opened, freezing, thawing"
+                                android:text="Type, Default days, after opened, freezing, thawing"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>

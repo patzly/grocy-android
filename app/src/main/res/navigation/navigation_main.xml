@@ -606,6 +606,13 @@
                 app:exitAnim="@anim/slide_to_left"
                 app:popEnterAnim="@anim/slide_from_left"
                 app:popExitAnim="@anim/slide_to_right" />
+            <action
+                android:id="@+id/action_masterProductFragment_to_masterProductCatLocationFragment"
+                app:destination="@id/masterProductCatLocationFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
         </fragment>
         <fragment
             android:id="@+id/masterProductCatOptionalFragment"
@@ -624,6 +631,22 @@
                 android:name="categoriesInvalid"
                 app:argType="integer[]" />
         </fragment>
-
+        <fragment
+            android:id="@+id/masterProductCatLocationFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatLocationFragment"
+            android:label="MasterProductCatLocationFragment"
+            tools:layout="@layout/fragment_master_product_cat_location">
+            <argument
+                android:name="product"
+                app:argType="xyz.zedler.patrick.grocy.model.Product"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="action"
+                app:argType="string" />
+            <argument
+                android:name="categoriesInvalid"
+                app:argType="integer[]" />
+        </fragment>
     </navigation>
 </navigation>

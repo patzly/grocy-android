@@ -25,8 +25,10 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.Store;
 
 public class MasterProductRepository {
     private final AppDatabase appDatabase;
@@ -44,6 +46,10 @@ public class MasterProductRepository {
 
     public interface ProductsListener {
         void actionFinished(ArrayList<Product> products);
+    }
+
+    public interface LocationsStoresListener {
+        void actionFinished(ArrayList<Location> locations, ArrayList<Store> stores);
     }
 
     public interface DataUpdatedListener {
@@ -180,6 +186,82 @@ public class MasterProductRepository {
         protected final Void doInBackground(Void... params) {
             appDatabase.productDao().deleteAll();
             appDatabase.productDao().insertAll(products);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished();
+        }
+    }
+
+    public void loadLocationsStoresFromDatabase(LocationsStoresListener listener) {
+        new loadLocationsStoresAsyncTask(appDatabase, listener).execute();
+    }
+
+    private static class loadLocationsStoresAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final LocationsStoresListener listener;
+
+        private ArrayList<Location> locations;
+        private ArrayList<Store> stores;
+
+        loadLocationsStoresAsyncTask(AppDatabase appDatabase, LocationsStoresListener listener) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            locations = new ArrayList<>(appDatabase.locationDao().getAll());
+            stores = new ArrayList<>(appDatabase.storeDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished(locations, stores);
+        }
+    }
+
+    public void updateLocationsStoresDatabase(
+            ArrayList<Location> locations,
+            ArrayList<Store> stores,
+            DataUpdatedListener listener
+    ) {
+        new updateLocationsStoresAsyncTask(
+                appDatabase,
+                locations,
+                stores,
+                listener
+        ).execute();
+    }
+
+    private static class updateLocationsStoresAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final DataUpdatedListener listener;
+
+        private final ArrayList<Location> locations;
+        private final ArrayList<Store> stores;
+
+        updateLocationsStoresAsyncTask(
+                AppDatabase appDatabase,
+                ArrayList<Location> locations,
+                ArrayList<Store> stores,
+                DataUpdatedListener listener
+        ) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+            this.locations = locations;
+            this.stores = stores;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            appDatabase.locationDao().deleteAll();
+            appDatabase.locationDao().insertAll(locations);
+            appDatabase.storeDao().deleteAll();
+            appDatabase.storeDao().insertAll(stores);
             return null;
         }
 

@@ -554,6 +554,27 @@ public class DownloadHelper {
         return getLocations(onResponseListener, null);
     }
 
+    public QueueItem updateLocations(
+            String dbChangedTime,
+            OnLocationsResponseListener onResponseListener
+    ) {
+        OnLocationsResponseListener newOnResponseListener = products -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(products);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_LOCATIONS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getLocations(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped Locations download");
+            return null;
+        }
+    }
+
     public QueueItem getProducts(
             OnProductsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -1011,6 +1032,27 @@ public class DownloadHelper {
 
     public QueueItem getStores(OnStoresResponseListener onResponseListener) {
         return getStores(onResponseListener, null);
+    }
+
+    public QueueItem updateStores(
+            String dbChangedTime,
+            OnStoresResponseListener onResponseListener
+    ) {
+        OnStoresResponseListener newOnResponseListener = products -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(products);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_STORES, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getStores(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped Stores download");
+            return null;
+        }
     }
 
     public void deleteProduct(

@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,8 +42,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
-import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -114,16 +112,8 @@ public class LocationsBottomSheet extends BaseBottomSheet
     @Override
     public void onItemRowClicked(int position) {
         if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-                ((MasterProductSimpleFragment) currentFragment).selectLocation(
-                        locations.get(position).getId()
-                );
-            } else if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).selectLocation(
-                        locations.get(position).getId()
-                );
-            }
+            BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            currentFragment.selectLocation(locations.get(position));
         } else if(activity.getClass() == ScanBatchActivity.class) {
             String locationId = String.valueOf(locations.get(position).getId());
             ((ScanBatchActivity) activity).setLocationId(locationId);
