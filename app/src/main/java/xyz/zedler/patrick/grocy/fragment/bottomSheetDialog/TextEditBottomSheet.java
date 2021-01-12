@@ -88,7 +88,7 @@ public class TextEditBottomSheet extends BaseBottomSheet {
             editText.setText(TextUtil.trimCharSequence(text));
         }
 
-        view.findViewById(R.id.button_text_edit_ok).setOnClickListener(v -> {
+        view.findViewById(R.id.button_text_edit_save).setOnClickListener(v -> {
             /*Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductSimpleFragment.class) {
                 ((MasterProductSimpleFragment) current).editDescription(

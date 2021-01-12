@@ -64,7 +64,7 @@
                     android:textColor="@color/on_background_secondary" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_text_edit_ok"
+                    android:id="@+id/button_text_edit_save"
                     style="@style/Widget.Grocy.Button.UnelevatedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
