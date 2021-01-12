@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterProductBottomSheet extends BaseBottomSheet {
@@ -56,7 +57,6 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 	private ProductGroup productGroup;
 	private ListItem
 			itemName,
-			itemDescription,
 			itemLocation,
 			itemMinStockAmount,
 			itemQuPurchase,
@@ -64,6 +64,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 			itemQuFactor,
 			itemProductGroup,
 			itemBarcodes;
+	private ExpandableCard cardDescription;
 
 	@NonNull
 	@Override
@@ -101,7 +102,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 		// VIEWS
 
 		itemName = view.findViewById(R.id.item_master_product_name);
-		itemDescription = view.findViewById(R.id.item_master_product_description);
+		cardDescription = view.findViewById(R.id.card_master_product_description);
 		itemLocation = view.findViewById(R.id.item_master_product_location);
 		itemMinStockAmount = view.findViewById(R.id.item_master_product_min_stock_amount);
 		itemQuPurchase = view.findViewById(R.id.item_master_product_qu_purchase);
@@ -142,13 +143,9 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 				: null;
 		description = (Spanned) TextUtil.trimCharSequence(description);
 		if(description != null && !description.toString().isEmpty()) {
-			itemDescription.setSingleLine(false);
-			itemDescription.setText(
-					activity.getString(R.string.property_description),
-					description.toString()
-			);
+			cardDescription.setText(description.toString());
 		} else {
-			itemDescription.setVisibility(View.GONE);
+			cardDescription.setVisibility(View.GONE);
 		}
 
 		// LOCATION
