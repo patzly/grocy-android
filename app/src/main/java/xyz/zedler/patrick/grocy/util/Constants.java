@@ -107,6 +107,8 @@ public final class Constants {
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";
             public final static String FRONT_CAM = "front_cam";
+            public final static String EXTERNAL_PREFIX = "external_prefix";
+            public final static String EXTERNAL_SUFFIX = "external_suffix";
         }
         public final static class STOCK {
             public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE

@@ -80,7 +80,7 @@ public class MasterProductViewModel extends AndroidViewModel {
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
-    private final boolean isActionEdit;
+    private final MutableLiveData<Boolean> actionEditLive;
 
     public MasterProductViewModel(
             @NonNull Application application,
@@ -98,17 +98,26 @@ public class MasterProductViewModel extends AndroidViewModel {
         repository = new ShoppingListItemEditRepository(application);
         formData = new FormDataMasterProduct(application);
         args = startupArgs;
-        isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+        actionEditLive = new MutableLiveData<>();
+        actionEditLive.setValue(startupArgs.getAction().equals(Constants.ACTION.EDIT));
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
 
-        if(isActionEdit) {
+        if(isActionEdit()) {
             assert args.getProduct() != null;
             setCurrentProduct(args.getProduct());
         } else {
             setCurrentProduct(new Product(sharedPrefs));
         }
+    }
+
+    public boolean isActionEdit() {
+        return actionEditLive.getValue();
+    }
+
+    public MutableLiveData<Boolean> getActionEditLive() {
+        return actionEditLive;
     }
 
     public FormDataMasterProduct getFormData() {
@@ -132,7 +141,7 @@ public class MasterProductViewModel extends AndroidViewModel {
             this.quantityUnits = qUs;
             this.unitConversions = conversions;
             formData.getProductsLive().setValue(products);
-            if(!isActionEdit) formData.getShoppingListLive().setValue(getLastShoppingList());
+            if(!isActionEdit()) formData.getShoppingListLive().setValue(getLastShoppingList());
             fillWithSoppingListItemIfNecessary();
             if(downloadAfterLoading) downloadData();
         });
@@ -156,7 +165,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         queue.append(
                 dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
                     this.shoppingLists = shoppingLists;
-                    if(!isActionEdit) {
+                    if(!isActionEdit()) {
                         formData.getShoppingListLive().setValue(getLastShoppingList());
                     }
                 }), dlHelper.updateProducts(dbChangedTime, products -> {
@@ -238,7 +247,7 @@ public class MasterProductViewModel extends AndroidViewModel {
     }
 
     private void fillWithSoppingListItemIfNecessary() {
-        if(!isActionEdit || formData.isFilledWithProduct()) return;
+        if(!isActionEdit() || formData.isFilledWithProduct()) return;
 
         /*ShoppingListItem item = args.getShoppingListItem();
         assert item != null;
@@ -300,7 +309,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         }
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
-        if(!isActionEdit) {
+        if(!isActionEdit()) {
             formData.getQuantityUnitLive().setValue(purchase);
         }
         return unitFactors;
@@ -370,10 +379,6 @@ public class MasterProductViewModel extends AndroidViewModel {
         for(ProductBarcode code : barcodes) {
             if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
         } return null;
-    }
-
-    public boolean isActionEdit() {
-        return isActionEdit;
     }
 
     public boolean isFeatureMultiShoppingListsEnabled() {

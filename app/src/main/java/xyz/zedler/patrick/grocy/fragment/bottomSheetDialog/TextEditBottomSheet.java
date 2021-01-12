@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,9 +37,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
@@ -93,7 +89,7 @@ public class TextEditBottomSheet extends BaseBottomSheet {
         }
 
         view.findViewById(R.id.button_text_edit_ok).setOnClickListener(v -> {
-            Fragment current = activity.getCurrentFragment();
+            /*Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductSimpleFragment.class) {
                 ((MasterProductSimpleFragment) current).editDescription(
                         Html.toHtml(editText.getText()),
@@ -107,7 +103,10 @@ public class TextEditBottomSheet extends BaseBottomSheet {
                 ((ShoppingModeFragment) current).saveNotes(
                         (Spanned) TextUtil.trimCharSequence(editText.getText())
                 );
-            }
+            }*/
+
+            CharSequence charSequence = TextUtil.trimCharSequence(editText.getText());
+            activity.getCurrentFragment().saveText(charSequence != null ? charSequence.toString() : null);
             dismiss();
         });
 

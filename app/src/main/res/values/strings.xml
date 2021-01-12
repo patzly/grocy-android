@@ -234,6 +234,7 @@
     <string name="title_logout_demo">Logout from demo mode?</string>
     <string name="title_batch_config">Batch mode configuration</string>
     <string name="title_manage_master_data">Manage master data</string>
+    <string name="title_edit_description">Edit description</string>
 
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>

@@ -171,33 +171,28 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        style="@style/Theme.Grocy.ListItem"
-                        android:paddingTop="0dp"
-                        android:paddingBottom="0dp">
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> fragment.showDescriptionBottomSheet()}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_subject_anim"
-                            android:layout_marginBottom="5dp"
-                            tools:ignore="ContentDescription" />
+                            tools:ignore="ContentDescription"
+                            android:src="@drawable/ic_round_subject_anim"/>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/description"
-                            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="@string/property_description"
-                            app:helperTextEnabled="true"
-                            app:helperText=" ">
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
-                                android:inputType="text|textCapSentences|textNoSuggestions"
-                                android:imeOptions="actionDone"
-                                android:text="@={formData.descriptionLive}"
-                                app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:text="@string/property_description"/>
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:text="@{formData.descriptionLive}"
+                                android:singleLine="true"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

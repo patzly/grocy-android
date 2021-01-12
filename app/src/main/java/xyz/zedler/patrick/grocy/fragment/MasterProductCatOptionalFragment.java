@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -153,7 +154,6 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.textInputParentProduct.clearFocus();
-        binding.description.clearFocus();
         binding.energy.clearFocus();
     }
 
@@ -166,6 +166,22 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
     public void onParentProductInputFocusChanged(boolean hasFocus) {
         if(hasFocus) return;
         viewModel.getFormData().isParentProductValid();
+    }
+
+    public void showDescriptionBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
+        bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));
+        bundle.putString(
+                Constants.ARGUMENT.TEXT,
+                viewModel.getFormData().getDescriptionLive().getValue()
+        );
+        activity.showBottomSheet(new TextEditBottomSheet(), bundle);
+    }
+
+    @Override
+    public void saveText(String text) {
+        viewModel.getFormData().getDescriptionLive().setValue(text);
     }
 
     public void showProductGroupsBottomSheet() {

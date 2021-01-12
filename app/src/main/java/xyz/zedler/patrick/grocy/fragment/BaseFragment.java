@@ -126,6 +126,8 @@ public class BaseFragment extends Fragment {
 
     public void selectProductGroup(ProductGroup productGroup) {}
 
+    public void saveText(String text) {}
+
     public void updateShortcuts() {}
 
     public void enableLoginButtons() {}

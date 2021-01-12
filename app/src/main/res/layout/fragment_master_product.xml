@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="@{viewModel.actionEdit ? @string/title_product_edit : @string/title_product_create}"
+                android:text="@{viewModel.actionEditLive ? @string/title_product_edit : @string/title_product_create}"
                 android:textAlignment="viewStart"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_bold"
@@ -86,8 +86,7 @@
                 android:id="@+id/scroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="vertical">
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -306,7 +305,7 @@
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:alpha="0.4">
+                        android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -341,7 +340,7 @@
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:alpha="0.4">
+                        android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -376,7 +375,7 @@
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:alpha="0.4">
+                        android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
