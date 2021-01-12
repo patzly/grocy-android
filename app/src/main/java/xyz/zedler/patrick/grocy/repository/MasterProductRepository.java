@@ -42,6 +42,10 @@ public class MasterProductRepository {
         );
     }
 
+    public interface ProductsListener {
+        void actionFinished(ArrayList<Product> products);
+    }
+
     public interface DataUpdatedListener {
         void actionFinished();
     }
@@ -113,6 +117,69 @@ public class MasterProductRepository {
             appDatabase.productDao().insertAll(products);
             appDatabase.productGroupDao().deleteAll();
             appDatabase.productGroupDao().insertAll(productGroups);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished();
+        }
+    }
+
+    public void loadProductsFromDatabase(ProductsListener listener) {
+        new loadProductsAsyncTask(appDatabase, listener).execute();
+    }
+
+    private static class loadProductsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final ProductsListener listener;
+
+        private ArrayList<Product> products;
+
+        loadProductsAsyncTask(AppDatabase appDatabase, ProductsListener listener) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            products = new ArrayList<>(appDatabase.productDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished(products);
+        }
+    }
+
+    public void updateDatabase(
+            ArrayList<Product> products,
+            DataUpdatedListener listener
+    ) {
+        new updateProductsAsyncTask(appDatabase, products, listener).execute();
+    }
+
+    private static class updateProductsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final DataUpdatedListener listener;
+
+        private final ArrayList<Product> products;
+
+        updateProductsAsyncTask(
+                AppDatabase appDatabase,
+                ArrayList<Product> products,
+                DataUpdatedListener listener
+        ) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+            this.products = products;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            appDatabase.productDao().deleteAll();
+            appDatabase.productDao().insertAll(products);
             return null;
         }
 

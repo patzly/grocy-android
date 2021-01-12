@@ -147,7 +147,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> viewModel.saveItem()
+                () -> {}
         );
     }
 
@@ -210,6 +210,13 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
                 viewModel.getFilledProduct()
         );
         return false;
+    }
+
+    @Override
+    public void updateConnectivity(boolean isOnline) {
+        if(!isOnline == viewModel.isOffline()) return;
+        viewModel.setOfflineLive(!isOnline);
+        if(isOnline) viewModel.downloadData();
     }
 
     @NonNull

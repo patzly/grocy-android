@@ -75,7 +75,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        app:progressBackgroundColor="@{@color/surface}"
+        app:progressForegroundColor="@{@color/secondary}"
+        app:setRefreshing="@{viewModel.isLoadingLive}"
+        app:onRefreshListener="@{() -> viewModel.downloadData()}">
 
         <FrameLayout
             android:id="@+id/container"

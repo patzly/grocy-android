@@ -129,12 +129,6 @@ public class MasterProductFragment extends BaseFragment {
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
-        String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);
-        if(barcode != null) {
-            removeForThisDestination(Constants.ARGUMENT.BARCODE);
-            viewModel.onBarcodeRecognized(barcode);
-        }
-
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         updateUI(savedInstanceState == null);
@@ -162,6 +156,13 @@ public class MasterProductFragment extends BaseFragment {
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.textInputName.clearFocus();
+    }
+
+    @Override
+    public void updateConnectivity(boolean isOnline) {
+        if(!isOnline == viewModel.isOffline()) return;
+        viewModel.setOfflineLive(!isOnline);
+        if(isOnline) viewModel.downloadData();
     }
 
     @NonNull

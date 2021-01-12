@@ -166,37 +166,6 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
         if(!isOffline()) setOfflineLive(true);
     }
 
-    public void saveItem() {
-        if(!formData.isFormValid()) return;
-
-        /*ShoppingListItem item = null;
-        if(isActionEdit) item = args.getShoppingListItem();
-        item = formData.fillShoppingListItem(item);
-        JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
-
-        if(isActionEdit) {
-            dlHelper.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
-                    jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
-                    }
-            );
-        } else {
-            dlHelper.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
-                    jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
-                    }
-            );
-        }*/
-    }
-
     public void onBarcodeRecognized(String barcode) {
         dlHelper.getSingleFilteredProductBarcode(barcode, productBarcode -> {
             if(productBarcode != null) {

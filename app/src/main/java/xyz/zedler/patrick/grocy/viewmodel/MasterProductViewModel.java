@@ -36,7 +36,6 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -49,11 +48,8 @@ import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
+import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterProductViewModel extends AndroidViewModel {
@@ -64,7 +60,7 @@ public class MasterProductViewModel extends AndroidViewModel {
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
     private final EventHandler eventHandler;
-    private final ShoppingListItemEditRepository repository;
+    private final MasterProductRepository repository;
     private final FormDataMasterProduct formData;
     private final MasterProductFragmentArgs args;
 
@@ -72,11 +68,7 @@ public class MasterProductViewModel extends AndroidViewModel {
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
 
-    private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<Product> products;
-    private ArrayList<ProductBarcode> barcodes;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<QuantityUnitConversion> unitConversions;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -95,7 +87,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
         eventHandler = new EventHandler();
-        repository = new ShoppingListItemEditRepository(application);
+        repository = new MasterProductRepository(application);
         formData = new FormDataMasterProduct(application);
         args = startupArgs;
         actionEditLive = new MutableLiveData<>();
@@ -134,15 +126,9 @@ public class MasterProductViewModel extends AndroidViewModel {
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
-        repository.loadFromDatabase((shoppingLists, products, barcodes, qUs, conversions) -> {
-            this.shoppingLists = shoppingLists;
+        repository.loadProductsFromDatabase(products -> {
             this.products = products;
-            this.barcodes = barcodes;
-            this.quantityUnits = qUs;
-            this.unitConversions = conversions;
             formData.getProductsLive().setValue(products);
-            if(!isActionEdit()) formData.getShoppingListLive().setValue(getLastShoppingList());
-            fillWithSoppingListItemIfNecessary();
             if(downloadAfterLoading) downloadData();
         });
     }
@@ -163,21 +149,10 @@ public class MasterProductViewModel extends AndroidViewModel {
 
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
-                dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
-                    this.shoppingLists = shoppingLists;
-                    if(!isActionEdit()) {
-                        formData.getShoppingListLive().setValue(getLastShoppingList());
-                    }
-                }), dlHelper.updateProducts(dbChangedTime, products -> {
+                dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
                     formData.getProductsLive().setValue(products);
-                }), dlHelper.updateQuantityUnitConversions(
-                        dbChangedTime, conversions -> this.unitConversions = conversions
-                ), dlHelper.updateProductBarcodes(
-                        dbChangedTime, barcodes -> this.barcodes = barcodes
-                ), dlHelper.updateQuantityUnits(
-                        dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
-                )
+                })
         );
         if(queue.isEmpty()) return;
 
@@ -191,9 +166,7 @@ public class MasterProductViewModel extends AndroidViewModel {
 
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
-        fillWithSoppingListItemIfNecessary();
-        repository.updateDatabase(shoppingLists, products, barcodes,
-                quantityUnits, unitConversions, () -> {});
+        repository.updateDatabase(products, () -> {});
     }
 
     private void onDownloadError(@Nullable VolleyError error) {
@@ -246,92 +219,6 @@ public class MasterProductViewModel extends AndroidViewModel {
         ).perform(dlHelper.getUuid());
     }
 
-    private void fillWithSoppingListItemIfNecessary() {
-        if(!isActionEdit() || formData.isFilledWithProduct()) return;
-
-        /*ShoppingListItem item = args.getShoppingListItem();
-        assert item != null;
-
-        ShoppingList shoppingList = getShoppingList(item.getShoppingListId());
-        formData.getShoppingListLive().setValue(shoppingList);
-
-        double amount = item.getAmount();
-
-        if(item.getProductId() != null) {
-            Product product = getProduct(Integer.parseInt(item.getProductId()));
-            formData.getProductLive().setValue(product);
-            formData.getProductNameLive().setValue(product.getName());
-            HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
-
-            if(item.getQuId() != null && !item.getQuId().isEmpty()) {
-                QuantityUnit quantityUnit = getQuantityUnit(Integer.parseInt(item.getQuId()));
-                if(unitFactors != null && unitFactors.containsKey(quantityUnit)) {
-                    Double factor = unitFactors.get(quantityUnit);
-                    assert factor != null;
-                    if(factor == -1) factor = product.getQuFactorPurchaseToStockDouble();
-                    formData.getAmountLive().setValue(NumUtil.trim(amount * factor));
-                } else {
-                    formData.getAmountLive().setValue(NumUtil.trim(amount));
-                }
-                formData.getQuantityUnitLive().setValue(quantityUnit);
-            } else {
-                formData.getAmountLive().setValue(NumUtil.trim(amount));
-            }
-        } else {
-            formData.getAmountLive().setValue(NumUtil.trim(amount));
-        }
-
-        formData.getNoteLive().setValue(item.getNote());
-        formData.setFilledWithShoppingListItem(true);*/
-    }
-
-    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
-        QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-        QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
-
-        if(stock == null || purchase == null) {
-            showMessage(getString(R.string.error_loading_qus));
-            return null;
-        }
-
-        HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-        ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-        unitFactors.put(stock, (double) -1);
-        quIdsInHashMap.add(stock.getId());
-        if(!quIdsInHashMap.contains(purchase.getId())) {
-            unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
-        }
-        for(QuantityUnitConversion conversion : unitConversions) {
-            if(product.getId() != conversion.getProductId()) continue;
-            QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-            if(unit == null || quIdsInHashMap.contains(unit.getId())) continue;
-            unitFactors.put(unit, conversion.getFactor());
-        }
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-        if(!isActionEdit()) {
-            formData.getQuantityUnitLive().setValue(purchase);
-        }
-        return unitFactors;
-    }
-
-    public void setProduct(Product product) {
-        if(product == null) return;
-        formData.getProductLive().setValue(product);
-        formData.getNameLive().setValue(product.getName());
-        setProductQuantityUnitsAndFactors(product);
-        formData.isFormValid();
-    }
-
-    public void onBarcodeRecognized(String barcode) {
-        Product product = getProductFromBarcode(barcode);
-        if(product != null) {
-            setProduct(product);
-        } else {
-            formData.getBarcodeLive().setValue(barcode);
-        }
-    }
-
     public void deleteItem() {
         if(!isActionEdit()) return;
         /*ShoppingListItem shoppingListItem = args.getShoppingListItem();
@@ -346,45 +233,10 @@ public class MasterProductViewModel extends AndroidViewModel {
         );*/
     }
 
-    private QuantityUnit getQuantityUnit(int id) {
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) return quantityUnit;
-        } return null;
-    }
-
-    private ShoppingList getLastShoppingList() {
-        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
-        return getShoppingList(lastId);
-    }
-
-    private ShoppingList getShoppingList(int id) {
-        for(ShoppingList shoppingList : shoppingLists) {
-            if(shoppingList.getId() == id) return shoppingList;
-        } return null;
-    }
-
     public Product getProduct(int id) {
         for(Product product : products) {
             if(product.getId() == id) return product;
         } return null;
-    }
-
-    private Product getProductFromName(String name) {
-        for(Product product : products) {
-            if(product.getName().equals(name)) return product;
-        } return null;
-    }
-
-    private Product getProductFromBarcode(String barcode) {
-        for(ProductBarcode code : barcodes) {
-            if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
-        } return null;
-    }
-
-    public boolean isFeatureMultiShoppingListsEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
-        );
     }
 
     @NonNull
