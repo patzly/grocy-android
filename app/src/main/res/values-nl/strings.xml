@@ -273,11 +273,11 @@
     <string name="property_qu_factor">Factor van aankoop- naar voorraadeenheid</string>
     <string name="property_barcode">Streepjescode</string>
     <string name="property_barcodes">Streepjescodes</string>
-    <string name="property_bbd">Tenminste houdbaar tot</string>
-    <string name="property_bbd_next">Volgende houdbaarheidsdatum</string>
-    <string name="property_bb_days">THT dagen</string>
-    <string name="property_bb_days_default">Standaard THT dagen</string>
-    <string name="property_bb_days_default_opened">Standaard THT dagen na openen</string>
+    <string name="property_due_date">Tenminste houdbaar tot</string>
+    <string name="property_due_date_next">Volgende houdbaarheidsdatum</string>
+    <string name="property_due_days">THT dagen</string>
+    <string name="property_due_days_default">Standaard THT dagen</string>
+    <string name="property_due_days_default_opened">Standaard THT dagen na openen</string>
     <string name="property_location">Locatie</string>
     <string name="property_location_default">Standaard locatie</string>
     <string name="property_notes">Notities</string>

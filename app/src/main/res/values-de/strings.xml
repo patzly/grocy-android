@@ -277,11 +277,11 @@
     <string name="property_qu_factor">Faktor Einkauf zu Bestand</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
-    <string name="property_bbd">Mindesthaltbarkeitsdatum</string>
-    <string name="property_bbd_next">Nächstes Mindesthaltbarkeitsdatum</string>
-    <string name="property_bb_days">Haltbarkeit in Tagen</string>
-    <string name="property_bb_days_default">Standard Haltbarkeit in Tagen</string>
-    <string name="property_bb_days_default_opened">Standard Haltbarkeit in Tagen nach dem Öffnen</string>
+    <string name="property_due_date">Mindesthaltbarkeitsdatum</string>
+    <string name="property_due_date_next">Nächstes Mindesthaltbarkeitsdatum</string>
+    <string name="property_due_days">Haltbarkeit in Tagen</string>
+    <string name="property_due_days_default">Standard Haltbarkeit in Tagen</string>
+    <string name="property_due_days_default_opened">Standard Haltbarkeit in Tagen nach dem Öffnen</string>
     <string name="property_location">Standort</string>
     <string name="property_location_default">Standard Standort</string>
     <string name="property_notes">Notizen</string>

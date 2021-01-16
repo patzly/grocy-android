@@ -246,6 +246,7 @@ public final class Constants {
     }
 
     public final static class ARGUMENT {
+        public final static String DECIMAL = "decimal";
         public final static String PREFERENCE = "option";
         public final static String ANIMATED = "animated";
         public final static String STOCK_ITEM = "stock_item";
@@ -293,6 +294,7 @@ public final class Constants {
         public final static String PRICE = "price";
         public final static String FACTOR = "factor";
         public final static String AMOUNT = "amount";
+        public final static String NUMBER = "number";
         public final static String TEXT = "text";
         public final static String FILE = "file";
         public final static String LINK = "link";

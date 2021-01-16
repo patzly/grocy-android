@@ -335,7 +335,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/text_input_master_product_simple_days"
                             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="@string/property_bb_days"
+                            android:hint="@string/property_due_days"
                             app:helperTextEnabled="true"
                             app:helperText=" ">
 

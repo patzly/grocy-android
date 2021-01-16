@@ -277,11 +277,11 @@
     <string name="property_qu_factor">Faktor mellan köp och lager</string>
     <string name="property_barcode">Streckkod</string>
     <string name="property_barcodes">Streckkoder</string>
-    <string name="property_bbd">Bäst före-datum</string>
-    <string name="property_bbd_next">Nästa bäst före-datum</string>
-    <string name="property_bb_days">Hållbarhet (dagar)</string>
-    <string name="property_bb_days_default">Standard-hållbarhet (dagar)</string>
-    <string name="property_bb_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
+    <string name="property_due_date">Bäst före-datum</string>
+    <string name="property_due_date_next">Nästa bäst före-datum</string>
+    <string name="property_due_days">Hållbarhet (dagar)</string>
+    <string name="property_due_days_default">Standard-hållbarhet (dagar)</string>
+    <string name="property_due_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
     <string name="property_location">Plats</string>
     <string name="property_location_default">Standardplats</string>
     <string name="property_notes">Anteckningar</string>

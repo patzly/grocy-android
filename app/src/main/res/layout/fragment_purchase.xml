@@ -200,7 +200,7 @@
                             <TextView
                                 android:id="@+id/text_purchase_bbd_label"
                                 style="@style/Theme.Grocy.ListItem.OverLine"
-                                android:text="@string/property_bbd" />
+                                android:text="@string/property_due_date" />
 
                             <TextView
                                 android:id="@+id/text_purchase_bbd"

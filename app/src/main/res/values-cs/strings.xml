@@ -277,11 +277,11 @@
     <string name="property_qu_factor">Faktor nákupu do zásob</string>
     <string name="property_barcode">Čárový kód</string>
     <string name="property_barcodes">Čárové kódy</string>
-    <string name="property_bbd">Datum trvanlivosti</string>
-    <string name="property_bbd_next">Další datum trvanlivosti</string>
-    <string name="property_bb_days">Trvanlivost dní</string>
-    <string name="property_bb_days_default">Výchozí trvanlivost dní</string>
-    <string name="property_bb_days_default_opened">Výchozí trvanlivost dní po otevření</string>
+    <string name="property_due_date">Datum trvanlivosti</string>
+    <string name="property_due_date_next">Další datum trvanlivosti</string>
+    <string name="property_due_days">Trvanlivost dní</string>
+    <string name="property_due_days_default">Výchozí trvanlivost dní</string>
+    <string name="property_due_days_default_opened">Výchozí trvanlivost dní po otevření</string>
     <string name="property_location">Umístění</string>
     <string name="property_location_default">Výchozí umístění</string>
     <string name="property_notes">Poznámky</string>

@@ -87,6 +87,7 @@
     <string name="action_clear_all">All</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Done</string>
+    <string name="action_display_help">Display help texts</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
     <string name="tooltip_switch_purchase">Switch to purchase mode</string>
@@ -148,6 +149,11 @@
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
     <string name="msg_press_hold_confirm">Press and hold to confirm</string>
+    <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
+    <string name="msg_help_default_due_days">For purchases this amount of days will be added to today for the due date suggestion (-1 means that this product will be never overdue).</string>
+    <string name="msg_help_default_due_days_opened">When this product was marked as opened, the due date will be replaced by today + this amount of days (a value of 0 disables this).</string>
+    <string name="msg_help_default_due_days_freezing">On moving this product to a freezer location (so when freezing it), the due date will be replaced by today + this amount of days (-1 means that this product will be never overdue).</string>
+    <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -235,6 +241,7 @@
     <string name="title_batch_config">Batch mode configuration</string>
     <string name="title_manage_master_data">Manage master data</string>
     <string name="title_edit_description">Edit description</string>
+    <string name="title_input_number">Number input</string>
 
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
@@ -252,6 +259,7 @@
     <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
     <string name="title_product_cat_optional">Optional properties</string>
     <string name="title_product_cat_location">Default location</string>
+    <string name="title_product_cat_due_date">Due date</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -318,11 +326,16 @@
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_days">Days</string>
-    <string name="property_bbd">Best before date</string>
-    <string name="property_bbd_next">Next best before date</string>
-    <string name="property_bb_days">Best before days</string>
-    <string name="property_bb_days_default">Default best before days</string>
-    <string name="property_bb_days_default_opened">Default best before days after opened</string>
+    <string name="property_due_date_type">Due date type</string>
+    <string name="property_due_type_best_before">Best before date</string>
+    <string name="property_due_type_expiration">Expiration date</string>
+    <string name="property_due_date">Due date</string>
+    <string name="property_due_date_next">Next due date</string>
+    <string name="property_due_days">Due days</string>
+    <string name="property_due_days_default">Default due days</string>
+    <string name="property_due_days_default_opened">Default due days after opened</string>
+    <string name="property_due_days_default_freezing">Default due days after freezing</string>
+    <string name="property_due_days_default_thawing">Default due days after thawing</string>
     <string name="property_location">Location</string>
     <string name="property_location_default">Default location</string>
     <string name="property_notes">Notes</string>
@@ -348,6 +361,7 @@
     <string name="property_energy">Energy (kcal)</string>
     <string name="property_active">Active</string>
     <string name="property_never_show">Never show on stock overview</string>
+    <string name="property_number">Number</string>
 
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>

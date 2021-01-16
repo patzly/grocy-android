@@ -276,11 +276,11 @@
     <string name="property_qu_factor">Faktor kjøp til lager</string>
     <string name="property_barcode">Strekkode</string>
     <string name="property_barcodes">Strekkoder</string>
-    <string name="property_bbd">Best før dato</string>
-    <string name="property_bbd_next">Neste best før dato</string>
-    <string name="property_bb_days">Best før dager</string>
-    <string name="property_bb_days_default">Standard best før dager</string>
-    <string name="property_bb_days_default_opened">Standard best før dager etter åpning</string>
+    <string name="property_due_date">Best før dato</string>
+    <string name="property_due_date_next">Neste best før dato</string>
+    <string name="property_due_days">Best før dager</string>
+    <string name="property_due_days_default">Standard best før dager</string>
+    <string name="property_due_days_default_opened">Standard best før dager etter åpning</string>
     <string name="property_location">Lokasjon</string>
     <string name="property_location_default">Standard lokasjon</string>
     <string name="property_notes">Notater</string>

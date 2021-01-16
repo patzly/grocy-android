@@ -32,23 +32,24 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatDueDateBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatDueDateViewModel;
 
-public class MasterProductFragment extends BaseFragment {
+public class MasterProductCatDueDateFragment extends BaseFragment {
 
-    private final static String TAG = MasterProductFragment.class.getSimpleName();
+    private final static String TAG = MasterProductCatDueDateFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentMasterProductBinding binding;
-    private MasterProductViewModel viewModel;
+    private FragmentMasterProductCatDueDateBinding binding;
+    private MasterProductCatDueDateViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -57,7 +58,7 @@ public class MasterProductFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentMasterProductBinding.inflate(
+        binding = FragmentMasterProductCatDueDateBinding.inflate(
                 inflater, container, false
         );
         return binding.getRoot();
@@ -74,36 +75,14 @@ public class MasterProductFragment extends BaseFragment {
         activity = (MainActivity) requireActivity();
         MasterProductFragmentArgs args = MasterProductFragmentArgs
                 .fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new MasterProductViewModel
-                .MasterProductViewModelFactory(activity.getApplication(), args)
-        ).get(MasterProductViewModel.class);
+        viewModel = new ViewModelProvider(this, new MasterProductCatDueDateViewModel
+                .MasterProductCatDueDateViewModelFactory(activity.getApplication(), args)
+        ).get(MasterProductCatDueDateViewModel.class);
         binding.setActivity(activity);
         binding.setFormData(viewModel.getFormData());
         binding.setViewModel(viewModel);
         binding.setFragment(this);
         binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        binding.categoryOptional.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatOptionalFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
-        binding.categoryLocation.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatLocationFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
-        binding.categoryDueDate.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatDueDateFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
-
-        Product product = (Product) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT);
-        if(product != null) {
-            viewModel.setCurrentProduct(product);
-            removeForThisDestination(Constants.ARGUMENT.PRODUCT);
-        }
 
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -139,7 +118,7 @@ public class MasterProductFragment extends BaseFragment {
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
-        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
+        if(savedInstanceState == null) viewModel.fillData();
 
         updateUI(savedInstanceState == null);
     }
@@ -159,20 +138,40 @@ public class MasterProductFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> viewModel.saveItem()
+                () -> {}
         );
     }
 
     public void clearInputFocus() {
         activity.hideKeyboard();
-        binding.textInputName.clearFocus();
+    }
+
+    public void showInputNumberBottomSheet(int type) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, type);
+        bundle.putInt(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getDaysNumber(type));
+        activity.showBottomSheet(new InputNumberBottomSheet(), bundle);
+    }
+
+    @Override
+    public void saveNumber(String text, Bundle argsBundle) {
+        viewModel.getFormData().setDaysNumber(text, argsBundle);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.PRODUCT,
+                viewModel.getFilledProduct()
+        );
+        return false;
     }
 
     @Override
     public void updateConnectivity(boolean isOnline) {
         if(!isOnline == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!isOnline);
-        if(isOnline) viewModel.downloadData();
     }
 
     @NonNull

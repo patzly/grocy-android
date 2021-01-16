@@ -206,6 +206,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_due_date"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -219,7 +220,8 @@
 
                             <TextView
                                 android:text="Due date"
-                                style="@style/Theme.Grocy.ListItem.Title" />
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:textColor="@{formData.catDueDateErrorLive ? @color/retro_red : @color/on_background}"/>
 
                             <TextView
                                 android:text="Type, Default days, after opened, freezing, thawing"

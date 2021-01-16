@@ -277,11 +277,11 @@
     <string name="property_qu_factor">库存采购</string>
     <string name="property_barcode">条形码</string>
     <string name="property_barcodes">条形码</string>
-    <string name="property_bbd">保质期</string>
-    <string name="property_bbd_next">下个保质期</string>
-    <string name="property_bb_days">保质期</string>
-    <string name="property_bb_days_default">默认保质期</string>
-    <string name="property_bb_days_default_opened">默认开封后保质期</string>
+    <string name="property_due_date">保质期</string>
+    <string name="property_due_date_next">下个保质期</string>
+    <string name="property_due_days">保质期</string>
+    <string name="property_due_days_default">默认保质期</string>
+    <string name="property_due_days_default_opened">默认开封后保质期</string>
     <string name="property_location">位置</string>
     <string name="property_location_default">默认位置</string>
     <string name="property_notes">笔记</string>

@@ -134,6 +134,8 @@ public class BaseFragment extends Fragment {
 
     public void saveText(String text) {}
 
+    public void saveNumber(String text, Bundle argsBundle) {}
+
     public void updateShortcuts() {}
 
     public void enableLoginButtons() {}

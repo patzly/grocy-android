@@ -277,11 +277,11 @@
     <string name="property_qu_factor">Przelicznik jednostki zakupu do zapasu</string>
     <string name="property_barcode">Kod kreskowy</string>
     <string name="property_barcodes">Kody kreskowe</string>
-    <string name="property_bbd">Najlepiej spożyć do</string>
-    <string name="property_bbd_next">Następna data najlepiej spożyć do</string>
-    <string name="property_bb_days">Ilość dni terminu ważności</string>
-    <string name="property_bb_days_default">Domyślna ilość dni terminu ważności</string>
-    <string name="property_bb_days_default_opened">Domyślna ilość dni terminu ważności po otwarciu</string>
+    <string name="property_due_date">Najlepiej spożyć do</string>
+    <string name="property_due_date_next">Następna data najlepiej spożyć do</string>
+    <string name="property_due_days">Ilość dni terminu ważności</string>
+    <string name="property_due_days_default">Domyślna ilość dni terminu ważności</string>
+    <string name="property_due_days_default_opened">Domyślna ilość dni terminu ważności po otwarciu</string>
     <string name="property_location">Lokalizacja</string>
     <string name="property_location_default">Domyślna lokalizacja</string>
     <string name="property_notes">Notatki</string>

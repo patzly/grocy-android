@@ -182,7 +182,6 @@ public class Product implements Parcelable {
         defaultDueDaysAfterThawing = 0;
         quickConsumeAmount = String.valueOf(1);
         hideOnStockOverview = 0;
-        // TODO: Use sharedPrefs for values which can be configured in settings (like default location etc...)
     }
 
     @Ignore

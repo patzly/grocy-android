@@ -41,13 +41,13 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataMasterProduct {
-    public final static int CATEGORY_OPTIONAL = 1;
 
     private final WeakReference<Context> contextWeak;
     private final MutableLiveData<String> nameLive;
     private final MutableLiveData<Integer> nameErrorLive;
     private final LiveData<Boolean> catOptionalErrorLive;
     private final LiveData<Boolean> catLocationErrorLive;
+    private final LiveData<Boolean> catDueDateErrorLive;
 
 
 
@@ -82,6 +82,10 @@ public class FormDataMasterProduct {
         catLocationErrorLive = Transformations.map(
                 productLive,
                 FormDataMasterProductCatLocation::isFormInvalid
+        );
+        catDueDateErrorLive = Transformations.map(
+                productLive,
+                FormDataMasterProductCatDueDate::isFormInvalid
         );
 
         shoppingListLive = new MutableLiveData<>();
@@ -137,6 +141,10 @@ public class FormDataMasterProduct {
 
     public LiveData<Boolean> getCatLocationErrorLive() {
         return catLocationErrorLive;
+    }
+
+    public LiveData<Boolean> getCatDueDateErrorLive() {
+        return catDueDateErrorLive;
     }
 
     public MutableLiveData<String> getBarcodeLive() {
@@ -230,10 +238,6 @@ public class FormDataMasterProduct {
         }
         nameErrorLive.setValue(null);
         return true;
-    }
-
-    public boolean isCatOptionalValid() {
-        return FormDataMasterProductCatOptional.isFormInvalid(productLive.getValue());
     }
 
     public boolean isFormValid() {
