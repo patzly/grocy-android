@@ -39,7 +39,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -111,14 +110,6 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
             if(!isLoading) viewModel.setCurrentQueueLoading(null);
-        });
-
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
-                    InfoFullscreen.ERROR_OFFLINE,
-                    () -> updateConnectivity(true)
-            ) : null;
-            viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
         String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);

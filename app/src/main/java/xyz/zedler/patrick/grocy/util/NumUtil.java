@@ -66,6 +66,16 @@ public class NumUtil {
         }
     }
 
+    public static boolean isStringDouble(String s) {
+        if(s == null || s.isEmpty()) return false;
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
     public static boolean isStringNum(String s) {
         if(s == null || s.isEmpty()) return false;
         try {

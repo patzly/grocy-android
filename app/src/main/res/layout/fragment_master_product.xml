@@ -153,7 +153,7 @@
 
                             <TextView
                                 android:text="State, Parent product, Description, Product group, Energy"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Theme.Grocy.ListItem.Description"/>
 
                         </LinearLayout>
 
@@ -219,46 +219,12 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Due date"
+                                android:text="@string/title_product_cat_due_date"
                                 style="@style/Theme.Grocy.ListItem.Title"
                                 android:textColor="@{formData.catDueDateErrorLive ? @color/retro_red : @color/on_background}"/>
 
                             <TextView
                                 android:text="Type, Default days, after opened, freezing, thawing"
-                                style="@style/Theme.Grocy.ListItem.Description" />
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_marginStart="16dp"
-                            android:clickable="false"
-                            android:focusable="false"
-                            android:src="@drawable/ic_round_expand_more"
-                            android:rotation="-90"
-                            tools:ignore="ContentDescription"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_scatter_plot_anim"
-                            tools:ignore="ContentDescription" />
-
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                            <TextView
-                                android:text="Amount"
-                                style="@style/Theme.Grocy.ListItem.Title" />
-
-                            <TextView
-                                android:text="Min. stock, Quick consume, Factor, Tare weight handling"
                                 style="@style/Theme.Grocy.ListItem.Description" />
 
                         </LinearLayout>
@@ -288,8 +254,9 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Quantity units"
-                                style="@style/Theme.Grocy.ListItem.Title" />
+                                android:text="@string/title_product_cat_quantity_units"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:textColor="@{formData.catQuErrorLive ? @color/retro_red : @color/on_background}"/>
 
                             <TextView
                                 android:text="Stock, Purchase default"
@@ -310,6 +277,43 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_amount"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:src="@drawable/ic_round_scatter_plot_anim"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:text="@string/title_product_cat_amount"
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:textColor="@{formData.catAmountErrorLive ? @color/retro_red : @color/on_background}"/>
+
+                            <TextView
+                                android:text="Min. stock, Quick consume, Factor, Tare weight handling"
+                                style="@style/Theme.Grocy.ListItem.Description" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_marginStart="16dp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:src="@drawable/ic_round_expand_more"
+                            android:rotation="-90"
+                            tools:ignore="ContentDescription"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/category_barcodes"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -323,12 +327,13 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Barcodes"
+                                android:text="@string/title_product_cat_barcodes"
                                 style="@style/Theme.Grocy.ListItem.Title" />
 
                             <TextView
-                                android:text="Product is not on server"
-                                style="@style/Theme.Grocy.ListItem.Description"/>
+                                android:text="@string/subtitle_product_not_on_server"
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}"/>
 
                         </LinearLayout>
 
@@ -345,6 +350,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_qu_conversions"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -358,12 +364,13 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="QU conversions"
+                                android:text="@string/title_product_cat_qu_conversions"
                                 style="@style/Theme.Grocy.ListItem.Title"/>
 
                             <TextView
-                                android:text="Product is not on server"
-                                style="@style/Theme.Grocy.ListItem.Description"/>
+                                android:text="@string/subtitle_product_not_on_server"
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}"/>
 
                         </LinearLayout>
 
@@ -380,6 +387,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_picture"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -393,12 +401,13 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="Picture"
+                                android:text="@string/title_product_cat_picture"
                                 style="@style/Theme.Grocy.ListItem.Title"/>
 
                             <TextView
-                                android:text="Product is not on server"
-                                style="@style/Theme.Grocy.ListItem.Description"/>
+                                android:text="@string/subtitle_product_not_on_server"
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}"/>
 
                         </LinearLayout>
 

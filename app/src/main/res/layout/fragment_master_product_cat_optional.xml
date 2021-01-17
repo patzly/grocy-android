@@ -272,6 +272,7 @@
                             <TextView
                                 android:id="@+id/title"
                                 style="@style/Theme.Grocy.ListItem.Title"
+                                android:maxLines="3"
                                 android:text="@string/property_never_show"/>
 
                         </LinearLayout>

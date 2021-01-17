@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class MasterProductRepository {
@@ -50,6 +51,10 @@ public class MasterProductRepository {
 
     public interface LocationsStoresListener {
         void actionFinished(ArrayList<Location> locations, ArrayList<Store> stores);
+    }
+
+    public interface QuantityUnitsListener {
+        void actionFinished(ArrayList<QuantityUnit> quantityUnits);
     }
 
     public interface DataUpdatedListener {
@@ -262,6 +267,73 @@ public class MasterProductRepository {
             appDatabase.locationDao().insertAll(locations);
             appDatabase.storeDao().deleteAll();
             appDatabase.storeDao().insertAll(stores);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished();
+        }
+    }
+
+    public void loadQuantityUnitsFromDatabase(QuantityUnitsListener listener) {
+        new loadQuantityUnitsAsyncTask(appDatabase, listener).execute();
+    }
+
+    private static class loadQuantityUnitsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final QuantityUnitsListener listener;
+
+        private ArrayList<QuantityUnit> quantityUnits;
+
+        loadQuantityUnitsAsyncTask(AppDatabase appDatabase, QuantityUnitsListener listener) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished(quantityUnits);
+        }
+    }
+
+    public void updateQuantityUnitsDatabase(
+            ArrayList<QuantityUnit> quantityUnits,
+            DataUpdatedListener listener
+    ) {
+        new updateQuantityUnitsAsyncTask(
+                appDatabase,
+                quantityUnits,
+                listener
+        ).execute();
+    }
+
+    private static class updateQuantityUnitsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final DataUpdatedListener listener;
+
+        private final ArrayList<QuantityUnit> quantityUnits;
+
+        updateQuantityUnitsAsyncTask(
+                AppDatabase appDatabase,
+                ArrayList<QuantityUnit> quantityUnits,
+                DataUpdatedListener listener
+        ) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+            this.quantityUnits = quantityUnits;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            appDatabase.locationDao().deleteAll();
+            appDatabase.quantityUnitDao().insertAll(quantityUnits);
             return null;
         }
 

@@ -48,6 +48,8 @@ public class FormDataMasterProduct {
     private final LiveData<Boolean> catOptionalErrorLive;
     private final LiveData<Boolean> catLocationErrorLive;
     private final LiveData<Boolean> catDueDateErrorLive;
+    private final LiveData<Boolean> catQuErrorLive;
+    private final LiveData<Boolean> catAmountErrorLive;
 
 
 
@@ -86,6 +88,14 @@ public class FormDataMasterProduct {
         catDueDateErrorLive = Transformations.map(
                 productLive,
                 FormDataMasterProductCatDueDate::isFormInvalid
+        );
+        catQuErrorLive = Transformations.map(
+                productLive,
+                FormDataMasterProductCatAmount::isFormInvalid
+        );
+        catAmountErrorLive = Transformations.map(
+                productLive,
+                FormDataMasterProductCatAmount::isFormInvalid
         );
 
         shoppingListLive = new MutableLiveData<>();
@@ -145,6 +155,14 @@ public class FormDataMasterProduct {
 
     public LiveData<Boolean> getCatDueDateErrorLive() {
         return catDueDateErrorLive;
+    }
+
+    public LiveData<Boolean> getCatQuErrorLive() {
+        return catQuErrorLive;
+    }
+
+    public LiveData<Boolean> getCatAmountErrorLive() {
+        return catAmountErrorLive;
     }
 
     public MutableLiveData<String> getBarcodeLive() {

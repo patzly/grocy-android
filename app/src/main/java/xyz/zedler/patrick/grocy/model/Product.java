@@ -34,6 +34,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "product_table")
 public class Product implements Parcelable {
@@ -308,11 +309,9 @@ public class Product implements Parcelable {
     }
 
     public double getQuFactorPurchaseToStockDouble() {
-        if(quFactorPurchaseToStock == null || quFactorPurchaseToStock.isEmpty()) {
-            return 1;
-        } else {
-            return Double.parseDouble(quFactorPurchaseToStock);
-        }
+        return NumUtil.isDouble(quFactorPurchaseToStock)
+                ? Double.parseDouble(quFactorPurchaseToStock)
+                : 1;
     }
 
     public String getQuFactorPurchaseToStock() {
@@ -323,17 +322,17 @@ public class Product implements Parcelable {
         return enableTareWeightHandling;
     }
 
+    public boolean getEnableTareWeightHandlingBoolean() {
+        return enableTareWeightHandling == 1;
+    }
+
     @Deprecated
     public String getBarcode() {
         return null;
     }
 
     public double getMinStockAmountDouble() {
-        if(minStockAmount == null || minStockAmount.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(minStockAmount);
-        }
+        return NumUtil.isDouble(minStockAmount) ? Double.parseDouble(minStockAmount) : 0;
     }
 
     public int getDefaultDueDays() {
@@ -366,15 +365,15 @@ public class Product implements Parcelable {
     }
 
     public double getTareWeightDouble() {
-        if(tareWeight == null || tareWeight.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(tareWeight);
-        }
+        return NumUtil.isDouble(tareWeight) ? Double.parseDouble(tareWeight) : 0;
     }
 
     public int getNotCheckStockFulfillmentForRecipes() {
         return notCheckStockFulfillmentForRecipes;
+    }
+
+    public boolean getNotCheckStockFulfillmentForRecipesBoolean() {
+        return notCheckStockFulfillmentForRecipes == 1;
     }
 
     public String getParentProductId() {
@@ -382,11 +381,7 @@ public class Product implements Parcelable {
     }
 
     public double getCaloriesDouble() {
-        if(calories == null || calories.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(calories);
-        }
+        return NumUtil.isDouble(calories) ? Double.parseDouble(calories) : 0;
     }
 
     public int getAccumulateSubProductsMinStockAmount() {
@@ -427,6 +422,10 @@ public class Product implements Parcelable {
 
     public void setEnableTareWeightHandling(int enableTareWeightHandling) {
         this.enableTareWeightHandling = enableTareWeightHandling;
+    }
+
+    public void setEnableTareWeightHandling(boolean enableTareWeightHandling) {
+        this.enableTareWeightHandling = enableTareWeightHandling ? 1 : 0;
     }
 
     public void setPictureFileName(String pictureFileName) {
@@ -473,6 +472,10 @@ public class Product implements Parcelable {
 
     public void setNotCheckStockFulfillmentForRecipes(int notCheckStockFulfillmentForRecipes) {
         this.notCheckStockFulfillmentForRecipes = notCheckStockFulfillmentForRecipes;
+    }
+
+    public void setNotCheckStockFulfillmentForRecipes(boolean notCheckStockFulfillmentForRecipes) {
+        this.notCheckStockFulfillmentForRecipes = notCheckStockFulfillmentForRecipes ? 1 : 0;
     }
 
     public void setParentProductId(String parentProductId) {
@@ -525,6 +528,10 @@ public class Product implements Parcelable {
 
     public String getQuickConsumeAmount() {
         return quickConsumeAmount;
+    }
+
+    public double getQuickConsumeAmountDouble() {
+        return NumUtil.isDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 0;
     }
 
     public void setQuickConsumeAmount(String quickConsumeAmount) {

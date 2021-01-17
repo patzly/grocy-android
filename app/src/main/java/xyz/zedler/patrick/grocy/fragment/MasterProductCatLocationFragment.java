@@ -40,7 +40,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -112,14 +111,6 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
             if(!isLoading) viewModel.setCurrentQueueLoading(null);
-        });
-
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
-                    InfoFullscreen.ERROR_OFFLINE,
-                    () -> updateConnectivity(true)
-            ) : null;
-            viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);

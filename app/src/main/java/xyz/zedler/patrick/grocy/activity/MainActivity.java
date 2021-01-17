@@ -40,6 +40,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -365,7 +366,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showMessage(String message) {
-        showSnackbar(Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG));
+        Snackbar bar = Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG);
+        View v = bar.getView();
+        TextView text = (TextView) v.findViewById(com.google.android.material.R.id.snackbar_text);
+        text.setMaxLines(3);
+        showSnackbar(bar);
     }
 
     public void showMessage(@StringRes int message) {

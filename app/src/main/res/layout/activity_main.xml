@@ -29,7 +29,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:backgroundTint="@color/primary"
         app:navigationIcon="@drawable/ic_round_menu_anim"
-        app:fabAnimationMode="slide">
+        app:fabAnimationMode="scale">
 
         <FrameLayout
             android:id="@+id/frame_main_demo"

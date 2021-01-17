@@ -98,6 +98,14 @@ public class MasterProductFragment extends BaseFragment {
                         args.getAction(),
                         viewModel.getFormData().getCategoriesInvalid()
                 ).setProduct(viewModel.getFilledProduct())));
+        binding.categoryAmount.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+                .actionMasterProductFragmentToMasterProductCatAmountFragment(
+                        args.getAction(),
+                        viewModel.getFormData().getCategoriesInvalid()
+                ).setProduct(viewModel.getFilledProduct())));
+        binding.categoryBarcodes.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
+        binding.categoryQuConversions.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
+        binding.categoryPicture.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
 
         Product product = (Product) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT);
         if(product != null) {

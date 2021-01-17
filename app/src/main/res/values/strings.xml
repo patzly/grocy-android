@@ -149,11 +149,15 @@
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
     <string name="msg_press_hold_confirm">Press and hold to confirm</string>
+    <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
     <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
     <string name="msg_help_default_due_days">For purchases this amount of days will be added to today for the due date suggestion (-1 means that this product will be never overdue).</string>
     <string name="msg_help_default_due_days_opened">When this product was marked as opened, the due date will be replaced by today + this amount of days (a value of 0 disables this).</string>
     <string name="msg_help_default_due_days_freezing">On moving this product to a freezer location (so when freezing it), the due date will be replaced by today + this amount of days (-1 means that this product will be never overdue).</string>
     <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
+    <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
+    <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
+    <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -260,6 +264,12 @@
     <string name="title_product_cat_optional">Optional properties</string>
     <string name="title_product_cat_location">Default location</string>
     <string name="title_product_cat_due_date">Due date</string>
+    <string name="title_product_cat_amount">Amount</string>
+    <string name="title_product_cat_quantity_units">Quantity units</string>
+    <string name="title_product_cat_barcodes">Barcodes</string>
+    <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. -->
+    <string name="title_product_cat_qu_conversions">QU conversions</string>
+    <string name="title_product_cat_picture">Picture</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -289,6 +299,7 @@
     <string name="subtitle_amount_compare">That\'s the same as %1$s %2$s.</string>
     <string name="subtitle_product_hidden">Product is hidden</string>
     <string name="subtitle_product_not_hidden">Product is not hidden</string>
+    <string name="subtitle_product_not_on_server">Product is not on server</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
@@ -322,7 +333,7 @@
     <string name="property_quantity_units">Quantity units</string>
     <string name="property_qu_purchase">Quantity unit purchase</string>
     <string name="property_qu_stock">Quantity unit stock</string>
-    <string name="property_qu_factor">Factor purchase to stock</string>
+    <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_days">Days</string>
@@ -362,6 +373,14 @@
     <string name="property_active">Active</string>
     <string name="property_never_show">Never show on stock overview</string>
     <string name="property_number">Number</string>
+    <string name="property_enable_tare_weight">Enable tare weight handling</string>
+    <string name="property_tare_weight">Tare weight</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_tare_weight_in">Tare weight in %1$s</string>
+    <string name="property_disable_stock_check">Disable stock fulfillment checking for this ingredient</string>
+    <string name="property_amount_quick_consume">Quick consume amount</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
 
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>

@@ -32,23 +32,23 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatDueDateBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatAmountBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
+import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatDueDateViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatAmountViewModel;
 
-public class MasterProductCatDueDateFragment extends BaseFragment {
+public class MasterProductCatAmountFragment extends BaseFragment {
 
-    private final static String TAG = MasterProductCatDueDateFragment.class.getSimpleName();
+    private final static String TAG = MasterProductCatAmountFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentMasterProductCatDueDateBinding binding;
-    private MasterProductCatDueDateViewModel viewModel;
+    private FragmentMasterProductCatAmountBinding binding;
+    private MasterProductCatAmountViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -57,7 +57,7 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentMasterProductCatDueDateBinding.inflate(
+        binding = FragmentMasterProductCatAmountBinding.inflate(
                 inflater, container, false
         );
         return binding.getRoot();
@@ -74,9 +74,9 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
         activity = (MainActivity) requireActivity();
         MasterProductFragmentArgs args = MasterProductFragmentArgs
                 .fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new MasterProductCatDueDateViewModel
-                .MasterProductCatDueDateViewModelFactory(activity.getApplication(), args)
-        ).get(MasterProductCatDueDateViewModel.class);
+        viewModel = new ViewModelProvider(this, new MasterProductCatAmountViewModel
+                .MasterProductCatAmountViewModelFactory(activity.getApplication(), args)
+        ).get(MasterProductCatAmountViewModel.class);
         binding.setActivity(activity);
         binding.setFormData(viewModel.getFormData());
         binding.setViewModel(viewModel);
@@ -109,7 +109,7 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
             if(!isLoading) viewModel.setCurrentQueueLoading(null);
         });
 
-        if(savedInstanceState == null) viewModel.fillData();
+        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         updateUI(savedInstanceState == null);
     }
@@ -139,14 +139,19 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
 
     public void showInputNumberBottomSheet(int type) {
         Bundle bundle = new Bundle();
-        bundle.putInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, type);
-        bundle.putInt(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getDaysNumber(type));
+        bundle.putInt(FormDataMasterProductCatAmount.AMOUNT_ARG, type);
+        bundle.putDouble(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getAmount(type));
         activity.showBottomSheet(new InputNumberBottomSheet(), bundle);
+    }
+
+    public void showInputNumberBottomSheet(int type, View imageView) {
+        if(imageView != null) activity.startIconAnimation(imageView, true);
+        showInputNumberBottomSheet(type);
     }
 
     @Override
     public void saveNumber(String text, Bundle argsBundle) {
-        viewModel.getFormData().setDaysNumber(text, argsBundle);
+        viewModel.getFormData().setAmount(text, argsBundle);
     }
 
     @Override
