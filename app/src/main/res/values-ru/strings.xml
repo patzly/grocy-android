@@ -1,0 +1,442 @@
+<resources>
+
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in purchase screen for example. -->
+    <string name="action_purchase">Купить</string>
+    <!-- This is an action – in English, it contains a verb.
+     The string is visible after clicking long on the action button in consume screen for example. -->
+    <string name="action_consume">Ипользовать</string>
+    <!-- This is an action – in English, it contains a verb. -->
+    <string name="action_consume_all">Использовать все</string>
+
+    <string name="action_consume_one_spoiled">Списать 1 испорченный</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_consume_one">Использовать %1$s %2$s</string>
+    <string name="action_open">Отметить вскрытым</string>
+    <!-- %1$s is a quantity unit and %2$s is a product name -->
+    <string name="action_open_one">Вскрыть %1$s %2$s </string>
+    <string name="action_edit_product">Изменить продукт</string>
+    <string name="action_shopping_list_add">Добавить в список покупок</string>
+
+    <string name="action_back">Назад</string>
+    <string name="action_search">Поиск</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_next">Далее</string>
+    <string name="action_new">Новый</string>
+    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+    <string name="action_prev">Назад</string>
+    <string name="action_send_feedback">Обратная связь</string>
+    <string name="action_reset">Сброс</string>
+    <string name="action_reload">Обновить</string>
+    <string name="action_top_scroll">Наверх</string>
+    <string name="action_send">Отправить</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_scan">Сканировать</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_add">Добавить</string>
+    <string name="action_clear">Очистить</string>
+    <string name="action_clear_shopping_list">Очистить список покупок</string>
+    <string name="action_rate">Оценить на Google Play</string>
+    <string name="action_rate_description">Поддержать разработку</string>
+    <string name="action_email">Отправить email</string>
+    <string name="action_email_description">Связаться с разработчиками</string>
+    <string name="action_new_issue">Создайте новое обсуждение на GitHub</string>
+    <string name="action_new_issue_description">Сообщите об ошибке или пожелании</string>
+    <string name="action_get_started">Начать</string>
+    <string name="action_ascending">По возрастанию</string>
+    <string name="action_filter">Фильтр</string>
+    <string name="action_sort">Сортировка</string>
+    <string name="action_undo">Отменить</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_logout">Выйти</string>
+    <string name="action_restart">Перезапустить</string>
+    <string name="action_show_extended">Показать все поля</string>
+    <string name="action_batch_mode">Групповое действие</string>
+    <string name="action_create">Создать</string>
+    <string name="action_link">Ссылка</string>
+    <string name="action_open_forms">Открыть формы</string>
+    <string name="action_open_scanner">Открыть сканер</string>
+    <string name="action_discard">Сбросить</string>
+    <string name="action_toggle_done">Пометить выполненным</string>
+    <string name="action_edit_notes">Отредактировать заметки</string>
+    <string name="action_shopping_mode">Режим покупок</string>
+    <string name="action_add_missing">Добавить недостающие продукты</string>
+    <string name="action_purchase_all_items">Купить все</string>
+    <string name="action_skip_entry">Пропустить запись</string>
+    <string name="action_delete_shopping_list">Удалить список покупок</string>
+    <string name="action_discard_products">Сбросить продукты</string>
+    <string name="action_perform_purchasing_processes">Выполнить процедуру закупки для созданных продуктов</string>
+    <string name="action_create_key">Создать ключ</string>
+    <string name="action_login">Войти</string>
+    <string name="action_use_demo_account">Использовать  демо аккаунт</string>
+    <string name="action_ignore">Игнорировать</string>
+    <!-- This string should follow the equality between "all" and "Clear all items" -->
+    <string name="action_clear_all">Все</string>
+    <!-- This string should follow the equality between "done" and "Clear done items" -->
+    <string name="action_clear_done">Выполнено</string>
+
+    <string name="tooltip_new_products_count">Количество новых продуктов</string>
+    <string name="tooltip_switch_purchase">Переключится в режим покупок</string>
+    <string name="tooltip_switch_consume">Переключится в режим использования</string>
+    <string name="tooltip_switch_open">Переключится в открытый режим</string>
+    <string name="tooltip_demo">Вы в демонстрационном режиме</string>
+
+    <!-- %1$s is the number of products which expire soon -->
+    <string name="msg_expiring_products">%1$d скоро испортится</string>
+    <!-- %1$s is the number of products which are expired -->
+    <string name="msg_expired_products">%1$d испортилось</string>
+    <!-- %1$s is the number of products which are below min. stock amount -->
+    <string name="msg_missing_products">на %1$d меньше минимального запаса</string>
+    <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
+    <string name="msg_consumed_spoiled">Испортилось %1$s %2$s %3$s</string>
+    <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
+    <!-- %1$s is the number of undone items in shopping list -->
+    <string name="msg_undone_items">%1$d отменено</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_saved_purchase">Покупка %1$s сохранена</string>
+    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+    <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_not_in_stock">В запасах нет %1$s</string>
+    <string name="msg_no_connection">Нет соединения</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_locations">Нет места хранения для %1$s</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_no_stock_entries">Продукт %1$s не создан</string>
+    <string name="msg_not_found">Продукт не найден</string>
+    <string name="msg_undone_transaction">Действие отменено</string>
+    <string name="msg_failed_to_sync">Синхронизация не удалась</string>
+    <string name="msg_synced">Записи синхронизированы</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_added_missing_products">Недостающие продукты добавлены в %1$s</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_cleared">Список %1$s очищен</string>
+    <!-- %1$s is a shopping list name -->
+    <string name="msg_shopping_list_deleted">Список %1$sудален</string>
+    <string name="msg_barcode_duplicate">Штрихкод уже существует</string>
+    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">Удалить %1$s \"%2$s\"?</string>
+    <string name="msg_master_delete_stock">У продукта есть запас</string>
+    <!-- %1$s is a master data type like "location" or "product" -->
+    <string name="msg_master_delete_usage">%1$s еще используется</string>
+    <string name="msg_item_marked_as_done">Пункт выполнен</string>
+    <string name="msg_item_marked_as_undone">Пункт отменен</string>
+    <string name="msg_batch_no_products">Новые продукты создавать не требуется</string>
+    <string name="msg_batch_tare_weight">Продукт не поддерживает групповой режим: включено управление весом тары</string>
+    <string name="msg_purchase_transactions_done">Завершены транзакции по закупке созданных товаров</string>
+    <string name="msg_no_purchase_transactions">Нет ожидающих транзакций по закупке</string>
+    <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере,\n\nТекущая версия сервера %1$s\n\nТребуется:\nминимальная версия: %2$s\nмаксимальная версия: %3$s\n\nЕсли вы проигнорируете это предупреждение, могут возникнуть потери данных (маловероятно) и сбои (весьма вероятно).\nВас предупредили!</string>
+    <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
+    <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
+    <string name="msg_restart">Требуется перезапуск приложения для корректного применения настроек Grocy</string>
+    <string name="msg_features">Запустить введение еще раз можно в разделе \"О программе\"</string>
+    <string name="msg_feedback">У вас есть пожелания, вопросы или ошибки? Свяжитесь с нами и мы поможем!\nесли нет. мы будем рады положительному отзыву в Play Store</string>
+    <string name="msg_point_at_barcode">Направьте камеру на штрихкод</string>
+
+    <string name="error_api_not_working">Ключ API  не работает</string>
+    <string name="error_orbot_not_installed">Orbot не установлен</string>
+    <string name="error_select_product">Выберите продукт</string>
+    <string name="error_empty">Обязательно</string>
+    <string name="error_empty_stock">Ничего в запасах</string>
+    <string name="error_empty_stock_sub">Купите что-нибудь</string>
+    <string name="error_empty_shopping_list">Пустой список покупок</string>
+    <string name="error_empty_shopping_list_sub">Добавьте нужные продукты</string>
+    <string name="error_empty_master_data_sub">Создайте с помощью кнопки внизу</string>
+    <string name="error_empty_locations">Нет мест хранения</string>
+    <string name="error_empty_product_groups">Нет продуктовых групп</string>
+    <string name="error_empty_products">Нет продуктов</string>
+    <string name="error_empty_qu">Нет единиц измерения</string>
+    <string name="error_empty_stores">Нет магазинов</string>
+    <string name="error_search">Нет результатов поиска</string>
+    <string name="error_search_sub">Попробуйте другие условия</string>
+    <string name="error_filter">Нечего показать</string>
+    <string name="error_filter_sub">Попробуйте другие фильтры</string>
+    <string name="error_duplicate">Уже существует</string>
+    <string name="error_parent">Не может быть родителем себе</string>
+    <string name="error_invalid_product">Неверный продукт</string>
+    <string name="error_invalid_url">Неверный адрес</string>
+    <string name="error_invalid_amount">Неверное количество</string>
+    <string name="error_invalid_best_before_days">Используйте -1 если срок годности не ограничен</string>
+    <string name="error_invalid_factor">Неверный фактор</string>
+    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+    <string name="error_bounds_min_max">Между %1$s и %2$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_min">больше или равно %1$s</string>
+    <string name="error_offline">Не в сети - оффлайн</string>
+    <string name="error_name_exists">Название уже существует</string>
+    <string name="error_offline_subtitle">Проверьте соединение и попробуйте еще раз</string>
+    <string name="error_unknown">Ууупс!</string>
+    <string name="error_not_grocy_instance">Это не сервер Grocy</string>
+    <string name="error_timeout">Превышено время ожидания</string>
+    <!-- %1$s is a server URL -->
+    <string name="error_failed_to_connect_to">Соединение с %1$sне удалось</string>
+    <string name="error_handshake">Нет сертификата</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">%1$sтребуется сертификат который неизвестен или которому не доверяет операционная система. \nСертификат сервера должен быть подписан доверенным корневым Центром Сертификации (ЦС)\nдля выполнения этих условий можно использовать бесплатный сертификат от letsencrypt.org </string>
+    <string name="error_unexpected_response_code">Неожиданный код ответа: %1$d</string>
+    <string name="error_unexpected_response">Неожиданный ответ сервера</string>
+    <string name="error_no_browser">Установите веб браузер для отображения справочной страницы</string>
+    <string name="error_undefined">Возникла ошибка</string>
+
+    <string name="title_stock_overview">Обзор запасов</string>
+    <string name="title_purchase">Купить</string>
+    <string name="title_consume">Использовать</string>
+    <string name="title_product_overview">Обзор продуктов</string>
+    <string name="title_product">Продукт</string>
+    <string name="title_master_data">Основные данные</string>
+    <string name="title_stock_entries">Список запасов</string>
+    <string name="title_shopping_list">Список покупок</string>
+    <string name="title_feedback">Обратная связь</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_about">О программе</string>
+    <string name="title_info">Информация</string>
+    <string name="title_help">Справка</string>
+    <string name="title_logs">Журнал</string>
+    <string name="title_link_barcode">Связать штрихкод с продуктом</string>
+    <string name="title_batch_scan_exit">Заполнить формы продуктов?</string>
+    <string name="title_batch_missing_exit">Вернуться в сканер?</string>
+    <string name="title_link_barcode_to_existing">Связать штрихкод с существующим продуктом?</string>
+    <string name="title_link_barcode_or_create">Связать штрихкод с существующим продуктом или создать новый продукт?</string>
+    <string name="title_compatibility">Проблемы совместимости</string>
+    <string name="title_logout">Выйти из Grocy?</string>
+    <string name="title_restart">Перезапустить Grocy?</string>
+    <string name="title_logout_demo">Выйти из демо режима?</string>
+    <string name="title_batch_config">Настройка групповых действий</string>
+    <string name="title_manage_master_data">Управление основными данными</string>
+
+    <string name="title_spoiled">Испорчено</string>
+    <string name="title_use_specific">Использовать конкретный запас</string>
+    <string name="title_is_total_price">Общая цена</string>
+    <string name="title_stock_entry_no_specific">Неопределенный запас</string>
+    <string name="title_shopping_list_ungrouped">Не в группе</string>
+    <string name="title_list_entry">Элемент списка</string>
+    <string name="title_edit_list_entry">Редактировать элемент списка</string>
+    <string name="title_create_list_entry">Создать элемент списка</string>
+    <string name="title_shopping_list_edit">Редактировать список покупок</string>
+    <string name="title_shopping_list_new">Новый список покупок</string>
+    <string name="title_shopping_mode">Режим покупки</string>
+    <string name="title_products_to_create">Создаваемые продукты</string>
+    <string name="title_batch_mode_shopping_list">Групповой режим списка покупок</string>
+
+    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+    <string name="subtitle_amount">%1$s%2$s</string>
+    <!-- %1$s is a number like 1, 2, 3 -->
+    <string name="subtitle_amount_opened">(открыто %1$s) </string>
+    <!-- %1$s is a product name -->
+    <string name="subtitle_stock_locations">Где есть запасы %1$s</string>
+    <string name="subtitle_default">По умолчанию</string>
+    <string name="subtitle_none_selected">Ничего не выбрано</string>
+    <string name="subtitle_empty">Пусто</string>
+    <string name="subtitle_done">Выполнено</string>
+    <string name="subtitle_undone">Отменено</string>
+    <string name="subtitle_never_expires">Срок годности не ограничен</string>
+    <string name="subtitle_selected">Выбрано</string>
+    <string name="subtitle_stock_entry_no_specific">Первым истекает первый, потом первый пришел - первый ушел</string>
+    <!-- %1$s is a purchase date -->
+    <string name="subtitle_stock_entry_name">Куплено: %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <string name="subtitle_stock_entry">Срок годности: %1$s; количество: %2$s; %3$s</string>
+    <!-- %1$s and %2$s are numbers -->
+    <string name="subtitle_entry_num_of_num">Запись %1$d из %2$d</string>
+
+    <string name="description_batch_choose_link">Выберите продукт к которому привязать штрихкод</string>
+    <string name="description_batch_choose_create">Выберите продукт к которому привязать штрихкод или создайте новый</string>
+    <string name="description_scan_batch_exit">Новые продукты созданы, но не были отправлены на сервер, так как не внесены необходимые данные. Открыть формы продуктов?</string>
+    <string name="description_missing_batch_exit">Некоторые закупки еще не были отправлены на сервер. Сбросить их или вернуться в сканер?</string>
+    <!-- %1$s is a product name -->
+    <string name="description_input_name">Создать новый продукт \"%1$s\"?</string>
+    <string name="description_clear_shopping_list">Вы хотите удалить все или только выполненные элементы?</string>
+
+    <string name="property_name">Название</string>
+    <string name="property_name_singular">Название</string>
+    <string name="property_name_plural">Название (множественная форма)</string>
+    <string name="property_product">Продукт</string>
+    <string name="property_products">Продукты</string>
+    <string name="property_product_name">Название продукта</string>
+    <string name="property_parent_product">Родительскй продукт</string>
+    <string name="property_description">Описание</string>
+    <string name="property_note">Заметка</string>
+    <string name="property_status">Статус</string>
+    <string name="property_amount">Количество</string>
+    <string name="property_seconds">Секунды</string>
+    <!-- %1$d is a number (amount of seconds) -->
+    <string name="property_seconds_num">%1$dсек.</string>
+    <string name="property_amount_min_stock">Мин. количество в запасе</string>
+    <!-- &1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_in">Одна %1$s содержит</string>
+    <string name="property_price">Цена</string>
+    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <string name="property_price_in">Цена в %1$s</string>
+    <string name="property_quantity_unit">Единица измерения</string>
+    <string name="property_quantity_units">Единицы измерения</string>
+    <string name="property_qu_purchase">Единица измерения покупок</string>
+    <string name="property_qu_stock">Единица измерения запасов</string>
+    <string name="property_qu_factor">Коэффициент закупа к запасам</string>
+    <string name="property_barcode">Штрихкод</string>
+    <string name="property_barcodes">Штрихкоды</string>
+    <string name="property_bbd">Срок годности</string>
+    <string name="property_bbd_next">Следующий срок годности</string>
+    <string name="property_bb_days">Дней до срока годности</string>
+    <string name="property_bb_days_default">Дней до срока годности по умолчанию</string>
+    <string name="property_bb_days_default_opened">Дней до срока годности после вскрытия по умолчанию</string>
+    <string name="property_location">Место</string>
+    <string name="property_location_default">Место по умолчанию</string>
+    <string name="property_notes">Заметки</string>
+    <string name="property_locations">Места</string>
+    <string name="property_store">Магазин</string>
+    <string name="property_store_unknown">Неизвестный магазин</string>
+    <string name="property_store_default">Магазин по умолчанию</string>
+    <string name="property_stores">Магазины</string>
+    <string name="property_shopping_list">Список покупок</string>
+    <string name="property_shopping_lists">Списки покупок</string>
+    <string name="property_last_purchased">Последний раз куплено</string>
+    <string name="property_last_used">Последний раз использовано</string>
+    <string name="property_last_price">Последняя цена</string>
+    <string name="property_average_shelf_life">Обычно хранится</string>
+    <string name="property_spoil_rate">Процент испорченного</string>
+    <string name="property_price_history">История цен</string>
+    <string name="property_product_group">Продуктовая группа</string>
+    <string name="property_product_groups">Продуктовые группы</string>
+    <string name="property_opened">вскрыто</string>
+    <string name="property_not_opened">не вскрыто</string>
+    <string name="property_is_freezer">Морозильник</string>
+
+    <string name="date_yesterday">Вчера</string>
+    <string name="date_today">Сегодня</string>
+    <string name="date_tomorrow">завтра</string>
+    <string name="date_unknown">Неизвестно</string>
+    <string name="date_unlimited">Неограничено</string>
+    <string name="date_never">Никогда</string>
+
+    <plurals name="date_days">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%dдней</item>
+        <item quantity="other">%d дней</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="other">%d месяцев</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d года</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="other">%d лет</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">%d день назад</item>
+        <item quantity="few">%d дня назад</item>
+        <item quantity="many">%d дней назад</item>
+        <item quantity="other">%d дней назад</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">%d месяц назад</item>
+        <item quantity="few">%d месяца назад</item>
+        <item quantity="many">%d месяцев назад</item>
+        <item quantity="other">%d месяцев назад</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">%d год назад</item>
+        <item quantity="few">%d года назад</item>
+        <item quantity="many">%d лет назад</item>
+        <item quantity="other">%d лет назад</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">Еще %d день</item>
+        <item quantity="few">Еще %d дня</item>
+        <item quantity="many">Еще %d дней.</item>
+        <item quantity="other">Еще %d дней</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">Еще %d месяц</item>
+        <item quantity="few">Еще %d месяца</item>
+        <item quantity="many">Еще %d месяцев</item>
+        <item quantity="other">Еще %d месяцев</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">Еще %d год</item>
+        <item quantity="few">Еще %d года</item>
+        <item quantity="many">Еще %d лет</item>
+        <item quantity="other">Еще %d лет</item>
+    </plurals>
+
+    <string name="info_acknowledgement">Мы хотим поблагодарить Бернда Бестеля, без отличной работы которого это приложение было бы невозможно</string>
+    <string name="info_intro">Показать введение еще раз</string>
+    <string name="info_intro_description">Демонстрация возможностей</string>
+    <string name="info_material_components_built_with">Собрано при помощи</string>
+    <string name="info_version">Версия</string>
+    <string name="info_grocy_version">Версия Grocy</string>
+    <string name="info_grocy_version_incompatible">Не поддерживается</string>
+    <string name="info_changelog">Список изменений</string>
+    <string name="info_changelog_description">Что нового?</string>
+    <string name="info_developers">Разработчики</string>
+    <string name="info_github">Grocy Android on GitHub</string>
+    <string name="info_github_description">Исходный код</string>
+    <string name="info_website">Открыть сайт Grocy</string>
+
+    <string name="feature_1_title">Grocy for Android</string>
+    <string name="feature_1_description">Управление домашней бакалеей на своем сервере</string>
+    <string name="feature_2_title">Интуитивный дизайн</string>
+    <string name="feature_2_description">Открытие и списание одним жестом</string>
+    <string name="feature_3_title">Мощные групповые действия</string>
+    <string name="feature_3_description">Отсканируйте все свои покупки за секунды</string>
+
+    <string name="category_licenses">Лицензии open source</string>
+    <string name="category_general">Общее</string>
+    <string name="category_purchase_consume">Закупки &amp; использование</string>
+    <string name="category_server">Сервер</string>
+    <string name="category_debugging">Отладка</string>
+    <string name="category_presets">предустановки для новых продуктов</string>
+
+    <string name="hint_server">Адрес сервера</string>
+    <string name="hint_key">Действительный ключ доступа к API</string>
+
+    <string name="setting_dark_mode">Принудительный темный режим</string>
+    <string name="setting_dark_mode_description">Выключить для использования системных настроек</string>
+    <string name="setting_open_food_facts">Использовать Open Food Facts</string>
+    <string name="setting_open_food_facts_description">Получать данные со штрихкодов</string>
+    <string name="setting_use_front_cam">Использовать фронтальную камеру</string>
+    <string name="setting_use_front_cam_description">Для сканирования штрихкодов</string>
+    <string name="setting_reload_config">Перезагрузить конфигурацию</string>
+    <string name="setting_reload_config_description">Требуется перезапуск приложения</string>
+    <string name="setting_logout">Выйти</string>
+    <string name="setting_logout_description">Вернуться на страницу входа</string>
+    <string name="setting_list_indicator">Подсвечивать элементы списка</string>
+    <string name="setting_list_indicator_description">Показывать синюю точку, если продукт в списке покупок</string>
+    <string name="setting_shopping_mode_update_interval">Интервал обновления режима покупок</string>
+    <string name="setting_keep_screen_on">Держать экран включенным</string>
+    <string name="setting_keep_screen_on_description">В режиме покупок</string>
+    <string name="setting_expiring_soon_days">За сколько дней предупреждать об истечении срока годности</string>
+    <string name="setting_default_amount_purchase">Обычное количество для покупки</string>
+    <string name="setting_default_amount_consume">Обычное количество использования</string>
+    <string name="setting_empty_value">Пусто</string>
+    <string name="setting_sync_off">Синхронизация выключена</string>
+    <string name="setting_not_loaded">Не может быть загружено</string>
+    <string name="setting_debug">Включить журналирование</string>
+    <string name="setting_debug_description">Показывать ошибки в журнале</string>
+    <string name="setting_info_logs">Показвать информационные записи журнала</string>
+    <string name="setting_logs_description">Показать журнал этого процесса</string>
+
+    <string name="setting_ask_best_before_date">Спрашивать срок годности</string>
+    <string name="setting_ask_price">Спрашивать цену</string>
+    <string name="setting_ask_store">Спрашивать магазин</string>
+    <string name="setting_ask_location">Спрашивать место</string>
+    <string name="setting_ask_specific_item">Спрашивать конкретный экземпляр</string>
+    <string name="setting_consume_all">Использовать все экземпляры продукта</string>
+
+    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    Examples: 'de' for German; 'fr' for French -->
+    <string name="url_grocy_demo">https://ru.demo.grocy.info</string>
+    </resources>
