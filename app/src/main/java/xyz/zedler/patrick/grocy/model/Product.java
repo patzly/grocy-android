@@ -388,6 +388,10 @@ public class Product implements Parcelable {
         return accumulateSubProductsMinStockAmount;
     }
 
+    public boolean getAccumulateSubProductsMinStockAmountBoolean() {
+        return accumulateSubProductsMinStockAmount == 1;
+    }
+
     public String getStoreId() {
         return storeId;
     }
@@ -500,6 +504,10 @@ public class Product implements Parcelable {
 
     public void setAccumulateSubProductsMinStockAmount(int accumulateSubProductsMinStockAmount) {
         this.accumulateSubProductsMinStockAmount = accumulateSubProductsMinStockAmount;
+    }
+
+    public void setAccumulateSubProductsMinStockAmount(boolean accumulateSubProductsMinStockAmount) {
+        this.accumulateSubProductsMinStockAmount = accumulateSubProductsMinStockAmount ? 1 : 0;
     }
 
     public void setStoreId(String storeId) {

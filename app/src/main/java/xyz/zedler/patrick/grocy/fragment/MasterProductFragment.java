@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -84,25 +83,17 @@ public class MasterProductFragment extends BaseFragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         binding.categoryOptional.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatOptionalFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
+                .actionMasterProductFragmentToMasterProductCatOptionalFragment(args.getAction())
+                .setProduct(viewModel.getFilledProduct())));
         binding.categoryLocation.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatLocationFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
+                .actionMasterProductFragmentToMasterProductCatLocationFragment(args.getAction())
+                .setProduct(viewModel.getFilledProduct())));
         binding.categoryDueDate.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatDueDateFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
+                .actionMasterProductFragmentToMasterProductCatDueDateFragment(args.getAction())
+                .setProduct(viewModel.getFilledProduct())));
         binding.categoryAmount.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatAmountFragment(
-                        args.getAction(),
-                        viewModel.getFormData().getCategoriesInvalid()
-                ).setProduct(viewModel.getFilledProduct())));
+                .actionMasterProductFragmentToMasterProductCatAmountFragment(args.getAction())
+                .setProduct(viewModel.getFilledProduct())));
         binding.categoryBarcodes.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
         binding.categoryQuConversions.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
         binding.categoryPicture.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
@@ -137,14 +128,6 @@ public class MasterProductFragment extends BaseFragment {
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
             if(!isLoading) viewModel.setCurrentQueueLoading(null);
-        });
-
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-            InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
-                    InfoFullscreen.ERROR_OFFLINE,
-                    () -> updateConnectivity(true)
-            ) : null;
-            viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);

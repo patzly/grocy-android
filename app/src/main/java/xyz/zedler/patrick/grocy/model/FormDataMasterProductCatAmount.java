@@ -46,6 +46,7 @@ public class FormDataMasterProductCatAmount {
     private final WeakReference<Context> contextWeak;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<String> minAmountLive;
+    private final MutableLiveData<Boolean> accumulateMinAmount;
     private final MutableLiveData<String> quickConsumeAmountLive;
     private final LiveData<String> quickConsumeAmountTitleLive;
     private final MutableLiveData<String> factorPurchaseToStockLive;
@@ -64,6 +65,7 @@ public class FormDataMasterProductCatAmount {
         displayHelpLive = new MutableLiveData<>(false);
         quantityUnitLive = new MutableLiveData<>();
         minAmountLive = new MutableLiveData<>();
+        accumulateMinAmount = new MutableLiveData<>(false);
         quickConsumeAmountLive = new MutableLiveData<>();
         quickConsumeAmountTitleLive = Transformations.map(
                 quantityUnitLive,
@@ -106,6 +108,10 @@ public class FormDataMasterProductCatAmount {
 
     public MutableLiveData<String> getMinAmountLive() {
         return minAmountLive;
+    }
+
+    public MutableLiveData<Boolean> getAccumulateMinAmount() {
+        return accumulateMinAmount;
     }
 
     public MutableLiveData<String> getQuickConsumeAmountLive() {
@@ -206,6 +212,7 @@ public class FormDataMasterProductCatAmount {
     public Product fillProduct(@NonNull Product product) {
         if(!isFormValid()) return product;
         product.setMinStockAmount(minAmountLive.getValue());
+        product.setAccumulateSubProductsMinStockAmount(accumulateMinAmount.getValue());
         product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
         product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
         product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
@@ -222,6 +229,7 @@ public class FormDataMasterProductCatAmount {
         String factor = NumUtil.trim(product.getQuFactorPurchaseToStockDouble());
         String tareWeight = NumUtil.trim(product.getTareWeightDouble());
         minAmountLive.setValue(minAmount);
+        accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
         quickConsumeAmountLive.setValue(quickAmount);
         factorPurchaseToStockLive.setValue(factor);
         enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());

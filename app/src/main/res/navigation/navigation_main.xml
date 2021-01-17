@@ -641,9 +641,6 @@
             <argument
                 android:name="action"
                 app:argType="string" />
-            <argument
-                android:name="categoriesInvalid"
-                app:argType="integer[]" />
         </fragment>
         <fragment
             android:id="@+id/masterProductCatLocationFragment"
@@ -658,9 +655,6 @@
             <argument
                 android:name="action"
                 app:argType="string" />
-            <argument
-                android:name="categoriesInvalid"
-                app:argType="integer[]" />
         </fragment>
         <fragment
             android:id="@+id/masterProductCatDueDateFragment"
@@ -675,9 +669,6 @@
             <argument
                 android:name="action"
                 app:argType="string" />
-            <argument
-                android:name="categoriesInvalid"
-                app:argType="integer[]" />
         </fragment>
         <fragment
             android:id="@+id/masterProductCatAmountFragment"
@@ -692,9 +683,6 @@
             <argument
                 android:name="action"
                 app:argType="string" />
-            <argument
-                android:name="categoriesInvalid"
-                app:argType="integer[]" />
         </fragment>
     </navigation>
 </navigation>

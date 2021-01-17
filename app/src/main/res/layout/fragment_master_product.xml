@@ -66,6 +66,30 @@
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
+            <FrameLayout
+                android:id="@+id/frame_help"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_cancel"
+                android:tooltipText="@string/action_display_help"
+                android:focusable="true"
+                tools:targetApi="o"
+                android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -97,7 +121,9 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
                     android:paddingBottom="90dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    app:transitionTypeChanging="@{true}">
 
                     <LinearLayout
                         style="@style/Theme.Grocy.ListItem"
@@ -137,7 +163,9 @@
                         android:id="@+id/category_optional"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        app:transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -153,7 +181,8 @@
 
                             <TextView
                                 android:text="State, Parent product, Description, Product group, Energy"
-                                style="@style/Theme.Grocy.ListItem.Description"/>
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}"/>
 
                         </LinearLayout>
 
@@ -189,7 +218,8 @@
 
                             <TextView
                                 android:text="Location, Store"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}"/>
 
                         </LinearLayout>
 
@@ -225,7 +255,8 @@
 
                             <TextView
                                 android:text="Type, Default days, after opened, freezing, thawing"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
                         </LinearLayout>
 
@@ -260,7 +291,8 @@
 
                             <TextView
                                 android:text="Stock, Purchase default"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
                         </LinearLayout>
 
@@ -296,7 +328,8 @@
 
                             <TextView
                                 android:text="Min. stock, Quick consume, Factor, Tare weight handling"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
                         </LinearLayout>
 

@@ -155,6 +155,7 @@
     <string name="msg_help_default_due_days_opened">When this product was marked as opened, the due date will be replaced by today + this amount of days (a value of 0 disables this).</string>
     <string name="msg_help_default_due_days_freezing">On moving this product to a freezer location (so when freezing it), the due date will be replaced by today + this amount of days (-1 means that this product will be never overdue).</string>
     <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
+    <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
     <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
@@ -381,6 +382,7 @@
     <string name="property_amount_quick_consume">Quick consume amount</string>
     <!-- &1$s is a quantity unit like "bottles" -->
     <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
+    <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
 
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>

@@ -47,7 +47,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -204,19 +203,6 @@ public class MasterProductViewModel extends AndroidViewModel {
                     }
             );
         }*/
-    }
-
-    private void saveProductBarcodeAndNavigateUp() {
-        ProductBarcode productBarcode = formData.fillProductBarcode(null);
-        if(productBarcode.getBarcode() == null) {
-            navigateUp();
-            return;
-        }
-        dlHelper.addProductBarcode(
-                ProductBarcode.getJsonFromProductBarcode(productBarcode, debug, TAG),
-                this::navigateUp,
-                error -> navigateUp()
-        ).perform(dlHelper.getUuid());
     }
 
     public void deleteItem() {
