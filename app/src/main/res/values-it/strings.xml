@@ -272,7 +272,7 @@
     <string name="property_price_in">Prezzo in %1$s</string>
     <string name="property_quantity_unit">Unità di misura</string>
     <string name="property_quantity_units">Unità di misura</string>
-    <string name="property_qu_purchase">Unità di acquisto</string>
+    <string name="property_default_qu_purchase">Unità di acquisto</string>
     <string name="property_qu_stock">Unità di dispensa</string>
     <string name="property_qu_factor">Pezzi nella confezione</string>
     <string name="property_barcode">Codice a barre</string>

@@ -272,7 +272,7 @@
     <string name="property_price_in">מחיר ב־%1$s</string>
     <string name="property_quantity_unit">יחידת כמות</string>
     <string name="property_quantity_units">יחידות כמות</string>
-    <string name="property_qu_purchase">יחידת כמות ברכישה</string>
+    <string name="property_default_qu_purchase">יחידת כמות ברכישה</string>
     <string name="property_qu_stock">יחידת כמות במלאי</string>
     <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
     <string name="property_barcode">ברקוד</string>

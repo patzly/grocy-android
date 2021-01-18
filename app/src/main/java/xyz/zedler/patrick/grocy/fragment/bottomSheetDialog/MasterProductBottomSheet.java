@@ -167,7 +167,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 		// QUANTITY UNIT PURCHASE
 		if(quantityUnitPurchase != null) {
 			itemQuPurchase.setText(
-					activity.getString(R.string.property_qu_purchase),
+					activity.getString(R.string.property_default_qu_purchase),
 					quantityUnitPurchase.getName()
 			);
 		} else {

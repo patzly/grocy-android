@@ -272,7 +272,7 @@
     <string name="property_price_in">Pris i %1$s</string>
     <string name="property_quantity_unit">Mängdenhet</string>
     <string name="property_quantity_units">Mängdenheter</string>
-    <string name="property_qu_purchase">Mängdenhetsköp</string>
+    <string name="property_default_qu_purchase">Mängdenhetsköp</string>
     <string name="property_qu_stock">Mängdenhet lager</string>
     <string name="property_qu_factor">Faktor mellan köp och lager</string>
     <string name="property_barcode">Streckkod</string>

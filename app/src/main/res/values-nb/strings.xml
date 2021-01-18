@@ -271,7 +271,7 @@
     <string name="property_price_in">Pris i %1$s</string>
     <string name="property_quantity_unit">Mengdeenhet</string>
     <string name="property_quantity_units">Mengdeenheter</string>
-    <string name="property_qu_purchase">Mengdeenhet kjøp</string>
+    <string name="property_default_qu_purchase">Mengdeenhet kjøp</string>
     <string name="property_qu_stock">Mengdeenhet lager</string>
     <string name="property_qu_factor">Faktor kjøp til lager</string>
     <string name="property_barcode">Strekkode</string>

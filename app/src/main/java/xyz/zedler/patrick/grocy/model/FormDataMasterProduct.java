@@ -71,7 +71,7 @@ public class FormDataMasterProduct {
         );
         catQuErrorLive = Transformations.map(
                 productLive,
-                FormDataMasterProductCatAmount::isFormInvalid
+                FormDataMasterProductCatQuantityUnit::isFormInvalid
         );
         catAmountErrorLive = Transformations.map(
                 productLive,

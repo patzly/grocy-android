@@ -272,7 +272,7 @@
     <string name="property_price_in">Cena v %1$s</string>
     <string name="property_quantity_unit">Měrná jednotka</string>
     <string name="property_quantity_units">Měrná jednotky</string>
-    <string name="property_qu_purchase">Měrná jednotka nákupu</string>
+    <string name="property_default_qu_purchase">Měrná jednotka nákupu</string>
     <string name="property_qu_stock">Měrná jednotka zásob</string>
     <string name="property_qu_factor">Faktor nákupu do zásob</string>
     <string name="property_barcode">Čárový kód</string>

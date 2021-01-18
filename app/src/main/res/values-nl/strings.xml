@@ -268,7 +268,7 @@
     <string name="property_price_in">Prijs in %1$s</string>
     <string name="property_quantity_unit">Hoeveelheid eenheid</string>
     <string name="property_quantity_units">Aantal eenheden</string>
-    <string name="property_qu_purchase">Aankoopeenheid</string>
+    <string name="property_default_qu_purchase">Aankoopeenheid</string>
     <string name="property_qu_stock">Voorraadeenheid</string>
     <string name="property_qu_factor">Factor van aankoop- naar voorraadeenheid</string>
     <string name="property_barcode">Streepjescode</string>

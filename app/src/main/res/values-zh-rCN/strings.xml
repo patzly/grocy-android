@@ -272,7 +272,7 @@
     <string name="property_price_in">价格单位%1$s</string>
     <string name="property_quantity_unit">数量单位</string>
     <string name="property_quantity_units">数量单位</string>
-    <string name="property_qu_purchase">数量单位购买</string>
+    <string name="property_default_qu_purchase">数量单位购买</string>
     <string name="property_qu_stock">数量单位库存</string>
     <string name="property_qu_factor">库存采购</string>
     <string name="property_barcode">条形码</string>

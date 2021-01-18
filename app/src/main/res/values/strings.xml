@@ -155,6 +155,8 @@
     <string name="msg_help_default_due_days_opened">When this product was marked as opened, the due date will be replaced by today + this amount of days (a value of 0 disables this).</string>
     <string name="msg_help_default_due_days_freezing">On moving this product to a freezer location (so when freezing it), the due date will be replaced by today + this amount of days (-1 means that this product will be never overdue).</string>
     <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
+    <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
+    <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
     <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
     <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
@@ -266,7 +268,7 @@
     <string name="title_product_cat_location">Default location</string>
     <string name="title_product_cat_due_date">Due date</string>
     <string name="title_product_cat_amount">Amount</string>
-    <string name="title_product_cat_quantity_units">Quantity units</string>
+    <string name="title_product_cat_quantity_unit">Quantity unit</string>
     <string name="title_product_cat_barcodes">Barcodes</string>
     <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. -->
     <string name="title_product_cat_qu_conversions">QU conversions</string>
@@ -332,7 +334,7 @@
     <string name="property_price_in">Price in %1$s</string>
     <string name="property_quantity_unit">Quantity unit</string>
     <string name="property_quantity_units">Quantity units</string>
-    <string name="property_qu_purchase">Quantity unit purchase</string>
+    <string name="property_default_qu_purchase">Default quantity unit purchase</string>
     <string name="property_qu_stock">Quantity unit stock</string>
     <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
     <string name="property_barcode">Barcode</string>

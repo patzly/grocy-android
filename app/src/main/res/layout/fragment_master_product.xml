@@ -40,8 +40,8 @@
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
                 android:gravity="center"
-                android:contentDescription="@string/action_cancel"
-                android:tooltipText="@string/action_cancel"
+                android:contentDescription="@string/action_back"
+                android:tooltipText="@string/action_back"
                 android:focusable="true"
                 tools:targetApi="o"
                 android:onClick="@{() -> activity.navigateUp()}">
@@ -75,7 +75,7 @@
                 android:background="?attr/actionBarItemBackground"
                 android:clickable="true"
                 android:gravity="center"
-                android:contentDescription="@string/action_cancel"
+                android:contentDescription="@string/action_display_help"
                 android:tooltipText="@string/action_display_help"
                 android:focusable="true"
                 tools:targetApi="o"
@@ -273,6 +273,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/category_quantity_unit"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -285,7 +286,7 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="@string/title_product_cat_quantity_units"
+                                android:text="@string/title_product_cat_quantity_unit"
                                 style="@style/Theme.Grocy.ListItem.Title"
                                 android:textColor="@{formData.catQuErrorLive ? @color/retro_red : @color/on_background}"/>
 

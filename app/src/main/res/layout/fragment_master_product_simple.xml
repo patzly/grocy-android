@@ -412,7 +412,7 @@
                         <TextView
                             android:id="@+id/text_master_product_simple_qu_label_purchase"
                             style="@style/Theme.Grocy.ListItem.OverLine"
-                            android:text="@string/property_qu_purchase" />
+                            android:text="@string/property_default_qu_purchase" />
 
                         <TextView
                             android:id="@+id/text_master_product_simple_qu_purchase"

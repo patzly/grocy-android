@@ -126,6 +126,8 @@ public class BaseFragment extends Fragment {
 
     public void selectQuantityUnit(QuantityUnit quantityUnit) {}
 
+    public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {}
+
     public void selectProductGroup(ProductGroup productGroup) {}
 
     public void selectLocation(Location location) {}

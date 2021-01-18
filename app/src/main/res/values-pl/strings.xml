@@ -272,7 +272,7 @@
     <string name="property_price_in">Cena w %1$s</string>
     <string name="property_quantity_unit">Jednostka miary</string>
     <string name="property_quantity_units">Jednostki miar</string>
-    <string name="property_qu_purchase">Jednostka zakupu</string>
+    <string name="property_default_qu_purchase">Jednostka zakupu</string>
     <string name="property_qu_stock">Jednostka zapasu</string>
     <string name="property_qu_factor">Przelicznik jednostki zakupu do zapasu</string>
     <string name="property_barcode">Kod kreskowy</string>

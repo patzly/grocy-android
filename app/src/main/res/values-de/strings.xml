@@ -272,7 +272,7 @@
     <string name="property_price_in">Preis in %1$s</string>
     <string name="property_quantity_unit">Mengeneinheit</string>
     <string name="property_quantity_units">Mengeneinheiten</string>
-    <string name="property_qu_purchase">Mengeneinheit Einkauf</string>
+    <string name="property_default_qu_purchase">Mengeneinheit Einkauf</string>
     <string name="property_qu_stock">Mengeneinheit Bestand</string>
     <string name="property_qu_factor">Faktor Einkauf zu Bestand</string>
     <string name="property_barcode">Barcode</string>

@@ -32,22 +32,22 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantiyUnitBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatQuantityUnitViewModel;
 
-public class MasterProductFragment extends BaseFragment {
+public class MasterProductCatQuantityUnitFragment extends BaseFragment {
 
-    private final static String TAG = MasterProductFragment.class.getSimpleName();
+    private final static String TAG = MasterProductCatQuantityUnitFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentMasterProductBinding binding;
-    private MasterProductViewModel viewModel;
+    private FragmentMasterProductCatQuantiyUnitBinding binding;
+    private MasterProductCatQuantityUnitViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -56,7 +56,7 @@ public class MasterProductFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentMasterProductBinding.inflate(
+        binding = FragmentMasterProductCatQuantiyUnitBinding.inflate(
                 inflater, container, false
         );
         return binding.getRoot();
@@ -73,39 +73,14 @@ public class MasterProductFragment extends BaseFragment {
         activity = (MainActivity) requireActivity();
         MasterProductFragmentArgs args = MasterProductFragmentArgs
                 .fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new MasterProductViewModel
-                .MasterProductViewModelFactory(activity.getApplication(), args)
-        ).get(MasterProductViewModel.class);
+        viewModel = new ViewModelProvider(this, new MasterProductCatQuantityUnitViewModel
+                .MasterProductCatQuantityUnitViewModelFactory(activity.getApplication(), args)
+        ).get(MasterProductCatQuantityUnitViewModel.class);
         binding.setActivity(activity);
         binding.setFormData(viewModel.getFormData());
         binding.setViewModel(viewModel);
         binding.setFragment(this);
         binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        binding.categoryOptional.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatOptionalFragment(args.getAction())
-                .setProduct(viewModel.getFilledProduct())));
-        binding.categoryLocation.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatLocationFragment(args.getAction())
-                .setProduct(viewModel.getFilledProduct())));
-        binding.categoryDueDate.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatDueDateFragment(args.getAction())
-                .setProduct(viewModel.getFilledProduct())));
-        binding.categoryAmount.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatAmountFragment(args.getAction())
-                .setProduct(viewModel.getFilledProduct())));
-        binding.categoryQuantityUnit.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-                .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(args.getAction())
-                .setProduct(viewModel.getFilledProduct())));
-        binding.categoryBarcodes.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
-        binding.categoryQuConversions.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
-        binding.categoryPicture.setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
-
-        Product product = (Product) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT);
-        if(product != null) {
-            viewModel.setCurrentProduct(product);
-            removeForThisDestination(Constants.ARGUMENT.PRODUCT);
-        }
 
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -153,13 +128,27 @@ public class MasterProductFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> viewModel.saveItem()
+                () -> {}
         );
     }
 
     public void clearInputFocus() {
         activity.hideKeyboard();
-        binding.textInputName.clearFocus();
+    }
+
+    @Override
+    public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {
+        viewModel.getFormData().selectQuantityUnit(quantityUnit, argsBundle);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.PRODUCT,
+                viewModel.getFilledProduct()
+        );
+        return false;
     }
 
     @Override

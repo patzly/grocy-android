@@ -272,7 +272,7 @@
     <string name="property_price_in">Prix en %1$s</string>
     <string name="property_quantity_unit">Unité de quantité</string>
     <string name="property_quantity_units">Unités de quantité</string>
-    <string name="property_qu_purchase">Achat d\'unité de quantité</string>
+    <string name="property_default_qu_purchase">Achat d\'unité de quantité</string>
     <string name="property_qu_stock">Quantité unité stock</string>
     <string name="property_qu_factor">Achat d\'un élément en stock</string>
     <string name="property_barcode">Code barre</string>
