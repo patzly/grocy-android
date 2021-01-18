@@ -133,7 +133,14 @@ public class MasterProductCatLocationFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> {}
+                () -> {
+                    setForDestination(
+                            R.id.masterProductFragment,
+                            Constants.ARGUMENT.ACTION,
+                            Constants.ACTION.SAVE
+                    );
+                    activity.onBackPressed();
+                }
         );
     }
 

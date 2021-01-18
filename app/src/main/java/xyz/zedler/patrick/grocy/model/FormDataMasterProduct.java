@@ -23,40 +23,37 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 
 public class FormDataMasterProduct {
-
-    private final WeakReference<Context> contextWeak;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<String> nameLive;
-    private final MutableLiveData<Integer> nameErrorLive;
+    private final MediatorLiveData<Integer> nameErrorLive;
     private final LiveData<Boolean> catOptionalErrorLive;
     private final LiveData<Boolean> catLocationErrorLive;
     private final LiveData<Boolean> catDueDateErrorLive;
     private final LiveData<Boolean> catQuErrorLive;
     private final LiveData<Boolean> catAmountErrorLive;
-
-
-    private final MutableLiveData<ArrayList<Product>> productsLive;
+    private final MutableLiveData<ArrayList<String>> productNamesLive;
     private final MutableLiveData<Product> productLive;
 
     public FormDataMasterProduct(Context contextWeak) {
-        this.contextWeak = new WeakReference<>(contextWeak);
         displayHelpLive = new MutableLiveData<>(true);
         productLive = new MutableLiveData<>();
-        productsLive = new MutableLiveData<>(new ArrayList<>());
+        productNamesLive = new MutableLiveData<>();
         nameLive = (MutableLiveData<String>) Transformations.map(
                 productLive,
                 product -> product != null ? product.getName() : null
         );
-        nameErrorLive = new MutableLiveData<>();
+        nameErrorLive = new MediatorLiveData<>();
+        nameErrorLive.addSource(nameLive, i -> isNameValid());
+        nameErrorLive.addSource(productNamesLive, i -> isNameValid());
         catOptionalErrorLive = Transformations.map(
                 productLive,
                 FormDataMasterProductCatOptional::isFormInvalid
@@ -120,8 +117,8 @@ public class FormDataMasterProduct {
         return catAmountErrorLive;
     }
 
-    public MutableLiveData<ArrayList<Product>> getProductsLive() {
-        return productsLive;
+    public MutableLiveData<ArrayList<String>> getProductNamesLive() {
+        return productNamesLive;
     }
 
     public boolean isNameValid() {
@@ -129,21 +126,34 @@ public class FormDataMasterProduct {
             nameErrorLive.setValue(R.string.error_empty);
             return false;
         }
+        if(nameLive.getValue() != null && !nameLive.getValue().isEmpty()
+                && productNamesLive.getValue() != null
+                && productNamesLive.getValue().contains(nameLive.getValue())
+        ) {
+            nameErrorLive.setValue(R.string.error_name_exists);
+            return false;
+        }
         nameErrorLive.setValue(null);
         return true;
     }
 
     public boolean isFormValid() {
-        boolean valid = isNameValid();
-        /*boolean valid = isProductNameValid();
-        valid = isAmountValid() && valid;
-        valid = isQuantityUnitValid() && valid;*/
-        return valid;
+        return isNameValid();
     }
 
     public Product fillProduct(@NonNull Product product) {
         if(!isFormValid()) return product;
         product.setName(nameLive.getValue());
         return product;
+    }
+
+    public boolean isWholeFormValid() {
+        boolean valid = isFormValid();
+        valid = !catOptionalErrorLive.getValue() && valid;
+        valid = !catLocationErrorLive.getValue() && valid;
+        valid = !catDueDateErrorLive.getValue() && valid;
+        valid = !catQuErrorLive.getValue() && valid;
+        valid = !catAmountErrorLive.getValue() && valid;
+        return valid;
     }
 }

@@ -127,7 +127,7 @@ public class MasterProductViewModel extends AndroidViewModel {
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadProductsFromDatabase(products -> {
             this.products = products;
-            formData.getProductsLive().setValue(products);
+            formData.getProductNamesLive().setValue(getProductNames(products));
             if(downloadAfterLoading) downloadData();
         });
     }
@@ -150,7 +150,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         queue.append(
                 dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
-                    formData.getProductsLive().setValue(products);
+                    formData.getProductNamesLive().setValue(getProductNames(products));
                 })
         );
         if(queue.isEmpty()) return;
@@ -172,6 +172,15 @@ public class MasterProductViewModel extends AndroidViewModel {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         showMessage(getString(R.string.msg_no_connection));
         if(!isOffline()) setOfflineLive(true);
+    }
+
+    private ArrayList<String> getProductNames(ArrayList<Product> products) {
+        ArrayList<String> names = new ArrayList<>();
+        for(Product product : products) names.add(product.getName());
+        if(isActionEdit() && formData.getProductLive().getValue() != null) {
+            names.remove(formData.getProductLive().getValue().getName());
+        }
+        return names;
     }
 
     public void saveItem() {
@@ -256,7 +265,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         showMessage(getString(R.string.error_undefined));
     }
 
-    private void showMessage(@NonNull String message) {
+    public void showMessage(@NonNull String message) {
         showSnackbar(new SnackbarMessage(message));
     }
 

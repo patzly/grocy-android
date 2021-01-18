@@ -162,6 +162,10 @@ public class MasterProductCatQuantityUnitViewModel extends AndroidViewModel {
     }
 
     public void showQuBottomSheet(int type) {
+        if(type == FormDataMasterProductCatQuantityUnit.STOCK && isActionEdit) {
+            showMessage(getString(R.string.msg_help_qu_stock));
+            return;
+        }
         ArrayList<QuantityUnit> qUs = formData.getQuantityUnitsLive().getValue();
         if(qUs == null) {
             showErrorMessage();

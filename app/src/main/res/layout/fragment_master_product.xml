@@ -152,7 +152,6 @@
                                 android:inputType="text|textCapSentences|textNoSuggestions"
                                 android:imeOptions="actionDone"
                                 android:text="@={formData.nameLive}"
-                                android:afterTextChanged="@{() -> formData.isNameValid()}"
                                 app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>

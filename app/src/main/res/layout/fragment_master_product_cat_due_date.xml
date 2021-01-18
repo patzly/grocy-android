@@ -138,7 +138,8 @@
                 <LinearLayout
                     style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:clickable="false">
 
                     <ImageView
                         style="@style/Theme.Grocy.ListItem.Icon"
@@ -155,7 +156,7 @@
                             android:paddingBottom="6dp"/>
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:minHeight="38dp"
                             android:text="@string/property_due_type_best_before"
@@ -163,7 +164,7 @@
                             android:onClick="@{() -> formData.setDueDateTypeLive(1)}"/>
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:minHeight="38dp"
                             android:text="@string/property_due_type_expiration"

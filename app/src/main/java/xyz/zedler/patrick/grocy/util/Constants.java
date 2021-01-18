@@ -229,6 +229,7 @@ public final class Constants {
         public final static String PURCHASE = "action_purchase";
         public final static String CREATE = "action_create"; // raw string is also used in navigation_main.xml
         public final static String EDIT = "action_edit";
+        public final static String SAVE = "action_save"; // raw string is also used in navigation_main.xml
         public final static String LINK = "action_link";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";

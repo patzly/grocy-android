@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -54,6 +55,9 @@ public class SnackbarMessage extends Event {
             snackbar.setAction(actionText, action);
             snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.secondary));
         }
+        View v = snackbar.getView();
+        TextView text = (TextView) v.findViewById(com.google.android.material.R.id.snackbar_text);
+        text.setMaxLines(3);
         return snackbar;
     }
 

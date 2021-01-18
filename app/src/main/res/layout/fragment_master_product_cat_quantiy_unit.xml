@@ -133,8 +133,7 @@
                         app:contentPadding="16dp"
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
-                        android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+                        app:cardBackgroundColor="@color/on_background_variant">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -147,7 +146,8 @@
 
                     <LinearLayout
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:onClick="@{() -> viewModel.showQuBottomSheet(formData.STOCK)}">
+                        android:onClick="@{() -> viewModel.showQuBottomSheet(formData.STOCK)}"
+                        android:alpha="@{viewModel.actionEdit ? 0.4f : 1.0f}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"

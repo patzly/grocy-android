@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +133,18 @@ public class MasterProductFragment extends BaseFragment {
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
             if(!isLoading) viewModel.setCurrentQueueLoading(null);
         });
+
+        String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
+        if(action != null) {
+            removeForThisDestination(Constants.ARGUMENT.ACTION);
+            new Handler().postDelayed(() -> {
+                if(!viewModel.getFormData().isWholeFormValid()) {
+                    viewModel.showMessage(getString(R.string.error_missing_information));
+                    return;
+                }
+                activity.navigateUp();
+            }, 500);
+        }
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
