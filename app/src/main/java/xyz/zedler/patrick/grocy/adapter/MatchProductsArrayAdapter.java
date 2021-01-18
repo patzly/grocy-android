@@ -30,23 +30,30 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
 
     Context context;
     int resource;
-    List<Product> items, tempItems, suggestions;
+    List<Product> items, suggestions;
+    HashMap<String, Product> tempItems;
 
     public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
         super(context, resource, items);
         this.context = context;
         this.resource = resource;
         this.items = items;
-        tempItems = new ArrayList<>(items); // this makes the difference.
         suggestions = new ArrayList<>();
+        tempItems = new HashMap<>(); // this makes the difference.
+        for(Product product : items) {
+            tempItems.put(product.getName().toLowerCase(), product);
+        }
     }
 
     @NonNull
@@ -85,11 +92,22 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
                 suggestions.clear();
-                for (Product product : tempItems) {
+                List<ExtractedResult> results = FuzzySearch.extractSorted(
+                        constraint.toString().toLowerCase(),
+                        tempItems.keySet(),
+                        50
+                );
+                for(ExtractedResult result : results) {
+                    suggestions.add(tempItems.get(result.getString()));
+                }
+
+                //alternative without fuzzy
+                /*for (Product product : tempItems) {
                     if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
-                }
+                }*/
+
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = suggestions;
                 filterResults.count = suggestions.size();

@@ -6,6 +6,7 @@
 • New login flow for QR codes from grocy server
 • Improved loading speed by use of database
 • Smooth & consistent navigation between pages
+• Product autocomplete lists now use fuzzy matching
 • Server requests are now more secure with API key in header
 • Many internal code changes & improvements
 • Fixed layout for text on features pages
