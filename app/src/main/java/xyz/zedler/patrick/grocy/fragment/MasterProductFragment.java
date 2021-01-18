@@ -146,6 +146,10 @@ public class MasterProductFragment extends BaseFragment {
             }, 500);
         }
 
+        viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
+            //if(isOnline ) viewModel.downloadData();
+        });
+
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         updateUI(savedInstanceState == null);
@@ -173,13 +177,6 @@ public class MasterProductFragment extends BaseFragment {
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.textInputName.clearFocus();
-    }
-
-    @Override
-    public void updateConnectivity(boolean isOnline) {
-        if(!isOnline == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!isOnline);
-        if(isOnline) viewModel.downloadData();
     }
 
     @NonNull

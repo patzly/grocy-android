@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.web.ConnectivityLiveData;
 
 public class MasterProductViewModel extends AndroidViewModel {
 
@@ -65,7 +66,7 @@ public class MasterProductViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Boolean> offlineLive;
+    private final ConnectivityLiveData isOnlineLive;
 
     private ArrayList<Product> products;
 
@@ -93,7 +94,7 @@ public class MasterProductViewModel extends AndroidViewModel {
         actionEditLive.setValue(startupArgs.getAction().equals(Constants.ACTION.EDIT));
 
         infoFullscreenLive = new MutableLiveData<>();
-        offlineLive = new MutableLiveData<>(false);
+        isOnlineLive = new ConnectivityLiveData(application);
 
         if(isActionEdit()) {
             assert args.getProduct() != null;
@@ -164,14 +165,12 @@ public class MasterProductViewModel extends AndroidViewModel {
     }
 
     private void onQueueEmpty() {
-        if(isOffline()) setOfflineLive(false);
         repository.updateDatabase(products, () -> {});
     }
 
     private void onDownloadError(@Nullable VolleyError error) {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         showMessage(getString(R.string.msg_no_connection));
-        if(!isOffline()) setOfflineLive(true);
     }
 
     private ArrayList<String> getProductNames(ArrayList<Product> products) {
@@ -234,17 +233,12 @@ public class MasterProductViewModel extends AndroidViewModel {
         } return null;
     }
 
-    @NonNull
-    public MutableLiveData<Boolean> getOfflineLive() {
-        return offlineLive;
+    private boolean isOffline() {
+        return !isOnlineLive.getValue();
     }
 
-    public Boolean isOffline() {
-        return offlineLive.getValue();
-    }
-
-    public void setOfflineLive(boolean isOffline) {
-        offlineLive.setValue(isOffline);
+    public ConnectivityLiveData getIsOnlineLive() {
+        return isOnlineLive;
     }
 
     @NonNull
