@@ -159,7 +159,7 @@
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
                                 android:text="@string/property_qu_stock"
-                                android:textColor="@{formData.quStockErrorLive ? @color/retro_red : @color/on_background}"/>
+                                android:textColor="@{formData.quStockErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.Title"
@@ -204,7 +204,7 @@
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
                                 android:text="@string/property_default_qu_purchase"
-                                android:textColor="@{formData.quPurchaseErrorLive ? @color/retro_red : @color/on_background}"/>
+                                android:textColor="@{formData.quPurchaseErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.Title"

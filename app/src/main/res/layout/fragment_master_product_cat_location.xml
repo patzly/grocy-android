@@ -113,7 +113,7 @@
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
                                 android:text="@string/property_location_default"
-                                android:textColor="@{formData.locationErrorLive ? @color/retro_red : @color/on_background}"/>
+                                android:textColor="@{formData.locationErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.Title"
