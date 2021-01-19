@@ -706,4 +706,8 @@
                 app:argType="string" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/scanExternalInputFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ScanExternalInputFragment"
+        android:label="ScanExternalInputFragment" />
 </navigation>

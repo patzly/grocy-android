@@ -149,6 +149,8 @@ public final class Constants {
         public final static class SCANNER {
             public final static boolean FOOD_FACTS = false;
             public final static boolean FRONT_CAM = false;
+            public final static String EXTERNAL_PREFIX = "";
+            public final static String EXTERNAL_SUFFIX = "TAB";
         }
         public final static class STOCK {
             public final static boolean DISPLAY_DOTS_IN_STOCK = true;

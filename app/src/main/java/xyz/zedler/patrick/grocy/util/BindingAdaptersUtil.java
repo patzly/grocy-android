@@ -117,4 +117,12 @@ public class BindingAdaptersUtil {
             } return false;
         });
     }
+
+    @BindingAdapter("endIconOnLongClickListenerCustom")
+    public static void setEndIconOnLongClickListenerCustom(TextInputLayout view, Runnable listener) {
+        view.setEndIconOnLongClickListener(v -> {
+            listener.run();
+            return true;
+        });
+    }
 }

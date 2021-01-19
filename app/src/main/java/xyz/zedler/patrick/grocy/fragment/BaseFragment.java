@@ -208,6 +208,14 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(Uri.parse(uri), builder.build());
     }
 
+    void navigateDeepLink(@NonNull String uri, Bundle bundleArgs) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        builder.setEnterAnim(R.anim.slide_in_up)
+                .setPopExitAnim(R.anim.slide_out_down)
+                .setExitAnim(R.anim.slide_no);
+        findNavController().navigate(Uri.parse(uri), builder.build());
+    }
+
     @SuppressLint("RestrictedApi")
     int getBackStackSize() {
         return findNavController().getBackStack().size();

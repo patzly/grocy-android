@@ -161,6 +161,8 @@
     <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
+    <string name="msg_help_external_scanner">Scan a barcode with an USB or Bluetooth barcode scanner which is connected with your device.</string>
+    <string name="msg_help_external_scanner_settings">The following options must be configured in your external scanner:\n\nPrefix: %1$s\nSuffix: %2$s\n\nClick here, if you want to change them in this app instead.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -249,6 +251,7 @@
     <string name="title_manage_master_data">Manage master data</string>
     <string name="title_edit_description">Edit description</string>
     <string name="title_input_number">Number input</string>
+    <string name="title_external_barcode_input">External scanner</string>
 
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
@@ -282,6 +285,7 @@
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
     <string name="subtitle_default">Default</string>
     <string name="subtitle_none_selected">None selected</string>
+    <string name="subtitle_none">None</string>
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
