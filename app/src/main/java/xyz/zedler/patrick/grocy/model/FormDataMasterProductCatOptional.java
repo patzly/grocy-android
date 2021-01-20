@@ -166,7 +166,7 @@ public class FormDataMasterProductCatOptional {
     }
 
     private ProductGroup getProductGroupFromId(String id) {
-        if(productGroupsLive.getValue() == null || id == null) return null;
+        if(productGroupsLive.getValue() == null || id == null || id.isEmpty()) return null;
         int idInt = Integer.parseInt(id);
         for(ProductGroup productGroup : productGroupsLive.getValue()) {
             if(productGroup.getId() == idInt) return productGroup;
