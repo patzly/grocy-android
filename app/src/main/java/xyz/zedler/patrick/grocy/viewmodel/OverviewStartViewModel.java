@@ -92,7 +92,7 @@ public class OverviewStartViewModel extends AndroidViewModel {
                     int products = stockItems.size();
                     double value = 0;
                     for(StockItem stockItem : stockItems) {
-                        value += stockItem.getValueDouble();
+                        value += stockItem.getValueDouble(); // TODO: Wrong calculation? End value is other than on web interface
                     }
                     if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
                         return application.getResources().getQuantityString(
