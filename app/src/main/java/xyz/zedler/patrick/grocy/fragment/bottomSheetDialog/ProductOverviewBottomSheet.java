@@ -162,7 +162,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 		// TOOLBAR
 
 		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
-		boolean isInStock = stockItem.getAmount() > 0;
+		boolean isInStock = stockItem.getAmountDouble() > 0;
 		MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
 		// disable consume actions if necessary
 		toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
@@ -509,9 +509,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 	}
 
 	private void refreshButtonStates(boolean animated) {
-		boolean consume = stockItem.getAmount() > 0
+		boolean consume = stockItem.getAmountDouble() > 0
 					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
-		boolean open = stockItem.getAmount() > stockItem.getAmountOpened()
+		boolean open = stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
 					&& stockItem.getProduct().getEnableTareWeightHandling() == 0;
 		if(animated) {
 			actionButtonConsume.refreshState(consume);
@@ -545,8 +545,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 	}
 
 	private String getAmountText() {
-		double amount = stockItem.getAmount();
-		double opened = stockItem.getAmountOpened();
+		double amount = stockItem.getAmountDouble();
+		double opened = stockItem.getAmountOpenedDouble();
 		StringBuilder stringBuilderAmount = new StringBuilder(
 				activity.getString(
 						R.string.subtitle_amount,
@@ -567,7 +567,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 	}
 
 	private String getAggregatedAmount() {
-		double amountAggregated = stockItem.getAmountAggregated();
+		double amountAggregated = stockItem.getAmountAggregatedDouble();
 		return "∑ " + activity.getString(
 				R.string.subtitle_amount,
 				NumUtil.trim(amountAggregated),

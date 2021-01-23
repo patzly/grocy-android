@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
 
@@ -46,7 +46,7 @@ public class OverviewStartFragment extends BaseFragment {
 
     private MainActivity activity;
     private FragmentOverviewStartBinding binding;
-    private MasterDataOverviewViewModel viewModel;
+    private OverviewStartViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
     @Override
@@ -76,15 +76,18 @@ public class OverviewStartFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
-
-        viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
+        viewModel = new ViewModelProvider(this).get(OverviewStartViewModel.class);
         viewModel.setOfflineLive(!activity.isOnline());
+        binding.setViewModel(viewModel);
+        binding.setFragment(this);
+        binding.setActivity(activity);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             binding.swipe.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadData());
+        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
         binding.swipe.setProgressBackgroundColorSchemeColor(
                 ContextCompat.getColor(activity, R.color.surface)
         );
@@ -123,7 +126,7 @@ public class OverviewStartFragment extends BaseFragment {
         activity.getScrollBehavior().setUpScroll(binding.scroll);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
+                Constants.FAB.POSITION.CENTER,
                 R.menu.menu_stock,
                 animated,
                 () -> {}

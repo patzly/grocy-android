@@ -202,7 +202,7 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(destination, null, navOptions);
     }
 
-    void navigateDeepLink(@NonNull String uri) {
+    public void navigateDeepLink(@NonNull String uri) {
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up)
                 .setPopExitAnim(R.anim.slide_out_down)

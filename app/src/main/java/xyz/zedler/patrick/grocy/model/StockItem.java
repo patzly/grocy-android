@@ -23,39 +23,63 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import xyz.zedler.patrick.grocy.util.NumUtil;
+
+@Entity(tableName = "stock_item_table")
 public class StockItem implements Parcelable {
 
+    @ColumnInfo(name = "amount")
     @SerializedName("amount")
     private String amount;
 
+    @ColumnInfo(name = "amount_aggregated")
     @SerializedName("amount_aggregated")
     private String amountAggregated;
 
+    @ColumnInfo(name = "value")
+    @SerializedName("value")
+    private String value;
+
+    @ColumnInfo(name = "best_before_date")
     @SerializedName("best_before_date")
     private String bestBeforeDate;
 
+    @ColumnInfo(name = "amount_opened")
     @SerializedName("amount_opened")
     private String amountOpened;
 
+    @ColumnInfo(name = "amount_opened_aggregated")
     @SerializedName("amount_opened_aggregated")
     private String amountOpenedAggregated;
 
+    @ColumnInfo(name = "is_aggregated_amount")
     @SerializedName("is_aggregated_amount")
     private int isAggregatedAmount;
 
+    @PrimaryKey
+    @ColumnInfo(name = "product_id")
     @SerializedName("product_id")
     private int productId;
 
+    @Ignore
     @SerializedName("product")
     private Product product;
 
+    public StockItem() {}
+
+    @Ignore
     public StockItem(ProductDetails productDetails) {
         this.amount = String.valueOf(productDetails.getStockAmount());
         this.amountAggregated = String.valueOf(productDetails.getStockAmountAggregated());
-        this.bestBeforeDate = productDetails.getNextBestBeforeDate();
+        this.value = productDetails.getStockValue();
+        this.bestBeforeDate = productDetails.getNextDueDate();
         this.amountOpened = String.valueOf(productDetails.getStockAmountOpened());
         this.amountOpenedAggregated = String.valueOf(productDetails.getStockAmountOpenedAggregated());
         this.isAggregatedAmount = productDetails.getIsAggregatedAmount();
@@ -63,9 +87,11 @@ public class StockItem implements Parcelable {
         this.product = productDetails.getProduct();
     }
 
+    @Ignore
     private StockItem(Parcel parcel) {
         amount = parcel.readString();
         amountAggregated = parcel.readString();
+        value = parcel.readString();
         bestBeforeDate = parcel.readString();
         amountOpened = parcel.readString();
         amountOpenedAggregated = parcel.readString();
@@ -78,6 +104,7 @@ public class StockItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(amount);
         dest.writeString(amountAggregated);
+        dest.writeString(value);
         dest.writeString(bestBeforeDate);
         dest.writeString(amountOpened);
         dest.writeString(amountOpenedAggregated);
@@ -99,7 +126,7 @@ public class StockItem implements Parcelable {
         }
     };
 
-    public double getAmountAggregated() {
+    public double getAmountAggregatedDouble() {
         if(amountAggregated == null || amountAggregated.isEmpty()) {
             return 0;
         } else {
@@ -107,11 +134,19 @@ public class StockItem implements Parcelable {
         }
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public double getValueDouble() {
+        return NumUtil.isStringDouble(value) ? Double.parseDouble(value) : 0;
+    }
+
     public String getBestBeforeDate() {
         return bestBeforeDate;
     }
 
-    public double getAmountOpenedAggregated() {
+    public double getAmountOpenedAggregatedDouble() {
         if(amountOpenedAggregated == null || amountOpenedAggregated.isEmpty()) {
             return 0;
         } else {
@@ -131,7 +166,7 @@ public class StockItem implements Parcelable {
         return product;
     }
 
-    public double getAmount() {
+    public double getAmountDouble() {
         if(amount == null || amount.isEmpty()) {
             return 0;
         } else {
@@ -139,12 +174,64 @@ public class StockItem implements Parcelable {
         }
     }
 
-    public double getAmountOpened() {
+    public double getAmountOpenedDouble() {
         if(amountOpened == null || amountOpened.isEmpty()) {
             return 0;
         } else {
             return Double.parseDouble(amountOpened);
         }
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public void setAmountAggregated(String amountAggregated) {
+        this.amountAggregated = amountAggregated;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setBestBeforeDate(String bestBeforeDate) {
+        this.bestBeforeDate = bestBeforeDate;
+    }
+
+    public void setAmountOpened(String amountOpened) {
+        this.amountOpened = amountOpened;
+    }
+
+    public void setAmountOpenedAggregated(String amountOpenedAggregated) {
+        this.amountOpenedAggregated = amountOpenedAggregated;
+    }
+
+    public void setIsAggregatedAmount(int isAggregatedAmount) {
+        this.isAggregatedAmount = isAggregatedAmount;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public String getAmountAggregated() {
+        return amountAggregated;
+    }
+
+    public String getAmountOpened() {
+        return amountOpened;
+    }
+
+    public String getAmountOpenedAggregated() {
+        return amountOpenedAggregated;
     }
 
     @Override

@@ -327,6 +327,27 @@
     <string name="description_input_name">Create new product with the name \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Do you want to delete all or only done items?</string>
 
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock">
+        <item quantity="one">You have one product in stock.</item>
+        <item quantity="other">You have %1$d products in stock.</item>
+    </plurals>
+    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+    <plurals name="description_overview_stock_value">
+        <item quantity="one">You have one product in stock with a value of %2$s %3$s.</item>
+        <item quantity="other">You have %1$d products in stock with a value of %2$s %3$s.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list_multi">
+        <item quantity="one">One item is on your shopping lists.</item>
+        <item quantity="other">%1$d items are on your shopping lists.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list">
+        <item quantity="one">One item is on your shopping list.</item>
+        <item quantity="other">%1$d items are on your shopping list.</item>
+    </plurals>
+
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
     <string name="property_name_plural">Name (plural form)</string>

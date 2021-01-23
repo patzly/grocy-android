@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <import type="xyz.zedler.patrick.grocy.R"/>
+        <variable name="viewModel"
+            type="xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel"/>
+        <variable name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.OverviewStartFragment"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+    </data>
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -83,6 +95,88 @@
                     android:paddingBottom="80dp"
                     android:orientation="vertical">
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        app:contentPadding="16dp"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardBackgroundColor="@color/on_background_variant"
+                        android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/title_stock_overview"
+                                android:layout_gravity="center_vertical"
+                                android:textStyle="bold"
+                                android:textColor="@color/on_surface"
+                                android:drawablePadding="8dp"
+                                android:singleLine="true"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp"
+                                app:drawableStartCompat="@drawable/ic_round_category" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/on_background"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
+                                android:text="@{viewModel.stockDescriptionTextLive}"/>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        app:contentPadding="16dp"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardBackgroundColor="@color/on_background_variant"
+                        android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/title_shopping_list"
+                                android:layout_gravity="center_vertical"
+                                android:textStyle="bold"
+                                android:textColor="@color/on_surface"
+                                android:drawablePadding="8dp"
+                                android:singleLine="true"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp"
+                                app:drawableStartCompat="@drawable/ic_round_shopping_list" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/on_background"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
+                                android:text="@{viewModel.shoppingListDescriptionTextLive}"/>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
@@ -92,3 +186,4 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
+</layout>

@@ -130,7 +130,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         QuantityUnit quantityUnit = quantityUnits.get(stockItem.getProduct().getQuIdStock());
 
         String unit = null;
-        if(quantityUnit != null && stockItem.getAmount() == 1) {
+        if(quantityUnit != null && stockItem.getAmountDouble() == 1) {
             unit = quantityUnit.getName();
         } else if (quantityUnit != null) {
             unit = quantityUnit.getNamePlural();
@@ -138,22 +138,22 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         StringBuilder stringBuilderAmount = new StringBuilder(
                 context.getString(
                         R.string.subtitle_amount,
-                        NumUtil.trim(stockItem.getAmount()),
+                        NumUtil.trim(stockItem.getAmountDouble()),
                         unit
                 )
         );
-        if(stockItem.getAmountOpened() > 0) {
+        if(stockItem.getAmountOpenedDouble() > 0) {
             stringBuilderAmount.append(" ");
             stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount_opened,
-                            NumUtil.trim(stockItem.getAmountOpened())
+                            NumUtil.trim(stockItem.getAmountOpenedDouble())
                     )
             );
         }
         // aggregated amount
         if(stockItem.getIsAggregatedAmount() == 1) {
-            if(quantityUnit != null && stockItem.getAmountAggregated() == 1) {
+            if(quantityUnit != null && stockItem.getAmountAggregatedDouble() == 1) {
                 unit = quantityUnit.getName();
             } else if (quantityUnit != null) {
                 unit = quantityUnit.getNamePlural();
@@ -162,7 +162,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             stringBuilderAmount.append(
                     context.getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(stockItem.getAmountAggregated()),
+                            NumUtil.trim(stockItem.getAmountAggregatedDouble()),
                             unit
                     )
             );

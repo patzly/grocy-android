@@ -26,98 +26,121 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class ProductDetails implements Parcelable {
 
     @SerializedName("product")
-    private Product product;
+    private final Product product;
+
+    @SerializedName("product_barcodes")
+    private final ArrayList<ProductBarcode> productBarcodes;
 
     @SerializedName("last_purchased")
-    private String lastPurchased;
+    private final String lastPurchased;
 
     @SerializedName("last_used")
-    private String lastUsed;
+    private final String lastUsed;
 
     @SerializedName("stock_amount")
-    private String stockAmount;
+    private final String stockAmount;
+
+    @SerializedName("stock_value")
+    private final String stockValue;
 
     @SerializedName("stock_amount_opened")
-    private String stockAmountOpened;
+    private final String stockAmountOpened;
 
     @SerializedName("stock_amount_aggregated")
-    private String stockAmountAggregated;
+    private final String stockAmountAggregated;
 
     @SerializedName("stock_amount_opened_aggregated")
-    private String stockAmountOpenedAggregated;
+    private final String stockAmountOpenedAggregated;
 
     @SerializedName("quantity_unit_purchase")
-    private QuantityUnit quantityUnitPurchase;
+    private final QuantityUnit quantityUnitPurchase;
 
     @SerializedName("quantity_unit_stock")
-    private QuantityUnit quantityUnitStock;
+    private final QuantityUnit quantityUnitStock;
 
     @SerializedName("last_price")
-    private String lastPrice;
+    private final String lastPrice;
 
-    @SerializedName("next_best_before_date")
-    private String nextBestBeforeDate;
+    @SerializedName("avg_price")
+    private final String avgPrice;
 
-    @SerializedName("location")
-    private Location location;
-
-    @SerializedName("average_shelf_life_days")
-    private int averageShelfLifeDays;
-
-    @SerializedName("spoil_rate_percent")
-    private String spoilRatePercent;
-
-    @SerializedName("is_aggregated_amount")
-    private int isAggregatedAmount;
+    @SerializedName("oldest_price")
+    private final String oldestPrice;
 
     @SerializedName("last_shopping_location_id")
-    private String lastShoppingLocationId;
+    private final String lastShoppingLocationId;
 
     @SerializedName("default_shopping_location_id")
-    private String defaultShoppingLocationId;
+    private final String defaultShoppingLocationId;
+
+    @SerializedName("next_due_date")
+    private final String nextDueDate;
+
+    @SerializedName("location")
+    private final Location location;
+
+    @SerializedName("average_shelf_life_days")
+    private final int averageShelfLifeDays;
+
+    @SerializedName("spoil_rate_percent")
+    private final String spoilRatePercent;
+
+    @SerializedName("is_aggregated_amount")
+    private final int isAggregatedAmount;
 
     public ProductDetails(Parcel parcel) {
         product = parcel.readParcelable(Product.class.getClassLoader());
+        // productBarcodes = parcel.readParcelableList(); // TODO ?
+        productBarcodes = null;
         lastPurchased = parcel.readString();
         lastUsed = parcel.readString();
         stockAmount = parcel.readString();
+        stockValue = parcel.readString();
         stockAmountOpened = parcel.readString();
         stockAmountAggregated = parcel.readString();
         stockAmountOpenedAggregated = parcel.readString();
         quantityUnitPurchase = parcel.readParcelable(QuantityUnit.class.getClassLoader());
         quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
         lastPrice = parcel.readString();
-        nextBestBeforeDate = parcel.readString();
+        avgPrice = parcel.readString();
+        oldestPrice = parcel.readString();
+        lastShoppingLocationId = parcel.readString();
+        defaultShoppingLocationId = parcel.readString();
+        nextDueDate = parcel.readString();
         location = parcel.readParcelable(Location.class.getClassLoader());
         averageShelfLifeDays = parcel.readInt();
         spoilRatePercent = parcel.readString();
         isAggregatedAmount = parcel.readInt();
-        lastShoppingLocationId = parcel.readString();
-        defaultShoppingLocationId = parcel.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(product, 0);
+        // dest.writeParcelableList(productBarcodes); // TODO ?
         dest.writeString(lastPurchased);
         dest.writeString(lastUsed);
         dest.writeString(stockAmount);
+        dest.writeString(stockValue);
         dest.writeString(stockAmountOpened);
         dest.writeString(stockAmountAggregated);
         dest.writeString(stockAmountOpenedAggregated);
         dest.writeParcelable(quantityUnitPurchase, 0);
         dest.writeParcelable(quantityUnitStock, 0);
         dest.writeString(lastPrice);
-        dest.writeString(nextBestBeforeDate);
+        dest.writeString(avgPrice);
+        dest.writeString(oldestPrice);
+        dest.writeString(lastShoppingLocationId);
+        dest.writeString(defaultShoppingLocationId);
+        dest.writeString(nextDueDate);
         dest.writeParcelable(location, 0);
         dest.writeInt(averageShelfLifeDays);
         dest.writeString(spoilRatePercent);
         dest.writeInt(isAggregatedAmount);
-        dest.writeString(lastShoppingLocationId);
-        dest.writeString(defaultShoppingLocationId);
     }
 
     public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
@@ -189,8 +212,8 @@ public class ProductDetails implements Parcelable {
         return lastPrice;
     }
 
-    public String getNextBestBeforeDate() {
-        return nextBestBeforeDate;
+    public String getNextDueDate() {
+        return nextDueDate;
     }
 
     public Location getLocation() {
@@ -219,6 +242,22 @@ public class ProductDetails implements Parcelable {
 
     public String getDefaultShoppingLocationId() {
         return defaultShoppingLocationId;
+    }
+
+    public ArrayList<ProductBarcode> getProductBarcodes() {
+        return productBarcodes;
+    }
+
+    public String getStockValue() {
+        return stockValue;
+    }
+
+    public String getAvgPrice() {
+        return avgPrice;
+    }
+
+    public String getOldestPrice() {
+        return oldestPrice;
     }
 
     @Override

@@ -315,7 +315,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 ) {
                     if(viewHolder.getAdapterPosition() >= stockItems.size()) return;
                     StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
-                    if(stockItem.getAmount() > 0
+                    if(stockItem.getAmountDouble() > 0
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
@@ -329,8 +329,8 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                                 }
                         ));
                     }
-                    if(stockItem.getAmount()
-                            > stockItem.getAmountOpened()
+                    if(stockItem.getAmountDouble()
+                            > stockItem.getAmountOpenedDouble()
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                             && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
                     ) {
@@ -953,7 +953,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     consumeProduct(
                             productId,
                             stockItem.getProduct().getEnableTareWeightHandling() == 0
-                                    ? stockItem.getAmount()
+                                    ? stockItem.getAmountDouble()
                                     : stockItem.getProduct().getTareWeightDouble(),
                             false
                     );
@@ -1022,12 +1022,12 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     // create updated stockItem object
                     StockItem stockItemNew = new StockItem(productDetails);
 
-                    if(!undo && stockItemNew.getAmount() == 0
+                    if(!undo && stockItemNew.getAmountDouble() == 0
                             && stockItemNew.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.remove(index);
                         stockItemAdapter.notifyItemRemoved(index);
-                    } else if(undo && stockItemOld.getAmount() == 0
+                    } else if(undo && stockItemOld.getAmountDouble() == 0
                             && stockItemOld.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.add(index, stockItemNew);
@@ -1042,7 +1042,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     if(!undo) {
 
                         // calculate consumed amount for info
-                        double amountConsumed = stockItemOld.getAmount() - stockItemNew.getAmount();
+                        double amountConsumed = stockItemOld.getAmountDouble() - stockItemNew.getAmountDouble();
 
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
 

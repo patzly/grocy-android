@@ -62,6 +62,7 @@ public final class Constants {
         public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
         public final static String BATCH_CONFIG_CONSUME_ALL = "batch_config_consume_all";
 
+        public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
         public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
         public final static String DB_LAST_TIME_LOCATIONS = "db_last_time_locations";
         public final static String DB_LAST_TIME_SHOPPING_LIST_ITEMS = "db_last_time_shopping_list_items";

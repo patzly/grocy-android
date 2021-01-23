@@ -795,6 +795,29 @@ public class DownloadHelper {
         return getStockItems(onResponseListener, null);
     }
 
+    public QueueItem updateStockItems(
+            String dbChangedTime,
+            OnStockItemsResponseListener onResponseListener
+    ) {
+        OnStockItemsResponseListener newOnResponseListener = stockItems -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(stockItems);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getStockItems(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped StockItems download");
+            return null;
+        }
+    }
+
     public QueueItem getVolatile(
             OnVolatileResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -939,6 +962,29 @@ public class DownloadHelper {
             OnShoppingListResponseListener onResponseListener
     ) {
         return getShoppingListItems(onResponseListener, null);
+    }
+
+    public QueueItem updateShoppingListItems(
+            String dbChangedTime,
+            OnShoppingListResponseListener onResponseListener
+    ) {
+        OnShoppingListResponseListener newOnResponseListener = shoppingListItems -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(shoppingListItems);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getShoppingListItems(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped ShoppingListItems download");
+            return null;
+        }
     }
 
     public QueueItem getShoppingLists(
