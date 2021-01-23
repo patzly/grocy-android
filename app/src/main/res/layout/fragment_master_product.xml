@@ -174,26 +174,26 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                             <TextView
-                                android:text="@string/title_product_cat_optional"
                                 style="@style/Theme.Grocy.ListItem.Title"
-                                android:textColor="@{formData.catOptionalErrorLive ? @color/retro_red : @color/on_background}"/>
+                                android:text="@string/title_product_cat_optional"
+                                android:textColor="@{formData.catOptionalErrorLive ? @color/retro_red : @color/on_background}" />
 
                             <TextView
-                                android:text="State, Parent product, Description, Product group, Energy"
                                 style="@style/Theme.Grocy.ListItem.Description"
-                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}"/>
+                                android:text="State, Parent product, Description, Product group, Energy"
+                                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
                         </LinearLayout>
 
                         <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:clickable="false"
                             android:focusable="false"
-                            android:src="@drawable/ic_round_expand_more"
                             android:rotation="-90"
-                            tools:ignore="ContentDescription"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"/>
+                            android:src="@drawable/ic_round_expand_more"
+                            tools:ignore="ContentDescription" />
 
                     </LinearLayout>
 
@@ -201,7 +201,9 @@
                         android:id="@+id/category_location"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        app:transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -238,7 +240,9 @@
                         android:id="@+id/category_due_date"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        app:transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -275,7 +279,9 @@
                         android:id="@+id/category_quantity_unit"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        app:transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -312,7 +318,9 @@
                         android:id="@+id/category_amount"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        app:transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"

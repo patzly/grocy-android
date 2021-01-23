@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Tom</string>
     <string name="subtitle_done">Klar</string>
     <string name="subtitle_undone">Ångrat</string>
-    <string name="subtitle_never_expires">Går aldrig ut</string>
+    <string name="subtitle_never_overdue">Går aldrig ut</string>
     <string name="subtitle_selected">Valt</string>
     <string name="subtitle_stock_entry_no_specific">Kortast datum först, sedan först in – först ut</string>
     <!-- %1$s is a purchase date -->

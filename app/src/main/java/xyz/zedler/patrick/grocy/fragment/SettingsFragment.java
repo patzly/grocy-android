@@ -402,7 +402,7 @@ public class SettingsFragment extends BaseFragment {
         ));
         if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             String days = sharedPrefs.getString(
-                    Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS,
+                    Constants.SETTINGS.STOCK.DUE_SOON_DAYS,
                     Constants.SETTINGS_DEFAULT.STOCK.EXPIRING_SOON_DAYS
             );
             if(days == null || days.isEmpty() || days.equals("null")) {
@@ -410,7 +410,7 @@ public class SettingsFragment extends BaseFragment {
             }
             binding.linearBody.addView(new SettingEntryClick(
                     requireContext(),
-                    Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS,
+                    Constants.SETTINGS.STOCK.DUE_SOON_DAYS,
                     R.string.setting_expiring_soon_days,
                     days,
                     null,
@@ -703,7 +703,7 @@ public class SettingsFragment extends BaseFragment {
                         this::showVolleyError
                 );
                 break;
-            case Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS:
+            case Constants.SETTINGS.STOCK.DUE_SOON_DAYS:
                 try {
                     body.put("value", Integer.parseInt((String) value));
                 } catch (JSONException e) {

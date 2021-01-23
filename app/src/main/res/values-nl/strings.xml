@@ -228,7 +228,7 @@
     <string name="subtitle_empty">Leeg</string>
     <string name="subtitle_done">Klaar</string>
     <string name="subtitle_undone">Niet klaar</string>
-    <string name="subtitle_never_expires">Verloopt nooit</string>
+    <string name="subtitle_never_overdue">Verloopt nooit</string>
     <string name="subtitle_selected">Geselecteerd</string>
     <string name="subtitle_stock_entry_no_specific">Eerst verloopt eerst, dan eerst in - eerst uit</string>
     <!-- %1$s is a purchase date -->

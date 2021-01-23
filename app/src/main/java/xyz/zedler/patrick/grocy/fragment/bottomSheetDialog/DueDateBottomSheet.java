@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -45,12 +44,12 @@ import java.util.Date;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class BBDateBottomSheet extends BaseBottomSheet {
+public class DueDateBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = BBDateBottomSheet.class.getSimpleName();
+    private final static String TAG = DueDateBottomSheet.class.getSimpleName();
 
     private Activity activity;
 
@@ -76,7 +75,7 @@ public class BBDateBottomSheet extends BaseBottomSheet {
             Bundle savedInstanceState
     ) {
         View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_bbdate, container, false
+                R.layout.fragment_bottomsheet_due_date, container, false
         );
 
         activity =  getActivity();
@@ -124,7 +123,7 @@ public class BBDateBottomSheet extends BaseBottomSheet {
         );
 
         String selectedBestBeforeDate = bundle.getString(Constants.ARGUMENT.SELECTED_DATE);
-        defaultBestBeforeDays = bundle.getString(Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS);
+        defaultBestBeforeDays = bundle.getString(Constants.ARGUMENT.DEFAULT_DUE_DAYS);
 
         fillForm(selectedBestBeforeDate);
 
@@ -203,10 +202,8 @@ public class BBDateBottomSheet extends BaseBottomSheet {
         }
 
         if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == PurchaseFragment.class) {
-                ((PurchaseFragment) currentFragment).selectBestBeforeDate(date);
-            }
+            BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+            currentFragment.selectDueDate(date);
         } else if(activity.getClass() == ScanBatchActivity.class) {
             ((ScanBatchActivity) activity).setBestBeforeDate(date);
             ((ScanBatchActivity) activity).askNecessaryDetails();

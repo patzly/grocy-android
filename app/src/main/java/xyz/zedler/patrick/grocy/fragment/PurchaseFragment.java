@@ -21,15 +21,17 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
@@ -37,36 +39,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment {
@@ -108,111 +106,23 @@ public class PurchaseFragment extends BaseFragment {
         args = PurchaseFragmentArgs.fromBundle(requireArguments());
 
         viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
+        binding.setActivity(activity);
+        binding.setViewModel(viewModel);
+        binding.setFragment(this);
+        binding.setFormData(viewModel.getFormData());
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         dateUtil = new DateUtil(activity);
 
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
+        infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
         // INITIALIZE VIEWS
-
-        binding.framePurchaseBack.setOnClickListener(v -> activity.navigateUp());
 
         binding.linearPurchaseShoppingListItem.container.setBackground(
                 ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
         );
-
-        // swipe refresh
-
-        binding.swipePurchase.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipePurchase.setColorSchemeColors(
-                ContextCompat.getColor(activity, R.color.secondary)
-        );
-        binding.swipePurchase.setOnRefreshListener(() -> {
-            binding.swipePurchase.setRefreshing(false);
-            viewModel.refresh(args);
-        });
-
-        // product
-
-        binding.textInputPurchaseProduct.setErrorIconDrawable(null);
-        binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> NavHostFragment
-                .findNavController(this).navigate(
-                        PurchaseFragmentDirections.actionPurchaseFragmentToScanInputFragment()
-                )
-        );
-        binding.autoCompletePurchaseProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(!hasFocus) return;
-            IconUtil.start(binding.imagePurchaseProduct);
-            if(viewModel.getProductNamesLive().getValue() == null
-                    || viewModel.getProductNamesLive().getValue().isEmpty()
-            ) viewModel.updateProducts();
-        });
-        binding.autoCompletePurchaseProduct.setOnItemClickListener((parent, v, position, id) -> {
-            String productName = (String) parent.getItemAtPosition(position);
-            Product product = viewModel.getProductFromName(productName);
-            if(product != null) viewModel.loadProductDetails(product.getId());
-        });
-        binding.autoCompletePurchaseProduct.setOnEditorActionListener(
-                (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                        clearInputFocus();
-                        String input = binding.autoCompletePurchaseProduct.getText().toString();
-                        if(viewModel.getProductNames() != null
-                                && !viewModel.getProductNames().isEmpty()
-                                && !viewModel.getProductNames().contains(input)
-                                && !input.isEmpty()
-                        ) {
-                            showInputNameBottomSheet(input);
-                        }
-                        return true;
-                    } return false;
-        });
-
-        // best before date
-
-        binding.linearPurchaseBbd.setOnClickListener(v -> {
-            ProductDetails productDetails = requireProductDetails();
-            if(productDetails == null) return;
-            Bundle bundle = new Bundle();
-            bundle.putString(
-                    Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
-                    String.valueOf(productDetails.getProduct().getDefaultDueDays())
-            );
-            bundle.putString(Constants.ARGUMENT.SELECTED_DATE, viewModel.getBestBeforeDate());
-            activity.showBottomSheet(new BBDateBottomSheet(), bundle);
-        });
-
-        // amount
-
-        binding.editTextPurchaseAmount.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            public void afterTextChanged(Editable s) {
-                viewModel.getAmountLive().setValue(s != null ? s.toString() : "");
-            }
-        });
-        binding.editTextPurchaseAmount.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(binding.imagePurchaseAmount);
-        });
-        binding.editTextPurchaseAmount.setOnEditorActionListener(
-                (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId != EditorInfo.IME_ACTION_DONE) return false;
-                    clearInputFocus();
-                    return true;
-                }
-        );
-        binding.buttonPurchaseAmountMore.setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_purchase_amount);
-            viewModel.changeAmountMore();
-        });
-        binding.buttonPurchaseAmountLess.setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_purchase_amount);
-            viewModel.changeAmountLess();
-        });
 
         // price
 
@@ -239,44 +149,10 @@ public class PurchaseFragment extends BaseFragment {
                     return true;
                 }
         );
-        binding.buttonPurchasePriceMore.setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_purchase_price);
-            viewModel.changePriceMore();
-        });
-        binding.buttonPurchasePriceLess.setOnClickListener(v -> {
-            IconUtil.start(activity, R.id.image_purchase_price);
-            viewModel.changePriceLess();
-        });
-
-        binding.linearPurchaseTotalPrice.setOnClickListener(
-                v -> binding.checkboxPurchaseTotalPrice.setChecked(
-                        !binding.checkboxPurchaseTotalPrice.isChecked()
-                )
-        );
-        binding.checkboxPurchaseTotalPrice.setOnCheckedChangeListener(
-                (v, isChecked) -> viewModel.getTotalPriceCheckedLive().setValue(isChecked)
-        );
 
         // store
 
-        binding.linearPurchaseStore.setOnClickListener(v -> {
-            if(requireProductDetails() == null) return;
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, viewModel.getStores());
-            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getStoreId());
-            activity.showBottomSheet(new StoresBottomSheet(), bundle);
-        });
 
-        // location
-
-        binding.linearPurchaseLocation.setOnClickListener(v -> {
-            if(requireProductDetails() == null) return;
-            IconUtil.start(activity, R.id.image_purchase_location);
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, viewModel.getLocations());
-            bundle.putInt(Constants.ARGUMENT.SELECTED_ID, viewModel.getLocationId());
-            activity.showBottomSheet(new LocationsBottomSheet(), bundle);
-        });
 
         hideDisabledFeatures();
 
@@ -289,8 +165,7 @@ public class PurchaseFragment extends BaseFragment {
 
         // START
 
-        // load or refresh data if there wasn't a configuration change
-        if(savedInstanceState == null) viewModel.refresh(args);
+        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         observeStates();
 
@@ -334,7 +209,7 @@ public class PurchaseFragment extends BaseFragment {
             if(date == null) {
                 binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
             } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
-                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_expires));
+                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_overdue));
             } else {
                 binding.textPurchaseBbd.setText(dateUtil
                         .getLocalizedDate(viewModel.getBestBeforeDate(), DateUtil.FORMAT_MEDIUM)
@@ -351,7 +226,7 @@ public class PurchaseFragment extends BaseFragment {
                 );
             }
         });
-        viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
+        /*viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
             if(binding.editTextPurchaseAmount.getText() != null
                     && !binding.editTextPurchaseAmount.getText().toString().equals(amount)
             ) {
@@ -377,7 +252,7 @@ public class PurchaseFragment extends BaseFragment {
             } else {
                 binding.textInputPurchaseAmount.setErrorEnabled(false);
             }
-        });
+        });*/
         viewModel.getPriceLive().observe(getViewLifecycleOwner(), price -> {
             if(binding.editTextPurchasePrice.getText() != null
                     && !binding.editTextPurchasePrice.getText().toString().equals(price)
@@ -394,24 +269,7 @@ public class PurchaseFragment extends BaseFragment {
                 binding.textInputPurchasePrice.setErrorEnabled(false);
             }
         });
-        viewModel.getTotalPriceCheckedLive().observe(
-                getViewLifecycleOwner(),
-                isChecked -> binding.checkboxPurchaseTotalPrice.setChecked(isChecked)
-        );
-        viewModel.getStoreIdLive().observe(
-                getViewLifecycleOwner(),
-                storeId -> {
-                    Store store = viewModel.getStoreFromId(storeId);
-                    if(store != null) {
-                        binding.textPurchaseStore.setText(store.getName());
-                    } else {
-                        binding.textPurchaseStore.setText(
-                                getString(R.string.subtitle_none_selected)
-                        );
-                    }
-                }
-        );
-        viewModel.getLocationIdLive().observe(getViewLifecycleOwner(), locationId -> {
+        /*viewModel.getLocationIdLive().observe(getViewLifecycleOwner(), locationId -> {
             Location location = viewModel.getLocationFromId(locationId);
             if(location != null) {
                 binding.textPurchaseLocation.setText(location.getName());
@@ -430,7 +288,7 @@ public class PurchaseFragment extends BaseFragment {
                         getColor(R.color.on_background_secondary)
                 );
             }
-        });
+        });*/
         viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemPos -> {
             if(args.getShoppingListItems() == null) return;
             if(itemPos == -1) {
@@ -448,27 +306,6 @@ public class PurchaseFragment extends BaseFragment {
             }
         });
 
-
-        viewModel.getProductNamesLive().observe(getViewLifecycleOwner(), productNames -> {
-            MatchArrayAdapter adapterProducts = new MatchArrayAdapter(
-                    activity,
-                    new ArrayList<>(productNames)
-            );
-            binding.autoCompletePurchaseProduct.setAdapter(adapterProducts);
-        });
-        viewModel.getProductDetailsLive().observe(getViewLifecycleOwner(), productDetails -> {
-            if(productDetails != null) {
-                setForThisDestination( // for loading selected product after process death
-                        Constants.ARGUMENT.PRODUCT_ID,
-                        productDetails.getProduct().getId()
-                );
-                fillWithProductDetails(productDetails);
-                viewModel.writeDefaultValues();
-            } else {
-                removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-                clearFields();
-            }
-        });
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
                 activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
@@ -488,26 +325,11 @@ public class PurchaseFragment extends BaseFragment {
                         new InputBarcodeBottomSheet(),
                         event.getBundle()
                 );
+            } else if(event.getType() == Event.BOTTOM_SHEET) {
+                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
             }
         });
-        if(viewModel.getProductDetails() != null
-                && (binding.autoCompletePurchaseProduct.getText() == null
-                || !binding.autoCompletePurchaseProduct.getText().toString()
-                .equals(viewModel.getProductDetails().getProduct().getName()))
-        ) {
-            new Handler().postDelayed(() -> binding.autoCompletePurchaseProduct.setText(
-                    viewModel.getProductDetails().getProduct().getName()
-            ), 100);
-        }
-
-        // display barcodes which are already in viewModel
-        for(String barcode : viewModel.getBarcodes()) {
-            InputChip inputChipBarcode = new InputChip(
-                    activity, barcode, R.drawable.ic_round_barcode, false
-            );
-            inputChipBarcode.setPadding(0, 0, 0, 8);
-            binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
-        }
 
         getFromThisDestination(Constants.ARGUMENT.BARCODE, barcode -> {
             if(viewModel.getIsDownloading()) {
@@ -527,6 +349,80 @@ public class PurchaseFragment extends BaseFragment {
                 viewModel.loadProductDetails((Integer) productId);
             }
         });
+    }
+
+    public void showQuantityUnitsBottomSheet(boolean hasFocus) {
+        if(!hasFocus) return;
+        HashMap<QuantityUnit, Double> unitsFactors = viewModel.getFormData()
+                .getQuantityUnitsFactorsLive().getValue();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(
+                Constants.ARGUMENT.QUANTITY_UNITS,
+                unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
+        );
+        activity.showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    }
+
+    @Override
+    public int getSelectedQuantityUnitId() {
+        QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
+        if(selectedId == null) return -1;
+        return selectedId.getId();
+    }
+
+    @Override
+    public void selectQuantityUnit(QuantityUnit quantityUnit) {
+        viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
+    }
+
+    @Override
+    public void selectDueDate(String dueDate) {
+        viewModel.getFormData().getDueDateLive().setValue(dueDate);
+        viewModel.getFormData().isDueDateValid();
+    }
+
+    public void clearInputFocus() {
+        activity.hideKeyboard();
+        binding.autoCompletePurchaseProduct.clearFocus();
+        binding.textInputShoppingListItemEditAmount.clearFocus();
+        binding.quantityUnitContainer.clearFocus();
+    }
+
+    public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
+        Product product = (Product) adapterView.getItemAtPosition(pos);
+        viewModel.setProduct(product);
+        focusNextView();
+    }
+
+    public void onProductInputNextClick() {
+        /*viewModel.checkProductInput();
+        if(isWorkflowEnabled()) {
+            focusNextView();
+        } else {
+            clearInputFocus();
+        }*/
+    }
+
+    public void focusNextView() {
+        if(!isWorkflowEnabled()) {
+            clearInputFocus();
+            return;
+        }
+        View nextView = FocusFinder.getInstance()
+                .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
+        if(nextView == null) {
+            clearInputFocus();
+            return;
+        }
+        nextView.requestFocus();
+        if(nextView instanceof EditText) {
+            activity.showKeyboard((EditText) nextView);
+        }
+    }
+
+    @Override
+    public void onBottomSheetDismissed() {
+        focusNextView();
     }
 
     private void fillWithShoppingListItem(int itemPos) {
@@ -561,7 +457,7 @@ public class PurchaseFragment extends BaseFragment {
     private void fillWithProductDetails(
             @Nullable ProductDetails productDetails
     ) {
-        clearInputFocus();
+        /*clearInputFocus();
 
         // AMOUNT
         if(viewModel.getForcedAmount() != null) {
@@ -610,14 +506,7 @@ public class PurchaseFragment extends BaseFragment {
         binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
 
         // mark fields with invalid or missing content as invalid
-        isFormIncomplete();
-    }
-
-    private void clearInputFocus() {
-        activity.hideKeyboard();
-        binding.textInputPurchaseProduct.clearFocus();
-        binding.textInputPurchaseAmount.clearFocus();
-        binding.textInputPurchasePrice.clearFocus();
+        isFormIncomplete();*/
     }
 
     private boolean isFormIncomplete() {
@@ -630,7 +519,7 @@ public class PurchaseFragment extends BaseFragment {
             isIncomplete = true;
         }
         if(requireProductDetails() == null) isIncomplete = true;
-        if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
+        //if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
         if(binding.textInputPurchasePrice.isErrorEnabled()) isIncomplete = true;
         if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) {
             isIncomplete = true;
@@ -676,15 +565,15 @@ public class PurchaseFragment extends BaseFragment {
         });
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
-            if(requireProductDetails() == null) return false;
+            if(!viewModel.getFormData().isProductNameValid()) return false;
             navigate(PurchaseFragmentDirections
                     .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
-                    .setProductDetails(viewModel.getProductDetailsLive().getValue()));
+                    .setProductDetails(viewModel.getFormData().getProductDetailsLive().getValue()));
             return true;
         });
         menuItemClear.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemClear);
-            viewModel.getProductDetailsLive().setValue(null);
+            viewModel.getFormData().clearForm();
             return true;
         });
         if(args.getShoppingListItems() != null) {
@@ -695,10 +584,6 @@ public class PurchaseFragment extends BaseFragment {
                 return true;
             });
         }
-    }
-
-    public void selectBestBeforeDate(String selectedBestBeforeDate) {
-        viewModel.getBestBeforeDateLive().setValue(selectedBestBeforeDate);
     }
 
     public void selectStore(int selectedId) {
@@ -719,7 +604,7 @@ public class PurchaseFragment extends BaseFragment {
 
     @Override
     public void addBarcode(String barcode) {
-        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
+        /*for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(barcode)) {
                 showMessage(activity.getString(R.string.msg_barcode_duplicate));
@@ -739,7 +624,7 @@ public class PurchaseFragment extends BaseFragment {
         if(viewModel.getProductDetails() == null) {
             binding.autoCompletePurchaseProduct.setText(null);
             activity.showKeyboard(binding.autoCompletePurchaseProduct);
-        }
+        }*/
     }
 
     @Override
@@ -753,7 +638,7 @@ public class PurchaseFragment extends BaseFragment {
 
     @Override
     public void clearFields() {
-        binding.textInputPurchaseProduct.setErrorEnabled(false);
+        /*binding.textInputPurchaseProduct.setErrorEnabled(false);
         binding.autoCompletePurchaseProduct.setText(null);
         binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
         binding.textInputPurchaseAmount.setErrorEnabled(false);
@@ -772,7 +657,7 @@ public class PurchaseFragment extends BaseFragment {
         clearInputFocus();
         for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
             ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
-        }
+        }*/
     }
 
     private void showMessage(String text) {
@@ -783,12 +668,6 @@ public class PurchaseFragment extends BaseFragment {
 
     private int getColor(@ColorRes int color) {
         return ContextCompat.getColor(activity, color);
-    }
-
-    private String getAmount() {
-        Editable amount = binding.editTextPurchaseAmount.getText();
-        if(amount == null) return "";
-        return amount.toString();
     }
 
     @NonNull

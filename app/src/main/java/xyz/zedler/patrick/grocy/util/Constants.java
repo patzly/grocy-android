@@ -112,7 +112,9 @@ public final class Constants {
         }
         public final static class STOCK {
             public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
-            public final static String EXPIRING_SOON_DAYS = "stock_expring_soon_days"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
         }
         public final static class SHOPPING_MODE {
             public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
@@ -155,6 +157,8 @@ public final class Constants {
         public final static class STOCK {
             public final static boolean DISPLAY_DOTS_IN_STOCK = true;
             public final static String EXPIRING_SOON_DAYS = "5";
+            public final static String DEFAULT_PURCHASE_AMOUNT = "1";
+            public final static String DEFAULT_CONSUME_AMOUNT = "1";
         }
         public final static class SHOPPING_MODE {
             public final static int UPDATE_INTERVAL = 10;
@@ -293,7 +297,7 @@ public final class Constants {
         public final static String BATCH_ITEMS = "batch_items";
         public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
-        public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
+        public final static String DEFAULT_DUE_DAYS = "default_best_before_days";
         public final static String PRICE = "price";
         public final static String FACTOR = "factor";
         public final static String AMOUNT = "amount";

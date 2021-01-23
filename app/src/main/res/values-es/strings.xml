@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Vacío</string>
     <string name="subtitle_done">Hecho</string>
     <string name="subtitle_undone">Deshecho</string>
-    <string name="subtitle_never_expires">Nunca vence</string>
+    <string name="subtitle_never_overdue">Nunca vence</string>
     <string name="subtitle_selected">Seleccionado</string>
     <string name="subtitle_stock_entry_no_specific">Primero los productos que vencen, después primero dentro - primero fuera</string>
     <!-- %1$s is a purchase date -->

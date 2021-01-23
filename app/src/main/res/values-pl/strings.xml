@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Puste</string>
     <string name="subtitle_done">Zrobione</string>
     <string name="subtitle_undone">Niezrobione</string>
-    <string name="subtitle_never_expires">Nigdy się nie przeterminuje</string>
+    <string name="subtitle_never_overdue">Nigdy się nie przeterminuje</string>
     <string name="subtitle_selected">Wybrane</string>
     <string name="subtitle_stock_entry_no_specific">Najpierw z najkrótszą data, potem pierwsze zatowarowane - pierwsze zdjęte ze stanu</string>
     <!-- %1$s is a purchase date -->

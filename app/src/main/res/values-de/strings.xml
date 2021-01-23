@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Leer</string>
     <string name="subtitle_done">Erledigt</string>
     <string name="subtitle_undone">Unerledigt</string>
-    <string name="subtitle_never_expires">Läuft nie ab</string>
+    <string name="subtitle_never_overdue">Läuft nie ab</string>
     <string name="subtitle_selected">Ausgewählt</string>
     <string name="subtitle_stock_entry_no_specific">Zuerst ablaufende zuerst, dann First In - First Out</string>
     <!-- %1$s is a purchase date -->

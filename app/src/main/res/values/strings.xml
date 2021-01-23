@@ -160,6 +160,7 @@
     <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
     <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
+    <string name="msg_help_tare_weight_purchase">Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculated.</string>
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
     <string name="msg_help_external_scanner">Scan a barcode with an USB or Bluetooth barcode scanner which is connected with your device.</string>
     <string name="msg_help_external_scanner_settings">The following options must be configured in your external scanner:\n\nPrefix: %1$s\nSuffix: %2$s\n\nClick here, if you want to change them in this app instead.</string>
@@ -187,6 +188,7 @@
     <string name="error_invalid_product">Invalid product</string>
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_invalid_amount">Invalid amount</string>
+    <string name="error_invalid_price">Invalid price</string>
     <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
     <string name="error_invalid_factor">Invalid factor</string>
     <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
@@ -217,6 +219,7 @@
     <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_no_browser">Install a web browser to display the help webpage</string>
     <string name="error_barcode_not_linked">Barcode is not linked to a product</string>
+    <string name="error_no_product_details">Could not get product details</string>
     <string name="error_undefined">An error occurred</string>
 
     <string name="title_overview">Overview</string>
@@ -255,6 +258,10 @@
 
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
+    <string name="title_total_price">Total price</string>
+    <string name="title_unit_price">Unit price</string>
+    <!-- %1$s is a quantity unit -->
+    <string name="title_unit_price_specific">%1$s price</string>
     <string name="title_is_total_price">Is total price</string>
     <string name="title_delete_entry">Delete entry</string>
     <string name="title_stock_entry_no_specific">No specific entry</string>
@@ -273,7 +280,7 @@
     <string name="title_product_cat_amount">Amount</string>
     <string name="title_product_cat_quantity_unit">Quantity unit</string>
     <string name="title_product_cat_barcodes">Barcodes</string>
-    <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. -->
+    <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
     <string name="title_product_cat_qu_conversions">QU conversions</string>
     <string name="title_product_cat_picture">Picture</string>
 
@@ -289,7 +296,7 @@
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
-    <string name="subtitle_never_expires">Never expires</string>
+    <string name="subtitle_never_overdue">Never overdue</string>
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
     <!-- %1$s is a purchase date -->
@@ -307,6 +314,10 @@
     <string name="subtitle_product_hidden">Product is hidden</string>
     <string name="subtitle_product_not_hidden">Product is not hidden</string>
     <string name="subtitle_product_not_on_server">Product is not on server</string>
+    <string name="subtitle_price_help_total">Total price</string>
+    <string name="subtitle_price_help_unit">Unit price</string>
+    <!-- %1$s is a unit name -->
+    <string name="subtitle_price_help_unit_in">%1$s price</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>

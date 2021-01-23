@@ -80,7 +80,7 @@ public class SettingInputBottomSheet extends BaseBottomSheet {
         editText = textInput.getEditText();
         assert editText != null;
         editText.setInputType(
-                option.equals(Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS)
+                option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)
                         ? InputType.TYPE_CLASS_NUMBER
                         : InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
         );
@@ -111,7 +111,7 @@ public class SettingInputBottomSheet extends BaseBottomSheet {
         });
 
         view.findViewById(R.id.button_setting_input_save).setOnClickListener(v -> {
-            if(option.equals(Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS)) {
+            if(option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)) {
                 if(editText.getText().toString().isEmpty()) {
                     textInput.setError(activity.getString(R.string.error_empty));
                     return;
@@ -127,7 +127,7 @@ public class SettingInputBottomSheet extends BaseBottomSheet {
         String hint = null;
         String input = bundle.getString(Constants.ARGUMENT.TEXT);
         switch (option) {
-            case Constants.SETTINGS.STOCK.EXPIRING_SOON_DAYS:
+            case Constants.SETTINGS.STOCK.DUE_SOON_DAYS:
                 title = activity.getString(R.string.setting_expiring_soon_days);
                 hint = activity.getString(R.string.property_days);
                 buttonClear.setText(activity.getString(R.string.action_reset));

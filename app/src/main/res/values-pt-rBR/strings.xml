@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Vazio</string>
     <string name="subtitle_done">Feito</string>
     <string name="subtitle_undone">Desfeito</string>
-    <string name="subtitle_never_expires">Nunca perde a validade</string>
+    <string name="subtitle_never_overdue">Nunca perde a validade</string>
     <string name="subtitle_selected">Selecionado</string>
     <string name="subtitle_stock_entry_no_specific">Os que perdem a validade primeiro, então os primeiros en - são primeiros a sair</string>
     <!-- %1$s is a purchase date -->

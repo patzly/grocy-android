@@ -72,7 +72,7 @@ import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BBDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchChooseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BatchConfigBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ExitScanBatchBottomSheet;
@@ -960,10 +960,10 @@ public class ScanBatchActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.SELECTED_DATE, bestBeforeDate);
         bundle.putString(
-                Constants.ARGUMENT.DEFAULT_BEST_BEFORE_DAYS,
+                Constants.ARGUMENT.DEFAULT_DUE_DAYS,
                 String.valueOf(currentDefaultBestBeforeDays)
         );
-        showBottomSheet(new BBDateBottomSheet(), bundle);
+        showBottomSheet(new DueDateBottomSheet(), bundle);
     }
 
     private void showPriceBottomSheet() {

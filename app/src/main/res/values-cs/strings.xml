@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Prázdné</string>
     <string name="subtitle_done">Hotovo</string>
     <string name="subtitle_undone">Nehotovo</string>
-    <string name="subtitle_never_expires">Nikdy neexpiruje</string>
+    <string name="subtitle_never_overdue">Nikdy neexpiruje</string>
     <string name="subtitle_selected">Vybráno</string>
     <string name="subtitle_stock_entry_no_specific">První expiruje první, pravidlo FIFO \"První dovnitř, první ven.\"</string>
     <!-- %1$s is a purchase date -->

@@ -128,6 +128,8 @@ public class BaseFragment extends Fragment {
 
     public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle argsBundle) {}
 
+    public void selectDueDate(String dueDate) {}
+
     public void selectProductGroup(ProductGroup productGroup) {}
 
     public void selectLocation(Location location) {}

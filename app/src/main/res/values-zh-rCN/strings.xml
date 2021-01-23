@@ -232,7 +232,7 @@
     <string name="subtitle_empty">空</string>
     <string name="subtitle_done">完成</string>
     <string name="subtitle_undone">未完成</string>
-    <string name="subtitle_never_expires">永不过期</string>
+    <string name="subtitle_never_overdue">永不过期</string>
     <string name="subtitle_selected">已选</string>
     <string name="subtitle_stock_entry_no_specific">先到期，然后先入先出</string>
     <!-- %1$s is a purchase date -->

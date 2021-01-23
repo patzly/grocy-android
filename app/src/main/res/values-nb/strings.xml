@@ -231,7 +231,7 @@
     <string name="subtitle_empty">Tom</string>
     <string name="subtitle_done">Utført</string>
     <string name="subtitle_undone">Uferdig</string>
-    <string name="subtitle_never_expires">Går aldri ut på dato</string>
+    <string name="subtitle_never_overdue">Går aldri ut på dato</string>
     <string name="subtitle_selected">Valgt</string>
     <string name="subtitle_stock_entry_no_specific">Først utgår først, deretter først inn - først ut</string>
     <!-- %1$s is a purchase date -->

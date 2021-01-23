@@ -232,7 +232,7 @@
     <string name="subtitle_empty">Vide</string>
     <string name="subtitle_done">Terminé</string>
     <string name="subtitle_undone">Non terminé</string>
-    <string name="subtitle_never_expires">N\'expire jamais</string>
+    <string name="subtitle_never_overdue">N\'expire jamais</string>
     <string name="subtitle_selected">Sélectionner</string>
     <string name="subtitle_stock_entry_no_specific">Expirant d\'abord, puis premier entré - premier sorti</string>
     <!-- %1$s is a purchase date -->

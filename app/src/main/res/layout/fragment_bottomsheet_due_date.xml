@@ -33,7 +33,7 @@
             style="@style/Theme.Grocy.ListItem.Title"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="@string/subtitle_never_expires" />
+            android:text="@string/subtitle_never_overdue" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkbox_bbd_never_expires"

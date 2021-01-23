@@ -232,7 +232,7 @@
     <string name="subtitle_empty">ריק</string>
     <string name="subtitle_done">בוצע</string>
     <string name="subtitle_undone">לטיפול</string>
-    <string name="subtitle_never_expires">אין תפוגה</string>
+    <string name="subtitle_never_overdue">אין תפוגה</string>
     <string name="subtitle_selected">נבחר</string>
     <string name="subtitle_stock_entry_no_specific">הראשונים שתוקפם יפוג ולאחר מכן הראשונים שמולאו - הראשונים שיצאו</string>
     <!-- %1$s is a purchase date -->

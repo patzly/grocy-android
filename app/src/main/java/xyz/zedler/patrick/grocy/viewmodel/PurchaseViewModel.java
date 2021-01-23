@@ -40,55 +40,71 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class PurchaseViewModel extends AndroidViewModel {
 
     private static final String TAG = PurchaseViewModel.class.getSimpleName();
-    private SharedPreferences sharedPrefs;
-    private boolean debug;
+    private final SharedPreferences sharedPrefs;
+    private final boolean debug;
 
-    private DownloadHelper dlHelper;
-    private NetUtil netUtil;
-    private Gson gson;
-    private GrocyApi grocyApi;
-    private EventHandler eventHandler;
+    private final DownloadHelper dlHelper;
+    private final NetUtil netUtil;
+    private final Gson gson;
+    private final GrocyApi grocyApi;
+    private final PurchaseRepository repository;
+    private final EventHandler eventHandler;
+    private final FormDataPurchase formData;
 
-    private SingleLiveEvent<ArrayList<Product>> productsLive;
-    private SingleLiveEvent<ArrayList<Location>> locationsLive;
-    private SingleLiveEvent<ArrayList<Store>> storesLive;
-    private SingleLiveEvent<ArrayList<QuantityUnit>> quantityUnitsLive;
-    private SingleLiveEvent<ArrayList<String>> productNamesLive;
-    private SingleLiveEvent<ProductDetails> productDetailsLive;
+    private ArrayList<Product> products;
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<QuantityUnitConversion> unitConversions;
+    private ArrayList<ProductBarcode> barcodes;
+    private ArrayList<Store> stores;
+    private ArrayList<Location> locations;
 
-    private MutableLiveData<Boolean> isLoadingLive;
-    private MutableLiveData<Boolean> totalPriceCheckedLive;
-    private MutableLiveData<String> bestBeforeDateLive;
-    private MutableLiveData<String> priceLive;
-    private MutableLiveData<String> amountLive;
-    private MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private MutableLiveData<Integer> storeIdLive;
-    private MutableLiveData<Integer> locationIdLive;
-    private MutableLiveData<Integer> shoppingListItemPosLive;
+    private final SingleLiveEvent<ArrayList<Product>> productsLive;
+    private final SingleLiveEvent<ArrayList<Location>> locationsLive;
+    private final SingleLiveEvent<ArrayList<Store>> storesLive;
+    private final SingleLiveEvent<ArrayList<QuantityUnit>> quantityUnitsLive;
+    private final SingleLiveEvent<ArrayList<String>> productNamesLive;
+    private final SingleLiveEvent<ProductDetails> productDetailsLive;
 
-    private ArrayList<String> barcodes;
+    private final MutableLiveData<Boolean> isLoadingLive;
+    private final MutableLiveData<Boolean> totalPriceCheckedLive;
+    private final MutableLiveData<String> bestBeforeDateLive;
+    private final MutableLiveData<String> priceLive;
+    private final MutableLiveData<String> amountLive;
+    private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
+    private final MutableLiveData<Integer> storeIdLive;
+    private final MutableLiveData<Integer> locationIdLive;
+    private final MutableLiveData<Integer> shoppingListItemPosLive;
+
     private ArrayList<Runnable> queueEmptyActions;
     private String forcedAmount;
 
@@ -98,15 +114,14 @@ public class PurchaseViewModel extends AndroidViewModel {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-        dlHelper = new DownloadHelper(
-                getApplication(),
-                TAG,
-                isLoading -> isLoadingLive.setValue(isLoading)
-        );
+        isLoadingLive = new MutableLiveData<>(false);
+        dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         netUtil = new NetUtil(getApplication());
         gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
+        repository = new PurchaseRepository(application);
         eventHandler = new EventHandler();
+        formData = new FormDataPurchase(application, sharedPrefs);
 
         productsLive = new SingleLiveEvent<>();
         productNamesLive = new SingleLiveEvent<>();
@@ -115,7 +130,6 @@ public class PurchaseViewModel extends AndroidViewModel {
         storesLive = new SingleLiveEvent<>();
         productDetailsLive = new SingleLiveEvent<>();
 
-        isLoadingLive = new MutableLiveData<>(false);
         amountLive = new MutableLiveData<>();
         priceLive = new MutableLiveData<>();
         infoFullscreenLive = new MutableLiveData<>();
@@ -129,28 +143,71 @@ public class PurchaseViewModel extends AndroidViewModel {
         queueEmptyActions = new ArrayList<>();
     }
 
-    public void refresh(PurchaseFragmentArgs args) {
-        if(netUtil.isOnline()) {
-            downloadData(args);
-        } else {
-            infoFullscreenLive.setValue(new InfoFullscreen(
-                    InfoFullscreen.ERROR_OFFLINE,
-                    () -> {
-                        getInfoFullscreenLive().setValue(null);
-                        refresh(args);
-                    })
-            );
+    public FormDataPurchase getFormData() {
+        return formData;
+    }
+
+    public void loadFromDatabase(boolean downloadAfterLoading) {
+        repository.loadFromDatabase((products, barcodes, qUs, conversions, stores, locations) -> {
+            this.products = products;
+            this.barcodes = barcodes;
+            this.quantityUnits = qUs;
+            this.unitConversions = conversions;
+            this.stores = stores;
+            this.locations = locations;
+            formData.getProductsLive().setValue(products);
+            if(downloadAfterLoading) downloadData();
+        });
+    }
+
+    public void downloadData(@Nullable String dbChangedTime) {
+        /*if(isOffline()) { // skip downloading
+            isLoadingLive.setValue(false);
+            return;
+        }*/
+        if(dbChangedTime == null) {
+            dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+            return;
         }
+
+        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        queue.append(
+                dlHelper.updateProducts(dbChangedTime, products -> {
+                    this.products = products;
+                    formData.getProductsLive().setValue(products);
+                }), dlHelper.updateQuantityUnitConversions(
+                        dbChangedTime, conversions -> this.unitConversions = conversions
+                ), dlHelper.updateProductBarcodes(
+                        dbChangedTime, barcodes -> this.barcodes = barcodes
+                ), dlHelper.updateQuantityUnits(
+                        dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+                ), dlHelper.updateStores(
+                        dbChangedTime, stores -> this.stores = stores
+                ), dlHelper.updateLocations(
+                        dbChangedTime, locations -> this.locations = locations
+                )
+        );
+        if(queue.isEmpty()) return;
+
+        //currentQueueLoading = queue;
+        queue.start();
     }
 
-    public void updateProducts() {
-        dlHelper.getProducts(products -> {
-            productsLive.setValue(products);
-            productNamesLive.setValue(createProductNamesList(products));
-        }).perform(dlHelper.getUuid());
+    public void downloadData() {
+        downloadData(null);
     }
 
-    public void downloadData(PurchaseFragmentArgs args) {
+    private void onQueueEmpty() {
+        repository.updateDatabase(products, barcodes,
+                quantityUnits, unitConversions, stores, locations, () -> {});
+    }
+
+    private void onDownloadError(@Nullable VolleyError error) {
+        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
+        showMessage(getString(R.string.msg_no_connection));
+    }
+
+    /*public void downloadData(PurchaseFragmentArgs args) {
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
                 dlHelper.getProducts(products -> {
@@ -179,27 +236,96 @@ public class PurchaseViewModel extends AndroidViewModel {
             queue.append(dlHelper.getQuantityUnits(quUnits -> quantityUnitsLive.setValue(quUnits)));
         }
         queue.start();
+    }*/
+
+    public void setProduct(Product product) {
+        if(product == null) return;
+        dlHelper.getProductDetails(
+                product.getId(),
+                productDetails -> {
+                    Product updatedProduct = productDetails.getProduct();
+                    formData.getProductDetailsLive().setValue(productDetails);
+                    formData.getProductNameLive().setValue(updatedProduct.getName());
+                    setProductQuantityUnitsAndFactors(updatedProduct);
+                    if(!isTareWeightEnabled(productDetails)) {
+                        String defaultAmount = sharedPrefs.getString(
+                                Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
+                                Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
+                        );
+                        if(NumUtil.isStringDouble(defaultAmount)) {
+                            defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
+                        }
+                        formData.getAmountLive().setValue(defaultAmount);
+                    }
+                    int defaultBestBeforeDays = productDetails.getProduct().getDefaultDueDays();
+                    if(defaultBestBeforeDays < 0) {
+                        formData.getDueDateLive().setValue(Constants.DATE.NEVER_EXPIRES);
+                    } else if (defaultBestBeforeDays == 0) {
+                        formData.getDueDateLive().setValue(null);
+                    } else {
+                        formData.getDueDateLive()
+                                .setValue(DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays));
+                    }
+                    String lastPrice = productDetails.getLastPrice();
+                    if(lastPrice != null && !lastPrice.isEmpty()) {
+                        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+                    }
+                    formData.getPriceLive().setValue(lastPrice);
+                    String storeId = productDetails.getLastShoppingLocationId();
+                    if(!NumUtil.isStringInt(storeId)) {
+                        storeId = productDetails.getDefaultShoppingLocationId();
+                    }
+                    Store store = NumUtil.isStringInt(storeId)
+                            ? getStore(Integer.parseInt(storeId)) : null;
+                    formData.getStoreLive().setValue(store);
+                    formData.getLocationLive().setValue(productDetails.getLocation());
+                    formData.isFormValid();
+                },
+                error -> {
+                    showMessage(getString(R.string.error_no_product_details));
+                    formData.clearForm();
+                }
+        ).perform(dlHelper.getUuid());
     }
 
-    private void onQueueEmpty() {
-        if(queueEmptyActions.isEmpty()) return;
-        for(Runnable queueEmptyAction : queueEmptyActions) {
-            queueEmptyAction.run();
+    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
+        QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
+        QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+
+        if(stock == null || purchase == null) {
+            showMessage(getString(R.string.error_loading_qus));
+            return null;
         }
-        queueEmptyActions.clear();
+
+        HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
+        ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
+        unitFactors.put(stock, (double) -1);
+        quIdsInHashMap.add(stock.getId());
+        if(!quIdsInHashMap.contains(purchase.getId())) {
+            unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+        }
+        for(QuantityUnitConversion conversion : unitConversions) {
+            if(product.getId() != conversion.getProductId()) continue;
+            QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
+            if(unit == null || quIdsInHashMap.contains(unit.getId())) continue;
+            unitFactors.put(unit, conversion.getFactor());
+        }
+        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+        formData.getQuantityUnitLive().setValue(purchase);
+
+        return unitFactors;
     }
 
-    private void onDownloadError(VolleyError error) {
-        // TODO: If there was an error, queue gets cancelled, but loading bar is still there (-> DownloadHelper)
-        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        infoFullscreenLive.setValue(new InfoFullscreen(
-                InfoFullscreen.ERROR_NETWORK,
-                error.getLocalizedMessage(),
-                () -> {
-                    getInfoFullscreenLive().setValue(null);
-                    refresh(null); // TODO
-                })
-        );
+    private QuantityUnit getQuantityUnit(int id) {
+        for(QuantityUnit quantityUnit : quantityUnits) {
+            if(quantityUnit.getId() == id) return quantityUnit;
+        } return null;
+    }
+
+    private Store getStore(int id) {
+        for(Store store : stores) {
+            if(store.getId() == id) return store;
+        } return null;
     }
 
     public void loadProductDetails(int productId) {
@@ -435,6 +561,50 @@ public class PurchaseViewModel extends AndroidViewModel {
         return null;
     }
 
+    public void showDueDateBottomSheet() {
+        if(!formData.isProductNameValid()) return;
+        Product product = formData.getProductDetailsLive().getValue().getProduct();
+        Bundle bundle = new Bundle();
+        bundle.putString(
+                Constants.ARGUMENT.DEFAULT_DUE_DAYS,
+                String.valueOf(product.getDefaultDueDays())
+        );
+        bundle.putString(
+                Constants.ARGUMENT.SELECTED_DATE,
+                formData.getDueDateLive().getValue()
+        );
+        showBottomSheet(new DueDateBottomSheet(), bundle);
+    }
+
+    public void showStoresBottomSheet() {
+        if(!formData.isProductNameValid()) return;
+        Bundle bundle = new Bundle();
+        if(stores.get(0).getId() != -1) {
+            stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
+        }
+        bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+        bundle.putInt(
+                Constants.ARGUMENT.SELECTED_ID,
+                formData.getStoreLive().getValue() != null
+                        ? formData.getStoreLive().getValue().getId()
+                        : -1
+        );
+        showBottomSheet(new StoresBottomSheet(), bundle);
+    }
+
+    public void showLocationsBottomSheet() {
+        if(!formData.isProductNameValid()) return;
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+        bundle.putInt(
+                Constants.ARGUMENT.SELECTED_ID,
+                formData.getLocationLive().getValue() != null
+                        ? formData.getLocationLive().getValue().getId()
+                        : -1
+        );
+        showBottomSheet(new LocationsBottomSheet(), bundle);
+    }
+
     @NonNull
     public SingleLiveEvent<ArrayList<Product>> getProductsLive() {
         return productsLive;
@@ -491,16 +661,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         return amountLive.getValue();
     }
 
-    public void changeAmountMore() {
-        if(!NumUtil.isDouble(getAmount())) {
-            amountLive.setValue(NumUtil.trim(1));
-        } else {
-            double amountNew = NumUtil.toDouble(getAmount()) + 1;
-            amountLive.setValue(NumUtil.trim(amountNew));
-        }
-    }
-
-    public void changeAmountLess() {
+    /*public void changeAmountLess() {
         if(!NumUtil.isDouble(getAmount())) {
             amountLive.setValue(NumUtil.trim(1));
         } else {
@@ -519,7 +680,7 @@ public class PurchaseViewModel extends AndroidViewModel {
             minAmount += getProductDetails().getStockAmount();
         }
         return minAmount;
-    }
+    }*/
 
     public void setForcedAmount(String forcedAmount) {
         this.forcedAmount = forcedAmount;
@@ -542,21 +703,6 @@ public class PurchaseViewModel extends AndroidViewModel {
     @Nullable
     public String getPrice() {
         return priceLive.getValue();
-    }
-
-    public void changePriceMore() {
-        if(getPrice() == null || getPrice().isEmpty()) {
-            priceLive.setValue(NumUtil.trimPrice(1));
-        } else {
-            double priceNew = NumUtil.toDouble(getPrice()) + 1;
-            priceLive.setValue(NumUtil.trimPrice(priceNew));
-        }
-    }
-
-    public void changePriceLess() {
-        if(getPrice() == null || getPrice().isEmpty()) return;
-        double priceNew = NumUtil.toDouble(getPrice()) - 1;
-        if(priceNew >= 0) priceLive.setValue(NumUtil.trimPrice(priceNew));
     }
 
     @NonNull
@@ -638,11 +784,6 @@ public class PurchaseViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public ArrayList<String> getBarcodes() {
-        return barcodes;
-    }
-
-    @NonNull
     public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
         return infoFullscreenLive;
     }
@@ -651,7 +792,7 @@ public class PurchaseViewModel extends AndroidViewModel {
         queueEmptyActions.add(runnable);
     }
 
-    private void showErrorMessage() {
+    public void showErrorMessage() {
         showMessage(getString(R.string.error_undefined));
     }
 
@@ -661,6 +802,10 @@ public class PurchaseViewModel extends AndroidViewModel {
 
     private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
         eventHandler.setValue(snackbarMessage);
+    }
+
+    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
+        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
     }
 
     private void sendEvent(int type) {

@@ -72,6 +72,7 @@ public class QuantityUnitsBottomSheetNew extends BaseBottomSheet
                 .getSelectedQuantityUnitId();
         quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
         if(quantityUnits == null) {
+            activity.showMessage(R.string.error_undefined);
             dismiss();
             return view;
         }

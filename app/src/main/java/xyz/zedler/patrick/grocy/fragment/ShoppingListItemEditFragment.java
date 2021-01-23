@@ -228,14 +228,11 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     public void showQuantityUnitsBottomSheet(boolean hasFocus) {
         if(!hasFocus) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, viewModel.getFormData().getQuantityUnitsLive().getValue());
+        bundle.putParcelableArrayList(
+                Constants.ARGUMENT.QUANTITY_UNITS,
+                viewModel.getFormData().getQuantityUnitsLive().getValue()
+        );
         activity.showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
-    }
-
-    @Nullable
-    @Override
-    public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
-        return viewModel.getFormData().getShoppingListIdLive();
     }
 
     @Override
@@ -243,6 +240,12 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
         if(selectedId == null) return -1;
         return selectedId.getId();
+    }
+
+    @Nullable
+    @Override
+    public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
+        return viewModel.getFormData().getShoppingListIdLive();
     }
 
     @Override
