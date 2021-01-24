@@ -54,7 +54,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 public class BaseFragment extends Fragment {
 
     private boolean isSearchVisible = false;
-    private final MutableLiveData<Boolean> workflowEnabled = new MutableLiveData<>(false); // TODO: Move into formData or ViewModel because here it's not saved on config change!
+     // TODO: Move into formData or ViewModel because here it's not saved on config change!
 
     public boolean isSearchVisible() {
         return isSearchVisible;
@@ -65,24 +65,6 @@ public class BaseFragment extends Fragment {
     }
 
     public void dismissSearch() {}
-
-    public boolean isWorkflowEnabled() {
-        if(workflowEnabled.getValue() == null) return false;
-        return workflowEnabled.getValue();
-    }
-
-    public MutableLiveData<Boolean> getWorkflowEnabled() {
-        return workflowEnabled;
-    }
-
-    public void setWorkflowEnabled(boolean enabled) {
-        workflowEnabled.setValue(enabled);
-    }
-
-    public boolean toggleWorkflowEnabled() {
-        workflowEnabled.setValue(!isWorkflowEnabled());
-        return true;
-    }
 
     public void onBottomSheetDismissed() {}
 

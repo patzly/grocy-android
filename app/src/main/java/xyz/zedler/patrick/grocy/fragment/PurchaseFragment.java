@@ -404,10 +404,10 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     public void focusNextView() {
-        if(!isWorkflowEnabled()) {
+        /*if(!isWorkflowEnabled()) {
             clearInputFocus();
             return;
-        }
+        }*/
         View nextView = FocusFinder.getInstance()
                 .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
         if(nextView == null) {

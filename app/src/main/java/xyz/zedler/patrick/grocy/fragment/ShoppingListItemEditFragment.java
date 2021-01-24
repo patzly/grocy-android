@@ -124,7 +124,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
-        getWorkflowEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
+        viewModel.getWorkflowEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
             if(isEnabled) {
                 binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT
                         | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -192,7 +192,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
     public void onProductInputNextClick() {
         viewModel.checkProductInput();
-        if(isWorkflowEnabled()) {
+        if(viewModel.isWorkflowEnabled()) {
             focusNextView();
         } else {
             clearInputFocus();
@@ -200,7 +200,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     }
 
     public void focusNextView() {
-        if(!isWorkflowEnabled()) {
+        if(!viewModel.isWorkflowEnabled()) {
             clearInputFocus();
             return;
         }

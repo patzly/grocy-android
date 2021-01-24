@@ -79,6 +79,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
+    private final MutableLiveData<Boolean> workflowEnabled;
 
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<Product> products;
@@ -110,6 +111,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
+        workflowEnabled = new MutableLiveData<>(false);
     }
 
     public FormDataShoppingListItemEdit getFormData() {
@@ -407,6 +409,24 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         return sharedPrefs.getBoolean(
                 Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
         );
+    }
+
+    public boolean isWorkflowEnabled() {
+        if(workflowEnabled.getValue() == null) return false;
+        return workflowEnabled.getValue();
+    }
+
+    public MutableLiveData<Boolean> getWorkflowEnabled() {
+        return workflowEnabled;
+    }
+
+    public void setWorkflowEnabled(boolean enabled) {
+        workflowEnabled.setValue(enabled);
+    }
+
+    public boolean toggleWorkflowEnabled() {
+        workflowEnabled.setValue(!isWorkflowEnabled());
+        return true;
     }
 
     @NonNull
