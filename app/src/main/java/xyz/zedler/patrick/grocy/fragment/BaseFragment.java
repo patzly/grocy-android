@@ -53,15 +53,8 @@ import xyz.zedler.patrick.grocy.model.Store;
 
 public class BaseFragment extends Fragment {
 
-    private boolean isSearchVisible = false;
-     // TODO: Move into formData or ViewModel because here it's not saved on config change!
-
     public boolean isSearchVisible() {
-        return isSearchVisible;
-    }
-
-    public void setIsSearchVisible(boolean visible) {
-        isSearchVisible = visible;
+        return false;
     }
 
     public void dismissSearch() {}

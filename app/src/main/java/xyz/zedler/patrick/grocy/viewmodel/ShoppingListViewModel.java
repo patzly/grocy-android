@@ -21,15 +21,12 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
@@ -45,7 +42,6 @@ import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -54,11 +50,10 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ShoppingListViewModel extends AndroidViewModel {
+public class ShoppingListViewModel extends BaseViewModel {
 
     private static final String TAG = ShoppingListViewModel.class.getSimpleName();
     private static final int DEFAULT_SHOPPING_LIST_ID = 1;
@@ -66,7 +61,6 @@ public class ShoppingListViewModel extends AndroidViewModel {
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
     private final ShoppingListRepository repository;
 
     private final MutableLiveData<Boolean> isLoadingLive;
@@ -98,7 +92,6 @@ public class ShoppingListViewModel extends AndroidViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
         repository = new ShoppingListRepository(application);
 
         infoFullscreenLive = new MutableLiveData<>();
@@ -249,7 +242,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         }
         if(dbChangedTime == null) {
             dlHelper.getTimeDbChanged(
-                    (DownloadHelper.OnStringResponseListener) this::downloadData,
+                    this::downloadData,
                     () -> onDownloadError(null)
             );
             return;
@@ -491,7 +484,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         dlHelper.post(
                 grocyApi.addMissingProducts(),
                 jsonObject,
-                response -> showMessage(getString(
+                response -> showMessage(getApplication().getString(
                         R.string.msg_added_missing_products,
                         shoppingList.getName()
                 )),
@@ -571,7 +564,10 @@ public class ShoppingListViewModel extends AndroidViewModel {
                 ),
                 response -> {
                     showMessage(
-                            getString(R.string.msg_shopping_list_deleted, shoppingList.getName())
+                            getApplication().getString(
+                                    R.string.msg_shopping_list_deleted,
+                                    shoppingList.getName()
+                            )
                     );
                     shoppingLists.remove(shoppingList);
                     if(selectedShoppingListId == shoppingList.getId()) {
@@ -621,7 +617,7 @@ public class ShoppingListViewModel extends AndroidViewModel {
         DownloadHelper.Queue queue = dlHelper.newQueue(
                 () -> {
                     showMessage(
-                            getString(
+                            getApplication().getString(
                                     R.string.msg_shopping_list_cleared,
                                     shoppingList.getName()
                             )
@@ -652,19 +648,6 @@ public class ShoppingListViewModel extends AndroidViewModel {
     @Nullable
     public ShoppingList getSelectedShoppingList() {
         return getShoppingListFromId(getSelectedShoppingListId());
-    }
-
-    @Nullable
-    public ShoppingListItem getShoppingListItemAtPos(int position) { // from current GroupedListItems
-        ArrayList<GroupedListItem> groupedListItems = filteredGroupedListItemsLive.getValue();
-        if(groupedListItems == null) return null;
-        if(position > groupedListItems.size()-1) return null;
-        return (ShoppingListItem) groupedListItems.get(position);
-    }
-
-    public boolean isDataLoaded() {
-        return shoppingLists != null && shoppingListItems != null
-                && productGroups != null && quantityUnits != null;
     }
 
     @Nullable
@@ -708,51 +691,9 @@ public class ShoppingListViewModel extends AndroidViewModel {
         currentQueueLoading = queueLoading;
     }
 
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void sendEvent(int type) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-        });
-    }
-
-    private void sendEvent(int type, Bundle bundle) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-
-            @Override
-            public Bundle getBundle() {return bundle;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
-
-    private String getString(@StringRes int resId, Object... formatArgs) {
-        return getApplication().getString(resId, formatArgs);
     }
 
     @Override

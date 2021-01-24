@@ -1414,7 +1414,13 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(binding.editTextStockSearch);
 
-        setIsSearchVisible(true);
+        //setIsSearchVisible(true);
+    }
+
+    @Override
+    public boolean isSearchVisible() {
+        return false;
+        //return viewModel.isSearchVisible();
     }
 
     @Override
@@ -1426,7 +1432,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
 
         emptyStateHelper.clearState();
 
-        setIsSearchVisible(false);
+        //setIsSearchVisible(false);
     }
 
     private boolean isFeatureEnabled(String pref) {

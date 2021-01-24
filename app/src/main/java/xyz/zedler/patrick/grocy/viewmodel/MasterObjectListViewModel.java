@@ -26,8 +26,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,7 +38,6 @@ import java.util.Collections;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
@@ -48,28 +45,24 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBot
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 
-public class MasterObjectListViewModel extends AndroidViewModel {
+public class MasterObjectListViewModel extends BaseViewModel {
 
     private static final String TAG = MasterObjectListViewModel.class.getSimpleName();
 
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
     private final MasterObjectListRepository repository;
 
     private final MutableLiveData<Boolean> isLoadingLive;
@@ -98,7 +91,6 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
         repository = new MasterObjectListRepository(application, entity);
 
         infoFullscreenLive = new MutableLiveData<>();
@@ -367,7 +359,8 @@ public class MasterObjectListViewModel extends AndroidViewModel {
                             && NumUtil.isStringInt(product.getStoreId())
                             && Integer.parseInt(product.getStoreId()) == objectId
                     ) {
-                        showMessage(getString(R.string.msg_master_delete_usage, entityText));
+                        showMessage(getApplication()
+                                .getString(R.string.msg_master_delete_usage, entityText));
                         return;
                     }
                 }
@@ -495,55 +488,9 @@ public class MasterObjectListViewModel extends AndroidViewModel {
         currentQueueLoading = queueLoading;
     }
 
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void sendEvent(int type) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-        });
-    }
-
-    private void sendEvent(int type, Bundle bundle) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-
-            @Override
-            public Bundle getBundle() {return bundle;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
-
-    private String getString(@StringRes int resId, Object... formatArgs) {
-        return getApplication().getString(resId, formatArgs);
     }
 
     @Override

@@ -455,7 +455,12 @@ public class MasterObjectListFragment extends BaseFragment
         binding.editTextSearch.requestFocus();
         activity.showKeyboard(binding.editTextSearch);
 
-        setIsSearchVisible(true);
+        viewModel.setIsSearchVisible(true);
+    }
+
+    @Override
+    public boolean isSearchVisible() {
+        return viewModel.isSearchVisible();
     }
 
     @Override
@@ -465,7 +470,7 @@ public class MasterObjectListFragment extends BaseFragment
         binding.editTextSearch.setText("");
         viewModel.setSearch(null);
 
-        setIsSearchVisible(false);
+        viewModel.setIsSearchVisible(false);
     }
 
     @Override

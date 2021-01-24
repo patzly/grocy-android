@@ -464,14 +464,19 @@ public class ShoppingListFragment extends BaseFragment implements
     }
 
     private void setUpSearch() {
-        if(!isSearchVisible()) {
+        if(!viewModel.isSearchVisible()) {
             appBarBehavior.switchToSecondary();
             binding.editTextShoppingListSearch.setText("");
         }
         binding.textInputShoppingListSearch.requestFocus();
         activity.showKeyboard(binding.editTextShoppingListSearch);
 
-        setIsSearchVisible(true);
+        viewModel.setIsSearchVisible(true);
+    }
+
+    @Override
+    public boolean isSearchVisible() {
+        return viewModel.isSearchVisible();
     }
 
     @Override
@@ -479,7 +484,7 @@ public class ShoppingListFragment extends BaseFragment implements
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
         binding.editTextShoppingListSearch.setText("");
-        setIsSearchVisible(false);
+        viewModel.setIsSearchVisible(false);
     }
 
     private void showMessage(String msg) {
