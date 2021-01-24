@@ -284,6 +284,44 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/category_picture"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="@{viewModel.actionEdit ? 1.0f : 0.4f}"
+                        android:onClick="@{v -> activity.showMessage(@string/msg_not_implemented_yet)}">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:src="@drawable/ic_round_pasta"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                android:text="@string/property_picture"
+                                style="@style/Theme.Grocy.ListItem.Title"/>
+
+                            <TextView
+                                android:text="@string/subtitle_product_not_on_server"
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:visibility="@{viewModel.actionEdit ? View.GONE : View.VISIBLE}"/>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_marginStart="16dp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:src="@drawable/ic_round_expand_more"
+                            android:rotation="-90"
+                            tools:ignore="ContentDescription"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

@@ -446,13 +446,6 @@
                 app:argType="string"
                 app:nullable="true" />
             <action
-                android:id="@+id/action_settingsFragment_self"
-                app:destination="@id/settingsFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right" />
-            <action
                 android:id="@+id/action_settingsFragment_to_aboutFragment"
                 app:destination="@id/aboutFragment"
                 app:enterAnim="@anim/slide_from_right"
@@ -462,6 +455,34 @@
             <deepLink
                 android:id="@+id/deepLink3"
                 app:uri="@string/deep_link_settingsFragment" />
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatServerFragment"
+                app:destination="@id/settingsCatServerFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatAppearanceFragment"
+                app:destination="@id/settingsCatAppearanceFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatBehaviorFragment"
+                app:destination="@id/settingsCatBehaviorFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatNetworkFragment"
+                app:destination="@id/settingsCatNetworkFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
         </fragment>
         <fragment
             android:id="@+id/logFragment"
@@ -477,6 +498,26 @@
                 android:id="@+id/deepLink8"
                 app:uri="@string/deep_link_aboutFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/settingsCatServerFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatServerFragment"
+            android:label="SettingsCatServerFragment"
+            tools:layout="@layout/fragment_settings_cat_server"/>
+        <fragment
+            android:id="@+id/settingsCatAppearanceFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatAppearanceFragment"
+            android:label="SettingsCatAppearanceFragment"
+            tools:layout="@layout/fragment_settings_cat_appearance"/>
+        <fragment
+            android:id="@+id/settingsCatBehaviorFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatBehaviorFragment"
+            android:label="SettingsCatBehaviorFragment"
+            tools:layout="@layout/fragment_settings_cat_behavior"/>
+        <fragment
+            android:id="@+id/settingsCatNetworkFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNetworkFragment"
+            android:label="SettingsCatNetworkFragment"
+            tools:layout="@layout/fragment_settings_cat_network"/>
     </navigation>
     <navigation
         android:id="@+id/navigation_master_objects"
@@ -486,7 +527,7 @@
             android:id="@+id/masterDataOverviewFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.MasterDataOverviewFragment"
             android:label="MasterDataOverviewFragment"
-            tools:layout="@layout/fragment_master_data_overview" >
+            tools:layout="@layout/fragment_master_data_overview">
             <action
                 android:id="@+id/action_masterDataOverviewFragment_to_masterObjectListFragment"
                 app:destination="@id/masterObjectListFragment"
@@ -494,6 +535,9 @@
                 app:exitAnim="@anim/fade_out"
                 app:popEnterAnim="@anim/fade_in"
                 app:popExitAnim="@anim/fade_out" />
+            <deepLink
+                android:id="@+id/deepLink10"
+                app:uri="@string/deep_link_masterDataOverviewFragment" />
         </fragment>
         <fragment
             android:id="@+id/masterObjectListFragment"
@@ -695,7 +739,7 @@
             android:id="@+id/masterProductCatQuantityUnitFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatQuantityUnitFragment"
             android:label="MasterProductCatQuantityUnitFragment"
-            tools:layout="@layout/fragment_master_product_cat_quantiy_unit">
+            tools:layout="@layout/fragment_master_product_cat_quantity_unit">
             <argument
                 android:name="product"
                 app:argType="xyz.zedler.patrick.grocy.model.Product"
@@ -709,5 +753,6 @@
     <fragment
         android:id="@+id/scanExternalInputFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanExternalInputFragment"
-        android:label="ScanExternalInputFragment" />
+        android:label="ScanExternalInputFragment"
+        tools:layout="@layout/fragment_scan_external_input"/>
 </navigation>

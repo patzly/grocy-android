@@ -114,9 +114,10 @@ public class MainActivity extends AppCompatActivity {
         // this has to be placed before super.onCreate(savedInstanceState);
         // https://stackoverflow.com/a/53356918
         AppCompatDelegate.setDefaultNightMode(
-                sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false)
-                        ? AppCompatDelegate.MODE_NIGHT_YES
-                        : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                sharedPrefs.getBoolean(
+                        Constants.SETTINGS.APPEARANCE.DARK_MODE,
+                        Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+                ) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
 
         super.onCreate(savedInstanceState);

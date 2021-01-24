@@ -160,7 +160,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_optional"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
@@ -180,7 +180,7 @@
 
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.Description"
-                                android:text="State, Parent product, Description, Product group, Energy"
+                                android:text="State, Parent product, Description, Product group, Energy, Picture"
                                 android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
                         </LinearLayout>
@@ -199,7 +199,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_location"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
@@ -238,7 +238,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_due_date"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
@@ -277,7 +277,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_quantity_unit"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
@@ -316,7 +316,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_amount"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
@@ -355,7 +355,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_barcodes"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
@@ -392,7 +392,7 @@
 
                     <LinearLayout
                         android:id="@+id/category_qu_conversions"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
@@ -406,43 +406,6 @@
 
                             <TextView
                                 android:text="@string/title_product_cat_qu_conversions"
-                                style="@style/Theme.Grocy.ListItem.Title"/>
-
-                            <TextView
-                                android:text="@string/subtitle_product_not_on_server"
-                                style="@style/Theme.Grocy.ListItem.Description"
-                                android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}"/>
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_marginStart="16dp"
-                            android:clickable="false"
-                            android:focusable="false"
-                            android:src="@drawable/ic_round_expand_more"
-                            android:rotation="-90"
-                            tools:ignore="ContentDescription"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/category_picture"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
-
-                        <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
-                            android:src="@drawable/ic_round_pasta"
-                            tools:ignore="ContentDescription" />
-
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
-
-                            <TextView
-                                android:text="@string/title_product_cat_picture"
                                 style="@style/Theme.Grocy.ListItem.Title"/>
 
                             <TextView

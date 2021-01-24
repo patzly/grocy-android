@@ -54,7 +54,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 public class BaseFragment extends Fragment {
 
     private boolean isSearchVisible = false;
-    private final MutableLiveData<Boolean> workflowEnabled = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> workflowEnabled = new MutableLiveData<>(false); // TODO: Move into formData or ViewModel because here it's not saved on config change!
 
     public boolean isSearchVisible() {
         return isSearchVisible;
@@ -67,6 +67,7 @@ public class BaseFragment extends Fragment {
     public void dismissSearch() {}
 
     public boolean isWorkflowEnabled() {
+        if(workflowEnabled.getValue() == null) return false;
         return workflowEnabled.getValue();
     }
 
@@ -174,7 +175,7 @@ public class BaseFragment extends Fragment {
         return NavHostFragment.findNavController(this);
     }
 
-    void navigate(NavDirections directions) {
+    public void navigate(NavDirections directions) {
         findNavController().navigate(directions);
     }
 

@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="xyz.zedler.patrick.grocy.fragment.SettingsFragmentDirections"/>
+        <variable name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.SettingsFragment"/>
+        <variable name="clickUtil"
+            type="xyz.zedler.patrick.grocy.util.ClickUtil"/>
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -71,8 +80,271 @@
             android:paddingBottom="80dp"
             android:orientation="vertical">
 
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
+                app:clickUtil="@{clickUtil}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_settings_system"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_server"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
+                app:clickUtil="@{clickUtil}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_dark_mode_on_anim"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_appearance"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
+                app:clickUtil="@{clickUtil}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_settings_system"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_network"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
+                app:clickUtil="@{clickUtil}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_settings_system"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_behavior"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_barcode_scan"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_barcode_scanner"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_pasta"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_stock"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_storefront"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/title_shopping_mode"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_bug_report_anim"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/category_debugging"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
+                app:clickUtil="@{clickUtil}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_info_outline_anim_menu"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/Theme.Grocy.ListItem.Title"
+                    android:text="@string/title_about_this_app"/>
+
+                <ImageView
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/ic_round_expand_more"
+                    android:rotation="-90"
+                    tools:ignore="ContentDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

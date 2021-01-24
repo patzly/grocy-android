@@ -164,6 +164,7 @@
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
     <string name="msg_help_external_scanner">Scan a barcode with an USB or Bluetooth barcode scanner which is connected with your device.</string>
     <string name="msg_help_external_scanner_settings">The following options must be configured in your external scanner:\n\nPrefix: %1$s\nSuffix: %2$s\n\nClick here, if you want to change them in this app instead.</string>
+    <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -282,7 +283,6 @@
     <string name="title_product_cat_barcodes">Barcodes</string>
     <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
     <string name="title_product_cat_qu_conversions">QU conversions</string>
-    <string name="title_product_cat_picture">Picture</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -318,6 +318,7 @@
     <string name="subtitle_price_help_unit">Unit price</string>
     <!-- %1$s is a unit name -->
     <string name="subtitle_price_help_unit_in">%1$s price</string>
+    <string name="subtitle_unknown">Unknown</string>
 
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
@@ -421,6 +422,7 @@
     <!-- &1$s is a quantity unit like "bottles" -->
     <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
     <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
+    <string name="property_picture">Picture</string>
 
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>
@@ -501,13 +503,13 @@
     <string name="category_licenses">Open source licenses</string>
     <string name="category_general">General</string>
     <string name="category_purchase_consume">Purchase &amp; consume</string>
+    <string name="category_stock">Stock</string>
     <string name="category_server">Server</string>
     <string name="category_barcode_scanner">Barcode scanner</string>
     <string name="category_appearance">Appearance</string>
     <string name="category_network">Network</string>
     <string name="category_behavior">Behavior</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets">Presets</string>
     <string name="category_presets_new_products">Presets for new products</string>
 
     <string name="hint_server">Server URL</string>
@@ -539,6 +541,8 @@
     <string name="setting_debug_description">Display errors in the logs</string>
     <string name="setting_info_logs">Show info logs</string>
     <string name="setting_logs_description">Display logcat of this process</string>
+    <string name="setting_timeout">Loading timeout</string>
+    <string name="setting_timeout_descriptions">After which loading is cancelled</string>
     <string name="setting_synchronized">These settings are synchronized with your server.</string>
 
     <string name="setting_ask_best_before_date">Ask for best before date</string>

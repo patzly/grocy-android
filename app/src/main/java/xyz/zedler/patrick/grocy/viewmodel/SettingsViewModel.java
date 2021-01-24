@@ -36,13 +36,20 @@ import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
@@ -93,7 +100,8 @@ public class SettingsViewModel extends AndroidViewModel {
         );
     }
 
-    public CompatibilityBottomSheet getCompatibilityBottomSheet() {
+    public void showCompatibilityBottomSheet() {
+        if(isVersionCompatible()) return;
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.SERVER, sharedPrefs.getString(
                 Constants.PREF.SERVER_URL,
@@ -113,8 +121,56 @@ public class SettingsViewModel extends AndroidViewModel {
                 getSupportedVersions()
         );
         CompatibilityBottomSheet bottomSheet = new CompatibilityBottomSheet();
-        bottomSheet.setArguments(bundle);
-        return bottomSheet;
+        showBottomSheet(bottomSheet, bundle);
+    }
+
+    public void reloadConfiguration() {
+        ConfigUtil.loadInfo(
+                dlHelper,
+                grocyApi,
+                sharedPrefs,
+                () -> showBottomSheet(new RestartBottomSheet(), null),
+                error -> showErrorMessage()
+        );
+    }
+
+    public void showLogoutBottomSheet() {
+        Bundle bundle = null;
+        if(isDemo()) bundle = new Bundle(); // empty bundle for indicating demo type
+        showBottomSheet(new LogoutBottomSheet(), bundle);
+    }
+
+    public void showShortcutsBottomSheet() {
+        showBottomSheet(new ShortcutsBottomSheet(), null);
+    }
+
+    public boolean getDarkMode() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.APPEARANCE.DARK_MODE,
+                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+        );
+    }
+
+    public void setDarkMode(boolean dark) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.APPEARANCE.DARK_MODE, dark).apply();
+    }
+
+    public void showLoadingTimeoutBottomSheet() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
+        bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
+        showBottomSheet(new InputNumberBottomSheet(), bundle);
+    }
+
+    public int getLoadingTimeout() {
+        return sharedPrefs.getInt(
+                Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
+                Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
+        );
+    }
+
+    public void setLoadingTimeout(int seconds) {
+        sharedPrefs.edit().putInt(Constants.SETTINGS.NETWORK.LOADING_TIMEOUT, seconds).apply();
     }
 
     public ArrayList<String> getSupportedVersions() {
@@ -165,6 +221,10 @@ public class SettingsViewModel extends AndroidViewModel {
 
     private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
         eventHandler.setValue(snackbarMessage);
+    }
+
+    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
+        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
     }
 
     private void sendEvent(int type) {

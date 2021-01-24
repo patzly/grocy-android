@@ -102,6 +102,7 @@ public final class Constants {
             public final static String LOADING_TIMEOUT = "loading_timeout";
         }
         public final static class BEHAVIOR {
+            public final static String BEGINNER_MODE = "beginner_mode";
             public final static String START_DESTINATION = "start_destination";
             public final static String SHORTCUTS = "shortcuts";
         }
@@ -112,6 +113,9 @@ public final class Constants {
             public final static String EXTERNAL_SUFFIX = "external_suffix";
         }
         public final static class STOCK {
+            public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
             public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
             public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
             public final static String DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount"; // used for pref sync, DO NOT EDIT VALUE
@@ -121,14 +125,6 @@ public final class Constants {
             public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
             public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
             public final static String SHOW_DONE_ITEMS = "show_done_items";
-        }
-        public final static class PURCHASE_CONSUME {
-
-        }
-        public final static class PRESETS {
-            public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
-            public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
-            public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
         }
         public final static class DEBUGGING {
             public final static String ENABLE_DEBUGGING = "enable_debugging";
@@ -141,13 +137,13 @@ public final class Constants {
         public final static class SERVER {
         }
         public final static class APPEARANCE {
-            public final static boolean DARK_MODE_DEFAULT = false;
+            public final static boolean DARK_MODE = false;
         }
         public final static class NETWORK {
-            public final static String ORBOT = "orbot";
-            public final static String SOCKS_PROXY = "socks_proxy";
-            public final static String LOADING_CIRCLE = "loading_circle";
             public final static int LOADING_TIMEOUT = 30;
+        }
+        public final static class BEHAVIOR {
+            public final static boolean BEGINNER_MODE = true;
         }
         public final static class SCANNER {
             public final static boolean FOOD_FACTS = false;
@@ -156,6 +152,9 @@ public final class Constants {
             public final static String EXTERNAL_SUFFIX = "TAB";
         }
         public final static class STOCK {
+            public final static int LOCATION = -1;
+            public final static int PRODUCT_GROUP = -1;
+            public final static int QUANTITY_UNIT = -1;
             public final static boolean DISPLAY_DOTS_IN_STOCK = true;
             public final static String EXPIRING_SOON_DAYS = "5";
             public final static String DEFAULT_PURCHASE_AMOUNT = "1";
@@ -165,13 +164,6 @@ public final class Constants {
             public final static int UPDATE_INTERVAL = 10;
             public final static boolean KEEP_SCREEN_ON = true;
             public final static boolean SHOW_DONE_ITEMS = true;
-        }
-        public final static class PURCHASE_CONSUME {
-        }
-        public final static class PRESETS {
-            public final static int LOCATION = -1;
-            public final static int PRODUCT_GROUP = -1;
-            public final static int QUANTITY_UNIT = -1;
         }
         public final static class DEBUGGING {
             public final static boolean ENABLE_DEBUGGING = false;

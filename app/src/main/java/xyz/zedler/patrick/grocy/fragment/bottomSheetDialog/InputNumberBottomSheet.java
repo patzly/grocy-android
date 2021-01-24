@@ -84,6 +84,12 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
                         ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
                         : InputType.TYPE_CLASS_NUMBER
         );
+
+        if(requireArguments().containsKey(Constants.ARGUMENT.HINT)) {
+            binding.textInput.setHint(requireArguments().getString(Constants.ARGUMENT.HINT));
+        } else {
+            binding.textInput.setHint(getString(R.string.property_number));
+        }
     }
 
     public MutableLiveData<String> getNumberInputLive() {

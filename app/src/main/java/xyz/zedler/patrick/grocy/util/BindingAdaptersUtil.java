@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.animation.LayoutTransition;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -123,6 +124,19 @@ public class BindingAdaptersUtil {
         view.setEndIconOnLongClickListener(v -> {
             listener.run();
             return true;
+        });
+    }
+
+    @BindingAdapter(value={"android:onClick", "clickUtil"}, requireAll=false)
+    public static void setOnClickListener(
+            View view,
+            View.OnClickListener listener,
+            ClickUtil clickUtil
+    ) {
+        if(view == null) return;
+        view.setOnClickListener(v -> {
+            if(clickUtil != null && clickUtil.isDisabled()) return;
+            listener.onClick(view);
         });
     }
 }

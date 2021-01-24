@@ -149,16 +149,16 @@ public class Product implements Parcelable {
     @Ignore
     public Product(SharedPreferences sharedPrefs) {
         int presetLocationId = sharedPrefs.getInt(
-                Constants.SETTINGS.PRESETS.LOCATION,
-                Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+                Constants.SETTINGS.STOCK.LOCATION,
+                Constants.SETTINGS_DEFAULT.STOCK.LOCATION
         );
         int presetProductGroupId = sharedPrefs.getInt(
-                Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
-                Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
+                Constants.SETTINGS.STOCK.PRODUCT_GROUP,
+                Constants.SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP
         );
         int presetQuId = sharedPrefs.getInt(
-                Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
-                Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
+                Constants.SETTINGS.STOCK.QUANTITY_UNIT,
+                Constants.SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT
         );
         name = null;  // initialize default values (used in masterProductFragment)
         active = 1;

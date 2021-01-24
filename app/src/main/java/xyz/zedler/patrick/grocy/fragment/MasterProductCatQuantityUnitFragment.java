@@ -32,7 +32,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantiyUnitBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -46,7 +46,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
     private final static String TAG = MasterProductCatQuantityUnitFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentMasterProductCatQuantiyUnitBinding binding;
+    private FragmentMasterProductCatQuantityUnitBinding binding;
     private MasterProductCatQuantityUnitViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
 
@@ -56,7 +56,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentMasterProductCatQuantiyUnitBinding.inflate(
+        binding = FragmentMasterProductCatQuantityUnitBinding.inflate(
                 inflater, container, false
         );
         return binding.getRoot();

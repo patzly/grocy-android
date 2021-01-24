@@ -63,8 +63,7 @@
                         android:imeOptions="actionDone"
                         android:maxLength="10"
                         android:text="@={bottomsheet.numberInputLive}"
-                        app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.save()}"
-                        android:hint="@string/property_number"/>
+                        app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.save()}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

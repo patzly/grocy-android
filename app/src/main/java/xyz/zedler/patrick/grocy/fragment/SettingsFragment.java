@@ -20,8 +20,6 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +29,6 @@ import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -40,30 +37,23 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.UUID;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.view.SettingCategory;
 import xyz.zedler.patrick.grocy.view.SettingEntryCard;
 import xyz.zedler.patrick.grocy.view.SettingEntryClick;
-import xyz.zedler.patrick.grocy.view.SettingEntryHeading;
 import xyz.zedler.patrick.grocy.view.SettingEntrySwitch;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -90,32 +80,32 @@ public class SettingsFragment extends BaseFragment {
         SettingsFragmentArgs args = SettingsFragmentArgs.fromBundle(requireArguments());
         viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        clickUtil = new ClickUtil(); // TODO: Clickutil on every entry
+        clickUtil = new ClickUtil();
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         queue = viewModel.getDownloadHelper().newQueue(
                 null,
                 this::showVolleyError
         );
+        binding.setFragment(this);
+        binding.setClickUtil(clickUtil);
 
         String category = args.getShowCategory();
         if(category == null) {
-            showOverview();
+            //showOverview();
         } else if(category.equals(Constants.SETTINGS.SERVER.class.getSimpleName())) {
-            showCategoryServer();
+            //showCategoryServer();
         } else if(category.equals(Constants.SETTINGS.APPEARANCE.class.getSimpleName())) {
-            showCategoryAppearance();
+            //showCategoryAppearance();
         } else if(category.equals(Constants.SETTINGS.NETWORK.class.getSimpleName())) {
-            showCategoryNetwork();
+            //showCategoryNetwork();
         } else if(category.equals(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())) {
-            showCategoryBehavior();
+            //showCategoryBehavior();
         } else if(category.equals(Constants.SETTINGS.SCANNER.class.getSimpleName())) {
             showCategoryScanner();
         } else if(category.equals(Constants.SETTINGS.STOCK.class.getSimpleName())) {
             showCategoryStock();
         } else if(category.equals(Constants.SETTINGS.SHOPPING_MODE.class.getSimpleName())) {
             showCategoryShoppingMode();
-        } else if(category.equals(Constants.SETTINGS.PRESETS.class.getSimpleName())) {
-            showCategoryPresets();
         } else if(category.equals(Constants.SETTINGS.DEBUGGING.class.getSimpleName())) {
             showCategoryDebugging();
         }
@@ -148,230 +138,6 @@ public class SettingsFragment extends BaseFragment {
         setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
 
         queue.start();
-    }
-
-    private void showOverview() {
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_server,
-                sharedPrefs.getString(Constants.PREF.SERVER_URL, getString(R.string.error_unknown)),
-                R.drawable.ic_round_settings_system,
-                () -> goTo(Constants.SETTINGS.SERVER.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_appearance,
-                R.drawable.ic_round_dark_mode_on_anim,
-                () -> goTo(Constants.SETTINGS.APPEARANCE.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_network,
-                R.drawable.ic_round_dark_mode_on_anim,
-                () -> goTo(Constants.SETTINGS.NETWORK.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_behavior,
-                R.drawable.ic_round_dark_mode_on_anim,
-                () -> goTo(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_barcode_scanner,
-                R.drawable.ic_round_barcode_scan,
-                () -> goTo(Constants.SETTINGS.SCANNER.class.getSimpleName())
-        ));
-        if(isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)
-                || isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
-        ) {
-            binding.linearBody.addView(new SettingCategory(
-                    requireContext(),
-                    R.string.title_stock_overview,
-                    R.drawable.ic_round_view_list, // TODO: Shelf icon would be good
-                    () -> goTo(Constants.SETTINGS.STOCK.class.getSimpleName())
-            ));
-        }
-        if(isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-            binding.linearBody.addView(new SettingCategory(
-                    requireContext(),
-                    R.string.title_shopping_mode,
-                    R.drawable.ic_round_storefront,
-                    () -> goTo(Constants.SETTINGS.SHOPPING_MODE.class.getSimpleName())
-            ));
-        }
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_purchase_consume,
-                R.drawable.ic_round_pasta,
-                () -> goTo(Constants.SETTINGS.PURCHASE_CONSUME.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_presets,
-                R.drawable.ic_round_widgets,
-                () -> goTo(Constants.SETTINGS.PRESETS.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.category_debugging,
-                R.drawable.ic_round_bug_report_anim,
-                () -> goTo(Constants.SETTINGS.DEBUGGING.class.getSimpleName())
-        ));
-        binding.linearBody.addView(new SettingCategory(
-                requireContext(),
-                R.string.title_about_this_app,
-                R.drawable.ic_round_info_outline_anim_menu,
-                () -> navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())
-        ));
-    }
-
-    /**
-     * Navigates to a category (it opens SettingsFragment with the specified category).
-     * @param category (String) if null, the category overview will be shown
-     */
-    private void goTo(@Nullable String category) {
-        navigate(SettingsFragmentDirections.actionSettingsFragmentSelf().setShowCategory(category));
-    }
-
-    private void showCategoryServer() {
-        binding.appBarTitle.setText(R.string.category_server);
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.SERVER.GROCY_URL,
-                R.string.hint_server,
-                sharedPrefs.getString(Constants.PREF.SERVER_URL, getString(R.string.date_unknown)),
-                null,
-                R.drawable.ic_round_settings_system,
-                null
-        ));
-        boolean isVersionCompatible = viewModel.isVersionCompatible();
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.SERVER.GROCY_VERSION,
-                R.string.info_grocy_version,
-                sharedPrefs.getString(
-                        Constants.PREF.GROCY_VERSION,
-                        getString(R.string.date_unknown)
-                ),
-                isVersionCompatible
-                        ? R.string.info_grocy_version_compatible
-                        : R.string.info_grocy_version_incompatible,
-                isVersionCompatible ? R.color.retro_green_fg : R.color.retro_red_fg,
-                true,
-                R.drawable.ic_round_settings_system,
-                entry -> {
-                    if(!isVersionCompatible) {
-                        activity.showBottomSheet(viewModel.getCompatibilityBottomSheet());
-                    }
-                }
-        ));
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.SERVER.RELOAD_CONFIG,
-                R.string.setting_reload_config,
-                R.string.setting_reload_config_description,
-                R.drawable.ic_round_sync_anim,
-                entry -> ConfigUtil.loadInfo(
-                        viewModel.getDownloadHelper(),
-                        viewModel.getGrocyApi(),
-                        sharedPrefs,
-                        () -> activity.showBottomSheet(new RestartBottomSheet()),
-                        this::showVolleyError
-                )
-        ));
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.SERVER.LOGOUT,
-                R.string.setting_logout,
-                R.string.setting_logout_description,
-                R.drawable.ic_round_logout,
-                entry -> {
-                    Bundle bundle = null;
-                    if(viewModel.isDemo()) bundle = new Bundle(); // empty bundle for indicating demo type
-                    activity.showBottomSheet(new LogoutBottomSheet(), bundle);
-                }
-        ));
-    }
-
-    private void showCategoryAppearance() {
-        binding.appBarTitle.setText(R.string.category_appearance);
-        binding.linearBody.addView(new SettingEntrySwitch(
-                requireContext(),
-                Constants.SETTINGS.APPEARANCE.DARK_MODE,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
-                getString(R.string.setting_dark_mode),
-                getString(R.string.setting_dark_mode_description),
-                R.drawable.ic_round_dark_mode_off_anim,
-                R.drawable.ic_round_dark_mode_on_anim,
-                this::updateTheme
-        ));
-    }
-
-    private void showCategoryNetwork() {
-        binding.appBarTitle.setText(R.string.category_network);
-        // TODO: Timeout option
-        binding.linearBody.addView(new SettingEntrySwitch(
-                requireContext(),
-                Constants.SETTINGS.APPEARANCE.DARK_MODE,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
-                getString(R.string.setting_dark_mode),
-                getString(R.string.setting_dark_mode_description),
-                R.drawable.ic_round_dark_mode_off_anim,
-                R.drawable.ic_round_dark_mode_on_anim,
-                this::updateTheme
-        ));
-    }
-
-    private void showCategoryBehavior() {
-        binding.appBarTitle.setText(R.string.category_behavior);
-        binding.linearBody.addView(new SettingEntrySwitch(
-                requireContext(),
-                Constants.SETTINGS.BEHAVIOR.START_DESTINATION,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE_DEFAULT,
-                getString(R.string.setting_dark_mode),
-                getString(R.string.setting_dark_mode_description),
-                R.drawable.ic_round_dark_mode_off_anim,
-                R.drawable.ic_round_dark_mode_on_anim,
-                this::updateTheme
-        ));
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.BEHAVIOR.SHORTCUTS,
-                R.string.setting_manage_shortcuts,
-                R.string.subtitle_none_selected,
-                R.drawable.ic_round_edit, // TODO: Icon
-                entry -> {
-                    if(clickUtil.isDisabled()) return;
-                    activity.showBottomSheet(new ShortcutsBottomSheet());
-                }
-        ));
-        updateShortcuts();
-    }
-
-    @Override
-    public void updateShortcuts() {
-        String subtitleShortcuts;
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-            ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
-            List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
-            StringBuilder shortcutLabels = new StringBuilder();
-            for(ShortcutInfo shortcutInfo : shortcutInfos) {
-                shortcutLabels.append(shortcutInfo.getShortLabel());
-                if(shortcutInfo != shortcutInfos.get(shortcutInfos.size()-1)) {
-                    shortcutLabels.append(", ");
-                }
-            }
-            if(shortcutLabels.length() != 0) {
-                subtitleShortcuts = shortcutLabels.toString();
-            } else {
-                subtitleShortcuts = getString(R.string.subtitle_none_selected);
-            }
-        } else {
-            subtitleShortcuts = getString(R.string.subtitle_shortcuts_not_supported);
-        }
-        View view = binding.linearBody.findViewWithTag(Constants.SETTINGS.BEHAVIOR.SHORTCUTS);
-        ((SettingEntryClick) view).setDescription(subtitleShortcuts);
     }
 
     private void showCategoryScanner() {
@@ -450,8 +216,8 @@ public class SettingsFragment extends BaseFragment {
                 R.drawable.ic_round_place,
                 entry -> viewModel.getDownloadHelper().getLocations(arrayList -> {
                     int prefLocationId = sharedPrefs.getInt(
-                            Constants.SETTINGS.PRESETS.LOCATION,
-                            Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+                            Constants.SETTINGS.STOCK.LOCATION,
+                            Constants.SETTINGS_DEFAULT.STOCK.LOCATION
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -467,26 +233,22 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void showCategoryPresets() {
-        binding.appBarTitle.setText(R.string.category_presets);
+        //binding.appBarTitle.setText(R.string.category_presets);
         binding.linearBody.addView(new SettingEntryCard(
                 requireContext(),
                 R.string.setting_synchronized
         ));
-        binding.linearBody.addView(new SettingEntryHeading(
-                requireContext(),
-                R.string.category_presets_new_products
-        ));
         binding.linearBody.addView(new SettingEntryClick(
                 requireContext(),
-                Constants.SETTINGS.PRESETS.LOCATION,
+                Constants.SETTINGS.STOCK.LOCATION,
                 R.string.property_location,
                 getString(R.string.setting_not_loaded),
                 null,
                 R.drawable.ic_round_place,
                 entry -> viewModel.getDownloadHelper().getLocations(arrayList -> {
                     int prefLocationId = sharedPrefs.getInt(
-                            Constants.SETTINGS.PRESETS.LOCATION,
-                            Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+                            Constants.SETTINGS.STOCK.LOCATION,
+                            Constants.SETTINGS_DEFAULT.STOCK.LOCATION
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -501,15 +263,15 @@ public class SettingsFragment extends BaseFragment {
         ));
         binding.linearBody.addView(new SettingEntryClick(
                 requireContext(),
-                Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
+                Constants.SETTINGS.STOCK.PRODUCT_GROUP,
                 R.string.property_product_group,
                 getString(R.string.setting_not_loaded),
                 null,
                 R.drawable.ic_round_category,
                 entry -> viewModel.getDownloadHelper().getProductGroups(arrayList -> {
                     int prefProductGroupId = sharedPrefs.getInt(
-                            Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
-                            Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
+                            Constants.SETTINGS.STOCK.PRODUCT_GROUP,
+                            Constants.SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -524,15 +286,15 @@ public class SettingsFragment extends BaseFragment {
         ));
         binding.linearBody.addView(new SettingEntryClick(
                 requireContext(),
-                Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
+                Constants.SETTINGS.STOCK.QUANTITY_UNIT,
                 R.string.property_quantity_unit,
                 getString(R.string.setting_not_loaded),
                 null,
                 R.drawable.ic_round_weights,
                 entry -> viewModel.getDownloadHelper().getQuantityUnits(arrayList -> {
                     int prefQuId = sharedPrefs.getInt(
-                            Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
-                            Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
+                            Constants.SETTINGS.STOCK.QUANTITY_UNIT,
+                            Constants.SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT
                     );
                     Bundle bundle = new Bundle();
                     arrayList.add(
@@ -547,22 +309,22 @@ public class SettingsFragment extends BaseFragment {
         ));
         queue.append(viewModel.getDownloadHelper().getLocations(arrayList -> {
             int prefLocationId = sharedPrefs.getInt(
-                    Constants.SETTINGS.PRESETS.LOCATION,
-                    Constants.SETTINGS_DEFAULT.PRESETS.LOCATION
+                    Constants.SETTINGS.STOCK.LOCATION,
+                    Constants.SETTINGS_DEFAULT.STOCK.LOCATION
             );
             updateLocationSetting(viewModel.getLocation(arrayList, prefLocationId));
         }));
         queue.append(viewModel.getDownloadHelper().getProductGroups(arrayList -> {
             int prefProductGroupId = sharedPrefs.getInt(
-                    Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
-                    Constants.SETTINGS_DEFAULT.PRESETS.PRODUCT_GROUP
+                    Constants.SETTINGS.STOCK.PRODUCT_GROUP,
+                    Constants.SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP
             );
             updateProductGroupSetting(viewModel.getProductGroup(arrayList, prefProductGroupId));
         }));
         queue.append(viewModel.getDownloadHelper().getQuantityUnits(arrayList -> {
             int prefQuId = sharedPrefs.getInt(
-                    Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
-                    Constants.SETTINGS_DEFAULT.PRESETS.QUANTITY_UNIT
+                    Constants.SETTINGS.STOCK.QUANTITY_UNIT,
+                    Constants.SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT
             );
             updateQuantityUnitSetting(viewModel.getQuantityUnit(arrayList, prefQuId));
         }));
@@ -611,52 +373,52 @@ public class SettingsFragment extends BaseFragment {
 
     private void updateLocationSetting(Location location) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
-                Constants.SETTINGS.PRESETS.LOCATION
+                Constants.SETTINGS.STOCK.LOCATION
         );
         if(entry == null) return;
         if(location != null) {
             entry.setTitle(location.getName());
             sharedPrefs.edit().putInt(
-                    Constants.SETTINGS.PRESETS.LOCATION,
+                    Constants.SETTINGS.STOCK.LOCATION,
                     location.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.LOCATION, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.STOCK.LOCATION, -1).apply();
         }
     }
 
     private void updateProductGroupSetting(ProductGroup productGroup) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
-                Constants.SETTINGS.PRESETS.PRODUCT_GROUP
+                Constants.SETTINGS.STOCK.PRODUCT_GROUP
         );
         if(entry == null) return;
         if(productGroup != null) {
             entry.setTitle(productGroup.getName());
             sharedPrefs.edit().putInt(
-                    Constants.SETTINGS.PRESETS.PRODUCT_GROUP,
+                    Constants.SETTINGS.STOCK.PRODUCT_GROUP,
                     productGroup.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.PRODUCT_GROUP, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.STOCK.PRODUCT_GROUP, -1).apply();
         }
     }
 
     private void updateQuantityUnitSetting(QuantityUnit quantityUnit) {
         SettingEntryClick entry = binding.linearBody.findViewWithTag(
-                Constants.SETTINGS.PRESETS.QUANTITY_UNIT
+                Constants.SETTINGS.STOCK.QUANTITY_UNIT
         );
         if(entry == null) return;
         if(quantityUnit != null) {
             entry.setTitle(quantityUnit.getName());
             sharedPrefs.edit().putInt(
-                    Constants.SETTINGS.PRESETS.QUANTITY_UNIT,
+                    Constants.SETTINGS.STOCK.QUANTITY_UNIT,
                     quantityUnit.getId()
             ).apply();
         } else {
             entry.setTitle(R.string.subtitle_none_selected);
-            sharedPrefs.edit().putInt(Constants.SETTINGS.PRESETS.QUANTITY_UNIT, -1).apply();
+            sharedPrefs.edit().putInt(Constants.SETTINGS.STOCK.QUANTITY_UNIT, -1).apply();
         }
     }
 
@@ -664,7 +426,7 @@ public class SettingsFragment extends BaseFragment {
     public void setOption(Object value, String option) {
         JSONObject body = new JSONObject();
         switch (option) {
-            case Constants.SETTINGS.PRESETS.LOCATION:
+            case Constants.SETTINGS.STOCK.LOCATION:
                 try {
                     body.put("value", ((Location) value).getId());
                 } catch (JSONException e) {
@@ -677,7 +439,7 @@ public class SettingsFragment extends BaseFragment {
                         this::showVolleyError
                 );
                 break;
-            case Constants.SETTINGS.PRESETS.PRODUCT_GROUP:
+            case Constants.SETTINGS.STOCK.PRODUCT_GROUP:
                 try {
                     body.put("value", ((ProductGroup) value).getId());
                 } catch (JSONException e) {
@@ -690,7 +452,7 @@ public class SettingsFragment extends BaseFragment {
                         this::showVolleyError
                 );
                 break;
-            case Constants.SETTINGS.PRESETS.QUANTITY_UNIT:
+            case Constants.SETTINGS.STOCK.QUANTITY_UNIT:
                 try {
                     body.put("value", ((QuantityUnit) value).getId());
                 } catch (JSONException e) {
@@ -737,15 +499,6 @@ public class SettingsFragment extends BaseFragment {
         } else {
             activity.showMessage(R.string.error_undefined);
         }
-    }
-
-    private void updateTheme(boolean forceDarkMode) {
-        sharedPrefs.edit().putBoolean(Constants.PREF.DARK_MODE, forceDarkMode).apply();
-        AppCompatDelegate.setDefaultNightMode(forceDarkMode
-                ? AppCompatDelegate.MODE_NIGHT_YES
-                : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        );
-        activity.executeOnStart();
     }
 
     private boolean isFeatureEnabled(String pref) {
