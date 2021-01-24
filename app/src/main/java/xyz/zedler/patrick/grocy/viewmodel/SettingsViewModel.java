@@ -173,6 +173,30 @@ public class SettingsViewModel extends AndroidViewModel {
         sharedPrefs.edit().putInt(Constants.SETTINGS.NETWORK.LOADING_TIMEOUT, seconds).apply();
     }
 
+    public boolean getLoggingEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+        );
+    }
+
+    public void setLoggingEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, enabled).apply();
+    }
+
+    public boolean getInfoLogsEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS
+        );
+    }
+
+    public void setInfoLogsEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS, enabled).apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)

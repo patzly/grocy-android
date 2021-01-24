@@ -107,7 +107,7 @@ public class SettingsFragment extends BaseFragment {
         } else if(category.equals(Constants.SETTINGS.SHOPPING_MODE.class.getSimpleName())) {
             showCategoryShoppingMode();
         } else if(category.equals(Constants.SETTINGS.DEBUGGING.class.getSimpleName())) {
-            showCategoryDebugging();
+            //showCategoryDebugging();
         }
         return binding.getRoot();
     }
@@ -120,8 +120,6 @@ public class SettingsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        binding.frameBack.setOnClickListener(v -> activity.navigateUp());
-
         if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
             activity.showHideDemoIndicator(this, true);
             activity.getScrollBehavior().setUpScroll(binding.scroll);
@@ -328,31 +326,6 @@ public class SettingsFragment extends BaseFragment {
             );
             updateQuantityUnitSetting(viewModel.getQuantityUnit(arrayList, prefQuId));
         }));
-    }
-
-    private void showCategoryDebugging() {
-        binding.appBarTitle.setText(R.string.category_debugging);
-        binding.linearBody.addView(new SettingEntrySwitch(
-                requireContext(),
-                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
-                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING,
-                getString(R.string.setting_debug),
-                getString(R.string.setting_debug_description),
-                getDrawable(R.drawable.ic_round_bug_report_anim)
-        ));
-        binding.linearBody.addView(new SettingEntrySwitch(
-                requireContext(),
-                Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
-                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS,
-                getString(R.string.setting_info_logs)
-        ));
-        binding.linearBody.addView(new SettingEntryClick(
-                requireContext(),
-                Constants.SETTINGS.DEBUGGING.SHOW_LOGS,
-                R.string.title_logs,
-                R.string.setting_logs_description,
-                entry -> navigate(SettingsFragmentDirections.actionSettingsFragmentToLogFragment())
-        ));
     }
 
     private void updatePrefOnServerBoolean(String pref, boolean isChecked) {

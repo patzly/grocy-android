@@ -20,7 +20,9 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,6 +70,7 @@ public class LogFragment extends BaseFragment {
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
+        binding.setActivity(activity);
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
@@ -84,26 +87,52 @@ public class LogFragment extends BaseFragment {
             );
         }
 
-        setLog(showInfo);
+        new Handler().postDelayed(
+                () -> new loadAsyncTask(
+                        getLogcatCommand(),
+                        log -> binding.textLog.setText(log)
+                ).execute(),
+                300
+        );
     }
 
-    private void setLog(boolean showInfo) {
-        StringBuilder log = new StringBuilder();
-        try {
-            Process process = Runtime.getRuntime().exec(getLogcatCommand(showInfo));
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream())
-            );
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                log.append(line).append('\n');
-            }
-            log.deleteCharAt(log.length() - 1);
-        } catch (IOException ignored) {}
-        binding.textLog.setText(log.toString());
+    private static class loadAsyncTask extends AsyncTask<Void, Void, String> {
+        private final String logcatCommand;
+        private final LogLoadedListener listener;
+
+        loadAsyncTask(String logcatCommand, LogLoadedListener listener) {
+            this.logcatCommand = logcatCommand;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final String doInBackground(Void... params) {
+            StringBuilder log = new StringBuilder();
+            try {
+                Process process = Runtime.getRuntime().exec(logcatCommand);
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream())
+                );
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    log.append(line).append('\n');
+                }
+                log.deleteCharAt(log.length() - 1);
+            } catch (IOException ignored) {}
+            return log.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String log) {
+            if(listener != null) listener.onLogLoaded(log);
+        }
+
+        private interface LogLoadedListener {
+            void onLogLoaded(String log);
+        }
     }
 
-    private String getLogcatCommand(boolean showInfo) {
+    private String getLogcatCommand() {
         return "logcat -d " +
                 (showInfo ? "*:I " : "*:E ") +
                 (showInfo ? "-t 150 " : "-t 300 ") +
@@ -122,7 +151,7 @@ public class LogFragment extends BaseFragment {
         if(menuItemRefresh == null || menuItemFeedback == null) return;
 
         menuItemRefresh.setOnMenuItemClickListener(item -> {
-            setLog(showInfo);
+            new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
             return true;
         });
         menuItemFeedback.setOnMenuItemClickListener(item -> {

@@ -78,8 +78,7 @@
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:fillViewport="true">
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +86,6 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="90dp"
                 android:orientation="vertical"
-                android:gravity="center"
                 android:animateLayoutChanges="true"
                 app:transitionTypeChanging="@{true}">
 

@@ -433,13 +433,6 @@
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsFragment"
             android:label="SettingsFragment"
             tools:layout="@layout/fragment_settings">
-            <action
-                android:id="@+id/action_settingsFragment_to_logFragment"
-                app:destination="@id/logFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right" />
             <argument
                 android:name="showCategory"
                 android:defaultValue="@null"
@@ -483,6 +476,13 @@
                 app:exitAnim="@anim/slide_to_left"
                 app:popEnterAnim="@anim/slide_from_left"
                 app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatDebuggingFragment"
+                app:destination="@id/settingsCatDebuggingFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
         </fragment>
         <fragment
             android:id="@+id/logFragment"
@@ -518,6 +518,19 @@
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNetworkFragment"
             android:label="SettingsCatNetworkFragment"
             tools:layout="@layout/fragment_settings_cat_network"/>
+        <fragment
+            android:id="@+id/settingsCatDebuggingFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatDebuggingFragment"
+            android:label="SettingsCatDebuggingFragment"
+            tools:layout="@layout/fragment_settings_cat_debugging">
+            <action
+                android:id="@+id/action_settingsCatDebuggingFragment_to_logFragment"
+                app:destination="@id/logFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+        </fragment>
     </navigation>
     <navigation
         android:id="@+id/navigation_master_objects"

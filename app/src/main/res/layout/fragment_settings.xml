@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="xyz.zedler.patrick.grocy.fragment.SettingsFragmentDirections"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
         <variable name="fragment"
             type="xyz.zedler.patrick.grocy.fragment.SettingsFragment"/>
         <variable name="clickUtil"
@@ -39,7 +41,8 @@
                 android:contentDescription="@string/action_back"
                 android:tooltipText="@string/action_back"
                 android:focusable="true"
-                tools:targetApi="o">
+                tools:targetApi="o"
+                android:onClick="@{() -> activity.navigateUp()}">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -287,7 +290,9 @@
             <LinearLayout
                 style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
+                app:clickUtil="@{clickUtil}">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
