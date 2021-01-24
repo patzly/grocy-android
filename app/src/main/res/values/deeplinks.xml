@@ -8,6 +8,7 @@
     <string name="deep_link_consumeFragment">grocy://consumeFragment</string>
     <string name="deep_link_batchModeFragment">grocy://batchModeFragment</string>
     <string name="deep_link_settingsFragment">grocy://settingsFragment?showCategory={showCategory}</string>
+    <string name="deep_link_settingsCatBehaviorFragment">grocy://settingsCatBehaviorFragment</string>
     <string name="deep_link_aboutFragment">grocy://aboutFragment</string>
     <string name="deep_link_masterProductFragment">grocy://masterProductFragment</string>
     <string name="deep_link_masterDataOverviewFragment">grocy://masterDataOverviewFragment</string>

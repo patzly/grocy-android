@@ -512,7 +512,11 @@
             android:id="@+id/settingsCatBehaviorFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatBehaviorFragment"
             android:label="SettingsCatBehaviorFragment"
-            tools:layout="@layout/fragment_settings_cat_behavior"/>
+            tools:layout="@layout/fragment_settings_cat_behavior">
+            <deepLink
+                android:id="@+id/deepLink11"
+                app:uri="@string/deep_link_settingsCatBehaviorFragment" />
+        </fragment>
         <fragment
             android:id="@+id/settingsCatNetworkFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNetworkFragment"

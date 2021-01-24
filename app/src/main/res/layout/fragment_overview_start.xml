@@ -107,7 +107,7 @@
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}"
+                        android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsCatBehaviorFragment)}"
                         app:clickUtil="@{clickUtil}">
 
                         <TextView
