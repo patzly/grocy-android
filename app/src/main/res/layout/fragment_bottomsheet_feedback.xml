@@ -94,31 +94,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_feedback_email"
-                style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
-                android:background="@drawable/bg_list_item_surface">
-
-                <ImageView
-                    android:id="@+id/image_feedback_email"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    android:src="@drawable/ic_round_email"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/action_email" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/action_email_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -94,19 +94,6 @@ public class FeedbackBottomSheet extends BaseBottomSheet {
 			dismiss();
 		});
 
-		view.findViewById(R.id.linear_feedback_email).setOnClickListener(v -> {
-			Intent intent = new Intent(Intent.ACTION_SENDTO);
-			intent.setData(
-					Uri.parse(
-							"mailto:"
-									+ getString(R.string.app_mail)
-									+ "?subject=" + Uri.encode("Feedback@Grocy")
-					)
-			);
-			startActivity(Intent.createChooser(intent, getString(R.string.action_send_feedback)));
-			dismiss();
-		});
-
 		return view;
 	}
 
