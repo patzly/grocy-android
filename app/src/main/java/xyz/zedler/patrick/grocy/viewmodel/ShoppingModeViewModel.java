@@ -145,6 +145,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                         getApplication(),
                         getFilteredShoppingListItems(),
                         this.productHashMap,
+                        getProductNamesHashMap(),
                         this.productGroups,
                         this.shoppingLists,
                         getSelectedShoppingListId(),
@@ -469,6 +470,15 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
     public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
         return quantityUnitHashMap;
+    }
+
+    public HashMap<Integer, String> getProductNamesHashMap() {
+        if(products == null) return null;
+        HashMap<Integer, String> productNamesHashMap = new HashMap<>();
+        for(Product product : products) {
+            productNamesHashMap.put(product.getId(), product.getName());
+        }
+        return productNamesHashMap;
     }
 
     @NonNull

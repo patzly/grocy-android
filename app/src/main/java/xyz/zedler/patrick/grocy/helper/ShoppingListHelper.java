@@ -45,6 +45,7 @@ public class ShoppingListHelper {
             Context context,
             ArrayList<ShoppingListItem> shoppingListItems,
             HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, String> productNamesHashMap,
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
             int selectedShoppingListId,
@@ -92,7 +93,7 @@ public class ShoppingListHelper {
             Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
             assert items != null;
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
-            SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
+            SortUtil.sortShoppingListItemsByName(itemsOneGroup, productNamesHashMap, true);
             groupedListItems.addAll(itemsOneGroup);
         }
         if(!showNotes) return groupedListItems;
@@ -118,6 +119,7 @@ public class ShoppingListHelper {
             Context context,
             ArrayList<ShoppingListItem> shoppingListItems,
             HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, String> productNamesHashMap,
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
             int selectedShoppingListId,
@@ -170,7 +172,7 @@ public class ShoppingListHelper {
             Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
             assert items != null;
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
-            SortUtil.sortShoppingListItemsByName(itemsOneGroup, true);
+            SortUtil.sortShoppingListItemsByName(itemsOneGroup, productNamesHashMap, true);
             groupedListItems.addAll(itemsOneGroup);
         }
         // add bottom notes if they are not empty

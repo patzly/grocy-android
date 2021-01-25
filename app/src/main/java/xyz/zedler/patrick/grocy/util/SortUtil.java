@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.model.Location;
@@ -133,12 +134,13 @@ public class SortUtil {
 
     public static void sortShoppingListItemsByName(
             List<ShoppingListItem> shoppingListItems,
+            HashMap<Integer, String> productNamesHashMap,
             boolean ascending
     ) {
         if(shoppingListItems == null) return;
         ArrayList<ShoppingListItem> itemsWithoutProduct = new ArrayList<>();
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(shoppingListItem.getProduct() == null) {
+            if(!shoppingListItem.hasProduct()) {
                 itemsWithoutProduct.add(shoppingListItem);
             }
         }
@@ -157,8 +159,10 @@ public class SortUtil {
         Collections.sort(
                 shoppingListItems,
                 (item1, item2) -> {
-                    String nameA = (ascending ? item1 : item2).getProduct().getName();
-                    String nameB = (ascending ? item2 : item1).getProduct().getName();
+                    String nameA = productNamesHashMap.get((ascending ? item1 : item2)
+                            .getProductIdInt());
+                    String nameB = productNamesHashMap.get((ascending ? item2 : item1)
+                            .getProductIdInt());
                     if(nameA != null && nameB != null) return nameA.compareToIgnoreCase(nameB);
                     else if(nameA == null && nameB != null) return -1;
                     else if(nameA != null) return 1;

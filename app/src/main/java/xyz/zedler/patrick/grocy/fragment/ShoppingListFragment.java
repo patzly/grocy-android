@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -357,7 +358,12 @@ public class ShoppingListFragment extends BaseFragment implements
                     return true;
                 }
                 ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
-                SortUtil.sortShoppingListItemsByName(listItems, true);
+                HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
+                if(productNamesHashMap == null) {
+                    showMessage(activity.getString(R.string.error_undefined));
+                    return true;
+                }
+                SortUtil.sortShoppingListItemsByName(listItems, productNamesHashMap, true);
                 ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
                 for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
                 navigate(R.id.purchaseFragment,

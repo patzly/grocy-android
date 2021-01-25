@@ -424,14 +424,16 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     // Only for PurchaseFragment
     public static void fillShoppingListItem(
             Context context,
-            ShoppingListItem listItem,
+            ShoppingListItem item,
             RowShoppingListItemBinding binding,
             ArrayList<QuantityUnit> quantityUnits
     ) {
 
         // NAME
 
-        Product product = listItem.getProduct();  // TODO
+        Product product = null;
+        //if(listItem.hasProduct()) product = productHashMap.get(item.getProductIdInt()); TODO
+
         if(product != null) {
             binding.name.setText(product.getName());
             binding.name.setVisibility(View.VISIBLE);
@@ -439,7 +441,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             binding.name.setText(null);
             binding.name.setVisibility(View.GONE);
         }
-        if(listItem.isUndone()) {
+        if(item.isUndone()) {
             binding.name.setPaintFlags(
                     binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -458,31 +460,28 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // AMOUNT
 
-        if(listItem.getProduct() != null) {
-            QuantityUnit quantityUnit = new QuantityUnit();
-            for(int i = 0; i < quantityUnits.size(); i++) {
-                if(quantityUnits.get(i).getId() == listItem.getProduct().getQuIdPurchase()) {
-                    quantityUnit = quantityUnits.get(i);
-                    break;
-                }
-            }
+        if(product != null) {
+            QuantityUnit quantityUnit = null;
+            // quantityUnit = quantityUnitHashMap.get(product.getQuIdStock()); // TODO
+            if(quantityUnit == null) quantityUnit = new QuantityUnit();
 
             if(DEBUG) Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
 
             binding.amount.setText(
                     context.getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(listItem.getAmount()),
-                            listItem.getAmount() == 1
+                            NumUtil.trim(item.getAmount()),
+                            item.getAmount() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()
                     )
             );
         } else {
-            binding.amount.setText(NumUtil.trim(listItem.getAmount()));
+            binding.amount.setText(NumUtil.trim(item.getAmount()));
         }
 
-        if(listItem.isMissing()) {
+        //if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {  TODO
+        if(item.hasProduct()) {
             binding.amount.setTypeface(
                     ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
@@ -497,7 +496,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     ContextCompat.getColor(context, R.color.on_background_secondary)
             );
         }
-        if(listItem.isUndone()) {
+        if(item.isUndone()) {
             binding.amount.setPaintFlags(
                     binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -509,13 +508,13 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NOTE
 
-        if(listItem.getNote() != null && !listItem.getNote().isEmpty()) {
+        if(item.getNote() != null && !item.getNote().isEmpty()) {
             if(binding.name.getVisibility() == View.VISIBLE) {
                 binding.noteContainer.setVisibility(View.VISIBLE);
-                binding.note.setText(listItem.getNote().trim());
+                binding.note.setText(item.getNote().trim());
             } else {
                 binding.noteAsName.setVisibility(View.VISIBLE);
-                binding.noteAsName.setText(listItem.getNote().trim());
+                binding.noteAsName.setText(item.getNote().trim());
             }
         } else {
             if(binding.name.getVisibility() == View.VISIBLE) {
@@ -524,7 +523,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             }
         }
         if(binding.noteAsName.getVisibility() == View.VISIBLE) {
-            if(listItem.isUndone()) {
+            if(item.isUndone()) {
                 binding.noteAsName.setPaintFlags(
                         binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );
@@ -534,7 +533,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                 );
             }
         } else {
-            if(listItem.isUndone()) {
+            if(item.isUndone()) {
                 binding.note.setPaintFlags(
                         binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );

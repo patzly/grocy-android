@@ -72,21 +72,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @SerializedName("product_id")
     private String productId;
 
-    @ColumnInfo(name = "product_name")
-    private String productName;
-
-    @ColumnInfo(name = "product_description")
-    private String productDescription;
-
-    @ColumnInfo(name = "product_group_id")
-    private String productGroupId;
-
-    @ColumnInfo(name = "product_qu_id_purchase")
-    private int productQuIdPurchase;
-
-    @ColumnInfo(name = "is_missing")
-    private int isMissing;  // needs to be integer because of min. API level
-
     @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
@@ -101,12 +86,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
               int shoppingListId,
               String quId,
               int done,
-              int doneSynced,
-              String productName,
-              String productDescription,
-              String productGroupId,
-              int productQuIdPurchase,
-              int isMissing
+              int doneSynced
     ) {
         this.id = id;
         this.productId = productId;
@@ -116,11 +96,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.quId = quId;
         this.done = done;
         this.doneSynced = doneSynced;
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productGroupId = productGroupId;
-        this.productQuIdPurchase = productQuIdPurchase;
-        this.isMissing = isMissing;
     }
 
     private ShoppingListItem(Parcel parcel) {
@@ -132,11 +107,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         quId = parcel.readString();
         done = parcel.readInt();
         doneSynced = parcel.readInt();
-        productName = parcel.readString();
-        productDescription = parcel.readString();
-        productGroupId = parcel.readString();
-        productQuIdPurchase = parcel.readInt();
-        isMissing = parcel.readInt();
     }
 
     @Override
@@ -149,11 +119,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeString(quId);
         dest.writeInt(done);
         dest.writeInt(doneSynced);
-        dest.writeString(productName);
-        dest.writeString(productDescription);
-        dest.writeString(productGroupId);
-        dest.writeInt(productQuIdPurchase);
-        dest.writeInt(isMissing);
     }
 
     public static final Creator<ShoppingListItem> CREATOR = new Creator<ShoppingListItem>() {
@@ -235,88 +200,8 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.doneSynced = doneSynced;
     }
 
-    @Deprecated
-    public String getProductName() {
-        return productName;
-    }
-
-    @Deprecated
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public String getProductGroupId() {
-        return productGroupId;
-    }
-
-    @Deprecated
-    public int getProductQuIdPurchase() {
-        return productQuIdPurchase;
-    }
-
-    @Deprecated
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    @Deprecated
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-
-    public void setProductGroupId(String productGroupId) {
-        this.productGroupId = productGroupId;
-    }
-
-    public void setProductQuIdPurchase(int productQuIdPurchase) {
-        this.productQuIdPurchase = productQuIdPurchase;
-    }
-
-    @Deprecated
-    public Product getProduct() {  // only required info for actions in shopping list
-        if(productId == null || productId.isEmpty()) return null;
-        return new Product(
-                Integer.parseInt(productId),
-                productName,
-                productDescription,
-                productQuIdPurchase,
-                productGroupId
-        );
-    }
-
-    @Deprecated
-    public void setProduct(Product product) {
-        if(product == null) {
-            return;
-        }
-        productName = product.getName();
-        productDescription = product.getDescription();
-        productQuIdPurchase = product.getQuIdPurchase();
-        productGroupId = product.getProductGroupId();
-    }
-
     public boolean hasProduct() {
         return productId != null && !productId.isEmpty();
-    }
-
-    @Deprecated
-    public int getIsMissing() {
-        return isMissing;
-    }
-
-    @Deprecated
-    public boolean isMissing() {
-        return getIsMissing() == 1;
-    }
-
-    @Deprecated
-    public void setIsMissing(boolean isMissing) {
-        setIsMissing(isMissing ? 1 : 0);
-    }
-
-    @Deprecated
-    public void setIsMissing(int isMissing) {
-        this.isMissing = isMissing;
     }
 
     public String getQuId() {
@@ -367,7 +252,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "ShoppingListItem(" + id + ", " + productName + ")";
+        return "ShoppingListItem(" + id + ")";
     }
 
     @NonNull
@@ -380,12 +265,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 this.shoppingListId,
                 this.quId,
                 this.done,
-                this.doneSynced,
-                this.productName,
-                this.productDescription,
-                this.productGroupId,
-                this.productQuIdPurchase,
-                this.isMissing
+                this.doneSynced
         );
     }
 
