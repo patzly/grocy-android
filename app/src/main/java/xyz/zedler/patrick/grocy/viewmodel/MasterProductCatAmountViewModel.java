@@ -21,13 +21,10 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,26 +37,21 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class MasterProductCatAmountViewModel extends AndroidViewModel {
+public class MasterProductCatAmountViewModel extends BaseViewModel {
 
     private static final String TAG = MasterProductCatAmountViewModel.class.getSimpleName();
 
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
     private final MasterProductRepository repository;
     private final FormDataMasterProductCatAmount formData;
     private final MasterProductFragmentArgs args;
@@ -86,9 +78,8 @@ public class MasterProductCatAmountViewModel extends AndroidViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
         repository = new MasterProductRepository(application);
-        formData = new FormDataMasterProductCatAmount(application);
+        formData = new FormDataMasterProductCatAmount(application, getBeginnerModeEnabled());
         args = startupArgs;
         isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
@@ -187,41 +178,16 @@ public class MasterProductCatAmountViewModel extends AndroidViewModel {
         currentQueueLoading = queueLoading;
     }
 
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void navigateUp() {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return Event.NAVIGATE_UP;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
     }
 
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
+    public boolean getBeginnerModeEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+        );
     }
 
     @Override

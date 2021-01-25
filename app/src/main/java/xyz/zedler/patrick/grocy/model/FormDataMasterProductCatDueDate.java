@@ -50,9 +50,9 @@ public class FormDataMasterProductCatDueDate {
 
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatDueDate(Context contextWeak) {
+    public FormDataMasterProductCatDueDate(Context contextWeak, boolean beginnerMode) {
         this.contextWeak = new WeakReference<>(contextWeak);
-        displayHelpLive = new MutableLiveData<>(false);
+        displayHelpLive = new MutableLiveData<>(beginnerMode);
         dueDateTypeLive = new MutableLiveData<>(0);
         dueDateTypeErrorLive = new MutableLiveData<>(false);
         dueDaysLive = new MutableLiveData<>();

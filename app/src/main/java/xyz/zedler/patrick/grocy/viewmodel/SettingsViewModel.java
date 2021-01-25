@@ -24,8 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
@@ -36,34 +34,29 @@ import java.util.Arrays;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
-public class SettingsViewModel extends AndroidViewModel {
+public class SettingsViewModel extends BaseViewModel {
 
     private static final String TAG = SettingsViewModel.class.getSimpleName();
-    private SharedPreferences sharedPrefs;
+    private final SharedPreferences sharedPrefs;
     private boolean debug;
 
-    private DownloadHelper dlHelper;
+    private final DownloadHelper dlHelper;
     private NetUtil netUtil;
     private Gson gson;
-    private GrocyApi grocyApi;
-    private EventHandler eventHandler;
+    private final GrocyApi grocyApi;
 
     private MutableLiveData<Boolean> isLoadingLive;
 
@@ -81,7 +74,6 @@ public class SettingsViewModel extends AndroidViewModel {
         netUtil = new NetUtil(getApplication());
         gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
 
         isLoadingLive = new MutableLiveData<>(false);
     }
@@ -197,6 +189,18 @@ public class SettingsViewModel extends AndroidViewModel {
                 .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS, enabled).apply();
     }
 
+    public boolean getBeginnerModeEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+        );
+    }
+
+    public void setBeginnerModeEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE, enabled).apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
@@ -235,55 +239,9 @@ public class SettingsViewModel extends AndroidViewModel {
         return grocyApi;
     }
 
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void sendEvent(int type) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-        });
-    }
-
-    private void sendEvent(int type, Bundle bundle) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-
-            @Override
-            public Bundle getBundle() {return bundle;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
-
-    private String getString(@StringRes int resId, Object... formatArgs) {
-        return getApplication().getString(resId, formatArgs);
     }
 
     @Override

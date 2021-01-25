@@ -21,46 +21,31 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
-import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.ConnectivityLiveData;
 
-public class ScanExternalInputViewModel extends AndroidViewModel {
+public class ScanExternalInputViewModel extends BaseViewModel {
 
     private static final String TAG = ScanExternalInputViewModel.class.getSimpleName();
 
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
     private final MasterProductRepository repository;
-    private final FormDataMasterProduct formData;
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final ConnectivityLiveData isOnlineLive;
-
-    private ArrayList<Product> products;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -74,16 +59,10 @@ public class ScanExternalInputViewModel extends AndroidViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
         repository = new MasterProductRepository(application);
-        formData = new FormDataMasterProduct(application);
 
         infoFullscreenLive = new MutableLiveData<>();
         isOnlineLive = new ConnectivityLiveData(application);
-    }
-
-    public FormDataMasterProduct getFormData() {
-        return formData;
     }
 
     public String getConfiguredOptions() {
@@ -126,41 +105,9 @@ public class ScanExternalInputViewModel extends AndroidViewModel {
         currentQueueLoading = queueLoading;
     }
 
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    public void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void navigateUp() {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return Event.NAVIGATE_UP;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
     }
 
     @Override

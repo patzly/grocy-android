@@ -49,9 +49,9 @@ public class FormDataMasterProductCatQuantityUnit {
     private final MutableLiveData<Product> productLive;
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatQuantityUnit(Context contextWeak) {
+    public FormDataMasterProductCatQuantityUnit(Context contextWeak, boolean beginnerMode) {
         this.contextWeak = new WeakReference<>(contextWeak);
-        displayHelpLive = new MutableLiveData<>(false);
+        displayHelpLive = new MutableLiveData<>(beginnerMode);
         quantityUnitsLive = new MutableLiveData<>();
         quStockLive = new MutableLiveData<>();
         quStockNameLive = Transformations.map(

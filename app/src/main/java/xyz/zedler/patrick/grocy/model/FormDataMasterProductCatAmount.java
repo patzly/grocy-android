@@ -60,9 +60,9 @@ public class FormDataMasterProductCatAmount {
 
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatAmount(Context contextWeak) {
+    public FormDataMasterProductCatAmount(Context contextWeak, boolean beginnerMode) {
         this.contextWeak = new WeakReference<>(contextWeak);
-        displayHelpLive = new MutableLiveData<>(false);
+        displayHelpLive = new MutableLiveData<>(beginnerMode);
         quantityUnitLive = new MutableLiveData<>();
         minAmountLive = new MutableLiveData<>();
         accumulateMinAmount = new MutableLiveData<>(false);

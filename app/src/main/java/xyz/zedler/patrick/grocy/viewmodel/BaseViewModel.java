@@ -47,7 +47,7 @@ public class BaseViewModel extends AndroidViewModel {
         showMessage(getString(R.string.error_undefined));
     }
 
-    void showMessage(@NonNull String message) {
+    public void showMessage(@NonNull String message) {
         showSnackbar(new SnackbarMessage(message));
     }
 

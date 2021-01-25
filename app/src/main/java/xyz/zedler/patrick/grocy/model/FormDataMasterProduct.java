@@ -43,8 +43,8 @@ public class FormDataMasterProduct {
     private final MutableLiveData<ArrayList<String>> productNamesLive;
     private final MutableLiveData<Product> productLive;
 
-    public FormDataMasterProduct(Context contextWeak) {
-        displayHelpLive = new MutableLiveData<>(true);
+    public FormDataMasterProduct(Context contextWeak, boolean beginnerMode) {
+        displayHelpLive = new MutableLiveData<>(beginnerMode);
         productLive = new MutableLiveData<>();
         productNamesLive = new MutableLiveData<>();
         nameLive = (MutableLiveData<String>) Transformations.map(

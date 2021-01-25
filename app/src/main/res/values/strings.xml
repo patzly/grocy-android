@@ -543,6 +543,8 @@
     <string name="setting_logs_description">Display logcat of this process</string>
     <string name="setting_timeout">Loading timeout</string>
     <string name="setting_timeout_descriptions">After which loading is cancelled</string>
+    <string name="setting_beginner_mode">Beginner mode</string>
+    <string name="setting_beginner_mode_description">Display help texts by default</string>
     <string name="setting_synchronized">These settings are synchronized with your server.</string>
 
     <string name="setting_ask_best_before_date">Ask for best before date</string>

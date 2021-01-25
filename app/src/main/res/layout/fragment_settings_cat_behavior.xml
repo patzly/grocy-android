@@ -93,6 +93,38 @@
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="@{v -> switchLogging.setChecked(!switchLogging.isChecked())}">
+
+                <ImageView
+                    android:id="@+id/image_help"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_help_anim"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_beginner_mode"/>
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_beginner_mode_description"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_logging"
+                    style="@style/Widget.Grocy.Switch"
+                    android:onCheckedChanged="@{() -> activity.startIconAnimation(imageHelp, true)}"
+                    android:checked="@={viewModel.beginnerModeEnabled}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:onClick="@{v -> viewModel.showShortcutsBottomSheet()}"
                 app:clickUtil="@{clickUtil}">
 

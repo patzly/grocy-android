@@ -108,7 +108,8 @@
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsCatBehaviorFragment)}"
-                        app:clickUtil="@{clickUtil}">
+                        app:clickUtil="@{clickUtil}"
+                        android:visibility="@{viewModel.beginnerModeEnabled ? View.VISIBLE : View.GONE}">
 
                         <TextView
                             android:layout_width="match_parent"
