@@ -17,7 +17,7 @@
 
     <color name="retro_dirt">#e2d9a2</color>
     <color name="retro_dirt_fg">#807128</color>
-    <color name="retro_dirt_bg">@color/retro_dirt</color>
+    <color name="retro_dirt_bg">#aae2d9a2</color>
 
     <color name="retro_green">#789f8a</color>
     <color name="retro_green_fg">#60837a</color>
