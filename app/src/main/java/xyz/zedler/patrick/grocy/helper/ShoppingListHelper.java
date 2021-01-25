@@ -117,6 +117,7 @@ public class ShoppingListHelper {
     public static ArrayList<GroupedListItem> groupItemsShoppingMode(
             Context context,
             ArrayList<ShoppingListItem> shoppingListItems,
+            HashMap<Integer, Product> productHashMap,
             ArrayList<ProductGroup> productGroups,
             ArrayList<ShoppingList> shoppingLists,
             int selectedShoppingListId,
@@ -138,7 +139,10 @@ public class ShoppingListHelper {
             }
             String groupId = null;
             ProductGroup productGroup = null;
-            Product product = shoppingListItem.getProduct();
+            Product product = null;
+            if(shoppingListItem.hasProduct()) {
+                product = productHashMap.get(shoppingListItem.getProductIdInt());
+            }
             if(product != null) groupId = product.getProductGroupId();
             if(groupId != null && groupId.isEmpty()) groupId = null;
             if(groupId != null) productGroup = productGroupHashMap.get(groupId);

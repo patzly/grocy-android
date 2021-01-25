@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -47,11 +48,9 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
 
-    private final static String TAG = ShoppingModeItemAdapter.class.getSimpleName();
-    private final static boolean DEBUG = false;
-
     private final ArrayList<GroupedListItem> groupedListItems;
-    private final ArrayList<QuantityUnit> quantityUnits;
+    private HashMap<Integer, Product> productHashMap;
+    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
     private final ShoppingModeItemClickListener listener;
 
     static class DiffCallback extends DiffUtil.Callback {
@@ -107,7 +106,14 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
         }
     }
 
-    public void updateList(ArrayList<GroupedListItem> newList) {
+    public void updateData(
+            ArrayList<GroupedListItem> newList,
+            HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+            ArrayList<Integer> missingProductIds
+    ) {
+        this.productHashMap = productHashMap;
+        this.quantityUnitHashMap = quantityUnitHashMap;
         DiffCallback diffCallback = new DiffCallback(newList, this.groupedListItems);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         groupedListItems.clear();
@@ -117,11 +123,14 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
     public ShoppingModeItemAdapter(
             ArrayList<GroupedListItem> groupedListItems,
-            ArrayList<QuantityUnit> quantityUnits,
+            HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+            ArrayList<Integer> missingProductIds,
             ShoppingModeItemClickListener listener
     ) {
         this.groupedListItems = new ArrayList<>(groupedListItems);
-        this.quantityUnits = quantityUnits;
+        this.productHashMap = productHashMap;
+        this.quantityUnitHashMap = quantityUnitHashMap;
         this.listener = listener;
     }
 
@@ -229,11 +238,13 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             return;
         }
 
-        ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItem;
+        ShoppingListItem item = (ShoppingListItem) groupedListItem;
 
         // NAME
 
-        Product product = shoppingListItem.getProduct();
+        Product product = null;
+        if(item.hasProduct()) product = productHashMap.get(item.getProductIdInt());
+
         if(product != null) {
             holder.textViewName.setText(product.getName());
             holder.textViewName.setVisibility(View.VISIBLE);
@@ -241,7 +252,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             holder.textViewName.setText(null);
             holder.textViewName.setVisibility(View.GONE);
         }
-        if(shoppingListItem.isUndone()) {
+        if(item.isUndone()) {
             holder.textViewName.setPaintFlags(
                     holder.textViewName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -260,31 +271,24 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
         // AMOUNT
 
-        if(shoppingListItem.getProduct() != null) {
-            QuantityUnit quantityUnit = new QuantityUnit();
-            for(int i = 0; i < quantityUnits.size(); i++) {
-                if(quantityUnits.get(i).getId()
-                        == shoppingListItem.getProduct().getQuIdPurchase()
-                ) {
-                    quantityUnit = quantityUnits.get(i);
-                    break;
-                }
-            }
+        if(product != null) {
+            QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
+            if(quantityUnit == null) quantityUnit = new QuantityUnit();
 
             holder.textViewAmount.setText(
                     holder.textViewAmount.getContext().getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(shoppingListItem.getAmount()),
-                            shoppingListItem.getAmount() == 1
+                            NumUtil.trim(item.getAmount()),
+                            item.getAmount() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()
                     )
             );
         } else {
-            holder.textViewAmount.setText(NumUtil.trim(shoppingListItem.getAmount()));
+            holder.textViewAmount.setText(NumUtil.trim(item.getAmount()));
         }
 
-        if(shoppingListItem.isUndone()) {
+        if(item.isUndone()) {
             holder.textViewAmount.setPaintFlags(
                     holder.textViewAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -296,13 +300,13 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
         // NOTE
 
-        if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().isEmpty()) {
+        if(item.getNote() != null && !item.getNote().isEmpty()) {
             if(holder.textViewName.getVisibility() == View.VISIBLE) {
                 holder.textViewNote.setVisibility(View.VISIBLE);
-                holder.textViewNote.setText(shoppingListItem.getNote().trim());
+                holder.textViewNote.setText(item.getNote().trim());
             } else {
                 holder.textViewNoteName.setVisibility(View.VISIBLE);
-                holder.textViewNoteName.setText(shoppingListItem.getNote().trim());
+                holder.textViewNoteName.setText(item.getNote().trim());
                 holder.textViewNote.setVisibility(View.GONE);
                 holder.textViewNote.setText(null);
             }
@@ -313,7 +317,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             }
         }
         if(holder.textViewNoteName.getVisibility() == View.VISIBLE) {
-            if(shoppingListItem.isUndone()) {
+            if(item.isUndone()) {
                 holder.textViewNoteName.setPaintFlags(
                         holder.textViewNoteName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );
@@ -323,7 +327,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
                 );
             }
         } else {
-            if(shoppingListItem.isUndone()) {
+            if(item.isUndone()) {
                 holder.textViewNote.setPaintFlags(
                         holder.textViewNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );
@@ -334,7 +338,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             }
         }
 
-        if(shoppingListItem.getDone() == 1) {
+        if(item.getDone() == 1) {
             holder.cardViewContainer.setAlpha((float) 0.5);
         } else {
             holder.cardViewContainer.setAlpha((float) 1.0);

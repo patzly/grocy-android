@@ -39,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -78,8 +79,11 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
+    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
     private ArrayList<Product> products;
+    private HashMap<Integer, Product> productHashMap;
     private ArrayList<MissingItem> missingItems;
+    private ArrayList<Integer> missingProductIds;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -119,16 +123,20 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                     this.shoppingLists = shoppingLists;
                     this.productGroups = productGroups;
                     this.quantityUnits = quantityUnits;
+                    quantityUnitHashMap = new HashMap<>();
+                    for(QuantityUnit quantityUnit : quantityUnits) {
+                        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+                    }
                     this.products = products;
+                    productHashMap = new HashMap<>();
+                    for(Product product : products) productHashMap.put(product.getId(), product);
                     this.missingItems = missingItems;
+                    missingProductIds = new ArrayList<>();
+                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
                     updateFilteredShoppingListItems();
                     if(downloadAfterLoading) downloadData();
                 }
         );
-    }
-
-    public ArrayList<QuantityUnit> getQuantityUnits() {
-        return this.quantityUnits;
     }
 
     public void updateFilteredShoppingListItems() {
@@ -136,6 +144,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                 ShoppingListHelper.groupItemsShoppingMode(
                         getApplication(),
                         getFilteredShoppingListItems(),
+                        this.productHashMap,
                         this.productGroups,
                         this.shoppingLists,
                         getSelectedShoppingListId(),
@@ -191,58 +200,32 @@ public class ShoppingModeViewModel extends AndroidViewModel {
             return;
         }
 
-        // get last offline db-changed-time values
-        String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
-        String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
-        String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-        String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
-        String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
-        String lastTimeMissingItems = getLastTime(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
-
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
-                this.shoppingListItems = shoppingListItems;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download");
-        if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingLists(shoppingLists -> {
-                this.shoppingLists = shoppingLists;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download");
-        if(lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
-            queue.append(dlHelper.getProductGroups(productGroups -> {
-                this.productGroups = productGroups;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download");
-        if(lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
-            queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
-                this.quantityUnits = quantityUnits;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download");
-        if(lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
-            queue.append(dlHelper.getProducts(products -> {
-                this.products = products;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Products download");
-        if(lastTimeMissingItems == null || !lastTimeMissingItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getVolatile((due, overdue, expired, missing) -> {
-                this.missingItems = missing;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Volatile download");
+        queue.append(
+                dlHelper.updateShoppingListItems(
+                        dbChangedTime, shoppingListItems -> this.shoppingListItems = shoppingListItems
+                ), dlHelper.updateShoppingLists(
+                        dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
+                ), dlHelper.updateProductGroups(
+                        dbChangedTime, productGroups -> this.productGroups = productGroups
+                ), dlHelper.updateQuantityUnits(
+                        dbChangedTime, quantityUnits -> {
+                            this.quantityUnits = quantityUnits;
+                            quantityUnitHashMap = new HashMap<>();
+                            for(QuantityUnit quantityUnit : quantityUnits) {
+                                quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+                            }
+                        }
+                ), dlHelper.updateProducts(dbChangedTime, products -> {
+                    this.products = products;
+                    for(Product product : products) productHashMap.put(product.getId(), product);
+                }),
+                dlHelper.updateMissingItems(dbChangedTime, missing -> {
+                    this.missingItems = missing;
+                    missingProductIds = new ArrayList<>();
+                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
+                })
+        );
 
         if(queue.isEmpty()) {
             onQueueEmpty();
@@ -468,13 +451,24 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         return shoppingLists;
     }
 
+    public ArrayList<QuantityUnit> getQuantityUnits() {
+        return this.quantityUnits;
+    }
+
     public QuantityUnit getQuantityUnitFromId(int id) {
-        if(quantityUnits == null) return null;
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) {
-                return quantityUnit;
-            }
-        } return null;
+        return quantityUnitHashMap.get(id);
+    }
+
+    public ArrayList<Integer> getMissingProductIds() {
+        return missingProductIds;
+    }
+
+    public HashMap<Integer, Product> getProductHashMap() {
+        return productHashMap;
+    }
+
+    public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
+        return quantityUnitHashMap;
     }
 
     @NonNull

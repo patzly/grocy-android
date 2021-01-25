@@ -147,12 +147,19 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getInfoFullscreenLive().setValue(null);
             }
             if(binding.recycler.getAdapter() instanceof ShoppingModeItemAdapter) {
-                ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateList(items); // TODO: Update also quantity units because a new item can have a new one | and also shoppinglists because of bottom notes
+                ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateData(
+                        items,
+                        viewModel.getProductHashMap(),
+                        viewModel.getQuantityUnitHashMap(),
+                        viewModel.getMissingProductIds()
+                );
             } else {
                 binding.recycler.setAdapter(
                         new ShoppingModeItemAdapter(
                                 items,
-                                viewModel.getQuantityUnits(),
+                                viewModel.getProductHashMap(),
+                                viewModel.getQuantityUnitHashMap(),
+                                viewModel.getMissingProductIds(),
                                 this
                         )
                 );
