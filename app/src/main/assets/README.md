@@ -42,6 +42,8 @@ Here is a changelog for this first alpha:
 
 **Testing**
 I you want to test the first alpha version (v2.0.0_alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there may be a popup with a toggle "Allow from this source".
+You can install the APK over your current installation, because it has the same signature.
+After update, the some or all app preferences may have the default status because their identifiers changed internally and I didn't write migrations for them.
 
 Please report any bug or misbehavior in a [new issue](https://github.com/patzly/grocy-android/issues) if there isn't already an open one.
 New or rewritten pages may also contain issues which were fixed in previous releases (so they may have a closed issue here) – please report them too in a new issue.

@@ -160,25 +160,6 @@ public class ShoppingListRepository {
 
         @Override
         protected final Void doInBackground(Void... params) {
-            // fill shopping list items with product objects
-            HashMap<Integer, Product> productHashMap = new HashMap<>();
-            for(Product p : this.products) productHashMap.put(p.getId(), p);
-            ArrayList<String> missingProductIds = new ArrayList<>();
-            for(MissingItem missingItem : this.missingItems) {
-                missingProductIds.add(String.valueOf(missingItem.getId()));
-            }
-
-            ArrayList<ShoppingListItem> shoppingListItemsWithProduct
-                    = new ArrayList<>(this.shoppingListItems);
-
-            for(ShoppingListItem item : shoppingListItemsWithProduct) {
-                if(item.getProductId() == null) continue;
-                Product product = productHashMap.get(Integer.parseInt(item.getProductId()));
-                if(product != null) item.setProduct(product);
-                if(missingProductIds.contains(item.getProductId())) item.setIsMissing(true);
-            }
-
-
             for(ShoppingListItem s : shoppingListItems) serverItemsHashMap.put(s.getId(), s);
 
             List<ShoppingListItem> offlineItems = appDatabase.shoppingListItemDao().getAll();

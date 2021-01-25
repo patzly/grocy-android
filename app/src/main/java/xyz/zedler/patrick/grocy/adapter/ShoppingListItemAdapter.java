@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
@@ -62,7 +63,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     private Context context;
     private final ArrayList<GroupedListItem> groupedListItems;
-    private ArrayList<QuantityUnit> quantityUnits;
+    private HashMap<Integer, Product> productHashMap;
+    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+    private ArrayList<Integer> missingProductIds;
     private final ShoppingListItemAdapterListener listener;
 
     private int filterState;
@@ -74,7 +77,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     public ShoppingListItemAdapter(
             Context context,
             ArrayList<GroupedListItem> groupedListItems,
-            ArrayList<QuantityUnit> quantityUnits,
+            HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+            ArrayList<Integer> missingProductIds,
             ShoppingListItemAdapterListener listener,
             int filterState,
             OnFilterChangedListener filterListenerOutput,
@@ -83,7 +88,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     ) {
         this.context = context;
         this.groupedListItems = new ArrayList<>(groupedListItems);
-        this.quantityUnits = quantityUnits;
+        this.productHashMap = productHashMap;
+        this.quantityUnitHashMap = quantityUnitHashMap;
+        this.missingProductIds = missingProductIds;
         this.listener = listener;
 
         this.filterState = filterState;
@@ -287,12 +294,14 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             return;
         }
 
-        ShoppingListItem shoppingListItem = (ShoppingListItem) groupedListItem;
+        ShoppingListItem item = (ShoppingListItem) groupedListItem;
         RowShoppingListItemBinding binding = ((ShoppingListItemViewHolder) viewHolder).binding;
 
         // NAME
 
-        Product product = shoppingListItem.getProduct();
+        Product product = null;
+        if(item.hasProduct()) product = productHashMap.get(item.getProductIdInt());
+
         if(product != null) {
             binding.name.setText(product.getName());
             binding.name.setVisibility(View.VISIBLE);
@@ -300,7 +309,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             binding.name.setText(null);
             binding.name.setVisibility(View.GONE);
         }
-        if(shoppingListItem.isUndone()) {
+        if(item.isUndone()) {
             binding.name.setPaintFlags(
                     binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -319,29 +328,24 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // AMOUNT
 
-        if(shoppingListItem.getProduct() != null) {
-            QuantityUnit quantityUnit = new QuantityUnit();
-            for(int i = 0; i < quantityUnits.size(); i++) {
-                if(quantityUnits.get(i).getId() == shoppingListItem.getProduct().getQuIdPurchase()) {
-                    quantityUnit = quantityUnits.get(i);
-                    break;
-                }
-            }
+        if(product != null) {
+            QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
+            if(quantityUnit == null) quantityUnit = new QuantityUnit();
 
             binding.amount.setText(
                     context.getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(shoppingListItem.getAmount()),
-                            shoppingListItem.getAmount() == 1
+                            NumUtil.trim(item.getAmount()),
+                            item.getAmount() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()
                     )
             );
         } else {
-            binding.amount.setText(NumUtil.trim(shoppingListItem.getAmount()));
+            binding.amount.setText(NumUtil.trim(item.getAmount()));
         }
 
-        if(shoppingListItem.isMissing()) {
+        if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
             binding.amount.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_mono_medium));
             binding.amount.setTextColor(ContextCompat.getColor(context, R.color.retro_blue_fg));
         } else {
@@ -352,7 +356,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     ContextCompat.getColor(context, R.color.on_background_secondary)
             );
         }
-        if(shoppingListItem.isUndone()) {
+        if(item.isUndone()) {
             binding.amount.setPaintFlags(
                     binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
@@ -364,13 +368,13 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NOTE
 
-        if(shoppingListItem.getNote() != null && !shoppingListItem.getNote().isEmpty()) {
+        if(item.getNote() != null && !item.getNote().isEmpty()) {
             if(binding.name.getVisibility() == View.VISIBLE) {
                 binding.noteContainer.setVisibility(View.VISIBLE);
-                binding.note.setText(shoppingListItem.getNote().trim());
+                binding.note.setText(item.getNote().trim());
             } else {
                 binding.noteAsName.setVisibility(View.VISIBLE);
-                binding.noteAsName.setText(shoppingListItem.getNote().trim());
+                binding.noteAsName.setText(item.getNote().trim());
             }
         } else {
             if(binding.name.getVisibility() == View.VISIBLE) {
@@ -379,7 +383,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             }
         }
         if(binding.noteAsName.getVisibility() == View.VISIBLE) {
-            if(shoppingListItem.isUndone()) {
+            if(item.isUndone()) {
                 binding.noteAsName.setPaintFlags(
                         binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );
@@ -389,7 +393,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                 );
             }
         } else {
-            if(shoppingListItem.isUndone()) {
+            if(item.isUndone()) {
                 binding.note.setPaintFlags(
                         binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
                 );
@@ -427,7 +431,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NAME
 
-        Product product = listItem.getProduct();
+        Product product = listItem.getProduct();  // TODO
         if(product != null) {
             binding.name.setText(product.getName());
             binding.name.setVisibility(View.VISIBLE);
@@ -544,11 +548,15 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     public void updateData(
             ArrayList<GroupedListItem> newList,
-            ArrayList<QuantityUnit> quantityUnits,
+            HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+            ArrayList<Integer> missingProductIds,
             int itemsMissingCount,
             int itemsUndoneCount
     ) {
-        this.quantityUnits = quantityUnits;
+        this.productHashMap = productHashMap;
+        this.quantityUnitHashMap = quantityUnitHashMap;
+        this.missingProductIds = missingProductIds;
         if(this.itemsMissingCount != itemsMissingCount
                 || this.itemsUndoneCount != itemsUndoneCount) {
             this.itemsMissingCount = itemsMissingCount;

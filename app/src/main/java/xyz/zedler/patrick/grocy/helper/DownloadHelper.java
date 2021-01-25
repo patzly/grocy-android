@@ -886,6 +886,75 @@ public class DownloadHelper {
         return getVolatile(onResponseListener, null);
     }
 
+    public QueueItem getMissingItems(
+            OnMissingItemsResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnStringResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getStockVolatile(),
+                        uuid,
+                        response -> {
+                            if(debug) Log.i(tag, "download Volatile (only missing): success");
+                            ArrayList<MissingItem> missingItems = new ArrayList<>();
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                // Parse fourth part of volatile array: missing products
+                                missingItems = gson.fromJson(
+                                        jsonObject.getJSONArray("missing_products").toString(),
+                                        new TypeToken<List<MissingItem>>(){}.getType()
+                                );
+                                if(debug) Log.i(tag, "download Volatile (only missing): missing = " + missingItems);
+                            } catch (JSONException e) {
+                                if(debug) Log.e(tag, "download Volatile (only missing): " + e);
+                            }
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(missingItems);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getMissingItems(OnMissingItemsResponseListener onResponseListener) {
+        return getMissingItems(onResponseListener, null);
+    }
+
+    public QueueItem updateMissingItems(
+            String dbChangedTime,
+            OnMissingItemsResponseListener onResponseListener
+    ) {
+        OnMissingItemsResponseListener newOnResponseListener = shoppingListItems -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(shoppingListItems);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getMissingItems(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped MissingItems download");
+            return null;
+        }
+    }
+
     public QueueItem getProductDetails(
             int productId,
             OnProductDetailsResponseListener onResponseListener,
@@ -927,7 +996,7 @@ public class DownloadHelper {
     }
 
     public QueueItem getShoppingListItems(
-            OnShoppingListResponseListener onResponseListener,
+            OnShoppingListItemsResponseListener onResponseListener,
             OnErrorListener onErrorListener
     ) {
         return new QueueItem() {
@@ -959,16 +1028,16 @@ public class DownloadHelper {
     }
 
     public QueueItem getShoppingListItems(
-            OnShoppingListResponseListener onResponseListener
+            OnShoppingListItemsResponseListener onResponseListener
     ) {
         return getShoppingListItems(onResponseListener, null);
     }
 
     public QueueItem updateShoppingListItems(
             String dbChangedTime,
-            OnShoppingListResponseListener onResponseListener
+            OnShoppingListItemsResponseListener onResponseListener
     ) {
-        OnShoppingListResponseListener newOnResponseListener = shoppingListItems -> {
+        OnShoppingListItemsResponseListener newOnResponseListener = shoppingListItems -> {
             SharedPreferences.Editor editPrefs = sharedPrefs.edit();
             editPrefs.putString(
                     Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime
@@ -1399,11 +1468,15 @@ public class DownloadHelper {
         );
     }
 
+    public interface OnMissingItemsResponseListener {
+        void onResponse(ArrayList<MissingItem> missingItems);
+    }
+
     public interface OnProductDetailsResponseListener {
         void onResponse(ProductDetails productDetails);
     }
 
-    public interface OnShoppingListResponseListener {
+    public interface OnShoppingListItemsResponseListener {
         void onResponse(ArrayList<ShoppingListItem> arrayList);
     }
 

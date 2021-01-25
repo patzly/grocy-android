@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
@@ -73,8 +74,11 @@ public class ShoppingListViewModel extends BaseViewModel {
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
+    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
     private ArrayList<Product> products;
+    private HashMap<Integer, Product> productHashMap;
     private ArrayList<MissingItem> missingItems;
+    private ArrayList<Integer> missingProductIds;
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
@@ -121,16 +125,20 @@ public class ShoppingListViewModel extends BaseViewModel {
                     this.shoppingLists = shoppingLists;
                     this.productGroups = productGroups;
                     this.quantityUnits = quantityUnits;
-                    this.products = products;
+                    quantityUnitHashMap = new HashMap<>();
+                    for(QuantityUnit quantityUnit : quantityUnits) {
+                        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+                    }
                     this.missingItems = missingItems;
+                    missingProductIds = new ArrayList<>();
+                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
+                    this.products = products;
+                    productHashMap = new HashMap<>();
+                    for(Product product : products) productHashMap.put(product.getId(), product);
                     updateFilteredShoppingListItems();
                     if(downloadAfterLoading) downloadData();
                 }
         );
-    }
-
-    public ArrayList<QuantityUnit> getQuantityUnits() {
-        return this.quantityUnits;
     }
 
     public void updateFilteredShoppingListItems() {
@@ -138,6 +146,7 @@ public class ShoppingListViewModel extends BaseViewModel {
                 ShoppingListHelper.groupItems(
                         getApplication(),
                         getFilteredShoppingListItems(),
+                        this.productHashMap,
                         this.productGroups,
                         this.shoppingLists,
                         getSelectedShoppingListId(),
@@ -155,35 +164,33 @@ public class ShoppingListViewModel extends BaseViewModel {
         itemsMissingCount = 0;
         itemsUndoneCount = 0;
 
-        for(ShoppingListItem shoppingListItem : this.shoppingListItems) {
-            if(shoppingListItem.getShoppingListId() != getSelectedShoppingListId()) continue;
-            if(shoppingListItem.isMissing()) itemsMissingCount += 1;
-            if(shoppingListItem.isUndone()) itemsUndoneCount += 1;
+        for(ShoppingListItem item : this.shoppingListItems) {
+            if(item.getShoppingListId() != getSelectedShoppingListId()) continue;
+            if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
+                itemsMissingCount += 1;
+            }
+            if(item.isUndone()) itemsUndoneCount += 1;
 
             boolean searchContainsItem = true;
             if(searchInput != null && !searchInput.isEmpty()) {
                 String name;
-                String description = null;
-                if(shoppingListItem.getProduct() != null) {
-                    name = shoppingListItem.getProduct().getName();
-                    description = shoppingListItem.getProduct().getDescription();
+                if(item.hasProduct()) {
+                    Product product = productHashMap.get(item.getProductIdInt());
+                    name = product.getName();
                 } else {
-                    name = shoppingListItem.getNote();
+                    name = item.getNote();
                 }
                 name = name != null ? name.toLowerCase() : "";
-                description = description != null ? description.toLowerCase() : "";
-                if(!name.contains(searchInput) && !description.contains(searchInput)) {
-                    searchContainsItem = false;
-                }
+                searchContainsItem = name.contains(searchInput);
             }
             if(!searchContainsItem) continue;
 
             if(filterState == ShoppingListItemAdapter.FILTER_NOTHING
                     || filterState == ShoppingListItemAdapter.FILTER_MISSING
-                    && shoppingListItem.isMissing()
+                    && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
                     || filterState == ShoppingListItemAdapter.FILTER_UNDONE
-                    && shoppingListItem.isUndone()
-            ) filteredShoppingListItems.add(shoppingListItem);
+                    && item.isUndone()
+            ) filteredShoppingListItems.add(item);
         }
         return filteredShoppingListItems;
     }
@@ -226,10 +233,6 @@ public class ShoppingListViewModel extends BaseViewModel {
         return selectedShoppingListIdLive;
     }
 
-    private String getLastTime(String sharedPref) {
-        return sharedPrefs.getString(sharedPref, null);
-    }
-
     public void downloadData(@Nullable String dbChangedTime) {
         if(currentQueueLoading != null) {
             currentQueueLoading.reset(true);
@@ -248,58 +251,32 @@ public class ShoppingListViewModel extends BaseViewModel {
             return;
         }
 
-        // get last offline db-changed-time values
-        String lastTimeShoppingListItems = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
-        String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
-        String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-        String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
-        String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
-        String lastTimeMissingItems = getLastTime(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
-
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        if(lastTimeShoppingListItems == null || !lastTimeShoppingListItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingListItems(shoppingListItems -> {
-                this.shoppingListItems = shoppingListItems;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingListItems download");
-        if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingLists(shoppingLists -> {
-                this.shoppingLists = shoppingLists;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download");
-        if(lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
-            queue.append(dlHelper.getProductGroups(productGroups -> {
-                this.productGroups = productGroups;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download");
-        if(lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
-            queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
-                this.quantityUnits = quantityUnits;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download");
-        if(lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
-            queue.append(dlHelper.getProducts(products -> {
-                this.products = products;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Products download");
-        if(lastTimeMissingItems == null || !lastTimeMissingItems.equals(dbChangedTime)) {
-            queue.append(dlHelper.getVolatile((due, overdue, expired, missing) -> {
-                this.missingItems = missing;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Volatile download");
+        queue.append(
+                dlHelper.updateShoppingListItems(
+                        dbChangedTime, shoppingListItems -> this.shoppingListItems = shoppingListItems
+                ), dlHelper.updateShoppingLists(
+                        dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
+                ), dlHelper.updateProductGroups(
+                        dbChangedTime, productGroups -> this.productGroups = productGroups
+                ), dlHelper.updateQuantityUnits(
+                        dbChangedTime, quantityUnits -> {
+                            this.quantityUnits = quantityUnits;
+                            quantityUnitHashMap = new HashMap<>();
+                            for(QuantityUnit quantityUnit : quantityUnits) {
+                                quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+                            }
+                        }
+                ), dlHelper.updateProducts(dbChangedTime, products -> {
+                    this.products = products;
+                    for(Product product : products) productHashMap.put(product.getId(), product);
+                }),
+                dlHelper.updateMissingItems(dbChangedTime, missing -> {
+                    this.missingItems = missing;
+                    missingProductIds = new ArrayList<>();
+                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
+                })
+        );
 
         if(queue.isEmpty()) {
             onQueueEmpty();
@@ -655,13 +632,20 @@ public class ShoppingListViewModel extends BaseViewModel {
         return shoppingLists;
     }
 
+    public ArrayList<Integer> getMissingProductIds() {
+        return missingProductIds;
+    }
+
+    public HashMap<Integer, Product> getProductHashMap() {
+        return productHashMap;
+    }
+
+    public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
+        return quantityUnitHashMap;
+    }
+
     public QuantityUnit getQuantityUnitFromId(int id) {
-        if(quantityUnits == null) return null;
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) {
-                return quantityUnit;
-            }
-        } return null;
+        return quantityUnitHashMap.get(id);
     }
 
     @NonNull

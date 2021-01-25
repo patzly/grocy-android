@@ -182,6 +182,11 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return productId;
     }
 
+    public int getProductIdInt() {
+        if(!hasProduct()) return -1;
+        return Integer.parseInt(productId);
+    }
+
     public void setProductId(String productId) {
         this.productId = productId;
     }
@@ -230,10 +235,12 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.doneSynced = doneSynced;
     }
 
+    @Deprecated
     public String getProductName() {
         return productName;
     }
 
+    @Deprecated
     public String getProductDescription() {
         return productDescription;
     }
@@ -242,14 +249,17 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return productGroupId;
     }
 
+    @Deprecated
     public int getProductQuIdPurchase() {
         return productQuIdPurchase;
     }
 
+    @Deprecated
     public void setProductName(String productName) {
         this.productName = productName;
     }
 
+    @Deprecated
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
@@ -262,6 +272,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.productQuIdPurchase = productQuIdPurchase;
     }
 
+    @Deprecated
     public Product getProduct() {  // only required info for actions in shopping list
         if(productId == null || productId.isEmpty()) return null;
         return new Product(
@@ -273,6 +284,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         );
     }
 
+    @Deprecated
     public void setProduct(Product product) {
         if(product == null) {
             return;
@@ -283,18 +295,26 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         productGroupId = product.getProductGroupId();
     }
 
+    public boolean hasProduct() {
+        return productId != null && !productId.isEmpty();
+    }
+
+    @Deprecated
     public int getIsMissing() {
         return isMissing;
     }
 
+    @Deprecated
     public boolean isMissing() {
         return getIsMissing() == 1;
     }
 
+    @Deprecated
     public void setIsMissing(boolean isMissing) {
         setIsMissing(isMissing ? 1 : 0);
     }
 
+    @Deprecated
     public void setIsMissing(int isMissing) {
         this.isMissing = isMissing;
     }

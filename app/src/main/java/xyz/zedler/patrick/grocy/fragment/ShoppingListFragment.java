@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -173,7 +174,9 @@ public class ShoppingListFragment extends BaseFragment implements
             if(binding.recycler.getAdapter() instanceof ShoppingListItemAdapter) {
                 ((ShoppingListItemAdapter) binding.recycler.getAdapter()).updateData(
                         items,
-                        viewModel.getQuantityUnits(),
+                        viewModel.getProductHashMap(),
+                        viewModel.getQuantityUnitHashMap(),
+                        viewModel.getMissingProductIds(),
                         viewModel.getItemsMissingCount(),
                         viewModel.getItemsUndoneCount()
                 );
@@ -182,7 +185,9 @@ public class ShoppingListFragment extends BaseFragment implements
                         new ShoppingListItemAdapter(
                                 requireContext(),
                                 items,
-                                viewModel.getQuantityUnits(),
+                                viewModel.getProductHashMap(),
+                                viewModel.getQuantityUnitHashMap(),
+                                viewModel.getMissingProductIds(),
                                 this,
                                 viewModel.getFilterState(),
                                 state -> viewModel.onFilterChanged(state),
@@ -437,28 +442,21 @@ public class ShoppingListFragment extends BaseFragment implements
         }
     }
 
-    private void showItemBottomSheet(ShoppingListItem shoppingListItem) {
-        if(shoppingListItem == null) return;
+    private void showItemBottomSheet(ShoppingListItem item) {
+        if(item == null) return;
 
         Bundle bundle = new Bundle();
-        if(shoppingListItem.getProduct() != null) {
-            bundle.putString(
-                    Constants.ARGUMENT.PRODUCT_NAME,
-                    shoppingListItem.getProduct().getName()
-            );
-            QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(
-                    shoppingListItem.getProduct().getQuIdPurchase()
-            );
-            if(quantityUnit != null && shoppingListItem.getAmount() == 1) {
+        if(item.hasProduct()) {
+            Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
+            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
+            QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchase());
+            if(quantityUnit != null && item.getAmount() == 1) {
                 bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
             } else if(quantityUnit != null) {
-                bundle.putString(
-                        Constants.ARGUMENT.QUANTITY_UNIT,
-                        quantityUnit.getNamePlural()
-                );
+                bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getNamePlural());
             }
         }
-        bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, shoppingListItem);
+        bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, item);
         bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
         activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
     }
