@@ -12,7 +12,7 @@
         android:textAlignment="viewStart"
         android:padding="16dp"
         android:text="@string/action_clear_shopping_list"
-        android:fontFamily="@font/roboto_mono_bold"
+        android:fontFamily="@font/besley_bold"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     <View

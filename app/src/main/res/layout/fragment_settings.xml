@@ -60,7 +60,7 @@
                 android:layout_marginEnd="16dp"
                 android:singleLine="true"
                 android:text="@string/title_settings"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/besley_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>

@@ -143,7 +143,7 @@
                     android:layout_gravity="center"
                     android:textAlignment="center"
                     android:background="@color/transparent"
-                    android:fontFamily="@font/roboto_mono_medium"
+                    android:fontFamily="@font/besley_medium"
                     android:textSize="15.5sp"
                     android:textColor="@color/white"/>
 

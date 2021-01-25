@@ -49,7 +49,7 @@
                 android:text="@string/property_stores"
                 android:layout_marginEnd="16dp"
                 android:textAlignment="viewStart"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/besley_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>

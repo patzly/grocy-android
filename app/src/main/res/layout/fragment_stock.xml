@@ -24,7 +24,7 @@
                 android:textAlignment="center"
                 android:singleLine="true"
                 android:text="@string/title_stock_overview"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/besley_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>

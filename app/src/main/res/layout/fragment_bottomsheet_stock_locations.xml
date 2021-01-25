@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textAlignment="viewStart"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/besley_bold"
                 android:text="@string/property_locations"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 

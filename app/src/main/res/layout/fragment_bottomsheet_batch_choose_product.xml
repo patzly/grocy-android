@@ -11,7 +11,7 @@
         android:padding="16dp"
         android:singleLine="true"
         android:textAlignment="viewStart"
-        android:fontFamily="@font/roboto_mono_bold"
+        android:fontFamily="@font/besley_bold"
         android:text="@string/title_link_barcode"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 

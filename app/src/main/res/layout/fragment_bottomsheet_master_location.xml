@@ -19,7 +19,7 @@
             android:singleLine="true"
             android:textAlignment="viewStart"
             android:layout_margin="16dp"
-            android:fontFamily="@font/roboto_mono_bold"
+            android:fontFamily="@font/besley_bold"
             android:text="@string/property_location"
             android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
 

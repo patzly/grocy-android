@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:fontFamily="@font/roboto_mono_bold"
+            android:fontFamily="@font/besley_bold"
             android:textSize="24sp"
             android:textColor="@color/on_background"
             android:maxLines="2"/>
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textAlignment="center"
-            android:fontFamily="@font/roboto_mono_regular"
+            android:fontFamily="@font/besley_regular"
             android:lineSpacingExtra="8sp"
             android:textSize="15sp"
             android:textColor="@color/on_background_secondary"

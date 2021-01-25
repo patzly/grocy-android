@@ -69,7 +69,7 @@
                     android:text="@string/title_purchase"
                     android:textAlignment="viewStart"
                     android:layout_marginEnd="16dp"
-                    android:fontFamily="@font/roboto_mono_bold"
+                    android:fontFamily="@font/besley_bold"
                     android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
             </LinearLayout>
@@ -228,6 +228,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_background"
                             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
+                            android:fontFamily="@font/besley_regular"
                             android:text="@string/msg_help_tare_weight_purchase"/>
 
                     </com.google.android.material.card.MaterialCardView>
@@ -250,6 +251,7 @@
                             <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
                                 android:text="@string/property_quantity_unit"
+                                android:fontFamily="@font/roboto_mono_regular"
                                 android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}" />
 
                             <TextView
