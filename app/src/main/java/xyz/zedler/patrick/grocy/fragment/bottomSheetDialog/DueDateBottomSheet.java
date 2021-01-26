@@ -204,6 +204,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
         if(activity.getClass() == MainActivity.class) {
             BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
             currentFragment.selectDueDate(date);
+            currentFragment.onBottomSheetDismissed();
         } else if(activity.getClass() == ScanBatchActivity.class) {
             ((ScanBatchActivity) activity).setBestBeforeDate(date);
             ((ScanBatchActivity) activity).askNecessaryDetails();

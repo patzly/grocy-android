@@ -57,6 +57,7 @@
     <string name="action_undo">Undo</string>
     <string name="action_retry">Retry</string>
     <string name="action_edit">Edit</string>
+    <string name="action_proceed">Proceed</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
     <string name="action_logout">Logout</string>
@@ -256,6 +257,7 @@
     <string name="title_edit_description">Edit description</string>
     <string name="title_input_number">Number input</string>
     <string name="title_external_barcode_input">External scanner</string>
+    <string name="title_confirmation">Confirmation</string>
 
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>

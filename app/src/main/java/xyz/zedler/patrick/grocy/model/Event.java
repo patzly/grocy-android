@@ -29,6 +29,7 @@ public abstract class Event {
     public final static int BOTTOM_SHEET = 6;
     public final static int NAVIGATE_UP = 8;
     public final static int SET_SHOPPING_LIST_ID = 10;
+    public final static int FOCUS_INVALID_VIEWS = 12;
 
     abstract public int getType();
 

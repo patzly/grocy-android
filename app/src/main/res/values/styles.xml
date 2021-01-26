@@ -223,6 +223,13 @@
     </style>
 
     <style
+        name="Widget.Grocy.ProgressBar.Horizontal.Green"
+        parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_height">4dp</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_green</item>
+    </style>
+
+    <style
         name="Widget.Grocy.ProgressBar.Circular"
         parent="@android:style/Widget.ProgressBar.Large">
         <item name="android:progressDrawable">@drawable/progress_bar_circular</item>

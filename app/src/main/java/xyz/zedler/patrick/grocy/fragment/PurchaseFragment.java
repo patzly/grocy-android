@@ -41,15 +41,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
@@ -150,6 +147,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             } else if(event.getType() == Event.BOTTOM_SHEET) {
                 BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
                 activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+            } else if(event.getType() == Event.FOCUS_INVALID_VIEWS) {
+                focusNextInvalidView();
             }
         });
 
@@ -297,18 +296,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         if(result.getText().isEmpty()) resumeScan();
     }
 
-    public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-        if(!hasFocus) return;
-        HashMap<QuantityUnit, Double> unitsFactors = viewModel.getFormData()
-                .getQuantityUnitsFactorsLive().getValue();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(
-                Constants.ARGUMENT.QUANTITY_UNITS,
-                unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
-        );
-        activity.showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
-    }
-
     @Override
     public int getSelectedQuantityUnitId() {
         QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
@@ -330,15 +317,16 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.autoCompletePurchaseProduct.clearFocus();
-        binding.textInputShoppingListItemEditAmount.clearFocus();
         binding.quantityUnitContainer.clearFocus();
+        binding.textInputShoppingListItemEditAmount.clearFocus();
+        binding.linearPurchaseBbd.clearFocus();
         binding.textInputPurchasePrice.clearFocus();
     }
 
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
         Product product = (Product) adapterView.getItemAtPosition(pos);
+        clearInputFocus();
         viewModel.setProduct(product);
-        focusNextView();
     }
 
     public void onProductInputNextClick() {
@@ -351,10 +339,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     public void focusNextView() {
-        /*if(!isWorkflowEnabled()) {
+        if(!viewModel.isWorkflowEnabled()) {
             clearInputFocus();
             return;
-        }*/
+        }
         View nextView = FocusFinder.getInstance()
                 .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
         if(nextView == null) {
@@ -367,9 +355,36 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         }
     }
 
+    public void focusNextInvalidView() {
+        if(!viewModel.isWorkflowEnabled()) {
+            clearInputFocus();
+            return;
+        }
+        View nextView = null;
+        if(!viewModel.getFormData().isAmountValid()) {
+            nextView = binding.editTextShoppingListItemEditAmount;
+        } else if(!viewModel.getFormData().isDueDateValid()) {
+            nextView = binding.linearPurchaseBbd;
+        }
+        if(nextView == null) {
+            clearInputFocus();
+            activity.showBottomSheet(new ScanModeConfirmBottomSheet());
+            return;
+        }
+        nextView.requestFocus();
+        if(nextView instanceof EditText) {
+            activity.showKeyboard((EditText) nextView);
+        }
+    }
+
+    @Override
+    public void startTransaction() {
+        viewModel.getFormData().clearForm();
+    }
+
     @Override
     public void onBottomSheetDismissed() {
-        focusNextView();
+        focusNextInvalidView();
     }
 
     private void fillWithShoppingListItem(int itemPos) {

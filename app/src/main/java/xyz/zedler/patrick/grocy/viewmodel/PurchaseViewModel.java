@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -86,6 +87,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
+    private final MutableLiveData<Boolean> workflowEnabled;
 
     private ArrayList<Runnable> queueEmptyActions;
     private String forcedAmount;
@@ -97,12 +99,14 @@ public class PurchaseViewModel extends BaseViewModel {
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
         isLoadingLive = new MutableLiveData<>(false);
-        infoFullscreenLive = new MutableLiveData<>();
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
         repository = new PurchaseRepository(application);
         formData = new FormDataPurchase(application, sharedPrefs);
+
+        infoFullscreenLive = new MutableLiveData<>();
+        workflowEnabled = new MutableLiveData<>(false);
 
         productsLive = new SingleLiveEvent<>();
         productNamesLive = new SingleLiveEvent<>();
@@ -228,6 +232,7 @@ public class PurchaseViewModel extends BaseViewModel {
                     formData.getLocationLive().setValue(productDetails.getLocation());
 
                     formData.isFormValid();
+                    if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
                 },
                 error -> {
                     showMessage(getString(R.string.error_no_product_details));
@@ -407,55 +412,6 @@ public class PurchaseViewModel extends BaseViewModel {
         );
     }
 
-    private void editProductBarcodes() {
-        /*if(binding.linearPurchaseBarcodeContainer.getChildCount() == 0) return;
-        if(getProductDetails() == null) return;
-
-        String barcodesString = getProductDetails().getProduct().getBarcode();
-        ArrayList<String> barcodes;
-        if(barcodesString == null || barcodesString.isEmpty()) {
-            barcodes = new ArrayList<>();
-        } else {
-            barcodes = new ArrayList<>(
-                    Arrays.asList(getProductDetails().getProduct().getBarcode().split(","))
-            );
-        }
-
-        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
-            if(!barcodes.contains(inputChip.getText())) {
-                barcodes.add(inputChip.getText());
-            }
-        }
-        if(debug) Log.i(TAG, "editProductBarcodes: " + barcodes);
-        JSONObject body = new JSONObject();
-        try {
-            body.put("barcode", TextUtils.join(",", barcodes));
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "editProductBarcodes: " + e);
-        }
-        dlHelper.put(
-                grocyApi.getObject(
-                        GrocyApi.ENTITY.PRODUCTS,
-                        getProductDetails().getProduct().getId()
-                ),
-                body,
-                response -> { },
-                error -> {
-                    if(debug) Log.i(TAG, "editProductBarcodes: " + error);
-                }
-        );*/
-    }
-
-    @NonNull
-    private ArrayList<String> createProductNamesList(@NonNull ArrayList<Product> products) {
-        ArrayList<String> names = new ArrayList<>();
-        for(Product product : products) {
-            names.add(product.getName());
-        }
-        return names;
-    }
-
     @Nullable
     public Product getProductFromName(@Nullable String name) {
         if(productsLive.getValue() == null || name == null) return null;
@@ -467,8 +423,20 @@ public class PurchaseViewModel extends BaseViewModel {
         return null;
     }
 
-    public void showDueDateBottomSheet() {
-        if(!formData.isProductNameValid()) return;
+    public void showQuantityUnitsBottomSheet(boolean hasFocus) {
+        if(!hasFocus) return;
+        HashMap<QuantityUnit, Double> unitsFactors = getFormData()
+                .getQuantityUnitsFactorsLive().getValue();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(
+                Constants.ARGUMENT.QUANTITY_UNITS,
+                unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
+        );
+        showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    }
+
+    public void showDueDateBottomSheet(boolean hasFocus) {
+        if(!hasFocus || !formData.isProductNameValid()) return;
         Product product = formData.getProductDetailsLive().getValue().getProduct();
         Bundle bundle = new Bundle();
         bundle.putString(
@@ -613,6 +581,24 @@ public class PurchaseViewModel extends BaseViewModel {
 
     public void addQueueEmptyAction(Runnable runnable) {
         queueEmptyActions.add(runnable);
+    }
+
+    public boolean isWorkflowEnabled() {
+        if(workflowEnabled.getValue() == null) return false;
+        return workflowEnabled.getValue();
+    }
+
+    public MutableLiveData<Boolean> getWorkflowEnabled() {
+        return workflowEnabled;
+    }
+
+    public void setWorkflowEnabled(boolean enabled) {
+        workflowEnabled.setValue(enabled);
+    }
+
+    public boolean toggleWorkflowEnabled() {
+        workflowEnabled.setValue(!isWorkflowEnabled());
+        return true;
     }
 
     public boolean isFeatureEnabled(String pref) {

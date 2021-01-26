@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textAlignment="viewStart"
+                android:fontFamily="@font/roboto_mono_bold"
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"
+                android:text="@string/title_confirmation"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_timeout"
+            android:layout_width="match_parent"
+            style="@style/Widget.Grocy.ProgressBar.Horizontal.Green"
+            android:layout_gravity="bottom"
+            android:indeterminate="false"
+            android:max="100"
+            android:visibility="visible"/>
+
+    </FrameLayout>
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="viewStart"
+                android:text="Transaction which will be executed:\n\nPurchase 2 Bottles of Water\nDue date: 23. November 2021\nPrice: 32 EUR\nStore: Rewe\nLocation: Kühlschrank"
+                android:textSize="15sp"
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_cancel"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/retro_red_bg_white"
+                    android:text="@string/action_cancel" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_proceed"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:backgroundTint="@color/retro_green_bg_white"
+                    android:text="@string/action_proceed" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

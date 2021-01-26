@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:onLongClick="@{() -> viewModel.toggleWorkflowEnabled()}">
 
                 <FrameLayout
                     android:id="@+id/frame_purchase_back"
@@ -70,7 +71,8 @@
                     android:textAlignment="viewStart"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/roboto_mono_bold"
-                    android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                    android:textAppearance="@style/TextAppearance.Grocy.Toolbar"
+                    android:textColor="@{viewModel.workflowEnabled ? @color/retro_blue : @color/on_primary}"/>
 
             </LinearLayout>
 
@@ -244,8 +246,8 @@
                         android:id="@+id/quantity_unit_container"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:focusableInTouchMode="true"
-                        android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet(true)}"
-                        app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}"
+                        android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet(true)}"
+                        app:onFocusChangeListener="@{(v, focus) -> viewModel.showQuantityUnitsBottomSheet(focus)}"
                         android:visibility="@{formData.quantityUnitsFactorsLive.size > 1 ? View.VISIBLE : View.GONE}">
 
                         <ImageView
@@ -348,7 +350,9 @@
                     <LinearLayout
                         android:id="@+id/linear_purchase_bbd"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:onClick="@{() -> viewModel.showDueDateBottomSheet()}">
+                        android:focusableInTouchMode="true"
+                        android:onClick="@{() -> viewModel.showDueDateBottomSheet(true)}"
+                        app:onFocusChangeListener="@{(v, focus) -> viewModel.showDueDateBottomSheet(focus)}">
 
                         <ImageView
                             android:id="@+id/image_purchase_bbd"

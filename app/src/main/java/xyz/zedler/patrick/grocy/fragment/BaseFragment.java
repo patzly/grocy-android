@@ -118,6 +118,8 @@ public class BaseFragment extends Fragment {
 
     public void updateShortcuts() {}
 
+    public void startTransaction() {}
+
     public void enableLoginButtons() {}
 
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {}
