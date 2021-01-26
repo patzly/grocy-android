@@ -39,7 +39,6 @@ import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
@@ -52,7 +51,6 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickListener {
 
@@ -109,9 +107,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
                 R.id.linear_drawer_consume,
                 R.id.linear_drawer_purchase,
                 R.id.linear_drawer_master_data,
-                R.id.linear_settings,
-                R.id.linear_feedback,
-                R.id.linear_help
+                R.id.linear_settings
         );
 
         Fragment currentFragment = activity.getCurrentFragment();
@@ -158,22 +154,6 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
             IconUtil.start(view, R.id.image_settings);
             new Handler().postDelayed(() -> navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToSettingsActivity()), 300);
-        } else if(v.getId() == R.id.linear_feedback) {
-            navigateCustom(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
-        } else if(v.getId() == R.id.linear_help) {
-            IconUtil.start(view, R.id.image_help);
-            new Handler().postDelayed(() -> {
-                dismiss();
-                boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
-                if(!success) {
-                    Snackbar.make(
-                            activity.binding.frameMainContainer,
-                            R.string.error_no_browser,
-                            Snackbar.LENGTH_LONG
-                    ).show();
-                }
-            }, 300);
         }
     }
 

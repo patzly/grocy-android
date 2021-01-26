@@ -25,7 +25,7 @@
     <string name="action_new">Ny</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Forrige</string>
-    <string name="action_send_feedback">Send tilbakemelding</string>
+    <string name="action_feedback">Send tilbakemelding</string>
     <string name="action_reset">Tilbakestill</string>
     <string name="action_reload">Oppfrisk</string>
     <string name="action_top_scroll">Bla til toppen</string>

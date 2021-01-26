@@ -4,7 +4,7 @@
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
-    <!-- Here you can append your name, but please only if you have translated some strings.
+    <!-- Here you can append your name, but only if you have translated some strings, please.
      Append your name with the prefix \n (means newline) if there are already some other names.-->
     <string name="language_translators"></string>
 
@@ -33,7 +33,7 @@
     <string name="action_new">New</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Previous</string>
-    <string name="action_send_feedback">Send feedback</string>
+    <string name="action_feedback">Give feedback</string>
     <string name="action_reset">Reset</string>
     <string name="action_reload">Reload</string>
     <string name="action_top_scroll">Scroll to top</string>

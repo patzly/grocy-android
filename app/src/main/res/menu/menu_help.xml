@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_feedback"
-        android:title="@string/action_send_feedback"
+        android:title="@string/action_feedback"
         android:icon="@drawable/ic_round_feedback_anim"
         app:showAsAction="ifRoom"/>
 

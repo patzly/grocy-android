@@ -25,7 +25,7 @@
     <string name="action_new">Nový</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Předchozí</string>
-    <string name="action_send_feedback">Poslat zpětnou vazbu</string>
+    <string name="action_feedback">Poslat zpětnou vazbu</string>
     <string name="action_reset">Vynulovat</string>
     <string name="action_reload">Načíst znovu</string>
     <string name="action_top_scroll">Posunout nahoru</string>

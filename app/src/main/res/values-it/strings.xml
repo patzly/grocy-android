@@ -25,7 +25,7 @@
     <string name="action_new">Nuovo</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Indietro</string>
-    <string name="action_send_feedback">Invia feedback</string>
+    <string name="action_feedback">Invia feedback</string>
     <string name="action_reset">Resetta</string>
     <string name="action_reload">Ricarica</string>
     <string name="action_top_scroll">Torna in cima</string>

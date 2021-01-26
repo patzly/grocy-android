@@ -25,7 +25,7 @@
     <string name="action_new">חדש</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">הקודם</string>
-    <string name="action_send_feedback">שליחת משוב</string>
+    <string name="action_feedback">שליחת משוב</string>
     <string name="action_reset">איפוס</string>
     <string name="action_reload">רענון</string>
     <string name="action_top_scroll">גלילה למעלה</string>

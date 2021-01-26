@@ -118,11 +118,6 @@
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
         android:label="SettingsActivity"
         tools:layout="@layout/activity_settings" />
-    <dialog
-        android:id="@+id/feedbackBottomSheetDialogFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet"
-        android:label="FeedbackBottomSheetDialogFragment"
-        tools:layout="@layout/fragment_bottomsheet_feedback" />
     <fragment
         android:id="@+id/masterProductSimpleFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment"
@@ -213,9 +208,6 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
             app:destination="@id/settingsActivity" />
-        <action
-            android:id="@+id/action_drawerBottomSheetDialogFragment_to_feedbackBottomSheetDialogFragment"
-            app:destination="@id/feedbackBottomSheetDialogFragment" />
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_scanBatchFragment"
             app:destination="@id/scanBatchFragment" />

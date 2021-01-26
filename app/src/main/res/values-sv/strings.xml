@@ -25,7 +25,7 @@
     <string name="action_new">Ny</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Föregående</string>
-    <string name="action_send_feedback">Skicka feedback</string>
+    <string name="action_feedback">Skicka feedback</string>
     <string name="action_reset">Återställ</string>
     <string name="action_reload">Uppdatera</string>
     <string name="action_top_scroll">Scrolla till toppen</string>

@@ -204,38 +204,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_feedback"
-                style="@style/Theme.Grocy.DrawerItem">
-
-                <ImageView
-                    android:id="@+id/image_feedback"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_feedback_anim" />
-
-                <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="@string/action_send_feedback" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_help"
-                style="@style/Theme.Grocy.DrawerItem">
-
-                <ImageView
-                    android:id="@+id/image_help"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_help_anim" />
-
-                <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="@string/title_help" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

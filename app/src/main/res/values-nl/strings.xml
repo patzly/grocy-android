@@ -25,7 +25,7 @@
     <string name="action_new">Nieuw</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Vorige</string>
-    <string name="action_send_feedback">Feedback versturen</string>
+    <string name="action_feedback">Feedback versturen</string>
     <string name="action_reset">Reset</string>
     <string name="action_reload">Opnieuw inladen</string>
     <string name="action_top_scroll">Naar boven scrollen</string>
