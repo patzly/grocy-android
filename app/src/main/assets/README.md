@@ -39,6 +39,7 @@ Here is a changelog for this first alpha:
 - Product page
 - Purchase page
 - Tor and SOCKS support
+- *Deactivated features: if Due Date Tracking feature is disabled, there can be misbehavior!*
 
 **Testing**
 I you want to test the first alpha version (v2.0.0_alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there may be a popup with a toggle "Allow from this source".

@@ -358,10 +358,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 		if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
 			itemBestBefore.setText(
 					activity.getString(R.string.property_due_date_next),
-					!bestBefore.equals(Constants.DATE.NEVER_EXPIRES)
+					!bestBefore.equals(Constants.DATE.NEVER_OVERDUE)
 							? dateUtil.getLocalizedDate(bestBefore)
 							: activity.getString(R.string.date_never),
-					!bestBefore.equals(Constants.DATE.NEVER_EXPIRES) && !bestBefore.isEmpty()
+					!bestBefore.equals(Constants.DATE.NEVER_OVERDUE) && !bestBefore.isEmpty()
 							? dateUtil.getHumanForDaysFromNow(bestBefore)
 							: null
 			);

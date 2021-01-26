@@ -707,7 +707,7 @@ public class ScanBatchActivity extends AppCompatActivity
         missingBatchItem.addPurchaseEntry(batchPurchaseEntry);
         // Store default values, so that the fields can be filled in the product creator
         if(!missingBatchItem.getIsDefaultBestBeforeDaysSet()
-                && bestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)
+                && bestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)
         ) {
             missingBatchItem.setDefaultBestBeforeDays(-1);
         } else {
@@ -814,7 +814,7 @@ public class ScanBatchActivity extends AppCompatActivity
             if(isFeatureDisabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
                     && bestBeforeDate == null
             ) {
-                bestBeforeDate = Constants.DATE.NEVER_EXPIRES;
+                bestBeforeDate = Constants.DATE.NEVER_OVERDUE;
             } else if(askForBestBeforeDate == 0 && bestBeforeDate == null) {
                 if(currentDefaultBestBeforeDays == 0) {
                     if(sessionBestBeforeDates.containsKey(currentProductName)) {
@@ -823,7 +823,7 @@ public class ScanBatchActivity extends AppCompatActivity
                     showBBDateBottomSheet();
                     return;
                 } else if(currentDefaultBestBeforeDays == -1) {
-                    bestBeforeDate = Constants.DATE.NEVER_EXPIRES;
+                    bestBeforeDate = Constants.DATE.NEVER_OVERDUE;
                 } else {
                     Calendar calendar = Calendar.getInstance();
                     calendar.add(Calendar.DAY_OF_MONTH, currentDefaultBestBeforeDays);

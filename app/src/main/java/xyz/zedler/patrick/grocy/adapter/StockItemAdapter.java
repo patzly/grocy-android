@@ -195,7 +195,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             holder.linearLayoutDays.setVisibility(View.GONE);
         } else if(days != null && (sortMode.equals(Constants.STOCK.SORT.BBD)
                 || Integer.parseInt(days) <= daysExpiringSoon
-                && !date.equals(Constants.DATE.NEVER_EXPIRES))
+                && !date.equals(Constants.DATE.NEVER_OVERDUE))
         ) {
             holder.linearLayoutDays.setVisibility(View.VISIBLE);
             holder.textViewDays.setText(new DateUtil(context).getHumanForDaysFromNow(date));

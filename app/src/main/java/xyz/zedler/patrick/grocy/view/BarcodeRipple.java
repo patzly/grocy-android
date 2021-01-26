@@ -67,7 +67,7 @@ public class BarcodeRipple extends LinearLayout {
                         height = cardView.getHeight();
                         strokeWidth = cardView.getStrokeWidth();
 
-                        resumeAnimation();
+                        //resumeAnimation();
 
                         if (getViewTreeObserver().isAlive()) {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -114,7 +114,7 @@ public class BarcodeRipple extends LinearLayout {
 
     private void startAnimation() {
         continueAnim = true;
-        animation();
+        //animation();
     }
 
     public void resumeAnimation() {

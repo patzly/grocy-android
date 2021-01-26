@@ -21,18 +21,14 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
@@ -42,6 +38,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,23 +59,23 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
-public class PurchaseFragment extends BaseFragment {
+public class PurchaseFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
 
     private final static String TAG = PurchaseFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private DateUtil dateUtil;
     private PurchaseFragmentArgs args;
     private FragmentPurchaseBinding binding;
     private PurchaseViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
+    private ScanInputCaptureManager capture;
 
     @Override
     public View onCreateView(
@@ -96,6 +94,7 @@ public class PurchaseFragment extends BaseFragment {
             infoFullscreenHelper.destroyInstance();
             infoFullscreenHelper = null;
         }
+        binding.barcodeScan.setTorchOff();
         binding = null;
     }
 
@@ -114,60 +113,66 @@ public class PurchaseFragment extends BaseFragment {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        dateUtil = new DateUtil(activity);
-
         infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
         // INITIALIZE VIEWS
 
-        binding.linearPurchaseShoppingListItem.container.setBackground(
+        /*binding.linearPurchaseShoppingListItem.container.setBackground(
                 ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
+        );*/
+
+        viewModel.getInfoFullscreenLive().observe(
+                getViewLifecycleOwner(),
+                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
-
-        // price
-
-        String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        if(currency != null && !currency.isEmpty()) {
-            binding.textInputPurchasePrice.setHint(getString(R.string.property_price_in, currency));
-        } else {
-            binding.textInputPurchasePrice.setHint(getString(R.string.property_price));
-        }
-        binding.editTextPurchasePrice.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            public void afterTextChanged(Editable s) {
-                viewModel.getPriceLive().setValue(s != null ? s.toString() : "");
+        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
+                binding.swipePurchase.setRefreshing(isDownloading)
+        );
+        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+            if(event.getType() == Event.SNACKBAR_MESSAGE) {
+                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+                        activity,
+                        activity.binding.frameMainContainer
+                ));
+            } else if(event.getType() == Event.PURCHASE_SUCCESS) {
+                assert getArguments() != null;
+                if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                    activity.navigateUp();
+                } else {
+                    viewModel.getProductDetailsLive().setValue(null);
+                }
+            } else if(event.getType() == Event.BARCODE_UNKNOWN) {
+                assert event.getBundle() != null;
+                activity.showBottomSheet(
+                        new InputBarcodeBottomSheet(),
+                        event.getBundle()
+                );
+            } else if(event.getType() == Event.BOTTOM_SHEET) {
+                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
             }
         });
-        binding.editTextPurchasePrice.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(binding.imagePurchasePrice);
+
+        viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
+            if(visible) {
+                capture.onResume();
+                capture.decode();
+            } else {
+                capture.onPause();
+            }
         });
-        binding.editTextPurchasePrice.setOnEditorActionListener(
-                (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId != EditorInfo.IME_ACTION_DONE) return false;
-                    clearInputFocus();
-                    return true;
-                }
-        );
 
-        // store
-
-
-
-        hideDisabledFeatures();
-
-        // show or hide shopping list item section
-        if(args.getShoppingListItems() != null) {
-            binding.linearPurchaseBatchModeSection.setVisibility(View.VISIBLE);
-        } else {
-            binding.linearPurchaseBatchModeSection.setVisibility(View.GONE);
-        }
-
-        // START
+        //hideDisabledFeatures();
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
-        observeStates();
+        binding.barcodeScan.setTorchOff();
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(
+                sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+        );
+        binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
+        capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
 
         updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
@@ -188,45 +193,17 @@ public class PurchaseFragment extends BaseFragment {
                 Constants.FAB.TAG.PURCHASE,
                 animated,
                 () -> {
-                    if(isFormIncomplete()) {
+                    /*if(isFormIncomplete()) {
                         showMessage(getString(R.string.error_missing_information));
                         return;
-                    }
+                    }*/
                     viewModel.purchaseProduct();
                 }
         );
     }
 
     public void observeStates() {
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-                binding.swipePurchase.setRefreshing(isDownloading)
-        );
-        viewModel.getBestBeforeDateLive().observe(getViewLifecycleOwner(), date -> {
-            if(date == null) {
-                binding.textPurchaseBbd.setText(getString(R.string.subtitle_none_selected));
-            } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
-                binding.textPurchaseBbd.setText(getString(R.string.subtitle_never_overdue));
-            } else {
-                binding.textPurchaseBbd.setText(dateUtil
-                        .getLocalizedDate(viewModel.getBestBeforeDate(), DateUtil.FORMAT_MEDIUM)
-                );
-            }
-            if(viewModel.getProductDetails() != null
-                    && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)
-                    && viewModel.getBestBeforeDateLive().getValue() == null
-            ) {
-                binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.error));
-            } else {
-                binding.textPurchaseBbdLabel.setTextColor(
-                        getColor(R.color.on_background_secondary)
-                );
-            }
-        });
-        /*viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
+                /*viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
             if(binding.editTextPurchaseAmount.getText() != null
                     && !binding.editTextPurchaseAmount.getText().toString().equals(amount)
             ) {
@@ -253,22 +230,6 @@ public class PurchaseFragment extends BaseFragment {
                 binding.textInputPurchaseAmount.setErrorEnabled(false);
             }
         });*/
-        viewModel.getPriceLive().observe(getViewLifecycleOwner(), price -> {
-            if(binding.editTextPurchasePrice.getText() != null
-                    && !binding.editTextPurchasePrice.getText().toString().equals(price)
-            ) {
-                binding.editTextPurchasePrice.setText(price);
-            }
-            if(viewModel.getProductDetails() != null && price != null && !price.isEmpty()
-                    && NumUtil.toDouble(price) < 0
-            ) {
-                binding.textInputPurchasePrice.setError(
-                        activity.getString(R.string.error_bounds_min, NumUtil.trim(0))
-                );
-            } else {
-                binding.textInputPurchasePrice.setErrorEnabled(false);
-            }
-        });
         /*viewModel.getLocationIdLive().observe(getViewLifecycleOwner(), locationId -> {
             Location location = viewModel.getLocationFromId(locationId);
             if(location != null) {
@@ -289,7 +250,7 @@ public class PurchaseFragment extends BaseFragment {
                 );
             }
         });*/
-        viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemPos -> {
+        /*viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemPos -> {
             if(args.getShoppingListItems() == null) return;
             if(itemPos == -1) {
                 viewModel.getShoppingListItemPosLive().setValue(0);
@@ -304,51 +265,36 @@ public class PurchaseFragment extends BaseFragment {
             } else {
                 fillWithShoppingListItem(itemPos);
             }
-        });
+        });*/
+    }
 
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            } else if(event.getType() == Event.PURCHASE_SUCCESS) {
-                assert getArguments() != null;
-                if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                    activity.navigateUp();
-                } else {
-                    viewModel.getProductDetailsLive().setValue(null);
-                }
-            } else if(event.getType() == Event.BARCODE_UNKNOWN) {
-                assert event.getBundle() != null;
-                activity.showBottomSheet(
-                        new InputBarcodeBottomSheet(),
-                        event.getBundle()
-                );
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(viewModel.getFormData().isScannerVisible()) capture.onResume();
+    }
 
-        getFromThisDestination(Constants.ARGUMENT.BARCODE, barcode -> {
-            if(viewModel.getIsDownloading()) {
-                viewModel.addQueueEmptyAction(
-                        () -> viewModel.loadProductDetailsByBarcode((String) barcode)
-                );
-            } else {
-                viewModel.loadProductDetailsByBarcode((String) barcode);
-            }
-        });
-        getFromThisDestination(Constants.ARGUMENT.PRODUCT_ID, productId -> {
-            if(viewModel.getIsDownloading()) {
-                viewModel.addQueueEmptyAction(
-                        () -> viewModel.loadProductDetails((Integer) productId)
-                );
-            } else {
-                viewModel.loadProductDetails((Integer) productId);
-            }
-        });
+    @Override
+    public void onPause() {
+        if(viewModel.getFormData().isScannerVisible()) capture.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(!viewModel.getFormData().isScannerVisible()) return false;
+        return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        capture.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBarcodeResult(BarcodeResult result) {
+        if(result.getText().isEmpty()) resumeScan();
     }
 
     public void showQuantityUnitsBottomSheet(boolean hasFocus) {
@@ -386,6 +332,7 @@ public class PurchaseFragment extends BaseFragment {
         binding.autoCompletePurchaseProduct.clearFocus();
         binding.textInputShoppingListItemEditAmount.clearFocus();
         binding.quantityUnitContainer.clearFocus();
+        binding.textInputPurchasePrice.clearFocus();
     }
 
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -509,27 +456,6 @@ public class PurchaseFragment extends BaseFragment {
         isFormIncomplete();*/
     }
 
-    private boolean isFormIncomplete() {
-        boolean isIncomplete = false;
-        String input = binding.autoCompletePurchaseProduct.getText().toString();
-        if(viewModel.getProductNames() != null && !viewModel.getProductNames().isEmpty()
-                && !viewModel.getProductNames().contains(input) && !input.isEmpty()
-        ) {
-            showInputNameBottomSheet(input);
-            isIncomplete = true;
-        }
-        if(requireProductDetails() == null) isIncomplete = true;
-        //if(binding.textInputPurchaseAmount.isErrorEnabled()) isIncomplete = true;
-        if(binding.textInputPurchasePrice.isErrorEnabled()) isIncomplete = true;
-        if(binding.textPurchaseLocationLabel.getCurrentTextColor() == getColor(R.color.error)) {
-            isIncomplete = true;
-        }
-        if(binding.textPurchaseBbdLabel.getCurrentTextColor() == getColor(R.color.error)) {
-            isIncomplete = true;
-        }
-        return isIncomplete;
-    }
-
     private void showInputNameBottomSheet(@NonNull String productName) {
         navigate(PurchaseFragmentDirections
                 .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName));
@@ -549,20 +475,14 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private void setUpBottomMenu() {
-        MenuItem menuItemBatch, menuItemDetails, menuItemClear, menuItemSkipItem;
-        menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
+        MenuItem menuItemDetails, menuItemClear, menuItemSkipItem;
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
         menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
-        if(menuItemBatch == null || menuItemDetails == null || menuItemClear == null
+        if(menuItemDetails == null || menuItemClear == null
                 || menuItemSkipItem == null
         ) return;
 
-        menuItemBatch.setOnMenuItemClickListener(item -> {
-            navigate(PurchaseFragmentDirections
-                    .actionPurchaseFragmentToScanBatchFragment(Constants.ACTION.PURCHASE));
-            return true;
-        });
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(!viewModel.getFormData().isProductNameValid()) return false;
@@ -573,6 +493,7 @@ public class PurchaseFragment extends BaseFragment {
         });
         menuItemClear.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemClear);
+            clearInputFocus();
             viewModel.getFormData().clearForm();
             return true;
         });
@@ -580,18 +501,10 @@ public class PurchaseFragment extends BaseFragment {
             menuItemSkipItem.setVisible(true);
             menuItemSkipItem.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemSkipItem);
-                viewModel.nextShoppingListItemPos();
+                //viewModel.nextShoppingListItemPos();
                 return true;
             });
         }
-    }
-
-    public void selectStore(int selectedId) {
-        viewModel.getStoreIdLive().setValue(selectedId);
-    }
-
-    public void selectLocation(int selectedId) {
-        viewModel.getLocationIdLive().setValue(selectedId);
     }
 
     private ProductDetails requireProductDetails() {
@@ -634,30 +547,6 @@ public class PurchaseFragment extends BaseFragment {
                 .setCreateProductObject(new CreateProduct(null, barcode,
                         null, null, null)
                 ));
-    }
-
-    @Override
-    public void clearFields() {
-        /*binding.textInputPurchaseProduct.setErrorEnabled(false);
-        binding.autoCompletePurchaseProduct.setText(null);
-        binding.textPurchaseBbdLabel.setTextColor(getColor(R.color.on_background_secondary));
-        binding.textInputPurchaseAmount.setErrorEnabled(false);
-        binding.editTextPurchaseAmount.setText(null);
-        binding.imagePurchaseAmount.setImageResource(R.drawable.ic_round_scatter_plot_anim);
-        binding.textInputPurchasePrice.setErrorEnabled(false);
-        binding.editTextPurchasePrice.setText(null);
-        binding.linearPurchaseTotalPrice.setAlpha(1.0f);
-        binding.linearPurchaseTotalPrice.setEnabled(true);
-        binding.checkboxPurchaseTotalPrice.setEnabled(true);
-        binding.checkboxPurchaseTotalPrice.setChecked(false);
-        binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.on_background_secondary));
-        viewModel.getBestBeforeDateLive().setValue(null);
-        viewModel.getStoreIdLive().setValue(-1);
-        viewModel.getLocationIdLive().setValue(-1);
-        clearInputFocus();
-        for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
-            ((InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i)).close();
-        }*/
     }
 
     private void showMessage(String text) {

@@ -136,7 +136,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
 
     private void fillForm(String selectedBestBeforeDate) {
         if(selectedBestBeforeDate != null
-                && selectedBestBeforeDate.equals(Constants.DATE.NEVER_EXPIRES)) {
+                && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
 
             datePicker.setEnabled(false);
             datePicker.setAlpha(0.5f);
@@ -198,7 +198,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
             );
             date = dateFormat.format(calendar.getTime());
         } else {
-            date = Constants.DATE.NEVER_EXPIRES;
+            date = Constants.DATE.NEVER_OVERDUE;
         }
 
         if(activity.getClass() == MainActivity.class) {

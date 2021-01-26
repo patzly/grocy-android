@@ -45,8 +45,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataPurchase {
     private final WeakReference<Context> contextWeak;
-
-
+    private final MutableLiveData<Boolean> scannerVisibilityLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
     private final MutableLiveData<ProductDetails> productDetailsLive;
     private final LiveData<Boolean> isTareWeightEnabledLive;
@@ -74,13 +73,12 @@ public class FormDataPurchase {
     private final LiveData<String> storeNameLive;
     private final MutableLiveData<Location> locationLive;
     private final LiveData<String> locationNameLive;
-
-
     private boolean filledWithProduct;
 
     public FormDataPurchase(Context contextWeak, SharedPreferences sharedPrefs) {
         DateUtil dateUtil = new DateUtil(contextWeak);
         this.contextWeak = new WeakReference<>(contextWeak);
+        scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
         productsLive = new MutableLiveData<>(new ArrayList<>());
         productDetailsLive = new MutableLiveData<>();
         isTareWeightEnabledLive = Transformations.map(
@@ -120,7 +118,7 @@ public class FormDataPurchase {
                 date -> {
                     if(date == null) {
                         return getString(R.string.subtitle_none_selected);
-                    } else if(date.equals(Constants.DATE.NEVER_EXPIRES)) {
+                    } else if(date.equals(Constants.DATE.NEVER_OVERDUE)) {
                         return getString(R.string.subtitle_never_overdue);
                     } else {
                         return dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM);
@@ -160,6 +158,19 @@ public class FormDataPurchase {
         );
 
         filledWithProduct = false;
+    }
+
+    public MutableLiveData<Boolean> getScannerVisibilityLive() {
+        return scannerVisibilityLive;
+    }
+
+    public boolean isScannerVisible() {
+        assert scannerVisibilityLive.getValue() != null;
+        return scannerVisibilityLive.getValue();
+    }
+
+    public void toggleScannerVisibility() {
+        scannerVisibilityLive.setValue(!isScannerVisible());
     }
 
     public MutableLiveData<ArrayList<Product>> getProductsLive() {
@@ -313,7 +324,8 @@ public class FormDataPurchase {
         }
     }
 
-    public void morePrice() {
+    public void morePrice(ImageView view) {
+        IconUtil.start(view);
         if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
             priceLive.setValue(NumUtil.trimPrice(1));
         } else {
@@ -322,7 +334,8 @@ public class FormDataPurchase {
         }
     }
 
-    public void lessPrice() {
+    public void lessPrice(ImageView view) {
+        IconUtil.start(view);
         if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) return;
         double priceNew = NumUtil.toDouble(priceLive.getValue()) - 1;
         if(priceNew >= 0) {
@@ -382,7 +395,8 @@ public class FormDataPurchase {
                 return false;
             }
         }
-        if(productDetailsLive.getValue() == null && productNameLive.getValue().isEmpty()) {
+        if(productDetailsLive.getValue() == null && productNameLive.getValue() == null
+                || productDetailsLive.getValue() == null && productNameLive.getValue().isEmpty()) {
             productNameErrorLive.setValue(R.string.error_empty);
             return false;
         }

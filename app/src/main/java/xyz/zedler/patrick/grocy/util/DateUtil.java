@@ -116,7 +116,7 @@ public class DateUtil {
     public String getHumanForDaysFromNow(String dateString) {
         if(dateString == null || dateString.isEmpty()) {
             return context.getString(R.string.date_unknown);
-        } else if(dateString.equals(Constants.DATE.NEVER_EXPIRES)) {
+        } else if(dateString.equals(Constants.DATE.NEVER_OVERDUE)) {
             return context.getString(R.string.date_never);
         } else {
             return getHumanFromToday(getDaysFromNow(dateString));
@@ -178,7 +178,7 @@ public class DateUtil {
                 // Check if days are about the same as to the never expiring date
                 Calendar calendarNever = Calendar.getInstance();
                 try {
-                    Date dateNever = DATE_FORMAT.parse(Constants.DATE.NEVER_EXPIRES);
+                    Date dateNever = DATE_FORMAT.parse(Constants.DATE.NEVER_OVERDUE);
                     if(dateNever != null) calendarNever.setTime(dateNever);
                 } catch (ParseException e) {
                     Log.i(TAG, "getHumanDuration: " + e);

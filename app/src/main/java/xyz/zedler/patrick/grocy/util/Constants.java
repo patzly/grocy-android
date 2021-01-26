@@ -177,7 +177,7 @@ public final class Constants {
     }
 
     public final static class DATE {
-        public final static String NEVER_EXPIRES = "2999-12-31";
+        public final static String NEVER_OVERDUE = "2999-12-31";
     }
 
     public final static class STOCK {

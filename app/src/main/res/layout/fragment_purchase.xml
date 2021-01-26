@@ -109,6 +109,13 @@
                     android:animateLayoutChanges="true"
                     transitionTypeChanging="@{true}">
 
+                    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                        android:id="@+id/barcode_scan"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        app:zxing_scanner_layout="@layout/partial_scanner_embedded"
+                        android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"/>
+
                     <LinearLayout
                         android:id="@+id/linear_purchase_batch_mode_section"
                         android:layout_width="match_parent"
@@ -173,7 +180,7 @@
                             app:helperTextEnabled="true"
                             app:helperText=" "
                             app:errorIconDrawable="@{null}"
-                            app:endIconOnClickListener="@{v -> fragment.navigate(R.id.scanInputFragment)}"
+                            app:endIconOnClickListener="@{v -> formData.toggleScannerVisibility()}"
                             app:endIconOnLongClickListenerCustom="@{() -> fragment.navigate(R.id.scanExternalInputFragment)}"
                             app:errorText="@{formData.productNameErrorLive}">
 
@@ -387,7 +394,7 @@
                             transitionTypeChanging="@{true}">
 
                             <ImageView
-                                android:id="@+id/image_purchase_price"
+                                android:id="@+id/image_price"
                                 style="@style/Theme.Grocy.ListItem.Icon"
                                 android:src="@drawable/ic_round_cash_multiple"
                                 android:layout_marginBottom="4dp"
@@ -424,7 +431,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
-                            android:onClick="@{() -> formData.morePrice()}"
+                            android:onClick="@{() -> formData.morePrice(imagePrice)}"
                             app:icon="@drawable/ic_round_expand_less"
                             app:tint="@color/icon"
                             app:dense="true"/>
@@ -435,7 +442,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:layout_marginEnd="12dp"
-                            android:onClick="@{() -> formData.lessPrice()}"
+                            android:onClick="@{() -> formData.lessPrice(imagePrice)}"
                             app:icon="@drawable/ic_round_expand_more"
                             app:tint="@color/icon"
                             app:dense="true"/>

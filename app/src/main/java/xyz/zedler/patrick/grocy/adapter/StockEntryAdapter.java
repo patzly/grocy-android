@@ -124,7 +124,7 @@ public class StockEntryAdapter
             );
 
             // SUBTITLE
-            String bbd = stockEntry.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)
+            String bbd = stockEntry.getBestBeforeDate().equals(Constants.DATE.NEVER_OVERDUE)
                     ? context.getString(R.string.date_unlimited)
                     : dateUtil.getLocalizedDate(
                             stockEntry.getBestBeforeDate(),
