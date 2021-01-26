@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:singleLine="true"
-            android:fontFamily="@font/besley_medium"
+            android:fontFamily="@font/roboto_mono_medium"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
         <View

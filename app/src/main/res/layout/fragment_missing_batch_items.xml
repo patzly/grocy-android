@@ -48,7 +48,7 @@
                 android:text="@string/title_products_to_create"
                 android:textAlignment="viewStart"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/besley_bold"
+                android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>

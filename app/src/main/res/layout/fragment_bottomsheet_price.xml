@@ -11,7 +11,7 @@
         android:padding="16dp"
         android:singleLine="true"
         android:textAlignment="viewStart"
-        android:fontFamily="@font/besley_bold"
+        android:fontFamily="@font/roboto_mono_bold"
         android:text="@string/property_price"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
     <View

@@ -54,7 +54,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/title_batch_mode"
-                    android:fontFamily="@font/besley_bold"
+                    android:fontFamily="@font/roboto_mono_bold"
                     android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
             </LinearLayout>
@@ -150,7 +150,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:background="@color/transparent"
-                android:fontFamily="@font/besley_medium"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:textSize="15.5sp"
                 android:textColor="@color/white"/>
 

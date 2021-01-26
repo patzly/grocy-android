@@ -13,7 +13,7 @@
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
         android:textAlignment="viewStart"
-        android:fontFamily="@font/besley_bold"
+        android:fontFamily="@font/roboto_mono_bold"
         android:textSize="17sp"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 

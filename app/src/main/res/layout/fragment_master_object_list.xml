@@ -54,7 +54,7 @@
                 android:singleLine="true"
                 android:layout_marginEnd="16dp"
                 android:textAlignment="viewStart"
-                android:fontFamily="@font/besley_bold"
+                android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/besley_medium"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:text="@string/error_offline"/>

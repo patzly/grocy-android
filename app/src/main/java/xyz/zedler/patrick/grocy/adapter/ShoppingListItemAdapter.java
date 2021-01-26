@@ -346,11 +346,11 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         }
 
         if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-            binding.amount.setTypeface(ResourcesCompat.getFont(context, R.font.besley_medium));
+            binding.amount.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_mono_medium));
             binding.amount.setTextColor(ContextCompat.getColor(context, R.color.retro_blue_fg));
         } else {
             binding.amount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_regular)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
             );
             binding.amount.setTextColor(
                     ContextCompat.getColor(context, R.color.on_background_secondary)
@@ -483,14 +483,14 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         //if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {  TODO
         if(item.hasProduct()) {
             binding.amount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_medium)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
             binding.amount.setTextColor(
                     ContextCompat.getColor(context, R.color.retro_blue_fg)
             );
         } else {
             binding.amount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_regular)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
             );
             binding.amount.setTextColor(
                     ContextCompat.getColor(context, R.color.on_background_secondary)

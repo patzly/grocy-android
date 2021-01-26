@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textAlignment="viewStart"
-        android:fontFamily="@font/besley_bold"
+        android:fontFamily="@font/roboto_mono_bold"
         android:text="@string/property_due_date"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 

@@ -57,7 +57,7 @@
                 android:layout_weight="1"
                 android:text="@string/title_logs"
                 android:textAlignment="viewStart"
-                android:fontFamily="@font/besley_bold"
+                android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>

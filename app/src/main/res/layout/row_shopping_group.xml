@@ -23,7 +23,7 @@
         android:textSize="18sp"
         android:letterSpacing="0.1"
         android:textColor="@color/retro_green_fg"
-        android:fontFamily="@font/besley_bold"
+        android:fontFamily="@font/roboto_mono_bold"
         android:layout_marginStart="13dp"
         android:textAllCaps="true"
         android:singleLine="true" />

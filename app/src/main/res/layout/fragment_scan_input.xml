@@ -54,7 +54,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/title_barcode_input"
-                    android:fontFamily="@font/besley_bold"
+                    android:fontFamily="@font/roboto_mono_bold"
                     android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
             </LinearLayout>

@@ -49,7 +49,7 @@
                 android:singleLine="true"
                 android:layout_weight="1"
                 android:text="@string/title_settings"
-                android:fontFamily="@font/besley_bold"
+                android:fontFamily="@font/roboto_mono_bold"
                 android:textAlignment="viewStart"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 

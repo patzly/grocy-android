@@ -170,14 +170,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         holder.textViewAmount.setText(stringBuilderAmount);
         if(missingItemsProductIds.contains(stockItem.getProductId())) {
             holder.textViewAmount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_medium)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
             holder.textViewAmount.setTextColor(
                     ContextCompat.getColor(context, R.color.retro_blue_fg)
             );
         } else {
             holder.textViewAmount.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_regular)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
             );
             holder.textViewAmount.setTextColor(
                     ContextCompat.getColor(context, R.color.on_background_secondary)
@@ -207,7 +207,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
         if(colorDays) {
             holder.textViewDays.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_medium)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_medium)
             );
             holder.textViewDays.setTextColor(
                     ContextCompat.getColor(
@@ -218,7 +218,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             );
         } else {
             holder.textViewDays.setTypeface(
-                    ResourcesCompat.getFont(context, R.font.besley_regular)
+                    ResourcesCompat.getFont(context, R.font.roboto_mono_regular)
             );
             holder.textViewDays.setTextColor(
                     ContextCompat.getColor(context, R.color.on_background_secondary)

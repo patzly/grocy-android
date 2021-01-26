@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:singleLine="true"
-                android:fontFamily="@font/besley_medium"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:textSize="26sp"
                 android:background="@drawable/bg_placeholder_text"
                 android:backgroundTint="@color/on_background_tertiary"
@@ -40,7 +40,7 @@
                 android:textSize="18sp"
                 android:background="@drawable/bg_placeholder_text"
                 android:backgroundTint="@color/on_background_tertiary"
-                android:fontFamily="@font/besley_medium"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:singleLine="true" />
 
         </LinearLayout>

@@ -23,7 +23,7 @@
 
         <item name="actionOverflowButtonStyle">@style/Widget.Grocy.OverFlow</item>
 
-        <item name="android:fontFamily">@font/besley_regular</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
     </style>
 
     <style name="Theme.Grocy" parent="Base.Grocy">
@@ -65,7 +65,7 @@
 
         <item name="actionOverflowButtonStyle">@style/Widget.Grocy.OverFlow</item>
 
-        <item name="android:fontFamily">@font/besley_regular</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowIsFloating">false</item>

@@ -81,7 +81,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="@string/title_shopping_list"
-                        android:fontFamily="@font/besley_bold"
+                        android:fontFamily="@font/roboto_mono_bold"
                         android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
                     <xyz.zedler.patrick.grocy.view.ActionButton
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/besley_medium"
+                android:fontFamily="@font/roboto_mono_medium"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:text="@string/error_offline"/>
