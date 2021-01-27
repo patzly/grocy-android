@@ -327,7 +327,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
         Product product = (Product) adapterView.getItemAtPosition(pos);
         clearInputFocus();
-        viewModel.setProduct(product);
+        viewModel.setProduct(product, null);
     }
 
     public void onProductInputNextClick() {
@@ -358,7 +358,9 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             return;
         }
         View nextView = null;
-        if(!viewModel.getFormData().isAmountValid()) {
+        if(!viewModel.getFormData().isProductNameValid()) {
+            nextView = binding.autoCompletePurchaseProduct;
+        } else if(!viewModel.getFormData().isAmountValid()) {
             nextView = binding.editTextShoppingListItemEditAmount;
         } else if(!viewModel.getFormData().isDueDateValid()) {
             nextView = binding.linearPurchaseBbd;

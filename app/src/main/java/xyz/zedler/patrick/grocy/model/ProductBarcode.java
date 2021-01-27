@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.util.NumUtil;
+
 @Entity(tableName = "product_barcode_table")
 public class ProductBarcode implements Parcelable {
 
@@ -62,7 +64,7 @@ public class ProductBarcode implements Parcelable {
 
     @ColumnInfo(name = "shopping_location_id")
     @SerializedName("shopping_location_id")
-    private String shoppingLocationId;
+    private String storeId;
 
     @ColumnInfo(name = "last_price")
     @SerializedName("last_price")
@@ -85,7 +87,7 @@ public class ProductBarcode implements Parcelable {
         barcode = parcel.readString();
         quId = parcel.readString();
         amount = parcel.readString();
-        shoppingLocationId = parcel.readString();
+        storeId = parcel.readString();
         lastPrice = parcel.readString();
         note = parcel.readString();
         rowCreatedTimestamp = parcel.readString();
@@ -98,7 +100,7 @@ public class ProductBarcode implements Parcelable {
         dest.writeString(barcode);
         dest.writeString(quId);
         dest.writeString(amount);
-        dest.writeString(shoppingLocationId);
+        dest.writeString(storeId);
         dest.writeString(lastPrice);
         dest.writeString(note);
         dest.writeString(rowCreatedTimestamp);
@@ -145,32 +147,64 @@ public class ProductBarcode implements Parcelable {
         return quId;
     }
 
+    public int getQuIdInt() {
+        return hasQuId() ? Integer.parseInt(quId) : -1;
+    }
+
     public void setQuId(String quId) {
         this.quId = quId;
+    }
+
+    public boolean hasQuId() {
+        return NumUtil.isStringInt(quId);
     }
 
     public String getAmount() {
         return amount;
     }
 
+    public double getAmountDouble() {
+        return hasAmount() ? Double.parseDouble(amount) : 0;
+    }
+
     public void setAmount(String amount) {
         this.amount = amount;
     }
 
-    public String getShoppingLocationId() {
-        return shoppingLocationId;
+    public boolean hasAmount() {
+        return NumUtil.isStringDouble(amount);
     }
 
-    public void setShoppingLocationId(String shoppingLocationId) {
-        this.shoppingLocationId = shoppingLocationId;
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public int getStoreIdInt() {
+        return hasStoreId() ? Integer.parseInt(storeId) : -1;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public boolean hasStoreId() {
+        return NumUtil.isStringInt(storeId);
     }
 
     public String getLastPrice() {
         return lastPrice;
     }
 
+    public double getLastPriceDouble() {
+        return hasLastPrice() ? Double.parseDouble(lastPrice) : 0;
+    }
+
     public void setLastPrice(String lastPrice) {
         this.lastPrice = lastPrice;
+    }
+
+    public boolean hasLastPrice() {
+        return NumUtil.isStringDouble(lastPrice);
     }
 
     public String getNote() {
@@ -204,7 +238,7 @@ public class ProductBarcode implements Parcelable {
                 Objects.equals(barcode, that.barcode) &&
                 Objects.equals(quId, that.quId) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(shoppingLocationId, that.shoppingLocationId) &&
+                Objects.equals(storeId, that.storeId) &&
                 Objects.equals(lastPrice, that.lastPrice) &&
                 Objects.equals(note, that.note) &&
                 Objects.equals(rowCreatedTimestamp, that.rowCreatedTimestamp);
@@ -212,7 +246,7 @@ public class ProductBarcode implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productId, barcode, quId, amount, shoppingLocationId,
+        return Objects.hash(id, productId, barcode, quId, amount, storeId,
                 lastPrice, note, rowCreatedTimestamp);
     }
 
@@ -226,8 +260,8 @@ public class ProductBarcode implements Parcelable {
             Object lastPrice = productBarcode.getLastPrice() != null
                     && !productBarcode.getLastPrice().isEmpty()
                     ? productBarcode.getLastPrice() : JSONObject.NULL;
-            Object storeId = productBarcode.getShoppingLocationId() != null
-                    ? productBarcode.getShoppingLocationId() : JSONObject.NULL;
+            Object storeId = productBarcode.getStoreId() != null
+                    ? productBarcode.getStoreId() : JSONObject.NULL;
             Object amount = productBarcode.getAmount() != null
                     && !productBarcode.getAmount().isEmpty()
                     ? productBarcode.getAmount() : JSONObject.NULL ;

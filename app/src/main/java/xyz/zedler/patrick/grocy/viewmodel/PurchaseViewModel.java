@@ -169,65 +169,94 @@ public class PurchaseViewModel extends BaseViewModel {
         showMessage(getString(R.string.msg_no_connection));
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Product product, ProductBarcode barcode) {
         if(product == null) return;
-        dlHelper.getProductDetails(
-                product.getId(),
-                productDetails -> {
-                    Product updatedProduct = productDetails.getProduct();
-                    formData.getProductDetailsLive().setValue(productDetails);
-                    formData.getProductNameLive().setValue(updatedProduct.getName());
 
-                    setProductQuantityUnitsAndFactors(updatedProduct);
+        DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
+            Product updatedProduct = productDetails.getProduct();
+            formData.getProductDetailsLive().setValue(productDetails);
+            formData.getProductNameLive().setValue(updatedProduct.getName());
 
-                    if(!isTareWeightEnabled(productDetails)) {
-                        String defaultAmount = sharedPrefs.getString(
-                                Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
-                                Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
-                        );
-                        if(NumUtil.isStringDouble(defaultAmount)) {
-                            defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
-                        }
-                        formData.getAmountLive().setValue(defaultAmount);
-                    }
+            // quantity unit
+            setProductQuantityUnitsAndFactors(updatedProduct, barcode);
 
-                    int defaultBestBeforeDays = productDetails.getProduct().getDefaultDueDays();
-                    if(defaultBestBeforeDays < 0) {
-                        formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
-                    } else if (defaultBestBeforeDays == 0) {
-                        formData.getDueDateLive().setValue(null);
-                    } else {
-                        formData.getDueDateLive()
-                                .setValue(DateUtil.getTodayWithDaysAdded(defaultBestBeforeDays));
-                    }
-
-                    String lastPrice = productDetails.getLastPrice();
-                    if(lastPrice != null && !lastPrice.isEmpty()) {
-                        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
-                    }
-                    formData.getPriceLive().setValue(lastPrice);
-
-                    String storeId = productDetails.getLastShoppingLocationId();
-                    if(!NumUtil.isStringInt(storeId)) {
-                        storeId = productDetails.getDefaultShoppingLocationId();
-                    }
-                    Store store = NumUtil.isStringInt(storeId)
-                            ? getStore(Integer.parseInt(storeId)) : null;
-                    formData.getStoreLive().setValue(store);
-
-                    formData.getLocationLive().setValue(productDetails.getLocation());
-
-                    formData.isFormValid();
-                    if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
-                },
-                error -> {
-                    showMessage(getString(R.string.error_no_product_details));
-                    formData.clearForm();
+            // amount
+            if(!isTareWeightEnabled(productDetails) && barcode.hasAmount()) {
+                // if barcode contains amount, take this (with tare weight handling off)
+                // workflow status doesn't matter
+                formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+            } else if(!isTareWeightEnabled(productDetails) && !isWorkflowEnabled()) {
+                String defaultAmount = sharedPrefs.getString(
+                        Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
+                        Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
+                );
+                if(NumUtil.isStringDouble(defaultAmount)) {
+                    defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
                 }
-        ).perform(dlHelper.getUuid());
+                if(NumUtil.isStringDouble(defaultAmount)
+                        && Double.parseDouble(defaultAmount) > 0) {
+                    formData.getAmountLive().setValue(defaultAmount);
+                }
+            } else if(!isTareWeightEnabled(productDetails)) {
+                formData.getAmountLive().setValue(NumUtil.trim(1));
+            }
+
+            // due days
+            int dueDays = productDetails.getProduct().getDefaultDueDays();
+            if(dueDays < 0) {
+                formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
+            } else if (dueDays == 0) {
+                formData.getDueDateLive().setValue(null);
+            } else {
+                formData.getDueDateLive()
+                        .setValue(DateUtil.getTodayWithDaysAdded(dueDays));
+            }
+
+            // price
+            String lastPrice;
+            if(barcode != null && barcode.hasLastPrice()) {
+                // if barcode contains last price, take this
+                lastPrice = barcode.getLastPrice();
+            } else {
+                lastPrice = productDetails.getLastPrice();
+            }
+            if(lastPrice != null && !lastPrice.isEmpty()) {
+                lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+            }
+            formData.getPriceLive().setValue(lastPrice);
+
+            // store
+            String storeId;
+            if(barcode != null && barcode.hasStoreId()) {
+                // if barcode contains store, take this
+                storeId = barcode.getStoreId();
+            } else {
+                storeId = productDetails.getLastShoppingLocationId();
+            }
+            if(!NumUtil.isStringInt(storeId)) {
+                storeId = productDetails.getDefaultShoppingLocationId();
+            }
+            Store store = NumUtil.isStringInt(storeId)
+                    ? getStore(Integer.parseInt(storeId)) : null;
+            formData.getStoreLive().setValue(store);
+
+            // location
+            formData.getLocationLive().setValue(productDetails.getLocation());
+
+            formData.isFormValid();
+            if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+        };
+
+        dlHelper.getProductDetails(product.getId(), listener, error -> {
+            showMessage(getString(R.string.error_no_product_details));
+            formData.clearForm();
+        }).perform(dlHelper.getUuid());
     }
 
-    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
+    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(
+            Product product,
+            ProductBarcode barcode
+    ) {
         QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
         QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
 
@@ -250,54 +279,56 @@ public class PurchaseViewModel extends BaseViewModel {
             unitFactors.put(unit, conversion.getFactor());
         }
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-        formData.getQuantityUnitLive().setValue(purchase);
 
+        QuantityUnit barcodeUnit = null;
+        if(barcode.hasQuId()) barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+        if(barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
+            formData.getQuantityUnitLive().setValue(barcodeUnit);
+        } else {
+            formData.getQuantityUnitLive().setValue(purchase);
+        }
         return unitFactors;
     }
 
-    private QuantityUnit getQuantityUnit(int id) {
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) return quantityUnit;
-        } return null;
-    }
-
-    private Store getStore(int id) {
-        for(Store store : stores) {
-            if(store.getId() == id) return store;
-        } return null;
-    }
-
     public void onBarcodeRecognized(String barcode) {
-        Product product = getProductFromBarcode(barcode);
+        ProductBarcode productBarcode = null;
+        Product product = null;
+        for(ProductBarcode code : barcodes) {
+            if(code.getBarcode().equals(barcode)) {
+                productBarcode = code;
+                product = getProduct(code.getProductId());
+            }
+        }
         if(product != null) {
-            setProduct(product);
+            setProduct(product, productBarcode);
         } else {
             formData.getBarcodeLive().setValue(barcode);
+            formData.isFormValid();
+            if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         }
     }
 
-    public Product checkProductInput() {
+    public void checkProductInput() {
         formData.isProductNameValid();
         String input = formData.getProductNameLive().getValue();
-        if(input == null || input.isEmpty()) return null;
+        if(input == null || input.isEmpty()) return;
         Product product = getProductFromName(input);
 
         ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
         Product currentProduct = currentProductDetails != null
                 ? currentProductDetails.getProduct() : null;
         if(currentProduct != null && currentProduct.getId() == product.getId()) {
-            return product;
+            return;
         }
 
         if(product != null) {
-            setProduct(product);
+            setProduct(product, null);
         } else {
             showBottomSheet(
                     new InputNameBottomSheet(),
                     new InputNameBottomSheetArgs.Builder(input).build().toBundle()
             );
         }
-        return product;
     }
 
     public void purchaseProduct() {
@@ -410,9 +441,15 @@ public class PurchaseViewModel extends BaseViewModel {
         } return null;
     }
 
-    private Product getProductFromBarcode(String barcode) {
-        for(ProductBarcode code : barcodes) {
-            if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
+    private QuantityUnit getQuantityUnit(int id) {
+        for(QuantityUnit quantityUnit : quantityUnits) {
+            if(quantityUnit.getId() == id) return quantityUnit;
+        } return null;
+    }
+
+    private Store getStore(int id) {
+        for(Store store : stores) {
+            if(store.getId() == id) return store;
         } return null;
     }
 
