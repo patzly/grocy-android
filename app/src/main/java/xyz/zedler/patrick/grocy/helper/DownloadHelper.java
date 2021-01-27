@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +37,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
@@ -213,6 +215,27 @@ public class DownloadHelper {
             OnErrorListener onError
     ) {
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(
+                Request.Method.POST,
+                url,
+                apiKey,
+                json,
+                onResponse::onResponse,
+                onError::onError,
+                this::onRequestFinished,
+                timeoutSeconds,
+                uuidHelper
+        );
+        onRequestLoading();
+        requestQueue.add(request);
+    }
+
+    public void postWithArray(
+            String url,
+            JSONObject json,
+            OnJSONArrayResponseListener onResponse,
+            OnErrorListener onError
+    ) {
+        CustomJsonArrayRequest request = new CustomJsonArrayRequest(
                 Request.Method.POST,
                 url,
                 apiKey,
@@ -1494,6 +1517,10 @@ public class DownloadHelper {
 
     public interface OnJSONResponseListener {
         void onResponse(JSONObject response);
+    }
+
+    public interface OnJSONArrayResponseListener {
+        void onResponse(JSONArray response);
     }
 
     public interface OnResponseListener {

@@ -135,7 +135,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
                     activity.navigateUp();
                 } else {
-                    //viewModel.getProductDetailsLive().setValue(null);
+                    viewModel.getFormData().clearForm();
                 }
             } else if(event.getType() == Event.BARCODE_UNKNOWN) {
                 assert event.getBundle() != null;
@@ -190,13 +190,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 R.string.action_purchase,
                 Constants.FAB.TAG.PURCHASE,
                 animated,
-                () -> {
-                    /*if(isFormIncomplete()) {
-                        showMessage(getString(R.string.error_missing_information));
-                        return;
-                    }*/
-                    viewModel.purchaseProduct();
-                }
+                () -> viewModel.purchaseProduct()
         );
     }
 
@@ -378,7 +372,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
     @Override
     public void startTransaction() {
-        viewModel.getFormData().clearForm();
+        viewModel.purchaseProduct();
     }
 
     @Override

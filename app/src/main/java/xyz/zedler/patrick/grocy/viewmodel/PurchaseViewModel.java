@@ -32,6 +32,9 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,6 +56,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -335,72 +339,41 @@ public class PurchaseViewModel extends BaseViewModel {
     }
 
     public void purchaseProduct() {
-        /*assert getProductDetails() != null && getAmount() != null;
-        ProductDetails productDetails = getProductDetails();
-        Product product = productDetails.getProduct();
-        double amount = NumUtil.toDouble(getAmount());
-        double amountMultiplied = amount * product.getQuFactorPurchaseToStockDouble();
-        JSONObject body = new JSONObject();
-        try {
-            body.put("amount", amountMultiplied);
-            body.put("transaction_type", "purchase");
-            if(getPrice() != null && !getPrice().isEmpty()) {
-                double price = NumUtil.toDouble(getPrice());
-                assert totalPriceCheckedLive.getValue() != null;
-                if(totalPriceCheckedLive.getValue()) {
-                    price = price / amount;
-                }
-                body.put("price", price);
-            }
-            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-                body.put("best_before_date", bestBeforeDateLive);
-            } else {
-                body.put("best_before_date", Constants.DATE.NEVER_OVERDUE);
-            }
-            assert storeIdLive.getValue() != null;
-            if(storeIdLive.getValue() > -1) {
-                body.put("shopping_location_id", storeIdLive.getValue());
-            }
-            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-                body.put("location_id", locationIdLive.getValue());
-            }
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "purchaseProduct: " + e);
+        if(!formData.isFormValid()) {
+            showMessage(R.string.error_missing_information);
+            return;
         }
-        dlHelper.post(
+        if(formData.getBarcodeLive().getValue() != null) {
+            uploadProductBarcode(this::purchaseProduct);
+            return;
+        }
+
+        Product product = formData.getProductDetailsLive().getValue().getProduct();
+        JSONObject body = formData.getFilledJSONObject();
+        dlHelper.postWithArray(
                 grocyApi.purchaseProduct(product.getId()),
                 body,
                 response -> {
-                    // ADD BARCODES TO PRODUCT
-                    editProductBarcodes();
-
                     // UNDO OPTION
                     String transactionId = null;
                     try {
-                        transactionId = response.getString("transaction_id");
+                        JSONObject jsonObject = (JSONObject) response.get(0);
+                        transactionId = jsonObject.getString("transaction_id");
                     } catch (JSONException e) {
                         if(debug) Log.e(TAG, "purchaseProduct: " + e);
                     }
-                    if(debug) Log.i(TAG, "purchaseProduct: purchased " + amountMultiplied);
+                    if(debug) Log.i(TAG, "purchaseProduct: transaction successful");
 
-                    double amountAdded;
-                    if(product.getEnableTareWeightHandling() == 0) {
+                    /*if(product.getEnableTareWeightHandling() == 0) {
                         amountAdded = amountMultiplied;
                     } else {
                         // calculate difference of amount if tare weight handling enabled
                         amountAdded = amountMultiplied - product.getTareWeightDouble()
                                 - productDetails.getStockAmount();
-                    }
+                    }*/
 
                     SnackbarMessage snackbarMessage = new SnackbarMessage(
-                            getApplication().getString(
-                                    R.string.msg_purchased,
-                                    NumUtil.trim(amountAdded),
-                                    amountMultiplied == 1
-                                            ? productDetails.getQuantityUnitStock().getName()
-                                            : productDetails.getQuantityUnitStock().getNamePlural(),
-                                    product.getName()
-                            )
+                            formData.getTransactionSuccessMsg()
                     );
                     if(transactionId != null) {
                         String transId = transactionId;
@@ -416,7 +389,7 @@ public class PurchaseViewModel extends BaseViewModel {
                     showErrorMessage();
                     if(debug) Log.i(TAG, "purchaseProduct: " + error);
                 }
-        );*/
+        );
     }
 
     private void undoTransaction(String transactionId) {
@@ -428,6 +401,15 @@ public class PurchaseViewModel extends BaseViewModel {
                 },
                 error -> showErrorMessage()
         );
+    }
+
+    private void uploadProductBarcode(Runnable onSuccess) {
+        ProductBarcode productBarcode = formData.fillProductBarcode();
+        JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
+        dlHelper.addProductBarcode(body, () -> {
+            formData.getBarcodeLive().setValue(null);
+            if(onSuccess != null) onSuccess.run();
+        }, error -> showMessage(R.string.error_failed_barcode_upload));
     }
 
     @Nullable

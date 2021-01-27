@@ -51,6 +51,10 @@ public class BaseViewModel extends AndroidViewModel {
         showSnackbar(new SnackbarMessage(message));
     }
 
+    public void showMessage(@StringRes int message) {
+        showSnackbar(new SnackbarMessage(getString(message)));
+    }
+
     void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
         eventHandler.setValue(snackbarMessage);
     }

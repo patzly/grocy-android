@@ -22,15 +22,17 @@ package xyz.zedler.patrick.grocy.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -44,7 +46,10 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataPurchase {
+    private final static String TAG = FormDataPurchase.class.getSimpleName();
+
     private final WeakReference<Context> contextWeak;
+    private final SharedPreferences sharedPrefs;
     private final MutableLiveData<Boolean> scannerVisibilityLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
     private final MutableLiveData<ProductDetails> productDetailsLive;
@@ -60,6 +65,7 @@ public class FormDataPurchase {
     private final MutableLiveData<String> amountErrorLive;
     private final MediatorLiveData<String> amountHelperLive;
     private final LiveData<String> amountHintLive;
+    private final MediatorLiveData<String> amountStockLive;
     private final MutableLiveData<String> dueDateLive;
     private final LiveData<String> dueDateTextLive;
     private final MutableLiveData<Boolean> dueDateErrorLive;
@@ -78,6 +84,7 @@ public class FormDataPurchase {
     public FormDataPurchase(Context contextWeak, SharedPreferences sharedPrefs) {
         DateUtil dateUtil = new DateUtil(contextWeak);
         this.contextWeak = new WeakReference<>(contextWeak);
+        this.sharedPrefs = sharedPrefs;
         scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
         productsLive = new MutableLiveData<>(new ArrayList<>());
         productDetailsLive = new MutableLiveData<>();
@@ -109,9 +116,12 @@ public class FormDataPurchase {
                         quantityUnit.getNamePlural()
                 ) : null
         );
+        amountStockLive = new MediatorLiveData<>();
+        amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
+        amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
         amountHelperLive = new MediatorLiveData<>();
-        amountHelperLive.addSource(amountLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-        amountHelperLive.addSource(quantityUnitLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        amountHelperLive.addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        amountHelperLive.addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
         dueDateLive = new MutableLiveData<>();
         dueDateTextLive = Transformations.map(
                 dueDateLive,
@@ -237,13 +247,13 @@ public class FormDataPurchase {
         return amountHintLive;
     }
 
-    private String getAmountHelpText() {
+    private String getAmountStock() {
         QuantityUnit stock = getStockQuantityUnit();
         QuantityUnit current = quantityUnitLive.getValue();
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
         assert amountLive.getValue() != null;
 
-        if(stock != null && current != null && stock.getId() != current.getId()) {
+        if(stock != null && current != null) {
             HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
             double amount = Double.parseDouble(amountLive.getValue());
             Object currentFactor = hashMap.get(current);
@@ -251,15 +261,33 @@ public class FormDataPurchase {
                 amountHelperLive.setValue(null);
                 return null;
             }
-            double amountMultiplied = amount * (double) currentFactor;
-            return contextWeak.get().getString(
-                    R.string.subtitle_amount_compare,
-                    NumUtil.trim(amountMultiplied),
-                    amountMultiplied == 1 ? stock.getName() : stock.getNamePlural()
-            );
+            double amountMultiplied;
+            if((double) currentFactor == -1) {
+                amountMultiplied = amount;
+            } else if(productDetailsLive.getValue() != null
+                    && current.getId() == productDetailsLive.getValue().getProduct()
+                    .getQuIdPurchase()) {
+                amountMultiplied = amount * (double) currentFactor;
+            } else {
+                amountMultiplied = amount / (double) currentFactor;
+            }
+            return NumUtil.trim(amountMultiplied);
         } else {
             return null;
         }
+    }
+
+    private String getAmountHelpText() {
+        QuantityUnit stock = getStockQuantityUnit();
+        QuantityUnit current = quantityUnitLive.getValue();
+        if(stock == null || current == null || stock.getId() == current.getId()
+                || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
+        return contextWeak.get().getString(
+                R.string.subtitle_amount_compare,
+                amountStockLive.getValue(),
+                Double.parseDouble(amountStockLive.getValue()) == 1
+                        ? stock.getName() : stock.getNamePlural()
+        );
     }
 
     public void moreAmount(ImageView view) {
@@ -280,6 +308,17 @@ public class FormDataPurchase {
                 amountLive.setValue(NumUtil.trim(amountNew));
             }
         }
+    }
+
+    public String getTransactionSuccessMsg() {
+        QuantityUnit stock = getStockQuantityUnit();
+        return contextWeak.get().getString(
+                R.string.msg_purchased,
+                NumUtil.trim(Double.parseDouble(amountStockLive.getValue())),
+                Double.parseDouble(amountStockLive.getValue()) == 1
+                        ? stock.getName() : stock.getNamePlural(),
+                productDetailsLive.getValue().getProduct().getName()
+        );
     }
 
     public MutableLiveData<String> getDueDateLive() {
@@ -470,10 +509,49 @@ public class FormDataPurchase {
         return valid;
     }
 
-    public static boolean isFormInvalid(@Nullable Product product) {
-        if(product == null) return true;
-        boolean valid = true;
-        return !valid;
+    public JSONObject getFilledJSONObject() {
+        String amount = getAmountStock();
+        String price = priceLive.getValue();
+        Store store = storeLive.getValue();
+        String storeId = store != null ? String.valueOf(store.getId()) : null;
+        Location location = locationLive.getValue();
+        String dueDate = dueDateLive.getValue();
+        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+            dueDate = Constants.DATE.NEVER_OVERDUE;
+        }
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("amount", amount);
+            if(NumUtil.isStringDouble(price)) {
+                double priceDouble = NumUtil.toDouble(price);
+                if(isTotalPriceLive.getValue()) {
+                    priceDouble = priceDouble / Double.parseDouble(amount);
+                }
+                json.put("price", String.valueOf(priceDouble));
+            }
+            json.put("best_before_date", dueDate);
+            if(storeId != null) json.put("shopping_location_id", storeId);
+            if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
+                json.put("location_id", String.valueOf(location.getId()));
+            }
+        } catch (JSONException e) {
+            if(isDebuggingEnabled()) Log.e(TAG, "purchaseProduct: " + e);
+        }
+        return json;
+    }
+
+    public ProductBarcode fillProductBarcode() {
+        if(!isFormValid()) return null;
+        String barcode = barcodeLive.getValue();
+        Product product = productDetailsLive.getValue().getProduct();
+        Store store = storeLive.getValue();
+
+        ProductBarcode productBarcode = new ProductBarcode();
+        productBarcode.setProductId(product.getId());
+        productBarcode.setBarcode(barcode);
+        if(store != null) productBarcode.setStoreId(String.valueOf(store.getId()));
+        return productBarcode;
     }
 
     public void clearForm() {
@@ -494,16 +572,16 @@ public class FormDataPurchase {
         }, 50);
     }
 
-    public Product fillProduct(@NonNull Product product) {
-        if(!isFormValid()) return product;
-
-        return product;
+    public boolean isFeatureEnabled(String pref) {
+        if(pref == null) return true;
+        return sharedPrefs.getBoolean(pref, true);
     }
 
-    public void fillWithProductIfNecessary(Product product) {
-        if(filledWithProduct || product == null) return;
-
-        filledWithProduct = true;
+    private boolean isDebuggingEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+        );
     }
 
     private String getString(@StringRes int res) {

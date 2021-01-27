@@ -222,6 +222,7 @@
     <string name="error_no_browser">Install a web browser to display the help webpage</string>
     <string name="error_barcode_not_linked">Barcode is not linked to a product</string>
     <string name="error_no_product_details">Could not get product details</string>
+    <string name="error_failed_barcode_upload">Could not upload barcode</string>
     <string name="error_undefined">An error occurred</string>
 
     <string name="title_overview">Overview</string>

@@ -278,6 +278,10 @@ public class ProductBarcode implements Parcelable {
         return json;
     }
 
+    public JSONObject getJsonFromProductBarcode(boolean debug, String TAG) {
+        return getJsonFromProductBarcode(this, debug, TAG);
+    }
+
     @NonNull
     @Override
     public String toString() {
