@@ -29,10 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +38,8 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -78,13 +78,6 @@ public class PurchaseViewModel extends BaseViewModel {
     private ArrayList<Store> stores;
     private ArrayList<Location> locations;
 
-    private final SingleLiveEvent<ArrayList<Product>> productsLive;
-    private final SingleLiveEvent<ArrayList<Location>> locationsLive;
-    private final SingleLiveEvent<ArrayList<Store>> storesLive;
-    private final SingleLiveEvent<ArrayList<QuantityUnit>> quantityUnitsLive;
-    private final SingleLiveEvent<ArrayList<String>> productNamesLive;
-    private final SingleLiveEvent<ProductDetails> productDetailsLive;
-
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> workflowEnabled;
@@ -107,13 +100,6 @@ public class PurchaseViewModel extends BaseViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         workflowEnabled = new MutableLiveData<>(false);
-
-        productsLive = new SingleLiveEvent<>();
-        productNamesLive = new SingleLiveEvent<>();
-        quantityUnitsLive = new SingleLiveEvent<>();
-        locationsLive = new SingleLiveEvent<>();
-        storesLive = new SingleLiveEvent<>();
-        productDetailsLive = new SingleLiveEvent<>();
 
         barcodes = new ArrayList<>();
         queueEmptyActions = new ArrayList<>();
@@ -281,39 +267,37 @@ public class PurchaseViewModel extends BaseViewModel {
         } return null;
     }
 
-    public void loadProductDetails(int productId) {
-        dlHelper.get(
-                grocyApi.getStockProductDetails(productId),
-                response -> productDetailsLive.setValue(
-                        gson.fromJson(
-                                response,
-                                new TypeToken<ProductDetails>(){}.getType()
-                        )
-                ), error -> {}
-        );
+    public void onBarcodeRecognized(String barcode) {
+        Product product = getProductFromBarcode(barcode);
+        if(product != null) {
+            setProduct(product);
+        } else {
+            formData.getBarcodeLive().setValue(barcode);
+        }
     }
 
-    public void loadProductDetailsByBarcode(String barcode) {
-        dlHelper.get(
-                grocyApi.getStockProductByBarcode(barcode),
-                response -> {
-                    productDetailsLive.setValue(
-                            gson.fromJson(
-                                    response,
-                                    new TypeToken<ProductDetails>(){}.getType()
-                            )
-                    );
-                }, error -> {
-                    NetworkResponse response = error.networkResponse;
-                    if(response != null && response.statusCode == 400) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.ARGUMENT.BARCODE, barcode);
-                        sendEvent(Event.BARCODE_UNKNOWN, bundle);
-                    } else {
-                        showMessage(getString(R.string.error_undefined));
-                    }
-                }
-        );
+    public Product checkProductInput() {
+        formData.isProductNameValid();
+        String input = formData.getProductNameLive().getValue();
+        if(input == null || input.isEmpty()) return null;
+        Product product = getProductFromName(input);
+
+        ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
+        Product currentProduct = currentProductDetails != null
+                ? currentProductDetails.getProduct() : null;
+        if(currentProduct != null && currentProduct.getId() == product.getId()) {
+            return product;
+        }
+
+        if(product != null) {
+            setProduct(product);
+        } else {
+            showBottomSheet(
+                    new InputNameBottomSheet(),
+                    new InputNameBottomSheetArgs.Builder(input).build().toBundle()
+            );
+        }
+        return product;
     }
 
     public void purchaseProduct() {
@@ -414,13 +398,22 @@ public class PurchaseViewModel extends BaseViewModel {
 
     @Nullable
     public Product getProductFromName(@Nullable String name) {
-        if(productsLive.getValue() == null || name == null) return null;
-        for(Product product : productsLive.getValue()) {
-            if(product.getName().equals(name)) {
-                return product;
-            }
-        }
-        return null;
+        if(name == null) return null;
+        for(Product product : products) {
+            if(product.getName().equals(name)) return product;
+        } return null;
+    }
+
+    public Product getProduct(int id) {
+        for(Product product : products) {
+            if(product.getId() == id) return product;
+        } return null;
+    }
+
+    private Product getProductFromBarcode(String barcode) {
+        for(ProductBarcode code : barcodes) {
+            if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
+        } return null;
     }
 
     public void showQuantityUnitsBottomSheet(boolean hasFocus) {
@@ -480,31 +473,6 @@ public class PurchaseViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<ArrayList<Product>> getProductsLive() {
-        return productsLive;
-    }
-
-    @NonNull
-    public SingleLiveEvent<ArrayList<String>> getProductNamesLive() {
-        return productNamesLive;
-    }
-
-    @Nullable
-    public ArrayList<String> getProductNames() {
-        return productNamesLive.getValue();
-    }
-
-    @NonNull
-    public SingleLiveEvent<ProductDetails> getProductDetailsLive() {
-        return productDetailsLive;
-    }
-
-    @Nullable
-    public ProductDetails getProductDetails() {
-        return productDetailsLive.getValue();
-    }
-
-    @NonNull
     public MutableLiveData<Boolean> getIsLoadingLive() {
         return isLoadingLive;
     }
@@ -547,31 +515,6 @@ public class PurchaseViewModel extends BaseViewModel {
     public boolean isTareWeightEnabled(ProductDetails productDetails) {
         if(productDetails == null) return false;
         return productDetails.getProduct().getEnableTareWeightHandling() == 1;
-    }
-
-    @NonNull
-    public SingleLiveEvent<ArrayList<Location>> getLocationsLive() {
-        return locationsLive;
-    }
-
-    @Nullable
-    public ArrayList<Location> getLocations() {
-        return locationsLive.getValue();
-    }
-
-    @NonNull
-    public SingleLiveEvent<ArrayList<Store>> getStoresLive() {
-        return storesLive;
-    }
-
-    @Nullable
-    public ArrayList<Store> getStores() {
-        return storesLive.getValue();
-    }
-
-    @NonNull
-    public SingleLiveEvent<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
-        return quantityUnitsLive;
     }
 
     @NonNull

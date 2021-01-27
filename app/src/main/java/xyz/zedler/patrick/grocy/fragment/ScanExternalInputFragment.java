@@ -169,9 +169,10 @@ public class ScanExternalInputFragment extends BaseFragment {
                 .setShowCategory(Constants.SETTINGS.SCANNER.class.getSimpleName())
                 .build().toBundle();
         for(String argName : bundle.keySet()) {
+            Object value = bundle.get(argName);
             deepLinkUri = deepLinkUri.replace(
                     "{" + argName + "}",
-                    bundle.get(argName).toString()
+                    value != null ? value.toString() : ""
             );
         }
         navigateDeepLink(deepLinkUri);

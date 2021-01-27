@@ -32,7 +32,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.model.CreateProduct;
+import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputNameBottomSheet extends BaseBottomSheet {
 
@@ -67,25 +68,27 @@ public class InputNameBottomSheet extends BaseBottomSheet {
         textView.setText(activity.getString(R.string.description_input_name, productName));
 
         view.findViewById(R.id.button_input_name_create).setOnClickListener(v -> {
-            CreateProduct createProduct = new CreateProduct(
-                    productName,
-                    null,
-                    null,
-                    null,
-                    null
-            );
-            /*NavHostFragment.findNavController(this).navigate(
-                    InputNameBottomSheetDirections
-                            .actionInputNameBottomSheetDialogFragmentToMasterProductSimpleFragment(
-                                    Constants.ACTION.CREATE
-                            ).setCreateProductObject(createProduct));*/
-            navigateDeepLink(getString(R.string.deep_link_masterProductFragment));
+            navigateToMasterProductFragment();
             dismiss();
         });
 
         view.findViewById(R.id.button_input_name_cancel).setOnClickListener(v -> dismiss());
 
         return view;
+    }
+
+    public void navigateToMasterProductFragment() {
+        String deepLinkUri = getString(R.string.deep_link_masterProductFragment);
+        Bundle bundle = new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .build().toBundle();
+        for(String argName : bundle.keySet()) {
+            Object value = bundle.get(argName);
+            deepLinkUri = deepLinkUri.replace(
+                    "{" + argName + "}",
+                    value != null ? value.toString() : ""
+            );
+        }
+        navigateDeepLink(deepLinkUri);
     }
 
     @NonNull

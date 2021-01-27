@@ -115,7 +115,7 @@
                             app:cardBackgroundColor="@color/retro_dirt_bg"
                             app:strokeColor="@color/retro_dirt_dark"
                             app:strokeWidth="@dimen/help_card_border_size"
-                            android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsCatBehaviorFragment)}"
+                            android:onClick="@{() -> fragment.navigateToSettingsCatDebugging()}"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView

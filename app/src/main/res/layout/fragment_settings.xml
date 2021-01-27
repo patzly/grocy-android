@@ -178,7 +178,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
-                app:clickUtil="@{clickUtil}">
+                app:clickUtil="@{clickUtil}"
+                android:background="@{fragment.shouldNavigateToBehavior ? @color/retro_green_translucent : @color/background}">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"

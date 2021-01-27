@@ -19,11 +19,13 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -33,12 +35,14 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 
 /**
@@ -47,22 +51,41 @@ import xyz.zedler.patrick.grocy.R;
  * extended class to apply the fix.
  */
 public class BaseBottomSheet extends BottomSheetDialogFragment {
+    private boolean skipCollapsedStateInPortrait = false;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation != Configuration.ORIENTATION_LANDSCAPE) return;
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-            if(dialog == null) return;
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        boolean expandBottomSheets = sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
+        );
 
-            DisplayMetrics metrics = new DisplayMetrics();
-            requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if(view.getViewTreeObserver().isAlive()) {
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
 
-            BottomSheetBehavior<View> behavior = getBehavior();
-            if(behavior == null) return;
+                BottomSheetBehavior<View> behavior = getBehavior();
+                if(behavior == null) return;
 
-            behavior.setPeekHeight(metrics.heightPixels / 2);
+                int orientation = getResources().getConfiguration().orientation;
+                if(orientation == Configuration.ORIENTATION_PORTRAIT && skipCollapsedStateInPortrait) {
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    behavior.setPeekHeight(metrics.heightPixels);
+                    behavior.setSkipCollapsed(true);
+                } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    behavior.setPeekHeight(
+                            expandBottomSheets ? metrics.heightPixels : metrics.heightPixels / 2
+                    );
+                }
+            }
         });
     }
 
@@ -73,6 +96,10 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
         View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if(sheet == null) return null;
         return BottomSheetBehavior.from(sheet);
+    }
+
+    void setSkipCollapsedInPortrait() {
+        skipCollapsedStateInPortrait = true;
     }
 
     @NonNull

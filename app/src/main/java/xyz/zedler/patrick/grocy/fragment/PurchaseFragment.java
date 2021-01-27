@@ -43,7 +43,6 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
@@ -136,7 +135,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
                     activity.navigateUp();
                 } else {
-                    viewModel.getProductDetailsLive().setValue(null);
+                    //viewModel.getProductDetailsLive().setValue(null);
                 }
             } else if(event.getType() == Event.BARCODE_UNKNOWN) {
                 assert event.getBundle() != null;
@@ -294,6 +293,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     @Override
     public void onBarcodeResult(BarcodeResult result) {
         if(result.getText().isEmpty()) resumeScan();
+        if(!viewModel.isWorkflowEnabled()) viewModel.getFormData().toggleScannerVisibility();
+        viewModel.onBarcodeRecognized(result.getText());
     }
 
     @Override
@@ -330,12 +331,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     public void onProductInputNextClick() {
-        /*viewModel.checkProductInput();
-        if(isWorkflowEnabled()) {
-            focusNextView();
-        } else {
-            clearInputFocus();
-        }*/
+        clearInputFocus();
+        viewModel.checkProductInput();
     }
 
     public void focusNextView() {
@@ -390,23 +387,23 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     private void fillWithShoppingListItem(int itemPos) {
         if(args.getShoppingListItems() == null) return;
         ShoppingListItem listItem = args.getShoppingListItems()[itemPos];
-        if(viewModel.getQuantityUnitsLive().getValue() == null) return;
+        //if(viewModel.getQuantityUnitsLive().getValue() == null) return;
 
         binding.textPurchaseBatch.setText(activity.getString(
                 R.string.subtitle_entry_num_of_num,
                 itemPos+1,
                 args.getShoppingListItems().length
         ));
-        ShoppingListItemAdapter.fillShoppingListItem(
+        /*ShoppingListItemAdapter.fillShoppingListItem(
                 activity,
                 listItem,
                 binding.linearPurchaseShoppingListItem,
                 viewModel.getQuantityUnitsLive().getValue()
-        );
+        );*/
         if(listItem.getProductId() != null) {
-            viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
+            //viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
-            viewModel.getProductDetailsLive().setValue(null);
+            //viewModel.getProductDetailsLive().setValue(null);
             fillWithProductDetails(null);
         }
         viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
@@ -520,14 +517,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 return true;
             });
         }
-    }
-
-    private ProductDetails requireProductDetails() {
-        ProductDetails productDetails = viewModel.getProductDetailsLive().getValue();
-        if(productDetails == null) {
-            binding.textInputPurchaseProduct.setError(getString(R.string.error_select_product));
-        }
-        return productDetails;
     }
 
     @Override

@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,7 @@ public class SettingsFragment extends BaseFragment {
     private MainActivity activity;
     private SettingsViewModel viewModel;
     private SharedPreferences sharedPrefs;
+    private SettingsFragmentArgs args;
     private DownloadHelper.Queue queue;
     private ClickUtil clickUtil;
     private boolean debug;
@@ -77,7 +79,7 @@ public class SettingsFragment extends BaseFragment {
     ) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         activity = (MainActivity) requireActivity();
-        SettingsFragmentArgs args = SettingsFragmentArgs.fromBundle(requireArguments());
+        args = SettingsFragmentArgs.fromBundle(requireArguments());
         viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         clickUtil = new ClickUtil();
@@ -87,7 +89,9 @@ public class SettingsFragment extends BaseFragment {
                 this::showVolleyError
         );
         binding.setFragment(this);
+        binding.setActivity(activity);
         binding.setClickUtil(clickUtil);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         String category = args.getShowCategory();
         if(category == null) {
@@ -474,6 +478,11 @@ public class SettingsFragment extends BaseFragment {
         }
     }
 
+    public boolean shouldNavigateToBehavior() {
+        return args.getShowCategory() != null
+                && args.getShowCategory().equals(Constants.SETTINGS.BEHAVIOR.class.getSimpleName());
+    }
+
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return false;
         return sharedPrefs.getBoolean(pref, true);
@@ -481,6 +490,13 @@ public class SettingsFragment extends BaseFragment {
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary, () -> {
+            if(shouldNavigateToBehavior()) {
+                setArguments(new SettingsFragmentArgs.Builder(args)
+                        .setShowCategory(null).build().toBundle());
+                new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+                        .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
+            }
+        });
     }
 }

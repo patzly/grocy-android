@@ -201,6 +201,18 @@ public class SettingsViewModel extends BaseViewModel {
                 .putBoolean(Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE, enabled).apply();
     }
 
+    public boolean getExpandBottomSheetsEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
+        );
+    }
+
+    public void setExpandBottomSheetsEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)

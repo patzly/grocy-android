@@ -324,8 +324,7 @@ public class FormDataPurchase {
         }
     }
 
-    public void morePrice(ImageView view) {
-        IconUtil.start(view);
+    public void morePrice() {
         if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
             priceLive.setValue(NumUtil.trimPrice(1));
         } else {
@@ -334,8 +333,7 @@ public class FormDataPurchase {
         }
     }
 
-    public void lessPrice(ImageView view) {
-        IconUtil.start(view);
+    public void lessPrice() {
         if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) return;
         double priceNew = NumUtil.toDouble(priceLive.getValue()) - 1;
         if(priceNew >= 0) {

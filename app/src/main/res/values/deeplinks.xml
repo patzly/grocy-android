@@ -10,7 +10,7 @@
     <string name="deep_link_settingsFragment">grocy://settingsFragment?showCategory={showCategory}</string>
     <string name="deep_link_settingsCatBehaviorFragment">grocy://settingsCatBehaviorFragment</string>
     <string name="deep_link_aboutFragment">grocy://aboutFragment</string>
-    <string name="deep_link_masterProductFragment">grocy://masterProductFragment</string>
+    <string name="deep_link_masterProductFragment">grocy://masterProductFragment?action={action}</string>
     <string name="deep_link_masterDataOverviewFragment">grocy://masterDataOverviewFragment</string>
 
 </resources>

@@ -435,7 +435,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
-                            android:onClick="@{() -> formData.morePrice(imagePrice)}"
+                            android:onClick="@{() -> formData.morePrice()}"
                             app:icon="@drawable/ic_round_expand_less"
                             app:tint="@color/icon"
                             app:dense="true"/>
@@ -446,7 +446,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:layout_marginEnd="12dp"
-                            android:onClick="@{() -> formData.lessPrice(imagePrice)}"
+                            android:onClick="@{() -> formData.lessPrice()}"
                             app:icon="@drawable/ic_round_expand_more"
                             app:tint="@color/icon"
                             app:dense="true"/>

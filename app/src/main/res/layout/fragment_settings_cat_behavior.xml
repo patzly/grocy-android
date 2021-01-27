@@ -148,6 +148,38 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> switchExpand.setChecked(!switchExpand.isChecked())}">
+
+                <ImageView
+                    android:id="@+id/image_expand"
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_open_in_browser_anim"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_expand_bottom_sheets"/>
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_expand_bottom_sheets_description"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_expand"
+                    style="@style/Widget.Grocy.Switch"
+                    android:onCheckedChanged="@{() -> activity.startIconAnimation(imageExpand, true)}"
+                    android:checked="@={viewModel.expandBottomSheetsEnabled}"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -299,7 +299,8 @@ public class BaseFragment extends Fragment {
             boolean enter,
             int nextAnim,
             MainActivity activity,
-            @ColorRes int color
+            @ColorRes int color,
+            Runnable onAnimationEnd
     ) {
         if(!enter) return super.onCreateAnimation(transit, false, nextAnim);
         if(nextAnim == 0) {
@@ -317,9 +318,21 @@ public class BaseFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animation animation) {
                 activity.setStatusBarColor(color);
+                if(onAnimationEnd != null) onAnimationEnd.run();
             }
         });
         return anim;
+    }
+
+    @Nullable
+    public Animation setStatusBarColor(
+            int transit,
+            boolean enter,
+            int nextAnim,
+            MainActivity activity,
+            @ColorRes int color
+    ) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, color, null);
     }
 
     Drawable getDrawable(@DrawableRes int drawable) {

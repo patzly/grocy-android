@@ -79,6 +79,7 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setSkipCollapsedInPortrait();
         super.onViewCreated(view, savedInstanceState);
         activity = (MainActivity) requireActivity();
         binding.setActivity(activity);
