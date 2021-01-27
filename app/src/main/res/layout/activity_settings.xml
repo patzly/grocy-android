@@ -360,7 +360,7 @@
 
             <TextView
                 style="@style/Theme.Grocy.Category"
-                android:text="@string/category_purchase_consume"/>
+                android:text="@string/category_shopping_mode"/>
 
             <LinearLayout
                 android:id="@+id/linear_setting_default_amount_purchase"

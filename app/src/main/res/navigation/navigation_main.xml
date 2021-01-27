@@ -390,6 +390,27 @@
                 app:popEnterAnim="@anim/slide_from_left"
                 app:popExitAnim="@anim/slide_to_right"/>
             <action
+                android:id="@+id/action_settingsFragment_to_settingsCatScannerFragment"
+                app:destination="@id/settingsCatScannerFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatStockFragment"
+                app:destination="@id/settingsCatStockFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
+                android:id="@+id/action_settingsFragment_to_settingsCatShoppingModeFragment"
+                app:destination="@id/settingsCatShoppingModeFragment"
+                app:enterAnim="@anim/slide_from_right"
+                app:exitAnim="@anim/slide_to_left"
+                app:popEnterAnim="@anim/slide_from_left"
+                app:popExitAnim="@anim/slide_to_right"/>
+            <action
                 android:id="@+id/action_settingsFragment_to_settingsCatNetworkFragment"
                 app:destination="@id/settingsCatNetworkFragment"
                 app:enterAnim="@anim/slide_from_right"
@@ -436,6 +457,24 @@
             <deepLink
                 android:id="@+id/deepLink11"
                 app:uri="@string/deep_link_settingsCatBehaviorFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/settingsCatScannerFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerFragment"
+            android:label="SettingsCatScannerFragment"
+            tools:layout="@layout/fragment_settings_cat_scanner">
+        </fragment>
+        <fragment
+            android:id="@+id/settingsCatStockFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatStockFragment"
+            android:label="SettingsCatStockFragment"
+            tools:layout="@layout/fragment_settings_cat_stock">
+        </fragment>
+        <fragment
+            android:id="@+id/settingsCatShoppingModeFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingModeFragment"
+            android:label="SettingsCatShoppingModeFragment"
+            tools:layout="@layout/fragment_settings_cat_shopping_mode">
         </fragment>
         <fragment
             android:id="@+id/settingsCatNetworkFragment"

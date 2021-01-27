@@ -333,7 +333,7 @@
 
     <string name="category_licenses">Åpen kildekode lisenser</string>
     <string name="category_general">Generelt</string>
-    <string name="category_purchase_consume">Kjøp &amp; forbruk</string>
+    <string name="category_shopping_mode">Kjøp &amp; forbruk</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Feilsøking</string>
     <string name="category_presets_new_products">Forhåndsinnstillinger for nye produkter</string>

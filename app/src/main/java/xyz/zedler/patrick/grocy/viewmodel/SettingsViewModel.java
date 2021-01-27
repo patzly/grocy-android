@@ -213,6 +213,41 @@ public class SettingsViewModel extends BaseViewModel {
                 .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
     }
 
+    public boolean getFrontCamEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.FRONT_CAM,
+                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+        );
+    }
+
+    public void setFrontCamEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.FRONT_CAM, enabled).apply();
+    }
+
+    public boolean getKeepScreenOnEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON,
+                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.KEEP_SCREEN_ON
+        );
+    }
+
+    public void setKeepScreenOnEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON, enabled)
+                .apply();
+    }
+
+    public boolean getShowDoneItemsEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
+                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
+        );
+    }
+
+    public void setShowDoneItemsEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
+                .apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)

@@ -143,7 +143,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void showCategoryScanner() {
-        binding.appBarTitle.setText(R.string.category_barcode_scanner);
+        binding.appBarTitle.setText(R.string.category_scanner);
         binding.linearBody.addView(new SettingEntrySwitch(
                 requireContext(),
                 Constants.SETTINGS.SCANNER.FOOD_FACTS,

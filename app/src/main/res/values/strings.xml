@@ -506,10 +506,10 @@
 
     <string name="category_licenses">Open source licenses</string>
     <string name="category_general">General</string>
-    <string name="category_purchase_consume">Purchase &amp; consume</string>
+    <string name="category_shopping_mode">Shopping mode</string>
     <string name="category_stock">Stock</string>
     <string name="category_server">Server</string>
-    <string name="category_barcode_scanner">Barcode scanner</string>
+    <string name="category_scanner">Scanner</string>
     <string name="category_appearance">Appearance</string>
     <string name="category_network">Network</string>
     <string name="category_behavior">Behavior</string>
@@ -535,6 +535,8 @@
     <string name="setting_shopping_mode_update_interval">Shopping mode update interval</string>
     <string name="setting_keep_screen_on">Keep screen on</string>
     <string name="setting_keep_screen_on_description">While in shopping mode</string>
+    <string name="setting_show_done_items">Show done items</string>
+    <string name="setting_show_done_items_description">At the bottom</string>
     <string name="setting_expiring_soon_days">Expiring soon days</string>
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
     <string name="setting_default_amount_consume">Default amount for consume</string>

@@ -395,7 +395,7 @@
 
     <string name="category_licenses">Licence otevřených zdrojových kódů</string>
     <string name="category_general">Všeobecné</string>
-    <string name="category_purchase_consume">Nakup &amp; spotřebuj</string>
+    <string name="category_shopping_mode">Nakup &amp; spotřebuj</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Ladění</string>
     <string name="category_presets">Přednastavení pro nový produkt</string>

@@ -377,7 +377,7 @@
 
     <string name="category_licenses">Apri licenze del codice sorgente</string>
     <string name="category_general">Generale</string>
-    <string name="category_purchase_consume">Compra e consuma</string>
+    <string name="category_shopping_mode">Compra e consuma</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
     <string name="category_presets">Impostazioni predefinite per nuovi prodotti</string>

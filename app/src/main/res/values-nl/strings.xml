@@ -328,7 +328,7 @@
 
     <string name="category_licenses">Open Source licenties</string>
     <string name="category_general">Algemeen</string>
-    <string name="category_purchase_consume">Aankoop &amp; consumeer</string>
+    <string name="category_shopping_mode">Aankoop &amp; consumeer</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
     <string name="category_presets_new_products">Voorinstellingen voor nieuwe producten</string>

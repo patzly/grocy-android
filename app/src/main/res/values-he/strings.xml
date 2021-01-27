@@ -395,7 +395,7 @@
 
     <string name="category_licenses">רישיונות קוד פתוח</string>
     <string name="category_general">כללי</string>
-    <string name="category_purchase_consume">רכישה וצריכה</string>
+    <string name="category_shopping_mode">רכישה וצריכה</string>
     <string name="category_server">שרת</string>
     <string name="category_debugging">ניפוי שגיאות</string>
     <string name="category_presets_new_products">ערכות למוצרים חדשים</string>
