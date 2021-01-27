@@ -53,6 +53,7 @@ public class FormDataShoppingListItemEdit {
     private final MutableLiveData<String> amountErrorLive;
     private final MediatorLiveData<String> amountHelperLive;
     private final LiveData<String> amountHintLive;
+    private final MediatorLiveData<String> amountStockLive;
     private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
     private final LiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
     private final MutableLiveData<QuantityUnit> quantityUnitLive;
@@ -102,9 +103,12 @@ public class FormDataShoppingListItemEdit {
                         quantityUnit.getNamePlural()
                 ) : null
         );
+        amountStockLive = new MediatorLiveData<>();
+        amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
+        amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
         amountHelperLive = new MediatorLiveData<>();
-        amountHelperLive.addSource(amountLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-        amountHelperLive.addSource(quantityUnitLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        amountHelperLive.addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        amountHelperLive.addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
         noteLive = new MutableLiveData<>();
         noteErrorLive = new MutableLiveData<>();
         filledWithShoppingListItem = false;
@@ -202,7 +206,7 @@ public class FormDataShoppingListItemEdit {
         } return null;
     }
 
-    private String getAmountHelpText() {
+    private String getAmountStock() {
         QuantityUnit stock = getStockQuantityUnit();
         QuantityUnit current = quantityUnitLive.getValue();
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
@@ -216,15 +220,28 @@ public class FormDataShoppingListItemEdit {
                 amountHelperLive.setValue(null);
                 return null;
             }
-            double amountMultiplied = amount / (double) currentFactor;
-            return contextWeak.get().getString(
-                    R.string.subtitle_amount_compare,
-                    NumUtil.trim(amountMultiplied),
-                    amountMultiplied == 1 ? stock.getName() : stock.getNamePlural()
-            );
+            double amountMultiplied;
+            if(productLive.getValue() != null
+                    && current.getId() == productLive.getValue().getQuIdPurchase()) {
+                amountMultiplied = amount * (double) currentFactor;
+            } else {
+                amountMultiplied = amount / (double) currentFactor;
+            }
+            return NumUtil.trim(amountMultiplied);
         } else {
             return null;
         }
+    }
+
+    private String getAmountHelpText() {
+        QuantityUnit stock = getStockQuantityUnit();
+        if(stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
+        return contextWeak.get().getString(
+                R.string.subtitle_amount_compare,
+                amountStockLive.getValue(),
+                Double.parseDouble(amountStockLive.getValue()) == 1
+                        ? stock.getName() : stock.getNamePlural()
+        );
     }
 
     public MutableLiveData<String> getNoteLive() {
@@ -303,14 +320,9 @@ public class FormDataShoppingListItemEdit {
         if(!isFormValid()) return null;
         ShoppingList shoppingList = shoppingListLive.getValue();
         Product product = productLive.getValue();
-        String amount = amountLive.getValue();
+        String amount = amountStockLive.getValue();
         String note = noteLive.getValue();
         QuantityUnit unit = quantityUnitLive.getValue();
-        HashMap<QuantityUnit, Double> unitFactors = quantityUnitsFactorsLive.getValue();
-        Double factor = unitFactors != null ? unitFactors.get(unit) : null;
-        if(factor != null && factor == -1 && product != null) {
-            factor = product.getQuFactorPurchaseToStockDouble();
-        }
 
         assert shoppingList != null && amount != null;
         if(item == null) item = new ShoppingListItem();
@@ -318,7 +330,7 @@ public class FormDataShoppingListItemEdit {
         item.setShoppingListId(shoppingList.getId());
         item.setProductId(product != null ? String.valueOf(product.getId()) : null);
         item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
-        item.setAmount(factor != null ? amountDouble / factor : amountDouble);
+        item.setAmount(amountDouble);
         item.setNote(note != null ? note.trim() : null);
         return item;
     }
