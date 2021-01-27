@@ -187,7 +187,7 @@ public class MissingBatchItemsFragment extends BaseFragment
                 R.string.action_perform_purchasing_processes,
                 Constants.FAB.TAG.PURCHASE,
                 animated,
-                this::doOnePurchaseRequest
+                this::doOnePurchaseRequest, null
         );
     }
 

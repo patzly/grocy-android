@@ -233,6 +233,11 @@ public class OverviewStartViewModel extends BaseViewModel {
         );
     }
 
+    public boolean getIsDemoInstance() {
+        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        return server != null && server.contains("grocy.info");
+    }
+
     @Override
     protected void onCleared() {
         dlHelper.destroy();

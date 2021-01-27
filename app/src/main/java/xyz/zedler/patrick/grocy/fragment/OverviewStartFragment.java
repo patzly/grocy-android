@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -131,7 +132,7 @@ public class OverviewStartFragment extends BaseFragment {
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.CENTER,
-                R.menu.menu_stock,
+                R.menu.menu_empty,
                 animated,
                 () -> {}
         );
@@ -140,9 +141,8 @@ public class OverviewStartFragment extends BaseFragment {
                 R.string.action_scan,
                 Constants.FAB.TAG.SCAN,
                 animated,
-                () -> {
-                    navigate(R.id.navigation_shopping);
-                }
+                () -> navigate(R.id.consumeFragment),
+                () -> navigate(R.id.purchaseFragment)
         );
     }
 
@@ -159,6 +159,10 @@ public class OverviewStartFragment extends BaseFragment {
             );
         }
         navigateDeepLink(deepLinkUri);
+    }
+
+    public void openLogoutBottomSheet() {
+        activity.showBottomSheet(new LogoutBottomSheet(), new Bundle());
     }
 
     public void openFeedbackBottomSheet() {

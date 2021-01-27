@@ -142,7 +142,8 @@
     <string name="msg_no_purchase_transactions">No pending purchase transactions</string>
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
-    <string name="msg_logout_demo">You\'re running the grocy demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them.</b>\n\nOn the login screen you can enter your own server address.</string>
+    <string name="msg_logout_demo">You\'re using the grocy public demo instance of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
+    <string name="msg_logout_demo_short">Public demo instance. Click for details.</string>
     <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_shortcuts">You can enable 4 shortcuts.</string>
     <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>

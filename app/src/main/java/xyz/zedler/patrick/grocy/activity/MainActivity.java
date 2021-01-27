@@ -300,7 +300,26 @@ public class MainActivity extends AppCompatActivity {
                 tooltipStringId,
                 tag,
                 animated,
-                onClick
+                onClick,
+                null
+        );
+    }
+
+    public void updateFab(
+            @DrawableRes int resId,
+            @StringRes int tooltipStringId,
+            String tag,
+            boolean animated,
+            Runnable onClick,
+            Runnable onLongClick
+    ) {
+        updateFab(
+                ContextCompat.getDrawable(this, resId),
+                tooltipStringId,
+                tag,
+                animated,
+                onClick,
+                onLongClick
         );
     }
 
@@ -309,13 +328,21 @@ public class MainActivity extends AppCompatActivity {
             @StringRes int tooltipStringId,
             String tag,
             boolean animated,
-            Runnable onClick
+            Runnable onClick,
+            Runnable onLongClick
     ) {
         replaceFabIcon(icon, tag, animated);
         binding.fabMain.setOnClickListener(v -> {
             Drawable drawable = binding.fabMain.getDrawable();
             if(drawable instanceof AnimationDrawable) IconUtil.start(drawable);
             onClick.run();
+        });
+        binding.fabMain.setOnLongClickListener(v -> {
+            if(onLongClick == null) return false;
+            Drawable drawable = binding.fabMain.getDrawable();
+            if(drawable instanceof AnimationDrawable) IconUtil.start(drawable);
+            onLongClick.run();
+            return true;
         });
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.fabMain.setTooltipText(getString(tooltipStringId));
