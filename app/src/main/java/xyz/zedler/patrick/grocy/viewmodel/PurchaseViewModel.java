@@ -181,7 +181,7 @@ public class PurchaseViewModel extends BaseViewModel {
             setProductQuantityUnitsAndFactors(updatedProduct, barcode);
 
             // amount
-            if(!isTareWeightEnabled(productDetails) && barcode.hasAmount()) {
+            if(!isTareWeightEnabled(productDetails) && barcode != null && barcode.hasAmount()) {
                 // if barcode contains amount, take this (with tare weight handling off)
                 // workflow status doesn't matter
                 formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
@@ -198,6 +198,7 @@ public class PurchaseViewModel extends BaseViewModel {
                     formData.getAmountLive().setValue(defaultAmount);
                 }
             } else if(!isTareWeightEnabled(productDetails)) {
+                // if workflow enabled, always fill with amount 1
                 formData.getAmountLive().setValue(NumUtil.trim(1));
             }
 
@@ -281,7 +282,9 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
         QuantityUnit barcodeUnit = null;
-        if(barcode.hasQuId()) barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+        if(barcode != null && barcode.hasQuId()) {
+            barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+        }
         if(barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
             formData.getQuantityUnitLive().setValue(barcodeUnit);
         } else {
