@@ -188,6 +188,7 @@ public class BottomAppBarRefreshScrollBehavior {
 					TAG,
 					"onScrollChangeListener: newY = " + scrollY + ", oldY = " + oldScrollY
 			);
+			if(oldScrollY == 0 && scrollY > 0) return; // prevent hiding bottom app bar after pressing back button
 			if(!isTopScroll && scrollY == 0) { // TOP
 				onTopScroll();
 			} else {

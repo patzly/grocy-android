@@ -289,7 +289,7 @@
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.openFeedbackBottomSheet()}"
+                        android:onClick="@{() -> fragment.navigateDeepLink(fragment.getString(R.string.deep_link_masterDataOverviewFragment))}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout
@@ -362,7 +362,7 @@
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
+                        android:onClick="@{() -> fragment.openFeedbackBottomSheet()}"
                         app:clickUtil="@{clickUtil}">
 
                         <TextView
