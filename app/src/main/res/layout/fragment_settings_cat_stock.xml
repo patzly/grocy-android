@@ -93,31 +93,29 @@
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> switchFrontCam.setChecked(!switchFrontCam.isChecked())}">
+                android:onClick="@{v -> switchIndicator.setChecked(!switchIndicator.isChecked())}">
 
                 <ImageView
-                    android:id="@+id/image_front_cam"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_camera_front"/>
+                    android:src="@drawable/ic_round_shopping_list_long"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_use_front_cam"/>
+                        android:text="@string/setting_list_indicator"/>
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_use_front_cam_description"/>
+                        android:text="@string/setting_list_indicator_description"/>
 
                 </LinearLayout>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_front_cam"
+                    android:id="@+id/switch_indicator"
                     style="@style/Widget.Grocy.Switch"
-                    android:onCheckedChanged="@{() -> activity.startIconAnimation(imageFrontCam, true)}"
-                    android:checked="@={viewModel.frontCamEnabled}"/>
+                    android:checked="@={viewModel.listIndicatorEnabled}"/>
 
             </LinearLayout>
 

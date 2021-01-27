@@ -248,6 +248,18 @@ public class SettingsViewModel extends BaseViewModel {
                 .apply();
     }
 
+    public boolean getListIndicatorEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
+                Constants.SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK
+        );
+    }
+
+    public void setListIndicatorEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
+                .apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
