@@ -55,14 +55,11 @@ public class InputNameBottomSheet extends BaseBottomSheet {
                 R.layout.fragment_bottomsheet_input_name, container, false
         );
 
-        MainActivity activity = (MainActivity) getActivity();
-        assert activity != null && getArguments() != null;
+        MainActivity activity = (MainActivity) requireActivity();
 
         setCancelable(false);
 
-        String productName = InputNameBottomSheetArgs
-                .fromBundle(getArguments())
-                .getProductName();
+        String productName = requireArguments().getString(Constants.ARGUMENT.PRODUCT_NAME);
 
         TextView textView = view.findViewById(R.id.text_input_name_question);
         textView.setText(activity.getString(R.string.description_input_name, productName));

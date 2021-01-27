@@ -40,7 +40,6 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
@@ -85,21 +84,6 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(
                 v -> navigateDeepLink(getString(R.string.deep_link_shoppingModeFragment))
         );
-
-        view.findViewById(R.id.button_drawer_batch_consume).setOnClickListener(v -> {
-            navigateCustom(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToScanBatchFragment(
-                            Constants.ACTION.CONSUME
-                    )
-            );
-        });
-
-        view.findViewById(R.id.button_drawer_batch_purchase).setOnClickListener(v -> {
-            navigateCustom(NavigationMainDirections.actionGlobalScanBatchFragment(
-                            Constants.ACTION.PURCHASE
-                    )
-            );
-        });
 
         setOnClickListeners(
                 R.id.linear_drawer_stock,

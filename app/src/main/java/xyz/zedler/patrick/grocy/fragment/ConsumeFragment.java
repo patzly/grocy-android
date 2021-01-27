@@ -58,7 +58,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
@@ -170,7 +169,7 @@ public class ConsumeFragment extends BaseFragment {
 
         binding.textInputConsumeProduct.setErrorIconDrawable(null);
         binding.textInputConsumeProduct.setEndIconOnClickListener(
-                v -> navigate(ConsumeFragmentDirections.actionConsumeFragmentToScanInputFragment())
+                v -> {}
         );
         binding.autoCompleteConsumeProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
@@ -1050,12 +1049,7 @@ public class ConsumeFragment extends BaseFragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
-        menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
-        if(menuItemBatch != null) menuItemBatch.setOnMenuItemClickListener(item -> {
-            navigate(NavigationMainDirections.actionGlobalScanBatchFragment(Constants.ACTION.CONSUME));
-            return true;
-        });
+        MenuItem menuItemDetails, menuItemOpen;
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);

@@ -464,11 +464,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         isFormIncomplete();*/
     }
 
-    private void showInputNameBottomSheet(@NonNull String productName) {
-        navigate(PurchaseFragmentDirections
-                .actionPurchaseFragmentToInputNameBottomSheetDialogFragment(productName));
-    }
-
     private void hideDisabledFeatures() {
         if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
             binding.linearPurchaseTotalPrice.setVisibility(View.GONE);

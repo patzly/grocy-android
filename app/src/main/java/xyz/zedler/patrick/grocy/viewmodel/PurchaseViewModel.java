@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheetArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -331,10 +330,9 @@ public class PurchaseViewModel extends BaseViewModel {
         if(product != null) {
             setProduct(product, null);
         } else {
-            showBottomSheet(
-                    new InputNameBottomSheet(),
-                    new InputNameBottomSheetArgs.Builder(input).build().toBundle()
-            );
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
+            showBottomSheet(new InputNameBottomSheet(), bundle);
         }
     }
 
