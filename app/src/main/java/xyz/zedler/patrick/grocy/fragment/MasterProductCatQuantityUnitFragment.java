@@ -119,7 +119,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
-                viewModel.isActionEdit() ? R.menu.menu_shopping_list_item_edit : R.menu.menu_empty,
+                viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
                 animated,
                 () -> {}
         );

@@ -50,6 +50,7 @@ public class FormDataPurchase {
 
     private final WeakReference<Context> contextWeak;
     private final SharedPreferences sharedPrefs;
+    private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<Boolean> scannerVisibilityLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
     private final MutableLiveData<ProductDetails> productDetailsLive;
@@ -85,6 +86,10 @@ public class FormDataPurchase {
         DateUtil dateUtil = new DateUtil(contextWeak);
         this.contextWeak = new WeakReference<>(contextWeak);
         this.sharedPrefs = sharedPrefs;
+        displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+        ));
         scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
         productsLive = new MutableLiveData<>(new ArrayList<>());
         productDetailsLive = new MutableLiveData<>();
@@ -168,6 +173,15 @@ public class FormDataPurchase {
         );
 
         filledWithProduct = false;
+    }
+
+    public MutableLiveData<Boolean> getDisplayHelpLive() {
+        return displayHelpLive;
+    }
+
+    public void toggleDisplayHelpLive() {
+        assert displayHelpLive.getValue() != null;
+        displayHelpLive.setValue(!displayHelpLive.getValue());
     }
 
     public MutableLiveData<Boolean> getScannerVisibilityLive() {

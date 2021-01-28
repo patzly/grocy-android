@@ -166,6 +166,7 @@
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
     <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB</string>
     <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
+    <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
     <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
 
     <string name="error_api_not_working">API key not working</string>
