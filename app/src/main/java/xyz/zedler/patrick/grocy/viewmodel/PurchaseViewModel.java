@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -86,7 +87,6 @@ public class PurchaseViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> scanModeEnabled;
 
     private ArrayList<Runnable> queueEmptyActions;
-    private String forcedAmount;
 
     public PurchaseViewModel(@NonNull Application application) {
         super(application);
@@ -495,6 +495,13 @@ public class PurchaseViewModel extends BaseViewModel {
         showBottomSheet(new LocationsBottomSheet(), bundle);
     }
 
+    public void showConfirmationBottomSheet() {
+        String amount = formData.getAmountLive().getValue();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
+        showBottomSheet(new ScanModeConfirmBottomSheet(), bundle);
+    }
+
     @NonNull
     public MutableLiveData<Boolean> getIsLoadingLive() {
         return isLoadingLive;
@@ -526,14 +533,6 @@ public class PurchaseViewModel extends BaseViewModel {
         }
         return minAmount;
     }*/
-
-    public void setForcedAmount(String forcedAmount) {
-        this.forcedAmount = forcedAmount;
-    }
-
-    public String getForcedAmount() {
-        return forcedAmount;
-    }
 
     public boolean isTareWeightEnabled(ProductDetails productDetails) {
         if(productDetails == null) return false;

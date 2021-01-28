@@ -66,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="viewStart"
-                android:text="Transaction which will be executed:\n\nPurchase 2 Bottles of Water\nDue date: 23. November 2021\nPrice: 32 EUR\nStore: Rewe\nLocation: Kühlschrank"
                 android:textSize="15sp"
                 android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 

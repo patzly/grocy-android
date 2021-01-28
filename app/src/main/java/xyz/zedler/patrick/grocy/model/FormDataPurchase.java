@@ -523,6 +523,26 @@ public class FormDataPurchase {
         return valid;
     }
 
+    public String getConfirmationText() {
+        String amount = amountLive.getValue();
+        QuantityUnit qU = quantityUnitLive.getValue();
+        ProductDetails details = productDetailsLive.getValue();
+        String price = priceLive.getValue();
+        assert amount != null && qU != null && details != null && price != null;
+        price = NumUtil.trimPrice(Double.parseDouble(price));
+        price += " " + sharedPrefs.getString(Constants.PREF.CURRENCY, "");
+        return contextWeak.get().getString(
+                R.string.msg_scan_mode_confirm,
+                NumUtil.trim(Double.parseDouble(amount)),
+                Double.parseDouble(amount) == 1 ? qU.getName() : qU.getNamePlural(),
+                details.getProduct().getName(),
+                dueDateTextLive.getValue(),
+                price,
+                storeNameLive.getValue(),
+                locationNameLive.getValue()
+        );
+    }
+
     public JSONObject getFilledJSONObject() {
         String amount = getAmountStock();
         String price = priceLive.getValue();

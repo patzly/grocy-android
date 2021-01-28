@@ -45,7 +45,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.CreateProduct;
@@ -58,7 +57,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
@@ -394,7 +392,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         }
         if(nextView == null) {
             clearInputFocus();
-            activity.showBottomSheet(new ScanModeConfirmBottomSheet());
+            viewModel.showConfirmationBottomSheet();
             return;
         }
         nextView.requestFocus();
@@ -435,7 +433,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             //viewModel.getProductDetailsLive().setValue(null);
             fillWithProductDetails(null);
         }
-        viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
+        //viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
     }
 
     /**

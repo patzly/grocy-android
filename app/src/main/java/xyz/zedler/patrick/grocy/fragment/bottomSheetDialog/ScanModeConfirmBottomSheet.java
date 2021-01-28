@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ScanModeConfirmBottomSheet extends BaseBottomSheet {
 
@@ -64,6 +66,7 @@ public class ScanModeConfirmBottomSheet extends BaseBottomSheet {
         );
 
         activity = (MainActivity) requireActivity();
+        Bundle args = requireArguments();
 
         view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
         view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
@@ -72,6 +75,9 @@ public class ScanModeConfirmBottomSheet extends BaseBottomSheet {
             activity.getCurrentFragment().startTransaction();
             dismiss();
         });
+
+        String msg = args.getString(Constants.ARGUMENT.TEXT);
+        ((TextView) view.findViewById(R.id.text)).setText(msg);
 
         progressTimeout = view.findViewById(R.id.progress_timeout);
         startProgress();
