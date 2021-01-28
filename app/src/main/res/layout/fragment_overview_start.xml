@@ -138,7 +138,7 @@
                             app:contentPadding="16dp"
                             app:cardElevation="0dp"
                             app:cardCornerRadius="12dp"
-                            app:cardBackgroundColor="@color/retro_dirt_bg"
+                            app:cardBackgroundColor="@color/retro_red_only_day"
                             app:strokeColor="@color/retro_red"
                             app:strokeWidth="@dimen/help_card_border_size"
                             android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"

@@ -9,6 +9,7 @@
     <color name="retro_red_fg">#c14f33</color>
     <color name="retro_red_bg_black">#ee7e62</color>
     <color name="retro_red_bg_white">#c35d45</color>
+    <color name="retro_red_only_day">#FFAB91</color>
     <color name="retro_red_translucent">#22e06a4e</color>
 
     <color name="retro_yellow">#deb853</color>

@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <color name="retro_red_fg">@color/retro_red_bg_black</color>
+    <color name="retro_red_only_day">@color/on_background_variant</color>
     <color name="retro_yellow_fg">@color/retro_yellow_bg</color>
     <color name="retro_dirt_fg">@color/retro_dirt_bg</color>
     <color name="retro_dirt_bg">@color/on_background_variant</color>
