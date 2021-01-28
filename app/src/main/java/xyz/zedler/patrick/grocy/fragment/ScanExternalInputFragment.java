@@ -164,18 +164,7 @@ public class ScanExternalInputFragment extends BaseFragment {
     }
 
     public void navigateToScannerSettings() {
-        String deepLinkUri = getString(R.string.deep_link_settingsFragment);
-        Bundle bundle = new SettingsFragmentArgs.Builder()
-                .setShowCategory(Constants.SETTINGS.SCANNER.class.getSimpleName())
-                .build().toBundle();
-        for(String argName : bundle.keySet()) {
-            Object value = bundle.get(argName);
-            deepLinkUri = deepLinkUri.replace(
-                    "{" + argName + "}",
-                    value != null ? value.toString() : ""
-            );
-        }
-        navigateDeepLink(deepLinkUri);
+        navigateDeepLink(R.string.deep_link_settingsCatScannerFragment);
     }
 
     @NonNull

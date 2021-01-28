@@ -116,7 +116,7 @@
                             app:strokeColor="@color/retro_dirt_dark"
                             app:strokeWidth="@dimen/help_card_border_size"
                             android:visibility="@{viewModel.beginnerModeEnabled ? View.VISIBLE : View.GONE}"
-                            android:onClick="@{() -> fragment.navigateToSettingsCatDebugging()}"
+                            android:onClick="@{() -> fragment.navigateToSettingsCatBehavior()}"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
@@ -317,7 +317,7 @@
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.navigateDeepLink(fragment.getString(R.string.deep_link_masterDataOverviewFragment))}"
+                        android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout

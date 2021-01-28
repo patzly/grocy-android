@@ -32,6 +32,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -188,12 +189,23 @@ public class BaseFragment extends Fragment {
         findNavController().navigate(Uri.parse(uri), builder.build());
     }
 
-    void navigateDeepLink(@NonNull String uri, Bundle bundleArgs) {
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_in_up)
-                .setPopExitAnim(R.anim.slide_out_down)
-                .setExitAnim(R.anim.slide_no);
-        findNavController().navigate(Uri.parse(uri), builder.build());
+    public void navigateDeepLink(@StringRes int uri) {
+        navigateDeepLink(getString(uri));
+    }
+
+    void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+        navigateDeepLink(fillUriWithArgs(getString(uri), args));
+    }
+
+    String fillUriWithArgs(@NonNull String uri, @NonNull Bundle args) {
+        for(String argName : args.keySet()) {
+            Object value = args.get(argName);
+            uri = uri.replace(
+                    "{" + argName + "}",
+                    value != null ? value.toString() : ""
+            );
+        }
+        return uri;
     }
 
     @SuppressLint("RestrictedApi")

@@ -454,15 +454,15 @@
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatBehaviorFragment"
             android:label="SettingsCatBehaviorFragment"
             tools:layout="@layout/fragment_settings_cat_behavior">
-            <deepLink
-                android:id="@+id/deepLink11"
-                app:uri="@string/deep_link_settingsCatBehaviorFragment" />
         </fragment>
         <fragment
             android:id="@+id/settingsCatScannerFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerFragment"
             android:label="SettingsCatScannerFragment"
             tools:layout="@layout/fragment_settings_cat_scanner">
+            <deepLink
+                android:id="@+id/deepLink11"
+                app:uri="@string/deep_link_settingsCatScannerFragment" />
         </fragment>
         <fragment
             android:id="@+id/settingsCatStockFragment"

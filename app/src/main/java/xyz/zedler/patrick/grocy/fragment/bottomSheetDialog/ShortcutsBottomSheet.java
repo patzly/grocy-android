@@ -45,6 +45,8 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ShortcutsBottomSheet extends BaseBottomSheet {
 
@@ -173,9 +175,10 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     private ShortcutInfo createShortcutAddToShoppingList(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListItemEditFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
+        Intent intent = getIntent(getUriWithArgs(R.string.deep_link_shoppingListItemEditFragment,
+                new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                        .build().toBundle()
+        ));
         return new ShortcutInfo.Builder(requireContext(), ADD_TO_SHOPPING_LIST)
                 .setShortLabel(label)
                 .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_add))
@@ -224,6 +227,12 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
                 .setShortLabel(label)
                 .setIcon(Icon.createWithResource(requireContext(), R.drawable.ic_round_barcode_scan))
                 .setIntent(intent).build();
+    }
+
+    private Intent getIntent(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setClass(requireContext(), MainActivity.class);
+        return intent;
     }
 
     @NonNull

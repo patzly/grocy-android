@@ -30,6 +30,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
@@ -135,11 +136,34 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
         findNavController().navigate(destination, null, navOptions);
     }
 
-    void navigateDeepLink(@NonNull String uri) {
+    void navigateDeepLink(@NonNull Uri uri) {
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up)
                 .setPopExitAnim(R.anim.slide_out_down)
                 .setExitAnim(R.anim.slide_no);
-        findNavController().navigate(Uri.parse(uri), builder.build());
+        findNavController().navigate(uri, builder.build());
+    }
+
+    void navigateDeepLink(@NonNull String uri) {
+        navigateDeepLink(Uri.parse(uri));
+    }
+
+    void navigateDeepLink(@NonNull String uri, @NonNull Bundle args) {
+        navigateDeepLink(getUriWithArgs(uri, args));
+    }
+
+    Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle args) {
+        for(String argName : args.keySet()) {
+            Object value = args.get(argName);
+            uri = uri.replace(
+                    "{" + argName + "}",
+                    value != null ? value.toString() : ""
+            );
+        }
+        return Uri.parse(uri);
+    }
+
+    Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {
+        return getUriWithArgs(getString(uri), args);
     }
 }

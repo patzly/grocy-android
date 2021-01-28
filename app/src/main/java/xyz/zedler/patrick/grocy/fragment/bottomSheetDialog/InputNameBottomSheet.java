@@ -75,17 +75,10 @@ public class InputNameBottomSheet extends BaseBottomSheet {
     }
 
     public void navigateToMasterProductFragment() {
-        String deepLinkUri = getString(R.string.deep_link_masterProductFragment);
-        Bundle bundle = new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
-                .build().toBundle();
-        for(String argName : bundle.keySet()) {
-            Object value = bundle.get(argName);
-            deepLinkUri = deepLinkUri.replace(
-                    "{" + argName + "}",
-                    value != null ? value.toString() : ""
-            );
-        }
-        navigateDeepLink(deepLinkUri);
+        navigateDeepLink(
+                getString(R.string.deep_link_masterProductFragment),
+                new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE).build().toBundle()
+        );
     }
 
     @NonNull

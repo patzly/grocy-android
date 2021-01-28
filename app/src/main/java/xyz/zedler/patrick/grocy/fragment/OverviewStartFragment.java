@@ -146,19 +146,11 @@ public class OverviewStartFragment extends BaseFragment {
         );
     }
 
-    public void navigateToSettingsCatDebugging() {
-        String deepLinkUri = getString(R.string.deep_link_settingsFragment);
+    public void navigateToSettingsCatBehavior() {
         Bundle bundle = new SettingsFragmentArgs.Builder()
                 .setShowCategory(Constants.SETTINGS.BEHAVIOR.class.getSimpleName())
                 .build().toBundle();
-        for(String argName : bundle.keySet()) {
-            Object value = bundle.get(argName);
-            deepLinkUri = deepLinkUri.replace(
-                    "{" + argName + "}",
-                    value != null ? value.toString() : ""
-            );
-        }
-        navigateDeepLink(deepLinkUri);
+        navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     }
 
     public void openLogoutBottomSheet() {
