@@ -152,7 +152,6 @@
                             app:helperText=" "
                             app:errorIconDrawable="@{null}"
                             app:endIconOnClickListener="@{v -> fragment.navigate(R.id.scanInputFragment)}"
-                            app:endIconOnLongClickListenerCustom="@{() -> fragment.navigate(R.id.scanExternalInputFragment)}"
                             app:errorText="@{formData.parentProductNameErrorLive}">
 
                             <com.google.android.material.textfield.MaterialAutoCompleteTextView
