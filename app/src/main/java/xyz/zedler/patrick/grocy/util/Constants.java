@@ -106,12 +106,13 @@ public final class Constants {
             public final static String SHORTCUTS = "shortcuts";
             public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
             public final static String START_DESTINATION = "start_destination";
+            public final static String SCAN_MODE_PURCHASE = "scan_mode_purchase";
+            public final static String SCAN_MODE_SHOPPING_ITEM = "scan_mode_shopping_item";
         }
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";
             public final static String FRONT_CAM = "front_cam";
-            public final static String EXTERNAL_PREFIX = "external_prefix";
-            public final static String EXTERNAL_SUFFIX = "external_suffix";
+            public final static String EXTERNAL_SCANNER = "external_scanner";
         }
         public final static class STOCK {
             public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
@@ -146,12 +147,13 @@ public final class Constants {
         public final static class BEHAVIOR {
             public final static boolean BEGINNER_MODE = true;
             public final static boolean EXPAND_BOTTOM_SHEETS = false;
+            public final static boolean SCAN_MODE_PURCHASE = false;
+            public final static boolean SCAN_MODE_SHOPPING_ITEM = false;
         }
         public final static class SCANNER {
             public final static boolean FOOD_FACTS = false;
             public final static boolean FRONT_CAM = false;
-            public final static String EXTERNAL_PREFIX = "";
-            public final static String EXTERNAL_SUFFIX = "TAB";
+            public final static boolean EXTERNAL_SCANNER = false;
         }
         public final static class STOCK {
             public final static int LOCATION = -1;

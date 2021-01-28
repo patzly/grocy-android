@@ -59,6 +59,7 @@ public class SettingsViewModel extends BaseViewModel {
     private final GrocyApi grocyApi;
 
     private MutableLiveData<Boolean> isLoadingLive;
+    private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
 
     public SettingsViewModel(@NonNull Application application) {
         super(application);
@@ -76,6 +77,7 @@ public class SettingsViewModel extends BaseViewModel {
         grocyApi = new GrocyApi(getApplication());
 
         isLoadingLive = new MutableLiveData<>(false);
+        getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     }
 
     public boolean isDemo() {
@@ -213,6 +215,30 @@ public class SettingsViewModel extends BaseViewModel {
                 .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
     }
 
+    public boolean getScanModeShoppingItemEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM
+        );
+    }
+
+    public void setScanModeShoppingItemEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM, enabled).apply();
+    }
+
+    public boolean getScanModePurchaseEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
+        );
+    }
+
+    public void setScanModePurchaseEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE, enabled).apply();
+    }
+
     public boolean getFrontCamEnabled() {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.SCANNER.FRONT_CAM,
@@ -222,6 +248,22 @@ public class SettingsViewModel extends BaseViewModel {
 
     public void setFrontCamEnabled(boolean enabled) {
         sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.FRONT_CAM, enabled).apply();
+    }
+
+    public boolean getExternalScannerEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+        );
+    }
+
+    public MutableLiveData<Boolean> getGetExternalScannerEnabledLive() {
+        return getExternalScannerEnabledLive;
+    }
+
+    public void setExternalScannerEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER, enabled).apply();
+        getExternalScannerEnabledLive.setValue(enabled);
     }
 
     public boolean getKeepScreenOnEnabled() {

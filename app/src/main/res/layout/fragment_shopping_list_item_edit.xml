@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:onLongClick="@{() -> viewModel.toggleWorkflowEnabled()}">
+            android:onLongClick="@{() -> viewModel.toggleScanModeEnabled()}">
 
             <FrameLayout
                 android:layout_width="48dp"
@@ -64,7 +64,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar"
-                android:textColor="@{viewModel.workflowEnabled ? @color/retro_blue : @color/on_primary}"
+                android:textColor="@{viewModel.scanModeEnabled ? @color/retro_blue : @color/on_primary}"
                 android:text="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}"/>
 
         </LinearLayout>
@@ -312,7 +312,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
                                 android:text="@={formData.noteLive}"
-                                app:onDoneClickInSoftKeyboard="@{() -> viewModel.setWorkflowEnabled(false)}"/>
+                                app:onDoneClickInSoftKeyboard="@{() -> viewModel.setScanModeEnabled(false)}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 

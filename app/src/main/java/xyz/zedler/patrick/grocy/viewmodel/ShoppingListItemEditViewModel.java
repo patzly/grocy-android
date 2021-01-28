@@ -78,7 +78,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
-    private final MutableLiveData<Boolean> workflowEnabled;
+    private final MutableLiveData<Boolean> scanModeEnabled;
 
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<Product> products;
@@ -110,7 +110,10 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
-        workflowEnabled = new MutableLiveData<>(false);
+        scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM
+        ));
     }
 
     public FormDataShoppingListItemEdit getFormData() {
@@ -409,21 +412,21 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         );
     }
 
-    public boolean isWorkflowEnabled() {
-        if(workflowEnabled.getValue() == null) return false;
-        return workflowEnabled.getValue();
+    public boolean isScanModeEnabled() {
+        if(scanModeEnabled.getValue() == null) return false;
+        return scanModeEnabled.getValue();
     }
 
-    public MutableLiveData<Boolean> getWorkflowEnabled() {
-        return workflowEnabled;
+    public MutableLiveData<Boolean> getScanModeEnabled() {
+        return scanModeEnabled;
     }
 
-    public void setWorkflowEnabled(boolean enabled) {
-        workflowEnabled.setValue(enabled);
+    public void setScanModeEnabled(boolean enabled) {
+        scanModeEnabled.setValue(enabled);
     }
 
-    public boolean toggleWorkflowEnabled() {
-        workflowEnabled.setValue(!isWorkflowEnabled());
+    public boolean toggleScanModeEnabled() {
+        scanModeEnabled.setValue(!isScanModeEnabled());
         return true;
     }
 

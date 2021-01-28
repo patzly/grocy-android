@@ -180,6 +180,60 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> switchScanModePurchase.setChecked(!switchScanModePurchase.isChecked())}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_batch"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_scan_mode_purchase"
+                        android:maxLines="4"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_scan_mode_purchase"
+                    style="@style/Widget.Grocy.Switch"
+                    android:checked="@={viewModel.scanModePurchaseEnabled}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> switchScanModeShopping.setChecked(!switchScanModeShopping.isChecked())}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_batch"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_scan_mode_shopping_item"
+                        android:maxLines="4"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_scan_mode_shopping"
+                    style="@style/Widget.Grocy.Switch"
+                    android:checked="@={viewModel.scanModeShoppingItemEnabled}"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -72,6 +72,7 @@ public class SettingsCatScannerFragment extends BaseFragment {
         binding.setViewModel(viewModel);
         binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
         binding.setClickUtil(new ClickUtil());
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {

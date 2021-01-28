@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -63,24 +62,6 @@ public class ScanExternalInputViewModel extends BaseViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         isOnlineLive = new ConnectivityLiveData(application);
-    }
-
-    public String getConfiguredOptions() {
-        String prefix = sharedPrefs.getString(
-                Constants.SETTINGS.SCANNER.EXTERNAL_PREFIX,
-                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_PREFIX
-        );
-        String suffix = sharedPrefs.getString(
-                Constants.SETTINGS.SCANNER.EXTERNAL_SUFFIX,
-                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SUFFIX
-        );
-        assert prefix != null;
-        assert suffix != null;
-        return getApplication().getString(
-                R.string.msg_help_external_scanner_settings,
-                prefix.isEmpty() ? getString(R.string.subtitle_none) : prefix,
-                suffix.isEmpty() ? getString(R.string.subtitle_none) : suffix
-        );
     }
 
     private boolean isOffline() {

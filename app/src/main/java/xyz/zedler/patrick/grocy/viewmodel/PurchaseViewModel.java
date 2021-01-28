@@ -83,7 +83,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Boolean> workflowEnabled;
+    private final MutableLiveData<Boolean> scanModeEnabled;
 
     private ArrayList<Runnable> queueEmptyActions;
     private String forcedAmount;
@@ -102,7 +102,10 @@ public class PurchaseViewModel extends BaseViewModel {
         formData = new FormDataPurchase(application, sharedPrefs);
 
         infoFullscreenLive = new MutableLiveData<>();
-        workflowEnabled = new MutableLiveData<>(false);
+        scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
+        ));
 
         barcodes = new ArrayList<>();
         queueEmptyActions = new ArrayList<>();
@@ -186,9 +189,9 @@ public class PurchaseViewModel extends BaseViewModel {
             // amount
             if(!isTareWeightEnabled(productDetails) && barcode != null && barcode.hasAmount()) {
                 // if barcode contains amount, take this (with tare weight handling off)
-                // workflow status doesn't matter
+                // scan mode status doesn't matter
                 formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-            } else if(!isTareWeightEnabled(productDetails) && !isWorkflowEnabled()) {
+            } else if(!isTareWeightEnabled(productDetails) && !isScanModeEnabled()) {
                 String defaultAmount = sharedPrefs.getString(
                         Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
                         Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
@@ -201,7 +204,7 @@ public class PurchaseViewModel extends BaseViewModel {
                     formData.getAmountLive().setValue(defaultAmount);
                 }
             } else if(!isTareWeightEnabled(productDetails)) {
-                // if workflow enabled, always fill with amount 1
+                // if scan mode enabled, always fill with amount 1
                 formData.getAmountLive().setValue(NumUtil.trim(1));
             }
 
@@ -248,7 +251,7 @@ public class PurchaseViewModel extends BaseViewModel {
             formData.getLocationLive().setValue(productDetails.getLocation());
 
             formData.isFormValid();
-            if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+            if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         };
 
         dlHelper.getProductDetails(product.getId(), listener, error -> {
@@ -310,7 +313,7 @@ public class PurchaseViewModel extends BaseViewModel {
         } else {
             formData.getBarcodeLive().setValue(barcode);
             formData.isFormValid();
-            if(isWorkflowEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+            if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         }
     }
 
@@ -546,22 +549,30 @@ public class PurchaseViewModel extends BaseViewModel {
         queueEmptyActions.add(runnable);
     }
 
-    public boolean isWorkflowEnabled() {
-        if(workflowEnabled.getValue() == null) return false;
-        return workflowEnabled.getValue();
+    public boolean isScanModeEnabled() {
+        if(scanModeEnabled.getValue() == null) return false;
+        return scanModeEnabled.getValue();
     }
 
-    public MutableLiveData<Boolean> getWorkflowEnabled() {
-        return workflowEnabled;
+    public MutableLiveData<Boolean> getScanModeEnabled() {
+        return scanModeEnabled;
     }
 
-    public void setWorkflowEnabled(boolean enabled) {
-        workflowEnabled.setValue(enabled);
+    public void setScanModeEnabled(boolean enabled) {
+        scanModeEnabled.setValue(enabled);
     }
 
-    public boolean toggleWorkflowEnabled() {
-        workflowEnabled.setValue(!isWorkflowEnabled());
+    public boolean toggleScanModeEnabled() {
+        scanModeEnabled.setValue(!isScanModeEnabled());
+        sendEvent(isScanModeEnabled() ? Event.SCAN_MODE_ENABLED : Event.SCAN_MODE_DISABLED);
         return true;
+    }
+
+    public boolean getExternalScannerEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+        );
     }
 
     public boolean isFeatureEnabled(String pref) {

@@ -29,7 +29,7 @@ Here is a changelog for this first alpha:
 **Rewritten & strongly edited pages**
 - Purchase
 - Consume
-- Settings (lots of new options, too)
+- Settings (with lots of new options)
 - Login (New login flow for QR codes from grocy server)
 
 **Not finished yet**

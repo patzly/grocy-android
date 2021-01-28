@@ -70,6 +70,10 @@ public class BaseFragment extends Fragment {
         return false;
     }
 
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return false;
+    }
+
     public void pauseScan() {}
 
     public void resumeScan() {}

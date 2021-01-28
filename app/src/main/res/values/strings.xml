@@ -164,8 +164,8 @@
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
     <string name="msg_help_tare_weight_purchase">Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculated.</string>
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
-    <string name="msg_help_external_scanner">Scan a barcode with an USB or Bluetooth barcode scanner which is connected with your device.</string>
-    <string name="msg_help_external_scanner_settings">The following options must be configured in your external scanner:\n\nPrefix: %1$s\nSuffix: %2$s\n\nClick here, if you want to change them in this app instead.</string>
+    <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB</string>
+    <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
     <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
 
     <string name="error_api_not_working">API key not working</string>
@@ -525,6 +525,10 @@
     <string name="setting_open_food_facts_description">Get info from barcodes</string>
     <string name="setting_use_front_cam">Use front camera</string>
     <string name="setting_use_front_cam_description">For barcode scanning</string>
+    <string name="setting_external_support">External scanner support</string>
+    <string name="setting_external_support_description">Via USB or Bluetooth</string>
+    <string name="setting_scan_mode_purchase">Start purchase page in scan mode</string>
+    <string name="setting_scan_mode_shopping_item">Start shopping list item page in scan mode</string>
     <string name="setting_reload_config">Reload configuration</string>
     <string name="setting_reload_config_description">App restart required</string>
     <string name="setting_logout">Logout</string>

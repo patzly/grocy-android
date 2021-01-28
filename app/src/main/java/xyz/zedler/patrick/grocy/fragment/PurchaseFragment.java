@@ -136,6 +136,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                     activity.navigateUp();
                 } else {
                     viewModel.getFormData().clearForm();
+                    focusProductInputIfNecessary();
                 }
             } else if(event.getType() == Event.BARCODE_UNKNOWN) {
                 assert event.getBundle() != null;
@@ -148,6 +149,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
             } else if(event.getType() == Event.FOCUS_INVALID_VIEWS) {
                 focusNextInvalidView();
+            } else if(event.getType() == Event.SCAN_MODE_ENABLED) {
+                focusProductInputIfNecessary();
+            } else if(event.getType() == Event.SCAN_MODE_DISABLED) {
+                clearInputFocus();
             }
         });
 
@@ -171,6 +176,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         );
         binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
         capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
+
+        focusProductInputIfNecessary();
 
         updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
@@ -274,8 +281,20 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(!viewModel.getFormData().isScannerVisible()) return false;
-        return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        if(viewModel.getFormData().isScannerVisible()) {
+            return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        } return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(viewModel.getFormData().isScannerVisible()) {
+            return super.onKeyUp(keyCode, event);
+        } else if(keyCode == KeyEvent.KEYCODE_TAB) {
+            showMessage("TAB");
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -287,7 +306,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     @Override
     public void onBarcodeResult(BarcodeResult result) {
         if(result.getText().isEmpty()) resumeScan();
-        if(!viewModel.isWorkflowEnabled()) viewModel.getFormData().toggleScannerVisibility();
+        if(!viewModel.isScanModeEnabled()) viewModel.getFormData().toggleScannerVisibility();
         viewModel.onBarcodeRecognized(result.getText());
     }
 
@@ -329,8 +348,22 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         viewModel.checkProductInput();
     }
 
+    public void focusProductInputIfNecessary() {
+        if(!viewModel.isScanModeEnabled()) return;
+        ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
+        String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
+        if(productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
+            binding.autoCompletePurchaseProduct.requestFocus();
+            if(viewModel.getExternalScannerEnabled()) {
+                activity.hideKeyboard();
+            } else {
+                activity.showKeyboard(binding.autoCompletePurchaseProduct);
+            }
+        }
+    }
+
     public void focusNextView() {
-        if(!viewModel.isWorkflowEnabled()) {
+        if(!viewModel.isScanModeEnabled()) {
             clearInputFocus();
             return;
         }
@@ -347,7 +380,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     public void focusNextInvalidView() {
-        if(!viewModel.isWorkflowEnabled()) {
+        if(!viewModel.isScanModeEnabled()) {
             clearInputFocus();
             return;
         }

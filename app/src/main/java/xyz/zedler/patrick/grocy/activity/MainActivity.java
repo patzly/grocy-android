@@ -368,6 +368,12 @@ public class MainActivity extends AppCompatActivity {
         return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        BaseFragment currentFragment = getCurrentFragment();
+        return currentFragment.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
+    }
+
     public void navigateUp() {
         NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
                 .findFragmentById(R.id.nav_host_fragment);
