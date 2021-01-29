@@ -182,7 +182,10 @@ public class OverviewStartViewModel extends BaseViewModel {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         String exact = error == null ? null : error.getLocalizedMessage();
         infoFullscreenLive.setValue(
-                new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, this::downloadData)
+                new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
+                    infoFullscreenLive.setValue(null);
+                    downloadData();
+                })
         );
     }
 

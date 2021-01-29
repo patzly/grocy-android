@@ -169,6 +169,7 @@
     <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB</string>
     <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
+    <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
     <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
 
     <string name="error_api_not_working">API key not working</string>
@@ -560,6 +561,8 @@
     <string name="setting_beginner_mode_description">Display help texts by default</string>
     <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
     <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
+    <string name="setting_loading_circle">Show loading circle for all requests</string>
+    <string name="setting_loading_circle_description">Helpful for slow networks</string>
     <string name="setting_synchronized">These settings are synchronized with your server.</string>
 
     <string name="setting_ask_best_before_date">Ask for best before date</string>

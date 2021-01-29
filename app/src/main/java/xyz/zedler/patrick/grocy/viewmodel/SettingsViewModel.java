@@ -302,6 +302,18 @@ public class SettingsViewModel extends BaseViewModel {
                 .apply();
     }
 
+    public boolean getLoadingCircleEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.NETWORK.LOADING_CIRCLE,
+                Constants.SETTINGS_DEFAULT.NETWORK.LOADING_CIRCLE
+        );
+    }
+
+    public void setLoadingCircleEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.NETWORK.LOADING_CIRCLE, enabled)
+                .apply();
+    }
+
     public ArrayList<String> getSupportedVersions() {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)

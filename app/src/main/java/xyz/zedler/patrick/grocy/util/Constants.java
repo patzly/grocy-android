@@ -143,6 +143,7 @@ public final class Constants {
         }
         public final static class NETWORK {
             public final static int LOADING_TIMEOUT = 30;
+            public final static boolean LOADING_CIRCLE = false;
         }
         public final static class BEHAVIOR {
             public final static boolean BEGINNER_MODE = true;
