@@ -46,11 +46,13 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomShe
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -270,6 +272,16 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     public void selectDueDate(String dueDate) {
         viewModel.getFormData().getDueDateLive().setValue(dueDate);
         viewModel.getFormData().isDueDateValid();
+    }
+
+    @Override
+    public void selectStore(Store store) {
+        viewModel.getFormData().getStoreLive().setValue(store.getId() != -1 ? store : null);
+    }
+
+    @Override
+    public void selectLocation(Location location) {
+        viewModel.getFormData().getLocationLive().setValue(location);
     }
 
     @Override

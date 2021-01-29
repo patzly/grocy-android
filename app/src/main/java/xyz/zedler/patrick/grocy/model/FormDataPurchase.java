@@ -557,7 +557,9 @@ public class FormDataPurchase {
 
     public JSONObject getFilledJSONObject() {
         String amount = getAmountStock();
+        assert amount != null;
         String price = priceLive.getValue();
+        assert isTotalPriceLive.getValue() != null;
         Store store = storeLive.getValue();
         String storeId = store != null ? String.valueOf(store.getId()) : null;
         Location location = locationLive.getValue();
