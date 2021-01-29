@@ -427,8 +427,9 @@ public class PurchaseViewModel extends BaseViewModel {
         JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
         dlHelper.addProductBarcode(body, () -> {
             formData.getBarcodeLive().setValue(null);
+            barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
             if(onSuccess != null) onSuccess.run();
-        }, error -> showMessage(R.string.error_failed_barcode_upload));
+        }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
     }
 
     @Nullable

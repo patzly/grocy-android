@@ -19,7 +19,7 @@
         android:textAlignment="viewStart"
         android:fontFamily="@font/roboto_mono_bold"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"
-        android:text="Unknown input"/>
+        android:text="@string/title_unknown_input"/>
 
     <View
         style="@style/Theme.Grocy.Divider"
@@ -63,6 +63,7 @@
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
                 android:text="@string/description_input_product_option1"
                 android:checked="@{bottomsheet.selectionLive == 1}"
                 android:onClick="@{v -> bottomsheet.setSelectionLive(1)}"/>
@@ -70,6 +71,7 @@
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
                 android:text="@string/description_input_product_option2"
                 android:checked="@{bottomsheet.selectionLive == 2}"
                 android:onClick="@{v -> bottomsheet.setSelectionLive(2)}"/>
@@ -77,6 +79,7 @@
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
                 android:text="@string/description_input_product_option3"
                 android:checked="@{bottomsheet.selectionLive == 3}"
                 android:onClick="@{v -> bottomsheet.setSelectionLive(3)}"/>

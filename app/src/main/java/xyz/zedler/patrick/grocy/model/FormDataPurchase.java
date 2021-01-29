@@ -80,7 +80,7 @@ public class FormDataPurchase {
     private final LiveData<String> storeNameLive;
     private final MutableLiveData<Location> locationLive;
     private final LiveData<String> locationNameLive;
-    private boolean filledWithProduct;
+    private boolean torchOn = false;
 
     public FormDataPurchase(Context contextWeak, SharedPreferences sharedPrefs) {
         DateUtil dateUtil = new DateUtil(contextWeak);
@@ -171,8 +171,6 @@ public class FormDataPurchase {
                 locationLive,
                 location -> location != null ? location.getName() : null
         );
-
-        filledWithProduct = false;
     }
 
     public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -428,6 +426,14 @@ public class FormDataPurchase {
 
     public LiveData<String> getLocationNameLive() {
         return locationNameLive;
+    }
+
+    public boolean isTorchOn() {
+        return torchOn;
+    }
+
+    public void setTorchOn(boolean torchOn) {
+        this.torchOn = torchOn;
     }
 
     private Product getProductFromName(String name) {

@@ -30,15 +30,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import xyz.zedler.patrick.grocy.R;
@@ -47,7 +45,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.CreateProduct;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -135,6 +132,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 } else {
                     viewModel.getFormData().clearForm();
                     focusProductInputIfNecessary();
+                    if(viewModel.getFormData().isScannerVisible()) {
+                        capture.onResume();
+                        capture.decode();
+                    }
                 }
             } else if(event.getType() == Event.BARCODE_UNKNOWN) {
                 assert event.getBundle() != null;
@@ -174,6 +175,14 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
         binding.barcodeScan.setTorchOff();
+        binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+            @Override public void onTorchOn() {
+                viewModel.getFormData().setTorchOn(true);
+            }
+            @Override public void onTorchOff() {
+                viewModel.getFormData().setTorchOn(false);
+            }
+        });
         CameraSettings cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(
                 sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
@@ -203,72 +212,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 animated,
                 () -> viewModel.purchaseProduct()
         );
-    }
-
-    public void observeStates() {
-                /*viewModel.getAmountLive().observe(getViewLifecycleOwner(), amount -> {
-            if(binding.editTextPurchaseAmount.getText() != null
-                    && !binding.editTextPurchaseAmount.getText().toString().equals(amount)
-            ) {
-                binding.editTextPurchaseAmount.setText(amount);
-            }
-            if(viewModel.getProductDetails() != null && NumUtil.isDouble(amount)
-                    && NumUtil.toDouble(amount) < viewModel.getMinAmount()
-            ) {
-                binding.textInputPurchaseAmount.setError(
-                        activity.getString(
-                                R.string.error_bounds_min,
-                                NumUtil.trim(viewModel.getMinAmount())
-                        )
-                );
-            } else if(viewModel.getProductDetails() != null && NumUtil.isDouble(amount)
-                    && NumUtil.toDouble(amount) % 1 != 0 // partial amount, has to be allowed in product master
-                    && viewModel.getProductDetails().getProduct().getAllowPartialUnitsInStock() == 0
-                    || viewModel.getProductDetails() != null && !NumUtil.isDouble(amount)
-            ) {
-                binding.textInputPurchaseAmount.setError(
-                        activity.getString(R.string.error_invalid_amount)
-                );
-            } else {
-                binding.textInputPurchaseAmount.setErrorEnabled(false);
-            }
-        });*/
-        /*viewModel.getLocationIdLive().observe(getViewLifecycleOwner(), locationId -> {
-            Location location = viewModel.getLocationFromId(locationId);
-            if(location != null) {
-                binding.textPurchaseLocation.setText(location.getName());
-            } else {
-                binding.textPurchaseLocation.setText(
-                        getString(R.string.subtitle_none_selected)
-                );
-            }
-            if(viewModel.getProductDetails() != null
-                    && !viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)
-                    && viewModel.getLocationId() < 0
-            ) {
-                binding.textPurchaseLocationLabel.setTextColor(getColor(R.color.error));
-            } else {
-                binding.textPurchaseLocationLabel.setTextColor(
-                        getColor(R.color.on_background_secondary)
-                );
-            }
-        });*/
-        /*viewModel.getShoppingListItemPosLive().observe(getViewLifecycleOwner(), itemPos -> {
-            if(args.getShoppingListItems() == null) return;
-            if(itemPos == -1) {
-                viewModel.getShoppingListItemPosLive().setValue(0);
-                return;
-            }
-            if(itemPos+1 > args.getShoppingListItems().length) {
-                activity.navigateUp();
-                return;
-            }
-            if(viewModel.getIsDownloading()) {
-                viewModel.addQueueEmptyAction(() -> fillWithShoppingListItem(itemPos));
-            } else {
-                fillWithShoppingListItem(itemPos);
-            }
-        });*/
     }
 
     @Override
@@ -303,6 +246,14 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         viewModel.onBarcodeRecognized(result.getText());
     }
 
+    public void toggleTorch() {
+        if(viewModel.getFormData().isTorchOn()) {
+            binding.barcodeScan.setTorchOff();
+        } else {
+            binding.barcodeScan.setTorchOn();
+        }
+    }
+
     @Override
     public int getSelectedQuantityUnitId() {
         QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
@@ -333,6 +284,11 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         viewModel.addBarcodeToExistingProduct(barcode);
     }
 
+    public void toggleScannerVisibility() {
+        viewModel.getFormData().toggleScannerVisibility();
+        if(viewModel.getFormData().isScannerVisible()) clearInputFocus();
+    }
+
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.autoCompletePurchaseProduct.clearFocus();
@@ -355,7 +311,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     public void focusProductInputIfNecessary() {
-        if(!viewModel.isScanModeEnabled()) return;
+        if(!viewModel.isScanModeEnabled() || viewModel.getFormData().isScannerVisible()) return;
         ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
         String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
         if(productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
@@ -547,50 +503,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 return true;
             });
         }
-    }
-
-    @Override
-    public void addBarcode(String barcode) {
-        /*for(int i = 0; i < binding.linearPurchaseBarcodeContainer.getChildCount(); i++) {
-            InputChip inputChip = (InputChip) binding.linearPurchaseBarcodeContainer.getChildAt(i);
-            if(inputChip.getText().equals(barcode)) {
-                showMessage(activity.getString(R.string.msg_barcode_duplicate));
-                if(viewModel.getProductDetails() == null) {
-                    binding.autoCompletePurchaseProduct.setText(null);
-                    activity.showKeyboard(binding.autoCompletePurchaseProduct);
-                }
-                return;
-            }
-        }
-        InputChip inputChipBarcode = new InputChip(
-                activity, barcode, R.drawable.ic_round_barcode, true
-        );
-        inputChipBarcode.setPadding(0, 0, 0, 8);
-        binding.linearPurchaseBarcodeContainer.addView(inputChipBarcode);
-        viewModel.getBarcodes().add(barcode);
-        if(viewModel.getProductDetails() == null) {
-            binding.autoCompletePurchaseProduct.setText(null);
-            activity.showKeyboard(binding.autoCompletePurchaseProduct);
-        }*/
-    }
-
-    @Override
-    public void createProductFromBarcode(String barcode) {
-        navigate(PurchaseFragmentDirections
-                .actionPurchaseFragmentToMasterProductSimpleFragment(Constants.ACTION.CREATE)
-                .setCreateProductObject(new CreateProduct(null, barcode,
-                        null, null, null)
-                ));
-    }
-
-    private void showMessage(String text) {
-        activity.showSnackbar(
-                Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_LONG)
-        );
-    }
-
-    private int getColor(@ColorRes int color) {
-        return ContextCompat.getColor(activity, color);
     }
 
     @NonNull

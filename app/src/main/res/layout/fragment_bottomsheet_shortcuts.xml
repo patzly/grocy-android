@@ -62,6 +62,7 @@
                     android:id="@+id/shopping_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/title_shopping_list"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
@@ -69,6 +70,7 @@
                     android:id="@+id/add_to_shopping_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/action_shopping_list_add"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
@@ -76,6 +78,7 @@
                     android:id="@+id/shopping_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/title_shopping_mode"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
@@ -83,6 +86,7 @@
                     android:id="@+id/purchase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/title_purchase"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
@@ -90,6 +94,7 @@
                     android:id="@+id/consume"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/title_consume"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
@@ -97,6 +102,7 @@
                     android:id="@+id/batch_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
                     android:text="@string/title_batch_mode"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
