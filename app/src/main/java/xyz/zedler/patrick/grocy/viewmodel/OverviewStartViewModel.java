@@ -171,6 +171,7 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
+        infoFullscreenLive.setValue(null);
         repository.updateDatabase(
                 this.stockItemsLive.getValue(),
                 this.shoppingListItemsLive.getValue(),

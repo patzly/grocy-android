@@ -30,7 +30,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +40,7 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
@@ -70,7 +69,6 @@ public class PurchaseViewModel extends BaseViewModel {
     private final boolean debug;
 
     private final DownloadHelper dlHelper;
-    private final Gson gson;
     private final GrocyApi grocyApi;
     private final PurchaseRepository repository;
     private final FormDataPurchase formData;
@@ -86,7 +84,7 @@ public class PurchaseViewModel extends BaseViewModel {
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> scanModeEnabled;
 
-    private ArrayList<Runnable> queueEmptyActions;
+    private Runnable queueEmptyAction;
 
     public PurchaseViewModel(@NonNull Application application) {
         super(application);
@@ -96,7 +94,6 @@ public class PurchaseViewModel extends BaseViewModel {
 
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-        gson = new Gson();
         grocyApi = new GrocyApi(getApplication());
         repository = new PurchaseRepository(application);
         formData = new FormDataPurchase(application, sharedPrefs);
@@ -108,7 +105,6 @@ public class PurchaseViewModel extends BaseViewModel {
         ));
 
         barcodes = new ArrayList<>();
-        queueEmptyActions = new ArrayList<>();
     }
 
     public FormDataPurchase getFormData() {
@@ -155,7 +151,13 @@ public class PurchaseViewModel extends BaseViewModel {
                         dbChangedTime, locations -> this.locations = locations
                 )
         );
-        if(queue.isEmpty()) return;
+        if(queue.isEmpty()) {
+            if(queueEmptyAction != null) {
+                queueEmptyAction.run();
+                queueEmptyAction = null;
+            }
+            return;
+        }
 
         //currentQueueLoading = queue;
         queue.start();
@@ -168,6 +170,10 @@ public class PurchaseViewModel extends BaseViewModel {
     private void onQueueEmpty() {
         repository.updateDatabase(products, barcodes,
                 quantityUnits, unitConversions, stores, locations, () -> {});
+        if(queueEmptyAction != null) {
+            queueEmptyAction.run();
+            queueEmptyAction = null;
+        }
     }
 
     private void onDownloadError(@Nullable VolleyError error) {
@@ -175,9 +181,7 @@ public class PurchaseViewModel extends BaseViewModel {
         showMessage(getString(R.string.msg_no_connection));
     }
 
-    public void setProduct(Product product, ProductBarcode barcode) {
-        if(product == null) return;
-
+    public void setProduct(int productId, ProductBarcode barcode) {
         DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
             Product updatedProduct = productDetails.getProduct();
             formData.getProductDetailsLive().setValue(productDetails);
@@ -254,7 +258,7 @@ public class PurchaseViewModel extends BaseViewModel {
             if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         };
 
-        dlHelper.getProductDetails(product.getId(), listener, error -> {
+        dlHelper.getProductDetails(productId, listener, error -> {
             showMessage(getString(R.string.error_no_product_details));
             formData.clearForm();
         }).perform(dlHelper.getUuid());
@@ -309,7 +313,7 @@ public class PurchaseViewModel extends BaseViewModel {
             }
         }
         if(product != null) {
-            setProduct(product, productBarcode);
+            setProduct(product.getId(), productBarcode);
         } else {
             formData.getBarcodeLive().setValue(barcode);
             formData.isFormValid();
@@ -323,20 +327,34 @@ public class PurchaseViewModel extends BaseViewModel {
         if(input == null || input.isEmpty()) return;
         Product product = getProductFromName(input);
 
+        if(product == null) {
+            ProductBarcode productBarcode = null;
+            for(ProductBarcode code : barcodes) {
+                if(code.getBarcode().equals(input.trim())) {
+                    productBarcode = code;
+                    product = getProduct(code.getProductId());
+                }
+            }
+            if(product != null) setProduct(product.getId(), productBarcode);
+        }
+
         ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();
         Product currentProduct = currentProductDetails != null
                 ? currentProductDetails.getProduct() : null;
-        if(currentProduct != null && currentProduct.getId() == product.getId()) {
+        if(currentProduct != null && product != null && currentProduct.getId() == product.getId()) {
             return;
         }
 
         if(product != null) {
-            setProduct(product, null);
+            setProduct(product.getId(), null);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-            showBottomSheet(new InputNameBottomSheet(), bundle);
+            showInputProductBottomSheet(input);
         }
+    }
+
+    public void addBarcodeToExistingProduct(String barcode) {
+        formData.getBarcodeLive().setValue(barcode);
+        formData.getProductNameLive().setValue(null);
     }
 
     public void purchaseProduct() {
@@ -437,6 +455,12 @@ public class PurchaseViewModel extends BaseViewModel {
         for(Store store : stores) {
             if(store.getId() == id) return store;
         } return null;
+    }
+
+    public void showInputProductBottomSheet(@NonNull String input) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
+        showBottomSheet(new InputProductBottomSheet(), bundle);
     }
 
     public void showQuantityUnitsBottomSheet(boolean hasFocus) {
@@ -544,8 +568,8 @@ public class PurchaseViewModel extends BaseViewModel {
         return infoFullscreenLive;
     }
 
-    public void addQueueEmptyAction(Runnable runnable) {
-        queueEmptyActions.add(runnable);
+    public void setQueueEmptyAction(Runnable queueEmptyAction) {
+        this.queueEmptyAction = queueEmptyAction;
     }
 
     public boolean isScanModeEnabled() {

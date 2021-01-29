@@ -275,6 +275,7 @@ public final class Constants {
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
         public final static String PRODUCT_NAME = "product_name";
+        public final static String PRODUCT_INPUT = "product_input";
         public final static String OBJECT_NAME = "object_name";
         public final static String OBJECT_ID = "object_id";
         public final static String DEMO_CHOSEN = "demo_chosen";

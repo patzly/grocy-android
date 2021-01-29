@@ -166,7 +166,7 @@
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
     <string name="msg_help_tare_weight_purchase">Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculated.</string>
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
-    <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB</string>
+    <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
     <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
     <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
@@ -328,6 +328,11 @@
     <string name="subtitle_price_help_unit_in">%1$s price</string>
     <string name="subtitle_unknown">Unknown</string>
 
+    <string name="description_input_product_part1">Product field contains:</string>
+    <string name="description_input_product_part2">Please choose how to proceed with that.</string>
+    <string name="description_input_product_option1">Create new product and use input as name</string>
+    <string name="description_input_product_option2">Create new product and use input as barcode</string>
+    <string name="description_input_product_option3">Add as barcode to existing product</string>
     <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
     <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
     <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>

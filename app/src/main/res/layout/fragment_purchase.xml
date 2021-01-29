@@ -256,7 +256,7 @@
                             app:endIconOnClickListener="@{v -> formData.toggleScannerVisibility()}"
                             app:errorText="@{formData.productNameErrorLive}">
 
-                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            <xyz.zedler.patrick.grocy.view.CustomAutoCompleteTextView
                                 android:id="@+id/auto_complete_purchase_product"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -269,7 +269,9 @@
                                 android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
                                 android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                                 app:productList="@{formData.productsLive}"
-                                app:onNextClickInSoftKeyboard="@{() -> fragment.onProductInputNextClick()}"/>
+                                app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
+                                app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}"
+                                app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 

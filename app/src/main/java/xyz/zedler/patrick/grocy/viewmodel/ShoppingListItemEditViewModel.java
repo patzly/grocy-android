@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNameBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -362,7 +362,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
-            showBottomSheet(new InputNameBottomSheet(), bundle);
+            showBottomSheet(new InputProductBottomSheet(), bundle);
         }
         return product;
     }

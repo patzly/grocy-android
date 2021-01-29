@@ -32,6 +32,7 @@ public abstract class Event {
     public final static int FOCUS_INVALID_VIEWS = 12;
     public final static int SCAN_MODE_DISABLED = 14;
     public final static int SCAN_MODE_ENABLED = 16;
+    public final static int SET_PRODUCT_ID = 18;
 
     abstract public int getType();
 

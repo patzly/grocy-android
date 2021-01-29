@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -91,11 +93,14 @@ public class MasterProductViewModel extends BaseViewModel {
             assert args.getProduct() != null;
             setCurrentProduct(args.getProduct());
         } else {
-            setCurrentProduct(new Product(sharedPrefs));
+            Product product = new Product(sharedPrefs);
+            if(args.getProductName() != null) product.setName(args.getProductName());
+            setCurrentProduct(product);
         }
     }
 
     public boolean isActionEdit() {
+        assert actionEditLive.getValue() != null;
         return actionEditLive.getValue();
     }
 
@@ -175,6 +180,13 @@ public class MasterProductViewModel extends BaseViewModel {
 
     public void saveItem() {
         if(!formData.isFormValid()) return;
+
+        if(!isActionEdit()) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, 10);
+            sendEvent(Event.SET_PRODUCT_ID, bundle);
+            sendEvent(Event.NAVIGATE_UP);
+        }
 
         /*ShoppingListItem item = null;
         if(isActionEdit) item = args.getShoppingListItem();

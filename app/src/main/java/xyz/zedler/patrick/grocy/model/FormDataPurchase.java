@@ -317,10 +317,16 @@ public class FormDataPurchase {
     public void lessAmount(ImageView view) {
         IconUtil.start(view);
         if(amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
-            double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
-            if(amountNew >= 1) {
-                amountLive.setValue(NumUtil.trim(amountNew));
+            double amountCurrent = Double.parseDouble(amountLive.getValue());
+            Double amountNew = null;
+            if(amountCurrent > 1) {
+                amountNew = amountCurrent - 1;
+            } else if(amountCurrent > 0.1) {
+                amountNew = amountCurrent - 0.1;
+            } else if(amountCurrent > 0.01) {
+                amountNew = amountCurrent - 0.01;
             }
+            if(amountNew != null) amountLive.setValue(NumUtil.trim(amountNew));
         }
     }
 
@@ -589,11 +595,11 @@ public class FormDataPurchase {
     }
 
     public void clearForm() {
-        productDetailsLive.setValue(null);
-        productNameLive.setValue(null);
+        amountLive.setValue(null);
         quantityUnitLive.setValue(null);
         quantityUnitsFactorsLive.setValue(null);
-        amountLive.setValue(null);
+        productDetailsLive.setValue(null);
+        productNameLive.setValue(null);
         dueDateLive.setValue(null);
         priceLive.setValue(null);
         storeLive.setValue(null);

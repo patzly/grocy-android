@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,18 +33,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputNumberBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputProductBinding;
+import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class InputNumberBottomSheet extends BaseBottomSheet {
+public class InputProductBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = InputNumberBottomSheet.class.getSimpleName();
+    private final static String TAG = InputProductBottomSheet.class.getSimpleName();
 
     private MainActivity activity;
-    private FragmentBottomsheetInputNumberBinding binding;
+    private FragmentBottomsheetInputProductBinding binding;
 
-    private MutableLiveData<String> numberInputLive;
+    private MutableLiveData<Integer> selectionLive;
 
     @NonNull
     @Override
@@ -59,7 +58,7 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentBottomsheetInputNumberBinding.inflate(
+        binding = FragmentBottomsheetInputProductBinding.inflate(
                 inflater, container, false
         );
         return binding.getRoot();
@@ -67,57 +66,51 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setSkipCollapsedInPortrait();
+        setCancelable(false);
         super.onViewCreated(view, savedInstanceState);
         activity = (MainActivity) requireActivity();
         binding.setBottomsheet(this);
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        numberInputLive = new MutableLiveData<>();
-        Object number = requireArguments().get(Constants.ARGUMENT.NUMBER);
-        if(number instanceof Double) {
-            numberInputLive.setValue(NumUtil.trim((Double) number));
-        } else if(number instanceof Integer) {
-            numberInputLive.setValue(NumUtil.trim((Integer) number));
+        String input = requireArguments().getString(Constants.ARGUMENT.PRODUCT_INPUT);
+        assert input != null;
+        binding.input.setText(input);
+
+        int defaultSelection;
+        try {
+            Integer.parseInt(input.trim());
+            defaultSelection = 3;
+        } catch(NumberFormatException e) {
+            defaultSelection = 1;
         }
+        selectionLive = new MutableLiveData<>(defaultSelection);
+    }
 
-        binding.editText.setInputType(
-                number instanceof Double
-                        ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                        : InputType.TYPE_CLASS_NUMBER
-        );
-
-        if(requireArguments().containsKey(Constants.ARGUMENT.HINT)) {
-            binding.textInput.setHint(requireArguments().getString(Constants.ARGUMENT.HINT));
+    public void proceed() {
+        assert selectionLive.getValue() != null;
+        String input = binding.input.getText().toString();
+        if(selectionLive.getValue() == 1) {
+            navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+                    new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+                            .setProductName(input).build().toBundle());
+        } else if(selectionLive.getValue() == 2) {
+            activity.getCurrentFragment().addBarcodeToNewProduct(input.trim());
+            navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+                    new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+                            .build().toBundle());
         } else {
-            binding.textInput.setHint(getString(R.string.property_number));
+            activity.getCurrentFragment().addBarcodeToExistingProduct(input.trim());
         }
-    }
-
-    public MutableLiveData<String> getNumberInputLive() {
-        return numberInputLive;
-    }
-
-    public void more() {
-        String currentInput = numberInputLive.getValue();
-        String nextInput;
-        if(!NumUtil.isStringNum(currentInput)) {
-            nextInput = String.valueOf(1);
-        } else {
-            nextInput = NumUtil.trim(Double.parseDouble(currentInput) + 1);
-        }
-        numberInputLive.setValue(nextInput);
-    }
-
-    public void less() {
-        String currentInput = numberInputLive.getValue();
-        if(!NumUtil.isStringNum(currentInput)) return;
-        String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
-        numberInputLive.setValue(nextInput);
-    }
-
-    public void save() {
-        activity.getCurrentFragment().saveNumber(numberInputLive.getValue(), requireArguments());
         dismiss();
+    }
+
+    public MutableLiveData<Integer> getSelectionLive() {
+        return selectionLive;
+    }
+
+    public void setSelectionLive(int selection) {
+        selectionLive.setValue(selection);
     }
 
     @NonNull

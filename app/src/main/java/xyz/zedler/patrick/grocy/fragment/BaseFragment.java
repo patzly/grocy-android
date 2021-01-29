@@ -117,6 +117,10 @@ public class BaseFragment extends Fragment {
 
     public void selectStore(Store store) {}
 
+    public void addBarcodeToNewProduct(String barcode) {}
+
+    public void addBarcodeToExistingProduct(String barcode) {}
+
     public void saveText(String text) {}
 
     public void saveNumber(String text, Bundle argsBundle) {}
@@ -201,15 +205,22 @@ public class BaseFragment extends Fragment {
         navigateDeepLink(fillUriWithArgs(getString(uri), args));
     }
 
-    String fillUriWithArgs(@NonNull String uri, @NonNull Bundle args) {
-        for(String argName : args.keySet()) {
-            Object value = args.get(argName);
-            uri = uri.replace(
-                    "{" + argName + "}",
-                    value != null ? value.toString() : ""
-            );
+    String fillUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+        String[] parts = uri.split("\\?");
+        if(parts.length == 1) return uri;
+        String linkPart = parts[0];
+        String argsPart = parts[parts.length-1];
+        String[] pairs = argsPart.split("&");
+        String finalDeepLink = linkPart + "?";
+        for(int i=0; i<=pairs.length-1; i++) {
+            String pair = pairs[i];
+            String key = pair.split("=")[0];
+            Object valueBundle = argsBundle.get(key);
+            if(valueBundle == null) continue;
+            finalDeepLink += key + "=" + valueBundle.toString();
+            if(i != pairs.length-1) finalDeepLink += "&";
         }
-        return uri;
+        return finalDeepLink;
     }
 
     @SuppressLint("RestrictedApi")

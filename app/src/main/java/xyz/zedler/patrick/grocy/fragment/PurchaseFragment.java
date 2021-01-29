@@ -154,6 +154,12 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             }
         });
 
+        Integer productId = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
+        if(productId != null) {
+            removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
+            viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+        }
+
         viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
             if(visible) {
                 capture.onResume();
@@ -285,19 +291,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if(viewModel.getFormData().isScannerVisible()) {
-            return super.onKeyUp(keyCode, event);
-        } else if(keyCode == KeyEvent.KEYCODE_TAB) {
-            showMessage("TAB");
-            return true;
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
     public void onDestroy() {
-        capture.onDestroy();
+        if(capture != null) capture.onDestroy();
         super.onDestroy();
     }
 
@@ -326,6 +321,18 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         viewModel.getFormData().isDueDateValid();
     }
 
+    @Override
+    public void addBarcodeToExistingProduct(String barcode) {
+        viewModel.addBarcodeToExistingProduct(barcode);
+        binding.autoCompletePurchaseProduct.requestFocus();
+        activity.showKeyboard(binding.autoCompletePurchaseProduct);
+    }
+
+    @Override
+    public void addBarcodeToNewProduct(String barcode) {
+        viewModel.addBarcodeToExistingProduct(barcode);
+    }
+
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.autoCompletePurchaseProduct.clearFocus();
@@ -338,10 +345,11 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
         Product product = (Product) adapterView.getItemAtPosition(pos);
         clearInputFocus();
-        viewModel.setProduct(product, null);
+        if(product == null) return;
+        viewModel.setProduct(product.getId(), null);
     }
 
-    public void onProductInputNextClick() {
+    public void clearFocusAndCheckProductInput() {
         clearInputFocus();
         viewModel.checkProductInput();
     }

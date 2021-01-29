@@ -77,6 +77,10 @@ public class MasterProductFragment extends BaseFragment {
         viewModel = new ViewModelProvider(this, new MasterProductViewModel
                 .MasterProductViewModelFactory(activity.getApplication(), args)
         ).get(MasterProductViewModel.class);
+        if(!viewModel.isActionEdit() && args.getProductName() != null) {
+            setArguments(new MasterProductFragmentArgs.Builder(args).setProductName(null)
+                    .build().toBundle());
+        }
         binding.setActivity(activity);
         binding.setFormData(viewModel.getFormData());
         binding.setViewModel(viewModel);
@@ -114,9 +118,9 @@ public class MasterProductFragment extends BaseFragment {
                 activity.showSnackbar(snack);
             } else if(event.getType() == Event.NAVIGATE_UP) {
                 activity.navigateUp();
-            } else if(event.getType() == Event.SET_SHOPPING_LIST_ID) {
-                int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
-                setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
+            } else if(event.getType() == Event.SET_PRODUCT_ID) {
+                int id = event.getBundle().getInt(Constants.ARGUMENT.PRODUCT_ID);
+                setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, id);
             } else if(event.getType() == Event.BOTTOM_SHEET) {
                 BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
                 activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());

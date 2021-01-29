@@ -152,15 +152,22 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
         navigateDeepLink(getUriWithArgs(uri, args));
     }
 
-    Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle args) {
-        for(String argName : args.keySet()) {
-            Object value = args.get(argName);
-            uri = uri.replace(
-                    "{" + argName + "}",
-                    value != null ? value.toString() : ""
-            );
+    Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+        String[] parts = uri.split("\\?");
+        if(parts.length == 1) return Uri.parse(uri);
+        String linkPart = parts[0];
+        String argsPart = parts[parts.length-1];
+        String[] pairs = argsPart.split("&");
+        String finalDeepLink = linkPart + "?";
+        for(int i=0; i<=pairs.length-1; i++) {
+            String pair = pairs[i];
+            String key = pair.split("=")[0];
+            Object valueBundle = argsBundle.get(key);
+            if(valueBundle == null) continue;
+            finalDeepLink += key + "=" + valueBundle.toString();
+            if(i != pairs.length-1) finalDeepLink += "&";
         }
-        return Uri.parse(uri);
+        return Uri.parse(finalDeepLink);
     }
 
     Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {

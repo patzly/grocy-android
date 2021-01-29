@@ -14,17 +14,20 @@ Here is a changelog for this first alpha:
 - Offline usage (no transactions but viewing lists)
 - List difference animations are used in every list
 - Smooth & consistent navigation between pages
-- Product autocomplete lists now use fuzzy matching
+- Product autocomplete lists now use fuzzy finder (idea from grocy/grocy#1275)
 - Server requests are now more secure with API key in header
 - Added many help texts which are also in the web interface (e.g. on master product pages)
 - No more buggy bottom app bar animations
 - Fixed layout for text on features pages
-- Fixed amount with factor on missing batch items page (#258)
 
 **New pages**
 - Start overview
 - Product
 - External scanner
+
+**Removed pages**
+- Batch mode (consume & purchase forms now behave like web interface and have a scan mode instead)
+- Missing batch items (unnecessary without batch mode)
 
 **Rewritten & strongly edited pages**
 - Purchase
@@ -32,14 +35,13 @@ Here is a changelog for this first alpha:
 - Settings (with lots of new options)
 - Login (New login flow for QR codes from grocy server)
 
-**Not finished yet**
-- Batch purchase & consume pages
+**Not fully working yet**
 - Consume page
 - Stock page
 - Product page
-- Purchase page
+- Purchase page (**tare weight handling**)
 - Tor and SOCKS support
-- *Deactivated features: if Due Date Tracking feature is disabled, there can be misbehavior!*
+- **Deactivated features: if Due Date Tracking feature is disabled, there can be misbehavior!**
 
 **Testing**
 I you want to test the first alpha version (v2.0.0_alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there may be a popup with a toggle "Allow from this source".
@@ -60,7 +62,7 @@ Sorry to the guys whose comments I marked as off-topic or spam: It was not again
 
 And sorry, my English is not *brilliant* yet... If your mother tongue is English and you find mistakes in the app, please report them also in the issue tracker.
 
-And finally, sorry for the long waiting time – I'm studying computer science since a few months now and hence I don't have that much time anymore to concentrate on this app.
+And finally, sorry for the long waiting time – I'm studying computer science since a few months now and hence I don't have that much time anymore to develop this app.
 
 ## Improvements
 
