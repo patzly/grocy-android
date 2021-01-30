@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +28,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class FormDataMasterProductCatQuantityUnit {
@@ -36,7 +35,7 @@ public class FormDataMasterProductCatQuantityUnit {
     public final static int STOCK = 0;
     public final static int PURCHASE = 2;
 
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
     private final MutableLiveData<QuantityUnit> quStockLive;
@@ -49,8 +48,8 @@ public class FormDataMasterProductCatQuantityUnit {
     private final MutableLiveData<Product> productLive;
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatQuantityUnit(Context contextWeak, boolean beginnerMode) {
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataMasterProductCatQuantityUnit(Application application, boolean beginnerMode) {
+        this.application = application;
         displayHelpLive = new MutableLiveData<>(beginnerMode);
         quantityUnitsLive = new MutableLiveData<>();
         quStockLive = new MutableLiveData<>();

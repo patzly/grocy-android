@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -30,7 +30,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +39,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataShoppingListItemEdit {
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final MutableLiveData<ShoppingList> shoppingListLive;
     private final LiveData<String> shoppingListNameLive;
     private final MutableLiveData<Integer> shoppingListIdLive;
@@ -63,8 +62,8 @@ public class FormDataShoppingListItemEdit {
     private final MutableLiveData<Integer> noteErrorLive;
     private boolean filledWithShoppingListItem;
 
-    public FormDataShoppingListItemEdit(Context contextWeak) {
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataShoppingListItemEdit(Application application) {
+        this.application = application;
         shoppingListLive = new MutableLiveData<>();
         shoppingListNameLive = Transformations.map(
                 shoppingListLive,
@@ -98,7 +97,7 @@ public class FormDataShoppingListItemEdit {
         );
         amountHintLive = Transformations.map(
                 quantityUnitLive,
-                quantityUnit -> quantityUnit != null ? this.contextWeak.get().getString(
+                quantityUnit -> quantityUnit != null ? application.getString(
                         R.string.property_amount_in,
                         quantityUnit.getNamePlural()
                 ) : null
@@ -236,7 +235,7 @@ public class FormDataShoppingListItemEdit {
     private String getAmountHelpText() {
         QuantityUnit stock = getStockQuantityUnit();
         if(stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
-        return contextWeak.get().getString(
+        return application.getString(
                 R.string.subtitle_amount_compare,
                 amountStockLive.getValue(),
                 Double.parseDouble(amountStockLive.getValue()) == 1
@@ -291,7 +290,7 @@ public class FormDataShoppingListItemEdit {
             return false;
         }
         if(Double.parseDouble(amountLive.getValue()) <= 0) {
-            amountErrorLive.setValue(contextWeak.get().getString(
+            amountErrorLive.setValue(application.getString(
                     R.string.error_bounds_higher, String.valueOf(0)
             ));
             return false;
@@ -363,6 +362,6 @@ public class FormDataShoppingListItemEdit {
     }
 
     private String getString(@StringRes int res) {
-        return contextWeak.get().getString(res);
+        return application.getString(res);
     }
 }

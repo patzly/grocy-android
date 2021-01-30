@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,7 +29,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
@@ -43,7 +42,7 @@ public class FormDataMasterProductCatAmount {
     public static final int FACTOR_AMOUNT = 4;
     public static final int TARE_WEIGHT = 6;
 
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<String> minAmountLive;
     private final MutableLiveData<Boolean> accumulateMinAmount;
@@ -60,8 +59,8 @@ public class FormDataMasterProductCatAmount {
 
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatAmount(Context contextWeak, boolean beginnerMode) {
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataMasterProductCatAmount(Application application, boolean beginnerMode) {
+        this.application = application;
         displayHelpLive = new MutableLiveData<>(beginnerMode);
         quantityUnitLive = new MutableLiveData<>();
         minAmountLive = new MutableLiveData<>();
@@ -71,7 +70,7 @@ public class FormDataMasterProductCatAmount {
                 quantityUnitLive,
                 quantityUnit -> quantityUnit == null ?
                         getString(R.string.property_amount_quick_consume) :
-                        contextWeak.getString(
+                        this.application.getString(
                                 R.string.property_amount_quick_consume_in,
                                 quantityUnit.getNamePlural()
                         )
@@ -83,7 +82,7 @@ public class FormDataMasterProductCatAmount {
                 quantityUnitLive,
                 quantityUnit -> quantityUnit == null ?
                         getString(R.string.property_tare_weight) :
-                        contextWeak.getString(
+                        this.application.getString(
                                 R.string.property_tare_weight_in,
                                 quantityUnit.getNamePlural()
                         )
@@ -240,6 +239,6 @@ public class FormDataMasterProductCatAmount {
     }
 
     private String getString(@StringRes int res) {
-        return contextWeak.get().getString(res);
+        return application.getString(res);
     }
 }

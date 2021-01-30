@@ -19,15 +19,13 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
-
-import java.lang.ref.WeakReference;
 
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -39,7 +37,7 @@ public class FormDataMasterProductCatDueDate {
     public static final int DUE_DAYS_FREEZING = 4;
     public static final int DUE_DAYS_THAWING = 8;
 
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<Integer> dueDateTypeLive;
     private final MutableLiveData<Boolean> dueDateTypeErrorLive;
@@ -50,8 +48,8 @@ public class FormDataMasterProductCatDueDate {
 
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatDueDate(Context contextWeak, boolean beginnerMode) {
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataMasterProductCatDueDate(Application application, boolean beginnerMode) {
+        this.application = application;
         displayHelpLive = new MutableLiveData<>(beginnerMode);
         dueDateTypeLive = new MutableLiveData<>(0);
         dueDateTypeErrorLive = new MutableLiveData<>(false);
@@ -178,6 +176,6 @@ public class FormDataMasterProductCatDueDate {
     }
 
     private String getString(@StringRes int res) {
-        return contextWeak.get().getString(res);
+        return application.getString(res);
     }
 }

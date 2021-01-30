@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
@@ -34,7 +34,6 @@ import androidx.lifecycle.Transformations;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +47,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 public class FormDataPurchase {
     private final static String TAG = FormDataPurchase.class.getSimpleName();
 
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final SharedPreferences sharedPrefs;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<Boolean> scannerVisibilityLive;
@@ -82,9 +81,9 @@ public class FormDataPurchase {
     private final LiveData<String> locationNameLive;
     private boolean torchOn = false;
 
-    public FormDataPurchase(Context contextWeak, SharedPreferences sharedPrefs) {
-        DateUtil dateUtil = new DateUtil(contextWeak);
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataPurchase(Application application, SharedPreferences sharedPrefs) {
+        DateUtil dateUtil = new DateUtil(application);
+        this.application = application;
         this.sharedPrefs = sharedPrefs;
         displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
@@ -116,7 +115,7 @@ public class FormDataPurchase {
         amountErrorLive = new MutableLiveData<>();
         amountHintLive = Transformations.map(
                 quantityUnitLive,
-                quantityUnit -> quantityUnit != null ? this.contextWeak.get().getString(
+                quantityUnit -> quantityUnit != null ? application.getString(
                         R.string.property_amount_in,
                         quantityUnit.getNamePlural()
                 ) : null
@@ -150,14 +149,14 @@ public class FormDataPurchase {
         priceHelperLive.addSource(quantityUnitLive, i -> priceHelperLive.setValue(getPriceHelpText()));
         String currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
         if(currency != null && !currency.isEmpty()) {
-            priceHint = contextWeak.getString(R.string.property_price_in, currency);
+            priceHint = application.getString(R.string.property_price_in, currency);
         } else {
             priceHint = getString(R.string.property_price);
         }
         unitPriceTextLive = Transformations.map(
                 quantityUnitLive,
                 quantityUnit -> quantityUnit != null
-                        ? this.contextWeak.get()
+                        ? application
                         .getString(R.string.title_unit_price_specific, quantityUnit.getName())
                         : getString(R.string.title_unit_price)
         );
@@ -294,7 +293,7 @@ public class FormDataPurchase {
         QuantityUnit current = quantityUnitLive.getValue();
         if(stock == null || current == null || stock.getId() == current.getId()
                 || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
-        return contextWeak.get().getString(
+        return application.getString(
                 R.string.subtitle_amount_compare,
                 amountStockLive.getValue(),
                 Double.parseDouble(amountStockLive.getValue()) == 1
@@ -330,7 +329,7 @@ public class FormDataPurchase {
 
     public String getTransactionSuccessMsg() {
         QuantityUnit stock = getStockQuantityUnit();
-        return contextWeak.get().getString(
+        return application.getString(
                 R.string.msg_purchased,
                 NumUtil.trim(Double.parseDouble(amountStockLive.getValue())),
                 Double.parseDouble(amountStockLive.getValue()) == 1
@@ -377,7 +376,7 @@ public class FormDataPurchase {
             return getString(R.string.subtitle_price_help_unit);
         } else {
             String name = unit.getName();
-            return contextWeak.get().getString(R.string.subtitle_price_help_unit_in, name);
+            return application.getString(R.string.subtitle_price_help_unit_in, name);
         }
     }
 
@@ -486,9 +485,9 @@ public class FormDataPurchase {
             return false;
         }
         if(Double.parseDouble(amountLive.getValue()) <= 0) {
-            amountErrorLive.setValue(contextWeak.get().getString(
+            amountErrorLive.setValue(application.getString(
                     R.string.error_bounds_higher, String.valueOf(0)
-            )); // TODO
+            )); // TODO: Tare weight handling
             return false;
         }
         amountErrorLive.setValue(null);
@@ -535,7 +534,7 @@ public class FormDataPurchase {
         assert amount != null && qU != null && details != null && price != null;
         price = NumUtil.trimPrice(Double.parseDouble(price));
         price += " " + sharedPrefs.getString(Constants.PREF.CURRENCY, "");
-        return contextWeak.get().getString(
+        return application.getString(
                 R.string.msg_scan_mode_confirm,
                 NumUtil.trim(Double.parseDouble(amount)),
                 Double.parseDouble(amount) == 1 ? qU.getName() : qU.getNamePlural(),
@@ -625,6 +624,6 @@ public class FormDataPurchase {
     }
 
     private String getString(@StringRes int res) {
-        return contextWeak.get().getString(res);
+        return application.getString(res);
     }
 }

@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,13 +27,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataMasterProductCatLocation {
-    private final WeakReference<Context> contextWeak;
+    private final Application application;
     private final MutableLiveData<ArrayList<Location>> locationsLive;
     private final MutableLiveData<Location> locationLive;
     private final LiveData<String> locationNameLive;
@@ -45,8 +44,8 @@ public class FormDataMasterProductCatLocation {
     private final MutableLiveData<Product> productLive;
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatLocation(Context contextWeak) {
-        this.contextWeak = new WeakReference<>(contextWeak);
+    public FormDataMasterProductCatLocation(Application application) {
+        this.application = application;
         locationsLive = new MutableLiveData<>();
         locationLive = new MutableLiveData<>();
         locationNameLive = Transformations.map(

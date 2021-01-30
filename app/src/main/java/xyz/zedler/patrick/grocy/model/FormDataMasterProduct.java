@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.model;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -43,7 +43,7 @@ public class FormDataMasterProduct {
     private final MutableLiveData<ArrayList<String>> productNamesLive;
     private final MutableLiveData<Product> productLive;
 
-    public FormDataMasterProduct(Context contextWeak, boolean beginnerMode) {
+    public FormDataMasterProduct(Application application, boolean beginnerMode) {
         displayHelpLive = new MutableLiveData<>(beginnerMode);
         productLive = new MutableLiveData<>();
         productNamesLive = new MutableLiveData<>();
