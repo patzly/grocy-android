@@ -129,9 +129,7 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     public void showLogoutBottomSheet() {
-        Bundle bundle = null;
-        if(isDemo()) bundle = new Bundle(); // empty bundle for indicating demo type
-        showBottomSheet(new LogoutBottomSheet(), bundle);
+        showBottomSheet(new LogoutBottomSheet());
     }
 
     public void showShortcutsBottomSheet() {
@@ -318,6 +316,11 @@ public class SettingsViewModel extends BaseViewModel {
         return new ArrayList<>(Arrays.asList(
                 getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
         ));
+    }
+
+    public boolean getIsDemoInstance() {
+        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        return server != null && server.contains("grocy.info");
     }
 
     public Location getLocation(ArrayList<Location> locations, int id) {

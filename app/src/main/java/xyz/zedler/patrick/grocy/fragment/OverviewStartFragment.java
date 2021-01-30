@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -153,8 +152,11 @@ public class OverviewStartFragment extends BaseFragment {
         navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     }
 
-    public void openLogoutBottomSheet() {
-        activity.showBottomSheet(new LogoutBottomSheet(), new Bundle());
+    public void navigateToSettingsCatServer() {
+        Bundle bundle = new SettingsFragmentArgs.Builder()
+                .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
+                .build().toBundle();
+        navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     }
 
     public void openFeedbackBottomSheet() {

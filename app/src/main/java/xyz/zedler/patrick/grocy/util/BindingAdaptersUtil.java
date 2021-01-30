@@ -136,7 +136,7 @@ public class BindingAdaptersUtil {
         if(view == null) return;
         view.setOnClickListener(v -> {
             if(clickUtil != null && clickUtil.isDisabled()) return;
-            listener.onClick(view);
+            if(listener != null) listener.onClick(view);
         });
     }
 }

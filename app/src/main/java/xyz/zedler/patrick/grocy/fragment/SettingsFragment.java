@@ -483,6 +483,11 @@ public class SettingsFragment extends BaseFragment {
                 && args.getShowCategory().equals(Constants.SETTINGS.BEHAVIOR.class.getSimpleName());
     }
 
+    public boolean shouldNavigateToServer() {
+        return args.getShowCategory() != null
+                && args.getShowCategory().equals(Constants.SETTINGS.SERVER.class.getSimpleName());
+    }
+
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return false;
         return sharedPrefs.getBoolean(pref, true);
@@ -496,6 +501,11 @@ public class SettingsFragment extends BaseFragment {
                         .setShowCategory(null).build().toBundle());
                 new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
                         .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
+            } else if(shouldNavigateToServer()) {
+                setArguments(new SettingsFragmentArgs.Builder(args)
+                        .setShowCategory(null).build().toBundle());
+                new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+                        .actionSettingsFragmentToSettingsCatServerFragment()), 200);
             }
         });
     }

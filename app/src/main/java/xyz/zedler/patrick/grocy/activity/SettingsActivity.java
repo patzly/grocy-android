@@ -60,7 +60,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
@@ -426,7 +425,7 @@ public class SettingsActivity extends AppCompatActivity
 				Bundle bundle = null;
 				if(isDemo()) bundle = new Bundle();
 				// empty bundle for indicating demo type
-				showBottomSheet(new LogoutBottomSheet(), bundle);
+				//showBottomSheet(new LogoutBottomSheet(), bundle);
 				break;
 			case R.id.linear_setting_dark_mode:
 				switchDark.setChecked(!switchDark.isChecked());

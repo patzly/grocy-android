@@ -142,7 +142,7 @@
                             app:strokeColor="@color/retro_red"
                             app:strokeWidth="@dimen/help_card_border_size"
                             android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"
-                            android:onClick="@{() -> fragment.openLogoutBottomSheet()}"
+                            android:onClick="@{() -> fragment.navigateToSettingsCatServer()}"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
