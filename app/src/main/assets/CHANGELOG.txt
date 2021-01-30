@@ -1,146 +1,146 @@
 2.0.0
-• Compatible with grocy version 3.0.x
-• Not compatible anymore with grocy version 2.7.x
-• New overview, settings, product & external scanner pages
-• Lots of new options for configuration (check them out)
-• New login flow for QR codes from grocy server
-• Improved loading speed by use of database
-• Smooth & consistent navigation between pages
-• Product autocomplete lists now use fuzzy matching
-• Server requests are now more secure with API key in header
-• Many internal code changes & improvements
-• Fixed layout for text on features pages
-• Fixed amount with factor on missing batch items page (#258)
-• Updated translations
+- New: Compatible with grocy version 3.0.x
+- New: Not compatible anymore with grocy version 2.7.x
+- New: Overview page
+- New: Rewritten Settings, Purchase & Consume pages
+- New: Lots of new options for configuration (check them out)
+- New: Login flow for QR codes from grocy server
+- Improved: Loading speed (by use of database)
+- Improved: Smooth & consistent navigation between pages
+- Improved: Product autocomplete lists now use fuzzy matching
+- Improved: Server requests are now more secure with API key in header
+- Improved: Many internal code changes & better techniques
+- Fixed: Layout for text on features pages
+- Updated translations
 
 1.10.1
-• Hotfix which allows HTTP cleartext traffic again (#252)
+- Hotfix which allows HTTP cleartext traffic again (#252)
 
 1.10.0
-• Czech, Portuguese, Chinese & Italian translation (thanks translators!)
-• App now trusts Android user certificates (thanks murizorun!) (#15)
-• Names from Open Food Facts are in device language if possible (#211)
-• Improved compatibility warning (#196) & added update warning (#223)
-• Fixed purchase workflow in missing batch items view (#225)
-• Fixed crash after rotation in product edit view (#214)
-• Fixed crash in shopping list with empty locationId (#226)
-• Fixed Purchase & Consume of product with space on start/end (#219)
-• Updated translations
+- Czech, Portuguese, Chinese & Italian translation (thanks translators!)
+- App now trusts Android user certificates (thanks murizorun!) (#15)
+- Names from Open Food Facts are in device language if possible (#211)
+- Improved compatibility warning (#196) & added update warning (#223)
+- Fixed purchase workflow in missing batch items view (#225)
+- Fixed crash after rotation in product edit view (#214)
+- Fixed crash in shopping list with empty locationId (#226)
+- Fixed Purchase & Consume of product with space on start/end (#219)
+- Updated translations
 
 1.9.0
-• Polish translation (thanks Marcin!)
-• Initial Scanner device support (needs TAB as suffix)
-• Initial Tor Hidden Services support through Orbot
-• Fixed consume batch mode with specific entry
-• Fixed shopping list preselection with shortcut
-• Fixed amount color of missing items in stock
-• Fixed wrong filtering of missing items
-• Plural strings for better translation support
-• Updated translations
+- Polish translation (thanks Marcin!)
+- Initial Scanner device support (needs TAB as suffix)
+- Initial Tor Hidden Services support through Orbot
+- Fixed consume batch mode with specific entry
+- Fixed shopping list preselection with shortcut
+- Fixed amount color of missing items in stock
+- Fixed wrong filtering of missing items
+- Plural strings for better translation support
+- Updated translations
 
 1.8.7
-• Hebrew translation (thanks Yaron!)
-• Bug fixes and improvements
+- Hebrew translation (thanks Yaron!)
+- Bug fixes and improvements
 
 1.8.6
-• This was just a new tag for F-Droid
+- This was just a new tag for F-Droid
 
 1.8.5
-• Fixed Norwegian translation
-• Updated translations
+- Fixed Norwegian translation
+- Updated translations
 
 1.8.4:
-• Norwegian translation (thanks Tor!)
-• Spanish translation (thanks Martín!)
+- Norwegian translation (thanks Tor!)
+- Spanish translation (thanks Martín!)
 
 1.8.3:
-• Hotfix for batch mode
+- Hotfix for batch mode
 
 1.8.2:
-• Moved in-app help to project page on Github
-• Updated translations
-• Bug fixes and improvements
+- Moved in-app help to project page on Github
+- Updated translations
+- Bug fixes and improvements
 
 1.8.1:
-• Many small design improvements
-• Improved download termination
-• Fix crash in shopping mode
-• Bug fixes and improvements
+- Many small design improvements
+- Improved download termination
+- Fix crash in shopping mode
+- Bug fixes and improvements
 
 1.8.0:
-• Dutch translation (thanks Maarten!)
-• Consume & purchase partial amount
-• Consume all in batch mode (option)
-• Offline indicator in shopping list
-• Fixed expiring items filter in stock overview
-• Fixed animation of product overview bottom sheet
-• Fixed height of bottom sheets in landscape mode
-• Updated translations
-• Bug fixes and improvements
+- Dutch translation (thanks Maarten!)
+- Consume & purchase partial amount
+- Consume all in batch mode (option)
+- Offline indicator in shopping list
+- Fixed expiring items filter in stock overview
+- Fixed animation of product overview bottom sheet
+- Fixed height of bottom sheets in landscape mode
+- Updated translations
+- Bug fixes and improvements
 
 1.7.0:
-• Swedish translation (thanks contributors!)
-• Front camera setting (e.g. for tablets)
-• Improved feedback
-• Removed shopping list shortcut due to shortcut limit in most launchers
-• Bug fixes and improvements
+- Swedish translation (thanks contributors!)
+- Front camera setting (e.g. for tablets)
+- Improved feedback
+- Removed shopping list shortcut due to shortcut limit in most launchers
+- Bug fixes and improvements
 
 1.6.0:
-• Purchase all items in shopping list
-• Fixed sync bug in shopping list
-• Updated translations
-• Bug fixes and improvements
+- Purchase all items in shopping list
+- Fixed sync bug in shopping list
+- Updated translations
+- Bug fixes and improvements
 
 1.5.0:
-• Our app is now translatable: Visit us on GitHub for more information
-• French translation (thanks prohand!)
-• German translation
-• Offline indicator in shopping mode
-• Clear only done items in shopping list
-• Bug fixes and improvements
+- Our app is now translatable: Visit us on GitHub for more information
+- French translation (thanks prohand!)
+- German translation
+- Offline indicator in shopping mode
+- Clear only done items in shopping list
+- Bug fixes and improvements
 
 1.4.2:
-• Fix jump to top on sync in shopping mode
-• New OPEN icon
-• Improved navigation
-• Debugging tools in settings
-• Bug fixes and improvements
+- Fix jump to top on sync in shopping mode
+- New OPEN icon
+- Improved navigation
+- Debugging tools in settings
+- Bug fixes and improvements
 
 1.4.1:
-• Camera crash fixed
-• In-app help with initial FAQ
-• Setting for changing update interval in shopping mode
-• Bug fixes and improvements
+- Camera crash fixed
+- In-app help with initial FAQ
+- Setting for changing update interval in shopping mode
+- Bug fixes and improvements
 
 1.4.0:
-• Full shopping list support with offline mode
-• In-store shopping mode with big UI elements
-• Disabled features with Grocy config
-• Improved screen rotation support
-• Switching between consume, open and purchase in scan mode
-• Over 340 improvements and bug fixes
+- Full shopping list support with offline mode
+- In-store shopping mode with big UI elements
+- Disabled features with Grocy config
+- Improved screen rotation support
+- Switching between consume, open and purchase in scan mode
+- Over 340 improvements and bug fixes
 
 1.3.0:
-• Open Food Facts integration
-• Editable bottom notes of shopping lists
-• Dense stock overview in landscape mode
-• Proper purchase to stock amount calculation
-• Bug fixes and improvements
+- Open Food Facts integration
+- Editable bottom notes of shopping lists
+- Dense stock overview in landscape mode
+- Proper purchase to stock amount calculation
+- Bug fixes and improvements
 
 1.2.0:
-• Create and edit shopping list entries
-• Add stock items to shopping list
-• Indicate "on shopping list" in stock overview
-• Edit product description
-• Grocy version incompatibility information
-• HTTP support
-• Bug fixes and improvements
+- Create and edit shopping list entries
+- Add stock items to shopping list
+- Indicate "on shopping list" in stock overview
+- Edit product description
+- Grocy version incompatibility information
+- HTTP support
+- Bug fixes and improvements
 
 1.1.0:
-• Switch between scan modes
-• Price history
-• Scanning with haptic feedback
-• Clear shopping lists
-• Auto fill login with recent credentials
-• Proper color contrasts
-• Bug fixes and improvements
+- Switch between scan modes
+- Price history
+- Scanning with haptic feedback
+- Clear shopping lists
+- Auto fill login with recent credentials
+- Proper color contrasts
+- Bug fixes and improvements

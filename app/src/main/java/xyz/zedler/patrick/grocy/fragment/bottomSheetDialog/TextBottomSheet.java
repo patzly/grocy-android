@@ -42,9 +42,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
@@ -71,9 +74,8 @@ public class TextBottomSheet extends BaseBottomSheet {
 				false
 		);
 
-		Context context = getContext();
-		Bundle bundle = getArguments();
-		assert context != null && bundle != null;
+		Context context = requireContext();
+		Bundle bundle = requireArguments();
 
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
@@ -102,8 +104,27 @@ public class TextBottomSheet extends BaseBottomSheet {
 			frameLayoutLink.setVisibility(View.GONE);
 		}
 
-		((TextView) view.findViewById(R.id.text_text)).setText(readFromFile(context, file));
-
+		if(file.equals("CHANGELOG.txt")) {
+			List<String> keyWords = Arrays.asList("New", "Improved", "Fixed");
+			String content = readFromFile(context, file);
+			if(content != null) {
+				((TextView) view.findViewById(R.id.text_text)).setText(
+						BulletUtil.makeBulletList(
+								context,
+								6,
+								2,
+								"- ",
+								content,
+								keyWords
+						),
+						TextView.BufferType.SPANNABLE
+				);
+			} else {
+				((TextView) view.findViewById(R.id.text_text)).setText(null);
+			}
+		} else {
+			((TextView) view.findViewById(R.id.text_text)).setText(readFromFile(context, file));
+		}
 		return view;
 	}
 
