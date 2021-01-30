@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.model;
 import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -30,6 +31,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -552,6 +556,69 @@ public class Product implements Parcelable {
 
     public void setHideOnStockOverview(int hideOnStockOverview) {
         this.hideOnStockOverview = hideOnStockOverview;
+    }
+
+    public static JSONObject getJsonFromProduct(Product product, boolean debug, String TAG) {
+        JSONObject json = new JSONObject();
+        try {
+            Object name = product.name;
+            Object description = product.description != null ? product.description : JSONObject.NULL;
+            Object groupId = product.productGroupId != null ? product.productGroupId : JSONObject.NULL;
+            String active = String.valueOf(product.active);
+            String locationId = product.locationId;
+            Object storeId = product.storeId != null ? product.storeId : JSONObject.NULL;
+            String quIdPurchase = String.valueOf(product.quIdPurchase);
+            String quIdStock = String.valueOf(product.quIdStock);
+            String factor = product.quFactorPurchaseToStock;
+            String minAmount = product.minStockAmount;
+            String defaultDueDays = String.valueOf(product.defaultDueDays);
+            String defaultDueDaysOpen = String.valueOf(product.defaultDueDaysAfterOpen);
+            String defaultDueDaysFreezing = String.valueOf(product.defaultDueDaysAfterFreezing);
+            String defaultDueDaysThawing = String.valueOf(product.defaultDueDaysAfterThawing);
+            Object pictureFile = product.pictureFileName != null ? product.pictureFileName : JSONObject.NULL;
+            String enableTareWeight = String.valueOf(product.enableTareWeightHandling);
+            String tareWeight = product.tareWeight;
+            String notCheckStock = String.valueOf(product.notCheckStockFulfillmentForRecipes);
+            Object parentProductId = product.parentProductId != null ? product.parentProductId : JSONObject.NULL;
+            String calories = product.calories;
+            String cumulateAmounts = String.valueOf(product.accumulateSubProductsMinStockAmount);
+            String dueType = String.valueOf(product.dueDateType);
+            String quickConsume = product.quickConsumeAmount;
+            String hideOnStock = String.valueOf(product.hideOnStockOverview);
+
+            json.put("name", name);
+            json.put("description", description);
+            json.put("product_group_id", groupId);
+            json.put("active", active);
+            json.put("location_id", locationId);
+            json.put("shopping_location_id", storeId);
+            json.put("qu_id_purchase", quIdPurchase);
+            json.put("qu_id_stock", quIdStock);
+            json.put("qu_factor_purchase_to_stock", factor);
+            json.put("min_stock_amount", minAmount);
+
+            json.put("default_best_before_days", defaultDueDays);
+            json.put("default_best_before_days_after_open", defaultDueDaysOpen);
+            json.put("default_best_before_days_after_freezing", defaultDueDaysFreezing);
+            json.put("default_best_before_days_after_thawing", defaultDueDaysThawing);
+            json.put("picture_file_name", pictureFile);
+            json.put("enable_tare_weight_handling", enableTareWeight);
+            json.put("tare_weight", tareWeight);
+            json.put("not_check_stock_fulfillment_for_recipes", notCheckStock);
+            json.put("parent_product_id", parentProductId);
+            json.put("calories", calories);
+            json.put("cumulate_min_stock_amount_of_sub_products", cumulateAmounts);
+            json.put("due_type", dueType);
+            json.put("quick_consume_amount", quickConsume);
+            json.put("hide_on_stock_overview", hideOnStock);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "getJsonFromProduct: " + e);
+        }
+        return json;
+    }
+
+    public JSONObject getJsonFromProduct(boolean debug, String TAG) {
+        return getJsonFromProduct(this, debug, TAG);
     }
 
     @Override

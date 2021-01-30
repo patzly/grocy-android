@@ -11,7 +11,7 @@
     <string name="deep_link_settingsCatBehaviorFragment">grocy://settingsCatBehaviorFragment</string>
     <string name="deep_link_settingsCatScannerFragment">grocy://settingsCatScannerFragment</string>
     <string name="deep_link_aboutFragment">grocy://aboutFragment</string>
-    <string name="deep_link_masterProductFragment">grocy://masterProductFragment?action={action}&amp;productName={productName}</string>
+    <string name="deep_link_masterProductFragment">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}</string>
     <string name="deep_link_masterDataOverviewFragment">grocy://masterDataOverviewFragment</string>
 
 </resources>

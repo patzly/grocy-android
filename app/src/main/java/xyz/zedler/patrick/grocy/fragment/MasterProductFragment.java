@@ -79,7 +79,7 @@ public class MasterProductFragment extends BaseFragment {
         ).get(MasterProductViewModel.class);
         if(!viewModel.isActionEdit() && args.getProductName() != null) {
             setArguments(new MasterProductFragmentArgs.Builder(args).setProductName(null)
-                    .build().toBundle());
+                    .setProductId(null).build().toBundle());
         }
         binding.setActivity(activity);
         binding.setFormData(viewModel.getFormData());
@@ -140,13 +140,7 @@ public class MasterProductFragment extends BaseFragment {
         String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
         if(action != null) {
             removeForThisDestination(Constants.ARGUMENT.ACTION);
-            new Handler().postDelayed(() -> {
-                if(!viewModel.getFormData().isWholeFormValid()) {
-                    viewModel.showMessage(getString(R.string.error_missing_information));
-                    return;
-                }
-                activity.navigateUp();
-            }, 500);
+            new Handler().postDelayed(() -> viewModel.saveProduct(), 500);
         }
 
         viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
@@ -173,7 +167,7 @@ public class MasterProductFragment extends BaseFragment {
                 R.string.action_save,
                 Constants.FAB.TAG.SAVE,
                 animated,
-                () -> viewModel.saveItem()
+                () -> viewModel.saveProduct()
         );
     }
 

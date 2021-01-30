@@ -436,21 +436,6 @@ public class FormDataPurchase {
         this.torchOn = torchOn;
     }
 
-    private Product getProductFromName(String name) {
-        if(productsLive.getValue() == null) return null;
-        for(Product product : productsLive.getValue()) {
-            if(product.getName().equals(name)) return product;
-        } return null;
-    }
-
-    private Product getProductFromId(String id) {
-        if(productsLive.getValue() == null || id == null) return null;
-        int idInt = Integer.parseInt(id);
-        for(Product product : productsLive.getValue()) {
-            if(product.getId() == idInt) return product;
-        } return null;
-    }
-
     public boolean isProductNameValid() {
         if(productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
             if(productDetailsLive.getValue() != null) {
@@ -464,6 +449,13 @@ public class FormDataPurchase {
             return false;
         }
         if(productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()) {
+            productNameErrorLive.setValue(R.string.error_invalid_product);
+            return false;
+        }
+        if(productDetailsLive.getValue() != null && !productNameLive.getValue().isEmpty()
+                && !productDetailsLive.getValue().getProduct().getName()
+                .equals(productNameLive.getValue())
+        ) {
             productNameErrorLive.setValue(R.string.error_invalid_product);
             return false;
         }

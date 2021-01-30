@@ -33,6 +33,9 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
@@ -65,6 +68,7 @@ public class MasterProductViewModel extends BaseViewModel {
     private ArrayList<Product> products;
 
     private DownloadHelper.Queue currentQueueLoading;
+    private DownloadHelper.QueueItem extraQueueItem;
     private final boolean debug;
     private final MutableLiveData<Boolean> actionEditLive;
 
@@ -90,8 +94,19 @@ public class MasterProductViewModel extends BaseViewModel {
         isOnlineLive = new ConnectivityLiveData(application);
 
         if(isActionEdit()) {
-            assert args.getProduct() != null;
-            setCurrentProduct(args.getProduct());
+            if(args.getProduct() != null) {
+                setCurrentProduct(args.getProduct());
+            } else {
+                assert args.getProductId() != null;
+                int productId = Integer.parseInt(args.getProductId());
+                extraQueueItem = dlHelper.getProductDetails(productId, productDetails -> {
+                    extraQueueItem = null;
+                    setCurrentProduct(productDetails.getProduct());
+                    if(products != null) {
+                        formData.getProductNamesLive().setValue(getProductNames(products));
+                    }
+                });
+            }
         } else {
             Product product = new Product(sharedPrefs);
             if(args.getProductName() != null) product.setName(args.getProductName());
@@ -150,6 +165,7 @@ public class MasterProductViewModel extends BaseViewModel {
                     formData.getProductNamesLive().setValue(getProductNames(products));
                 })
         );
+        if(extraQueueItem != null) queue.append(extraQueueItem);
         if(queue.isEmpty()) return;
 
         currentQueueLoading = queue;
@@ -178,8 +194,11 @@ public class MasterProductViewModel extends BaseViewModel {
         return names;
     }
 
-    public void saveItem() {
-        if(!formData.isFormValid()) return;
+    public void saveProduct() {
+        if(!formData.isWholeFormValid()) {
+            showMessage(getString(R.string.error_missing_information));
+            return;
+        }
 
         if(!isActionEdit()) {
             Bundle bundle = new Bundle();
@@ -188,32 +207,49 @@ public class MasterProductViewModel extends BaseViewModel {
             sendEvent(Event.NAVIGATE_UP);
         }
 
-        /*ShoppingListItem item = null;
-        if(isActionEdit) item = args.getShoppingListItem();
-        item = formData.fillShoppingListItem(item);
-        JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
+        Product product = getFilledProduct();
+        JSONObject jsonObject = product.getJsonFromProduct(debug, TAG);
 
-        if(isActionEdit) {
+        if(isActionEdit()) {
             dlHelper.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
+                    grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, product.getId()),
                     jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
+                    response -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+                        sendEvent(Event.SET_PRODUCT_ID, bundle);
+                        sendEvent(Event.NAVIGATE_UP);
+                    },
                     error -> {
                         showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
+                        if(debug) Log.e(TAG, "saveProduct: " + error);
                     }
             );
         } else {
             dlHelper.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+                    grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
                     jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
+                    response -> {
+                        int objectId = -1;
+                        try {
+                            objectId = response.getInt("created_object_id");
+                            Log.i(TAG, "saveProduct: " + objectId);
+                        } catch (JSONException e) {
+                            if(debug) Log.e(TAG, "saveProduct: " + e);
+                        }
+                        if(objectId != -1) {
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
+                            sendEvent(Event.SET_PRODUCT_ID, bundle);
+                        }
+                        sendEvent(Event.NAVIGATE_UP);
+                    },
                     error -> {
                         showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
+                        if(debug) Log.e(TAG, "saveProduct: " + error);
                     }
             );
-        }*/
+        }
     }
 
     public void deleteItem() {

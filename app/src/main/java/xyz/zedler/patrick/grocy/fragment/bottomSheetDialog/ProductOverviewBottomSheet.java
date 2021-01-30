@@ -51,6 +51,7 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -210,12 +211,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_edit_product) {
-				NavHostFragment.findNavController(this).navigate(
-						ProductOverviewBottomSheetDirections
-								.actionProductOverviewBottomSheetDialogFragmentToMasterProductSimpleFragment(
-										Constants.ACTION.EDIT
-								).setProduct(product)
-				);
+				String productId = String.valueOf(product.getId());
+				navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+						new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
+								.setProductId(productId).build().toBundle());
 				dismiss();
 				return true;
 			}
