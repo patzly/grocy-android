@@ -20,6 +20,8 @@ package xyz.zedler.patrick.grocy.model;
 */
 
 import android.app.Application;
+import android.text.Html;
+import android.text.Spanned;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +41,7 @@ public class FormDataMasterProductCatOptional {
     private final MutableLiveData<Product> parentProductLive;
     private final MutableLiveData<String> parentProductNameLive;
     private final MutableLiveData<Integer> parentProductNameErrorLive;
-    private final MutableLiveData<String> descriptionLive;
+    private final MutableLiveData<Spanned> descriptionLive;
     private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
     private final MutableLiveData<ProductGroup> productGroupLive;
     private final LiveData<String> productGroupNameLive;
@@ -98,7 +100,7 @@ public class FormDataMasterProductCatOptional {
         return parentProductNameErrorLive;
     }
 
-    public MutableLiveData<String> getDescriptionLive() {
+    public MutableLiveData<Spanned> getDescriptionLive() {
         return descriptionLive;
     }
 
@@ -194,7 +196,8 @@ public class FormDataMasterProductCatOptional {
         product.setActive(isActiveLive.getValue() ? 1 : 0);
         product.setParentProductId(parentProductLive.getValue() != null
                 ? String.valueOf(parentProductLive.getValue().getId()) : null);
-        product.setDescription(descriptionLive.getValue());
+        product.setDescription(descriptionLive.getValue() != null
+                ? Html.toHtml(descriptionLive.getValue()) : null);
         product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
         product.setCalories(energyLive.getValue());
         product.setHideOnStockOverview(neverShowOnStockLive.getValue() ? 1 : 0);
@@ -206,7 +209,8 @@ public class FormDataMasterProductCatOptional {
 
         isActiveLive.setValue(product.isActive());
         parentProductLive.setValue(getProductFromId(product.getParentProductId()));
-        descriptionLive.setValue(product.getDescription());
+        descriptionLive.setValue(product.getDescription() != null
+                ? Html.fromHtml(product.getDescription()) : null);
         productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
         energyLive.setValue(product.getCalories());
         neverShowOnStockLive.setValue(product.getHideOnStockOverview() == 1);

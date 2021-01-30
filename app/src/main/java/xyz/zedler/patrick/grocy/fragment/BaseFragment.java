@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -121,7 +122,7 @@ public class BaseFragment extends Fragment {
 
     public void addBarcodeToExistingProduct(String barcode) {}
 
-    public void saveText(String text) {}
+    public void saveText(Spanned spanned) {}
 
     public void saveNumber(String text, Bundle argsBundle) {}
 

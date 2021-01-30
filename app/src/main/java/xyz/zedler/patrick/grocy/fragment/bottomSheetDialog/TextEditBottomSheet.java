@@ -105,8 +105,8 @@ public class TextEditBottomSheet extends BaseBottomSheet {
                 );
             }*/
 
-            CharSequence charSequence = TextUtil.trimCharSequence(editText.getText());
-            activity.getCurrentFragment().saveText(charSequence != null ? charSequence.toString() : null);
+            Spanned spanned = (Spanned) TextUtil.trimCharSequence(editText.getText());
+            activity.getCurrentFragment().saveText(spanned);
             dismiss();
         });
 

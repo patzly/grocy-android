@@ -20,6 +20,8 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,15 +172,16 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
         bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));
+        Spanned description = viewModel.getFormData().getDescriptionLive().getValue();
         bundle.putString(
-                Constants.ARGUMENT.TEXT,
-                viewModel.getFormData().getDescriptionLive().getValue()
+                Constants.ARGUMENT.HTML,
+                description != null ? Html.toHtml(description) : null
         );
         activity.showBottomSheet(new TextEditBottomSheet(), bundle);
     }
 
     @Override
-    public void saveText(String text) {
+    public void saveText(Spanned text) {
         viewModel.getFormData().getDescriptionLive().setValue(text);
     }
 

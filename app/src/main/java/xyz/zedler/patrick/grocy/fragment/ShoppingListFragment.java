@@ -266,7 +266,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 .setShoppingListItem(shoppingListItem));
     }
 
-    public void saveNotes(Spanned notes) {
+    public void saveText(Spanned notes) {
         viewModel.saveNotes(notes);
     }
 
