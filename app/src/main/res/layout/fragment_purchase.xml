@@ -390,7 +390,7 @@
                                     android:text="@={formData.amountLive}"
                                     android:afterTextChanged="@{() -> formData.isAmountValid()}"
                                     app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
-                                    app:onDoneClickInSoftKeyboard="@{() -> fragment.focusNextView()}"/>
+                                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -497,7 +497,7 @@
                                     android:text="@={formData.priceLive}"
                                     android:afterTextChanged="@{() -> formData.isAmountValid()}"
                                     app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
-                                    app:onDoneClickInSoftKeyboard="@{() -> fragment.focusNextView()}"/>
+                                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
                             </com.google.android.material.textfield.TextInputLayout>
 

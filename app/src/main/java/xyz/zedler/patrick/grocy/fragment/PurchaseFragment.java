@@ -171,6 +171,9 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 capture.onPause();
             }
         });
+        // following lines are necessary because no observers are set in Views
+        viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {});
+        viewModel.getFormData().getQuantityUnitStock().observe(getViewLifecycleOwner(), i -> {});
 
         //hideDisabledFeatures();
 
@@ -212,7 +215,13 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 R.string.action_purchase,
                 Constants.FAB.TAG.PURCHASE,
                 animated,
-                () -> viewModel.purchaseProduct()
+                () -> {
+                    if(viewModel.isScanModeEnabled()) {
+                        focusNextInvalidView();
+                    } else {
+                        viewModel.purchaseProduct();
+                    }
+                }
         );
     }
 

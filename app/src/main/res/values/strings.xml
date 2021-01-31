@@ -320,7 +320,9 @@
     <string name="subtitle_count_unknown">Count: Unknown</string>
     <string name="subtitle_shortcuts_not_supported">Not supported</string>
     <!-- %1$s is an amount, %2$s is a quantity unit -->
-    <string name="subtitle_amount_compare">That\'s the same as %1$s %2$s.</string>
+    <string name="subtitle_amount_compare">This equals %1$s %2$s.</string>
+    <!-- %1$s is a price, %2$s is a quantity unit -->
+    <string name="subtitle_price_means">This means %1$s per %2$s.</string>
     <string name="subtitle_product_hidden">Product is hidden</string>
     <string name="subtitle_product_not_hidden">Product is not hidden</string>
     <string name="subtitle_product_not_on_server">Product is not on server</string>

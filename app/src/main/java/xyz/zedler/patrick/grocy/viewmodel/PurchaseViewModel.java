@@ -188,14 +188,15 @@ public class PurchaseViewModel extends BaseViewModel {
             formData.getProductNameLive().setValue(updatedProduct.getName());
 
             // quantity unit
-            setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+            double initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
 
             // amount
-            if(!isTareWeightEnabled(productDetails) && barcode != null && barcode.hasAmount()) {
+            boolean isTareWeightEnabled = formData.isTareWeightEnabled();
+            if(!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
                 // if barcode contains amount, take this (with tare weight handling off)
                 // scan mode status doesn't matter
                 formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-            } else if(!isTareWeightEnabled(productDetails) && !isScanModeEnabled()) {
+            } else if(!isTareWeightEnabled && !isScanModeEnabled()) {
                 String defaultAmount = sharedPrefs.getString(
                         Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
                         Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
@@ -207,7 +208,7 @@ public class PurchaseViewModel extends BaseViewModel {
                         && Double.parseDouble(defaultAmount) > 0) {
                     formData.getAmountLive().setValue(defaultAmount);
                 }
-            } else if(!isTareWeightEnabled(productDetails)) {
+            } else if(!isTareWeightEnabled) {
                 // if scan mode enabled, always fill with amount 1
                 formData.getAmountLive().setValue(NumUtil.trim(1));
             }
@@ -232,7 +233,7 @@ public class PurchaseViewModel extends BaseViewModel {
                 lastPrice = productDetails.getLastPrice();
             }
             if(lastPrice != null && !lastPrice.isEmpty()) {
-                lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+                lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor);
             }
             formData.getPriceLive().setValue(lastPrice);
 
@@ -264,7 +265,7 @@ public class PurchaseViewModel extends BaseViewModel {
         }).perform(dlHelper.getUuid());
     }
 
-    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(
+    private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
             Product product,
             ProductBarcode barcode
     ) {
@@ -273,7 +274,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
         if(stock == null || purchase == null) {
             showMessage(getString(R.string.error_loading_qus));
-            return null;
+            return 1;
         }
 
         HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
@@ -295,12 +296,15 @@ public class PurchaseViewModel extends BaseViewModel {
         if(barcode != null && barcode.hasQuId()) {
             barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
         }
+        Double factor;
         if(barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
             formData.getQuantityUnitLive().setValue(barcodeUnit);
+            factor =  unitFactors.get(barcodeUnit);
         } else {
             formData.getQuantityUnitLive().setValue(purchase);
+            factor = unitFactors.get(purchase);
         }
-        return unitFactors;
+        return factor != null && factor != -1 ? factor : 1;
     }
 
     public void onBarcodeRecognized(String barcode) {
@@ -382,14 +386,6 @@ public class PurchaseViewModel extends BaseViewModel {
                         if(debug) Log.e(TAG, "purchaseProduct: " + e);
                     }
                     if(debug) Log.i(TAG, "purchaseProduct: transaction successful");
-
-                    /*if(product.getEnableTareWeightHandling() == 0) {
-                        amountAdded = amountMultiplied;
-                    } else {
-                        // calculate difference of amount if tare weight handling enabled
-                        amountAdded = amountMultiplied - product.getTareWeightDouble()
-                                - productDetails.getStockAmount();
-                    }*/
 
                     SnackbarMessage snackbarMessage = new SnackbarMessage(
                             formData.getTransactionSuccessMsg()
@@ -521,7 +517,6 @@ public class PurchaseViewModel extends BaseViewModel {
     }
 
     public void showConfirmationBottomSheet() {
-        String amount = formData.getAmountLive().getValue();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
         showBottomSheet(new ScanModeConfirmBottomSheet(), bundle);
@@ -530,38 +525,6 @@ public class PurchaseViewModel extends BaseViewModel {
     @NonNull
     public MutableLiveData<Boolean> getIsLoadingLive() {
         return isLoadingLive;
-    }
-
-    @NonNull
-    public Boolean getIsDownloading() {
-        assert isLoadingLive.getValue() != null;
-        return isLoadingLive.getValue();
-    }
-
-    /*public void changeAmountLess() {
-        if(!NumUtil.isDouble(getAmount())) {
-            amountLive.setValue(NumUtil.trim(1));
-        } else {
-            double amountNew = NumUtil.toDouble(getAmount()) - 1;
-            if(amountNew < getMinAmount()) return;
-            amountLive.setValue(NumUtil.trim(amountNew));
-        }
-    }
-
-    public Double getMinAmount() {
-        double minAmount;
-        if(getProductDetails() == null || !isTareWeightEnabled(getProductDetails())) {
-            minAmount = 1;
-        } else {
-            minAmount = getProductDetails().getProduct().getTareWeightDouble();
-            minAmount += getProductDetails().getStockAmount();
-        }
-        return minAmount;
-    }*/
-
-    public boolean isTareWeightEnabled(ProductDetails productDetails) {
-        if(productDetails == null) return false;
-        return productDetails.getProduct().getEnableTareWeightHandling() == 1;
     }
 
     @NonNull
@@ -580,10 +543,6 @@ public class PurchaseViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getScanModeEnabled() {
         return scanModeEnabled;
-    }
-
-    public void setScanModeEnabled(boolean enabled) {
-        scanModeEnabled.setValue(enabled);
     }
 
     public boolean toggleScanModeEnabled() {
