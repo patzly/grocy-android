@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -50,7 +48,7 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
 
     private final static String TAG = StockEntriesBottomSheet.class.getSimpleName();
 
-    private Activity activity;
+    private MainActivity activity;
     private ArrayList<StockEntry> stockEntries;
 
     @NonNull
@@ -69,9 +67,8 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
                 R.layout.fragment_bottomsheet_stock_entries, container, false
         );
 
-        activity = getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = (MainActivity) requireActivity();
+        Bundle bundle = requireArguments();
 
         stockEntries = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_ENTRIES);
         String selectedStockId = bundle.getString(Constants.ARGUMENT.SELECTED_ID);
@@ -96,34 +93,16 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
                 )
         );
 
-        if(activity.getClass() == ScanBatchActivity.class) {
-            setCancelable(false);
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(
-                    v -> {
-                        ((ScanBatchActivity) activity).discardCurrentProduct();
-                        dismiss();
-                    }
-            );
-        }
-
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == ConsumeFragment.class) {
-                ((ConsumeFragment) currentFragment).selectStockEntry(
-                        stockEntries.get(position).getStockId()
-                );
-            }
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            ((ScanBatchActivity) activity).setEntryId(
+        Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+        if(currentFragment.getClass() == ConsumeFragment.class) {
+            ((ConsumeFragment) currentFragment).selectStockEntry(
                     stockEntries.get(position).getStockId()
             );
-            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
 
         dismiss();

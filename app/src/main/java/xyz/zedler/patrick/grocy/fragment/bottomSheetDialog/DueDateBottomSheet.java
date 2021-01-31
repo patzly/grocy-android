@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +41,6 @@ import java.util.Date;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -51,15 +48,13 @@ public class DueDateBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = DueDateBottomSheet.class.getSimpleName();
 
-    private Activity activity;
+    private MainActivity activity;
 
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
     private String defaultBestBeforeDays;
     private DatePicker datePicker;
     private MaterialCheckBox neverExpires;
-
-    private boolean productDiscarded = false;
 
     @NonNull
     @Override
@@ -78,7 +73,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
                 R.layout.fragment_bottomsheet_due_date, container, false
         );
 
-        activity =  getActivity();
+        activity = (MainActivity) getActivity();
         Bundle bundle = getArguments();
         assert activity != null && bundle != null;
 
@@ -109,15 +104,6 @@ public class DueDateBottomSheet extends BaseBottomSheet {
         if(activity.getClass() == MainActivity.class) {
             buttonDiscard.setVisibility(View.GONE);
         }
-        buttonDiscard.setOnClickListener(
-                v -> {
-                    if(activity.getClass() == ScanBatchActivity.class) {
-                        ((ScanBatchActivity) activity).discardCurrentProduct();
-                        productDiscarded = true;
-                        dismiss();
-                    }
-                }
-        );
         view.findViewById(R.id.button_bbd_save).setOnClickListener(
                 v -> dismiss()
         );
@@ -126,10 +112,6 @@ public class DueDateBottomSheet extends BaseBottomSheet {
         defaultBestBeforeDays = bundle.getString(Constants.ARGUMENT.DEFAULT_DUE_DAYS);
 
         fillForm(selectedBestBeforeDate);
-
-        if(activity.getClass() == ScanBatchActivity.class) {
-            setCancelable(false);
-        }
 
         return view;
     }
@@ -149,7 +131,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
                 if(date != null) calendar.setTime(date);
             } catch (ParseException e) {
                 fillForm(null);
-                showSnackbarMessage(activity.getString(R.string.error_undefined));
+                activity.showMessage(activity.getString(R.string.error_undefined));
                 return;
             }
             datePicker.setEnabled(true);
@@ -187,7 +169,6 @@ public class DueDateBottomSheet extends BaseBottomSheet {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(productDiscarded) return;
 
         String date;
         if(!neverExpires.isChecked()) {
@@ -201,24 +182,9 @@ public class DueDateBottomSheet extends BaseBottomSheet {
             date = Constants.DATE.NEVER_OVERDUE;
         }
 
-        if(activity.getClass() == MainActivity.class) {
-            BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            currentFragment.selectDueDate(date);
-            currentFragment.onBottomSheetDismissed();
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            ((ScanBatchActivity) activity).setBestBeforeDate(date);
-            ((ScanBatchActivity) activity).askNecessaryDetails();
-        }
-    }
-
-    private void showSnackbarMessage(String msg) {
-        View view = null;
-        if(activity.getClass() == MainActivity.class) {
-            view = activity.findViewById(R.id.frame_main_container);
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            view = activity.findViewById(R.id.barcode_scan_batch);
-        }
-        if(view != null) Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
+        BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+        currentFragment.selectDueDate(date);
+        currentFragment.onBottomSheetDismissed();
     }
 
     @NonNull

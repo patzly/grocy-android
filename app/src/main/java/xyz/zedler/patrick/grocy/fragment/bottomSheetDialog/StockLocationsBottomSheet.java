@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -52,7 +50,7 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
 
     private final static String TAG = StockLocationsBottomSheet.class.getSimpleName();
 
-    private Activity activity;
+    private MainActivity activity;
     private ArrayList<StockLocation> stockLocations;
 
     @NonNull
@@ -71,9 +69,8 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
                 R.layout.fragment_bottomsheet_stock_locations, container, false
         );
 
-        activity = getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = (MainActivity) getActivity();
+        Bundle bundle = requireArguments();
 
         stockLocations = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS);
         ProductDetails productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
@@ -108,34 +105,16 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
                 )
         );
 
-        if(activity.getClass() == ScanBatchActivity.class) {
-            setCancelable(false);
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(
-                    v -> {
-                        ((ScanBatchActivity) activity).discardCurrentProduct();
-                        dismiss();
-                    }
-            );
-        }
-
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        if(activity.getClass() == MainActivity.class) {
-            Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-            if(currentFragment.getClass() == ConsumeFragment.class) {
-                ((ConsumeFragment) currentFragment).selectLocation(
-                        stockLocations.get(position).getLocationId()
-                );
-            }
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            ((ScanBatchActivity) activity).setStockLocationId(
-                    String.valueOf(stockLocations.get(position).getLocationId())
+        Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+        if(currentFragment.getClass() == ConsumeFragment.class) {
+            ((ConsumeFragment) currentFragment).selectLocation(
+                    stockLocations.get(position).getLocationId()
             );
-            ((ScanBatchActivity) activity).askNecessaryDetails();
         }
 
         dismiss();

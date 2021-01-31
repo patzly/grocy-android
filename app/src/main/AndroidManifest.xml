@@ -35,11 +35,6 @@
 
         <activity android:name=".activity.SettingsActivity"/>
 
-        <activity
-            android:name=".activity.ScanBatchActivity"
-            android:theme="@style/Theme.Grocy.Camera"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
     </application>
 
 </manifest>

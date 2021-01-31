@@ -39,7 +39,6 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
 import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
@@ -95,17 +94,6 @@ public class LocationsBottomSheet extends BaseBottomSheet
                 )
         );
 
-        if(activity.getClass() == ScanBatchActivity.class) {
-            setCancelable(false);
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(
-                    v -> {
-                        ((ScanBatchActivity) activity).discardCurrentProduct();
-                        dismiss();
-                    }
-            );
-        }
-
         return view;
     }
 
@@ -114,10 +102,6 @@ public class LocationsBottomSheet extends BaseBottomSheet
         if(activity.getClass() == MainActivity.class) {
             BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
             currentFragment.selectLocation(locations.get(position));
-        } else if(activity.getClass() == ScanBatchActivity.class) {
-            String locationId = String.valueOf(locations.get(position).getId());
-            ((ScanBatchActivity) activity).setLocationId(locationId);
-            ((ScanBatchActivity) activity).askNecessaryDetails();
         } else if(activity.getClass() == SettingsActivity.class) {
             int locationId = locations.get(position).getId();
             ((SettingsActivity) activity).setLocation(locationId);
