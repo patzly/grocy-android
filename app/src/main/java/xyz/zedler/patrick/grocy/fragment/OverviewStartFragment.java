@@ -153,10 +153,14 @@ public class OverviewStartFragment extends BaseFragment {
     }
 
     public void navigateToSettingsCatServer() {
-        Bundle bundle = new SettingsFragmentArgs.Builder()
-                .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
-                .build().toBundle();
-        navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+        if(viewModel.getBeginnerModeEnabled()) {
+            Bundle bundle = new SettingsFragmentArgs.Builder()
+                    .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
+                    .build().toBundle();
+            navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+        } else {
+            navigateDeepLink(R.string.deep_link_settingsCatServerFragment);
+        }
     }
 
     public void openFeedbackBottomSheet() {

@@ -397,7 +397,11 @@
             android:id="@+id/settingsCatServerFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatServerFragment"
             android:label="SettingsCatServerFragment"
-            tools:layout="@layout/fragment_settings_cat_server"/>
+            tools:layout="@layout/fragment_settings_cat_server">
+            <deepLink
+                android:id="@+id/deepLink6"
+                app:uri="@string/deep_link_settingsCatServerFragment" />
+        </fragment>
         <fragment
             android:id="@+id/settingsCatAppearanceFragment"
             android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatAppearanceFragment"

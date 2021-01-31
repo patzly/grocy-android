@@ -562,7 +562,7 @@
                         style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
                         android:background="@null"
                         android:paddingTop="0dp"
-                        android:paddingBottom="8dp"
+                        android:paddingBottom="0dp"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:layout_marginStart="72dp"
