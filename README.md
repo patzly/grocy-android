@@ -68,13 +68,11 @@ If you run into a bug or miss a feature, feel free to give feedback in the app, 
 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
-Translations which reached a completion level of 80% will be included in releases.
+Translations which reached a completion level of 80% will be included in releases.  
 
+Translated languages: Chinese (China), Czech, French, German, Hebrew, Italian, Polish, Portuguese (Brazil), Russian, Spanish, Swedish, Ukrainian, Dutch, Norwegian Bokmål  
 
-<a href="https://www.transifex.com/projects/p/grocy-android/resource/app-src-main-res-values-strings-xml--master/chart/image_png">
-<img src="https://chart.googleapis.com/chart?chxt=y%2Cr&chd=e%3A......................-E-Eq3&chco=B7E1FF%2C73E6D2%2CF4F6FB&chbh=9&chs=350x196&cht=bhs&chxl=0%3A%7CChinese+%28Taiwan%29%7CNorwegian+Bokm%C3%A5l%7CDutch%7CPortuguese+%28Brazil%29%7CSpanish%7CCzech%7CPolish%7CHebrew%7CGerman%7CItalian%7CEnglish%7CSwedish%7CFrench%7CChinese+%28China%29%7C1%3A%7C67%25%7C97%25%7C97%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C100%25%7C">
-</a></br>
-<a href="https://www.transifex.com/grocy-android/grocy-android">View translations</a><br/>
+Thanks for your contributions!
 
 ## About
 
