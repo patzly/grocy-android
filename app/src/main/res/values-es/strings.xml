@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">El codigo de barras ya existe</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Este producto todavía tiene stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
     <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>

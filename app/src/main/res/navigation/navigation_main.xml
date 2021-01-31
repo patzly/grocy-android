@@ -190,15 +190,6 @@
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <fragment
-        android:id="@+id/missingBatchItemsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MissingBatchItemsFragment"
-        android:label="MissingBatchItemsFragment"
-        tools:layout="@layout/fragment_missing_batch_items" >
-        <argument
-            android:name="missingBatchItems"
-            app:argType="xyz.zedler.patrick.grocy.model.MissingBatchItem[]" />
-    </fragment>
-    <fragment
         android:id="@+id/scanInputFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.ScanInputFragment"
         android:label="ScanInputFragment"

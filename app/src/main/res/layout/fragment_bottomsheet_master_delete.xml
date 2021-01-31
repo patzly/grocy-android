@@ -13,8 +13,7 @@
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
         android:textAlignment="viewStart"
-        android:fontFamily="@font/roboto_mono_bold"
-        android:textSize="17sp"
+        android:textSize="16sp"
         android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
 
     <LinearLayout

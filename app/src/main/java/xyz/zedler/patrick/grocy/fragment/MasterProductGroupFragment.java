@@ -41,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -49,7 +48,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -66,7 +64,6 @@ public class MasterProductGroupFragment extends BaseFragment {
     private FragmentMasterProductGroupBinding binding;
 
     private ArrayList<ProductGroup> productGroups;
-    private ArrayList<Product> products;
     private ArrayList<String> productGroupNames;
     private ProductGroup editProductGroup;
 
@@ -112,7 +109,6 @@ public class MasterProductGroupFragment extends BaseFragment {
         // VARIABLES
 
         productGroups = new ArrayList<>();
-        products = new ArrayList<>();
         productGroupNames = new ArrayList<>();
         editProductGroup = null;
 
@@ -196,7 +192,6 @@ public class MasterProductGroupFragment extends BaseFragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("productGroups", productGroups);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("productGroupNames", productGroupNames);
 
         outState.putParcelable("editProductGroup", editProductGroup);
@@ -208,7 +203,6 @@ public class MasterProductGroupFragment extends BaseFragment {
         if(isHidden()) return;
 
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
-        products = savedInstanceState.getParcelableArrayList("products");
         productGroupNames = savedInstanceState.getStringArrayList("productGroupNames");
 
         editProductGroup = savedInstanceState.getParcelable("editProductGroup");
@@ -255,7 +249,6 @@ public class MasterProductGroupFragment extends BaseFragment {
     private void download() {
         binding.swipeMasterProductGroup.setRefreshing(true);
         downloadProductGroups();
-        downloadProducts();
     }
 
     private void downloadProductGroups() {
@@ -294,16 +287,6 @@ public class MasterProductGroupFragment extends BaseFragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -425,28 +408,12 @@ public class MasterProductGroupFragment extends BaseFragment {
         binding.editTextMasterProductGroupDescription.setText(null);
     }
 
-    public void checkForUsage(ProductGroup productGroup) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getProductGroupId() == null) continue;
-                if(product.getProductGroupId().equals(String.valueOf(productGroup.getId()))) {
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.binding.frameMainContainer,
-                                    activity.getString(
-                                            R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.property_product_group)
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            )
-                    );
-                    return;
-                }
-            }
-        }
+    public void deleteProductGroupSafely() {
+        if(editProductGroup == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT_GROUP);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
@@ -474,7 +441,7 @@ public class MasterProductGroupFragment extends BaseFragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editProductGroup);
+                deleteProductGroupSafely();
                 return true;
             });
             delete.setVisible(editProductGroup != null);

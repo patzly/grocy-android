@@ -234,6 +234,7 @@ public final class Constants {
         public final static String CREATE = "action_create"; // raw string is also used in navigation_main.xml
         public final static String EDIT = "action_edit";
         public final static String SAVE = "action_save"; // raw string is also used in navigation_main.xml
+        public final static String DELETE = "action_delete";
         public final static String LINK = "action_link";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
@@ -282,6 +283,7 @@ public final class Constants {
         public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
+        public final static String ENTITY = "entity";
         public final static String ENTITY_TEXT = "entity_text";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";

@@ -117,7 +117,6 @@
     <string name="msg_barcode_duplicate">Streepjescode bestaat al</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Verwijder %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Dit product heeft nog voorraad</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>

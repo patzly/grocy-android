@@ -41,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -50,7 +49,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -66,7 +64,6 @@ public class MasterLocationFragment extends BaseFragment {
     private FragmentMasterLocationBinding binding;
 
     private ArrayList<Location> locations;
-    private ArrayList<Product> products;
     private ArrayList<String> locationNames;
     private Location editLocation;
 
@@ -110,7 +107,6 @@ public class MasterLocationFragment extends BaseFragment {
         // INITIALIZE VARIABLES
 
         locations = new ArrayList<>();
-        products = new ArrayList<>();
         locationNames = new ArrayList<>();
 
         editLocation = null;
@@ -204,7 +200,6 @@ public class MasterLocationFragment extends BaseFragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("locations", locations);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("locationNames", locationNames);
 
         outState.putParcelable("editLocation", editLocation);
@@ -216,7 +211,6 @@ public class MasterLocationFragment extends BaseFragment {
         if(isHidden()) return;
 
         locations = savedInstanceState.getParcelableArrayList("locations");
-        products = savedInstanceState.getParcelableArrayList("products");
         locationNames = savedInstanceState.getStringArrayList("locationNames");
 
         editLocation = savedInstanceState.getParcelable("editLocation");
@@ -270,7 +264,6 @@ public class MasterLocationFragment extends BaseFragment {
     private void download() {
         binding.swipeMasterLocation.setRefreshing(true);
         downloadLocations();
-        downloadProducts();
     }
 
     private void downloadLocations() {
@@ -309,16 +302,6 @@ public class MasterLocationFragment extends BaseFragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -439,27 +422,12 @@ public class MasterLocationFragment extends BaseFragment {
         binding.checkboxMasterLocationFreezer.setChecked(false);
     }
 
-    public void checkForUsage(Location location) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getLocationIdInt() == location.getId()) {
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.binding.frameMainContainer,
-                                    activity.getString(
-                                            R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.property_location)
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            )
-                    );
-                    return;
-                }
-            }
-        }
+    public void deleteLocationSafely() {
+        if(editLocation == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.LOCATIONS);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editLocation.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editLocation.getName());
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
@@ -467,7 +435,7 @@ public class MasterLocationFragment extends BaseFragment {
     public void deleteObject(int locationId) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, locationId),
-                response -> activity.dismissFragment(),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }
@@ -487,7 +455,7 @@ public class MasterLocationFragment extends BaseFragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editLocation);
+                deleteLocationSafely();
                 return true;
             });
             delete.setVisible(editLocation != null);

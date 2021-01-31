@@ -122,7 +122,15 @@ public class FormDataMasterProductCatLocation {
     }
 
     public Product fillProduct(@NonNull Product product) {
-        if(!isFormValid()) return product;
+        if(!isFormValid()) {
+            if(locationLive.getValue() == null && NumUtil.isStringInt(product.getLocationId())) {
+                product.setLocationId(null);
+            }
+            if(storeLive.getValue() == null && NumUtil.isStringInt(product.getStoreId())) {
+                product.setStoreId(null);
+            }
+            return product;
+        }
         Location location = locationLive.getValue();
         Store store = storeLive.getValue();
         product.setLocationId(location != null ? String.valueOf(location.getId()) : null);

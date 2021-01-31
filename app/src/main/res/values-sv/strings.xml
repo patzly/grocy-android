@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Streckkod finns redan</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Radera %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Den här produkten finns fortfarande i lager</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
     <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>

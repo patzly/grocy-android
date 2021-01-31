@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -140,7 +141,11 @@ public class MasterProductFragment extends BaseFragment {
         String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
         if(action != null) {
             removeForThisDestination(Constants.ARGUMENT.ACTION);
-            new Handler().postDelayed(() -> viewModel.saveProduct(), 500);
+            if(action.equals(Constants.ACTION.SAVE)) {
+                new Handler().postDelayed(() -> viewModel.saveProduct(), 500);
+            } else if(action.equals(Constants.ACTION.DELETE)) {
+                new Handler().postDelayed(() -> viewModel.deleteProductSafely(), 500);
+            }
         }
 
         viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
@@ -160,7 +165,7 @@ public class MasterProductFragment extends BaseFragment {
                 Constants.FAB.POSITION.END,
                 viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
                 animated,
-                () -> {}
+                this::setUpBottomMenu
         );
         activity.updateFab(
                 R.drawable.ic_round_backup,
@@ -174,6 +179,21 @@ public class MasterProductFragment extends BaseFragment {
     public void clearInputFocus() {
         activity.hideKeyboard();
         binding.textInputName.clearFocus();
+    }
+
+    @Override
+    public void deleteObject(int objectId) {
+        viewModel.deleteProduct(objectId);
+    }
+
+    public void setUpBottomMenu() {
+        MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
+        if(delete != null) {
+            delete.setOnMenuItemClickListener(item -> {
+                viewModel.deleteProductSafely();
+                return true;
+            });
+        }
     }
 
     @NonNull

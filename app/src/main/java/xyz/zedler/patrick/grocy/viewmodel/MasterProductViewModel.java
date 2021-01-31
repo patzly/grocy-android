@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
@@ -252,18 +253,22 @@ public class MasterProductViewModel extends BaseViewModel {
         }
     }
 
-    public void deleteItem() {
+    public void deleteProductSafely() {
         if(!isActionEdit()) return;
-        /*ShoppingListItem shoppingListItem = args.getShoppingListItem();
-        assert shoppingListItem != null;
+        Product product = formData.getProductLive().getValue();
+        Bundle argsBundle = new Bundle();
+        argsBundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCTS);
+        argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, product.getId());
+        argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, product.getName());
+        showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);
+    }
+
+    public void deleteProduct(int productId) {
         dlHelper.delete(
-                grocyApi.getObject(
-                        GrocyApi.ENTITY.SHOPPING_LIST,
-                        shoppingListItem.getId()
-                ),
-                response -> navigateUp(),
-                error -> showErrorMessage()
-        );*/
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId),
+                response -> sendEvent(Event.NAVIGATE_UP),
+                error -> showMessage(getString(R.string.error_undefined))
+        );
     }
 
     public Product getProduct(int id) {

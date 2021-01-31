@@ -1426,13 +1426,13 @@ public class MasterProductSimpleFragment extends BaseFragment {
                                 bundle
                         );
                     } else {
-                        activity.showSnackbar(
+                        /*activity.showSnackbar(
                                 Snackbar.make(
                                         activity.findViewById(R.id.frame_main_container),
                                         activity.getString(R.string.msg_master_delete_stock),
                                         Snackbar.LENGTH_LONG
                                 )
-                        );
+                        );*/
                     }
                 },
                 error -> { }

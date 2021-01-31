@@ -129,9 +129,10 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_deleted">%1$s deleted successfully</string>
     <string name="msg_barcode_duplicate">Barcode already exists</string>
-    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
-    <string name="msg_master_delete">Delete %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">This product still has stock</string>
+    <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">Are you sure to delete %1$s \"%2$s\"?</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_master_delete_product">Are you sure to delete product \"%1$s\"?\n\nThis also removes any stock amount, the journal and all other references of this product - consider disabling it instead, if you want to keep that and just hide the product.</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">This %1$s is still in use</string>
     <string name="msg_item_marked_as_done">Marked item as done</string>

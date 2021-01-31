@@ -324,59 +324,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     public void deleteObjectSafely(Object object) {
         String objectName = ObjectUtil.getObjectName(object, entity);
         int objectId = ObjectUtil.getObjectId(object, entity);
-        int entityStrId;
-        switch (entity) {
-            case GrocyApi.ENTITY.PRODUCTS:
-                entityStrId = R.string.property_product;
-                break;
-            case GrocyApi.ENTITY.QUANTITY_UNITS:
-                entityStrId = R.string.property_quantity_unit;
-                break;
-            case GrocyApi.ENTITY.LOCATIONS:
-                entityStrId = R.string.property_location;
-                break;
-            case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                entityStrId = R.string.property_product_group;
-                break;
-            default: // STORES
-                entityStrId = R.string.property_store;
-        }
-        String entityText = getString(entityStrId);
-
-        if(!entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-            dlHelper.getProducts(products -> {
-                for(Object p : products) {
-                    Product product = (Product) p;
-                    if(entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)
-                            && product.getQuIdStock() != objectId
-                            && product.getQuIdPurchase() != objectId
-                            || entity.equals(GrocyApi.ENTITY.LOCATIONS)
-                            && product.getLocationIdInt() == objectId
-                            || entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)
-                            && NumUtil.isStringInt(product.getProductGroupId())
-                            && Integer.parseInt(product.getProductGroupId()) == objectId
-                            || entity.equals(GrocyApi.ENTITY.STORES)
-                            && NumUtil.isStringInt(product.getStoreId())
-                            && Integer.parseInt(product.getStoreId()) == objectId
-                    ) {
-                        showMessage(getApplication()
-                                .getString(R.string.msg_master_delete_usage, entityText));
-                        return;
-                    }
-                }
-                showMasterDeleteBottomSheet(entityText, objectName, objectId);
-            }, error -> showMessage(getString(R.string.error_network)))
-                    .perform(dlHelper.getUuid());
-        } else { // PRODUCTS
-            dlHelper.getProductDetails(ObjectUtil.getObjectId(object, entity), productDetails -> {
-                if(productDetails != null && productDetails.getStockAmount() == 0) {
-                    showMasterDeleteBottomSheet(entityText, objectName, objectId);
-                } else {
-                    showMessage(getString(R.string.msg_master_delete_stock));
-                }
-            }, error -> showMessage(getString(R.string.error_check_usage)))
-                    .perform(dlHelper.getUuid());
-        }
+        showMasterDeleteBottomSheet(entity, objectName, objectId);
     }
 
     public void deleteObject(int objectId) {
@@ -387,9 +335,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
         );
     }
 
-    private void showMasterDeleteBottomSheet(String entityText, String objectName, int objectId) {
+    private void showMasterDeleteBottomSheet(String entity, String objectName, int objectId) {
         Bundle argsBundle = new Bundle();
-        argsBundle.putString(Constants.ARGUMENT.ENTITY_TEXT, entityText);
+        argsBundle.putString(Constants.ARGUMENT.ENTITY, entity);
         argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, objectId);
         argsBundle.putString(Constants.ARGUMENT.OBJECT_NAME, objectName);
         showBottomSheet(new MasterDeleteBottomSheet(), argsBundle);

@@ -49,7 +49,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -66,7 +65,6 @@ public class MasterStoreFragment extends BaseFragment {
     private FragmentMasterStoreBinding binding;
 
     private ArrayList<Store> stores;
-    private ArrayList<Product> products;
     private ArrayList<String> storeNames;
     private Store editStore;
 
@@ -108,7 +106,6 @@ public class MasterStoreFragment extends BaseFragment {
         // VARIABLES
 
         stores = new ArrayList<>();
-        products = new ArrayList<>();
         storeNames = new ArrayList<>();
 
         editStore = null;
@@ -191,7 +188,6 @@ public class MasterStoreFragment extends BaseFragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("stores", stores);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("storeNames", storeNames);
 
         outState.putParcelable("editStore", editStore);
@@ -201,7 +197,6 @@ public class MasterStoreFragment extends BaseFragment {
         if(isHidden()) return;
 
         stores = savedInstanceState.getParcelableArrayList("stores");
-        products = savedInstanceState.getParcelableArrayList("products");
         storeNames = savedInstanceState.getStringArrayList("storeNames");
 
         editStore = savedInstanceState.getParcelable("editStore");
@@ -255,7 +250,6 @@ public class MasterStoreFragment extends BaseFragment {
     private void download() {
         binding.swipeMasterStore.setRefreshing(true);
         downloadStores();
-        downloadProducts();
     }
 
     private void downloadStores() {
@@ -294,16 +288,6 @@ public class MasterStoreFragment extends BaseFragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -416,28 +400,12 @@ public class MasterStoreFragment extends BaseFragment {
         binding.editTextMasterStoreDescription.setText(null);
     }
 
-    public void checkForUsage(Store store) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getStoreId() == null) continue;
-                if(product.getStoreId().equals(String.valueOf(store.getId()))) {
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
-                                    activity.getString(
-                                            R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.property_store)
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            )
-                    );
-                    return;
-                }
-            }
-        }
+    public void deleteStoreSafely() {
+        if(editStore == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.STORE, store);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.STORE);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.STORES);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editStore.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editStore.getName());
         activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
@@ -465,7 +433,7 @@ public class MasterStoreFragment extends BaseFragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editStore);
+                deleteStoreSafely();
                 return true;
             });
             delete.setVisible(editStore != null);

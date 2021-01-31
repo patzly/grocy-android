@@ -32,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -60,18 +61,46 @@ public class MasterDeleteBottomSheet extends BaseBottomSheet {
         activity = (MainActivity) getActivity();
         assert activity != null;
 
-        String textType = requireArguments().getString(Constants.ARGUMENT.ENTITY_TEXT);
+        String entity = requireArguments().getString(Constants.ARGUMENT.ENTITY);
         String textName = requireArguments().getString(Constants.ARGUMENT.OBJECT_NAME);
         int objectId = requireArguments().getInt(Constants.ARGUMENT.OBJECT_ID);
 
+        int entityStrId;
+        switch (entity) {
+            case GrocyApi.ENTITY.PRODUCTS:
+                entityStrId = R.string.property_product;
+                break;
+            case GrocyApi.ENTITY.QUANTITY_UNITS:
+                entityStrId = R.string.property_quantity_unit;
+                break;
+            case GrocyApi.ENTITY.LOCATIONS:
+                entityStrId = R.string.property_location;
+                break;
+            case GrocyApi.ENTITY.PRODUCT_GROUPS:
+                entityStrId = R.string.property_product_group;
+                break;
+            default: // STORES
+                entityStrId = R.string.property_store;
+        }
+        String entityText = getString(entityStrId);
+
         TextView textView = view.findViewById(R.id.text_master_delete_question);
-        textView.setText(
-                activity.getString(
-                        R.string.msg_master_delete,
-                        textType,
-                        textName
-                )
-        );
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
+            textView.setText(
+                    activity.getString(
+                            R.string.msg_master_delete_product,
+                            textName
+                    )
+            );
+        } else {
+            textView.setText(
+                    activity.getString(
+                            R.string.msg_master_delete,
+                            entityText,
+                            textName
+                    )
+            );
+        }
 
         view.findViewById(R.id.button_master_delete_delete).setOnClickListener(v -> {
             BaseFragment currentFragment = activity.getCurrentFragment();
