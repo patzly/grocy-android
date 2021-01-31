@@ -368,7 +368,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, editQuantityUnit.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveQuantityUnit: " + error);
@@ -378,7 +378,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveQuantityUnit: " + error);
@@ -438,7 +438,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     public void deleteObject(int quantityUnitId) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnitId),
-                response -> activity.dismissFragment(),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }

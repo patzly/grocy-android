@@ -362,7 +362,7 @@ public class MasterProductGroupFragment extends BaseFragment {
                             editProductGroup.getId()
                     ),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveProductGroup: " + error);
@@ -372,7 +372,7 @@ public class MasterProductGroupFragment extends BaseFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveProductGroup: " + error);
@@ -421,7 +421,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     public void deleteObject(int productGroupId) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
-                response -> activity.dismissFragment(),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }

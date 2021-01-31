@@ -99,25 +99,6 @@ public class QuantityUnitsBottomSheetNew extends BaseBottomSheet
     @Override
     public void onItemRowClicked(int position) {
         activity.getCurrentFragment().selectQuantityUnit(quantityUnits.get(position));
-
-        /*if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
-            assert bundle != null;
-            String type = bundle.getString(Constants.ARGUMENT.TYPE);
-            assert type != null;
-            if(type.equals(Constants.ARGUMENT.QU_PURCHASE)) {
-                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitPurchase(
-                        quantityUnits.get(position).getId()
-                );
-            } else {
-                ((MasterProductSimpleFragment) currentFragment).selectQuantityUnitStock(
-                        quantityUnits.get(position).getId()
-                );
-            }
-        }
-        activity.getCurrentFragment().setOption(
-                quantityUnits.get(position),
-                requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
-        );*/
         dismiss();
     }
 

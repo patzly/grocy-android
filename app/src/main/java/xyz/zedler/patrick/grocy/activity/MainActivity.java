@@ -378,8 +378,6 @@ public class MainActivity extends AppCompatActivity {
         hideKeyboard();
     }
 
-    public void dismissFragment() {}
-
     public boolean isOnline() {
         return netUtil.isOnline();
     }

@@ -358,7 +358,7 @@ public class MasterStoreFragment extends BaseFragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.STORES, editStore.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveStore: " + error);
@@ -368,7 +368,7 @@ public class MasterStoreFragment extends BaseFragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.STORES),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveStore: " + error);
@@ -413,7 +413,7 @@ public class MasterStoreFragment extends BaseFragment {
     public void deleteObject(int storeId) {
         dlHelper.delete(
                 grocyApi.getObject(GrocyApi.ENTITY.STORES, storeId),
-                response -> activity.dismissFragment(),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }

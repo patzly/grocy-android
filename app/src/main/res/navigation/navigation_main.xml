@@ -64,12 +64,6 @@
         <action
             android:id="@+id/action_purchaseFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
-        <action
-            android:id="@+id/action_purchaseFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="shoppingListItems"
             android:defaultValue="@null"
@@ -88,42 +82,11 @@
         android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
         android:label="SettingsActivity"
         tools:layout="@layout/activity_settings" />
-    <fragment
-        android:id="@+id/masterProductSimpleFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.MasterProductSimpleFragment"
-        android:label="MasterProductSimpleFragment"
-        tools:layout="@layout/fragment_master_product_simple" >
-        <argument
-            android:name="action"
-            app:argType="string" />
-        <argument
-            android:name="product"
-            app:argType="xyz.zedler.patrick.grocy.model.Product"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="createProductObject"
-            app:argType="xyz.zedler.patrick.grocy.model.CreateProduct"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <action
-            android:id="@+id/action_masterProductSimpleFragment_to_scanInputFragment"
-            app:destination="@id/scanInputFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-    </fragment>
     <dialog
         android:id="@+id/productOverviewBottomSheetDialogFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet"
         android:label="ProductOverviewBottomSheetDialogFragment"
         tools:layout="@layout/fragment_bottomsheet_product_overview">
-        <action
-            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_masterProductSimpleFragment"
-            app:destination="@id/masterProductSimpleFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
         <argument
             android:name="productDetails"
             android:defaultValue="@null"
