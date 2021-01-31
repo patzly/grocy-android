@@ -25,7 +25,7 @@
     <string name="action_new">新的</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">上一个</string>
-    <string name="action_send_feedback">发送反馈</string>
+    <string name="action_feedback">发送反馈</string>
     <string name="action_reset">重启</string>
     <string name="action_reload">刷新</string>
     <string name="action_top_scroll">滚动到顶部</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">执行创建产品的采购交易</string>
     <string name="action_create_key">创建密钥</string>
     <string name="action_login">登录</string>
-    <string name="action_use_demo_account">使用演示账户</string>
+    <string name="action_try_demo_instance">使用演示账户</string>
     <string name="action_ignore">忽略</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">全部</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">条形码已存在</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">删除%1$s“%2$s”？</string>
-    <string name="msg_master_delete_stock">该产品仍有库存</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">这个%1$s还在用</string>
     <string name="msg_item_marked_as_done">将项目标记为已完成</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">空</string>
     <string name="subtitle_done">完成</string>
     <string name="subtitle_undone">未完成</string>
-    <string name="subtitle_never_expires">永不过期</string>
+    <string name="subtitle_never_overdue">永不过期</string>
     <string name="subtitle_selected">已选</string>
     <string name="subtitle_stock_entry_no_specific">先到期，然后先入先出</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">价格单位%1$s</string>
     <string name="property_quantity_unit">数量单位</string>
     <string name="property_quantity_units">数量单位</string>
-    <string name="property_qu_purchase">数量单位购买</string>
+    <string name="property_default_qu_purchase">数量单位购买</string>
     <string name="property_qu_stock">数量单位库存</string>
     <string name="property_qu_factor">库存采购</string>
     <string name="property_barcode">条形码</string>
     <string name="property_barcodes">条形码</string>
-    <string name="property_bbd">保质期</string>
-    <string name="property_bbd_next">下个保质期</string>
-    <string name="property_bb_days">保质期</string>
-    <string name="property_bb_days_default">默认保质期</string>
-    <string name="property_bb_days_default_opened">默认开封后保质期</string>
+    <string name="property_due_date">保质期</string>
+    <string name="property_due_date_next">下个保质期</string>
+    <string name="property_due_days">保质期</string>
+    <string name="property_due_days_default">默认保质期</string>
+    <string name="property_due_days_default_opened">默认开封后保质期</string>
     <string name="property_location">位置</string>
     <string name="property_location_default">默认位置</string>
     <string name="property_notes">笔记</string>
@@ -368,7 +367,7 @@
 
     <string name="category_licenses">开源许可证</string>
     <string name="category_general">通用</string>
-    <string name="category_purchase_consume">购买&amp; 消耗</string>
+    <string name="category_shopping_mode">购买&amp; 消耗</string>
     <string name="category_server">服务器</string>
     <string name="category_debugging">调试</string>
     <string name="category_presets">新产品预设</string>

@@ -16,11 +16,10 @@ package xyz.zedler.patrick.grocy.activity;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,8 +36,10 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ActivityNavigator;
 import androidx.preference.PreferenceManager;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -57,13 +58,12 @@ import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarScrollBehavior;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.SettingInputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -144,10 +144,10 @@ public class SettingsActivity extends AppCompatActivity
 			switch (item.getItemId()) {
 				case R.id.action_about:
 					IconUtil.start(item);
-					startActivity(new Intent(this, AboutActivity.class));
+					//startActivity(new Intent(this, AboutActivity.class));
 					break;
 				case R.id.action_feedback:
-					showBottomSheet(new FeedbackBottomSheetDialogFragment(), null);
+					showBottomSheet(new FeedbackBottomSheet(), null);
 					break;
 			}
 			return true;
@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity
 		);
 
 		String days = sharedPrefs.getString(
-				Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+				Constants.PREF.STOCK_DUE_SOON_DAYS,
 				String.valueOf(5)
 		);
 		textViewExpiringSoonDays = findViewById(R.id.text_setting_expiring_soon_days);
@@ -371,6 +371,12 @@ public class SettingsActivity extends AppCompatActivity
 		dlHelper.destroy();
 	}
 
+	@Override
+	public void finish() {
+		super.finish();
+		ActivityNavigator.applyPopAnimationsToPendingTransition(this);
+	}
+
 	private void hideDisabledFeatures() {
 		if(isFeatureDisabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
 			findViewById(R.id.linear_setting_list_indicator).setVisibility(View.GONE);
@@ -411,7 +417,7 @@ public class SettingsActivity extends AppCompatActivity
 						new DownloadHelper(this, TAG),
 						grocyApi,
 						sharedPrefs,
-						() -> showBottomSheet(new RestartBottomSheetDialogFragment(), null),
+						() -> showBottomSheet(new RestartBottomSheet(), null),
 						this::showErrorMessage
 				);
 				break;
@@ -419,7 +425,7 @@ public class SettingsActivity extends AppCompatActivity
 				Bundle bundle = null;
 				if(isDemo()) bundle = new Bundle();
 				// empty bundle for indicating demo type
-				showBottomSheet(new LogoutBottomSheetDialogFragment(), bundle);
+				//showBottomSheet(new LogoutBottomSheet(), bundle);
 				break;
 			case R.id.linear_setting_dark_mode:
 				switchDark.setChecked(!switchDark.isChecked());
@@ -435,14 +441,14 @@ public class SettingsActivity extends AppCompatActivity
 				Bundle bundleExpiringSoonDays = new Bundle();
 				bundleExpiringSoonDays.putString(
 						Constants.ARGUMENT.TYPE,
-						Constants.PREF.STOCK_EXPIRING_SOON_DAYS
+						Constants.PREF.STOCK_DUE_SOON_DAYS
 				);
 				bundleExpiringSoonDays.putString(
-						Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+						Constants.PREF.STOCK_DUE_SOON_DAYS,
 						textViewExpiringSoonDays.getText().toString()
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleExpiringSoonDays
 				);
 				break;
@@ -466,7 +472,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleUpdateInterval
 				);
 				break;
@@ -488,7 +494,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleAmountPurchase
 				);
 				break;
@@ -507,7 +513,7 @@ public class SettingsActivity extends AppCompatActivity
 						)
 				);
 				showBottomSheet(
-						new SettingInputBottomSheetDialogFragment(),
+						new SettingInputBottomSheet(),
 						bundleAmountConsume
 				);
 				break;
@@ -548,7 +554,8 @@ public class SettingsActivity extends AppCompatActivity
 				switchInfoLogs.setChecked(!switchInfoLogs.isChecked());
 				break;
 			case R.id.linear_setting_logs:
-				startActivity(new Intent(this, LogActivity.class));
+				// TODO: navigate to LogFragment
+				//startActivity(new Intent(this, LogActivity.class));
 				break;
 		}
 	}
@@ -605,7 +612,7 @@ public class SettingsActivity extends AppCompatActivity
 									Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
 									switchListIndicator.isChecked()
 							).apply();
-							showErrorMessage();
+							showErrorMessage(error);
 							if(debug) Log.e(TAG, "onCheckedChanged: list indicator: " + error);
 						}
 				);
@@ -659,7 +666,7 @@ public class SettingsActivity extends AppCompatActivity
 		tmpLocations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, tmpLocations);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetLocationId);
-		showBottomSheet(new LocationsBottomSheetDialogFragment(), bundleLocations);
+		showBottomSheet(new LocationsBottomSheet(), bundleLocations);
 	}
 
 	private Location getLocation(int id) {
@@ -694,7 +701,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetLocationId = locationId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setLocation: " + error);
 				}
 		);
@@ -730,7 +737,7 @@ public class SettingsActivity extends AppCompatActivity
 				tmpProductGroups
 		);
 		bundleProductGroups.putInt(Constants.ARGUMENT.SELECTED_ID, presetProductGroupId);
-		showBottomSheet(new ProductGroupsBottomSheetDialogFragment(), bundleProductGroups);
+		showBottomSheet(new ProductGroupsBottomSheet(), bundleProductGroups);
 	}
 
 	private ProductGroup getProductGroup(int id) {
@@ -765,7 +772,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetProductGroupId = productGroupId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setProductGroup: " + error);
 				}
 		);
@@ -798,7 +805,7 @@ public class SettingsActivity extends AppCompatActivity
 		tmpQuantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
 		bundleLocations.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, tmpQuantityUnits);
 		bundleLocations.putInt(Constants.ARGUMENT.SELECTED_ID, presetQuantityUnitId);
-		showBottomSheet(new QuantityUnitsBottomSheetDialogFragment(), bundleLocations);
+		showBottomSheet(new QuantityUnitsBottomSheet(), bundleLocations);
 	}
 
 	private QuantityUnit getQuantityUnit(int id) {
@@ -833,7 +840,7 @@ public class SettingsActivity extends AppCompatActivity
 					presetQuantityUnitId = quantityUnitId;
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setQuantityUnit: " + error);
 				}
 		);
@@ -847,16 +854,16 @@ public class SettingsActivity extends AppCompatActivity
 			if(debug) Log.e(TAG, "setExpiringSoonDays: " + e);
 		}
 		dlHelper.put(
-				grocyApi.getUserSetting(Constants.PREF.STOCK_EXPIRING_SOON_DAYS),
+				grocyApi.getUserSetting(Constants.PREF.STOCK_DUE_SOON_DAYS),
 				body,
 				response -> {
 					textViewExpiringSoonDays.setText(days);
 					sharedPrefs.edit()
-							.putString(Constants.PREF.STOCK_EXPIRING_SOON_DAYS, days)
+							.putString(Constants.PREF.STOCK_DUE_SOON_DAYS, days)
 							.apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setExpiringSoonDays: " + error);
 				}
 		);
@@ -875,7 +882,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					String amountFormatted = amount == null || amount.isEmpty()
 							? null
-							: NumUtil.trim(NumUtil.stringToDouble(amount));
+							: NumUtil.trim(NumUtil.toDouble(amount));
 					textViewAmountPurchase.setText(
 							amountFormatted != null
 									? amountFormatted
@@ -887,7 +894,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setAmountPurchase: " + error);
 				}
 		);
@@ -906,7 +913,7 @@ public class SettingsActivity extends AppCompatActivity
 				response -> {
 					String amountFormatted = amount == null || amount.isEmpty()
 							? null
-							: NumUtil.trim(NumUtil.stringToDouble(amount));
+							: NumUtil.trim(NumUtil.toDouble(amount));
 					textViewAmountConsume.setText(
 							amountFormatted != null
 									? amountFormatted
@@ -918,7 +925,7 @@ public class SettingsActivity extends AppCompatActivity
 					).apply();
 				},
 				error -> {
-					showErrorMessage();
+					showErrorMessage(error);
 					if(debug) Log.e(TAG, "setAmountConsume: " + error);
 				}
 		);
@@ -957,7 +964,7 @@ public class SettingsActivity extends AppCompatActivity
 		Snackbar.make(findViewById(R.id.scroll_settings), msg, Snackbar.LENGTH_SHORT).show();
 	}
 
-	private void showErrorMessage() {
+	private void showErrorMessage(VolleyError error) {
 		showMessage(getString(R.string.error_undefined));
 	}
 

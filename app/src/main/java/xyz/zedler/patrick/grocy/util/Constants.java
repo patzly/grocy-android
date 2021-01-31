@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.util;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 public final class Constants {
@@ -38,16 +38,19 @@ public final class Constants {
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 
-        public final static String STOCK_EXPIRING_SOON_DAYS = "stock_expring_soon_days";
+        // DO NOT EDIT THE FOLLOWING STRINGS, THEY ARE FOR SERVER SYNC STUFF
+        // (but you can edit the variable names)
+        public final static String STOCK_DUE_SOON_DAYS = "stock_due_soon_days";
         public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
         public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
         public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
         public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
         public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
-        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
         public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
         public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
+        // end of server sync stuff
 
+        public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
         public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
         public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
 
@@ -58,6 +61,18 @@ public final class Constants {
         public final static String BATCH_CONFIG_STOCK_LOCATION = "batch_config_stock_location";
         public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
         public final static String BATCH_CONFIG_CONSUME_ALL = "batch_config_consume_all";
+
+        public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
+        public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
+        public final static String DB_LAST_TIME_LOCATIONS = "db_last_time_locations";
+        public final static String DB_LAST_TIME_SHOPPING_LIST_ITEMS = "db_last_time_shopping_list_items";
+        public final static String DB_LAST_TIME_SHOPPING_LISTS = "db_last_time_shopping_lists";
+        public final static String DB_LAST_TIME_PRODUCT_GROUPS = "db_last_time_product_groups";
+        public final static String DB_LAST_TIME_QUANTITY_UNITS = "db_last_time_quantity_units";
+        public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
+        public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
+        public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
+        public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
 
         public final static String DARK_MODE = "force_dark_mode";
         public final static String FOOD_FACTS = "use_open_food_facts";
@@ -70,52 +85,107 @@ public final class Constants {
         public final static String UPDATE_INFO_READ = "update_info_read";
     }
 
+    public final static class SETTINGS {
+        public final static class SERVER {
+            public final static String GROCY_URL = "grocy_url";
+            public final static String GROCY_VERSION = "grocy_version";
+            public final static String RELOAD_CONFIG = "reload_config";
+            public final static String LOGOUT = "logout";
+        }
+        public final static class APPEARANCE {
+            public final static String DARK_MODE = "dark_mode";
+        }
+        public final static class NETWORK {
+            public final static String ORBOT = "orbot";
+            public final static String SOCKS_PROXY = "socks_proxy";
+            public final static String LOADING_CIRCLE = "loading_circle";
+            public final static String LOADING_TIMEOUT = "loading_timeout";
+        }
+        public final static class BEHAVIOR {
+            public final static String BEGINNER_MODE = "beginner_mode";
+            public final static String SHORTCUTS = "shortcuts";
+            public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
+            public final static String START_DESTINATION = "start_destination";
+            public final static String SCAN_MODE_CONSUME = "scan_mode_consume_enabled";
+            public final static String SCAN_MODE_PURCHASE = "scan_mode_purchase_enabled";
+            public final static String SCAN_MODE_SHOPPING_ITEM = "scan_mode_shopping_item";
+        }
+        public final static class SCANNER {
+            public final static String FOOD_FACTS = "food_facts";
+            public final static String FRONT_CAM = "front_cam";
+            public final static String EXTERNAL_SCANNER = "external_scanner";
+        }
+        public final static class STOCK {
+            public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String SHOW_PURCHASED_DATE = "show_purchased_date_on_purchase";
+            public final static String DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount"; // used for pref sync, DO NOT EDIT VALUE
+            public final static String DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
+        }
+        public final static class SHOPPING_MODE {
+            public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
+            public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
+            public final static String SHOW_DONE_ITEMS = "show_done_items";
+        }
+        public final static class DEBUGGING {
+            public final static String ENABLE_DEBUGGING = "enable_debugging";
+            public final static String ENABLE_INFO_LOGS = "enable_info_logs";
+            public final static String SHOW_LOGS = "show_logs";
+        }
+    }
+
+    public final static class SETTINGS_DEFAULT {
+        public final static class SERVER {
+        }
+        public final static class APPEARANCE {
+            public final static boolean DARK_MODE = false;
+        }
+        public final static class NETWORK {
+            public final static int LOADING_TIMEOUT = 30;
+            public final static boolean LOADING_CIRCLE = false;
+        }
+        public final static class BEHAVIOR {
+            public final static boolean BEGINNER_MODE = true;
+            public final static boolean EXPAND_BOTTOM_SHEETS = false;
+            public final static boolean SCAN_MODE_PURCHASE = false;
+            public final static boolean SCAN_MODE_SHOPPING_ITEM = false;
+        }
+        public final static class SCANNER {
+            public final static boolean FOOD_FACTS = false;
+            public final static boolean FRONT_CAM = false;
+            public final static boolean EXTERNAL_SCANNER = false;
+        }
+        public final static class STOCK {
+            public final static int LOCATION = -1;
+            public final static int PRODUCT_GROUP = -1;
+            public final static int QUANTITY_UNIT = -1;
+            public final static boolean DISPLAY_DOTS_IN_STOCK = true;
+            public final static String EXPIRING_SOON_DAYS = "5";
+            public final static boolean SHOW_PURCHASED_DATE = false;
+            public final static String DEFAULT_PURCHASE_AMOUNT = "1";
+            public final static String DEFAULT_CONSUME_AMOUNT = "1";
+        }
+        public final static class SHOPPING_MODE {
+            public final static int UPDATE_INTERVAL = 10;
+            public final static boolean KEEP_SCREEN_ON = true;
+            public final static boolean SHOW_DONE_ITEMS = true;
+        }
+        public final static class DEBUGGING {
+            public final static boolean ENABLE_DEBUGGING = false;
+            public final static boolean ENABLE_INFO_LOGS = false;
+        }
+    }
+
     public final static class URL {
         public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
         public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-pagetop";
     }
 
     public final static class DATE {
-        public final static String NEVER_EXPIRES = "2999-12-31";
-    }
-
-    public final static class UI {
-        public final static String STOCK = "stock";
-        public final static String STOCK_DEFAULT = "stock_default";
-        public final static String STOCK_SEARCH	= "stock_search";
-        public final static String SHOPPING_LIST = "shopping_list";
-        public final static String SHOPPING_LIST_EDIT = "shopping_list_edit";
-        public final static String SHOPPING_LIST_DEFAULT = "shopping_list_default";
-        public final static String SHOPPING_LIST_SEARCH = "shopping_list_search";
-        public final static String SHOPPING_LIST_OFFLINE_DEFAULT = "shopping_list_offline";
-        public final static String SHOPPING_LIST_OFFLINE_SEARCH = "shopping_list_offline_search";
-        public final static String SHOPPING_LIST_ITEM_EDIT = "shopping_list_item_edit";
-        public final static String CONSUME = "consume";
-        public final static String PURCHASE = "purchase";
-        public final static String MASTER = "master";
-        public final static String MASTER_PRODUCTS = "master_products";
-        public final static String MASTER_PRODUCTS_DEFAULT = "master_products_default";
-        public final static String MASTER_PRODUCTS_SEARCH = "master_products_search";
-        public final static String MASTER_PRODUCT_EXTENDED = "master_product_extended";
-        public final static String MASTER_PRODUCT_SIMPLE = "master_product_simple";
-        public final static String MASTER_LOCATIONS = "master_locations";
-        public final static String MASTER_LOCATIONS_DEFAULT = "master_locations_default";
-        public final static String MASTER_LOCATIONS_SEARCH = "master_locations_search";
-        public final static String MASTER_LOCATION = "master_location";
-        public final static String MASTER_STORES = "master_stores";
-        public final static String MASTER_STORES_DEFAULT = "master_stores_default";
-        public final static String MASTER_STORES_SEARCH = "master_stores_search";
-        public final static String MASTER_STORE = "master_store";
-        public final static String MASTER_QUANTITY_UNITS = "master_quantity_units";
-        public final static String MASTER_QUANTITY_UNITS_DEFAULT = "master_quantity_units_default";
-        public final static String MASTER_QUANTITY_UNITS_SEARCH = "master_quantity_units_search";
-        public final static String MASTER_QUANTITY_UNIT = "master_quantity_unit";
-        public final static String MASTER_PRODUCT_GROUPS = "master_product_groups";
-        public final static String MASTER_PRODUCT_GROUPS_DEFAULT = "master_product_groups_default";
-        public final static String MASTER_PRODUCT_GROUPS_SEARCH = "master_product_groups_search";
-        public final static String MASTER_PRODUCT_GROUP = "master_product_group";
-        public final static String BATCH_SCAN = "batch_scan";
-        public final static String MISSING_BATCH_ITEMS = "missing_batch_products";
+        public final static String NEVER_OVERDUE = "2999-12-31";
     }
 
     public final static class STOCK {
@@ -139,6 +209,13 @@ public final class Constants {
         public final static String NONE = "none";
     }
 
+    public final static class ERROR {  // warning: create no unclear error states, that's bad UX
+        public final static String NONE = "none"; // no error
+        public final static String COMMUNICATION = "communication"; // example: server code 400
+        public final static String NETWORK = "network"; // example: any volley error other than 400
+        public final static String OFFLINE = "offline"; // example: device is offline
+    }
+
     public final static class SHOPPING_LIST {
         public final static class FILTER {
             public final static String UNDONE = "undone";
@@ -149,7 +226,6 @@ public final class Constants {
 
     public final static class EXTRA {
         public final static String SCAN_RESULT = "scan_result";
-        public final static String AFTER_FEATURES_ACTIVITY = "after_features_activity";
     }
 
     public final static class ACTION {
@@ -158,22 +234,16 @@ public final class Constants {
         public final static String CONSUME_ALL = "action_consume_all";
         public final static String CONSUME_SPOILED = "action_consume_spoiled";
         public final static String PURCHASE = "action_purchase";
-        public final static String CREATE = "action_create";
+        public final static String CREATE = "action_create"; // raw string is also used in navigation_main.xml
         public final static String EDIT = "action_edit";
+        public final static String SAVE = "action_save"; // raw string is also used in navigation_main.xml
+        public final static String DELETE = "action_delete";
         public final static String LINK = "action_link";
-        public final static String CREATE_FROM_STOCK = "action_create_from_stock";
         public final static String CREATE_THEN_PURCHASE = "create_then_purchase";
         public final static String CREATE_THEN_PURCHASE_BATCH = "create_then_purchase_batch";
         public final static String CREATE_THEN_SHOPPING_LIST_ITEM_EDIT = "create_then_shopping_list_item_edit";
-        public final static String EDIT_THEN_PURCHASE = "edit_then_purchase";
         public final static String EDIT_THEN_PURCHASE_BATCH = "edit_then_purchase_batch";
-        public final static String EDIT_THEN_CONSUME = "edit_then_consume";
-        public final static String EDIT_THEN_SHOPPING_LIST_ITEM_EDIT = "edit_then_shopping_list_item_edit";
         public final static String DELETE_THEN_PURCHASE_BATCH = "delete_then_purchase_batch";
-        public final static String PURCHASE_THEN_SHOPPING_LIST = "purchase_then_shopping_list";
-        public final static String PURCHASE_MULTI_THEN_SHOPPING_LIST = "purchase_multi_then_shopping_list"; // purchase multi shopping list items
-        public final static String PURCHASE_THEN_STOCK = "purchase_then_stock";
-        public final static String CONSUME_THEN_STOCK = "consume_then_stock";
     }
 
     public final static class SHORTCUT_ACTION {
@@ -185,7 +255,8 @@ public final class Constants {
     }
 
     public final static class ARGUMENT {
-        public final static String UI_MODE = "ui_mode";
+        public final static String DECIMAL = "decimal";
+        public final static String PREFERENCE = "option";
         public final static String ANIMATED = "animated";
         public final static String STOCK_ITEM = "stock_item";
         public final static String QUANTITY_UNIT = "quantity_unit";
@@ -208,10 +279,15 @@ public final class Constants {
         public final static String PRODUCT = "product";
         public final static String PRODUCTS = "products";
         public final static String PRODUCT_NAME = "product_name";
+        public final static String PRODUCT_INPUT = "product_input";
+        public final static String OBJECT_NAME = "object_name";
+        public final static String OBJECT_ID = "object_id";
         public final static String DEMO_CHOSEN = "demo_chosen";
         public final static String POSITION = "position";
         public final static String PRODUCT_NAMES = "product_names";
         public final static String TYPE = "type";
+        public final static String ENTITY = "entity";
+        public final static String ENTITY_TEXT = "entity_text";
         public final static String SHOW_ACTIONS = "show_actions";
         public final static String SELECTED_ID = "selected_id";
         public final static String PRODUCT_ID = "product_id";
@@ -225,10 +301,11 @@ public final class Constants {
         public final static String BATCH_ITEMS = "batch_items";
         public final static String ACTION = "action";
         public final static String BUNDLE = "bundle";
-        public final static String DEFAULT_BEST_BEFORE_DAYS = "default_best_before_days";
+        public final static String DEFAULT_DAYS_FROM_NOW = "default_best_before_days";
         public final static String PRICE = "price";
         public final static String FACTOR = "factor";
         public final static String AMOUNT = "amount";
+        public final static String NUMBER = "number";
         public final static String TEXT = "text";
         public final static String FILE = "file";
         public final static String LINK = "link";

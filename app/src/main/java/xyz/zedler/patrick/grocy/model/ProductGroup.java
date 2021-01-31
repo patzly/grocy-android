@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.model;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.os.Parcel;
@@ -29,6 +29,8 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Objects;
 
 @Entity(tableName = "product_group_table")
 public class ProductGroup extends GroupedListItem implements Parcelable {
@@ -46,6 +48,10 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     @SerializedName("description")
     private String description;
 
+    @Ignore
+    @SerializedName("display_divider")
+    private int displayDivider = 1;
+
     /**
      * First element in bottomSheet selection: NONE (id = null)
      */
@@ -55,12 +61,21 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         this.name = name;
     }
 
+    @Ignore
+    public ProductGroup(int id, String name, String description, int displayDivider) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.displayDivider = displayDivider;
+    }
+
     public ProductGroup() {}  // for Room
 
     public ProductGroup(Parcel parcel) {
         id = parcel.readInt();
         name = parcel.readString();
         description = parcel.readString();
+        displayDivider = parcel.readInt();
     }
 
     @Override
@@ -68,6 +83,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
+        dest.writeInt(displayDivider);
     }
 
     public static final Creator<ProductGroup> CREATOR = new Creator<ProductGroup>() {
@@ -107,6 +123,18 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         this.description = description;
     }
 
+    public int getDisplayDivider() {
+        return displayDivider;
+    }
+
+    public void setDisplayDivider(int display) {
+        displayDivider = display;
+    }
+
+    public void setDisplayDivider(boolean display) {
+        displayDivider = display ? 1 : 0;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -117,9 +145,30 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
         return TYPE_HEADER;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductGroup that = (ProductGroup) o;
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                displayDivider == that.displayDivider;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, displayDivider);
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "ProductGroup(" + name + ')';
+    }
+
+    @NonNull
+    public ProductGroup getClone() {
+        return new ProductGroup(this.id, this.name, this.description, this.displayDivider);
     }
 }

@@ -130,11 +130,11 @@
                 layout="@layout/partial_empty"/>
 
             <include
-                android:id="@+id/linear_error"
+                android:id="@+id/relative_error"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_error"/>
+                layout="@layout/info_fullscreen"/>
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_master_product_groups"

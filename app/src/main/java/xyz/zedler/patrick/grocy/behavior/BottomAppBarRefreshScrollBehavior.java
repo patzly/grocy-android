@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.behavior;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.animation.Animator;
@@ -25,22 +25,22 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
-import xyz.zedler.patrick.grocy.view.CustomBottomAppBar;
+import xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar;
 
 public class BottomAppBarRefreshScrollBehavior {
 
@@ -63,7 +63,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private Activity activity;
 	private CustomBottomAppBar bottomAppBar;
 	private FloatingActionButton fabScroll;
-	private NestedScrollView nestedScrollView;
+	private View scrollView;
 	private ViewPropertyAnimator topScrollAnimator;
 
 	public BottomAppBarRefreshScrollBehavior(Activity activity) {
@@ -109,27 +109,30 @@ public class BottomAppBarRefreshScrollBehavior {
 			if(DEBUG) Log.e(TAG, "setUpScroll: activity is null!");
 			return;
 		}
-		nestedScrollView = activity.findViewById(nestedScrollViewId);
+		setUpScroll(activity.findViewById(nestedScrollViewId));
+	}
+
+	/**
+	 * Initializes the scroll view behavior like liftOnScroll etc.
+	 */
+	public void setUpScroll(View scrollViewNew) {
+		this.scrollView = scrollViewNew;
 		currentState = STATE_SCROLLED_UP;
 		if(fabScroll != null) fabScroll.hide();
-		measureScrollView();
-		if(nestedScrollView != null) {
-			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-					new ViewTreeObserver.OnGlobalLayoutListener() {
-						public void onGlobalLayout() {
-							nestedScrollView.setOnScrollChangeListener(onScrollChangeListener());
-							// Kill ViewTreeObserver
-							if(nestedScrollView.getViewTreeObserver().isAlive()) {
-								nestedScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(
-										this
-								);
-							}
-						}
-					});
+
+		if(scrollView != null && scrollView instanceof RecyclerView) {
+			((RecyclerView) scrollView).addOnScrollListener(onScrollListenerRecycler());
+		} else if(scrollView != null && scrollView instanceof NestedScrollView) {
+			((NestedScrollView) scrollView).setOnScrollChangeListener(onScrollChangeListener());
 		}
-		if(fabScroll != null) {
+
+		if(fabScroll != null && scrollView != null) {
 			fabScroll.setOnClickListener(v -> {
-				nestedScrollView.smoothScrollTo(0, 0);
+				if(scrollView != null && scrollView instanceof RecyclerView) {
+					((RecyclerView) scrollView).smoothScrollToPosition(0);
+				} else if(scrollView != null && scrollView instanceof NestedScrollView) {
+					((NestedScrollView) scrollView).smoothScrollTo(0, 0);
+				}
 				fabScroll.hide();
 			});
 		}
@@ -140,12 +143,52 @@ public class BottomAppBarRefreshScrollBehavior {
 		if(DEBUG) Log.i(TAG, "setUpScroll with ScrollView");
 	}
 
+	private RecyclerView.OnScrollListener onScrollListenerRecycler() {
+		return new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+				super.onScrolled(recyclerView, dx, dy);
+				int scrollAbsoluteY = recyclerView.computeVerticalScrollOffset();
+				if(!isTopScroll && scrollAbsoluteY == 0) { // TOP
+					onTopScroll();
+				} else if(dy < 0) {
+					storedFirstBottomScrollY = 0;
+					if(currentState != STATE_SCROLLED_UP) {
+						onScrollUp();
+					}
+					if(scrollAbsoluteY < UnitUtil.getDp(activity, topScrollLimit)
+							&& fabScroll != null && showTopScroll
+					) {
+						if (fabScroll.isOrWillBeShown()) fabScroll.hide();
+					}
+				} else if(dy > 0) {
+					if(storedFirstBottomScrollY == 0) {
+						storedFirstBottomScrollY = scrollAbsoluteY;
+					}
+					int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
+							activity,
+							24
+					);
+					if(currentState != STATE_SCROLLED_DOWN && scrollAbsoluteY > scrollYHide) { // DOWN
+						onScrollDown();
+					}
+					if(scrollAbsoluteY > UnitUtil.getDp(activity, topScrollLimit)
+							&& fabScroll != null && showTopScroll
+					) {
+						if (fabScroll.isOrWillBeHidden()) fabScroll.show();
+					}
+				}
+			}
+		};
+	}
+
 	private NestedScrollView.OnScrollChangeListener onScrollChangeListener() {
 		return (NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) -> {
 			if(DEBUG) Log.i(
 					TAG,
 					"onScrollChangeListener: newY = " + scrollY + ", oldY = " + oldScrollY
 			);
+			if(oldScrollY == 0 && scrollY > 0) return; // prevent hiding bottom app bar after pressing back button
 			if(!isTopScroll && scrollY == 0) { // TOP
 				onTopScroll();
 			} else {
@@ -153,13 +196,6 @@ public class BottomAppBarRefreshScrollBehavior {
 					storedFirstBottomScrollY = 0;
 					if(currentState != STATE_SCROLLED_UP) {
 						onScrollUp();
-					}
-					if(scrollY < pufferSize) {
-						new Handler().postDelayed(() -> {
-							if (scrollY > 0) {
-								nestedScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-							}
-						}, 1);
 					}
 					if(scrollY < UnitUtil.getDp(activity, topScrollLimit)
 							&& fabScroll != null && showTopScroll
@@ -192,6 +228,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	 */
 	private void onTopScroll() {
 		isTopScroll = true;
+		scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		if(bottomAppBar != null) {
 			if(bottomAppBar.isOrWillBeShown()) {
 				if(DEBUG) Log.i(TAG, "onTopScroll: bottomAppBar already shown");
@@ -207,6 +244,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	 */
 	private void onScrollUp() {
 		currentState = STATE_SCROLLED_UP;
+		scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		if(bottomAppBar != null) {
 			bottomAppBar.show();
 			onChangeBottomAppBarVisibility(true, "onScrollUp");
@@ -220,7 +258,7 @@ public class BottomAppBarRefreshScrollBehavior {
 	private void onScrollDown() {
 		isTopScroll = false; // second top scroll is unrealistic before down scroll
 		currentState = STATE_SCROLLED_DOWN;
-		nestedScrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
+		scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
 		if(bottomAppBar != null) {
 			if(hideOnScroll) {
 				bottomAppBar.hide();
@@ -242,31 +280,6 @@ public class BottomAppBarRefreshScrollBehavior {
 			}
 		} else if(DEBUG) Log.e(TAG, "setHideOnScroll: bottomAppBar is null!");
 		if(DEBUG) Log.i(TAG, "setHideOnScroll(" + hide + ")");
-	}
-
-	/**
-	 * Adds a globalLayoutListener to the scrollView to get its own and the content's height.
-	 */
-	private void measureScrollView() {
-		if(nestedScrollView != null) {
-			nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-				if(nestedScrollView == null) {
-					if(DEBUG) Log.e(TAG, "measureScrollView: scrollView is null!");
-					return;
-				}
-				int scrollViewHeight = nestedScrollView.getMeasuredHeight();
-				int scrollContentHeight = nestedScrollView.getChildAt(
-						0
-				).getHeight();
-				pufferSize = (scrollContentHeight - scrollViewHeight) / pufferDivider;
-				if(DEBUG) {
-					Log.i(TAG, "onMeasureScrollView: viewHeight = " +
-							scrollViewHeight +
-							", contentHeight = " + scrollContentHeight
-					);
-				}
-			});
-		}
 	}
 
 	/**

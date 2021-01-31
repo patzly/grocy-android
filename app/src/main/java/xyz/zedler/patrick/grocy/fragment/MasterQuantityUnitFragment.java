@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.fragment;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.SharedPreferences;
@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -42,23 +41,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterQuantityUnitFragment extends Fragment {
+public class MasterQuantityUnitFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_QUANTITY_UNIT;
+    private final static String TAG = MasterQuantityUnitFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -67,7 +64,6 @@ public class MasterQuantityUnitFragment extends Fragment {
     private FragmentMasterQuantityUnitBinding binding;
 
     private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
-    private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<String> quantityUnitNames = new ArrayList<>();
     private QuantityUnit editQuantityUnit;
 
@@ -95,10 +91,7 @@ public class MasterQuantityUnitFragment extends Fragment {
 
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // PREFERENCES
 
@@ -114,7 +107,6 @@ public class MasterQuantityUnitFragment extends Fragment {
         // VARIABLES
 
         quantityUnits = new ArrayList<>();
-        products = new ArrayList<>();
         quantityUnitNames = new ArrayList<>();
         editQuantityUnit = null;
 
@@ -151,17 +143,11 @@ public class MasterQuantityUnitFragment extends Fragment {
                     if(hasFocus) IconUtil.start(binding.imageMasterQuantityUnitDescription);
                 });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editQuantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
-            // FILL
-            if(editQuantityUnit != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterQuantityUnitFragmentArgs args = MasterQuantityUnitFragmentArgs
+                .fromBundle(requireArguments());
+        editQuantityUnit = args.getQuantityUnit();
+        if(editQuantityUnit != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }
@@ -175,11 +161,27 @@ public class MasterQuantityUnitFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                Constants.UI.MASTER_QUANTITY_UNIT,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_quantity_unit);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_master_item_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveQuantityUnit
         );
     }
 
@@ -188,7 +190,6 @@ public class MasterQuantityUnitFragment extends Fragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("quantityUnits", quantityUnits);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("quantityUnitNames", quantityUnitNames);
 
         outState.putParcelable("editQuantityUnit", editQuantityUnit);
@@ -200,7 +201,6 @@ public class MasterQuantityUnitFragment extends Fragment {
         if(isHidden()) return;
 
         quantityUnits = savedInstanceState.getParcelableArrayList("quantityUnits");
-        products = savedInstanceState.getParcelableArrayList("products");
         quantityUnitNames = savedInstanceState.getStringArrayList("quantityUnitNames");
 
         editQuantityUnit = savedInstanceState.getParcelable("editQuantityUnit");
@@ -229,7 +229,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             download();
         } else {
             binding.swipeMasterQuantityUnit.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -247,7 +247,6 @@ public class MasterQuantityUnitFragment extends Fragment {
     private void download() {
         binding.swipeMasterQuantityUnit.setRefreshing(true);
         downloadQuantityUnits();
-        downloadProducts();
     }
 
     private void downloadQuantityUnits() {
@@ -273,7 +272,7 @@ public class MasterQuantityUnitFragment extends Fragment {
                 },
                 error -> {
                     binding.swipeMasterQuantityUnit.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -286,16 +285,6 @@ public class MasterQuantityUnitFragment extends Fragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -378,7 +367,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, editQuantityUnit.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveQuantityUnit: " + error);
@@ -388,7 +377,7 @@ public class MasterQuantityUnitFragment extends Fragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveQuantityUnit: " + error);
@@ -435,40 +424,26 @@ public class MasterQuantityUnitFragment extends Fragment {
         binding.editTextMasterQuantityUnitDescription.setText(null);
     }
 
-    private void checkForUsage(QuantityUnit quantityUnit) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getQuIdStock() != quantityUnit.getId()
-                        && product.getQuIdPurchase() != quantityUnit.getId()) continue;
-                activity.showMessage(
-                        Snackbar.make(
-                                activity.binding.frameMainContainer,
-                                activity.getString(
-                                        R.string.msg_master_delete_usage,
-                                        activity.getString(R.string.property_quantity_unit)
-                                ),
-                                Snackbar.LENGTH_LONG
-                        )
-                );
-                return;
-            }
-        }
+    public void deleteQuantityUnitSafely() {
+        if(editQuantityUnit == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.QUANTITY_UNIT);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.QUANTITY_UNITS);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editQuantityUnit.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editQuantityUnit.getName());
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteQuantityUnit(QuantityUnit quantityUnit) {
+    @Override
+    public void deleteObject(int quantityUnitId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnit.getId()),
-                response -> activity.dismissFragment(),
+                grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnitId),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -482,7 +457,7 @@ public class MasterQuantityUnitFragment extends Fragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editQuantityUnit);
+                deleteQuantityUnitSafely();
                 return true;
             });
             delete.setVisible(editQuantityUnit != null);

@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.fragment;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.SharedPreferences;
@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -42,23 +41,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterProductGroupFragment extends Fragment {
+public class MasterProductGroupFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_PRODUCT_GROUP;
+    private final static String TAG = MasterProductGroupFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -67,7 +64,6 @@ public class MasterProductGroupFragment extends Fragment {
     private FragmentMasterProductGroupBinding binding;
 
     private ArrayList<ProductGroup> productGroups;
-    private ArrayList<Product> products;
     private ArrayList<String> productGroupNames;
     private ProductGroup editProductGroup;
 
@@ -97,8 +93,7 @@ public class MasterProductGroupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // PREFERENCES
 
@@ -114,7 +109,6 @@ public class MasterProductGroupFragment extends Fragment {
         // VARIABLES
 
         productGroups = new ArrayList<>();
-        products = new ArrayList<>();
         productGroupNames = new ArrayList<>();
         editProductGroup = null;
 
@@ -145,17 +139,11 @@ public class MasterProductGroupFragment extends Fragment {
                     if(hasFocus) IconUtil.start(binding.imageMasterProductGroupDescription);
                 });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editProductGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
-            // FILL
-            if(editProductGroup != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterProductGroupFragmentArgs args = MasterProductGroupFragmentArgs
+                .fromBundle(requireArguments());
+        editProductGroup = args.getProductGroup();
+        if(editProductGroup != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }
@@ -169,11 +157,27 @@ public class MasterProductGroupFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(
-                Constants.UI.MASTER_PRODUCT_GROUP,
-                savedInstanceState == null,
-                TAG
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_product_group);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_master_item_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveProductGroup
         );
     }
 
@@ -182,7 +186,6 @@ public class MasterProductGroupFragment extends Fragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("productGroups", productGroups);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("productGroupNames", productGroupNames);
 
         outState.putParcelable("editProductGroup", editProductGroup);
@@ -194,7 +197,6 @@ public class MasterProductGroupFragment extends Fragment {
         if(isHidden()) return;
 
         productGroups = savedInstanceState.getParcelableArrayList("productGroups");
-        products = savedInstanceState.getParcelableArrayList("products");
         productGroupNames = savedInstanceState.getStringArrayList("productGroupNames");
 
         editProductGroup = savedInstanceState.getParcelable("editProductGroup");
@@ -223,7 +225,7 @@ public class MasterProductGroupFragment extends Fragment {
             download();
         } else {
             binding.swipeMasterProductGroup.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -241,7 +243,6 @@ public class MasterProductGroupFragment extends Fragment {
     private void download() {
         binding.swipeMasterProductGroup.setRefreshing(true);
         downloadProductGroups();
-        downloadProducts();
     }
 
     private void downloadProductGroups() {
@@ -267,7 +268,7 @@ public class MasterProductGroupFragment extends Fragment {
                 },
                 error -> {
                     binding.swipeMasterProductGroup.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -280,16 +281,6 @@ public class MasterProductGroupFragment extends Fragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -365,7 +356,7 @@ public class MasterProductGroupFragment extends Fragment {
                             editProductGroup.getId()
                     ),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveProductGroup: " + error);
@@ -375,7 +366,7 @@ public class MasterProductGroupFragment extends Fragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveProductGroup: " + error);
@@ -411,41 +402,26 @@ public class MasterProductGroupFragment extends Fragment {
         binding.editTextMasterProductGroupDescription.setText(null);
     }
 
-    public void checkForUsage(ProductGroup productGroup) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getProductGroupId() == null) continue;
-                if(product.getProductGroupId().equals(String.valueOf(productGroup.getId()))) {
-                    activity.showMessage(
-                            Snackbar.make(
-                                    activity.binding.frameMainContainer,
-                                    activity.getString(
-                                            R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.property_product_group)
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            )
-                    );
-                    return;
-                }
-            }
-        }
+    public void deleteProductGroupSafely() {
+        if(editProductGroup == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.PRODUCT_GROUP);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteProductGroup(ProductGroup productGroup) {
+    @Override
+    public void deleteObject(int productGroupId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroup.getId()),
-                response -> activity.dismissFragment(),
+                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -459,7 +435,7 @@ public class MasterProductGroupFragment extends Fragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editProductGroup);
+                deleteProductGroupSafely();
                 return true;
             });
             delete.setVisible(editProductGroup != null);

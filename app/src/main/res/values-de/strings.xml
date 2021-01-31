@@ -25,7 +25,7 @@
     <string name="action_new">Neu</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Vorheriges</string>
-    <string name="action_send_feedback">Feedback senden</string>
+    <string name="action_feedback">Feedback senden</string>
     <string name="action_reset">Zurücksetzen</string>
     <string name="action_reload">Neu laden</string>
     <string name="action_top_scroll">Nach oben scrollen</string>
@@ -54,7 +54,7 @@
     <string name="action_logout">Abmelden</string>
     <string name="action_restart">Neustarten</string>
     <string name="action_show_extended">Erweitertes Formular anzeigen</string>
-    <string name="action_batch_mode">Stapelmodus</string>
+    <string name="title_batch_mode">Stapelmodus</string>
     <string name="action_create">Erstellen</string>
     <string name="action_link">Verknüpfen</string>
     <string name="action_open_forms">Formulare öffnen</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Einkaufstransaktionen für erstellte Produkte durchführen</string>
     <string name="action_create_key">Schlüssel erstellen</string>
     <string name="action_login">Anmelden</string>
-    <string name="action_use_demo_account">Demo-Account probieren</string>
+    <string name="action_try_demo_instance">Demo-Account probieren</string>
     <string name="action_ignore">Ignorieren</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alle</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Barcode existiert bereits</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">%1$s \"%2$s\" löschen?</string>
-    <string name="msg_master_delete_stock">Dieses Produkt hat noch Bestand</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
     <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
@@ -191,7 +190,7 @@
     <string name="title_shopping_list">Einkaufszettel</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Einstellungen</string>
-    <string name="title_about">Über</string>
+    <string name="title_about_this_app">Über</string>
     <string name="title_info">Information</string>
     <string name="title_help">Hilfe</string>
     <string name="title_logs">Logs</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Leer</string>
     <string name="subtitle_done">Erledigt</string>
     <string name="subtitle_undone">Unerledigt</string>
-    <string name="subtitle_never_expires">Läuft nie ab</string>
+    <string name="subtitle_never_overdue">Läuft nie ab</string>
     <string name="subtitle_selected">Ausgewählt</string>
     <string name="subtitle_stock_entry_no_specific">Zuerst ablaufende zuerst, dann First In - First Out</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Preis in %1$s</string>
     <string name="property_quantity_unit">Mengeneinheit</string>
     <string name="property_quantity_units">Mengeneinheiten</string>
-    <string name="property_qu_purchase">Mengeneinheit Einkauf</string>
+    <string name="property_default_qu_purchase">Mengeneinheit Einkauf</string>
     <string name="property_qu_stock">Mengeneinheit Bestand</string>
     <string name="property_qu_factor">Faktor Einkauf zu Bestand</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
-    <string name="property_bbd">Mindesthaltbarkeitsdatum</string>
-    <string name="property_bbd_next">Nächstes Mindesthaltbarkeitsdatum</string>
-    <string name="property_bb_days">Haltbarkeit in Tagen</string>
-    <string name="property_bb_days_default">Standard Haltbarkeit in Tagen</string>
-    <string name="property_bb_days_default_opened">Standard Haltbarkeit in Tagen nach dem Öffnen</string>
+    <string name="property_due_date">Mindesthaltbarkeitsdatum</string>
+    <string name="property_due_date_next">Nächstes Mindesthaltbarkeitsdatum</string>
+    <string name="property_due_days">Haltbarkeit in Tagen</string>
+    <string name="property_due_days_default">Standard Haltbarkeit in Tagen</string>
+    <string name="property_due_days_default_opened">Standard Haltbarkeit in Tagen nach dem Öffnen</string>
     <string name="property_location">Standort</string>
     <string name="property_location_default">Standard Standort</string>
     <string name="property_notes">Notizen</string>
@@ -377,10 +376,10 @@
 
     <string name="category_licenses">Open Source Lizenzen</string>
     <string name="category_general">Allgemein</string>
-    <string name="category_purchase_consume">Einkauf &amp; Verbrauch</string>
+    <string name="category_shopping_mode">Einkauf &amp; Verbrauch</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets">Vorgaben für neue Produkte</string>
+    <string name="category_presets_new_products">Vorgaben für neue Produkte</string>
 
     <string name="hint_server">Server-URL</string>
     <string name="hint_key">Gültiger API-Schlüssel</string>

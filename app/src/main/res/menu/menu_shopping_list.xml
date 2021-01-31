@@ -32,18 +32,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_edit_shopping_list"
-        android:title="@string/title_shopping_list_edit"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_clear"
         android:title="@string/action_clear_shopping_list"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_delete_shopping_list"
-        android:title="@string/action_delete_shopping_list"
         app:showAsAction="never" />
 
 </menu>

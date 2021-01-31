@@ -9,9 +9,19 @@
     <FrameLayout
         android:id="@+id/frame_main_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <xyz.zedler.patrick.grocy.view.CustomBottomAppBar
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:defaultNavHost="true" />
+
+    </FrameLayout>
+
+    <xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +54,7 @@
 
         </FrameLayout>
 
-    </xyz.zedler.patrick.grocy.view.CustomBottomAppBar>
+    </xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main"

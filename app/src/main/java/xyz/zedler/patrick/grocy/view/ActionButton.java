@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.view;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.Context;
@@ -118,10 +118,21 @@ public class ActionButton extends LinearLayout {
     }
 
     @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        frameLayoutButton.setOnTouchListener(l);
+    }
+
+    @Override
     public void setTooltipText(@Nullable CharSequence tooltipText) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             frameLayoutButton.setTooltipText(tooltipText);
         }
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        frameLayoutButton.setEnabled(enabled);
+        frameLayoutButton.setClickable(enabled);
     }
 
     public void startIconAnimation() {

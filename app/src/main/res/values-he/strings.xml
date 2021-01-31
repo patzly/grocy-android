@@ -25,7 +25,7 @@
     <string name="action_new">חדש</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">הקודם</string>
-    <string name="action_send_feedback">שליחת משוב</string>
+    <string name="action_feedback">שליחת משוב</string>
     <string name="action_reset">איפוס</string>
     <string name="action_reload">רענון</string>
     <string name="action_top_scroll">גלילה למעלה</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">ביצוע העברות רכישה למוצרים שנוצרו</string>
     <string name="action_create_key">יצירת מפתח</string>
     <string name="action_login">כניסה</string>
-    <string name="action_use_demo_account">להשתמש בחשבון לדוגמה</string>
+    <string name="action_try_demo_instance">להשתמש בחשבון לדוגמה</string>
     <string name="action_ignore">התעלמות</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">הכול</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">הברקוד כבר קיים</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">למחוק %1$s „%2$s”?</string>
-    <string name="msg_master_delete_stock">עדיין יש מהמוצר הזה במלאי</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">%1$s זה עדיין בשימוש</string>
     <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
@@ -191,7 +190,7 @@
     <string name="title_shopping_list">רשימת קניות</string>
     <string name="title_feedback">משוב</string>
     <string name="title_settings">הגדרות</string>
-    <string name="title_about">על אודות</string>
+    <string name="title_about_this_app">על אודות</string>
     <string name="title_info">פרטים</string>
     <string name="title_help">עזרה</string>
     <string name="title_logs">יומנים</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">ריק</string>
     <string name="subtitle_done">בוצע</string>
     <string name="subtitle_undone">לטיפול</string>
-    <string name="subtitle_never_expires">אין תפוגה</string>
+    <string name="subtitle_never_overdue">אין תפוגה</string>
     <string name="subtitle_selected">נבחר</string>
     <string name="subtitle_stock_entry_no_specific">הראשונים שתוקפם יפוג ולאחר מכן הראשונים שמולאו - הראשונים שיצאו</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">מחיר ב־%1$s</string>
     <string name="property_quantity_unit">יחידת כמות</string>
     <string name="property_quantity_units">יחידות כמות</string>
-    <string name="property_qu_purchase">יחידת כמות ברכישה</string>
+    <string name="property_default_qu_purchase">יחידת כמות ברכישה</string>
     <string name="property_qu_stock">יחידת כמות במלאי</string>
     <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
     <string name="property_barcode">ברקוד</string>
     <string name="property_barcodes">ברקודים</string>
-    <string name="property_bbd">תאריך בתוקף עד</string>
-    <string name="property_bbd_next">תאריך בתוקף עד הבא</string>
-    <string name="property_bb_days">ימי תוקף עד</string>
-    <string name="property_bb_days_default">ימי תוקף עד כבררת מחדל</string>
-    <string name="property_bb_days_default_opened">ימי תוקף עד כבררת מחדל לאחר הפתיחה</string>
+    <string name="property_due_date">תאריך בתוקף עד</string>
+    <string name="property_due_date_next">תאריך בתוקף עד הבא</string>
+    <string name="property_due_days">ימי תוקף עד</string>
+    <string name="property_due_days_default">ימי תוקף עד כבררת מחדל</string>
+    <string name="property_due_days_default_opened">ימי תוקף עד כבררת מחדל לאחר הפתיחה</string>
     <string name="property_location">מיקום</string>
     <string name="property_location_default">מיקום בררת מחדל</string>
     <string name="property_notes">הערות</string>
@@ -395,10 +394,10 @@
 
     <string name="category_licenses">רישיונות קוד פתוח</string>
     <string name="category_general">כללי</string>
-    <string name="category_purchase_consume">רכישה וצריכה</string>
+    <string name="category_shopping_mode">רכישה וצריכה</string>
     <string name="category_server">שרת</string>
     <string name="category_debugging">ניפוי שגיאות</string>
-    <string name="category_presets">ערכות למוצרים חדשים</string>
+    <string name="category_presets_new_products">ערכות למוצרים חדשים</string>
 
     <string name="hint_server">כתובת שרת</string>
     <string name="hint_key">מפתח API תקני</string>

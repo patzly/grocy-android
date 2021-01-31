@@ -55,7 +55,7 @@
 
                 <item
                     android:id="@+id/action_sort_bbd"
-                    android:title="@string/property_bbd"/>
+                    android:title="@string/property_due_date"/>
 
             </group>
 

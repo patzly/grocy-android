@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="bottomsheet"
+            type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet"/>
+    </data>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textAlignment="viewStart"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"
+        android:text="@string/title_unknown_input"/>
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/description_input_product_part1"/>
+
+            <TextView
+                android:id="@+id/input"
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/description_input_product_part2"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
+                android:text="@string/description_input_product_option1"
+                android:checked="@{bottomsheet.selectionLive == 1}"
+                android:onClick="@{v -> bottomsheet.setSelectionLive(1)}"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
+                android:text="@string/description_input_product_option2"
+                android:checked="@{bottomsheet.selectionLive == 2}"
+                android:onClick="@{v -> bottomsheet.setSelectionLive(2)}"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/on_background"
+                android:text="@string/description_input_product_option3"
+                android:checked="@{bottomsheet.selectionLive == 3}"
+                android:onClick="@{v -> bottomsheet.setSelectionLive(3)}"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_cancel"
+                    style="@style/Widget.Grocy.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_cancel"
+                    app:rippleColor="@color/highlight"
+                    android:textColor="@color/on_background_secondary"
+                    android:onClick="@{v -> bottomsheet.dismiss()}"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_proceed"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/action_proceed"
+                    android:onClick="@{v -> bottomsheet.proceed()}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
+</layout>

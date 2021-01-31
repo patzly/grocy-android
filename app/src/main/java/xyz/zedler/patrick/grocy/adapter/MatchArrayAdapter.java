@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.adapter;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.Context;
@@ -35,9 +35,9 @@ import java.util.List;
 
 public class MatchArrayAdapter extends ArrayAdapter<String> {
 
-    private List<String> items;
-    private List<String> itemsAll;
-    private List<String> suggestions;
+    private final List<String> items;
+    private final List<String> itemsAll;
+    private final List<String> suggestions;
 
     public MatchArrayAdapter(@NonNull Context context, List<String> items) {
         super(context, android.R.layout.simple_list_item_1, items);
@@ -69,44 +69,46 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public Filter getFilter() {
-        return stringFilter;
+        return createFilter();
     }
 
-    private Filter stringFilter = new Filter() {
-        public String convertResultToString(Object resultValue) {
-            return (String) resultValue;
-        }
+    private Filter createFilter() {
+        return new Filter() {
+            public String convertResultToString(Object resultValue) {
+                return (String) resultValue;
+            }
 
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint != null) {
-                suggestions.clear();
-                for (String item : itemsAll) {
-                    String match = constraint.toString().toLowerCase();
-                    if (item.toLowerCase().contains(match)) {
-                        suggestions.add(item);
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                if (constraint != null) {
+                    suggestions.clear();
+                    for (String item : itemsAll) {
+                        String match = constraint.toString().toLowerCase();
+                        if (item.toLowerCase().contains(match)) {
+                            suggestions.add(item);
+                        }
                     }
+                    FilterResults filterResults = new FilterResults();
+                    filterResults.values = suggestions;
+                    filterResults.count = suggestions.size();
+                    return filterResults;
+                } else {
+                    return new FilterResults();
                 }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
-                return filterResults;
-            } else {
-                return new FilterResults();
             }
-        }
 
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            @SuppressWarnings("unchecked")
-            ArrayList<String> filteredList = (ArrayList<String>) results.values;
-            if (results.count > 0) {
-                clear();
-                for (String item : filteredList) {
-                    add(item);
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                @SuppressWarnings("unchecked")
+                ArrayList<String> filteredList = (ArrayList<String>) results.values;
+                if (results.count > 0) {
+                    clear();
+                    for (String item : filteredList) {
+                        add(item);
+                    }
+                    notifyDataSetChanged();
                 }
-                notifyDataSetChanged();
             }
-        }
-    };
+        };
+    }
 }

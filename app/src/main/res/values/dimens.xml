@@ -3,4 +3,6 @@
 
     <dimen name="login_margin">0dp</dimen>
 
+    <dimen name="help_card_border_size">0dp</dimen>
+
 </resources>

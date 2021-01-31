@@ -25,7 +25,7 @@
     <string name="action_new">Nowy</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Poprzedni</string>
-    <string name="action_send_feedback">Wyślij informację zwrotną</string>
+    <string name="action_feedback">Wyślij informację zwrotną</string>
     <string name="action_reset">Resetuj</string>
     <string name="action_reload">Przeładuj</string>
     <string name="action_top_scroll">Przewiń na górę</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Wykonaj transakcję kupna dla utworzonych produktów</string>
     <string name="action_create_key">Utwórz klucz</string>
     <string name="action_login">Zaloguj</string>
-    <string name="action_use_demo_account">Użyj konta demo</string>
+    <string name="action_try_demo_instance">Użyj konta demo</string>
     <string name="action_ignore">Ignoruj</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Wszystko</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Kod kreskowy już istnieje</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Usunąć %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Ten produkt posiada stan zapasu</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">%1$s jest wciąż w użyciu</string>
     <string name="msg_item_marked_as_done">Pozycja oznaczona jako zakończona</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Puste</string>
     <string name="subtitle_done">Zrobione</string>
     <string name="subtitle_undone">Niezrobione</string>
-    <string name="subtitle_never_expires">Nigdy się nie przeterminuje</string>
+    <string name="subtitle_never_overdue">Nigdy się nie przeterminuje</string>
     <string name="subtitle_selected">Wybrane</string>
     <string name="subtitle_stock_entry_no_specific">Najpierw z najkrótszą data, potem pierwsze zatowarowane - pierwsze zdjęte ze stanu</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Cena w %1$s</string>
     <string name="property_quantity_unit">Jednostka miary</string>
     <string name="property_quantity_units">Jednostki miar</string>
-    <string name="property_qu_purchase">Jednostka zakupu</string>
+    <string name="property_default_qu_purchase">Jednostka zakupu</string>
     <string name="property_qu_stock">Jednostka zapasu</string>
     <string name="property_qu_factor">Przelicznik jednostki zakupu do zapasu</string>
     <string name="property_barcode">Kod kreskowy</string>
     <string name="property_barcodes">Kody kreskowe</string>
-    <string name="property_bbd">Najlepiej spożyć do</string>
-    <string name="property_bbd_next">Następna data najlepiej spożyć do</string>
-    <string name="property_bb_days">Ilość dni terminu ważności</string>
-    <string name="property_bb_days_default">Domyślna ilość dni terminu ważności</string>
-    <string name="property_bb_days_default_opened">Domyślna ilość dni terminu ważności po otwarciu</string>
+    <string name="property_due_date">Najlepiej spożyć do</string>
+    <string name="property_due_date_next">Następna data najlepiej spożyć do</string>
+    <string name="property_due_days">Ilość dni terminu ważności</string>
+    <string name="property_due_days_default">Domyślna ilość dni terminu ważności</string>
+    <string name="property_due_days_default_opened">Domyślna ilość dni terminu ważności po otwarciu</string>
     <string name="property_location">Lokalizacja</string>
     <string name="property_location_default">Domyślna lokalizacja</string>
     <string name="property_notes">Notatki</string>
@@ -395,7 +394,7 @@
 
     <string name="category_licenses">Licencje open source</string>
     <string name="category_general">Ogólne</string>
-    <string name="category_purchase_consume">Kup i spożyj</string>
+    <string name="category_shopping_mode">Kup i spożyj</string>
     <string name="category_server">Serwer</string>
     <string name="category_debugging">Debugowanie</string>
     <string name="category_presets">Ustawienia domyślne dla nowych produktów</string>

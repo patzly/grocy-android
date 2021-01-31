@@ -16,9 +16,10 @@ package xyz.zedler.patrick.grocy.dao;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -26,12 +27,16 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 @Dao
 public interface ShoppingListItemDao {
+    @Query("SELECT * FROM shopping_list_item_table")
+    LiveData<List<ShoppingListItem>> getAllLive();
+
     @Query("SELECT * FROM shopping_list_item_table")
     List<ShoppingListItem> getAll();
 
@@ -41,10 +46,13 @@ public interface ShoppingListItemDao {
     @Query("SELECT COUNT(*) FROM shopping_list_item_table")
     int count();
 
-    @Insert
-    void insertAll(List<ShoppingListItem> shoppingListItems);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(ArrayList<ShoppingListItem> shoppingListItems);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(ShoppingListItem... shoppingListItems);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ShoppingListItem shoppingListItem);
 
     @Update

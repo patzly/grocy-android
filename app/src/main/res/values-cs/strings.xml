@@ -25,7 +25,7 @@
     <string name="action_new">Nový</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Předchozí</string>
-    <string name="action_send_feedback">Poslat zpětnou vazbu</string>
+    <string name="action_feedback">Poslat zpětnou vazbu</string>
     <string name="action_reset">Vynulovat</string>
     <string name="action_reload">Načíst znovu</string>
     <string name="action_top_scroll">Posunout nahoru</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Připravit transakci nákupu pro vytvořené produkty</string>
     <string name="action_create_key">Vytvořit klíč</string>
     <string name="action_login">Přihlásit</string>
-    <string name="action_use_demo_account">Použít demo účet</string>
+    <string name="action_try_demo_instance">Použít demo účet</string>
     <string name="action_ignore">Ignorovat</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Vše</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Čárový kód již existuje</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Smazat %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Tento produkd má pořád zásobu</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
     <string name="msg_item_marked_as_done">Nastav položku jako hotovou</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Prázdné</string>
     <string name="subtitle_done">Hotovo</string>
     <string name="subtitle_undone">Nehotovo</string>
-    <string name="subtitle_never_expires">Nikdy neexpiruje</string>
+    <string name="subtitle_never_overdue">Nikdy neexpiruje</string>
     <string name="subtitle_selected">Vybráno</string>
     <string name="subtitle_stock_entry_no_specific">První expiruje první, pravidlo FIFO \"První dovnitř, první ven.\"</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Cena v %1$s</string>
     <string name="property_quantity_unit">Měrná jednotka</string>
     <string name="property_quantity_units">Měrná jednotky</string>
-    <string name="property_qu_purchase">Měrná jednotka nákupu</string>
+    <string name="property_default_qu_purchase">Měrná jednotka nákupu</string>
     <string name="property_qu_stock">Měrná jednotka zásob</string>
     <string name="property_qu_factor">Faktor nákupu do zásob</string>
     <string name="property_barcode">Čárový kód</string>
     <string name="property_barcodes">Čárové kódy</string>
-    <string name="property_bbd">Datum trvanlivosti</string>
-    <string name="property_bbd_next">Další datum trvanlivosti</string>
-    <string name="property_bb_days">Trvanlivost dní</string>
-    <string name="property_bb_days_default">Výchozí trvanlivost dní</string>
-    <string name="property_bb_days_default_opened">Výchozí trvanlivost dní po otevření</string>
+    <string name="property_due_date">Datum trvanlivosti</string>
+    <string name="property_due_date_next">Další datum trvanlivosti</string>
+    <string name="property_due_days">Trvanlivost dní</string>
+    <string name="property_due_days_default">Výchozí trvanlivost dní</string>
+    <string name="property_due_days_default_opened">Výchozí trvanlivost dní po otevření</string>
     <string name="property_location">Umístění</string>
     <string name="property_location_default">Výchozí umístění</string>
     <string name="property_notes">Poznámky</string>
@@ -395,7 +394,7 @@
 
     <string name="category_licenses">Licence otevřených zdrojových kódů</string>
     <string name="category_general">Všeobecné</string>
-    <string name="category_purchase_consume">Nakup &amp; spotřebuj</string>
+    <string name="category_shopping_mode">Nakup &amp; spotřebuj</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Ladění</string>
     <string name="category_presets">Přednastavení pro nový produkt</string>

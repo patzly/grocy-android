@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="help_card_border_size">2dp</dimen>
+
+</resources>

@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.fragment;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.SharedPreferences;
@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -42,23 +41,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class MasterLocationFragment extends Fragment {
+public class MasterLocationFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.MASTER_LOCATION;
+    private final static String TAG = MasterLocationFragment.class.getSimpleName();
 
     private MainActivity activity;
     private Gson gson;
@@ -67,7 +64,6 @@ public class MasterLocationFragment extends Fragment {
     private FragmentMasterLocationBinding binding;
 
     private ArrayList<Location> locations;
-    private ArrayList<Product> products;
     private ArrayList<String> locationNames;
     private Location editLocation;
 
@@ -95,8 +91,7 @@ public class MasterLocationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
         
         // PREFERENCES
 
@@ -112,7 +107,6 @@ public class MasterLocationFragment extends Fragment {
         // INITIALIZE VARIABLES
 
         locations = new ArrayList<>();
-        products = new ArrayList<>();
         locationNames = new ArrayList<>();
 
         editLocation = null;
@@ -153,17 +147,10 @@ public class MasterLocationFragment extends Fragment {
             );
         });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editLocation = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
-            // FILL
-            if(editLocation != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterLocationFragmentArgs args = MasterLocationFragmentArgs.fromBundle(requireArguments());
+        editLocation = args.getLocation();
+        if(editLocation != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }
@@ -177,8 +164,28 @@ public class MasterLocationFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
+    }
 
-        activity.updateUI(Constants.UI.MASTER_LOCATION, savedInstanceState == null, TAG);
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_location);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_master_item_edit,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_backup,
+                R.string.action_save,
+                Constants.FAB.TAG.SAVE,
+                animated,
+                this::saveLocation
+        );
     }
 
     @Override
@@ -186,7 +193,6 @@ public class MasterLocationFragment extends Fragment {
         if(isHidden()) return;
 
         outState.putParcelableArrayList("locations", locations);
-        outState.putParcelableArrayList("products", products);
         outState.putStringArrayList("locationNames", locationNames);
 
         outState.putParcelable("editLocation", editLocation);
@@ -198,7 +204,6 @@ public class MasterLocationFragment extends Fragment {
         if(isHidden()) return;
 
         locations = savedInstanceState.getParcelableArrayList("locations");
-        products = savedInstanceState.getParcelableArrayList("products");
         locationNames = savedInstanceState.getStringArrayList("locationNames");
 
         editLocation = savedInstanceState.getParcelable("editLocation");
@@ -234,7 +239,7 @@ public class MasterLocationFragment extends Fragment {
             download();
         } else {
             binding.swipeMasterLocation.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -252,7 +257,6 @@ public class MasterLocationFragment extends Fragment {
     private void download() {
         binding.swipeMasterLocation.setRefreshing(true);
         downloadLocations();
-        downloadProducts();
     }
 
     private void downloadLocations() {
@@ -278,7 +282,7 @@ public class MasterLocationFragment extends Fragment {
                 },
                 error -> {
                     binding.swipeMasterLocation.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -291,16 +295,6 @@ public class MasterLocationFragment extends Fragment {
                             )
                     );
                 }
-        );
-    }
-
-    private void downloadProducts() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-                response -> products = gson.fromJson(
-                        response,
-                        new TypeToken<List<Product>>(){}.getType()
-                ), error -> {}
         );
     }
 
@@ -343,7 +337,7 @@ public class MasterLocationFragment extends Fragment {
             // description
             binding.editTextMasterLocationDescription.setText(editLocation.getDescription());
             // is freezer
-            binding.checkboxMasterLocationFreezer.setChecked(editLocation.getIsFreezer() == 1);
+            binding.checkboxMasterLocationFreezer.setChecked(editLocation.getIsFreezerInt() == 1);
         }
     }
 
@@ -376,7 +370,7 @@ public class MasterLocationFragment extends Fragment {
             dlHelper.put(
                     grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, editLocation.getId()),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);
@@ -386,7 +380,7 @@ public class MasterLocationFragment extends Fragment {
             dlHelper.post(
                     grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
                     jsonObject,
-                    response -> activity.dismissFragment(),
+                    response -> activity.navigateUp(),
                     error -> {
                         showErrorMessage();
                         if(debug) Log.e(TAG, "saveLocation: " + error);
@@ -421,40 +415,26 @@ public class MasterLocationFragment extends Fragment {
         binding.checkboxMasterLocationFreezer.setChecked(false);
     }
 
-    public void checkForUsage(Location location) {
-        if(!products.isEmpty()) {
-            for(Product product : products) {
-                if(product.getLocationId() == location.getId()) {
-                    activity.showMessage(
-                            Snackbar.make(
-                                    activity.binding.frameMainContainer,
-                                    activity.getString(
-                                            R.string.msg_master_delete_usage,
-                                            activity.getString(R.string.property_location)
-                                    ),
-                                    Snackbar.LENGTH_LONG
-                            )
-                    );
-                    return;
-                }
-            }
-        }
+    public void deleteLocationSafely() {
+        if(editLocation == null) return;
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-        bundle.putString(Constants.ARGUMENT.TYPE, Constants.ARGUMENT.LOCATION);
-        activity.showBottomSheet(new MasterDeleteBottomSheetDialogFragment(), bundle);
+        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.LOCATIONS);
+        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editLocation.getId());
+        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editLocation.getName());
+        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
     }
 
-    public void deleteLocation(Location location) {
+    @Override
+    public void deleteObject(int locationId) {
         dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, location.getId()),
-                response -> activity.dismissFragment(),
+                grocyApi.getObject(GrocyApi.ENTITY.LOCATIONS, locationId),
+                response -> activity.navigateUp(),
                 error -> showErrorMessage()
         );
     }
 
     private void showErrorMessage() {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -468,7 +448,7 @@ public class MasterLocationFragment extends Fragment {
         if(delete != null) {
             delete.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
-                checkForUsage(editLocation);
+                deleteLocationSafely();
                 return true;
             });
             delete.setVisible(editLocation != null);

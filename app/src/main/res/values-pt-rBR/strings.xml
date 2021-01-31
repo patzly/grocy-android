@@ -25,7 +25,7 @@
     <string name="action_new">Novo</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Anterior</string>
-    <string name="action_send_feedback">Dê sua opinião</string>
+    <string name="action_feedback">Dê sua opinião</string>
     <string name="action_reset">Reiniciar</string>
     <string name="action_reload">Recarregar</string>
     <string name="action_top_scroll">Role para cima</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Realizar transações de compra para os produtos criados</string>
     <string name="action_create_key">Criar chave</string>
     <string name="action_login">Login</string>
-    <string name="action_use_demo_account">Usar conta de demonstração</string>
+    <string name="action_try_demo_instance">Usar conta de demonstração</string>
     <string name="action_ignore">Ignorar</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Todos</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Código de barras já está cadastrado</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Apagar %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Ainda há estoque deste produto</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Este %1$s ainda está em uso</string>
     <string name="msg_item_marked_as_done">Item marcado como feito</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Vazio</string>
     <string name="subtitle_done">Feito</string>
     <string name="subtitle_undone">Desfeito</string>
-    <string name="subtitle_never_expires">Nunca perde a validade</string>
+    <string name="subtitle_never_overdue">Nunca perde a validade</string>
     <string name="subtitle_selected">Selecionado</string>
     <string name="subtitle_stock_entry_no_specific">Os que perdem a validade primeiro, então os primeiros en - são primeiros a sair</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Preço em %1$s</string>
     <string name="property_quantity_unit">Unidade</string>
     <string name="property_quantity_units">Unidades</string>
-    <string name="property_qu_purchase">Quantidade de compra</string>
+    <string name="property_default_qu_purchase">Quantidade de compra</string>
     <string name="property_qu_stock">Quantidade me estoque</string>
     <string name="property_qu_factor">Fator de compra para estoque</string>
     <string name="property_barcode">Código de barras</string>
     <string name="property_barcodes">Códigos de barra</string>
-    <string name="property_bbd">Data de validade</string>
-    <string name="property_bbd_next">Próxima data de validade</string>
-    <string name="property_bb_days">Dias até o vencimento</string>
-    <string name="property_bb_days_default">Dias até o vencimento pré-definidos</string>
-    <string name="property_bb_days_default_opened">Dias até o vencimento após abertura pré-definidos </string>
+    <string name="property_due_date">Data de validade</string>
+    <string name="property_due_date_next">Próxima data de validade</string>
+    <string name="property_due_days">Dias até o vencimento</string>
+    <string name="property_due_days_default">Dias até o vencimento pré-definidos</string>
+    <string name="property_due_days_default_opened">Dias até o vencimento após abertura pré-definidos </string>
     <string name="property_location">Lugar</string>
     <string name="property_location_default">Lugar pré-definido</string>
     <string name="property_notes">Notas</string>
@@ -377,7 +376,7 @@
 
     <string name="category_licenses">Licenças de código aberto</string>
     <string name="category_general">Geral</string>
-    <string name="category_purchase_consume">Compre &amp; consuma</string>
+    <string name="category_shopping_mode">Compre &amp; consuma</string>
     <string name="category_server">Servidor</string>
     <string name="category_debugging">Inspeção de erros</string>
     <string name="category_presets">Padrões para novos produtos</string>

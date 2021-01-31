@@ -25,7 +25,7 @@
     <string name="action_new">Nuovo</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Indietro</string>
-    <string name="action_send_feedback">Invia feedback</string>
+    <string name="action_feedback">Invia feedback</string>
     <string name="action_reset">Resetta</string>
     <string name="action_reload">Ricarica</string>
     <string name="action_top_scroll">Torna in cima</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Esegui le transazioni degli acquisti per i prodotti creati</string>
     <string name="action_create_key">Crea chiave</string>
     <string name="action_login">Entra</string>
-    <string name="action_use_demo_account">Usa account demo</string>
+    <string name="action_try_demo_instance">Usa account demo</string>
     <string name="action_ignore">Ignora</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Tutto</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Codice a barre già esistente</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Eliminare %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Questo prodotto è ancora presente in dispensa</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Questo %1$s è ancora utilizzato</string>
     <string name="msg_item_marked_as_done">Segna come fatto</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Vuoto</string>
     <string name="subtitle_done">Fatto</string>
     <string name="subtitle_undone">Annullato</string>
-    <string name="subtitle_never_expires">Non scade mai</string>
+    <string name="subtitle_never_overdue">Non scade mai</string>
     <string name="subtitle_selected">Selezionato</string>
     <string name="subtitle_stock_entry_no_specific">Il primo che scade per primo, poi il primo ad entrare è il primo ad uscire</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Prezzo in %1$s</string>
     <string name="property_quantity_unit">Unità di misura</string>
     <string name="property_quantity_units">Unità di misura</string>
-    <string name="property_qu_purchase">Unità di acquisto</string>
+    <string name="property_default_qu_purchase">Unità di acquisto</string>
     <string name="property_qu_stock">Unità di dispensa</string>
     <string name="property_qu_factor">Pezzi nella confezione</string>
     <string name="property_barcode">Codice a barre</string>
     <string name="property_barcodes">Codici a barre</string>
-    <string name="property_bbd">Data di scadenza</string>
-    <string name="property_bbd_next">Prossima data di scadenza</string>
-    <string name="property_bb_days">Da consumarsi preferibilmente entro giorni</string>
-    <string name="property_bb_days_default">Scadenza predefinita</string>
-    <string name="property_bb_days_default_opened">Dopo aperto da consumarsi preferibilmente entro</string>
+    <string name="property_due_date">Data di scadenza</string>
+    <string name="property_due_date_next">Prossima data di scadenza</string>
+    <string name="property_due_days">Da consumarsi preferibilmente entro giorni</string>
+    <string name="property_due_days_default">Scadenza predefinita</string>
+    <string name="property_due_days_default_opened">Dopo aperto da consumarsi preferibilmente entro</string>
     <string name="property_location">Posizione</string>
     <string name="property_location_default">Posizione predefinita</string>
     <string name="property_notes">Note</string>
@@ -377,7 +376,7 @@
 
     <string name="category_licenses">Apri licenze del codice sorgente</string>
     <string name="category_general">Generale</string>
-    <string name="category_purchase_consume">Compra e consuma</string>
+    <string name="category_shopping_mode">Compra e consuma</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
     <string name="category_presets">Impostazioni predefinite per nuovi prodotti</string>

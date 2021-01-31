@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <import type="xyz.zedler.patrick.grocy.R"/>
+        <import type="xyz.zedler.patrick.grocy.util.Constants"/>
+        <variable name="viewModel"
+            type="xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+        <variable name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.SettingsCatStockFragment"/>
+        <variable name="sharedPrefs"
+            type="android.content.SharedPreferences"/>
+        <variable name="clickUtil"
+            type="xyz.zedler.patrick.grocy.util.ClickUtil"/>
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize">
+
+        <LinearLayout
+            android:id="@+id/linear_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/primary">
+
+            <FrameLayout
+                android:id="@+id/frame_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_back"
+                android:tooltipText="@string/action_back"
+                android:focusable="true"
+                tools:targetApi="o"
+                android:onClick="@{v -> activity.navigateUp()}">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_arrow_back" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/app_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:text="@string/category_stock"
+                android:fontFamily="@font/roboto_mono_bold"
+                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:actionBarSize"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:id="@+id/linear_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="80dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> switchIndicator.setChecked(!switchIndicator.isChecked())}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_shopping_list_long"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_list_indicator"/>
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_list_indicator_description"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_indicator"
+                    style="@style/Widget.Grocy.Switch"
+                    android:checked="@={viewModel.listIndicatorEnabled}"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:contentPadding="16dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@color/on_background_variant">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
+                    android:fontFamily="@font/roboto_mono_regular"
+                    android:text="@string/msg_help_purchased_date_settings"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> switchPurchaseDate.setChecked(!switchPurchaseDate.isChecked())}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_event"/>
+
+                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Title"
+                        android:text="@string/setting_purchased_date"/>
+
+                    <TextView
+                        style="@style/Theme.Grocy.ListItem.Description"
+                        android:text="@string/setting_purchased_date_description"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_purchase_date"
+                    style="@style/Widget.Grocy.Switch"
+                    android:checked="@={viewModel.purchasedDateEnabled}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

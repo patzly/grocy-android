@@ -16,27 +16,38 @@ package xyz.zedler.patrick.grocy.model;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
+@Entity(tableName = "store_table")
 public class Store implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
@@ -88,9 +99,37 @@ public class Store implements Parcelable {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
+    }
+
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Store store = (Store) o;
+        return id == store.id &&
+                Objects.equals(name, store.name) &&
+                Objects.equals(description, store.description) &&
+                Objects.equals(rowCreatedTimestamp, store.rowCreatedTimestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, rowCreatedTimestamp);
     }
 
     @NonNull

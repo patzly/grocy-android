@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.view;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.animation.Animator;
@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,7 +33,13 @@ import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+
+import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
@@ -47,6 +54,7 @@ public class InputChip extends LinearLayout {
     private FrameLayout frameLayoutContainer, frameLayoutIcon;
     private TextView textView;
     private Runnable runnableOnClose;
+    private InverseBindingListener textAttrChange;
     private int width;
 
     public InputChip(@NonNull Context context) {
@@ -99,6 +107,39 @@ public class InputChip extends LinearLayout {
         init(text, -1, animate, null);
     }
 
+    public InputChip(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public InputChip(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public InputChip(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        int iconRes = attrs.getAttributeResourceValue(
+                "app", "icon", -1
+        );
+        this.context = context;
+        init(null, iconRes, false, null);
+    }
+
+    @BindingAdapter("text")
+    public static void setText(InputChip view, String text) {
+        if(Objects.equals(view.getText(), text)) return;
+        view.setText(text);
+    }
+
+    @InverseBindingAdapter(attribute = "text")
+    public static String getText(InputChip view) {
+        return view.getText();
+    }
+
+    @BindingAdapter("textAttrChanged")
+    public static void setListeners(InputChip view, final InverseBindingListener attrChange) {
+        view.textAttrChange = attrChange;
+    }
+
     private void init(String text, int iconRes, boolean animate, Runnable onClose) {
         inflate(context, R.layout.view_input_chip, this);
 
@@ -131,9 +172,17 @@ public class InputChip extends LinearLayout {
 
     public void setText(String text) {
         textView.setText(text);
+        if(textAttrChange != null) textAttrChange.onChange();
+        if(text == null) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+        }
     }
 
     public String getText() {
+        if(textView.getText() == null) return null;
+        if(textView.getText().toString().isEmpty()) return null;
         return textView.getText().toString();
     }
 
@@ -148,6 +197,8 @@ public class InputChip extends LinearLayout {
     }
 
     public void close() {
+        setText(null);
+        if(true) return;
         // DURATIONS
         int fade = 200, disappear = 300;
         // run action

@@ -16,10 +16,11 @@ package xyz.zedler.patrick.grocy.util;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -27,6 +28,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 
 import androidx.browser.customtabs.CustomTabsIntent;
+
+import xyz.zedler.patrick.grocy.R;
 
 public class NetUtil {
 
@@ -37,6 +40,11 @@ public class NetUtil {
         cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    public NetUtil(Application application) {
+        if(application == null) return;
+        cm = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
     public boolean isOnline() {
         if(cm == null) return false;
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -45,6 +53,8 @@ public class NetUtil {
 
     public static boolean openURL(Context context, String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setStartAnimations(context, R.anim.slide_in_up, R.anim.slide_no);
+        builder.setExitAnimations(context, R.anim.slide_no, R.anim.fade_out);
         CustomTabsIntent customTabsIntent = builder.build();
         try {
             customTabsIntent.launchUrl(context, Uri.parse(url));

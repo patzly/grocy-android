@@ -9,6 +9,8 @@
     <color name="retro_red_fg">#c14f33</color>
     <color name="retro_red_bg_black">#ee7e62</color>
     <color name="retro_red_bg_white">#c35d45</color>
+    <color name="retro_red_only_day">#ffae9a</color>
+    <color name="retro_red_translucent">#22e06a4e</color>
 
     <color name="retro_yellow">#deb853</color>
     <color name="retro_yellow_fg">#8E6F1A</color>
@@ -16,12 +18,14 @@
 
     <color name="retro_dirt">#e2d9a2</color>
     <color name="retro_dirt_fg">#807128</color>
-    <color name="retro_dirt_bg">@color/retro_dirt</color>
+    <color name="retro_dirt_bg">#aae2d9a2</color>
+    <color name="retro_dirt_dark">#aae2d9a2</color>
 
     <color name="retro_green">#789f8a</color>
     <color name="retro_green_fg">#60837a</color>
     <color name="retro_green_bg_black">#789f8a</color>
     <color name="retro_green_bg_white">#689283</color>
+    <color name="retro_green_translucent">#22789f8a</color>
 
     <color name="retro_blue">#5a97aa</color>
     <color name="retro_blue_fg">#497C8D</color>

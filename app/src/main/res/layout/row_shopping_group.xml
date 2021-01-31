@@ -9,6 +9,7 @@
     android:layout_marginBottom="8dp">
 
     <View
+        android:id="@+id/separator"
         android:layout_width="4dp"
         android:layout_height="match_parent"
         android:backgroundTint="@color/retro_green_fg"

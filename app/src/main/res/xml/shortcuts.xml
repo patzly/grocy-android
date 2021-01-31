@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:targetApi="n_mr1">
 
-    <shortcut
+    <!--<shortcut
         android:shortcutId="shortcut_shopping_mode"
         android:shortcutShortLabel="@string/title_shopping_mode"
         android:icon="@mipmap/ic_shopping_mode">
@@ -13,9 +13,9 @@
             android:targetPackage="xyz.zedler.patrick.grocy"
             android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>
+    </shortcut>-->
 
-    <shortcut
+    <!--<shortcut
         android:shortcutId="shortcut_shopping_list_add"
         android:shortcutShortLabel="@string/action_shopping_list_add"
         android:icon="@mipmap/ic_add">
@@ -25,7 +25,7 @@
             android:targetPackage="xyz.zedler.patrick.grocy"
             android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>
+    </shortcut>-->
 
     <!--<shortcut
         android:shortcutId="shortcut_shopping_list"
@@ -34,10 +34,11 @@
 
         <intent
             android:action="xyz.zedler.patrick.grocy.action.shoppingList"
+            android:data="grocy://shoppingListFragment"
             android:targetPackage="xyz.zedler.patrick.grocy"
             android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>-->
+    </shortcut>
 
     <shortcut
         android:shortcutId="shortcut_consume"
@@ -61,7 +62,7 @@
             android:targetPackage="xyz.zedler.patrick.grocy"
             android:targetClass="xyz.zedler.patrick.grocy.activity.MainActivity" />
 
-    </shortcut>
+    </shortcut>-->
 
 </shortcuts>
 

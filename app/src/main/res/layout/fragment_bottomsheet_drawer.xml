@@ -23,6 +23,22 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp">
 
+            <LinearLayout
+                android:id="@+id/linear_drawer_stock"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_category" />
+
+                <TextView
+                    android:id="@+id/text_drawer_stock"
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:text="@string/title_stock_overview" />
+
+            </LinearLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -110,15 +126,6 @@
 
                 </LinearLayout>
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_drawer_batch_consume"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="4dp"
-                    app:icon="@drawable/ic_round_batch"
-                    app:tint="@color/icon"/>
-
             </FrameLayout>
 
             <FrameLayout
@@ -140,15 +147,6 @@
                         android:text="@string/title_purchase" />
 
                 </LinearLayout>
-
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_drawer_batch_purchase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="4dp"
-                    app:icon="@drawable/ic_round_batch"
-                    app:tint="@color/icon"/>
 
             </FrameLayout>
 
@@ -185,38 +183,6 @@
                 <TextView
                     style="@style/Theme.Grocy.DrawerItem.Text"
                     android:text="@string/title_settings" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_feedback"
-                style="@style/Theme.Grocy.DrawerItem">
-
-                <ImageView
-                    android:id="@+id/image_feedback"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_feedback_anim" />
-
-                <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="@string/action_send_feedback" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_help"
-                style="@style/Theme.Grocy.DrawerItem">
-
-                <ImageView
-                    android:id="@+id/image_help"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_help_anim" />
-
-                <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:text="@string/title_help" />
 
             </LinearLayout>
 

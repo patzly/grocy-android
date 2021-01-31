@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.util;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.content.SharedPreferences;
@@ -37,15 +37,17 @@ public class ConfigUtil {
             GrocyApi api,
             SharedPreferences prefs,
             Runnable onSuccessAction,
-            Runnable onErrorAction
+            DownloadHelper.OnErrorListener onError
     ) {
 
         boolean debug = prefs.getBoolean(Constants.PREF.DEBUG, false);
 
+        api.loadCredentials();
+
         DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
             if(onSuccessAction != null) onSuccessAction.run();
         }, volleyError -> {
-            if(onErrorAction != null) onErrorAction.run();
+            if(onError != null) onError.onError(volleyError);
         });
 
         queue.append(
@@ -125,8 +127,8 @@ public class ConfigUtil {
                     Constants.PREF.PRODUCT_PRESETS_QU_ID,
                     jsonObject.getInt("product_presets_qu_id")
             ).putString(
-                    Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
-                    jsonObject.getString("stock_expring_soon_days")
+                    Constants.PREF.STOCK_DUE_SOON_DAYS,
+                    jsonObject.getString("stock_due_soon_days")
             ).putString(
                     Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
                     jsonObject.getString("stock_default_purchase_amount")

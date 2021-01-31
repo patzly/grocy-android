@@ -16,9 +16,10 @@ package xyz.zedler.patrick.grocy.dao;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -32,15 +33,18 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 @Dao
 public interface QuantityUnitDao {
     @Query("SELECT * FROM quantity_unit_table")
+    LiveData<List<QuantityUnit>> getAllLive();
+
+    @Query("SELECT * FROM quantity_unit_table")
     List<QuantityUnit> getAll();
 
     @Query("SELECT COUNT(*) FROM quantity_unit_table")
     int count();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<QuantityUnit> quantityUnits);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(QuantityUnit quantityUnit);
 
     @Delete

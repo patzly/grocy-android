@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.util;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.app.Activity;
@@ -56,7 +56,8 @@ public class IconUtil {
     }
 
     public static void start(ImageView imageView) {
-        if(imageView == null) return;
+        if(imageView == null || imageView.getDrawable() == null) return;
+        if(!(imageView.getDrawable() instanceof AnimatedVectorDrawable)) return;
         start(imageView.getDrawable());
     }
 

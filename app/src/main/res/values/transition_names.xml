@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="transition_overview_products">transition_overview_products</string>
+    <string name="transition_overview_qus">transition_overview_qus</string>
+    <string name="transition_overview_locations">transition_overview_locations</string>
+    <string name="transition_overview_product_groups">transition_overview_product_groups</string>
+    <string name="transition_overview_stores">transition_overview_stores</string>
+
+</resources>

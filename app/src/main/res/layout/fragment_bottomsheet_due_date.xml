@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_bbd_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textAlignment="viewStart"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:text="@string/property_due_date"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <LinearLayout
+        android:id="@+id/linear_bbd_never_expires"
+        style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
+        android:background="@null"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="0dp">
+
+        <TextView
+            style="@style/Theme.Grocy.ListItem.Title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/subtitle_never_overdue" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkbox_bbd_never_expires"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+    </LinearLayout>
+
+    <DatePicker
+        android:id="@+id/date_picker_bbd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_bbd_reset"
+            style="@style/Widget.Grocy.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rippleColor="@color/highlight"
+            android:textColor="@color/on_background_secondary"
+            android:text="@string/action_reset" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_bbd_save"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_save" />
+
+    </LinearLayout>
+
+</LinearLayout>

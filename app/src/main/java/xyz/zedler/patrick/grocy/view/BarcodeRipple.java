@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.view;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.animation.Animator;
@@ -67,7 +67,7 @@ public class BarcodeRipple extends LinearLayout {
                         height = cardView.getHeight();
                         strokeWidth = cardView.getStrokeWidth();
 
-                        resumeAnimation();
+                        //resumeAnimation();
 
                         if (getViewTreeObserver().isAlive()) {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -114,7 +114,7 @@ public class BarcodeRipple extends LinearLayout {
 
     private void startAnimation() {
         continueAnim = true;
-        animation();
+        //animation();
     }
 
     public void resumeAnimation() {

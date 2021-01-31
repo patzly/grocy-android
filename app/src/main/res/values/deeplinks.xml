@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="deep_link_shoppingListFragment">grocy://shoppingListFragment</string>
+    <string name="deep_link_shoppingListItemEditFragment">grocy://shoppingListItemEditFragment?action={action}</string>
+    <string name="deep_link_shoppingModeFragment">grocy://shoppingModeFragment</string>
+    <string name="deep_link_purchaseFragment">grocy://purchaseFragment</string>
+    <string name="deep_link_consumeFragment">grocy://consumeFragment</string>
+    <string name="deep_link_batchModeFragment">grocy://batchModeFragment</string>
+    <string name="deep_link_settingsFragment">grocy://settingsFragment?showCategory={showCategory}</string>
+    <string name="deep_link_settingsCatServerFragment">grocy://settingsCatServerFragment</string>
+    <string name="deep_link_settingsCatBehaviorFragment">grocy://settingsCatBehaviorFragment</string>
+    <string name="deep_link_settingsCatScannerFragment">grocy://settingsCatScannerFragment</string>
+    <string name="deep_link_aboutFragment">grocy://aboutFragment</string>
+    <string name="deep_link_masterProductFragment">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}</string>
+    <string name="deep_link_masterDataOverviewFragment">grocy://masterDataOverviewFragment</string>
+
+</resources>

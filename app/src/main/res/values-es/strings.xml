@@ -25,7 +25,7 @@
     <string name="action_new">Nuevo</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Anterior</string>
-    <string name="action_send_feedback">Enviar comentarios</string>
+    <string name="action_feedback">Enviar comentarios</string>
     <string name="action_reset">Reiniciar</string>
     <string name="action_reload">Recargar</string>
     <string name="action_top_scroll">Deslizar hasta arriba</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Ejecutar transacciones de compra para los productos creados</string>
     <string name="action_create_key">Crear llave</string>
     <string name="action_login">Iniciar sesión</string>
-    <string name="action_use_demo_account">Usar cuenta de demostración</string>
+    <string name="action_try_demo_instance">Usar cuenta de demostración</string>
     <string name="action_ignore">Ignorar</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Todo</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">El codigo de barras ya existe</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Este producto todavía tiene stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
     <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>
@@ -191,7 +190,7 @@
     <string name="title_shopping_list">Lista de compras</string>
     <string name="title_feedback">Comentarios</string>
     <string name="title_settings">Ajustes</string>
-    <string name="title_about">Acerca de</string>
+    <string name="title_about_this_app">Acerca de</string>
     <string name="title_info">Información</string>
     <string name="title_help">Ayuda</string>
     <string name="title_logs">Registros</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Vacío</string>
     <string name="subtitle_done">Hecho</string>
     <string name="subtitle_undone">Deshecho</string>
-    <string name="subtitle_never_expires">Nunca vence</string>
+    <string name="subtitle_never_overdue">Nunca vence</string>
     <string name="subtitle_selected">Seleccionado</string>
     <string name="subtitle_stock_entry_no_specific">Primero los productos que vencen, después primero dentro - primero fuera</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Precio en %1$s</string>
     <string name="property_quantity_unit">Unidad de cantidad</string>
     <string name="property_quantity_units">Unidades de cantidad</string>
-    <string name="property_qu_purchase">Compra de unidad de cantidad</string>
+    <string name="property_default_qu_purchase">Compra de unidad de cantidad</string>
     <string name="property_qu_stock">Stock de unidad de cantidad</string>
     <string name="property_qu_factor">Factor de compra a stock</string>
     <string name="property_barcode">Código de barras</string>
     <string name="property_barcodes">Códigos de barra</string>
-    <string name="property_bbd">Fecha de vencimiento</string>
-    <string name="property_bbd_next">Siguiente fecha de vencimiento</string>
-    <string name="property_bb_days">Días para la fecha de vencimiento</string>
-    <string name="property_bb_days_default">Días por defecto para la fecha de vencimiento</string>
-    <string name="property_bb_days_default_opened">Días para vencimiento después de abierto</string>
+    <string name="property_due_date">Fecha de vencimiento</string>
+    <string name="property_due_date_next">Siguiente fecha de vencimiento</string>
+    <string name="property_due_days">Días para la fecha de vencimiento</string>
+    <string name="property_due_days_default">Días por defecto para la fecha de vencimiento</string>
+    <string name="property_due_days_default_opened">Días para vencimiento después de abierto</string>
     <string name="property_location">Ubicación</string>
     <string name="property_location_default">Ubicación por defecto</string>
     <string name="property_notes">Notas</string>
@@ -377,10 +376,10 @@
 
     <string name="category_licenses">Licencias de código abierto</string>
     <string name="category_general">General</string>
-    <string name="category_purchase_consume">Comprar &amp; consumir</string>
+    <string name="category_shopping_mode">Comprar &amp; consumir</string>
     <string name="category_server">Servidor</string>
     <string name="category_debugging">Depuración</string>
-    <string name="category_presets">Preajustes para nuevos productos</string>
+    <string name="category_presets_new_products">Preajustes para nuevos productos</string>
 
     <string name="hint_server">URL del servidor</string>
     <string name="hint_key">Clave de API válida</string>

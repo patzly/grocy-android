@@ -16,32 +16,44 @@ package xyz.zedler.patrick.grocy.model;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
+@Entity(tableName = "location_table")
 public class Location implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "row_created_timestamp")
     @SerializedName("row_created_timestamp")
     private String rowCreatedTimestamp;
 
+    @ColumnInfo(name = "is_freezer")
     @SerializedName("is_freezer")
-    private int isFreezer;
+    private String isFreezer;
 
     public Location(int id, String name) {
         this.id = id;
@@ -53,7 +65,7 @@ public class Location implements Parcelable {
         name = parcel.readString();
         description = parcel.readString();
         rowCreatedTimestamp = parcel.readString();
-        isFreezer = parcel.readInt();
+        isFreezer = parcel.readString();
     }
 
     @Override
@@ -62,7 +74,7 @@ public class Location implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(rowCreatedTimestamp);
-        dest.writeInt(isFreezer);
+        dest.writeString(isFreezer);
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -90,13 +102,58 @@ public class Location implements Parcelable {
         return description;
     }
 
-    public int getIsFreezer() {
+    public String getIsFreezer() {
         return isFreezer;
+    }
+
+    public int getIsFreezerInt() {
+        return isFreezer == null || isFreezer.isEmpty() ? 0 : Integer.parseInt(isFreezer);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
+    }
+
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
+    }
+
+    public void setIsFreezer(String isFreezer) {
+        this.isFreezer = isFreezer;
     }
 
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return id == location.id &&
+                isFreezer == location.isFreezer &&
+                Objects.equals(name, location.name) &&
+                Objects.equals(description, location.description) &&
+                Objects.equals(rowCreatedTimestamp, location.rowCreatedTimestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, rowCreatedTimestamp, isFreezer);
     }
 
     @NonNull

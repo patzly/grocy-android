@@ -31,38 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-
         </activity>
 
-        <activity
-            android:name=".activity.LoginActivity"
-            android:theme="@style/Theme.Grocy.NoNavBarDivider"/>
-
         <activity android:name=".activity.SettingsActivity"/>
-
-        <activity android:name=".activity.ShoppingActivity"/>
-
-        <activity
-            android:name=".activity.FeaturesActivity"
-            android:theme="@style/Theme.Grocy.NoNavBarDivider"/>
-
-        <activity android:name=".activity.AboutActivity"/>
-
-        <activity android:name=".activity.LogActivity"/>
-
-        <activity
-            android:name=".activity.ScanInputActivity"
-            android:stateNotNeeded="true"
-            android:theme="@style/Theme.Grocy.Camera"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity
-            android:name=".activity.ScanBatchActivity"
-            android:theme="@style/Theme.Grocy.Camera"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
     </application>
 

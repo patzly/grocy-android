@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.fragment;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.app.Activity;
@@ -32,13 +32,13 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,15 +58,12 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.StockItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.animator.ItemAnimator;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.EmptyStateHelper;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -76,7 +73,6 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.util.AnimUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -86,9 +82,9 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class StockFragment extends Fragment implements StockItemAdapter.StockItemAdapterListener {
+public class StockFragment extends BaseFragment implements StockItemAdapter.StockItemAdapterListener {
 
-    private final static String TAG = Constants.UI.STOCK;
+    private final static String TAG = StockFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -98,7 +94,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     private AppBarBehavior appBarBehavior;
     private StockItemAdapter stockItemAdapter;
     private ClickUtil clickUtil;
-    private AnimUtil animUtil;
     private FragmentStockBinding binding;
     private SwipeBehavior swipeBehavior;
     private EmptyStateHelper emptyStateHelper;
@@ -159,20 +154,18 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         // UTILS
 
         clickUtil = new ClickUtil();
-        animUtil = new AnimUtil();
 
         // PREFERENCES
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         String days = sharedPrefs.getString(
-                Constants.PREF.STOCK_EXPIRING_SOON_DAYS,
+                Constants.PREF.STOCK_DUE_SOON_DAYS,
                 String.valueOf(5)
         );
         if(days == null) days = String.valueOf(5);
@@ -214,10 +207,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
         binding.frameStockSearchScan.setOnClickListener(v -> {
-            startActivityForResult(
-                    new Intent(activity, ScanInputActivity.class),
-                    Constants.REQUEST.SCAN
-            );
+            navigate(StockFragmentDirections.actionStockFragmentToScanInputFragment());
             dismissSearch();
         });
         binding.editTextStockSearch.addTextChangedListener(new TextWatcher() {
@@ -236,7 +226,11 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         return true;
                     } return false;
                 });
-        emptyStateHelper = new EmptyStateHelper(this, binding.linearEmpty);
+        emptyStateHelper = new EmptyStateHelper(
+                binding.linearEmpty,
+                R.string.error_empty_stock,
+                R.string.error_empty_stock_sub
+        );
 
         // APP BAR BEHAVIOR
 
@@ -310,7 +304,6 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.recyclerStock.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         );
-        binding.recyclerStock.setItemAnimator(new ItemAnimator());
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
         if(swipeBehavior == null) {
@@ -322,7 +315,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                 ) {
                     if(viewHolder.getAdapterPosition() >= stockItems.size()) return;
                     StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
-                    if(stockItem.getAmount() > 0
+                    if(stockItem.getAmountDouble() > 0
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
@@ -336,8 +329,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 }
                         ));
                     }
-                    if(stockItem.getAmount()
-                            > stockItem.getAmountOpened()
+                    if(stockItem.getAmountDouble()
+                            > stockItem.getAmountOpenedDouble()
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                             && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
                     ) {
@@ -370,17 +363,31 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
 
-        activity.updateUI(
-                appBarBehavior.isPrimaryLayout()
-                        ? Constants.UI.STOCK_DEFAULT
-                        : Constants.UI.STOCK_SEARCH,
-                (getArguments() == null
-                        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                        && savedInstanceState == null,
-                TAG
-        );
         setArguments(null);
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_stock);
+        activity.getScrollBehavior().setHideOnScroll(true);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_stock,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_barcode_scan,
+                R.string.action_scan,
+                Constants.FAB.TAG.SCAN,
+                animated,
+                () -> {
+                }
+        );
     }
 
     @Override
@@ -405,7 +412,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         outState.putInt("filterLocationId", filterLocationId);
         outState.putInt("filterProductGroupId", filterProductGroupId);
 
-        appBarBehavior.saveInstanceState(outState);
+        //appBarBehavior.saveInstanceState(outState);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -475,7 +482,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
             download();
         } else {
             binding.swipeStock.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -495,31 +502,31 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         if(binding == null) return;
 
-        binding.linearError.buttonErrorRetry.setOnClickListener(v -> refresh());
+        /*binding.relativeError.buttonErrorRetry.setOnClickListener(v -> refresh());
 
-        View viewIn = binding.linearError.linearError;
+        View viewIn = binding.relativeError.relativeError;
         View viewOut = binding.scrollStock;
 
         switch (state) {
             case Constants.STATE.OFFLINE:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_broccoli);
-                binding.linearError.textErrorTitle.setText(R.string.error_offline);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_broccoli);
+                binding.relativeError.textErrorTitle.setText(R.string.error_offline);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_offline_subtitle);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.ERROR:
-                binding.linearError.imageError.setImageResource(R.drawable.illustration_popsicle);
-                binding.linearError.textErrorTitle.setText(R.string.error_unknown);
-                binding.linearError.textErrorSubtitle.setText(R.string.error_undefined);
+                binding.relativeError.imageError.setImageResource(R.drawable.illustration_popsicle);
+                binding.relativeError.textErrorTitle.setText(R.string.error_unknown);
+                binding.relativeError.textErrorSubtitle.setText(R.string.error_undefined);
                 emptyStateHelper.clearState();
                 break;
             case Constants.STATE.NONE:
                 viewIn = binding.scrollStock;
-                viewOut = binding.linearError.linearError;
+                viewOut = binding.relativeError.relativeError;
                 break;
-        }
+        }*/
 
-        if(animUtil != null) animUtil.replaceViews(viewIn, viewOut, animated);
+        //if(animUtil != null) animUtil.replaceViews(viewIn, viewOut, animated);
     }
 
     private void download() {
@@ -536,8 +543,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     updateMenuFilterVisibility();
                 }),
                 dlHelper.getStockItems(stockItems -> this.stockItems = stockItems),
-                dlHelper.getVolatile((expiring, expired, missing) -> {
-                    expiringItems = expiring;
+                dlHelper.getVolatile((due, overdue, expired, missing) -> {
+                    expiringItems = overdue;
                     expiredItems = expired;
                     missingItems = missing;
                     chipExpiring.setText(
@@ -665,7 +672,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         if(filterLocationId != -1) {
             ArrayList<StockItem> tempItems = new ArrayList<>();
             for(StockItem stockItem : filteredItems) {
-                if(filterLocationId == stockItem.getProduct().getLocationId()) {
+                if(filterLocationId == stockItem.getProduct().getLocationIdInt()) {
                     tempItems.add(stockItem);
                 }
             }
@@ -923,7 +930,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                                 Snackbar.LENGTH_SHORT
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 }
         );
     }
@@ -946,8 +953,8 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     consumeProduct(
                             productId,
                             stockItem.getProduct().getEnableTareWeightHandling() == 0
-                                    ? stockItem.getAmount()
-                                    : stockItem.getProduct().getTareWeight(),
+                                    ? stockItem.getAmountDouble()
+                                    : stockItem.getProduct().getTareWeightDouble(),
                             false
                     );
                 }
@@ -1015,13 +1022,13 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     // create updated stockItem object
                     StockItem stockItemNew = new StockItem(productDetails);
 
-                    if(!undo && stockItemNew.getAmount() == 0
-                            && stockItemNew.getProduct().getMinStockAmount() == 0
+                    if(!undo && stockItemNew.getAmountDouble() == 0
+                            && stockItemNew.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.remove(index);
                         stockItemAdapter.notifyItemRemoved(index);
-                    } else if(undo && stockItemOld.getAmount() == 0
-                            && stockItemOld.getProduct().getMinStockAmount() == 0
+                    } else if(undo && stockItemOld.getAmountDouble() == 0
+                            && stockItemOld.getProduct().getMinStockAmountDouble() == 0
                     ) {
                         displayedItems.add(index, stockItemNew);
                         stockItemAdapter.notifyItemInserted(index);
@@ -1035,7 +1042,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                     if(!undo) {
 
                         // calculate consumed amount for info
-                        double amountConsumed = stockItemOld.getAmount() - stockItemNew.getAmount();
+                        double amountConsumed = stockItemOld.getAmountDouble() - stockItemNew.getAmountDouble();
 
                         QuantityUnit quantityUnit = productDetails.getQuantityUnitStock();
 
@@ -1086,7 +1093,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                         if(debug) Log.i(TAG, "updateConsumedStockItem: undone");
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
@@ -1191,7 +1198,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
                         );
                         if(debug) Log.i(TAG, "updateOpenedStockItem: undone");
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
                 },
                 error -> {
                     showErrorMessage(error);
@@ -1248,7 +1255,7 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void showErrorMessage(VolleyError error) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(
                         activity.binding.frameMainContainer,
                         activity.getString(R.string.error_undefined),
@@ -1380,28 +1387,23 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
     }
 
     private void showProductOverview(StockItem stockItem) {
-        if(stockItem != null) {
-            QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
-            Location location = getLocation(stockItem.getProduct().getLocationId());
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            bundle.putParcelable(Constants.ARGUMENT.STOCK_ITEM, stockItem);
-            bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit);
-            bundle.putParcelable(Constants.ARGUMENT.LOCATION, location);
-            activity.showBottomSheet(new ProductOverviewBottomSheetDialogFragment(), bundle);
-        }
+        if(stockItem == null) return;
+        QuantityUnit quantityUnit = getQuantityUnit(stockItem.getProduct().getQuIdStock());
+        Location location = getLocation(stockItem.getProduct().getLocationIdInt());
+        navigate(StockFragmentDirections
+                .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                .setShowActions(true)
+                .setStockItem(stockItem)
+                .setQuantityUnit(quantityUnit)
+                .setLocation(location));
     }
 
     private void showProductOverview(ProductDetails productDetails) {
-        if(productDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-            bundle.putBoolean(Constants.ARGUMENT.SHOW_ACTIONS, true);
-            activity.showBottomSheet(
-                    new ProductOverviewBottomSheetDialogFragment(),
-                    bundle
-            );
-        }
+        if(productDetails == null) return;
+        navigate(StockFragmentDirections
+                .actionStockFragmentToProductOverviewBottomSheetDialogFragment()
+                .setShowActions(true)
+                .setProductDetails(productDetails));
     }
 
     private void setUpSearch() {
@@ -1412,9 +1414,16 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
         binding.textInputStockSearch.requestFocus();
         activity.showKeyboard(binding.editTextStockSearch);
 
-        activity.setUI(Constants.UI.STOCK_SEARCH);
+        //setIsSearchVisible(true);
     }
 
+    @Override
+    public boolean isSearchVisible() {
+        return false;
+        //return viewModel.isSearchVisible();
+    }
+
+    @Override
     public void dismissSearch() {
         appBarBehavior.switchToPrimary();
         activity.hideKeyboard();
@@ -1423,12 +1432,17 @@ public class StockFragment extends Fragment implements StockItemAdapter.StockIte
 
         emptyStateHelper.clearState();
 
-        activity.setUI(Constants.UI.STOCK_DEFAULT);
+        //setIsSearchVisible(false);
     }
 
     private boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 
     @NonNull

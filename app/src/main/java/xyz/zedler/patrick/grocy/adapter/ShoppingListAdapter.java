@@ -16,11 +16,12 @@ package xyz.zedler.patrick.grocy.adapter;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,39 +32,48 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
     private final static String TAG = ShoppingListAdapter.class.getSimpleName();
 
-    private ArrayList<ShoppingList> shoppingLists;
+    private final List<ShoppingList> shoppingLists;
     private int selectedId;
-    private ShoppingListAdapterListener listener;
+    private final ShoppingListAdapterListener listener;
+    private final boolean showActions;
 
     public ShoppingListAdapter(
-            ArrayList<ShoppingList> shoppingLists,
-            int selectedId,
-            ShoppingListAdapterListener listener
+            List<ShoppingList> shoppingLists,
+            Object selectedId,
+            ShoppingListAdapterListener listener,
+            boolean showActions
     ) {
-        this.shoppingLists = shoppingLists;
-        this.selectedId = selectedId;
+        this.shoppingLists = new ArrayList<>(shoppingLists);
+        this.selectedId = selectedId != null ? (Integer) selectedId : -1;
         this.listener = listener;
+        this.showActions = showActions;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer;
-        private TextView textViewName;
-        private ImageView imageViewSelected;
+        private final LinearLayout container;
+        private final TextView name;
+        private final ImageView imageSelected;
+        private final ActionButton edit;
+        private final ActionButton delete;
 
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
-            textViewName = view.findViewById(R.id.text_master_edit_selection_name);
-            imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
+            container = view.findViewById(R.id.container);
+            name = view.findViewById(R.id.name);
+            imageSelected = view.findViewById(R.id.image_selected);
+            edit = view.findViewById(R.id.edit);
+            delete = view.findViewById(R.id.delete);
         }
     }
 
@@ -72,7 +82,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     public ShoppingListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ShoppingListAdapter.ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_edit_selection_sheet,
+                        R.layout.row_shopping_list_selection_sheet,
                         parent,
                         false
                 )
@@ -87,21 +97,39 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     ) {
         ShoppingList shoppingList = shoppingLists.get(holder.getAdapterPosition());
 
-        // NAME
-
-        holder.textViewName.setText(shoppingList.getName());
-
-        // SELECTED
+        holder.name.setText(shoppingList.getName());
 
         if(shoppingList.getId() == selectedId) {
-            holder.imageViewSelected.setVisibility(View.VISIBLE);
+            holder.imageSelected.setVisibility(View.VISIBLE);
         }
 
-        // CONTAINER
+        holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
 
-        holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(holder.getAdapterPosition())
-        );
+        if(shoppingList.getId() == 1) holder.delete.setVisibility(View.GONE);
+
+        holder.delete.setOnTouchListener((v, event) -> {
+            listener.onTouchDelete(v, event, shoppingList);
+            return true;
+        });
+
+        holder.edit.setOnClickListener(v -> listener.onClickEdit(shoppingList));
+
+        if(!showActions) {
+            holder.delete.setVisibility(View.GONE);
+            holder.edit.setVisibility(View.GONE);
+        }
+    }
+
+    public void updateData(List<ShoppingList> shoppingListsNew, Object selectedIdNew) {
+        shoppingLists.clear();
+        shoppingLists.addAll(shoppingListsNew);
+        this.selectedId = selectedIdNew != null ? (Integer) selectedIdNew : -1;
+        notifyDataSetChanged();
+    }
+
+    public void updateSelectedId(Object selectedIdNew) {
+        this.selectedId = selectedIdNew != null ? (Integer) selectedIdNew : -1;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -115,6 +143,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     }
 
     public interface ShoppingListAdapterListener {
-        void onItemRowClicked(int position);
+        void onItemRowClicked(ShoppingList shoppingList);
+        void onTouchDelete(View view, MotionEvent event, ShoppingList shoppingList);
+        void onClickEdit(ShoppingList shoppingList);
     }
 }

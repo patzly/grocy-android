@@ -25,7 +25,7 @@
     <string name="action_new">Ny</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Föregående</string>
-    <string name="action_send_feedback">Skicka feedback</string>
+    <string name="action_feedback">Skicka feedback</string>
     <string name="action_reset">Återställ</string>
     <string name="action_reload">Uppdatera</string>
     <string name="action_top_scroll">Scrolla till toppen</string>
@@ -54,7 +54,7 @@
     <string name="action_logout">Logga ut</string>
     <string name="action_restart">Starta om</string>
     <string name="action_show_extended">Visa utökat formulär</string>
-    <string name="action_batch_mode">Batch-läge</string>
+    <string name="title_batch_mode">Batch-läge</string>
     <string name="action_create">Skapa</string>
     <string name="action_link">Länk</string>
     <string name="action_open_forms">Öppna formulär</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Utför köptransaktioner för skapade produkter</string>
     <string name="action_create_key">Skapa nyckel</string>
     <string name="action_login">Logga in</string>
-    <string name="action_use_demo_account">Använd demo-konto</string>
+    <string name="action_try_demo_instance">Använd demo-konto</string>
     <string name="action_ignore">Ignorera</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alla</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Streckkod finns redan</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Radera %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Den här produkten finns fortfarande i lager</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
     <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>
@@ -191,7 +190,7 @@
     <string name="title_shopping_list">Shoppinglista</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Inställningar</string>
-    <string name="title_about">Om</string>
+    <string name="title_about_this_app">Om</string>
     <string name="title_info">Information</string>
     <string name="title_help">Hjälp</string>
     <string name="title_logs">Loggar</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Tom</string>
     <string name="subtitle_done">Klar</string>
     <string name="subtitle_undone">Ångrat</string>
-    <string name="subtitle_never_expires">Går aldrig ut</string>
+    <string name="subtitle_never_overdue">Går aldrig ut</string>
     <string name="subtitle_selected">Valt</string>
     <string name="subtitle_stock_entry_no_specific">Kortast datum först, sedan först in – först ut</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Pris i %1$s</string>
     <string name="property_quantity_unit">Mängdenhet</string>
     <string name="property_quantity_units">Mängdenheter</string>
-    <string name="property_qu_purchase">Mängdenhetsköp</string>
+    <string name="property_default_qu_purchase">Mängdenhetsköp</string>
     <string name="property_qu_stock">Mängdenhet lager</string>
     <string name="property_qu_factor">Faktor mellan köp och lager</string>
     <string name="property_barcode">Streckkod</string>
     <string name="property_barcodes">Streckkoder</string>
-    <string name="property_bbd">Bäst före-datum</string>
-    <string name="property_bbd_next">Nästa bäst före-datum</string>
-    <string name="property_bb_days">Hållbarhet (dagar)</string>
-    <string name="property_bb_days_default">Standard-hållbarhet (dagar)</string>
-    <string name="property_bb_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
+    <string name="property_due_date">Bäst före-datum</string>
+    <string name="property_due_date_next">Nästa bäst före-datum</string>
+    <string name="property_due_days">Hållbarhet (dagar)</string>
+    <string name="property_due_days_default">Standard-hållbarhet (dagar)</string>
+    <string name="property_due_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
     <string name="property_location">Plats</string>
     <string name="property_location_default">Standardplats</string>
     <string name="property_notes">Anteckningar</string>
@@ -377,10 +376,10 @@
 
     <string name="category_licenses">Licenser för öppen källkod</string>
     <string name="category_general">Generellt</string>
-    <string name="category_purchase_consume">Köp &amp; konsumera</string>
+    <string name="category_shopping_mode">Köp &amp; konsumera</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Felsökning</string>
-    <string name="category_presets">Förinställningar för nya produkter</string>
+    <string name="category_presets_new_products">Förinställningar för nya produkter</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Giltig API-nyckel</string>

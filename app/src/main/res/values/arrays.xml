@@ -2,8 +2,9 @@
 <resources>
 
     <string-array name="compatible_grocy_versions" translatable="false">
-        <item>2.7.0</item>
-        <item>2.7.1</item>
+        <item>3.0.0</item>
+        <item>3.0.1</item>
+        <item>3.0.2</item>
     </string-array>
 
 </resources>

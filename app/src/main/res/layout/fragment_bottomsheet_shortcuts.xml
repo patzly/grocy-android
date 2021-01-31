@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+        <variable name="sheet"
+            type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet"/>
+    </data>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_logout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textAlignment="viewStart"
+        android:fontFamily="@font/roboto_mono_bold"
+        android:text="@string/setting_manage_shortcuts"
+        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
+
+    <View
+        style="@style/Theme.Grocy.Divider"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="viewStart"
+                android:text="@string/msg_shortcuts"
+                android:textSize="15sp"
+                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+
+            <LinearLayout
+                android:id="@+id/checkbox_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/shopping_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/title_shopping_list"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/add_to_shopping_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/action_shopping_list_add"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/shopping_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/title_shopping_mode"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/purchase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/title_purchase"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/consume"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/title_consume"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/batch_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_background"
+                    android:text="@string/title_batch_mode"
+                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="@style/Widget.Grocy.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rippleColor="@color/highlight"
+                    android:textColor="@color/on_background_secondary"
+                    android:text="@string/action_cancel"
+                    android:onClick="@{() -> sheet.dismiss()}"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save"
+                    style="@style/Widget.Grocy.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:backgroundTint="@color/retro_green_bg_white"
+                    android:text="@string/action_save"
+                    android:onClick="@{() -> sheet.saveShortcuts()}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
+</layout>

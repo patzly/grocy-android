@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable name="viewModel"
+            type="xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel"/>
+        <variable name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+        <variable name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"/>
+    </data>
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,18 +19,21 @@
     android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:actionBarSize"
-        android:background="@color/primary">
+        android:background="@color/primary"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/linear_shopping_list_app_bar_default"
+                android:id="@+id/app_bar_default"
                 android:layout_width="match_parent"
                 android:layout_height="?android:actionBarSize"
                 android:gravity="center_vertical"
@@ -38,7 +52,8 @@
                     android:contentDescription="@string/action_back"
                     android:tooltipText="@string/action_back"
                     android:focusable="true"
-                    tools:targetApi="o">
+                    tools:targetApi="o"
+                    android:onClick="@{() -> activity.navigateUp()}">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -50,11 +65,13 @@
                 </FrameLayout>
 
                 <TableLayout
+                    android:id="@+id/table_title_app_bar"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:shrinkColumns="0">
+                    android:shrinkColumns="0"
+                    android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -80,7 +97,8 @@
                             android:paddingStart="4dp"
                             android:paddingEnd="4dp"
                             app:icon="@drawable/ic_round_expand_more"
-                            app:tint="@color/icon"/>
+                            app:tint="@color/icon"
+                            app:enabled="@{false}"/>
 
                     </TableRow>
 
@@ -89,7 +107,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_shopping_list_app_bar_search"
+                android:id="@+id/app_bar_search"
                 android:layout_width="match_parent"
                 android:layout_height="?android:actionBarSize"
                 android:gravity="center_vertical"
@@ -98,7 +116,6 @@
                 android:baselineAligned="false">
 
                 <FrameLayout
-                    android:id="@+id/frame_shopping_list_search_close"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="4dp"
@@ -109,7 +126,8 @@
                     android:contentDescription="@string/action_close"
                     android:tooltipText="@string/action_close"
                     android:focusable="true"
-                    tools:targetApi="o">
+                    tools:targetApi="o"
+                    android:onClick="@{() -> fragment.dismissSearch()}">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -137,33 +155,34 @@
                         android:imeOptions="actionSearch"
                         android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
                         android:singleLine="true"
-                        android:textColor="@color/on_background" />
+                        android:textColor="@color/on_background"
+                        android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
+                        app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_offline_error"
-                android:layout_width="match_parent"
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/retro_red_bg_black"
+            android:gravity="center"
+            android:alpha="0.9"
+            android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/retro_red_bg_black"
-                android:gravity="center"
-                android:alpha="0.9"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="@font/roboto_mono_medium"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:text="@string/error_offline"/>
-
-            </LinearLayout>
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/roboto_mono_medium"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:text="@string/error_offline"/>
 
         </LinearLayout>
 
@@ -173,74 +192,32 @@
         android:id="@+id/swipe_shopping_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:layout_below="@id/app_bar"
+        android:animateLayoutChanges="true"
+        app:transitionTypeChanging="@{true}"
+        app:progressBackgroundColor="@{@color/surface}"
+        app:progressForegroundColor="@{@color/secondary}"
+        app:setRefreshing="@{viewModel.isLoadingLive}"
+        app:onRefreshListener="@{() -> viewModel.downloadData()}">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <FrameLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/linear_empty"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="56dp"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_empty"/>
+                android:paddingTop="8dp"
+                android:paddingBottom="120dp"
+                android:overScrollMode="never"
+                android:clipToPadding="false" />
 
-            <include
-                android:id="@+id/linear_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_error"/>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_shopping_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:overScrollMode="never">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="120dp">
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:overScrollMode="ifContentScrolls">
-
-                        <LinearLayout
-                            android:id="@+id/linear_shopping_list_filter_container"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp"/>
-
-                    </HorizontalScrollView>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_shopping_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="8dp"
-                        android:overScrollMode="never"
-                        android:nestedScrollingEnabled="false"
-                        android:clipToPadding="false"/>
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
+</layout>

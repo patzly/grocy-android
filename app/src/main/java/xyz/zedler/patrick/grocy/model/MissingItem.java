@@ -16,29 +16,41 @@ package xyz.zedler.patrick.grocy.model;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "missing_item_table")
 public class MissingItem implements Parcelable {
 
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private int id;
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "amount_missing")
     @SerializedName("amount_missing")
     private String amountMissing;
 
+    @ColumnInfo(name = "is_partly_in_stock")
     @SerializedName("is_partly_in_stock")
     private int isPartlyInStock;
+
+    // for Room
+    public MissingItem() {}
 
     private MissingItem(Parcel parcel) {
         id = parcel.readInt();
@@ -76,7 +88,7 @@ public class MissingItem implements Parcelable {
         return name;
     }
 
-    public double getAmountMissing() {
+    public double getAmountMissingDouble() {
         if(amountMissing == null || amountMissing.isEmpty()) {
             return 0;
         } else {
@@ -84,8 +96,28 @@ public class MissingItem implements Parcelable {
         }
     }
 
+    public String getAmountMissing() {
+        return amountMissing;
+    }
+
     public int getIsPartlyInStock() {
         return isPartlyInStock;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAmountMissing(String amountMissing) {
+        this.amountMissing = amountMissing;
+    }
+
+    public void setIsPartlyInStock(int isPartlyInStock) {
+        this.isPartlyInStock = isPartlyInStock;
     }
 
     @Override

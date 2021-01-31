@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.adapter;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.annotation.SuppressLint;
@@ -124,7 +124,7 @@ public class StockEntryAdapter
             );
 
             // SUBTITLE
-            String bbd = stockEntry.getBestBeforeDate().equals(Constants.DATE.NEVER_EXPIRES)
+            String bbd = stockEntry.getBestBeforeDate().equals(Constants.DATE.NEVER_OVERDUE)
                     ? context.getString(R.string.date_unlimited)
                     : dateUtil.getLocalizedDate(
                             stockEntry.getBestBeforeDate(),

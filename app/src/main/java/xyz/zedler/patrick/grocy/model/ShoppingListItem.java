@@ -16,11 +16,12 @@ package xyz.zedler.patrick.grocy.model;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -28,6 +29,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -51,33 +55,48 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     @SerializedName("shopping_list_id")
     private int shoppingListId;
 
+    @ColumnInfo(name = "qu_id")
+    @SerializedName("qu_id")
+    private String quId;
+
     @ColumnInfo(name = "done")
     @SerializedName("done")
     private int done;
 
     @ColumnInfo(name = "done_synced")
+    @SerializedName("done_synced")
     private int doneSynced = -1;  // state of param "done" on server during time of last sync
+                                  // -1 means that the "done" was not edited since sync
 
     @ColumnInfo(name = "product_id")
     @SerializedName("product_id")
     private String productId;
 
-    @ColumnInfo(name = "product_name")
-    private String productName;
-
-    @ColumnInfo(name = "product_description")
-    private String productDescription;
-
-    @ColumnInfo(name = "product_group_id")
-    private String productGroupId;
-
-    @ColumnInfo(name = "product_qu_id_purchase")
-    private int productQuIdPurchase;
-
-    @ColumnInfo(name = "is_missing")
-    private int isMissing;  // needs to be integer because of min. API level
+    @ColumnInfo(name = "row_created_timestamp")
+    @SerializedName("row_created_timestamp")
+    private String rowCreatedTimestamp;
 
     public ShoppingListItem() {}
+
+    private ShoppingListItem( // for clone
+              int id,
+              String productId,
+              String note,
+              double amount,
+              int shoppingListId,
+              String quId,
+              int done,
+              int doneSynced
+    ) {
+        this.id = id;
+        this.productId = productId;
+        this.note = note;
+        this.amount = amount;
+        this.shoppingListId = shoppingListId;
+        this.quId = quId;
+        this.done = done;
+        this.doneSynced = doneSynced;
+    }
 
     private ShoppingListItem(Parcel parcel) {
         id = parcel.readInt();
@@ -85,13 +104,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         note = parcel.readString();
         amount = parcel.readDouble();
         shoppingListId = parcel.readInt();
+        quId = parcel.readString();
         done = parcel.readInt();
         doneSynced = parcel.readInt();
-        productName = parcel.readString();
-        productDescription = parcel.readString();
-        productGroupId = parcel.readString();
-        productQuIdPurchase = parcel.readInt();
-        isMissing = parcel.readInt();
     }
 
     @Override
@@ -101,13 +116,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeString(note);
         dest.writeDouble(amount);
         dest.writeInt(shoppingListId);
+        dest.writeString(quId);
         dest.writeInt(done);
         dest.writeInt(doneSynced);
-        dest.writeString(productName);
-        dest.writeString(productDescription);
-        dest.writeString(productGroupId);
-        dest.writeInt(productQuIdPurchase);
-        dest.writeInt(isMissing);
     }
 
     public static final Creator<ShoppingListItem> CREATOR = new Creator<ShoppingListItem>() {
@@ -134,6 +145,11 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     public String getProductId() {
         if(productId != null && productId.isEmpty()) return null;
         return productId;
+    }
+
+    public int getProductIdInt() {
+        if(!hasProduct()) return -1;
+        return Integer.parseInt(productId);
     }
 
     public void setProductId(String productId) {
@@ -184,73 +200,24 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.doneSynced = doneSynced;
     }
 
-    public String getProductName() {
-        return productName;
+    public boolean hasProduct() {
+        return productId != null && !productId.isEmpty();
     }
 
-    public String getProductDescription() {
-        return productDescription;
+    public String getQuId() {
+        return quId;
     }
 
-    public String getProductGroupId() {
-        return productGroupId;
+    public void setQuId(String quId) {
+        this.quId = quId;
     }
 
-    public int getProductQuIdPurchase() {
-        return productQuIdPurchase;
+    public String getRowCreatedTimestamp() {
+        return rowCreatedTimestamp;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-
-    public void setProductGroupId(String productGroupId) {
-        this.productGroupId = productGroupId;
-    }
-
-    public void setProductQuIdPurchase(int productQuIdPurchase) {
-        this.productQuIdPurchase = productQuIdPurchase;
-    }
-
-    public Product getProduct() {  // only required info for actions in shopping list
-        if(productId == null || productId.isEmpty()) return null;
-        return new Product(
-                Integer.parseInt(productId),
-                productName,
-                productDescription,
-                productQuIdPurchase,
-                productGroupId
-        );
-    }
-
-    public void setProduct(Product product) {
-        if(product == null) {
-            return;
-        }
-        productName = product.getName();
-        productDescription = product.getDescription();
-        productQuIdPurchase = product.getQuIdPurchase();
-        productGroupId = product.getProductGroupId();
-    }
-
-    public int getIsMissing() {
-        return isMissing;
-    }
-
-    public boolean isMissing() {
-        return getIsMissing() == 1;
-    }
-
-    public void setIsMissing(boolean isMissing) {
-        setIsMissing(isMissing ? 1 : 0);
-    }
-
-    public void setIsMissing(int isMissing) {
-        this.isMissing = isMissing;
+    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+        this.rowCreatedTimestamp = rowCreatedTimestamp;
     }
 
     @Override
@@ -273,17 +240,50 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
                 shoppingListId == that.shoppingListId &&
                 done == that.done &&
                 Objects.equals(note, that.note) &&
-                Objects.equals(productId, that.productId);
+                Objects.equals(productId, that.productId) &&
+                Objects.equals(quId, that.quId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, note, amount, shoppingListId, done, productId);
+        return Objects.hash(id, note, amount, shoppingListId, quId, done, productId);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "ShoppingListItem(" + id + ", " + productName + ")";
+        return "ShoppingListItem(" + id + ")";
+    }
+
+    @NonNull
+    public ShoppingListItem getClone() {
+        return new ShoppingListItem(
+                this.id,
+                this.productId,
+                this.note,
+                this.amount,
+                this.shoppingListId,
+                this.quId,
+                this.done,
+                this.doneSynced
+        );
+    }
+
+    public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean debug, String TAG) {
+        JSONObject json = new JSONObject();
+        try {
+            Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
+            Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
+            Object note = item.getNote() == null || item.getNote().isEmpty()
+                    ? JSONObject.NULL : item.getNote();
+            json.put("shopping_list_id", item.getShoppingListId());
+            json.put("amount", item.getAmount());
+            json.put("qu_id", quId);
+            json.put("product_id", productId);
+            json.put("note", note);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
+        }
+        return json;
     }
 }

@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.fragment;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.animation.ValueAnimator;
@@ -41,7 +41,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.NetworkResponse;
@@ -58,15 +60,12 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.ScanBatchActivity;
-import xyz.zedler.patrick.grocy.activity.ScanInputActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -78,9 +77,9 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
-public class ConsumeFragment extends Fragment {
+public class ConsumeFragment extends BaseFragment {
 
-    private final static String TAG = Constants.UI.CONSUME;
+    private final static String TAG = ConsumeFragment.class.getSimpleName();
 
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
@@ -88,7 +87,6 @@ public class ConsumeFragment extends Fragment {
     private GrocyApi grocyApi;
     private DownloadHelper dlHelper;
     private ArrayAdapter<String> adapterProducts;
-    private Bundle startupBundle;
     private FragmentConsumeBinding binding;
 
     private ArrayList<Product> products;
@@ -126,10 +124,7 @@ public class ConsumeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if(isHidden()) return;
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
-
-        if(getArguments() != null) startupBundle = getArguments();
+        activity = (MainActivity) requireActivity();
 
         // GET PREFERENCES
 
@@ -173,10 +168,9 @@ public class ConsumeFragment extends Fragment {
         // product
 
         binding.textInputConsumeProduct.setErrorIconDrawable(null);
-        binding.textInputConsumeProduct.setEndIconOnClickListener(v -> startActivityForResult(
-                new Intent(activity, ScanInputActivity.class),
-                Constants.REQUEST.SCAN
-        ));
+        binding.textInputConsumeProduct.setEndIconOnClickListener(
+                v -> {}
+        );
         binding.autoCompleteConsumeProduct.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if(hasFocus) {
                 IconUtil.start(activity, R.id.image_consume_product);
@@ -218,7 +212,7 @@ public class ConsumeFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
                 if(productDetails == null) return;
-                amount = NumUtil.stringToDouble(s.toString());
+                amount = NumUtil.toDouble(s.toString());
                 isAmountValid();
             }
         });
@@ -267,9 +261,9 @@ public class ConsumeFragment extends Fragment {
                 bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
                 bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
                 bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedLocationId);
-                activity.showBottomSheet(new StockLocationsBottomSheetDialogFragment(), bundle);
+                activity.showBottomSheet(new StockLocationsBottomSheet(), bundle);
             } else if(productDetails != null) {
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(
@@ -299,7 +293,7 @@ public class ConsumeFragment extends Fragment {
                     }
                 }
                 if(filteredStockEntries.isEmpty()) {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(
@@ -316,7 +310,7 @@ public class ConsumeFragment extends Fragment {
                             filteredStockEntries
                     );
                     bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedStockEntryId);
-                    activity.showBottomSheet(new StockEntriesBottomSheetDialogFragment(), bundle);
+                    activity.showBottomSheet(new StockEntriesBottomSheet(), bundle);
                 }
             } else {
                 // no product selected
@@ -347,8 +341,40 @@ public class ConsumeFragment extends Fragment {
         }
 
         // UPDATE UI
+        updateUI((getArguments() == null
+                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+                && savedInstanceState == null);
 
-        activity.updateUI(Constants.UI.CONSUME, savedInstanceState == null, TAG);
+        NavBackStackEntry currentBackStackEntry = NavHostFragment
+                .findNavController(this)
+                .getCurrentBackStackEntry();
+        assert currentBackStackEntry != null;
+        MutableLiveData<String> liveData = currentBackStackEntry
+                .getSavedStateHandle()
+                .getLiveData(Constants.ARGUMENT.PRODUCT_NAME);
+        liveData.observe(getViewLifecycleOwner(), (String productName) -> {
+            // TODO: Set product name; has higher relevance than productName in getArguments()
+            currentBackStackEntry.getSavedStateHandle().remove(Constants.ARGUMENT.PRODUCT_NAME);
+        });
+    }
+
+    private void updateUI(boolean animated) {
+        activity.showHideDemoIndicator(this, animated);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
+        activity.getScrollBehavior().setHideOnScroll(false);
+        activity.updateBottomAppBar(
+                Constants.FAB.POSITION.END,
+                R.menu.menu_consume,
+                animated,
+                this::setUpBottomMenu
+        );
+        activity.updateFab(
+                R.drawable.ic_round_consume_product,
+                R.string.action_consume,
+                Constants.FAB.TAG.CONSUME,
+                animated,
+                this::consumeProduct
+        );
     }
 
     @Override
@@ -399,16 +425,12 @@ public class ConsumeFragment extends Fragment {
         if(!hidden && getView() != null) onViewCreated(getView(), null);
     }
 
-    public void giveBundle(Bundle bundle) {
-        startupBundle = bundle;
-    }
-
     private void refresh() {
         if(activity.isOnline()) {
             download();
         } else {
             binding.swipeConsume.setRefreshing(false);
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(R.string.msg_no_connection),
@@ -442,25 +464,16 @@ public class ConsumeFragment extends Fragment {
                     adapterProducts = new MatchArrayAdapter(activity, productNames);
                     binding.autoCompleteConsumeProduct.setAdapter(adapterProducts);
 
-                    // fill with product from bundle
-                    String action = null;
-                    if(startupBundle != null) {
-                        action = startupBundle.getString(Constants.ARGUMENT.TYPE);
-                    }
-                    if(action != null) {
-                        if(action.equals(Constants.ACTION.CONSUME_THEN_STOCK)
-                                || action.equals(Constants.ACTION.EDIT_THEN_CONSUME)
-                        ) {
-                            Product product = getProductFromName(
-                                    startupBundle.getString(Constants.ARGUMENT.PRODUCT_NAME)
-                            );
-                            if(product != null) loadProductDetails(product.getId());
-                        }
-                    }
+                    // fill with product from args
+                    assert getArguments() != null;
+                    String productName = ConsumeFragmentArgs.fromBundle(getArguments())
+                            .getProductName();
+                    Product product = getProductFromName(productName);
+                    if(product != null) loadProductDetails(product.getId());
                     binding.swipeConsume.setRefreshing(false);
                 }, error -> {
                     binding.swipeConsume.setRefreshing(false);
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.error_undefined),
@@ -493,7 +506,7 @@ public class ConsumeFragment extends Fragment {
                 .getEnableTareWeightHandling() == 1;
 
         if(productDetails.getStockAmount() == 0) { // check if stock is empty
-            activity.showMessage(
+            activity.showSnackbar(
                     Snackbar.make(
                             activity.binding.frameMainContainer,
                             activity.getString(
@@ -638,10 +651,10 @@ public class ConsumeFragment extends Fragment {
                     if(response != null && response.statusCode == 400) {
                         binding.autoCompleteConsumeProduct.setText(barcode);
                         activity.showBottomSheet(
-                                new InputBarcodeBottomSheetDialogFragment(), null
+                                new InputBarcodeBottomSheet(), null
                         );
                     } else {
-                        activity.showMessage(
+                        activity.showSnackbar(
                                 Snackbar.make(
                                         activity.binding.frameMainContainer,
                                         activity.getString(R.string.error_undefined),
@@ -715,7 +728,7 @@ public class ConsumeFragment extends Fragment {
                     } else {
                         // calculate difference of amount if tare weight handling enabled
                         amountConsumed = productDetails.getStockAmount() - amount
-                                + productDetails.getProduct().getTareWeight();
+                                + productDetails.getProduct().getTareWeightDouble();
                     }
 
                     Snackbar snackbar = Snackbar.make(
@@ -741,10 +754,14 @@ public class ConsumeFragment extends Fragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
 
-                    // CLEAR USER INPUT
-                    clearAll();
+                    assert getArguments() != null;
+                    if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                        activity.navigateUp();
+                    } else {
+                        clearAll();
+                    }
                 },
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
@@ -791,7 +808,7 @@ public class ConsumeFragment extends Fragment {
                     } else {
                         // calculate difference of amount if tare weight handling enabled
                         amountConsumed = productDetails.getStockAmount() - amount
-                                + productDetails.getProduct().getTareWeight();
+                                + productDetails.getProduct().getTareWeightDouble();
                     }
 
                     Snackbar snackbar = Snackbar.make(
@@ -813,10 +830,14 @@ public class ConsumeFragment extends Fragment {
                                 v -> undoTransaction(transId)
                         );
                     }
-                    activity.showMessage(snackbar);
+                    activity.showSnackbar(snackbar);
 
-                    // CLEAR USER INPUT
-                    clearAll();
+                    assert getArguments() != null;
+                    if(ConsumeFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+                        activity.navigateUp();
+                    } else {
+                        clearAll();
+                    }
                 },
                 error -> {
                     showMessage(activity.getString(R.string.error_undefined));
@@ -830,7 +851,7 @@ public class ConsumeFragment extends Fragment {
         dlHelper.post(
                 grocyApi.undoStockTransaction(transactionId),
                 success -> {
-                    activity.showMessage(
+                    activity.showSnackbar(
                             Snackbar.make(
                                     activity.binding.frameMainContainer,
                                     activity.getString(R.string.msg_undone_transaction),
@@ -881,11 +902,10 @@ public class ConsumeFragment extends Fragment {
     }
 
     private Product getProductFromName(String name) {
-        if(name != null) {
-            for(Product product : products) {
-                if(product.getName().equals(name)) {
-                    return product;
-                }
+        if(name == null) return null;
+        for(Product product : products) {
+            if(product.getName().equals(name)) {
+                return product;
             }
         }
         return null;
@@ -961,8 +981,8 @@ public class ConsumeFragment extends Fragment {
                 }
             }
         } else {
-            minAmount = productDetails.getProduct().getTareWeight();
-            maxAmount = productDetails.getProduct().getTareWeight()
+            minAmount = productDetails.getProduct().getTareWeightDouble();
+            maxAmount = productDetails.getProduct().getTareWeightDouble()
                     + productDetails.getStockAmount();
         }
     }
@@ -1029,24 +1049,14 @@ public class ConsumeFragment extends Fragment {
     }
 
     public void setUpBottomMenu() {
-        MenuItem menuItemBatch, menuItemDetails, menuItemOpen;
-        menuItemBatch = activity.getBottomMenu().findItem(R.id.action_batch_mode);
-        if(menuItemBatch != null) menuItemBatch.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(activity, ScanBatchActivity.class);
-            intent.putExtra(Constants.ARGUMENT.TYPE, Constants.ACTION.CONSUME);
-            activity.startActivityForResult(intent, Constants.REQUEST.SCAN_BATCH);
-            return true;
-        });
+        MenuItem menuItemDetails, menuItemOpen;
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         if(menuItemDetails != null) menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(productDetails != null) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
-                activity.showBottomSheet(
-                        new ProductOverviewBottomSheetDialogFragment(),
-                        bundle
-                );
+                navigate(ConsumeFragmentDirections
+                        .actionConsumeFragmentToProductOverviewBottomSheetDialogFragment()
+                        .setProductDetails(productDetails));
             } else {
                 binding.textInputConsumeProduct.setError(
                         activity.getString(R.string.error_select_product)
@@ -1093,7 +1103,7 @@ public class ConsumeFragment extends Fragment {
         for(int i = 0; i < binding.linearConsumeBarcodeContainer.getChildCount(); i++) {
             InputChip inputChip = (InputChip) binding.linearConsumeBarcodeContainer.getChildAt(i);
             if(inputChip.getText().equals(input)) {
-                activity.showMessage(
+                activity.showSnackbar(
                         Snackbar.make(
                                 activity.binding.frameMainContainer,
                                 activity.getString(R.string.msg_barcode_duplicate),
@@ -1134,7 +1144,7 @@ public class ConsumeFragment extends Fragment {
     }
 
     private void showMessage(String text) {
-        activity.showMessage(
+        activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, text, Snackbar.LENGTH_SHORT)
         );
     }

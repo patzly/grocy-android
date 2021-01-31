@@ -25,7 +25,7 @@
     <string name="action_new">Nouveau</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Précedent</string>
-    <string name="action_send_feedback">Envoyer des commentaires</string>
+    <string name="action_feedback">Envoyer des commentaires</string>
     <string name="action_reset">Réinitialiser</string>
     <string name="action_reload">Recharger</string>
     <string name="action_top_scroll">Faire défiler vers le haut</string>
@@ -54,7 +54,7 @@
     <string name="action_logout">Se déconnecter</string>
     <string name="action_restart">Redémarrer</string>
     <string name="action_show_extended">Afficher le formulaire étendu</string>
-    <string name="action_batch_mode">Temps différé</string>
+    <string name="title_batch_mode">Temps différé</string>
     <string name="action_create">Créer</string>
     <string name="action_link">Lien</string>
     <string name="action_open_forms">Ouvrir le formulaire</string>
@@ -71,7 +71,7 @@
     <string name="action_perform_purchasing_processes">Effectuer des transactions d\'achat pour les produits créés</string>
     <string name="action_create_key">Créer une clé</string>
     <string name="action_login">S\'identifier</string>
-    <string name="action_use_demo_account">Utiliser un compte démo</string>
+    <string name="action_try_demo_instance">Utiliser un compte démo</string>
     <string name="action_ignore">Ignorer</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Tout</string>
@@ -119,7 +119,6 @@
     <string name="msg_barcode_duplicate">Le code-barres existe déjà</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Supprimer %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">Ce produit est toujours en stock</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Cette %1$s est toujours utilisé</string>
     <string name="msg_item_marked_as_done">Élément marqué comme terminé</string>
@@ -191,7 +190,7 @@
     <string name="title_shopping_list">Liste de courses</string>
     <string name="title_feedback">Retour d\'information</string>
     <string name="title_settings">Paramètres</string>
-    <string name="title_about">À propos</string>
+    <string name="title_about_this_app">À propos</string>
     <string name="title_info">Information</string>
     <string name="title_help">Aide</string>
     <string name="title_logs">Journaux</string>
@@ -232,7 +231,7 @@
     <string name="subtitle_empty">Vide</string>
     <string name="subtitle_done">Terminé</string>
     <string name="subtitle_undone">Non terminé</string>
-    <string name="subtitle_never_expires">N\'expire jamais</string>
+    <string name="subtitle_never_overdue">N\'expire jamais</string>
     <string name="subtitle_selected">Sélectionner</string>
     <string name="subtitle_stock_entry_no_specific">Expirant d\'abord, puis premier entré - premier sorti</string>
     <!-- %1$s is a purchase date -->
@@ -272,16 +271,16 @@
     <string name="property_price_in">Prix en %1$s</string>
     <string name="property_quantity_unit">Unité de quantité</string>
     <string name="property_quantity_units">Unités de quantité</string>
-    <string name="property_qu_purchase">Achat d\'unité de quantité</string>
+    <string name="property_default_qu_purchase">Achat d\'unité de quantité</string>
     <string name="property_qu_stock">Quantité unité stock</string>
     <string name="property_qu_factor">Achat d\'un élément en stock</string>
     <string name="property_barcode">Code barre</string>
     <string name="property_barcodes">Codes barres</string>
-    <string name="property_bbd">Date de péremption</string>
-    <string name="property_bbd_next">Date de péremption suivante</string>
-    <string name="property_bb_days">À consommer de préférence avant</string>
-    <string name="property_bb_days_default">Jours de péremption par défaut</string>
-    <string name="property_bb_days_default_opened">Meilleur jour par défaut avant ouverture</string>
+    <string name="property_due_date">Date de péremption</string>
+    <string name="property_due_date_next">Date de péremption suivante</string>
+    <string name="property_due_days">À consommer de préférence avant</string>
+    <string name="property_due_days_default">Jours de péremption par défaut</string>
+    <string name="property_due_days_default_opened">Meilleur jour par défaut avant ouverture</string>
     <string name="property_location">Emplacement</string>
     <string name="property_location_default">Emplacement par défaut</string>
     <string name="property_notes">Notes</string>
@@ -377,10 +376,10 @@
 
     <string name="category_licenses">Licences open source</string>
     <string name="category_general">Général</string>
-    <string name="category_purchase_consume">Achat &amp; consommer</string>
+    <string name="category_shopping_mode">Achat &amp; consommer</string>
     <string name="category_server">Serveur</string>
     <string name="category_debugging">Débogage</string>
-    <string name="category_presets">Préréglages pour de nouveaux produits</string>
+    <string name="category_presets_new_products">Préréglages pour de nouveaux produits</string>
 
     <string name="hint_server">URL du serveur</string>
     <string name="hint_key">Clé API valide</string>

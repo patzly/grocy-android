@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_open_config"
+        android:title="@string/action_config_batch_mode"
+        android:icon="@drawable/ic_round_tune"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_toggle_flash"
+        android:title="@string/action_toggle_flash"
+        android:icon="@drawable/ic_round_flash_on_to_off"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+</menu>

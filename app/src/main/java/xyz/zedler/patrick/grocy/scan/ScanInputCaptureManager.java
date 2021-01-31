@@ -16,7 +16,7 @@ package xyz.zedler.patrick.grocy.scan;
     You should have received a copy of the GNU General Public License
     along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2020 by Patrick Zedler & Dominic Zedler
+    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
 import android.Manifest;
@@ -72,7 +72,6 @@ public class ScanInputCaptureManager {
             barcodeView.pause();
             inactivityTimer.cancel();
             barcodeListener.onBarcodeResult(result);
-            finish();
         }
     };
 
@@ -190,7 +189,7 @@ public class ScanInputCaptureManager {
     public void onPause() {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         inactivityTimer.cancel();
-        barcodeView.pauseAndWait();
+        barcodeView.pause();
     }
 
     /**
