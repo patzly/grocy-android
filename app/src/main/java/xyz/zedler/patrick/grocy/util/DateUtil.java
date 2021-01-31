@@ -59,6 +59,10 @@ public class DateUtil {
         return date;
     }
 
+    public static String getDateStringToday() {
+        return DATE_FORMAT.format(getCurrentDate());
+    }
+
     public static int getDaysFromNow(String dateString) {
         if(dateString == null) return 0;
         Date date = null;

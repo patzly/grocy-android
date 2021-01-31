@@ -300,6 +300,18 @@ public class SettingsViewModel extends BaseViewModel {
                 .apply();
     }
 
+    public boolean getPurchasedDateEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
+                Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
+        );
+    }
+
+    public void setPurchasedDateEnabled(boolean enabled) {
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
+                .apply();
+    }
+
     public boolean getLoadingCircleEnabled() {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.NETWORK.LOADING_CIRCLE,

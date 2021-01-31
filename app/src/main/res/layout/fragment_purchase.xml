@@ -421,14 +421,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_purchase_bbd"
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:focusableInTouchMode="true"
-                        android:onClick="@{() -> viewModel.showDueDateBottomSheet(true)}"
-                        app:onFocusChangeListener="@{(v, focus) -> viewModel.showDueDateBottomSheet(focus)}">
+                        android:onClick="@{() -> viewModel.showPurchasedDateBottomSheet()}"
+                        android:visibility="@{formData.purchasedDateEnabled ? View.VISIBLE : View.GONE}">
 
                         <ImageView
-                            android:id="@+id/image_purchase_bbd"
                             style="@style/Theme.Grocy.ListItem.Icon"
                             android:src="@drawable/ic_round_event"
                             tools:ignore="ContentDescription" />
@@ -436,15 +433,49 @@
                         <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
 
                             <TextView
-                                android:id="@+id/text_purchase_bbd_label"
+                                style="@style/Theme.Grocy.ListItem.OverLine"
+                                android:text="@string/property_purchased_date" />
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:text="@{formData.purchasedDateTextLive}" />
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:text="@{formData.purchasedDateTextHumanLive}"
+                                android:visibility="@{formData.purchasedDateTextHumanLive != null ? View.VISIBLE : View.GONE}"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_due_date"
+                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        android:focusableInTouchMode="true"
+                        android:onClick="@{() -> viewModel.showDueDateBottomSheet(true)}"
+                        app:onFocusChangeListener="@{(v, focus) -> viewModel.showDueDateBottomSheet(focus)}">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            android:src="@drawable/ic_round_event"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox">
+
+                            <TextView
                                 style="@style/Theme.Grocy.ListItem.OverLine"
                                 android:text="@string/property_due_date"
                                 android:textColor="@{formData.dueDateErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
 
                             <TextView
-                                android:id="@+id/text_purchase_bbd"
                                 style="@style/Theme.Grocy.ListItem.Title"
                                 android:text="@{formData.dueDateTextLive}" />
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Description"
+                                android:text="@{formData.dueDateTextHumanLive}"
+                                android:visibility="@{formData.dueDateTextHumanLive != null ? View.VISIBLE : View.GONE}"/>
 
                         </LinearLayout>
 

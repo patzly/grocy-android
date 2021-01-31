@@ -393,13 +393,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
 			// LAST PRICE
 			String lastPrice = productDetails.getLastPrice();
-			if(lastPrice != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+			if(NumUtil.isStringDouble(lastPrice) && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
 				itemLastPrice.setText(
 						activity.getString(R.string.property_last_price),
-						lastPrice + " " + sharedPrefs.getString(
-								Constants.PREF.CURRENCY,
-								""
-						), null
+						NumUtil.trimPrice(Double.parseDouble(lastPrice))
+								+ " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
+						null
 				);
 			}
 

@@ -172,6 +172,7 @@
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
     <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
     <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
+    <string name="msg_help_purchased_date_settings">If the option below is enabled, a field for purchased date will be displayed on purchase and inventory page. Otherwise the purchased date defaults to today.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
@@ -394,6 +395,7 @@
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_days">Days</string>
+    <string name="property_purchased_date">Purchased date</string>
     <string name="property_due_date_type">Due date type</string>
     <string name="property_due_type_best_before">Best before date</string>
     <string name="property_due_type_expiration">Expiration date</string>
@@ -557,6 +559,8 @@
     <string name="setting_expiring_soon_days">Expiring soon days</string>
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
     <string name="setting_default_amount_consume">Default amount for consume</string>
+    <string name="setting_purchased_date">Ask for purchased date</string>
+    <string name="setting_purchased_date_description">On purchase and inventory page</string>
     <string name="setting_empty_value">Empty</string>
     <string name="setting_sync_off">Sync off</string>
     <string name="setting_not_loaded">Could not be loaded</string>

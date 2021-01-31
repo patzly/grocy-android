@@ -39,7 +39,7 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DueDateBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
@@ -211,6 +211,11 @@ public class PurchaseViewModel extends BaseViewModel {
             } else if(!isTareWeightEnabled) {
                 // if scan mode enabled, always fill with amount 1
                 formData.getAmountLive().setValue(NumUtil.trim(1));
+            }
+
+            // purchased date
+            if(formData.getPurchasedDateEnabled()) {
+                formData.getPurchasedDateLive().setValue(DateUtil.getDateStringToday());
             }
 
             // due days
@@ -472,19 +477,32 @@ public class PurchaseViewModel extends BaseViewModel {
         showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
     }
 
+    public void showPurchasedDateBottomSheet() {
+        if(!formData.isProductNameValid()) return;
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW, String.valueOf(0));
+        bundle.putString(
+                Constants.ARGUMENT.SELECTED_DATE,
+                formData.getPurchasedDateLive().getValue()
+        );
+        bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.PURCHASED_DATE);
+        showBottomSheet(new DateBottomSheet(), bundle);
+    }
+
     public void showDueDateBottomSheet(boolean hasFocus) {
         if(!hasFocus || !formData.isProductNameValid()) return;
         Product product = formData.getProductDetailsLive().getValue().getProduct();
         Bundle bundle = new Bundle();
         bundle.putString(
-                Constants.ARGUMENT.DEFAULT_DUE_DAYS,
+                Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
                 String.valueOf(product.getDefaultDueDays())
         );
         bundle.putString(
                 Constants.ARGUMENT.SELECTED_DATE,
                 formData.getDueDateLive().getValue()
         );
-        showBottomSheet(new DueDateBottomSheet(), bundle);
+        bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.DUE_DATE);
+        showBottomSheet(new DateBottomSheet(), bundle);
     }
 
     public void showStoresBottomSheet() {

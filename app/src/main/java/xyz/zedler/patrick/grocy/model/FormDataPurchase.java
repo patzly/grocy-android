@@ -68,8 +68,12 @@ public class FormDataPurchase {
     private final MediatorLiveData<String> amountHelperLive;
     private final LiveData<String> amountHintLive;
     private final MediatorLiveData<String> amountStockLive;
+    private final MutableLiveData<String> purchasedDateLive;
+    private final LiveData<String> purchasedDateTextLive;
+    private final LiveData<String> purchasedDateTextHumanLive;
     private final MutableLiveData<String> dueDateLive;
     private final LiveData<String> dueDateTextLive;
+    private final LiveData<String> dueDateTextHumanLive;
     private final MutableLiveData<Boolean> dueDateErrorLive;
     private final MutableLiveData<String> priceLive;
     private final MediatorLiveData<String> priceStockLive;
@@ -135,6 +139,25 @@ public class FormDataPurchase {
         amountHelperLive = new MediatorLiveData<>();
         amountHelperLive.addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
         amountHelperLive.addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        purchasedDateLive = new MutableLiveData<>();
+        purchasedDateTextLive = Transformations.map(
+                purchasedDateLive,
+                date -> {
+                    if(date == null) {
+                        return getString(R.string.subtitle_none_selected);
+                    } else {
+                        return dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM);
+                    }
+                }
+        );
+        purchasedDateTextHumanLive = Transformations.map(
+                purchasedDateLive,
+                date -> {
+                    if(date == null || date.equals(Constants.DATE.NEVER_OVERDUE)) return null;
+                    return dateUtil.getHumanForDaysFromNow(date);
+                }
+        );
+        purchasedDateLive.setValue(null);
         dueDateLive = new MutableLiveData<>();
         dueDateTextLive = Transformations.map(
                 dueDateLive,
@@ -146,6 +169,13 @@ public class FormDataPurchase {
                     } else {
                         return dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM);
                     }
+                }
+        );
+        dueDateTextHumanLive = Transformations.map(
+                dueDateLive,
+                date -> {
+                    if(date == null || date.equals(Constants.DATE.NEVER_OVERDUE)) return null;
+                    return dateUtil.getHumanForDaysFromNow(date);
                 }
         );
         dueDateLive.setValue(null);
@@ -365,12 +395,28 @@ public class FormDataPurchase {
         );
     }
 
+    public MutableLiveData<String> getPurchasedDateLive() {
+        return purchasedDateLive;
+    }
+
+    public LiveData<String> getPurchasedDateTextLive() {
+        return purchasedDateTextLive;
+    }
+
+    public LiveData<String> getPurchasedDateTextHumanLive() {
+        return purchasedDateTextHumanLive;
+    }
+
     public MutableLiveData<String> getDueDateLive() {
         return dueDateLive;
     }
 
     public LiveData<String> getDueDateTextLive() {
         return dueDateTextLive;
+    }
+
+    public LiveData<String> getDueDateTextHumanLive() {
+        return dueDateTextHumanLive;
     }
 
     public MutableLiveData<Boolean> getDueDateErrorLive() {
@@ -634,6 +680,7 @@ public class FormDataPurchase {
         Store store = storeLive.getValue();
         String storeId = store != null ? String.valueOf(store.getId()) : null;
         Location location = locationLive.getValue();
+        String purchasedDate = purchasedDateLive.getValue();
         String dueDate = dueDateLive.getValue();
         if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
             dueDate = Constants.DATE.NEVER_OVERDUE;
@@ -643,6 +690,9 @@ public class FormDataPurchase {
         try {
             json.put("amount", amount);
             if(NumUtil.isStringDouble(price)) json.put("price", price);
+            if(getPurchasedDateEnabled() && purchasedDate != null) {
+                json.put("purchased_date", purchasedDate);
+            }
             json.put("best_before_date", dueDate);
             if(storeId != null) json.put("shopping_location_id", storeId);
             if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
@@ -673,6 +723,7 @@ public class FormDataPurchase {
         quantityUnitsFactorsLive.setValue(null);
         productDetailsLive.setValue(null);
         productNameLive.setValue(null);
+        purchasedDateLive.setValue(null);
         dueDateLive.setValue(null);
         priceLive.setValue(null);
         storeLive.setValue(null);
@@ -683,6 +734,13 @@ public class FormDataPurchase {
             amountErrorLive.setValue(null);
             dueDateErrorLive.setValue(false);
         }, 50);
+    }
+
+    public boolean getPurchasedDateEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
+                Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
+        );
     }
 
     public boolean isFeatureEnabled(String pref) {

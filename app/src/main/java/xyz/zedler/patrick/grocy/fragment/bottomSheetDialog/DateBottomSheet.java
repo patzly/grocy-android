@@ -27,11 +27,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.text.ParseException;
@@ -44,15 +44,19 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class DueDateBottomSheet extends BaseBottomSheet {
+public class DateBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = DueDateBottomSheet.class.getSimpleName();
+    private final static String TAG = DateBottomSheet.class.getSimpleName();
+
+    public final static String DATE_TYPE = "date_type";
+    public final static int PURCHASED_DATE = 1;
+    public final static int DUE_DATE = 2;
 
     private MainActivity activity;
-
+    private Bundle args;
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
-    private String defaultBestBeforeDays;
+    private String defaultDueDays;
     private DatePicker datePicker;
     private MaterialCheckBox neverExpires;
 
@@ -73,9 +77,8 @@ public class DueDateBottomSheet extends BaseBottomSheet {
                 R.layout.fragment_bottomsheet_due_date, container, false
         );
 
-        activity = (MainActivity) getActivity();
-        Bundle bundle = getArguments();
-        assert activity != null && bundle != null;
+        activity = (MainActivity) requireActivity();
+        args = requireArguments();
 
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,27 +94,29 @@ public class DueDateBottomSheet extends BaseBottomSheet {
                         .start()
         );
 
-        view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
-                v -> neverExpires.setChecked(!neverExpires.isChecked())
-        );
+        if(args.getInt(DATE_TYPE) == DUE_DATE) {
+            view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
+                    v -> neverExpires.setChecked(!neverExpires.isChecked())
+            );
+        } else {
+            view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
+            ((TextView) view.findViewById(R.id.text_bbd_title))
+                    .setText(R.string.property_purchased_date);
+        }
         view.findViewById(R.id.button_bbd_reset).setOnClickListener(
                 v -> {
                     calendar = Calendar.getInstance();
                     fillForm(null);
                 }
         );
-        MaterialButton buttonDiscard = view.findViewById(R.id.button_bbd_discard);
-        if(activity.getClass() == MainActivity.class) {
-            buttonDiscard.setVisibility(View.GONE);
-        }
         view.findViewById(R.id.button_bbd_save).setOnClickListener(
                 v -> dismiss()
         );
 
-        String selectedBestBeforeDate = bundle.getString(Constants.ARGUMENT.SELECTED_DATE);
-        defaultBestBeforeDays = bundle.getString(Constants.ARGUMENT.DEFAULT_DUE_DAYS);
+        String selectedDate = args.getString(Constants.ARGUMENT.SELECTED_DATE);
+        defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
 
-        fillForm(selectedBestBeforeDate);
+        fillForm(selectedDate);
 
         return view;
     }
@@ -138,9 +143,9 @@ public class DueDateBottomSheet extends BaseBottomSheet {
             datePicker.setAlpha(1.0f);
             neverExpires.setChecked(false);
 
-        } else if(defaultBestBeforeDays != null) {
+        } else if(defaultDueDays != null) {
 
-            if(Integer.parseInt(defaultBestBeforeDays) < 0) {
+            if(Integer.parseInt(defaultDueDays) < 0) {
                 datePicker.setEnabled(false);
                 datePicker.setAlpha(0.5f);
                 neverExpires.setChecked(true);
@@ -148,7 +153,7 @@ public class DueDateBottomSheet extends BaseBottomSheet {
                 datePicker.setEnabled(true);
                 datePicker.setAlpha(1.0f);
                 neverExpires.setChecked(false);
-                calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultBestBeforeDays));
+                calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
             }
 
         } else {
@@ -183,7 +188,11 @@ public class DueDateBottomSheet extends BaseBottomSheet {
         }
 
         BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-        currentFragment.selectDueDate(date);
+        if(args.getInt(DATE_TYPE) == DUE_DATE) {
+            currentFragment.selectDueDate(date);
+        } else {
+            currentFragment.selectPurchasedDate(date);
+        }
         currentFragment.onBottomSheetDismissed();
     }
 

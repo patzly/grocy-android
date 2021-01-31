@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -278,6 +277,11 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     @Override
+    public void selectPurchasedDate(String purchasedDate) {
+        viewModel.getFormData().getPurchasedDateLive().setValue(purchasedDate);
+    }
+
+    @Override
     public void selectDueDate(String dueDate) {
         viewModel.getFormData().getDueDateLive().setValue(dueDate);
         viewModel.getFormData().isDueDateValid();
@@ -315,7 +319,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         binding.autoCompletePurchaseProduct.clearFocus();
         binding.quantityUnitContainer.clearFocus();
         binding.textInputShoppingListItemEditAmount.clearFocus();
-        binding.linearPurchaseBbd.clearFocus();
+        binding.linearDueDate.clearFocus();
         binding.textInputPurchasePrice.clearFocus();
     }
 
@@ -345,23 +349,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         }
     }
 
-    public void focusNextView() {
-        if(!viewModel.isScanModeEnabled()) {
-            clearInputFocus();
-            return;
-        }
-        View nextView = FocusFinder.getInstance()
-                .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
-        if(nextView == null) {
-            clearInputFocus();
-            return;
-        }
-        nextView.requestFocus();
-        if(nextView instanceof EditText) {
-            activity.showKeyboard((EditText) nextView);
-        }
-    }
-
     public void focusNextInvalidView() {
         if(!viewModel.isScanModeEnabled()) {
             clearInputFocus();
@@ -373,7 +360,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         } else if(!viewModel.getFormData().isAmountValid()) {
             nextView = binding.editTextShoppingListItemEditAmount;
         } else if(!viewModel.getFormData().isDueDateValid()) {
-            nextView = binding.linearPurchaseBbd;
+            nextView = binding.linearDueDate;
         }
         if(nextView == null) {
             clearInputFocus();
@@ -416,7 +403,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             //viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
         } else {
             //viewModel.getProductDetailsLive().setValue(null);
-            fillWithProductDetails(null);
+            //fillWithProductDetails(null);
         }
         //viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
     }
@@ -428,56 +415,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     private void fillWithProductDetails(
             @Nullable ProductDetails productDetails
     ) {
-        /*clearInputFocus();
-
-        // AMOUNT
-        if(viewModel.getForcedAmount() != null) {
-            binding.editTextPurchaseAmount.setText(viewModel.getForcedAmount());
-            viewModel.setForcedAmount(null);
-        } else if(!viewModel.isTareWeightEnabled(productDetails)) {
-            String defaultAmount = sharedPrefs.getString(
-                    Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT, "1"
-            );
-            if(defaultAmount != null && !defaultAmount.isEmpty()) {
-                defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
-            }
-            binding.editTextPurchaseAmount.setText(defaultAmount);
-        } else { // leave amount empty if tare weight handling enabled
-            binding.editTextPurchaseAmount.setText(null);
-        }
-        if(getAmount().isEmpty()) {
-            binding.editTextPurchaseAmount.requestFocus();
-            activity.showKeyboard(binding.editTextPurchaseAmount);
-        }
-
-        if(productDetails == null) {
-            requireProductDetails();
-            return;
-        }
-
-        binding.textInputPurchaseProduct.setErrorEnabled(false);
-
-        binding.textInputPurchaseAmount.setHint(
-                activity.getString(
-                        R.string.property_amount_in,
-                        productDetails.getQuantityUnitPurchase().getNamePlural()
-                )
-        );
-
-        // deactivate checkbox if tare weight handling is on
-        if(viewModel.isTareWeightEnabled(productDetails)) {
-            binding.linearPurchaseTotalPrice.setEnabled(false);
-            binding.linearPurchaseTotalPrice.setAlpha(0.5f);
-            binding.checkboxPurchaseTotalPrice.setEnabled(false);
-            binding.imagePurchaseAmount.setImageResource(R.drawable.ic_round_scale_anim);
-        }
-
+        /*
         // PRODUCT
         binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
-        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1
-
-        // mark fields with invalid or missing content as invalid
-        isFormIncomplete();*/
+        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1*/
     }
 
     private void hideDisabledFeatures() {
@@ -489,7 +430,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             binding.linearPurchaseLocation.setVisibility(View.GONE);
         }
         if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-            binding.linearPurchaseBbd.setVisibility(View.GONE);
+            binding.linearDueDate.setVisibility(View.GONE);
         }
     }
 
