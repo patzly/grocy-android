@@ -139,17 +139,11 @@ public class MasterProductGroupFragment extends BaseFragment {
                     if(hasFocus) IconUtil.start(binding.imageMasterProductGroupDescription);
                 });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editProductGroup = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_GROUP);
-            // FILL
-            if(editProductGroup != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterProductGroupFragmentArgs args = MasterProductGroupFragmentArgs
+                .fromBundle(requireArguments());
+        editProductGroup = args.getProductGroup();
+        if(editProductGroup != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }

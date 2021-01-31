@@ -135,17 +135,10 @@ public class MasterStoreFragment extends BaseFragment {
                     if(hasFocus) IconUtil.start(binding.imageMasterStoreDescription);
                 });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editStore = bundle.getParcelable(Constants.ARGUMENT.STORE);
-            // FILL
-            if(editStore != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterStoreFragmentArgs args = MasterStoreFragmentArgs.fromBundle(requireArguments());
+        editStore = args.getStore();
+        if(editStore != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }

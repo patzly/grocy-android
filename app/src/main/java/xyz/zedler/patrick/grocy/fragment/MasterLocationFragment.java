@@ -147,17 +147,10 @@ public class MasterLocationFragment extends BaseFragment {
             );
         });
 
-        // BUNDLE WHEN EDIT
-
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            editLocation = bundle.getParcelable(Constants.ARGUMENT.LOCATION);
-            // FILL
-            if(editLocation != null) {
-                fillWithEditReferences();
-            } else {
-                resetAll();
-            }
+        MasterLocationFragmentArgs args = MasterLocationFragmentArgs.fromBundle(requireArguments());
+        editLocation = args.getLocation();
+        if(editLocation != null) {
+            fillWithEditReferences();
         } else {
             resetAll();
         }

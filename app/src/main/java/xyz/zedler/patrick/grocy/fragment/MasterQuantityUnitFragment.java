@@ -143,10 +143,9 @@ public class MasterQuantityUnitFragment extends BaseFragment {
                     if(hasFocus) IconUtil.start(binding.imageMasterQuantityUnitDescription);
                 });
 
-        // BUNDLE WHEN EDIT
-
-        editQuantityUnit = MasterQuantityUnitFragmentArgs
-                .fromBundle(requireArguments()).getQuantityUnit();
+        MasterQuantityUnitFragmentArgs args = MasterQuantityUnitFragmentArgs
+                .fromBundle(requireArguments());
+        editQuantityUnit = args.getQuantityUnit();
         if(editQuantityUnit != null) {
             fillWithEditReferences();
         } else {
