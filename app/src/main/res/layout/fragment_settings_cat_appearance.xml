@@ -97,7 +97,7 @@
                     android:id="@+id/image"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@{fragment.darkModeLive ? @drawable/ic_round_dark_mode_off_anim : @drawable/ic_round_dark_mode_on_anim}"/>
+                    android:src="@{fragment.darkModeLive ? @drawable/ic_round_dark_to_light_anim : @drawable/ic_round_light_to_dark_anim}"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
