@@ -73,6 +73,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         binding.setFragment(this);
         binding.setViewModel(viewModel);
         binding.setClickUtil(new ClickUtil());
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         darkModeLive = new MutableLiveData<>(viewModel.getDarkMode());
 
