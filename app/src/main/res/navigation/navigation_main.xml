@@ -39,7 +39,7 @@
             android:id="@+id/action_consumeFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
         <deepLink
-            android:id="@+id/deepLink4"
+            android:id="@+id/deepLink13"
             app:uri="@string/deep_link_consumeFragment" />
     </fragment>
     <fragment
@@ -697,4 +697,27 @@
                 app:argType="string" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/consumeFragmentNew"
+        android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragmentNew"
+        android:label="ConsumeFragmentNew">
+        <argument
+            android:name="closeWhenFinished"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="productName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="amount"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="animateStart"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </fragment>
 </navigation>
