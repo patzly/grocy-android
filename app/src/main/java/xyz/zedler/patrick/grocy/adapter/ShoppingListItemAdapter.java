@@ -335,14 +335,14 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             binding.amount.setText(
                     context.getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(item.getAmount()),
-                            item.getAmount() == 1
+                            NumUtil.trim(item.getAmountDouble()),
+                            item.getAmountDouble() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()
                     )
             );
         } else {
-            binding.amount.setText(NumUtil.trim(item.getAmount()));
+            binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
         }
 
         if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
@@ -470,14 +470,14 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             binding.amount.setText(
                     context.getString(
                             R.string.subtitle_amount,
-                            NumUtil.trim(item.getAmount()),
-                            item.getAmount() == 1
+                            NumUtil.trim(item.getAmountDouble()),
+                            item.getAmountDouble() == 1
                                     ? quantityUnit.getName()
                                     : quantityUnit.getNamePlural()
                     )
             );
         } else {
-            binding.amount.setText(NumUtil.trim(item.getAmount()));
+            binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
         }
 
         //if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {  TODO

@@ -35,6 +35,8 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import xyz.zedler.patrick.grocy.util.NumUtil;
+
 @Entity(tableName = "shopping_list_item_table")
 public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
@@ -49,7 +51,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
     @ColumnInfo(name = "amount")
     @SerializedName("amount")
-    private double amount;
+    private String amount;
 
     @ColumnInfo(name = "shopping_list_id")
     @SerializedName("shopping_list_id")
@@ -82,7 +84,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
               int id,
               String productId,
               String note,
-              double amount,
+                              String amount,
               int shoppingListId,
               String quId,
               int done,
@@ -102,7 +104,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         id = parcel.readInt();
         productId = parcel.readString();
         note = parcel.readString();
-        amount = parcel.readDouble();
+        amount = parcel.readString();
         shoppingListId = parcel.readInt();
         quId = parcel.readString();
         done = parcel.readInt();
@@ -114,7 +116,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         dest.writeInt(id);
         dest.writeString(productId);
         dest.writeString(note);
-        dest.writeDouble(amount);
+        dest.writeString(amount);
         dest.writeInt(shoppingListId);
         dest.writeString(quId);
         dest.writeInt(done);
@@ -164,12 +166,20 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         this.note = note;               // but are required by Room
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public double getAmountDouble() {
+        return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
+    }
+
+    public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public void setAmountDouble(double amount) {
+        this.amount = NumUtil.trim(amount);
     }
 
     public int getShoppingListId() {
@@ -236,7 +246,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         if (o == null || getClass() != o.getClass()) return false;
         ShoppingListItem that = (ShoppingListItem) o;
         return id == that.id &&
-                Double.compare(that.amount, amount) == 0 &&
+                Objects.equals(amount, that.amount) &&
                 shoppingListId == that.shoppingListId &&
                 done == that.done &&
                 Objects.equals(note, that.note) &&
@@ -277,7 +287,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
             Object note = item.getNote() == null || item.getNote().isEmpty()
                     ? JSONObject.NULL : item.getNote();
             json.put("shopping_list_id", item.getShoppingListId());
-            json.put("amount", item.getAmount());
+            json.put("amount", item.getAmountDouble());
             json.put("qu_id", quId);
             json.put("product_id", productId);
             json.put("note", note);

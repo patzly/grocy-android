@@ -337,7 +337,7 @@ public class FormDataShoppingListItemEdit {
         item.setShoppingListId(shoppingList.getId());
         item.setProductId(product != null ? String.valueOf(product.getId()) : null);
         item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
-        item.setAmount(amountStock != null
+        item.setAmountDouble(amountStock != null
                 ? Double.parseDouble(amountStock) : Double.parseDouble(amount));
         item.setNote(note != null ? note.trim() : null);
         return item;

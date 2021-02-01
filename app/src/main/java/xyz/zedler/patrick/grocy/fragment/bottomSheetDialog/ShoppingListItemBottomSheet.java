@@ -142,7 +142,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
 		if(quantityUnit == null) quantityUnit = "";
 		String textAmount = activity.getString(
 				R.string.subtitle_amount,
-				NumUtil.trim(shoppingListItem.getAmount()),
+				NumUtil.trim(shoppingListItem.getAmountDouble()),
 				quantityUnit
 		);
 		itemAmount.setText(activity.getString(R.string.property_amount), textAmount);

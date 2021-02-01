@@ -70,7 +70,7 @@ public class NumUtil {
         if(s == null || s.isEmpty()) return false;
         try {
             Double.parseDouble(s);
-            return true;
+            return !Double.isNaN(Double.parseDouble(s));
         } catch (NumberFormatException ex) {
             return false;
         }

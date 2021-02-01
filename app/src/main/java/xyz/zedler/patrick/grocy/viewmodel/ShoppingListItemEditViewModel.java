@@ -242,7 +242,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         ShoppingList shoppingList = getShoppingList(item.getShoppingListId());
         formData.getShoppingListLive().setValue(shoppingList);
 
-        double amount = item.getAmount();
+        double amount = item.getAmountDouble();
 
         if(item.getProductId() != null) {
             Product product = getProduct(Integer.parseInt(item.getProductId()));
