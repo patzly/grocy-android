@@ -508,10 +508,10 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
     private void navigateToStartDestination() {
         activity.updateStartDestination();
         NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_from_right);
-        builder.setExitAnim(R.anim.slide_to_left);
-        builder.setPopEnterAnim(R.anim.slide_from_left);
-        builder.setPopExitAnim(R.anim.slide_to_right);
+        builder.setEnterAnim(R.anim.slide_from_end);
+        builder.setExitAnim(R.anim.slide_to_start);
+        builder.setPopEnterAnim(R.anim.slide_from_start);
+        builder.setPopExitAnim(R.anim.slide_to_end);
         builder.setPopUpTo(R.id.navigation_main, true);
         navigate(findNavController().getGraph().getStartDestination(), builder.build());
     }

@@ -169,18 +169,18 @@
         <action
             android:id="@+id/action_loginFragment_self"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
+            app:enterAnim="@anim/slide_from_end"
+            app:exitAnim="@anim/slide_to_start"
+            app:popEnterAnim="@anim/slide_from_start"
+            app:popExitAnim="@anim/slide_to_end" />
     </fragment>
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
         app:enterAnim="@anim/slide_no"
         app:exitAnim="@anim/slide_no"
-        app:popEnterAnim="@anim/slide_from_right"
-        app:popExitAnim="@anim/slide_to_left" />
+        app:popEnterAnim="@anim/slide_from_end"
+        app:popExitAnim="@anim/slide_to_start" />
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.OnboardingFragment"
@@ -189,10 +189,10 @@
         <action
             android:id="@+id/action_onboardingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right"
+            app:enterAnim="@anim/slide_from_end"
+            app:exitAnim="@anim/slide_to_start"
+            app:popEnterAnim="@anim/slide_from_start"
+            app:popExitAnim="@anim/slide_to_end"
             app:popUpTo="@id/navigation_main"
             app:popUpToInclusive="true" />
     </fragment>
@@ -201,8 +201,8 @@
         app:destination="@id/onboardingFragment"
         app:enterAnim="@anim/slide_no"
         app:exitAnim="@anim/slide_no"
-        app:popEnterAnim="@anim/slide_from_right"
-        app:popExitAnim="@anim/slide_to_left" />
+        app:popEnterAnim="@anim/slide_from_end"
+        app:popExitAnim="@anim/slide_to_start" />
     <fragment
         android:id="@+id/overviewStartFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.OverviewStartFragment"
@@ -315,69 +315,69 @@
             <action
                 android:id="@+id/action_settingsFragment_to_aboutFragment"
                 app:destination="@id/aboutFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right" />
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end" />
             <deepLink
                 android:id="@+id/deepLink3"
                 app:uri="@string/deep_link_settingsFragment" />
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatServerFragment"
                 app:destination="@id/settingsCatServerFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatAppearanceFragment"
                 app:destination="@id/settingsCatAppearanceFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatBehaviorFragment"
                 app:destination="@id/settingsCatBehaviorFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatScannerFragment"
                 app:destination="@id/settingsCatScannerFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatStockFragment"
                 app:destination="@id/settingsCatStockFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatShoppingModeFragment"
                 app:destination="@id/settingsCatShoppingModeFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatNetworkFragment"
                 app:destination="@id/settingsCatNetworkFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_settingsFragment_to_settingsCatDebuggingFragment"
                 app:destination="@id/settingsCatDebuggingFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
         </fragment>
         <fragment
             android:id="@+id/logFragment"
@@ -450,10 +450,10 @@
             <action
                 android:id="@+id/action_settingsCatDebuggingFragment_to_logFragment"
                 app:destination="@id/logFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
         </fragment>
     </navigation>
     <navigation
@@ -583,38 +583,38 @@
             <action
                 android:id="@+id/action_masterProductFragment_to_masterProductCatOptionalFragment"
                 app:destination="@id/masterProductCatOptionalFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right" />
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end" />
             <action
                 android:id="@+id/action_masterProductFragment_to_masterProductCatLocationFragment"
                 app:destination="@id/masterProductCatLocationFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_masterProductFragment_to_masterProductCatDueDateFragment"
                 app:destination="@id/masterProductCatDueDateFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_masterProductFragment_to_masterProductCatAmountFragment"
                 app:destination="@id/masterProductCatAmountFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <action
                 android:id="@+id/action_masterProductFragment_to_masterProductCatQuantityUnitFragment"
                 app:destination="@id/masterProductCatQuantityUnitFragment"
-                app:enterAnim="@anim/slide_from_right"
-                app:exitAnim="@anim/slide_to_left"
-                app:popEnterAnim="@anim/slide_from_left"
-                app:popExitAnim="@anim/slide_to_right"/>
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
             <argument
                 android:name="productName"
                 app:argType="string"
