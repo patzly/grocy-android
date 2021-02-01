@@ -161,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
         updateStartDestination();
 
         navController.addOnDestinationChangedListener((controller, dest, args) -> {
-            if(isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment || dest.getId() == R.id.onboardingFragment) {
+            if(isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
+                    || dest.getId() == R.id.onboardingFragment
+            ) {
                 binding.bottomAppBar.setVisibility(View.GONE);
                 binding.fabMain.hide();
                 new Handler().postDelayed(() -> setNavBarColor(R.color.background), 10);
@@ -558,7 +560,10 @@ public class MainActivity extends AppCompatActivity {
                 if(dest.getId() == R.id.loginFragment) {
                     setNavBarDividerColor(R.color.transparent);
                 } else {
-                    setNavBarDividerColor(R.color.stroke_secondary);
+                    new Handler().postDelayed(
+                            () -> setNavBarDividerColor(R.color.stroke_secondary),
+                            10
+                    );
                 }
             } else {
                 setNavBarDividerColor(R.color.stroke_secondary);
