@@ -10,7 +10,7 @@
     android:gravity="center_horizontal">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager_features"
+        android:id="@+id/pager_onboarding"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -18,7 +18,7 @@
         android:overScrollMode="never"/>
 
     <LinearLayout
-        android:id="@+id/linear_features_text_land"
+        android:id="@+id/linear_onboarding_text_land"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -27,19 +27,19 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/text_features_title_land"
+            android:id="@+id/text_onboarding_title_land"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/text_features_description_land"
+            android:id="@+id/text_onboarding_description_land"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_features_start"
+        android:id="@+id/button_onboarding_start"
         style="@style/Widget.Grocy.Button.UnelevatedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:baselineAligned="false">
 
         <FrameLayout
-            android:id="@+id/frame_features_previous"
+            android:id="@+id/frame_onboarding_previous"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -67,7 +67,7 @@
             tools:targetApi="o">
 
             <ImageView
-                android:id="@+id/image_features_previous"
+                android:id="@+id/image_onboarding_previous"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -83,21 +83,21 @@
             android:gravity="center">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs_features"
+                android:id="@+id/tabs_onboarding"
                 style="@style/Widget.Grocy.TabLayout.PageIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="8dp"
                 android:background="@null"
                 app:tabMaxWidth="16dp"
                 app:tabIndicatorFullWidth="true"
-                app:tabIndicator="@drawable/tab_indicator_features"
+                app:tabIndicator="@drawable/tab_indicator_onboarding"
                 app:tabIndicatorColor="@color/secondary"
-                app:tabBackground="@drawable/tab_background_features" />
+                app:tabBackground="@drawable/tab_background_onboarding" />
 
         </LinearLayout>
 
         <FrameLayout
-            android:id="@+id/frame_features_next"
+            android:id="@+id/frame_onboarding_next"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
@@ -110,7 +110,7 @@
             tools:targetApi="o">
 
             <ImageView
-                android:id="@+id/image_features_next"
+                android:id="@+id/image_onboarding_next"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"

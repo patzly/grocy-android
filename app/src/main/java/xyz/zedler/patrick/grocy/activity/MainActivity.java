@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         NavGraph graph = navInflater.inflate(R.navigation.navigation_main);
         boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
         if(!introShown) {
-            graph.setStartDestination(R.id.featuresFragment);
+            graph.setStartDestination(R.id.onboardingFragment);
         } else if(isServerUrlEmpty()){
             graph.setStartDestination(R.id.loginFragment);
         } else {

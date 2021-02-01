@@ -111,7 +111,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         if(v.getId() == R.id.linear_intro) {
             IconUtil.start(activity, R.id.image_intro);
             new Handler().postDelayed(
-                    () -> navigate(R.id.featuresFragment),
+                    () -> navigate(R.id.onboardingFragment),
                     150
             );
         } else if(v.getId() == R.id.linear_changelog) {

@@ -182,12 +182,12 @@
         app:popEnterAnim="@anim/slide_from_right"
         app:popExitAnim="@anim/slide_to_left" />
     <fragment
-        android:id="@+id/featuresFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.FeaturesFragment"
-        android:label="FeaturesFragment"
-        tools:layout="@layout/fragment_features" >
+        android:id="@+id/onboardingFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.OnboardingFragment"
+        android:label="OnboardingFragment"
+        tools:layout="@layout/fragment_onboarding" >
         <action
-            android:id="@+id/action_featuresFragment_to_loginFragment"
+            android:id="@+id/action_onboardingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_from_right"
             app:exitAnim="@anim/slide_to_left"
@@ -197,8 +197,8 @@
             app:popUpToInclusive="true" />
     </fragment>
     <action
-        android:id="@+id/action_global_featuresFragment"
-        app:destination="@id/featuresFragment"
+        android:id="@+id/action_global_onboardingFragment"
+        app:destination="@id/onboardingFragment"
         app:enterAnim="@anim/slide_no"
         app:exitAnim="@anim/slide_no"
         app:popEnterAnim="@anim/slide_from_right"

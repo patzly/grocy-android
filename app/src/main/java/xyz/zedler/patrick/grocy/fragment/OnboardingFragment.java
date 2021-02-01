@@ -40,17 +40,17 @@ import androidx.viewpager.widget.ViewPager;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentFeaturesBinding;
-import xyz.zedler.patrick.grocy.databinding.FragmentFeaturesPageBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 
-public class FeaturesFragment extends BaseFragment {
+public class OnboardingFragment extends BaseFragment {
 
-    private final static String TAG = FeaturesFragment.class.getSimpleName();
+    private final static String TAG = OnboardingFragment.class.getSimpleName();
 
-    private FragmentFeaturesBinding binding;
+    private FragmentOnboardingBinding binding;
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
     private PagerAdapter pagerAdapter;
@@ -62,7 +62,7 @@ public class FeaturesFragment extends BaseFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentFeaturesBinding.inflate(inflater, container, false);
+        binding = FragmentOnboardingBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -79,28 +79,28 @@ public class FeaturesFragment extends BaseFragment {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        binding.frameFeaturesPrevious.setOnClickListener(v -> {
-            if(binding.pagerFeatures.getCurrentItem() > 0) {
-                IconUtil.start(binding.imageFeaturesPrevious);
-                binding.pagerFeatures.setCurrentItem(binding.pagerFeatures.getCurrentItem() - 1);
+        binding.frameOnboardingPrevious.setOnClickListener(v -> {
+            if(binding.pagerOnboarding.getCurrentItem() > 0) {
+                IconUtil.start(binding.imageOnboardingPrevious);
+                binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
             }
         });
-        binding.frameFeaturesNext.setOnClickListener(v -> {
-            if(binding.pagerFeatures.getCurrentItem() < 3) {
-                IconUtil.start(binding.imageFeaturesNext);
-                binding.pagerFeatures.setCurrentItem(binding.pagerFeatures.getCurrentItem() + 1);
+        binding.frameOnboardingNext.setOnClickListener(v -> {
+            if(binding.pagerOnboarding.getCurrentItem() < 3) {
+                IconUtil.start(binding.imageOnboardingNext);
+                binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
             }
         });
         setArrows(0, false);
 
-        binding.buttonFeaturesStart.setOnClickListener(v -> {
+        binding.buttonOnboardingStart.setOnClickListener(v -> {
             if(clickUtil.isDisabled()) return;
             activity.onBackPressed();
         });
 
-        pagerAdapter = new FeaturesPagerAdapter(activity.getSupportFragmentManager());
-        binding.pagerFeatures.setAdapter(pagerAdapter);
-        binding.pagerFeatures.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pagerAdapter = new OnboardingPagerAdapter(activity.getSupportFragmentManager());
+        binding.pagerOnboarding.setAdapter(pagerAdapter);
+        binding.pagerOnboarding.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 setOffset(position, position, positionOffset); // active page
@@ -108,7 +108,7 @@ public class FeaturesFragment extends BaseFragment {
                 if(position != pagerAdapter.getCount() -1) {
                     setOffset(position + 1, position, positionOffset);
                 }
-                binding.linearFeaturesTextLand.setAlpha(
+                binding.linearOnboardingTextLand.setAlpha(
                         positionOffset < 0.5f
                                 ? 1 - 2 * positionOffset
                                 : 2 * positionOffset - 1
@@ -125,8 +125,8 @@ public class FeaturesFragment extends BaseFragment {
             public void onPageScrollStateChanged(int state) { }
         });
 
-        binding.tabsFeatures.setupWithViewPager(binding.pagerFeatures);
-        LinearLayout tabStrip = (LinearLayout) binding.tabsFeatures.getChildAt(0);
+        binding.tabsOnboarding.setupWithViewPager(binding.pagerOnboarding);
+        LinearLayout tabStrip = (LinearLayout) binding.tabsOnboarding.getChildAt(0);
         for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setOnTouchListener((v, event) -> true);
         }
@@ -144,7 +144,7 @@ public class FeaturesFragment extends BaseFragment {
             sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
         }
         if(getBackStackSize() == 2){ // TODO: Better condition
-            navigate(FeaturesFragmentDirections.actionFeaturesFragmentToLoginFragment());
+            navigate(OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment());
             return true;
         } else {
             return false;
@@ -152,33 +152,33 @@ public class FeaturesFragment extends BaseFragment {
     }
 
     private void setText(int position) {
-        binding.textFeaturesTitleLand.setText(FeaturesPageFragment.getTitle(position));
-        binding.textFeaturesDescriptionLand.setText(FeaturesPageFragment.getDescription(position));
+        binding.textOnboardingTitleLand.setText(OnboardingPageFragment.getTitle(position));
+        binding.textOnboardingDescriptionLand.setText(OnboardingPageFragment.getDescription(position));
     }
 
     private void setArrows(int position, boolean animated) {
         if(animated) {
-            binding.frameFeaturesPrevious.animate().alpha(
+            binding.frameOnboardingPrevious.animate().alpha(
                     position > 0 ? 1 : 0
             ).setDuration(200).start();
-            binding.frameFeaturesNext.animate().alpha(
+            binding.frameOnboardingNext.animate().alpha(
                     position < 2 ? 1 : 0
             ).setDuration(200).start();
         } else {
-            binding.frameFeaturesPrevious.setAlpha(position > 0 ? 1 : 0);
-            binding.frameFeaturesNext.setAlpha(position < 2 ? 1 : 0);
+            binding.frameOnboardingPrevious.setAlpha(position > 0 ? 1 : 0);
+            binding.frameOnboardingNext.setAlpha(position < 2 ? 1 : 0);
         }
-        binding.frameFeaturesPrevious.setEnabled(position > 0);
-        binding.frameFeaturesNext.setEnabled(position < 2);
+        binding.frameOnboardingPrevious.setEnabled(position > 0);
+        binding.frameOnboardingNext.setEnabled(position < 2);
     }
 
     private void setOffset(int targetPos, int scrollPos, float offset) {
-        ((FeaturesPageFragment) pagerAdapter.instantiateItem(binding.pagerFeatures, targetPos))
+        ((OnboardingPageFragment) pagerAdapter.instantiateItem(binding.pagerOnboarding, targetPos))
                 .setOffset(scrollPos, offset);
     }
 
-    private static class FeaturesPagerAdapter extends FragmentStatePagerAdapter {
-        public FeaturesPagerAdapter(FragmentManager fragmentManager) {
+    private static class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
+        public OnboardingPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
@@ -187,7 +187,7 @@ public class FeaturesFragment extends BaseFragment {
         public Fragment getItem(int position) {
             Bundle bundle = new Bundle();
             bundle.putInt("position", position);
-            FeaturesPageFragment fragment = new FeaturesPageFragment();
+            OnboardingPageFragment fragment = new OnboardingPageFragment();
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -198,8 +198,8 @@ public class FeaturesFragment extends BaseFragment {
         }
     }
 
-    public static class FeaturesPageFragment extends Fragment {
-        private FragmentFeaturesPageBinding binding;
+    public static class OnboardingPageFragment extends Fragment {
+        private FragmentOnboardingPageBinding binding;
         private int position = 0;
 
         @Override
@@ -208,7 +208,7 @@ public class FeaturesFragment extends BaseFragment {
                 ViewGroup container,
                 Bundle savedInstanceState
         ) {
-            binding = FragmentFeaturesPageBinding.inflate(
+            binding = FragmentOnboardingPageBinding.inflate(
                     inflater, container, false
             );
             return binding.getRoot();
@@ -226,62 +226,62 @@ public class FeaturesFragment extends BaseFragment {
 
             switch (position) {
                 case 1:
-                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_2_b);
-                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_2_m);
-                    binding.imageFeaturesRotate.setImageDrawable(null);
-                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_2_f);
+                    binding.imageOnboardingBack.setImageResource(R.drawable.onboarding_2_b);
+                    binding.imageOnboardingFocused.setImageResource(R.drawable.onboarding_2_m);
+                    binding.imageOnboardingRotate.setImageDrawable(null);
+                    binding.imageOnboardingFront.setImageResource(R.drawable.onboarding_2_f);
                     break;
                 case 2:
-                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_3_b);
-                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_3_m);
-                    binding.imageFeaturesRotate.setImageDrawable(null);
-                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_3_f);
+                    binding.imageOnboardingBack.setImageResource(R.drawable.onboarding_3_b);
+                    binding.imageOnboardingFocused.setImageResource(R.drawable.onboarding_3_m);
+                    binding.imageOnboardingRotate.setImageDrawable(null);
+                    binding.imageOnboardingFront.setImageResource(R.drawable.onboarding_3_f);
                     break;
                 default:
-                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_1_b);
-                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_1_m);
-                    binding.imageFeaturesRotate.setImageResource(R.drawable.feature_1_r);
-                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_1_f);
+                    binding.imageOnboardingBack.setImageResource(R.drawable.onboarding_1_b);
+                    binding.imageOnboardingFocused.setImageResource(R.drawable.onboarding_1_m);
+                    binding.imageOnboardingRotate.setImageResource(R.drawable.onboarding_1_r);
+                    binding.imageOnboardingFront.setImageResource(R.drawable.onboarding_1_f);
             }
 
-            binding.textFeaturesTitle.setText(getTitle(position));
-            binding.textFeaturesDescription.setText(getDescription(position));
+            binding.textOnboardingTitle.setText(getTitle(position));
+            binding.textOnboardingDescription.setText(getDescription(position));
 
-            binding.frameFeaturesContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            binding.frameOnboardingContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
                 if (getContext() == null) return;
                 int orientation = getResources().getConfiguration().orientation;
-                ViewGroup.LayoutParams params = binding.frameFeaturesContainer.getLayoutParams();
+                ViewGroup.LayoutParams params = binding.frameOnboardingContainer.getLayoutParams();
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    params.height = binding.frameFeaturesContainer.getWidth();
+                    params.height = binding.frameOnboardingContainer.getWidth();
                 } else {
-                    params.width = binding.frameFeaturesContainer.getHeight();
+                    params.width = binding.frameOnboardingContainer.getHeight();
                 }
-                binding.frameFeaturesContainer.requestLayout();
+                binding.frameOnboardingContainer.requestLayout();
             });
         }
 
         public void setOffset(int position, float offset) {
             if (binding == null) return;
-            if(binding.imageFeaturesFront == null || binding.imageFeaturesBack == null) return;
+            if(binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) return;
             int frontOffset = 200, backOffset = -200;
             int rotation = 50;
             int titleOffset = 150;
-            binding.imageFeaturesFront.setTranslationX(
+            binding.imageOnboardingFront.setTranslationX(
                     position == this.position
                             ? offset * -frontOffset
                             : (1 - offset) * frontOffset
             );
-            binding.imageFeaturesBack.setTranslationX(
+            binding.imageOnboardingBack.setTranslationX(
                     position == this.position
                             ? offset * -backOffset
                             : (1 - offset) * backOffset
             );
-            binding.imageFeaturesRotate.setRotation(
+            binding.imageOnboardingRotate.setRotation(
                     position == this.position
                             ? offset * -rotation
                             : (1 - offset) * rotation
             );
-            binding.textFeaturesTitle.setTranslationX(
+            binding.textOnboardingTitle.setTranslationX(
                     position == this.position
                             ? offset * -titleOffset
                             : (1 - offset) * titleOffset

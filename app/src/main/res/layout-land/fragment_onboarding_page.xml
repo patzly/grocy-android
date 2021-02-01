@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/image_features_back"
+            android:id="@+id/image_onboarding_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -23,7 +23,7 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/image_features_focused"
+            android:id="@+id/image_onboarding_focused"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -32,7 +32,7 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/image_features_rotate"
+            android:id="@+id/image_onboarding_rotate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -41,7 +41,7 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/image_features_front"
+            android:id="@+id/image_onboarding_front"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -58,12 +58,12 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/text_features_title"
+            android:id="@+id/text_onboarding_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/text_features_description"
+            android:id="@+id/text_onboarding_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

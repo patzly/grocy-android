@@ -13,7 +13,7 @@
         android:layout_weight="1">
 
         <FrameLayout
-            android:id="@+id/frame_features_container"
+            android:id="@+id/frame_onboarding_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
@@ -22,43 +22,43 @@
             tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/image_features_back"
+                android:id="@+id/image_onboarding_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:src="@drawable/feature_1_b"
+                android:src="@drawable/onboarding_1_b"
                 tools:ignore="ContentDescription" />
 
             <ImageView
-                android:id="@+id/image_features_focused"
+                android:id="@+id/image_onboarding_focused"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:src="@drawable/feature_1_f"
+                android:src="@drawable/onboarding_1_m"
                 tools:ignore="ContentDescription" />
 
             <ImageView
-                android:id="@+id/image_features_rotate"
+                android:id="@+id/image_onboarding_rotate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:src="@drawable/feature_1_r"
+                android:src="@drawable/onboarding_1_r"
                 tools:ignore="ContentDescription" />
 
             <ImageView
-                android:id="@+id/image_features_front"
+                android:id="@+id/image_onboarding_front"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:src="@drawable/feature_1_f"
+                android:src="@drawable/onboarding_1_f"
                 tools:ignore="ContentDescription" />
 
         </FrameLayout>
@@ -75,7 +75,7 @@
         android:clipToPadding="false">
 
         <TextView
-            android:id="@+id/text_features_title"
+            android:id="@+id/text_onboarding_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -85,7 +85,7 @@
             android:maxLines="2"/>
 
         <TextView
-            android:id="@+id/text_features_description"
+            android:id="@+id/text_onboarding_description"
             style="@style/TextAppearance.Grocy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
