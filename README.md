@@ -1,6 +1,6 @@
 <img src="assets/header.png" />
 
-<img align="right" src="https://raw.githubusercontent.com/patzly/grocy-android/master/app/src/main/res/mipmap-xhdpi/ic_launcher.png">
+<img align="right" src="https://raw.githubusercontent.com/patzly/grocy-android/master/app/src/main/res/mipmap-hdpi/ic_launcher.png">
 
 # Grocy Android
 
