@@ -141,10 +141,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         // necessary because else getValue() doesn't give current value (?)
         viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {});
 
-        viewModel.getFormData().getBarcodeLive().observe(
-                getViewLifecycleOwner(), barcode -> viewModel.getFormData().isFormValid()
-        );
-
         String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);
         if(barcode != null) {
             removeForThisDestination(Constants.ARGUMENT.BARCODE);

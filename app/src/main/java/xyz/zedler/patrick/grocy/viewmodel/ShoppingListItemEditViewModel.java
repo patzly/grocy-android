@@ -316,6 +316,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             setProduct(product);
         } else {
             formData.getBarcodeLive().setValue(barcode);
+            formData.isFormValid();
         }
     }
 

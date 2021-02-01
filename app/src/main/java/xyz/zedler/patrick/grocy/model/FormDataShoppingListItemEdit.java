@@ -208,7 +208,9 @@ public class FormDataShoppingListItemEdit {
     private String getAmountStock() {
         QuantityUnit stock = getStockQuantityUnit();
         QuantityUnit current = quantityUnitLive.getValue();
-        if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
+        if(!NumUtil.isStringDouble(amountLive.getValue())
+                || quantityUnitsFactorsLive.getValue() == null
+        ) return null;
         assert amountLive.getValue() != null;
 
         if(stock != null && current != null && stock.getId() != current.getId()) {
@@ -281,11 +283,17 @@ public class FormDataShoppingListItemEdit {
     }
 
     public boolean isAmountValid() {
+        if(productLive.getValue() == null
+                && (noteLive.getValue() == null || noteLive.getValue().isEmpty())
+        ) {
+            amountErrorLive.setValue(null);
+            return true;
+        }
         if(amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
             amountErrorLive.setValue(getString(R.string.error_empty));
             return false;
         }
-        if(!NumUtil.isStringNum(amountLive.getValue())) {
+        if(!NumUtil.isStringDouble(amountLive.getValue())) {
             amountErrorLive.setValue(getString(R.string.error_invalid_amount));
             return false;
         }
@@ -319,17 +327,18 @@ public class FormDataShoppingListItemEdit {
         if(!isFormValid()) return null;
         ShoppingList shoppingList = shoppingListLive.getValue();
         Product product = productLive.getValue();
-        String amount = amountStockLive.getValue();
+        String amountStock = amountStockLive.getValue();
+        String amount = amountLive.getValue();
         String note = noteLive.getValue();
         QuantityUnit unit = quantityUnitLive.getValue();
 
-        assert shoppingList != null && amount != null;
+        assert shoppingList != null;
         if(item == null) item = new ShoppingListItem();
-        double amountDouble = Double.parseDouble(amount);
         item.setShoppingListId(shoppingList.getId());
         item.setProductId(product != null ? String.valueOf(product.getId()) : null);
         item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
-        item.setAmount(amountDouble);
+        item.setAmount(amountStock != null
+                ? Double.parseDouble(amountStock) : Double.parseDouble(amount));
         item.setNote(note != null ? note.trim() : null);
         return item;
     }
@@ -347,17 +356,17 @@ public class FormDataShoppingListItemEdit {
     }
 
     public void clearForm() {
+        amountLive.setValue(null);
+        quantityUnitLive.setValue(null);
+        quantityUnitsFactorsLive.setValue(null);
         productLive.setValue(null);
         productNameLive.setValue(null);
         barcodeLive.setValue(null);
-        amountLive.setValue(null);
-        quantityUnitsFactorsLive.setValue(null);
-        quantityUnitLive.setValue(null);
         noteLive.setValue(null);
         new Handler().postDelayed(() -> {
             productNameErrorLive.setValue(null);
-            amountErrorLive.setValue(null);
             quantityUnitErrorLive.setValue(false);
+            amountErrorLive.setValue(null);
         }, 50);
     }
 
