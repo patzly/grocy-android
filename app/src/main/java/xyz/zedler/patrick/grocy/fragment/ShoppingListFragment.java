@@ -221,7 +221,7 @@ public class ShoppingListFragment extends BaseFragment implements
         activity.getScrollBehavior().setUpScroll(binding.recycler);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
-                Constants.FAB.POSITION.CENTER,
+                viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
                 viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
                 animated,
                 this::setUpBottomMenu
@@ -433,9 +433,9 @@ public class ShoppingListFragment extends BaseFragment implements
         if(!isOnline == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!isOnline);
         if(isOnline) viewModel.downloadData();
-        activity.updateBottomAppBar(
-                isOnline ? Constants.FAB.POSITION.CENTER : Constants.FAB.POSITION.GONE,
-                isOnline ? R.menu.menu_shopping_list : R.menu.menu_shopping_list_offline,
+        if(isOnline) activity.updateBottomAppBar(
+                Constants.FAB.POSITION.CENTER,
+                R.menu.menu_shopping_list,
                 true,
                 this::setUpBottomMenu
         );
