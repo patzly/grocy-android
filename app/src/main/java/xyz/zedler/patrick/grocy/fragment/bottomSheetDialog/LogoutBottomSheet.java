@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,14 +33,14 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.RestartUtil;
 
 public class LogoutBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = LogoutBottomSheet.class.getSimpleName();
 
-    private Activity activity;
+    private MainActivity activity;
 
     @NonNull
     @Override
@@ -60,8 +59,7 @@ public class LogoutBottomSheet extends BaseBottomSheet {
                 R.layout.fragment_bottomsheet_logout, container, false
         );
 
-        activity = getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         if(getArguments() != null) {
             // bundle was set to new Bundle() to indicate the demo type
@@ -79,7 +77,8 @@ public class LogoutBottomSheet extends BaseBottomSheet {
                     .remove(Constants.PREF.API_KEY)
                     .remove(Constants.PREF.SHOPPING_LIST_LAST_ID)
                     .commit();
-            RestartUtil.restartApp(activity);
+            activity.clearOfflineDataAndRestart();
+            dismiss();
         });
 
         return view;

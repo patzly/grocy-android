@@ -78,11 +78,13 @@ import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private FragmentManager fragmentManager;
     private GrocyApi grocyApi;
+    private MainRepository repository;
     private ClickUtil clickUtil;
     private NetUtil netUtil;
     private NavController navController;
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         // API
 
         grocyApi = new GrocyApi(this);
+        repository = new MainRepository(getApplication());
 
         // VIEWS
 
@@ -500,6 +504,24 @@ public class MainActivity extends AppCompatActivity {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
         return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+    }
+
+    public void clearOfflineDataAndRestart() {
+        repository.clearAllTables();
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_STORES);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_LOCATIONS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
+        editPrefs.apply();
+        new Handler().postDelayed(() -> RestartUtil.restartApp(this), 1000);
     }
 
     private void replaceFabIcon(Drawable icon, String tag, boolean animated) {
