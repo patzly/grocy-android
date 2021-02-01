@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager_onboarding"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:scrollbars="none"
         android:overScrollMode="never"/>
 
     <View

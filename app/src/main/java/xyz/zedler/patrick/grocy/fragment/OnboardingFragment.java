@@ -26,17 +26,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -53,8 +56,8 @@ public class OnboardingFragment extends BaseFragment {
     private FragmentOnboardingBinding binding;
     private MainActivity activity;
     private SharedPreferences sharedPrefs;
-    private PagerAdapter pagerAdapter;
     private final ClickUtil clickUtil = new ClickUtil();
+    private final HashMap<Integer, OnboardingPageFragment> fragments = new HashMap<>();
 
     @Override
     public View onCreateView(
@@ -80,16 +83,14 @@ public class OnboardingFragment extends BaseFragment {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         binding.frameOnboardingPrevious.setOnClickListener(v -> {
-            if(binding.pagerOnboarding.getCurrentItem() > 0) {
-                IconUtil.start(binding.imageOnboardingPrevious);
-                binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
-            }
+            if(binding.pagerOnboarding.getCurrentItem() == 0) return;
+            IconUtil.start(binding.imageOnboardingPrevious);
+            binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
         });
         binding.frameOnboardingNext.setOnClickListener(v -> {
-            if(binding.pagerOnboarding.getCurrentItem() < 3) {
-                IconUtil.start(binding.imageOnboardingNext);
-                binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
-            }
+            if(binding.pagerOnboarding.getCurrentItem() == 3) return;
+            IconUtil.start(binding.imageOnboardingNext);
+            binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
         });
         setArrows(0, false);
 
@@ -98,14 +99,32 @@ public class OnboardingFragment extends BaseFragment {
             activity.onBackPressed();
         });
 
-        pagerAdapter = new OnboardingPagerAdapter(activity.getSupportFragmentManager());
-        binding.pagerOnboarding.setAdapter(pagerAdapter);
-        binding.pagerOnboarding.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.pagerOnboarding.setAdapter(new OnboardingPagerAdapter(this));
+        binding.pagerOnboarding.setCurrentItem(0);
+        binding.pagerOnboarding.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+        binding.pagerOnboarding.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageSelected(int position) {
+                setArrows(position, true);
+            }
+
+            @Override
+            public void onPageScrolled(
+                    int position,
+                    float positionOffset,
+                    int positionOffsetPixels
+            ) {
+                for (int i = 0; i < 3; i++) {
+                    if (fragments.containsKey(i) && fragments.get(i) != null) continue;
+                    Fragment fragment = getChildFragmentManager().findFragmentByTag("f" + i);
+                    if (fragment == null) continue;
+                    fragments.put(i, (OnboardingPageFragment) fragment);
+                    ((OnboardingPageFragment) fragment).updateLayout(false);
+                }
+
                 setOffset(position, position, positionOffset); // active page
                 if(position != 0) setOffset(position - 1, position, positionOffset);
-                if(position != pagerAdapter.getCount() -1) {
+                if(position != binding.pagerOnboarding.getAdapter().getItemCount() - 1) {
                     setOffset(position + 1, position, positionOffset);
                 }
                 binding.linearOnboardingTextLand.setAlpha(
@@ -113,19 +132,20 @@ public class OnboardingFragment extends BaseFragment {
                                 ? 1 - 2 * positionOffset
                                 : 2 * positionOffset - 1
                 );
-                setText(positionOffset < 0.5f ? position : position + 1);
+                int positionNeeded = positionOffset < 0.5f ? position : position + 1;
+                binding.textOnboardingTitleLand.setText(
+                        OnboardingPageFragment.getTitle(positionNeeded)
+                );
+                binding.textOnboardingDescriptionLand.setText(
+                        OnboardingPageFragment.getDescription(positionNeeded)
+                );
             }
-
-            @Override
-            public void onPageSelected(int position) {
-                setArrows(position, true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) { }
         });
 
-        binding.tabsOnboarding.setupWithViewPager(binding.pagerOnboarding);
+        new TabLayoutMediator(
+                binding.tabsOnboarding, binding.pagerOnboarding, (tab, position) -> {}
+        ).attach();
+
         LinearLayout tabStrip = (LinearLayout) binding.tabsOnboarding.getChildAt(0);
         for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setOnTouchListener((v, event) -> true);
@@ -151,11 +171,6 @@ public class OnboardingFragment extends BaseFragment {
         }
     }
 
-    private void setText(int position) {
-        binding.textOnboardingTitleLand.setText(OnboardingPageFragment.getTitle(position));
-        binding.textOnboardingDescriptionLand.setText(OnboardingPageFragment.getDescription(position));
-    }
-
     private void setArrows(int position, boolean animated) {
         if(animated) {
             binding.frameOnboardingPrevious.animate().alpha(
@@ -173,34 +188,36 @@ public class OnboardingFragment extends BaseFragment {
     }
 
     private void setOffset(int targetPos, int scrollPos, float offset) {
-        ((OnboardingPageFragment) pagerAdapter.instantiateItem(binding.pagerOnboarding, targetPos))
-                .setOffset(scrollPos, offset);
+        if (!fragments.containsKey(targetPos)) return;
+        OnboardingPageFragment fragment = fragments.get(targetPos);
+        if (fragment != null) fragment.setOffset(scrollPos, offset);
     }
 
-    private static class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
-        public OnboardingPagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+    private static class OnboardingPagerAdapter extends FragmentStateAdapter {
+
+        public OnboardingPagerAdapter(Fragment fragment) {
+            super(fragment);
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             Bundle bundle = new Bundle();
-            bundle.putInt("position", position);
-            OnboardingPageFragment fragment = new OnboardingPageFragment();
+            bundle.putInt(Constants.ARGUMENT.POSITION, position);
+            Fragment fragment = new OnboardingPageFragment();
             fragment.setArguments(bundle);
             return fragment;
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return 3;
         }
     }
 
     public static class OnboardingPageFragment extends Fragment {
         private FragmentOnboardingPageBinding binding;
-        private int position = 0;
+        private int position;
 
         @Override
         public View onCreateView(
@@ -221,8 +238,16 @@ public class OnboardingFragment extends BaseFragment {
         }
 
         @Override
+        public void onResume() {
+            super.onResume();
+            updateLayout(true);
+        }
+
+        @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            if(getArguments() != null) position = getArguments().getInt("position");
+            if(getArguments() != null) position = getArguments().getInt(
+                    Constants.ARGUMENT.POSITION
+            );
 
             switch (position) {
                 case 1:
@@ -247,22 +272,36 @@ public class OnboardingFragment extends BaseFragment {
             binding.textOnboardingTitle.setText(getTitle(position));
             binding.textOnboardingDescription.setText(getDescription(position));
 
-            binding.frameOnboardingContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                if (getContext() == null) return;
-                int orientation = getResources().getConfiguration().orientation;
-                ViewGroup.LayoutParams params = binding.frameOnboardingContainer.getLayoutParams();
-                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    params.height = binding.frameOnboardingContainer.getWidth();
-                } else {
-                    params.width = binding.frameOnboardingContainer.getHeight();
-                }
-                binding.frameOnboardingContainer.requestLayout();
-            });
+            binding.frameOnboardingContainer.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            updateLayout(true);
+                            binding.frameOnboardingContainer.getViewTreeObserver()
+                                    .removeOnGlobalLayoutListener(this);
+                        }
+                    }
+            );
+        }
+
+        public void updateLayout(boolean force) {
+            if (getContext() == null) return;
+            int orientation = getResources().getConfiguration().orientation;
+            ViewGroup.LayoutParams params = binding.frameOnboardingContainer.getLayoutParams();
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                if (!force && params.height > 0) return;
+                params.height = binding.frameOnboardingContainer.getWidth();
+            } else {
+                if (!force && params.width > 0) return;
+                params.width = binding.frameOnboardingContainer.getHeight();
+            }
+            binding.frameOnboardingContainer.requestLayout();
+            if (force) binding.frameOnboardingContainer.forceLayout();
         }
 
         public void setOffset(int position, float offset) {
             if (binding == null) return;
-            if(binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) return;
+            if (binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) return;
             int frontOffset = 200, backOffset = -200;
             int rotation = 50;
             int titleOffset = 150;
@@ -289,21 +328,17 @@ public class OnboardingFragment extends BaseFragment {
         }
 
         public static int getTitle(int position) {
-            int[] titles = {
-                    R.string.feature_1_title,
-                    R.string.feature_2_title,
-                    R.string.feature_3_title
-            };
-            return titles[position];
+            return new int[]{
+                    R.string.feature_1_title, R.string.feature_2_title, R.string.feature_3_title
+            }[position];
         }
 
         public static int getDescription(int position) {
-            int[] descriptions = {
+            return new int[]{
                     R.string.feature_1_description,
                     R.string.feature_2_description,
                     R.string.feature_3_description
-            };
-            return descriptions[position];
+            }[position];
         }
     }
 }

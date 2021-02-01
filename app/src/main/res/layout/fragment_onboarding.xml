@@ -9,13 +9,14 @@
     android:background="@color/background"
     android:gravity="center_horizontal">
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager_onboarding"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="16dp"
-        android:overScrollMode="never"/>
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
 
     <LinearLayout
         android:id="@+id/linear_onboarding_text_land"

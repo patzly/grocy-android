@@ -10,8 +10,10 @@
     android:paddingBottom="16dp">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/frame_onboarding_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        tools:ignore="Suspicious0dp">
 
         <ImageView
             android:id="@+id/image_onboarding_back"
@@ -53,7 +55,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="1dp"
         android:orientation="vertical"
         android:visibility="gone">
 
