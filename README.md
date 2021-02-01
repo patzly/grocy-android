@@ -1,6 +1,6 @@
 <img src="assets/header.png" />
 
-<img align="right" height="80" src="assets/icon.png">
+<img align="right" height="70" src="assets/icon.png">
 
 # Grocy Android
 
