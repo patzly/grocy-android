@@ -576,6 +576,13 @@ public class PurchaseViewModel extends BaseViewModel {
         );
     }
 
+    public boolean getUseFrontCam() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.FRONT_CAM,
+                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+        );
+    }
+
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
