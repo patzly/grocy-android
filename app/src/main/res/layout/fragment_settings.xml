@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
                 app:clickUtil="@{clickUtil}"
-                android:background="@{fragment.shouldNavigateToServer ? @color/retro_green_translucent : @color/background}">
+                android:background="@{fragment.shouldNavigateToServer ? @drawable/bg_list_item_selected : @drawable/bg_list_item}">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
                 app:clickUtil="@{clickUtil}"
-                android:background="@{fragment.shouldNavigateToBehavior ? @color/retro_green_translucent : @color/background}">
+                android:background="@{fragment.shouldNavigateToBehavior ? @drawable/bg_list_item_selected : @drawable/bg_list_item}">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
