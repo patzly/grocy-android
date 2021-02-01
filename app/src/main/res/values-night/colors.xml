@@ -24,7 +24,7 @@
 
     <color name="background">#1e1f22</color>
     <color name="background_dark">@color/background</color>
-    <color name="on_background">@color/grey200</color>
+    <color name="on_background">@color/grey100</color>
     <color name="on_background_variant">#292a2e</color>
     <color name="on_background_secondary">@color/grey600</color>
     <color name="on_background_tertiary">@color/grey800</color>

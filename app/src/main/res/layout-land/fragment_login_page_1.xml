@@ -47,7 +47,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/enter_manually"
             style="@style/Widget.Grocy.Button.TextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Enter data manually" />
@@ -55,9 +55,10 @@
         <ImageView
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_round_grocy_color"
+            android:src="@drawable/ic_round_grocy"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>

@@ -64,7 +64,7 @@
                     android:layout_height="64dp"
                     android:layout_marginBottom="8dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_round_grocy_color"
+                    android:src="@drawable/ic_round_grocy"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.card.MaterialCardView
