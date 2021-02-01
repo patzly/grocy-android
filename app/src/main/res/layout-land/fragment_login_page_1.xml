@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="On another device, visit your grocy website and go to 'API keys' page. Click 'Add', then click on the little QR code symbol and scan the QR code."
+            android:text="@string/msg_qr_code_scan"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
             android:textColor="@color/on_background" />
 
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Enter data manually" />
+            android:text="@string/action_enter_data_manually" />
 
         <ImageView
             android:layout_width="56dp"
