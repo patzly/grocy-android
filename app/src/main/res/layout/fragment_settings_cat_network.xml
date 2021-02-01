@@ -144,8 +144,12 @@
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> switchLoadingCircle.setChecked(!switchLoadingCircle.isChecked())}"
-                android:layout_marginStart="56dp">
+                android:onClick="@{v -> switchLoadingCircle.setChecked(!switchLoadingCircle.isChecked())}">
+
+                <ImageView
+                    style="@style/Theme.Grocy.ListItem.Icon"
+                    tools:ignore="ContentDescription"
+                    android:src="@drawable/ic_round_refresh_anim"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 

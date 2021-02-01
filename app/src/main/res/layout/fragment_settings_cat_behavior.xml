@@ -99,7 +99,7 @@
                     android:id="@+id/image_help"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_help_anim"/>
+                    android:src="@drawable/ic_round_live_help"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
@@ -131,7 +131,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_edit"/>
+                    android:src="@drawable/ic_round_view_list"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
@@ -158,7 +158,7 @@
                     android:id="@+id/image_expand"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_open_in_browser_anim"/>
+                    android:src="@drawable/ic_round_vertical_align_top_anim"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
@@ -189,7 +189,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_batch"/>
+                    android:src="@drawable/ic_round_barcode_scan"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
@@ -216,7 +216,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_batch"/>
+                    android:src="@drawable/ic_round_barcode_scan"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
