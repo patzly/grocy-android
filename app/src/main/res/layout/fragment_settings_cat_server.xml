@@ -98,9 +98,9 @@
                 app:contentPadding="16dp"
                 app:cardElevation="0dp"
                 app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/retro_red_only_day"
-                app:strokeColor="@color/retro_red"
-                app:strokeWidth="@dimen/help_card_border_size"
+                app:cardBackgroundColor="@color/background"
+                app:strokeColor="@color/retro_red_fg"
+                app:strokeWidth="3dp"
                 android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
                 <TextView
