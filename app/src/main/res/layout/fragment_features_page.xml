@@ -10,46 +10,58 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="top"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/image_features_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
+        <FrameLayout
+            android:id="@+id/frame_features_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="UselessParent">
 
-        <ImageView
-            android:id="@+id/image_features_focused"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/image_features_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/feature_1_b"
+                tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:id="@+id/image_features_rotate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/image_features_focused"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/feature_1_f"
+                tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:id="@+id/image_features_front"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/image_features_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/feature_1_r"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/image_features_front"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/feature_1_f"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
 
     </FrameLayout>
 
@@ -58,8 +70,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:clipToPadding="false">
 
         <TextView
             android:id="@+id/text_features_title"
@@ -82,7 +95,8 @@
             android:lineSpacingExtra="8sp"
             android:textSize="15sp"
             android:textColor="@color/on_background_secondary"
-            android:maxLines="4"/>
+            android:maxLines="4"
+            android:minLines="2"/>
 
     </LinearLayout>
 

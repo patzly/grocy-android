@@ -10,7 +10,7 @@
 - Improved: Product autocomplete lists now use fuzzy matching
 - Improved: Server requests are now more secure with API key in header
 - Improved: Many internal code changes & better techniques
-- Fixed: Layout for text on features pages
+- Fixed: Onboarding layout
 - Updated translations
 
 1.10.1

@@ -21,14 +21,13 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +41,7 @@ import androidx.viewpager.widget.ViewPager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentFeaturesBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentFeaturesPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -199,17 +199,93 @@ public class FeaturesFragment extends BaseFragment {
     }
 
     public static class FeaturesPageFragment extends Fragment {
-        private ImageView imageViewBack, imageViewFront, imageViewRotate;
-        TextView textViewTitle, textViewDescription;
+        private FragmentFeaturesPageBinding binding;
         private int position = 0;
 
         @Override
         public View onCreateView(
-                LayoutInflater inflater,
+                @NonNull LayoutInflater inflater,
                 ViewGroup container,
                 Bundle savedInstanceState
         ) {
-            return inflater.inflate(R.layout.fragment_features_page, container, false);
+            binding = FragmentFeaturesPageBinding.inflate(
+                    inflater, container, false
+            );
+            return binding.getRoot();
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            binding = null;
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            if(getArguments() != null) position = getArguments().getInt("position");
+
+            switch (position) {
+                case 1:
+                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_2_b);
+                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_2_m);
+                    binding.imageFeaturesRotate.setImageDrawable(null);
+                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_2_f);
+                    break;
+                case 2:
+                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_3_b);
+                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_3_m);
+                    binding.imageFeaturesRotate.setImageDrawable(null);
+                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_3_f);
+                    break;
+                default:
+                    binding.imageFeaturesBack.setImageResource(R.drawable.feature_1_b);
+                    binding.imageFeaturesFocused.setImageResource(R.drawable.feature_1_m);
+                    binding.imageFeaturesRotate.setImageResource(R.drawable.feature_1_r);
+                    binding.imageFeaturesFront.setImageResource(R.drawable.feature_1_f);
+            }
+
+            binding.textFeaturesTitle.setText(getTitle(position));
+            binding.textFeaturesDescription.setText(getDescription(position));
+
+            binding.frameFeaturesContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                if (getContext() == null) return;
+                int orientation = getResources().getConfiguration().orientation;
+                ViewGroup.LayoutParams params = binding.frameFeaturesContainer.getLayoutParams();
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    params.height = binding.frameFeaturesContainer.getWidth();
+                } else {
+                    params.width = binding.frameFeaturesContainer.getHeight();
+                }
+                binding.frameFeaturesContainer.requestLayout();
+            });
+        }
+
+        public void setOffset(int position, float offset) {
+            if (binding == null) return;
+            if(binding.imageFeaturesFront == null || binding.imageFeaturesBack == null) return;
+            int frontOffset = 200, backOffset = -200;
+            int rotation = 50;
+            int titleOffset = 150;
+            binding.imageFeaturesFront.setTranslationX(
+                    position == this.position
+                            ? offset * -frontOffset
+                            : (1 - offset) * frontOffset
+            );
+            binding.imageFeaturesBack.setTranslationX(
+                    position == this.position
+                            ? offset * -backOffset
+                            : (1 - offset) * backOffset
+            );
+            binding.imageFeaturesRotate.setRotation(
+                    position == this.position
+                            ? offset * -rotation
+                            : (1 - offset) * rotation
+            );
+            binding.textFeaturesTitle.setTranslationX(
+                    position == this.position
+                            ? offset * -titleOffset
+                            : (1 - offset) * titleOffset
+            );
         }
 
         public static int getTitle(int position) {
@@ -228,73 +304,6 @@ public class FeaturesFragment extends BaseFragment {
                     R.string.feature_3_description
             };
             return descriptions[position];
-        }
-
-        @Override
-        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            ImageView imageViewFocused = view.findViewById(R.id.image_features_focused);
-            imageViewBack = view.findViewById(R.id.image_features_back);
-            imageViewFront = view.findViewById(R.id.image_features_front);
-            imageViewRotate = view.findViewById(R.id.image_features_rotate);
-            textViewTitle = view.findViewById(R.id.text_features_title);
-            textViewDescription = view.findViewById(R.id.text_features_description);
-
-            if(getArguments() != null) position = getArguments().getInt("position");
-
-            switch (position) {
-                case 1:
-                    imageViewBack.setImageResource(R.drawable.feature_2_b);
-                    imageViewFocused.setImageResource(R.drawable.feature_2_m);
-                    imageViewRotate.setImageDrawable(null);
-                    imageViewFront.setImageResource(R.drawable.feature_2_f);
-                    break;
-                case 2:
-                    imageViewBack.setImageResource(R.drawable.feature_3_b);
-                    imageViewFocused.setImageResource(R.drawable.feature_3_m);
-                    imageViewRotate.setImageDrawable(null);
-                    imageViewFront.setImageResource(R.drawable.feature_3_f);
-                    break;
-                default:
-                    imageViewBack.setImageResource(R.drawable.feature_1_b);
-                    imageViewFocused.setImageResource(R.drawable.feature_1_m);
-                    imageViewRotate.setImageResource(R.drawable.feature_1_r);
-                    imageViewFront.setImageResource(R.drawable.feature_1_f);
-            }
-
-            textViewTitle.setText(getTitle(position));
-            textViewDescription.setText(getDescription(position));
-        }
-
-        public void setOffset(int position, float offset) {
-            if(imageViewFront == null || imageViewBack == null) return;
-            int frontOffset = 200, backOffset = -200;
-            int rotation = 50;
-            int titleOffset = 0, descriptionOffset = -100;
-            imageViewFront.setTranslationX(
-                    position == this.position
-                            ? offset * -frontOffset
-                            : (1 - offset) * frontOffset
-            );
-            imageViewBack.setTranslationX(
-                    position == this.position
-                            ? offset * -backOffset
-                            : (1 - offset) * backOffset
-            );
-            imageViewRotate.setRotation(
-                    position == this.position
-                            ? offset * -rotation
-                            : (1 - offset) * rotation
-            );
-            textViewTitle.setTranslationX(
-                    position == this.position
-                            ? offset * -titleOffset
-                            : (1 - offset) * titleOffset
-            );
-            textViewDescription.setTranslationX(
-                    position == this.position
-                            ? offset * -descriptionOffset
-                            : (1 - offset) * descriptionOffset
-            );
         }
     }
 }
