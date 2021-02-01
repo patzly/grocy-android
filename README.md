@@ -1,5 +1,7 @@
 <img src="assets/header.png" />
 
+<img align="right" src="https://raw.githubusercontent.com/patzly/grocy-android/master/app/src/main/res/mipmap-hdpi/ic_launcher.png">
+
 # Grocy Android
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
