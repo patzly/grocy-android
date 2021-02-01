@@ -294,8 +294,8 @@ public class BottomAppBarRefreshScrollBehavior {
 
 	private void onChangeBottomAppBarVisibility(boolean visible, String origin) {
 		if(activity != null) {
-			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-				if(DEBUG) Log.i(TAG, "onChangeBottomAppBarVisibility: SDK below 28");
+			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+				if(DEBUG) Log.i(TAG, "onChangeBottomAppBarVisibility: SDK below 29");
 				return;
 			}
 			int dividerCurrentColor = activity.getWindow().getNavigationBarDividerColor();
