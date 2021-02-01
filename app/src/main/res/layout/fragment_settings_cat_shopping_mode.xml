@@ -99,7 +99,7 @@
                     android:id="@+id/image_screen_on"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_visibility"/>
+                    android:src="@drawable/ic_round_preview"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
@@ -131,7 +131,7 @@
                     android:id="@+id/image_show_done"
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_visibility"/>
+                    android:src="@drawable/ic_round_done"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
