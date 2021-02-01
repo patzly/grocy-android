@@ -77,14 +77,16 @@ public class InputProductBottomSheet extends BaseBottomSheet {
         assert input != null;
         binding.input.setText(input);
 
-        int defaultSelection;
-        try {
-            Integer.parseInt(input.trim());
-            defaultSelection = 3;
-        } catch(NumberFormatException e) {
-            defaultSelection = 1;
+        boolean stringOnlyContainsNumbers = true;
+        for(char c : input.trim().toCharArray()) {
+            try {
+                Integer.parseInt(String.valueOf(c));
+            } catch(NumberFormatException e) {
+                stringOnlyContainsNumbers = false;
+                break;
+            }
         }
-        selectionLive = new MutableLiveData<>(defaultSelection);
+        selectionLive = new MutableLiveData<>(stringOnlyContainsNumbers ? 3 : 1);
     }
 
     public void proceed() {
