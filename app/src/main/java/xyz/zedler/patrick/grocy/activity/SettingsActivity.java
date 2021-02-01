@@ -164,11 +164,11 @@ public class SettingsActivity extends AppCompatActivity
 		switchDark = findViewById(R.id.switch_setting_dark_mode);
 		switchDark.setChecked(sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false));
 		imageViewDark = findViewById(R.id.image_setting_dark_mode);
-		imageViewDark.setImageResource(
+		/*imageViewDark.setImageResource(
 				sharedPrefs.getBoolean(Constants.PREF.DARK_MODE, false)
 						? R.drawable.ic_round_dark_mode_off_anim
 						: R.drawable.ic_round_dark_mode_on_anim
-		);
+		);*/
 
 		switchFoodFacts = findViewById(R.id.switch_setting_open_food_facts);
 		switchFoodFacts.setChecked(
@@ -567,12 +567,12 @@ public class SettingsActivity extends AppCompatActivity
 				IconUtil.start(this, R.id.image_setting_dark_mode);
 				sharedPrefs.edit().putBoolean(Constants.PREF.DARK_MODE, isChecked).apply();
 				new Handler().postDelayed(() -> {
-					imageViewDark.setImageResource(
+					/*imageViewDark.setImageResource(
 							isChecked
 									? R.drawable.ic_round_dark_mode_off_anim
 									: R.drawable.ic_round_dark_mode_on_anim
 
-					);
+					);*/
 					AppCompatDelegate.setDefaultNightMode(
 							isChecked
 									? AppCompatDelegate.MODE_NIGHT_YES

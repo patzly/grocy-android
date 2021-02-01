@@ -124,7 +124,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_dark_mode_on_anim"/>
+                    android:src="@drawable/ic_round_visibility"/>
 
                 <TextView
                     android:layout_width="0dp"
