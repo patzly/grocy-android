@@ -182,7 +182,7 @@ public class OverviewStartFragment extends BaseFragment {
     public void updateConnectivity(boolean online) {
         if(!online == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!online);
-        viewModel.downloadData();
+        if(online) viewModel.downloadData();
     }
 
     private void appBarOfflineInfo(boolean visible) {
