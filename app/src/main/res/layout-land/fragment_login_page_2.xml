@@ -93,13 +93,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:text="HTTPS"/>
+                    android:text="@string/title_https"/>
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/http"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="HTTP"/>
+                    android:text="@string/title_http"/>
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout

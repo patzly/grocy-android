@@ -19,6 +19,8 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,7 @@ public class SettingsCatServerFragment extends BaseFragment {
 
     private FragmentSettingsCatServerBinding binding;
     private MainActivity activity;
+    private SettingsViewModel viewModel;
 
     @Override
     public View onCreateView(
@@ -66,7 +69,7 @@ public class SettingsCatServerFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
-        SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         binding.setActivity(activity);
         binding.setFragment(this);
         binding.setViewModel(viewModel);
@@ -99,6 +102,12 @@ public class SettingsCatServerFragment extends BaseFragment {
         }
 
         setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+    }
+
+    public void openServerWebsite() {
+        String serverUrl = viewModel.getServerUrl();
+        if(serverUrl == null) return;
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serverUrl)));
     }
 
     @Override

@@ -45,9 +45,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/on_background"
                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                    android:text="Welcome to Grocy Android!
-                \n\nTo use grocy productively you have to host your own instance on a server.
-\nIf you just want to try out this app you can use the demo instance from Bernd Bestel, the creator of grocy."/>
+                    android:text="@string/msg_welcome_to_grocy"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -65,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/on_background"
                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                    android:text="Please select one option from below."/>
+                    android:text="@string/msg_choose_option_below"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -83,7 +81,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:text="Demo instance"/>
+                    android:text="@string/action_demo_server"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/own_instance"
@@ -94,7 +92,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Own instance" />
+                    android:text="@string/action_own_server" />
 
             </LinearLayout>
 

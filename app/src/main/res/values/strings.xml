@@ -89,6 +89,9 @@
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Done</string>
     <string name="action_display_help">Display help texts</string>
+    <string name="action_demo_server">Demo server</string>
+    <string name="action_own_server">Own server</string>
+    <string name="action_enter_data_manually">Enter data manually</string>
 
     <string name="tooltip_new_products_count">Count of new products</string>
     <string name="tooltip_switch_purchase">Switch to purchase mode</string>
@@ -154,6 +157,9 @@
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
     <string name="msg_press_hold_confirm">Press and hold to confirm</string>
+    <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+    <string name="msg_choose_option_below">Please choose one option from below.</string>
+    <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
     <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
     <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
     <string name="msg_help_default_due_days">For purchases this amount of days will be added to today for the due date suggestion (-1 means that this product will be never overdue).</string>
@@ -267,6 +273,8 @@
     <string name="title_external_barcode_input">External scanner</string>
     <string name="title_confirmation">Confirmation</string>
 
+    <string name="title_http" translatable="false">HTTP</string>
+    <string name="title_https" translatable="false">HTTPS</string>
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
     <string name="title_total_price">Total price</string>

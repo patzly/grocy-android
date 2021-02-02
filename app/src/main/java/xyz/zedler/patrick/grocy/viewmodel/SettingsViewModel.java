@@ -136,6 +136,10 @@ public class SettingsViewModel extends BaseViewModel {
         showBottomSheet(new ShortcutsBottomSheet(), null);
     }
 
+    public String getServerUrl() {
+        return sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    }
+
     public boolean getDarkMode() {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.APPEARANCE.DARK_MODE,
