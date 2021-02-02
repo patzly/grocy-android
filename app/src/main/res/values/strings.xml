@@ -158,7 +158,7 @@
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
     <string name="msg_press_hold_confirm">Press and hold to confirm</string>
     <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
-    <string name="msg_select_option_below">Please select one option from below.</string>
+    <string name="msg_choose_option_below">Please choose one option from below.</string>
     <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
     <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
     <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
