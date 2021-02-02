@@ -148,7 +148,7 @@
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
                     tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_grocy"/>
+                    android:src="@drawable/ic_round_grocy_official"/>
 
                 <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
 
