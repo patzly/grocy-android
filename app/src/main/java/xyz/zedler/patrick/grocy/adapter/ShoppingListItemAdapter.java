@@ -553,9 +553,6 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             int itemsMissingCount,
             int itemsUndoneCount
     ) {
-        this.productHashMap = productHashMap;
-        this.quantityUnitHashMap = quantityUnitHashMap;
-        this.missingProductIds = missingProductIds;
         if(this.itemsMissingCount != itemsMissingCount
                 || this.itemsUndoneCount != itemsUndoneCount) {
             this.itemsMissingCount = itemsMissingCount;
@@ -565,24 +562,53 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         ShoppingListItemAdapter.DiffCallback diffCallback = new ShoppingListItemAdapter.DiffCallback(
                 newList,
-                this.groupedListItems
+                this.groupedListItems,
+                this.productHashMap,
+                productHashMap,
+                this.quantityUnitHashMap,
+                quantityUnitHashMap,
+                this.missingProductIds,
+                missingProductIds
         );
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.groupedListItems.clear();
         this.groupedListItems.addAll(newList);
+
+        this.productHashMap = productHashMap;
+        this.quantityUnitHashMap = quantityUnitHashMap;
+        this.missingProductIds = missingProductIds;
+
         diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
     }
 
     static class DiffCallback extends DiffUtil.Callback {
         ArrayList<GroupedListItem> oldItems;
         ArrayList<GroupedListItem> newItems;
+        HashMap<Integer, Product> productHashMapOld;
+        HashMap<Integer, Product> productHashMapNew;
+        HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
+        HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+        ArrayList<Integer> missingProductIdsOld;
+        ArrayList<Integer> missingProductIdsNew;
 
         public DiffCallback(
                 ArrayList<GroupedListItem> newItems,
-                ArrayList<GroupedListItem> oldItems
+                ArrayList<GroupedListItem> oldItems,
+                HashMap<Integer, Product> productHashMapOld,
+                HashMap<Integer, Product> productHashMapNew,
+                HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
+                HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+                ArrayList<Integer> missingProductIdsOld,
+                ArrayList<Integer> missingProductIdsNew
         ) {
             this.newItems = newItems;
             this.oldItems = oldItems;
+            this.productHashMapOld = productHashMapOld;
+            this.productHashMapNew = productHashMapNew;
+            this.quantityUnitHashMapOld = quantityUnitHashMapOld;
+            this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+            this.missingProductIdsOld = missingProductIdsOld;
+            this.missingProductIdsNew = missingProductIdsNew;
         }
 
         @Override
@@ -612,9 +638,17 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             if(oldItemType == GroupedListItem.TYPE_ENTRY) {
                 ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
                 ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
-                return compareContent
-                        ? newItem.equals(oldItem)
-                        : newItem.getId() == oldItem.getId();
+                if(!compareContent) return newItem.getId() == oldItem.getId();
+                
+                Integer idOld = productHashMapOld != null ? productHashMapOld.get(oldItem.getProductId()).getId() : null;
+
+                /*boolean isInOldMissingProducts = missingProductIdsOld != null && missingProductIdsOld.contains(oldItem.getProductId());
+                boolean isInNewMissingProducts = missingProductIdsNew != null && missingProductIdsNew.contains(newItem.getProductId());
+                if(isInOldMissingProducts != isInNewMissingProducts) return false;*/
+
+
+
+                return false;
             } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
                 ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
                 ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);

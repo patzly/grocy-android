@@ -211,7 +211,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(binding.scroll);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(

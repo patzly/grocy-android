@@ -53,11 +53,9 @@
     <string name="action_save">Сохранить</string>
     <string name="action_logout">Выйти</string>
     <string name="action_restart">Перезапустить</string>
-    <string name="action_show_extended">Показать все поля</string>
     <string name="action_batch_mode">Групповое действие</string>
     <string name="action_create">Создать</string>
     <string name="action_link">Ссылка</string>
-    <string name="action_open_forms">Открыть формы</string>
     <string name="action_open_scanner">Открыть сканер</string>
     <string name="action_discard">Сбросить</string>
     <string name="action_toggle_done">Пометить выполненным</string>
@@ -67,8 +65,6 @@
     <string name="action_purchase_all_items">Купить все</string>
     <string name="action_skip_entry">Пропустить запись</string>
     <string name="action_delete_shopping_list">Удалить список покупок</string>
-    <string name="action_discard_products">Сбросить продукты</string>
-    <string name="action_perform_purchasing_processes">Выполнить процедуру закупки для созданных продуктов</string>
     <string name="action_create_key">Создать ключ</string>
     <string name="action_login">Войти</string>
     <string name="action_use_demo_account">Использовать  демо аккаунт</string>
@@ -77,12 +73,6 @@
     <string name="action_clear_all">Все</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Выполнено</string>
-
-    <string name="tooltip_new_products_count">Количество новых продуктов</string>
-    <string name="tooltip_switch_purchase">Переключится в режим покупок</string>
-    <string name="tooltip_switch_consume">Переключится в режим использования</string>
-    <string name="tooltip_switch_open">Переключится в открытый режим</string>
-    <string name="tooltip_demo">Вы в демонстрационном режиме</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d скоро испортится</string>
@@ -96,7 +86,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d отменено</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">Покупка %1$s сохранена</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
     <!-- %1$s is a product name -->
@@ -125,9 +114,6 @@
     <string name="msg_item_marked_as_done">Пункт выполнен</string>
     <string name="msg_item_marked_as_undone">Пункт отменен</string>
     <string name="msg_batch_no_products">Новые продукты создавать не требуется</string>
-    <string name="msg_batch_tare_weight">Продукт не поддерживает групповой режим: включено управление весом тары</string>
-    <string name="msg_purchase_transactions_done">Завершены транзакции по закупке созданных товаров</string>
-    <string name="msg_no_purchase_transactions">Нет ожидающих транзакций по закупке</string>
     <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере,\n\nТекущая версия сервера %1$s\n\nТребуется:\nминимальная версия: %2$s\nмаксимальная версия: %3$s\n\nЕсли вы проигнорируете это предупреждение, могут возникнуть потери данных (маловероятно) и сбои (весьма вероятно).\nВас предупредили!</string>
     <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
     <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
@@ -195,21 +181,14 @@
     <string name="title_info">Информация</string>
     <string name="title_help">Справка</string>
     <string name="title_logs">Журнал</string>
-    <string name="title_link_barcode">Связать штрихкод с продуктом</string>
-    <string name="title_batch_scan_exit">Заполнить формы продуктов?</string>
-    <string name="title_batch_missing_exit">Вернуться в сканер?</string>
-    <string name="title_link_barcode_to_existing">Связать штрихкод с существующим продуктом?</string>
-    <string name="title_link_barcode_or_create">Связать штрихкод с существующим продуктом или создать новый продукт?</string>
     <string name="title_compatibility">Проблемы совместимости</string>
     <string name="title_logout">Выйти из Grocy?</string>
     <string name="title_restart">Перезапустить Grocy?</string>
     <string name="title_logout_demo">Выйти из демо режима?</string>
-    <string name="title_batch_config">Настройка групповых действий</string>
     <string name="title_manage_master_data">Управление основными данными</string>
 
     <string name="title_spoiled">Испорчено</string>
     <string name="title_use_specific">Использовать конкретный запас</string>
-    <string name="title_is_total_price">Общая цена</string>
     <string name="title_stock_entry_no_specific">Неопределенный запас</string>
     <string name="title_shopping_list_ungrouped">Не в группе</string>
     <string name="title_list_entry">Элемент списка</string>
@@ -227,7 +206,7 @@
     <string name="subtitle_amount_opened">(открыто %1$s) </string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Где есть запасы %1$s</string>
-    <string name="subtitle_default">По умолчанию</string>
+    <string name="subtitle_default_selection">По умолчанию</string>
     <string name="subtitle_none_selected">Ничего не выбрано</string>
     <string name="subtitle_empty">Пусто</string>
     <string name="subtitle_done">Выполнено</string>
@@ -242,12 +221,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Запись %1$d из %2$d</string>
 
-    <string name="description_batch_choose_link">Выберите продукт к которому привязать штрихкод</string>
-    <string name="description_batch_choose_create">Выберите продукт к которому привязать штрихкод или создайте новый</string>
-    <string name="description_scan_batch_exit">Новые продукты созданы, но не были отправлены на сервер, так как не внесены необходимые данные. Открыть формы продуктов?</string>
-    <string name="description_missing_batch_exit">Некоторые закупки еще не были отправлены на сервер. Сбросить их или вернуться в сканер?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">Создать новый продукт \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Вы хотите удалить все или только выполненные элементы?</string>
 
     <string name="property_name">Название</string>
@@ -304,9 +278,7 @@
     <string name="property_not_opened">не вскрыто</string>
     <string name="property_is_freezer">Морозильник</string>
 
-    <string name="date_yesterday">Вчера</string>
     <string name="date_today">Сегодня</string>
-    <string name="date_tomorrow">завтра</string>
     <string name="date_unknown">Неизвестно</string>
     <string name="date_unlimited">Неограничено</string>
     <string name="date_never">Никогда</string>
@@ -428,13 +400,6 @@
     <string name="setting_debug_description">Показывать ошибки в журнале</string>
     <string name="setting_info_logs">Показвать информационные записи журнала</string>
     <string name="setting_logs_description">Показать журнал этого процесса</string>
-
-    <string name="setting_ask_best_before_date">Спрашивать срок годности</string>
-    <string name="setting_ask_price">Спрашивать цену</string>
-    <string name="setting_ask_store">Спрашивать магазин</string>
-    <string name="setting_ask_location">Спрашивать место</string>
-    <string name="setting_ask_specific_item">Спрашивать конкретный экземпляр</string>
-    <string name="setting_consume_all">Использовать все экземпляры продукта</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

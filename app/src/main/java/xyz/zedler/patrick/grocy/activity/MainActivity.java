@@ -74,7 +74,6 @@ import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -414,27 +413,6 @@ public class MainActivity extends AppCompatActivity {
     public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
         bottomSheet.setArguments(bundle);
         showBottomSheet(bottomSheet);
-    }
-
-    public void showHideDemoIndicator(Fragment fragment, boolean animated) {
-        if(fragment instanceof StockFragment && isDemo()) {
-            if(animated) {
-                binding.frameMainDemo.setVisibility(View.VISIBLE);
-                binding.frameMainDemo.animate().alpha(1).setDuration(200).start();
-            } else {
-                binding.frameMainDemo.setAlpha(1);
-                binding.frameMainDemo.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if(animated) {
-                binding.frameMainDemo.animate().alpha(0).setDuration(200).withEndAction(
-                        () -> binding.frameMainDemo.setVisibility(View.GONE)
-                );
-            } else {
-                binding.frameMainDemo.setAlpha(0);
-                binding.frameMainDemo.setVisibility(View.GONE);
-            }
-        }
     }
 
     public void setNavBarColor(@ColorRes int color) {

@@ -371,7 +371,6 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_stock);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(

@@ -57,7 +57,6 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
     private final static String SHOPPING_MODE = "shortcut_shopping_mode";
     private final static String PURCHASE = "shortcut_purchase";
     private final static String CONSUME = "shortcut_consume";
-    private final static String BATCH_MODE = "shortcut_batch_mode";
 
     private MainActivity activity;
     private FragmentBottomsheetShortcutsBinding binding;
@@ -107,8 +106,6 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
                 setCheckBoxChecked(R.id.purchase);
             } else if(shortcutInfo.getId().equals(CONSUME)) {
                 setCheckBoxChecked(R.id.consume);
-            } else if(shortcutInfo.getId().equals(BATCH_MODE)) {
-                setCheckBoxChecked(R.id.batch_mode);
             }
         }
 
@@ -151,8 +148,6 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
                 shortcutInfos.add(createShortcutPurchase(checkBox.getText()));
             } else if(checkBox.getId() == R.id.consume) {
                 shortcutInfos.add(createShortcutConsume(checkBox.getText()));
-            } else if(checkBox.getId() == R.id.batch_mode) {
-                shortcutInfos.add(createShortcutBatchMode(checkBox.getText()));
             }
         }
 
@@ -215,17 +210,6 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         return new ShortcutInfo.Builder(requireContext(), CONSUME)
                 .setShortLabel(label)
                 .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_consume))
-                .setIntent(intent).build();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutBatchMode(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_batchModeFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return new ShortcutInfo.Builder(requireContext(), BATCH_MODE)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.drawable.ic_round_barcode_scan))
                 .setIntent(intent).build();
     }
 

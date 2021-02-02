@@ -78,7 +78,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         darkModeLive = new MutableLiveData<>(viewModel.getDarkMode());
 
         if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.showHideDemoIndicator(this, true);
             activity.getScrollBehavior().setUpScroll(binding.scroll);
             activity.getScrollBehavior().setHideOnScroll(true);
             activity.updateBottomAppBar(

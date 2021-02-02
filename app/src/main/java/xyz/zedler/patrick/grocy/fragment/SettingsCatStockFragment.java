@@ -86,7 +86,6 @@ public class SettingsCatStockFragment extends BaseFragment {
         });
 
         if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.showHideDemoIndicator(this, true);
             activity.getScrollBehavior().setUpScroll(binding.scroll);
             activity.getScrollBehavior().setHideOnScroll(true);
             activity.updateBottomAppBar(

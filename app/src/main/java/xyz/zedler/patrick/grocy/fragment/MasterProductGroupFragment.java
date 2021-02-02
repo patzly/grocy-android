@@ -163,7 +163,6 @@ public class MasterProductGroupFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_master_product_group);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(

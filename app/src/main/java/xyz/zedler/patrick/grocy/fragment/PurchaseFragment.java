@@ -39,7 +39,6 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -133,12 +132,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                         capture.decode();
                     }
                 }
-            } else if(event.getType() == Event.BARCODE_UNKNOWN) {
-                assert event.getBundle() != null;
-                activity.showBottomSheet(
-                        new InputBarcodeBottomSheet(),
-                        event.getBundle()
-                );
             } else if(event.getType() == Event.BOTTOM_SHEET) {
                 BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
                 activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -193,7 +186,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(

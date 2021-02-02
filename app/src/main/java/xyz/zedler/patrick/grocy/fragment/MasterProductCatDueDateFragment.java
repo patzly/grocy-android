@@ -116,7 +116,6 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(

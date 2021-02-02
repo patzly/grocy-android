@@ -98,14 +98,6 @@
                     android:text="@string/title_consume"
                     android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/batch_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/on_background"
-                    android:text="@string/title_batch_mode"
-                    android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
-
             </LinearLayout>
 
             <LinearLayout

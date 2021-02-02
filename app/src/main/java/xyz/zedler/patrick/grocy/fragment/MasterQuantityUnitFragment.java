@@ -167,7 +167,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_master_quantity_unit);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(

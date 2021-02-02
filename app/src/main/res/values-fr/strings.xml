@@ -53,11 +53,8 @@
     <string name="action_save">Sauvegarder</string>
     <string name="action_logout">Se déconnecter</string>
     <string name="action_restart">Redémarrer</string>
-    <string name="action_show_extended">Afficher le formulaire étendu</string>
-    <string name="title_batch_mode">Temps différé</string>
     <string name="action_create">Créer</string>
     <string name="action_link">Lien</string>
-    <string name="action_open_forms">Ouvrir le formulaire</string>
     <string name="action_open_scanner">Ouvrir le scanner</string>
     <string name="action_discard">Jeter</string>
     <string name="action_toggle_done">Basculer terminé</string>
@@ -67,22 +64,13 @@
     <string name="action_purchase_all_items">Achetez tous les articles</string>
     <string name="action_skip_entry">Passer l\'article</string>
     <string name="action_delete_shopping_list">Supprimer la liste d\'achats</string>
-    <string name="action_discard_products">Jeter les produits</string>
-    <string name="action_perform_purchasing_processes">Effectuer des transactions d\'achat pour les produits créés</string>
     <string name="action_create_key">Créer une clé</string>
     <string name="action_login">S\'identifier</string>
-    <string name="action_try_demo_instance">Utiliser un compte démo</string>
     <string name="action_ignore">Ignorer</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Tout</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Terminé</string>
-
-    <string name="tooltip_new_products_count">Nombre de nouveaux produits</string>
-    <string name="tooltip_switch_purchase">Passer en mode achat</string>
-    <string name="tooltip_switch_consume">Passer en mode consommation</string>
-    <string name="tooltip_switch_open">Passer en mode ouvert</string>
-    <string name="tooltip_demo">Vous êtes en mode démo</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d va bientôt expirer</string>
@@ -96,7 +84,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d défait</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">L\'achat de %1$s a été enregistré</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Achetée %1$s %2$s pour %3$s</string>
     <!-- %1$s is a product name -->
@@ -124,9 +111,6 @@
     <string name="msg_item_marked_as_done">Élément marqué comme terminé</string>
     <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
     <string name="msg_batch_no_products">Aucun nouveau produit à créer</string>
-    <string name="msg_batch_tare_weight">Le produit ne prend pas en charge le mode batch: la gestion du poids à vide est activée</string>
-    <string name="msg_purchase_transactions_done">Transactions d\'achat terminées des produits créés</string>
-    <string name="msg_no_purchase_transactions">Aucune transaction d\'achat en attente</string>
     <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
     <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
     <string name="msg_logout_demo">Vous exécutez l\'instance de démonstration grocy de <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications ici n\'est enregistrée!\nIls restent publics jusqu\'à ce que le serveur les écrase automatiquement.</b>\n\nSur l\'écran de connexion, vous pouvez entrer votre propre adresse de serveur.</string>
@@ -194,21 +178,14 @@
     <string name="title_info">Information</string>
     <string name="title_help">Aide</string>
     <string name="title_logs">Journaux</string>
-    <string name="title_link_barcode">Lier le code-barres au produit</string>
-    <string name="title_batch_scan_exit">Remplissez les formulaires produits?</string>
-    <string name="title_batch_missing_exit">Retour au scanner?</string>
-    <string name="title_link_barcode_to_existing">Lier le code-barres à un produit existant?</string>
-    <string name="title_link_barcode_or_create">Lier le code-barres à un produit existant ou créer un nouveau produit avec lui?</string>
     <string name="title_compatibility">Problèmes de compatibilité</string>
     <string name="title_logout">Déconnexion de Grocy?</string>
     <string name="title_restart">Redémarrer Grocy?</string>
     <string name="title_logout_demo">Se déconnecter du mode démo?</string>
-    <string name="title_batch_config">Configuration du mode batch</string>
     <string name="title_manage_master_data">Gérer les données de base</string>
 
     <string name="title_spoiled">Périmé</string>
     <string name="title_use_specific">Utiliser un article en stock spécifique</string>
-    <string name="title_is_total_price">Est le prix total</string>
     <string name="title_stock_entry_no_specific">Aucune entrée spécifique</string>
     <string name="title_shopping_list_ungrouped">Dissociée</string>
     <string name="title_list_entry">Entrée de liste</string>
@@ -226,7 +203,7 @@
     <string name="subtitle_amount_opened">(%1$s ouvert)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Où %1$s a du stock</string>
-    <string name="subtitle_default">Défaut</string>
+    <string name="subtitle_default_selection">Défaut</string>
     <string name="subtitle_none_selected">Aucune sélection</string>
     <string name="subtitle_empty">Vide</string>
     <string name="subtitle_done">Terminé</string>
@@ -241,12 +218,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Article %1$d sur %2$d</string>
 
-    <string name="description_batch_choose_link">Choisissez le produit auquel le code-barres sera lié.</string>
-    <string name="description_batch_choose_create">Choisissez le produit auquel le code-barres sera lié ou créez-en un nouveau.</string>
-    <string name="description_scan_batch_exit">De nouveaux produits ont été créés, mais ils n\'ont pas encore été envoyés au serveur car les détails requis manquent. Ouvrir les formulaires produits?</string>
-    <string name="description_missing_batch_exit">Certaines transactions d\'achat n\'ont pas encore été envoyées au serveur. Les jeter ou revenir au scanner?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">Créer un nouveau produit avec le nom \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Voulez-vous supprimer tous les éléments ou seulement les éléments terminés?</string>
 
     <string name="property_name">Nom</string>
@@ -303,9 +275,7 @@
     <string name="property_not_opened">pas ouvert</string>
     <string name="property_is_freezer">C\'est le congélateur</string>
 
-    <string name="date_yesterday">Hier</string>
     <string name="date_today">Aujourd\'hui</string>
-    <string name="date_tomorrow">Demain</string>
     <string name="date_unknown">Inconnue</string>
     <string name="date_unlimited">Illimitée</string>
     <string name="date_never">Jamais</string>
@@ -409,13 +379,6 @@
     <string name="setting_debug_description">Afficher le log des erreurs</string>
     <string name="setting_info_logs">Afficher les journaux d\'informations</string>
     <string name="setting_logs_description">Afficher le logcat de ce processus</string>
-
-    <string name="setting_ask_best_before_date">Demander la date de péremption</string>
-    <string name="setting_ask_price">Demandez le prix</string>
-    <string name="setting_ask_store">Demander un magasin</string>
-    <string name="setting_ask_location">Demandez l\'emplacement</string>
-    <string name="setting_ask_specific_item">Demander un article spécifique</string>
-    <string name="setting_consume_all">Consomer toutes les unités d\'un article</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

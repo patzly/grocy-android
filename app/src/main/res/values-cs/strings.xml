@@ -53,11 +53,9 @@
     <string name="action_save">Uložit</string>
     <string name="action_logout">Odhlásit</string>
     <string name="action_restart">Restartovat</string>
-    <string name="action_show_extended">Zobrazit rozšířený formulář</string>
     <string name="action_batch_mode">Dávkový mód</string>
     <string name="action_create">Vytvořit</string>
     <string name="action_link">Odkaz</string>
-    <string name="action_open_forms">Otevřít formulář</string>
     <string name="action_open_scanner">Otevřít skener</string>
     <string name="action_discard">Zrušit</string>
     <string name="action_toggle_done">Přepnout na hotovo</string>
@@ -67,22 +65,13 @@
     <string name="action_purchase_all_items">Koupit všechny položky</string>
     <string name="action_skip_entry">Přeskočit položku</string>
     <string name="action_delete_shopping_list">Smazat nákupní seznam</string>
-    <string name="action_discard_products">Zrušit produkt</string>
-    <string name="action_perform_purchasing_processes">Připravit transakci nákupu pro vytvořené produkty</string>
     <string name="action_create_key">Vytvořit klíč</string>
     <string name="action_login">Přihlásit</string>
-    <string name="action_try_demo_instance">Použít demo účet</string>
     <string name="action_ignore">Ignorovat</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Vše</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Hotovo</string>
-
-    <string name="tooltip_new_products_count">Počet nových produktů</string>
-    <string name="tooltip_switch_purchase">Přepnout do módu Nákup</string>
-    <string name="tooltip_switch_consume">Přepnout do módu Spotřebovat</string>
-    <string name="tooltip_switch_open">Přepnout do otevřeného módu</string>
-    <string name="tooltip_demo">Jste v demo režimu</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiruje brzy</string>
@@ -96,7 +85,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d navráceno</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">Nákup %1$s byl uložen</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Nakoupeno%1$s %2$s z %3$s</string>
     <!-- %1$s is a product name -->
@@ -124,9 +112,6 @@
     <string name="msg_item_marked_as_done">Nastav položku jako hotovou</string>
     <string name="msg_item_marked_as_undone">Nastav položku jako nehotovou</string>
     <string name="msg_batch_no_products">Žádný nový produkt nebyl vytvořen</string>
-    <string name="msg_batch_tare_weight">Produkt nepodporuje dávkový mód: Je aktivní mód táry</string>
-    <string name="msg_purchase_transactions_done">Dokončena transakce nákupu vytvořených produktů</string>
-    <string name="msg_no_purchase_transactions">Žádná čekající transakce nákupu</string>
     <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>
     <string name="msg_logout">Nic na vašem serveru nebylo změněno. Budete přesměrování na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte demo instanci Grocy <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
@@ -194,21 +179,14 @@
     <string name="title_info">Informace</string>
     <string name="title_help">Nápověda</string>
     <string name="title_logs">Logy</string>
-    <string name="title_link_barcode">Navázat čároý kód na produkt</string>
-    <string name="title_batch_scan_exit">Vyplnit formulář produktu?</string>
-    <string name="title_batch_missing_exit">Zpět do skeneru?</string>
-    <string name="title_link_barcode_to_existing">Navázat čárový kód na existující produkt?</string>
-    <string name="title_link_barcode_or_create">Navázat čárový kód na existující produkt nebo vytvořit nový produkt s tímto kódem?</string>
     <string name="title_compatibility">Problémy s kompatibilitou</string>
     <string name="title_logout">Odhlásit z Grocy?</string>
     <string name="title_restart">Restartovat Grocy?</string>
     <string name="title_logout_demo">Odhláit z módu dema?</string>
-    <string name="title_batch_config">Konfigurace dávkového módu</string>
     <string name="title_manage_master_data">Spravovat základní data</string>
 
     <string name="title_spoiled">Zkaženo</string>
     <string name="title_use_specific">Použit specifickou položku zásob</string>
-    <string name="title_is_total_price">Je celková cena</string>
     <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
     <string name="title_shopping_list_ungrouped">Neseskupeno</string>
     <string name="title_list_entry">Seznam položek</string>
@@ -226,7 +204,7 @@
     <string name="subtitle_amount_opened">(%1$s otevřeno)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Kde %1$s má zásobu</string>
-    <string name="subtitle_default">Výchozí</string>
+    <string name="subtitle_default_selection">Výchozí</string>
     <string name="subtitle_none_selected">Nic nevybráno</string>
     <string name="subtitle_empty">Prázdné</string>
     <string name="subtitle_done">Hotovo</string>
@@ -241,12 +219,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Položka %1$d z %2$d</string>
 
-    <string name="description_batch_choose_link">Vyberte produkt ke kterému bude přiřazen čárový kód</string>
-    <string name="description_batch_choose_create">Vyberte produkt ke kterému bude přiřazen čárový kód nebo vytvořte nový.</string>
-    <string name="description_scan_batch_exit">Nový produkt byl vytvořen, ale nebyl ještě odeslán na server, protože chybí některé vyžadované položky. Otevřít formulář produktu pro vyplnění?</string>
-    <string name="description_missing_batch_exit">Některé transakce nákupů ještě nebyly odeslány na server. Zrušit tyto nákupy nebo se vrátit na čtečku čárovýh kódů?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">Vytvořit nový produkt s názvem \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Chcete smazat vše nebo pouze hotové položky?</string>
 
     <string name="property_name">Jméno</string>
@@ -303,9 +276,7 @@
     <string name="property_not_opened">neotevřeno</string>
     <string name="property_is_freezer">Je mražák</string>
 
-    <string name="date_yesterday">Včera</string>
     <string name="date_today">Dnes</string>
-    <string name="date_tomorrow">Zítra</string>
     <string name="date_unknown">Neznámý</string>
     <string name="date_unlimited">Neomezený</string>
     <string name="date_never">Nikdy</string>
@@ -427,13 +398,6 @@
     <string name="setting_debug_description">Zobrazit chyby v logu</string>
     <string name="setting_info_logs">Zobrazit info v logu</string>
     <string name="setting_logs_description">Zobrazit logcat tohoto procesu</string>
-
-    <string name="setting_ask_best_before_date">Zeptat se na datum trvanlivosti</string>
-    <string name="setting_ask_price">Zeptat se na cenu</string>
-    <string name="setting_ask_store">Zeptat se na obchod</string>
-    <string name="setting_ask_location">Zeptat se na umístění</string>
-    <string name="setting_ask_specific_item">Zeptat se na specifické položky</string>
-    <string name="setting_consume_all">Spotřebovat všechny položky produktu</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

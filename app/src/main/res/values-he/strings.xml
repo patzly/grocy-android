@@ -53,11 +53,9 @@
     <string name="action_save">שמירה</string>
     <string name="action_logout">יציאה</string>
     <string name="action_restart">הפעלה מחדש</string>
-    <string name="action_show_extended">הצגת טופס מורחב</string>
     <string name="action_batch_mode">מצב מרוכז</string>
     <string name="action_create">יצירה</string>
     <string name="action_link">קישור</string>
-    <string name="action_open_forms">פתיחת טפסים</string>
     <string name="action_open_scanner">פתיחת סורק</string>
     <string name="action_discard">התעלמות</string>
     <string name="action_toggle_done">החלפת מצב ביצוע</string>
@@ -67,22 +65,13 @@
     <string name="action_purchase_all_items">לרכוש את כל הפריטים</string>
     <string name="action_skip_entry">לדלג על רשומה</string>
     <string name="action_delete_shopping_list">מחיקת רשימת קניות</string>
-    <string name="action_discard_products">השלכת מוצרים</string>
-    <string name="action_perform_purchasing_processes">ביצוע העברות רכישה למוצרים שנוצרו</string>
     <string name="action_create_key">יצירת מפתח</string>
     <string name="action_login">כניסה</string>
-    <string name="action_try_demo_instance">להשתמש בחשבון לדוגמה</string>
     <string name="action_ignore">התעלמות</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">הכול</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">בוצע</string>
-
-    <string name="tooltip_new_products_count">ספירת מוצרים חדשים</string>
-    <string name="tooltip_switch_purchase">מעבר למצב רכישה</string>
-    <string name="tooltip_switch_consume">מעבר למצב צריכה</string>
-    <string name="tooltip_switch_open">מעבר למצב פתיחה</string>
-    <string name="tooltip_demo">זה מצב הדגמה</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">התוקף של %1$d עומד לפוג בקרוב</string>
@@ -96,7 +85,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d לטיפול</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">הרכישה של %1$s נשמרה</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
     <!-- %1$s is a product name -->
@@ -124,9 +112,6 @@
     <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
     <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
     <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
-    <string name="msg_batch_tare_weight">המוצר לא תומך במצב מרוכז: מופעל טיפול במשקל טרה</string>
-    <string name="msg_purchase_transactions_done">העברות הרכישה של המוצרים שנוצרו בוצעו</string>
-    <string name="msg_no_purchase_transactions">אין העברות רכישה ממתינות</string>
     <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
     <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
     <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
@@ -194,21 +179,14 @@
     <string name="title_info">פרטים</string>
     <string name="title_help">עזרה</string>
     <string name="title_logs">יומנים</string>
-    <string name="title_link_barcode">קישור ברקוד למוצר</string>
-    <string name="title_batch_scan_exit">למלא את טופסי המוצר?</string>
-    <string name="title_batch_missing_exit">לחזור לסורק?</string>
-    <string name="title_link_barcode_to_existing">לקשר ברקוד למוצר קיים?</string>
-    <string name="title_link_barcode_or_create">לקשר את הברקוד למוצר קיים או ליצור עבורו מוצר חדש?</string>
     <string name="title_compatibility">בעיות תאימות</string>
     <string name="title_logout">לצאת מ־Grocy?</string>
     <string name="title_restart">להפעיל את Grocy מחדש?</string>
     <string name="title_logout_demo">לצאת ממצב ההדגמה?</string>
-    <string name="title_batch_config">הגדרות מצב מרוכז</string>
     <string name="title_manage_master_data">ניהול נתוני העל</string>
 
     <string name="title_spoiled">מקולקל</string>
     <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
-    <string name="title_is_total_price">האם המחיר הכללי</string>
     <string name="title_stock_entry_no_specific">אין רשומה מסוימת</string>
     <string name="title_shopping_list_ungrouped">לא מקובץ</string>
     <string name="title_list_entry">רשומה ברשימה</string>
@@ -226,7 +204,7 @@
     <string name="subtitle_amount_opened">(%1$s נפתחו)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">איפה למוצר %1$s יש מלאי</string>
-    <string name="subtitle_default">בררת מחדל</string>
+    <string name="subtitle_default_selection">בררת מחדל</string>
     <string name="subtitle_none_selected">לא נבחר כלום</string>
     <string name="subtitle_empty">ריק</string>
     <string name="subtitle_done">בוצע</string>
@@ -241,12 +219,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">רשומה %1$d מתוך %2$d</string>
 
-    <string name="description_batch_choose_link">נא לבחור את המוצר אליו יקושר הברקוד.</string>
-    <string name="description_batch_choose_create">נא לבחור את המוצר שאליו הברקוד יקושר או ליצור מוצר חדש.</string>
-    <string name="description_scan_batch_exit">נוצרו מוצרים חדשים אך הם לא נשלחו לשרת כיוון שחסרים פרטים חיוניים. לפתוח את טופסי המוצרים?</string>
-    <string name="description_missing_batch_exit">חלק מהעברות הרכישה לא נשלחו עדיין לשרת. להתעלם מהן או לחזור לסורק?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">ליצור מוצר חדש עם השם „%1$s”?</string>
     <string name="description_clear_shopping_list">למחוק את הכול או רק את הפריטים שבוצעו?</string>
 
     <string name="property_name">שם</string>
@@ -303,9 +276,7 @@
     <string name="property_not_opened">לא נפתח</string>
     <string name="property_is_freezer">במקפיא</string>
 
-    <string name="date_yesterday">אתמול</string>
     <string name="date_today">היום</string>
-    <string name="date_tomorrow">מחר</string>
     <string name="date_unknown">לא ידוע</string>
     <string name="date_unlimited">בלתי מוגבל</string>
     <string name="date_never">אף פעם</string>
@@ -427,13 +398,6 @@
     <string name="setting_debug_description">הצגת שגיאות ביומן</string>
     <string name="setting_info_logs">הצגת יומני מידע</string>
     <string name="setting_logs_description">הצגת logcat (יומן מעקב) לתהליך הזה</string>
-
-    <string name="setting_ask_best_before_date">בקשת תאריך בתוקף עד המיטבי</string>
-    <string name="setting_ask_price">בקשת מחיר</string>
-    <string name="setting_ask_store">בקשת חנות</string>
-    <string name="setting_ask_location">בקשת מיקום</string>
-    <string name="setting_ask_specific_item">בקשת פריט מסוים</string>
-    <string name="setting_consume_all">צריכת כל הפריטים למוצר</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

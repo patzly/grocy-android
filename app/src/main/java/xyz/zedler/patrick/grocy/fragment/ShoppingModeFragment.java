@@ -215,7 +215,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(null);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(

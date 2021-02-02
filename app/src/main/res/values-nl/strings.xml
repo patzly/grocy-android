@@ -53,11 +53,8 @@
     <string name="action_save">Opslaan</string>
     <string name="action_logout">Uitloggen</string>
     <string name="action_restart">Herstarten</string>
-    <string name="action_show_extended">Uitgebreid formulier weergeven</string>
-    <string name="title_batch_mode">Batchmodus</string>
     <string name="action_create">Aanmaken</string>
     <string name="action_link">Linken</string>
-    <string name="action_open_forms">Open formulier</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Verwerp</string>
     <string name="action_toggle_done">Verander status</string>
@@ -67,21 +64,14 @@
     <string name="action_purchase_all_items">Koop alle items</string>
     <string name="action_skip_entry">Invoer overslaan</string>
     <string name="action_delete_shopping_list">Boodschappenlijst verwijderen</string>
-    <string name="action_discard_products">Product weggooien</string>
-    <string name="action_perform_purchasing_processes">Voer inkooptransacties uit voor gecreëerde producten</string>
     <string name="action_create_key">Sleutel aanmaken</string>
     <string name="action_login">Inloggen</string>
-    <string name="action_try_demo_instance">Demo-account proberen</string>
     <string name="action_ignore">Negeer</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alle</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Afgerond</string>
 
-    <string name="tooltip_new_products_count">Aantal nieuwe producten</string>
-    <string name="tooltip_switch_purchase">Schakel over naar aankoopmodus</string>
-    <string name="tooltip_switch_consume">Schakel over naar de consumeermodus</string>
-    <string name="tooltip_switch_open">Schakel over naar de openmodus</string>
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d verloopt binnenkort</string>
     <!-- %1$s is the number of products which are expired -->
@@ -94,7 +84,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d nog niet gedaan</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">Aankoop %1$s wordt opgeslagen</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">%1$s %2$s van %3$s aan voorraad toegevoegd</string>
     <!-- %1$s is a product name -->
@@ -122,9 +111,6 @@
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
     <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
-    <string name="msg_batch_tare_weight">Product ondersteunt geen batchmodus: tarragewichtverwerking ingeschakeld</string>
-    <string name="msg_purchase_transactions_done">Aankooptransacties van aangemaakte producten gedaan</string>
-    <string name="msg_no_purchase_transactions">Geen lopende aankooptransacties</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
     <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
     <string name="msg_logout_demo">Je maakt momenteel gebruik van de demo op <u>https://grocy.info</u>.  <b>Daar worden geen wijzigingen opgeslagen! Ze blijven openbaar totdat de server ze automatisch overschrijft.</b>  Op het login-scherm kun je je eigen serveradres invoeren.</string>
@@ -190,21 +176,14 @@
     <string name="title_info">Informatie</string>
     <string name="title_help">Help</string>
     <string name="title_logs">Logs</string>
-    <string name="title_link_barcode">Link streepjescode aan product</string>
-    <string name="title_batch_scan_exit">Productformulier invullen?</string>
-    <string name="title_batch_missing_exit">Terug naar de scanner?</string>
-    <string name="title_link_barcode_to_existing">Link streepjescode aan een bestaand product?</string>
-    <string name="title_link_barcode_or_create">Link streepjescode aan een bestaand product of maak een nieuw product aan?</string>
     <string name="title_compatibility">Compatibiliteitsproblemen</string>
     <string name="title_logout">Uitloggen van Grocy?</string>
     <string name="title_restart">Grocy herstarten?</string>
     <string name="title_logout_demo">Demomodus uitloggen?</string>
-    <string name="title_batch_config">Batchmodus configuratie</string>
     <string name="title_manage_master_data">Masterdaata beheren</string>
 
     <string name="title_spoiled">Bedorven</string>
     <string name="title_use_specific">Gebruik specifiek voorraadartikel</string>
-    <string name="title_is_total_price">Is de totaalprijs</string>
     <string name="title_stock_entry_no_specific">Geen specifieke vermelding</string>
     <string name="title_shopping_list_ungrouped">Ongegroepeerd</string>
     <string name="title_list_entry">Lijstvermelding</string>
@@ -222,7 +201,7 @@
     <string name="subtitle_amount_opened">(%1$s geopend)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Waar %1$s voorraad heeft</string>
-    <string name="subtitle_default">Standaard</string>
+    <string name="subtitle_default_selection">Standaard</string>
     <string name="subtitle_none_selected">Niks geselecteerd</string>
     <string name="subtitle_empty">Leeg</string>
     <string name="subtitle_done">Klaar</string>
@@ -237,12 +216,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Item %1$d van %2$d</string>
 
-    <string name="description_batch_choose_link">Selecteer een product waar de streepjescode aan wordt gelinkt.</string>
-    <string name="description_batch_choose_create">Selecteer een product waar de streepjescode aan wordt gelinkt of maak een nieuw product aan.</string>
-    <string name="description_scan_batch_exit">Er zijn nieuwe producten gemaakt, maar deze zijn nog niet naar de server gestuurd omdat de vereiste details ontbreken. De productformulieren openen?</string>
-    <string name="description_missing_batch_exit">Sommige aankooptransacties zijn nog niet naar de server gestuurd. Weggooien of teruggaan naar de scanner?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">Maak een nieuw prodct aan met de naam \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Wil je alle items verwijderen of alleen die klaar zijn?</string>
 
     <string name="property_name">Naam</string>
@@ -299,9 +273,7 @@
     <string name="property_not_opened">niet geopend</string>
     <string name="property_is_freezer">Is een vriezer</string>
 
-    <string name="date_yesterday">Gisteren</string>
     <string name="date_today">Vandaag</string>
-    <string name="date_tomorrow">Morgen</string>
     <string name="date_unknown">Onbekend</string>
     <string name="date_unlimited">Onbeperkt</string>
     <string name="date_never">Nooit</string>
@@ -359,13 +331,6 @@
     <string name="setting_debug">Logging aangezet</string>
     <string name="setting_info_logs">Info-Logs bekijken</string>
     <string name="setting_logs_description">Logcat van dit proces bekijken</string>
-
-    <string name="setting_ask_best_before_date">Vraag naar THT-datum</string>
-    <string name="setting_ask_price">Vraag naar prijs</string>
-    <string name="setting_ask_store">Vraag naar winkel</string>
-    <string name="setting_ask_location">Vraag naar locatie</string>
-    <string name="setting_ask_specific_item">Vraag naar een specifiek item</string>
-    <string name="setting_consume_all">Consumeer alle items van een product</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

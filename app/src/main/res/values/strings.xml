@@ -62,10 +62,8 @@
     <string name="action_save">Save</string>
     <string name="action_logout">Logout</string>
     <string name="action_restart">Restart</string>
-    <string name="action_show_extended">Show extended form</string>
     <string name="action_create">Create</string>
     <string name="action_link">Link</string>
-    <string name="action_open_forms">Open forms</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Discard</string>
     <string name="action_clear_form">Clear form</string>
@@ -76,13 +74,9 @@
     <string name="action_purchase_all_items">Purchase all items</string>
     <string name="action_skip_entry">Skip entry</string>
     <string name="action_toggle_flash">Toggle flash</string>
-    <string name="action_config_batch_mode">Configure batch mode</string>
     <string name="action_delete_shopping_list">Delete shopping list</string>
-    <string name="action_discard_products">Discard products</string>
-    <string name="action_perform_purchasing_processes">Perform purchase transactions for created products</string>
     <string name="action_create_key">Create key</string>
     <string name="action_login">Login</string>
-    <string name="action_try_demo_instance">Try demo instance</string>
     <string name="action_ignore">Ignore</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">All</string>
@@ -92,12 +86,6 @@
     <string name="action_demo_server">Demo server</string>
     <string name="action_own_server">Own server</string>
     <string name="action_enter_data_manually">Enter data manually</string>
-
-    <string name="tooltip_new_products_count">Count of new products</string>
-    <string name="tooltip_switch_purchase">Switch to purchase mode</string>
-    <string name="tooltip_switch_consume">Switch to consume mode</string>
-    <string name="tooltip_switch_open">Switch to open mode</string>
-    <string name="tooltip_demo">You\'re in demo mode</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiring soon</string>
@@ -110,8 +98,6 @@
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d undone</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">Purchase of %1$s has been saved</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
     <!-- %1$s is a product name -->
@@ -141,9 +127,6 @@
     <string name="msg_item_marked_as_done">Marked item as done</string>
     <string name="msg_item_marked_as_undone">Marked item as undone</string>
     <string name="msg_batch_no_products">No new products have to be created</string>
-    <string name="msg_batch_tare_weight">Product doesn\'t support batch mode: tare weight handling enabled</string>
-    <string name="msg_purchase_transactions_done">Done purchase transactions of created products</string>
-    <string name="msg_no_purchase_transactions">No pending purchase transactions</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
@@ -232,7 +215,7 @@
     <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate has to be signed by a trusted certificate authority (CA)\nTo meet these requirements, you can use a free certificate from letsencrypt.org for proper encryption.</string>
     <string name="error_unexpected_response_code">Unexpected response code: %1$d</string>
     <string name="error_unexpected_response">Unexpected server response</string>
-    <string name="error_no_browser">Install a web browser to display the help webpage</string>
+    <string name="error_no_browser">Install a web browser to display the help website</string>
     <string name="error_barcode_not_linked">Barcode is not linked to a product</string>
     <string name="error_no_product_details">Could not get product details</string>
     <string name="error_failed_barcode_upload">Could not upload barcode</string>
@@ -242,7 +225,6 @@
     <string name="title_stock_overview">Stock overview</string>
     <string name="title_purchase">Purchase</string>
     <string name="title_consume">Consume</string>
-    <string name="title_batch_mode">Batch mode</string>
     <string name="title_barcode_input">Barcode input</string>
     <string name="title_product_overview">Product overview</string>
     <string name="title_product">Product</string>
@@ -257,16 +239,10 @@
     <string name="title_info">Information</string>
     <string name="title_help">Help</string>
     <string name="title_logs">Logs</string>
-    <string name="title_link_barcode">Link barcode to product</string>
-    <string name="title_batch_scan_exit">Fill out the product forms?</string>
-    <string name="title_batch_missing_exit">Back to scanner?</string>
-    <string name="title_link_barcode_to_existing">Link barcode to an existing product?</string>
-    <string name="title_link_barcode_or_create">Link barcode to an existing product or create a new product with it?</string>
     <string name="title_compatibility">Compatibility issues</string>
     <string name="title_logout">Logout from Grocy?</string>
     <string name="title_restart">Restart Grocy?</string>
     <string name="title_logout_demo">Logout from demo mode?</string>
-    <string name="title_batch_config">Batch mode configuration</string>
     <string name="title_manage_master_data">Manage master data</string>
     <string name="title_edit_description">Edit description</string>
     <string name="title_input_number">Number input</string>
@@ -281,7 +257,6 @@
     <string name="title_unit_price">Unit price</string>
     <!-- %1$s is a quantity unit -->
     <string name="title_unit_price_specific">%1$s price</string>
-    <string name="title_is_total_price">Is total price</string>
     <string name="title_delete_entry">Delete entry</string>
     <string name="title_stock_entry_no_specific">No specific entry</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
@@ -309,9 +284,8 @@
     <string name="subtitle_amount_opened">(%1$s opened)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
-    <string name="subtitle_default">Default</string>
+    <string name="subtitle_default_selection">Default selection</string>
     <string name="subtitle_none_selected">None selected</string>
-    <string name="subtitle_none">None</string>
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
@@ -319,9 +293,9 @@
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
     <!-- %1$s is a purchase date -->
-    <string name="subtitle_stock_entry_name">Purchased: %1$s</string>
+    <string name="subtitle_stock_entry_name">Bought on %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
-    <string name="subtitle_stock_entry">Best before: %1$s; amount: %2$s; %3$s</string>
+    <string name="subtitle_stock_entry">Due on %1$s; amount: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Entry %1$d of %2$d</string>
     <!-- %1$s is a number -->
@@ -335,10 +309,6 @@
     <string name="subtitle_product_hidden">Product is hidden</string>
     <string name="subtitle_product_not_hidden">Product is not hidden</string>
     <string name="subtitle_product_not_on_server">Product is not on server</string>
-    <string name="subtitle_price_help_total">Total price</string>
-    <string name="subtitle_price_help_unit">Unit price</string>
-    <!-- %1$s is a unit name -->
-    <string name="subtitle_price_help_unit_in">%1$s price</string>
     <string name="subtitle_unknown">Unknown</string>
 
     <string name="description_input_product_part1">Product field contains:</string>
@@ -346,12 +316,6 @@
     <string name="description_input_product_option1">Create new product and use input as name</string>
     <string name="description_input_product_option2">Create new product and use input as barcode</string>
     <string name="description_input_product_option3">Add as barcode to existing product</string>
-    <string name="description_batch_choose_link">Choose the product to which the barcode will be linked.</string>
-    <string name="description_batch_choose_create">Choose the product to which the barcode will be linked or create a new one.</string>
-    <string name="description_scan_batch_exit">New products have been created, but they have not yet been sent to the server because required details are missing. Open the product forms?</string>
-    <string name="description_missing_batch_exit">Some purchase transactions have not yet been sent to the server. Discard them or go back to the scanner?</string>
-    <!-- %1$s is a product name -->
-    <string name="description_input_name">Create new product with the name \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Do you want to delete all or only done items?</string>
 
     <!-- %1$s is a number -->
@@ -451,11 +415,11 @@
     <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
     <string name="property_picture">Picture</string>
 
-    <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>
-    <string name="date_tomorrow">Tomorrow</string>
     <string name="date_unknown">Unknown</string>
+    <!-- This means the 'time' context -->
     <string name="date_unlimited">Unlimited</string>
+    <!-- This means the 'time' context, like 'Last used date: Never' -->
     <string name="date_never">Never</string>
 
     <plurals name="date_days">
@@ -501,7 +465,7 @@
         <item quantity="other">%d years from now</item>
     </plurals>
 
-    <string name="info_acknowledgement">We\'d like to thank Bernd Bestel, without whose great work this app would never have been possible.</string>
+    <string name="info_acknowledgement">We\'d like to thank the developer of grocy, Bernd Bestel, without whose great work this app would never have been possible.</string>
     <string name="info_intro">Replay intro</string>
     <string name="info_intro_description">Showcasing features</string>
     <string name="info_dev_beginning">Beginning of development</string>
@@ -585,13 +549,6 @@
     <string name="setting_loading_circle">Show loading circle for all requests</string>
     <string name="setting_loading_circle_description">Helpful for slow networks</string>
     <string name="setting_synchronized">These settings are synchronized with your server.</string>
-
-    <string name="setting_ask_best_before_date">Ask for best before date</string>
-    <string name="setting_ask_price">Ask for price</string>
-    <string name="setting_ask_store">Ask for store</string>
-    <string name="setting_ask_location">Ask for location</string>
-    <string name="setting_ask_specific_item">Ask for specific item</string>
-    <string name="setting_consume_all">Consume all items of a product</string>
 
     <string name="license_author_google" translatable="false">Google</string>
     <string name="license_material_icons" translatable="false">Material Design Icons</string>

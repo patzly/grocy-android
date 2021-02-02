@@ -53,11 +53,8 @@
     <string name="action_save">Spara</string>
     <string name="action_logout">Logga ut</string>
     <string name="action_restart">Starta om</string>
-    <string name="action_show_extended">Visa utökat formulär</string>
-    <string name="title_batch_mode">Batch-läge</string>
     <string name="action_create">Skapa</string>
     <string name="action_link">Länk</string>
-    <string name="action_open_forms">Öppna formulär</string>
     <string name="action_open_scanner">Öppna skanner</string>
     <string name="action_discard">Förkasta</string>
     <string name="action_toggle_done">Växla klar</string>
@@ -67,22 +64,13 @@
     <string name="action_purchase_all_items">Köp alla varor</string>
     <string name="action_skip_entry">Hoppa över objekt</string>
     <string name="action_delete_shopping_list">Radera shoppinglista</string>
-    <string name="action_discard_products">Förkasta produkter</string>
-    <string name="action_perform_purchasing_processes">Utför köptransaktioner för skapade produkter</string>
     <string name="action_create_key">Skapa nyckel</string>
     <string name="action_login">Logga in</string>
-    <string name="action_try_demo_instance">Använd demo-konto</string>
     <string name="action_ignore">Ignorera</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Alla</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Klar</string>
-
-    <string name="tooltip_new_products_count">Antal nya produkter</string>
-    <string name="tooltip_switch_purchase">Byt till köp-läge</string>
-    <string name="tooltip_switch_consume">Byt till konsumera-läge</string>
-    <string name="tooltip_switch_open">Byt till öppna-läge</string>
-    <string name="tooltip_demo">Du är i demoläge</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d går snart ut</string>
@@ -96,7 +84,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d ångrade</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">Köp av %1$s har sparats</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Köpte %1$s %2$s av %3$s</string>
     <!-- %1$s is a product name -->
@@ -124,9 +111,6 @@
     <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>
     <string name="msg_item_marked_as_undone">Markerade objekt som ej slutfört</string>
     <string name="msg_batch_no_products">Inga nya produkter behöver skapas</string>
-    <string name="msg_batch_tare_weight">Produkt stöder inte batch-läge: tarering av vikt aktiverad</string>
-    <string name="msg_purchase_transactions_done">Slutförde köptransaktioner för skapade produkter</string>
-    <string name="msg_no_purchase_transactions">Inga väntande köptransaktioner</string>
     <string name="msg_compatibility">Den här appversionen är inte kompatibel med den version av grocy som körs på servern.\n\nNuvarande serverversion: %1$s\n\nKrav:\nLägsta serverversion: %2$s\nHögsta serverversion: %3$s\n\nOm du ignorerar denna varning kan dataförlust (mindre troligt) och krascher (mer troligt) uppstå.\nDu har blivit varnad!</string>
     <string name="msg_logout">Ingenting på din server kommer att ändras. Du kommer att omdirigeras till inloggningssidan.</string>
     <string name="msg_logout_demo">Du använder demo-instansen av grocy från <u>https://grocy.info</u>.\n\n<b>Inga ändringar kommer att sparas!\nDe kommer att vara publika tills servern automatiskt skriver över dem.</b>\n\nDu kan ange en egen serveradress på inloggningssidan.</string>
@@ -194,21 +178,14 @@
     <string name="title_info">Information</string>
     <string name="title_help">Hjälp</string>
     <string name="title_logs">Loggar</string>
-    <string name="title_link_barcode">Länka streckkod till produkt</string>
-    <string name="title_batch_scan_exit">Fyll i produktformulär?</string>
-    <string name="title_batch_missing_exit">Tillbaka till skanner?</string>
-    <string name="title_link_barcode_to_existing">Länka streckkod till befintlig produkt?</string>
-    <string name="title_link_barcode_or_create">Länka streckkod till befintlig produkt eller skapa en ny produkt med den?</string>
     <string name="title_compatibility">Kompabilitetsproblem</string>
     <string name="title_logout">Logga ut från Grocy?</string>
     <string name="title_restart">Starta om Grocy?</string>
     <string name="title_logout_demo">Logga ut från demo-läge?</string>
-    <string name="title_batch_config">Konfiguration för batch-läge</string>
     <string name="title_manage_master_data">Hantera huvuddata</string>
 
     <string name="title_spoiled">Skämd</string>
     <string name="title_use_specific">Använd specifikt lagerobjekt</string>
-    <string name="title_is_total_price">Är totalt pris</string>
     <string name="title_stock_entry_no_specific">Inget specifikt objekt</string>
     <string name="title_shopping_list_ungrouped">Ogrupperat</string>
     <string name="title_list_entry">Listobjekt</string>
@@ -226,7 +203,7 @@
     <string name="subtitle_amount_opened">(%1$s öppnade)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Där %1$s finns i lager</string>
-    <string name="subtitle_default">Standard</string>
+    <string name="subtitle_default_selection">Standard</string>
     <string name="subtitle_none_selected">Inget markerat</string>
     <string name="subtitle_empty">Tom</string>
     <string name="subtitle_done">Klar</string>
@@ -241,12 +218,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Objekt %1$d av %2$d</string>
 
-    <string name="description_batch_choose_link">Välj den produkt som streckkoden ska länkas till.</string>
-    <string name="description_batch_choose_create">Välj den produkt som streckkoden ska länkas till eller skapa en ny.</string>
-    <string name="description_scan_batch_exit">Nya produkter har skapats, men de har inte skickats till servern då nödvändiga detaljer saknas. Öppna produktformulär?</string>
-    <string name="description_missing_batch_exit">Vissa köptransaktioner har inte skickats till servern. Kasta bort dem eller gå tillbaka till skannern?</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">Skapa ny produkt med namn \"%1$s\"?</string>
     <string name="description_clear_shopping_list">Vill du radera alla objekt eller bara de som är markerade som klara?</string>
 
     <string name="property_name">Namn</string>
@@ -303,9 +275,7 @@
     <string name="property_not_opened">inte öppnad</string>
     <string name="property_is_freezer">Är frys</string>
 
-    <string name="date_yesterday">Igår</string>
     <string name="date_today">Idag</string>
-    <string name="date_tomorrow">Imorgon</string>
     <string name="date_unknown">Okänt</string>
     <string name="date_unlimited">Obegränsat</string>
     <string name="date_never">Aldrig</string>
@@ -409,13 +379,6 @@
     <string name="setting_debug_description">Visa fel i loggarna</string>
     <string name="setting_info_logs">Visa informationsloggar</string>
     <string name="setting_logs_description">Visa logcat-loggar för denna process</string>
-
-    <string name="setting_ask_best_before_date">Fråga efter bäst före-datum</string>
-    <string name="setting_ask_price">Fråga efter pris</string>
-    <string name="setting_ask_store">Fråga efter butik</string>
-    <string name="setting_ask_location">Fråga efter plats</string>
-    <string name="setting_ask_specific_item">Fråga efter specifikt objekt</string>
-    <string name="setting_consume_all">Konsumera alla artiklar av en produkt</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

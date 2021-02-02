@@ -264,7 +264,6 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(binding.recycler);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(

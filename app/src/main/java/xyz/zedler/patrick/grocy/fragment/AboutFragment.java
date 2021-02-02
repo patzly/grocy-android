@@ -85,7 +85,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         );
 
         if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.showHideDemoIndicator(this, true);
             activity.updateBottomAppBar(
                     Constants.FAB.POSITION.GONE,
                     R.menu.menu_empty,

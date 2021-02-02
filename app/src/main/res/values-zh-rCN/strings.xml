@@ -53,11 +53,9 @@
     <string name="action_save">保存</string>
     <string name="action_logout">退出</string>
     <string name="action_restart">重启</string>
-    <string name="action_show_extended">显示扩展形式</string>
     <string name="action_batch_mode">批处理模式</string>
     <string name="action_create">创建</string>
     <string name="action_link">链接</string>
-    <string name="action_open_forms">打开表格</string>
     <string name="action_open_scanner">打开扫描仪</string>
     <string name="action_discard">丢弃</string>
     <string name="action_toggle_done">切换完成</string>
@@ -67,22 +65,13 @@
     <string name="action_purchase_all_items">购买所有物品</string>
     <string name="action_skip_entry">跳过输入</string>
     <string name="action_delete_shopping_list">删除购物清单</string>
-    <string name="action_discard_products">丢弃产品</string>
-    <string name="action_perform_purchasing_processes">执行创建产品的采购交易</string>
     <string name="action_create_key">创建密钥</string>
     <string name="action_login">登录</string>
-    <string name="action_try_demo_instance">使用演示账户</string>
     <string name="action_ignore">忽略</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">全部</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">完成</string>
-
-    <string name="tooltip_new_products_count">新产品数量</string>
-    <string name="tooltip_switch_purchase">切换至购买模式</string>
-    <string name="tooltip_switch_consume">切换至消费模式</string>
-    <string name="tooltip_switch_open">切换到打开模式</string>
-    <string name="tooltip_demo">您处于演示模式</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d即将到期</string>
@@ -96,7 +85,6 @@
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d未完成</string>
     <!-- %1$s is a product name -->
-    <string name="msg_saved_purchase">已保存采购%1$s</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
     <!-- %1$s is a product name -->
@@ -124,9 +112,6 @@
     <string name="msg_item_marked_as_done">将项目标记为已完成</string>
     <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
     <string name="msg_batch_no_products">无需创建新产品</string>
-    <string name="msg_batch_tare_weight"> 产品不支持批处理模式：启用皮重处理</string>
-    <string name="msg_purchase_transactions_done">完成创建产品的购买交易</string>
-    <string name="msg_no_purchase_transactions">没有待处理的购买交易</string>
     <string name="msg_compatibility">此应用版本与服务器上的常规版本不兼容。\n \n当前服务器版本：%1$s\n\n必填：\nMin。伺服器版本：%2$s\nMax。服务器版本：%3$s\n\n如果忽略此警告，可能会导致数据丢失（不太可能）和崩溃（可能）。\n已警告您！</string>
     <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
     <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
@@ -194,21 +179,14 @@
     <string name="title_info">信息</string>
     <string name="title_help">帮助</string>
     <string name="title_logs">日志</string>
-    <string name="title_link_barcode">将条形码链接到产品</string>
-    <string name="title_batch_scan_exit">填写产品表格？</string>
-    <string name="title_batch_missing_exit">返回扫描仪？</string>
-    <string name="title_link_barcode_to_existing">将条形码链接到现有产品？</string>
-    <string name="title_link_barcode_or_create">将条形码链接到现有产品还是用它创建新产品？</string>
     <string name="title_compatibility">兼容性问题</string>
     <string name="title_logout">从Grocy注销？</string>
     <string name="title_restart">重新启动Grocy？</string>
     <string name="title_logout_demo">从演示模式退出？</string>
-    <string name="title_batch_config">批处理模式配置</string>
     <string name="title_manage_master_data">管理主数据</string>
 
     <string name="title_spoiled">损坏</string>
     <string name="title_use_specific">使用特定的库存物料</string>
-    <string name="title_is_total_price">总价</string>
     <string name="title_stock_entry_no_specific">没有特定条目</string>
     <string name="title_shopping_list_ungrouped">未分组</string>
     <string name="title_list_entry">列表条目</string>
@@ -226,7 +204,7 @@
     <string name="subtitle_amount_opened">(%1$s已打开)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">%1$s有存货的地方</string>
-    <string name="subtitle_default">默认</string>
+    <string name="subtitle_default_selection">默认</string>
     <string name="subtitle_none_selected">未选择</string>
     <string name="subtitle_empty">空</string>
     <string name="subtitle_done">完成</string>
@@ -241,12 +219,7 @@
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">条目%2$d之%1$d</string>
 
-    <string name="description_batch_choose_link">选择将要链接条形码的产品</string>
-    <string name="description_batch_choose_create">选择将要链接条形码的产品或创建一个新的条形码</string>
-    <string name="description_scan_batch_exit">已经创建了新产品，但是由于缺少所需的详细信息，因此尚未将其发送到服务器。打开产品表格？</string>
-    <string name="description_missing_batch_exit">某些购买交易尚未发送到服务器。丢弃它们还是返回扫描仪？</string>
     <!-- %1$s is a product name -->
-    <string name="description_input_name">创建名称为“%1$s”的新产品？</string>
     <string name="description_clear_shopping_list">您要删除全部还是仅删除已完成的项目？</string>
 
     <string name="property_name">名称</string>
@@ -303,9 +276,7 @@
     <string name="property_not_opened">没开</string>
     <string name="property_is_freezer">是冰柜</string>
 
-    <string name="date_yesterday">昨天</string>
     <string name="date_today">今天</string>
-    <string name="date_tomorrow">明天</string>
     <string name="date_unknown">未知</string>
     <string name="date_unlimited">无限</string>
     <string name="date_never">从不</string>
@@ -400,13 +371,6 @@
     <string name="setting_debug_description">在日志中显示错误</string>
     <string name="setting_info_logs">显示信息日志</string>
     <string name="setting_logs_description">显示此过程的日志</string>
-
-    <string name="setting_ask_best_before_date">询问保质期</string>
-    <string name="setting_ask_price">询问价格</string>
-    <string name="setting_ask_store">询问商店</string>
-    <string name="setting_ask_location">询问位置</string>
-    <string name="setting_ask_specific_item">询问特定项目</string>
-    <string name="setting_consume_all">消费产品的所有物品</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->

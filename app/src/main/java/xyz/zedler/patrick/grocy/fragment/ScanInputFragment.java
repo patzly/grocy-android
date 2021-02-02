@@ -103,7 +103,6 @@ public class ScanInputFragment extends BaseFragment
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.GONE,

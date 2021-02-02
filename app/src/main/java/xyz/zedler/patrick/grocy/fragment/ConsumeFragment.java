@@ -63,7 +63,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MatchArrayAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBarcodeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -359,7 +358,6 @@ public class ConsumeFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
@@ -650,9 +648,9 @@ public class ConsumeFragment extends BaseFragment {
                     NetworkResponse response = error.networkResponse;
                     if(response != null && response.statusCode == 400) {
                         binding.autoCompleteConsumeProduct.setText(barcode);
-                        activity.showBottomSheet(
+                        /*activity.showBottomSheet(
                                 new InputBarcodeBottomSheet(), null
-                        );
+                        );*/
                     } else {
                         activity.showSnackbar(
                                 Snackbar.make(

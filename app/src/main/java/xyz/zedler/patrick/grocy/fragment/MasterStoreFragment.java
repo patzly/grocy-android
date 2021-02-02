@@ -158,7 +158,6 @@ public class MasterStoreFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(

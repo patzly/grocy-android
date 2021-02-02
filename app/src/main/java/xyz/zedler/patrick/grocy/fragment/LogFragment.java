@@ -76,7 +76,6 @@ public class LogFragment extends BaseFragment {
         showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
 
         if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.showHideDemoIndicator(this, true);
             activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
             activity.getScrollBehavior().setHideOnScroll(false);
             activity.updateBottomAppBar(

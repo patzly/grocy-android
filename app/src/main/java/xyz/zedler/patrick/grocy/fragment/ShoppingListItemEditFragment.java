@@ -153,7 +153,6 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     }
 
     private void updateUI(boolean animated) {
-        activity.showHideDemoIndicator(this, animated);
         activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list_item_edit);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
