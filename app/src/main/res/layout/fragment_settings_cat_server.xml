@@ -164,7 +164,7 @@
 
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@{viewModel.versionCompatible ? @string/info_grocy_version_compatible : @string/info_grocy_version_incompatible}"
+                        android:text="@{viewModel.versionCompatible ? @string/subtitle_supported : @string/subtitle_not_supported}"
                         android:textColor="@{viewModel.versionCompatible ? @color/retro_green_fg : @color/retro_red_fg}"
                         android:textStyle="bold"/>
 

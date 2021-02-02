@@ -348,7 +348,7 @@
     <string name="info_material_components_built_with">נבנה באמצעות</string>
     <string name="info_version">גרסה</string>
     <string name="info_grocy_version">גרסת Grocy</string>
-    <string name="info_grocy_version_incompatible">לא נתמך</string>
+    <string name="subtitle_not_supported">לא נתמך</string>
     <string name="info_changelog">יומן שינויים</string>
     <string name="info_changelog_description">מה חדש?</string>
     <string name="info_developers">מפתחים</string>

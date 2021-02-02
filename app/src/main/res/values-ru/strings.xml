@@ -350,7 +350,7 @@
     <string name="info_material_components_built_with">Собрано при помощи</string>
     <string name="info_version">Версия</string>
     <string name="info_grocy_version">Версия Grocy</string>
-    <string name="info_grocy_version_incompatible">Не поддерживается</string>
+    <string name="subtitle_not_supported">Не поддерживается</string>
     <string name="info_changelog">Список изменений</string>
     <string name="info_changelog_description">Что нового?</string>
     <string name="info_developers">Разработчики</string>

@@ -329,7 +329,7 @@
     <string name="info_material_components_built_with">Byggd med</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Version av Grocy</string>
-    <string name="info_grocy_version_incompatible">Stöds inte</string>
+    <string name="subtitle_not_supported">Stöds inte</string>
     <string name="info_changelog">Ändringslogg</string>
     <string name="info_changelog_description">Vad är nytt?</string>
     <string name="info_developers">Utvecklare</string>

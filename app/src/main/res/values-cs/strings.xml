@@ -348,7 +348,7 @@
     <string name="info_material_components_built_with">Vytvořeno s</string>
     <string name="info_version">Verze</string>
     <string name="info_grocy_version">Verze Grocy</string>
-    <string name="info_grocy_version_incompatible">Nepodporováno</string>
+    <string name="subtitle_not_supported">Nepodporováno</string>
     <string name="info_changelog">Log změn</string>
     <string name="info_changelog_description">Co je nového?</string>
     <string name="info_developers">Vývojáři</string>

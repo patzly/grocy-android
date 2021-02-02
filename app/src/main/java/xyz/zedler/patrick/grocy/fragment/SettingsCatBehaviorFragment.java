@@ -125,7 +125,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
                 subtitleShortcuts = getString(R.string.subtitle_none_selected);
             }
         } else {
-            subtitleShortcuts = getString(R.string.subtitle_shortcuts_not_supported);
+            subtitleShortcuts = getString(R.string.subtitle_not_supported);
         }
         binding.subtitleShortcuts.setText(subtitleShortcuts);
     }

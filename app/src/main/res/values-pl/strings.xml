@@ -348,7 +348,7 @@
     <string name="info_material_components_built_with">Zbudowane z</string>
     <string name="info_version">Wersja</string>
     <string name="info_grocy_version">Wersja Grocy</string>
-    <string name="info_grocy_version_incompatible">Nie wpierane</string>
+    <string name="subtitle_not_supported">Nie wpierane</string>
     <string name="info_changelog">Lista zmian</string>
     <string name="info_changelog_description">Co nowego?</string>
     <string name="info_developers">Programiści</string>

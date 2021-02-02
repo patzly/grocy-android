@@ -101,7 +101,7 @@
                     <TextView
                         android:id="@+id/text_setting_grocy_version_incompatible"
                         style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/info_grocy_version_incompatible"
+                        android:text="@string/subtitle_not_supported"
                         android:textStyle="bold"
                         android:textColor="@color/retro_red_fg"/>
 

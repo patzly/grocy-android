@@ -329,7 +329,7 @@
     <string name="info_material_components_built_with">Construit avec</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy version</string>
-    <string name="info_grocy_version_incompatible">Non supporté</string>
+    <string name="subtitle_not_supported">Non supporté</string>
     <string name="info_changelog">Changelog</string>
     <string name="info_changelog_description">Quoi de neuf?</string>
     <string name="info_developers">Développeurs</string>

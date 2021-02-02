@@ -301,7 +301,6 @@
     <!-- %1$s is a number -->
     <string name="subtitle_count">Count: %1$d</string>
     <string name="subtitle_count_unknown">Count: Unknown</string>
-    <string name="subtitle_shortcuts_not_supported">Not supported</string>
     <!-- %1$s is an amount, %2$s is a quantity unit -->
     <string name="subtitle_amount_compare">This equals %1$s %2$s.</string>
     <!-- %1$s is a price, %2$s is a quantity unit -->
@@ -310,6 +309,10 @@
     <string name="subtitle_product_not_hidden">Product is not hidden</string>
     <string name="subtitle_product_not_on_server">Product is not on server</string>
     <string name="subtitle_unknown">Unknown</string>
+    <!-- Like the word 'supported' from 'This version is supported.'-->
+    <string name="subtitle_supported">Supported</string>
+    <!-- Like the words 'not supported' from 'This version is not supported.'-->
+    <string name="subtitle_not_supported">Not supported</string>
 
     <string name="description_input_product_part1">Product field contains:</string>
     <string name="description_input_product_part2">Please choose how to proceed with that.</string>
@@ -474,8 +477,6 @@
     <string name="info_material_components" translatable="false">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy version</string>
-    <string name="info_grocy_version_compatible">Supported</string>
-    <string name="info_grocy_version_incompatible">Not supported</string>
     <string name="info_changelog">Changelog</string>
     <string name="info_changelog_description">What\'s new?</string>
     <string name="info_developers">Developers</string>

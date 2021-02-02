@@ -330,7 +330,7 @@
     <string name="info_material_components_built_with">Compilado com</string>
     <string name="info_version">Versão</string>
     <string name="info_grocy_version">Versão do Grocy</string>
-    <string name="info_grocy_version_incompatible">Não suportado</string>
+    <string name="subtitle_not_supported">Não suportado</string>
     <string name="info_changelog">Registro de mudanças</string>
     <string name="info_changelog_description">O que há de novo?</string>
     <string name="info_developers">Desenvolvedores</string>

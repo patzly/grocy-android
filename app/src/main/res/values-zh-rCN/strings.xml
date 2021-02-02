@@ -321,7 +321,7 @@
     <string name="info_material_components_built_with">Built with</string>
     <string name="info_version">版本</string>
     <string name="info_grocy_version">Grocy版本</string>
-    <string name="info_grocy_version_incompatible">未支持</string>
+    <string name="subtitle_not_supported">未支持</string>
     <string name="info_changelog">更新日志</string>
     <string name="info_changelog_description">有什么新消息？</string>
     <string name="info_developers">开发者</string>

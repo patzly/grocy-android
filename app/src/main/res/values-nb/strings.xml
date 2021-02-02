@@ -286,7 +286,7 @@
     <string name="info_material_components_built_with">Bygd med</string>
     <string name="info_version">Versjon</string>
     <string name="info_grocy_version">Grocy versjon</string>
-    <string name="info_grocy_version_incompatible">Ikke støttet</string>
+    <string name="subtitle_not_supported">Ikke støttet</string>
     <string name="info_changelog">Endringslogg</string>
     <string name="info_changelog_description">Hva er nytt? </string>
     <string name="info_developers">Utviklere</string>
