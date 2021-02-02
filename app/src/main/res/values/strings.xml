@@ -6,7 +6,7 @@
 
     <!-- Here you can append your name, but only if you have translated some strings, please.
      Append your name with the prefix \n (means newline) if there are already some other names.-->
-    <string name="language_translators"></string>
+    <string name="language_translators"> </string>
 
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -354,10 +354,10 @@
     <!-- %1$d is a number (amount of seconds) -->
     <string name="property_seconds_num">%1$d seconds</string>
     <string name="property_amount_min_stock">Min. stock amount</string>
-    <!-- &1$s is a quantity unit like "bottles" -->
+    <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_amount_in">Amount in %1$s</string>
     <string name="property_price">Price</string>
-    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <!-- %1$s is a currency like "USD", or "EUR" -->
     <string name="property_price_in">Price in %1$s</string>
     <string name="property_quantity_unit">Quantity unit</string>
     <string name="property_quantity_units">Quantity units</string>
@@ -416,13 +416,13 @@
     <string name="property_enable_tare_weight">Enable tare weight handling</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_tare_weight">Tare weight</string>
-    <!-- &1$s is a quantity unit like "bottles" -->
+    <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_tare_weight_in">Tare weight in %1$s</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_disable_stock_check">Disable stock fulfillment checking for this ingredient</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_amount_quick_consume">Quick consume amount</string>
-    <!-- &1$s is a quantity unit like "bottles" -->
+    <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
