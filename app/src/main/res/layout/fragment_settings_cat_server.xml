@@ -116,7 +116,9 @@
             <LinearLayout
                 style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> fragment.openServerWebsite()}"
+                app:clickUtil="@{clickUtil}">
 
                 <ImageView
                     style="@style/Theme.Grocy.ListItem.Icon"
