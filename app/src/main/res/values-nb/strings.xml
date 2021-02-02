@@ -60,7 +60,6 @@
     <string name="action_discard">Kast</string>
     <string name="action_toggle_done">Veksle ferdig</string>
     <string name="action_edit_notes">Rediger notater</string>
-    <string name="action_shopping_mode">Handlemodus</string>
     <string name="action_add_missing">Legg til manglende produkter</string>
     <string name="action_purchase_all_items">Kjøp alle varer</string>
     <string name="action_skip_entry">Hopp over oppføring</string>
@@ -305,7 +304,7 @@
     <string name="category_shopping_mode">Kjøp &amp; forbruk</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Feilsøking</string>
-    <string name="category_presets_new_products">Forhåndsinnstillinger for nye produkter</string>
+    <string name="title_presets_new_products">Forhåndsinnstillinger for nye produkter</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Gyldig API-nøkkel</string>

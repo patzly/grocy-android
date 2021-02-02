@@ -59,7 +59,6 @@
     <string name="action_discard">Verwerp</string>
     <string name="action_toggle_done">Verander status</string>
     <string name="action_edit_notes">Notitie bewerken</string>
-    <string name="action_shopping_mode">Inkoopmodus</string>
     <string name="action_add_missing">Missende producten toevoegen</string>
     <string name="action_purchase_all_items">Koop alle items</string>
     <string name="action_skip_entry">Invoer overslaan</string>
@@ -301,7 +300,7 @@
     <string name="category_shopping_mode">Aankoop &amp; consumeer</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets_new_products">Voorinstellingen voor nieuwe producten</string>
+    <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Geldige API sleutel</string>

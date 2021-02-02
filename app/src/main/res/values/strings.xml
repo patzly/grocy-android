@@ -69,7 +69,6 @@
     <string name="action_clear_form">Clear form</string>
     <string name="action_toggle_done">Toggle done</string>
     <string name="action_edit_notes">Edit notes</string>
-    <string name="action_shopping_mode">Shopping mode</string>
     <string name="action_add_missing">Add missing products</string>
     <string name="action_purchase_all_items">Purchase all items</string>
     <string name="action_skip_entry">Skip entry</string>
@@ -274,6 +273,7 @@
     <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
     <string name="title_product_cat_qu_conversions">QU conversions</string>
     <string name="title_unknown_input">Unknown input</string>
+    <string name="title_presets_new_products">Presets for new products</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -512,7 +512,6 @@
     <string name="category_network">Network</string>
     <string name="category_behavior">Behavior</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets_new_products">Presets for new products</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Valid API key</string>
@@ -539,10 +538,14 @@
     <string name="setting_keep_screen_on_description">While in shopping mode</string>
     <string name="setting_show_done_items">Show done items</string>
     <string name="setting_show_done_items_description">At the bottom</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="setting_expiring_soon_days">Expiring soon days</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="setting_default_amount_consume">Default amount for consume</string>
     <string name="setting_purchased_date">Ask for purchased date</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="setting_purchased_date_description">On purchase and inventory page</string>
     <string name="setting_empty_value">Empty</string>
     <string name="setting_sync_off">Sync off</string>

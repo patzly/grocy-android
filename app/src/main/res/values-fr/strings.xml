@@ -59,7 +59,6 @@
     <string name="action_discard">Jeter</string>
     <string name="action_toggle_done">Basculer terminé</string>
     <string name="action_edit_notes">Modifier les notes</string>
-    <string name="action_shopping_mode">Mode d\'achat</string>
     <string name="action_add_missing">Ajouter des produits manquants</string>
     <string name="action_purchase_all_items">Achetez tous les articles</string>
     <string name="action_skip_entry">Passer l\'article</string>
@@ -348,7 +347,7 @@
     <string name="category_shopping_mode">Achat &amp; consommer</string>
     <string name="category_server">Serveur</string>
     <string name="category_debugging">Débogage</string>
-    <string name="category_presets_new_products">Préréglages pour de nouveaux produits</string>
+    <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
 
     <string name="hint_server">URL du serveur</string>
     <string name="hint_key">Clé API valide</string>

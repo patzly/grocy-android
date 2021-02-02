@@ -60,7 +60,6 @@
     <string name="action_discard">Відхилити</string>
     <string name="action_toggle_done">Помітити виконаним</string>
     <string name="action_edit_notes">Редагувати нотатки</string>
-    <string name="action_shopping_mode">Режим покупок</string>
     <string name="action_add_missing">Додайте відсутні продукти</string>
     <string name="action_purchase_all_items">Придбати все</string>
     <string name="action_skip_entry">Пропустити запис</string>

@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/action_shopping_mode"
-        android:title="@string/action_shopping_mode"
+        android:title="@string/title_shopping_mode"
         android:icon="@drawable/ic_round_storefront_menu"
         app:showAsAction="ifRoom"
         tools:ignore="AlwaysShowAction" />

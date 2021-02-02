@@ -60,7 +60,6 @@
     <string name="action_discard">התעלמות</string>
     <string name="action_toggle_done">החלפת מצב ביצוע</string>
     <string name="action_edit_notes">עריכת הערות</string>
-    <string name="action_shopping_mode">מצב קניות</string>
     <string name="action_add_missing">הוספת מוצרים חסרים</string>
     <string name="action_purchase_all_items">לרכוש את כל הפריטים</string>
     <string name="action_skip_entry">לדלג על רשומה</string>
@@ -367,7 +366,7 @@
     <string name="category_shopping_mode">רכישה וצריכה</string>
     <string name="category_server">שרת</string>
     <string name="category_debugging">ניפוי שגיאות</string>
-    <string name="category_presets_new_products">ערכות למוצרים חדשים</string>
+    <string name="title_presets_new_products">ערכות למוצרים חדשים</string>
 
     <string name="hint_server">כתובת שרת</string>
     <string name="hint_key">מפתח API תקני</string>

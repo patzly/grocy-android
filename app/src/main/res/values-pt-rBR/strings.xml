@@ -60,7 +60,6 @@
     <string name="action_discard">Descartar</string>
     <string name="action_toggle_done">Alternar feito</string>
     <string name="action_edit_notes">Editar notas</string>
-    <string name="action_shopping_mode">Modo compra</string>
     <string name="action_add_missing">Adicionar produto não encontrado</string>
     <string name="action_purchase_all_items">Comprar todos os itens</string>
     <string name="action_skip_entry">Pular entrada</string>

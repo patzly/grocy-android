@@ -59,7 +59,6 @@
     <string name="action_discard">Förkasta</string>
     <string name="action_toggle_done">Växla klar</string>
     <string name="action_edit_notes">Redigera anteckningar</string>
-    <string name="action_shopping_mode">Shoppingläge</string>
     <string name="action_add_missing">Lägg till saknade produkter</string>
     <string name="action_purchase_all_items">Köp alla varor</string>
     <string name="action_skip_entry">Hoppa över objekt</string>
@@ -348,7 +347,7 @@
     <string name="category_shopping_mode">Köp &amp; konsumera</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Felsökning</string>
-    <string name="category_presets_new_products">Förinställningar för nya produkter</string>
+    <string name="title_presets_new_products">Förinställningar för nya produkter</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Giltig API-nyckel</string>

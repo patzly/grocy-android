@@ -59,7 +59,6 @@
     <string name="action_discard">Verwerfen</string>
     <string name="action_toggle_done">Status wechseln</string>
     <string name="action_edit_notes">Notizen bearbeiten</string>
-    <string name="action_shopping_mode">Einkaufsmodus</string>
     <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
     <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
     <string name="action_skip_entry">Eintrag überspringen</string>
@@ -348,7 +347,7 @@
     <string name="category_shopping_mode">Einkauf &amp; Verbrauch</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets_new_products">Vorgaben für neue Produkte</string>
+    <string name="title_presets_new_products">Vorgaben für neue Produkte</string>
 
     <string name="hint_server">Server-URL</string>
     <string name="hint_key">Gültiger API-Schlüssel</string>

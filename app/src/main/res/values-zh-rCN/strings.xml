@@ -60,7 +60,6 @@
     <string name="action_discard">丢弃</string>
     <string name="action_toggle_done">切换完成</string>
     <string name="action_edit_notes">编辑注释</string>
-    <string name="action_shopping_mode">购物模式</string>
     <string name="action_add_missing">添加缺少的产品</string>
     <string name="action_purchase_all_items">购买所有物品</string>
     <string name="action_skip_entry">跳过输入</string>

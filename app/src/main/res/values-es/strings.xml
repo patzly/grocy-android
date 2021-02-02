@@ -60,7 +60,6 @@
     <string name="action_discard">Descartar</string>
     <string name="action_toggle_done">Marcar como listo</string>
     <string name="action_edit_notes">Editar notas</string>
-    <string name="action_shopping_mode">Modo de compras</string>
     <string name="action_add_missing">Añadir productos faltantes</string>
     <string name="action_purchase_all_items">Comprar todos los artículos</string>
     <string name="action_skip_entry">Saltar entrada</string>
@@ -349,7 +348,7 @@
     <string name="category_shopping_mode">Comprar &amp; consumir</string>
     <string name="category_server">Servidor</string>
     <string name="category_debugging">Depuración</string>
-    <string name="category_presets_new_products">Preajustes para nuevos productos</string>
+    <string name="title_presets_new_products">Preajustes para nuevos productos</string>
 
     <string name="hint_server">URL del servidor</string>
     <string name="hint_key">Clave de API válida</string>

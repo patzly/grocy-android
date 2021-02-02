@@ -60,7 +60,6 @@
     <string name="action_discard">Сбросить</string>
     <string name="action_toggle_done">Пометить выполненным</string>
     <string name="action_edit_notes">Отредактировать заметки</string>
-    <string name="action_shopping_mode">Режим покупок</string>
     <string name="action_add_missing">Добавить недостающие продукты</string>
     <string name="action_purchase_all_items">Купить все</string>
     <string name="action_skip_entry">Пропустить запись</string>

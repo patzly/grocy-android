@@ -60,7 +60,6 @@
     <string name="action_discard">Odrzuć</string>
     <string name="action_toggle_done">Oznacz jako zrobione</string>
     <string name="action_edit_notes">Edytuj notatki</string>
-    <string name="action_shopping_mode">Tryb zakupów</string>
     <string name="action_add_missing">Dodaj brakujące produkty</string>
     <string name="action_purchase_all_items">Kup wszystkie pozycje</string>
     <string name="action_skip_entry">Pomiń wpis</string>

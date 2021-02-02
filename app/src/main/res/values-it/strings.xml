@@ -60,7 +60,6 @@
     <string name="action_discard">Scarta</string>
     <string name="action_toggle_done">Segna come fatto</string>
     <string name="action_edit_notes">Modifica note</string>
-    <string name="action_shopping_mode">Modalità spesa</string>
     <string name="action_add_missing">Aggiungi prodotto mancante</string>
     <string name="action_purchase_all_items">Compra tutti gli articoli</string>
     <string name="action_skip_entry">Salta la voce</string>
