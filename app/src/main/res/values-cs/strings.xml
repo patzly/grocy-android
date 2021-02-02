@@ -195,7 +195,6 @@
     <string name="title_shopping_list_edit">Editovat nákupní seznam</string>
     <string name="title_shopping_list_new">Nový nákupní seznam</string>
     <string name="title_shopping_mode">Nákupní mód</string>
-    <string name="title_products_to_create">Produkty vytvořeny</string>
     <string name="title_batch_mode_shopping_list">Dávkový mód nákupního seznamu </string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->

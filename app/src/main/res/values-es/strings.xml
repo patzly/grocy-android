@@ -195,7 +195,6 @@
     <string name="title_shopping_list_edit">Editar lista de compras</string>
     <string name="title_shopping_list_new">Nueva lista de compras</string>
     <string name="title_shopping_mode">Modo de compras</string>
-    <string name="title_products_to_create">Productos para crear</string>
     <string name="title_batch_mode_shopping_list">Modo de lista de compras por lotes</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->

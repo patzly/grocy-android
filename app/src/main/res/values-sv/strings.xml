@@ -194,7 +194,6 @@
     <string name="title_shopping_list_edit">Redigera shoppinglista</string>
     <string name="title_shopping_list_new">Ny shoppinglista</string>
     <string name="title_shopping_mode">Shoppingläge</string>
-    <string name="title_products_to_create">Produkter att skapa</string>
     <string name="title_batch_mode_shopping_list">Batch-läge för shoppinglista</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->

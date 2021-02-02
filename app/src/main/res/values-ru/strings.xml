@@ -197,7 +197,6 @@
     <string name="title_shopping_list_edit">Редактировать список покупок</string>
     <string name="title_shopping_list_new">Новый список покупок</string>
     <string name="title_shopping_mode">Режим покупки</string>
-    <string name="title_products_to_create">Создаваемые продукты</string>
     <string name="title_batch_mode_shopping_list">Групповой режим списка покупок</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->

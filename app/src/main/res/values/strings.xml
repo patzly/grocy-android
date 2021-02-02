@@ -136,7 +136,7 @@
     <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_shortcuts">You can enable 4 shortcuts.</string>
     <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
-    <string name="msg_features">Start intro again in \"About\"</string>
+    <string name="msg_features">Start intro again in \"About this app\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
     <string name="msg_point_at_barcode">Point your camera at a barcode</string>
     <string name="msg_press_hold_confirm">Press and hold to confirm</string>
@@ -256,7 +256,6 @@
     <string name="title_unit_price">Unit price</string>
     <!-- %1$s is a quantity unit -->
     <string name="title_unit_price_specific">%1$s price</string>
-    <string name="title_delete_entry">Delete entry</string>
     <string name="title_stock_entry_no_specific">No specific entry</string>
     <string name="title_shopping_list_ungrouped">Ungrouped</string>
     <string name="title_list_entry">List entry</string>
@@ -265,7 +264,6 @@
     <string name="title_shopping_list_edit">Edit shopping list</string>
     <string name="title_shopping_list_new">New shopping list</string>
     <string name="title_shopping_mode">Shopping mode</string>
-    <string name="title_products_to_create">Products to create</string>
     <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
     <string name="title_product_cat_optional">Optional properties</string>
     <string name="title_product_cat_location">Default location</string>
