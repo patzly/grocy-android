@@ -4,7 +4,7 @@
     <string name="app_developer" translatable="false">Patrick &amp; Dominic Zedler</string>
     <string name="app_mail" translatable="false">patrick@zedler.xyz</string>
 
-    <!-- Here you can append your name, but only if you have translated some strings, please.
+    <!-- Here you can append your name (without the ":", but only if you have translated some strings, please.
      Append your name with the prefix \n (means newline) if there are already some other names.-->
     <string name="language_translators">:</string>
 
