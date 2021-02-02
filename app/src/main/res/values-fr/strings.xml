@@ -248,7 +248,6 @@
     <string name="property_barcodes">Codes barres</string>
     <string name="property_due_date">Date de péremption</string>
     <string name="property_due_date_next">Date de péremption suivante</string>
-    <string name="property_due_days">À consommer de préférence avant</string>
     <string name="property_due_days_default">Jours de péremption par défaut</string>
     <string name="property_due_days_default_opened">Meilleur jour par défaut avant ouverture</string>
     <string name="property_location">Emplacement</string>

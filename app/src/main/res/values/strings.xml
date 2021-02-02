@@ -292,8 +292,9 @@
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
     <!-- %1$s is a purchase date -->
+    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Bought on %1$s</string>
-    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
     <string name="subtitle_stock_entry">Due on %1$s; amount: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Entry %1$d of %2$d</string>
@@ -379,7 +380,6 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_date">Due date</string>
     <string name="property_due_date_next">Next due date</string>
-    <string name="property_due_days">Due days</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_days_default">Default due days</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->

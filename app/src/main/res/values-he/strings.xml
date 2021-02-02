@@ -249,7 +249,6 @@
     <string name="property_barcodes">ברקודים</string>
     <string name="property_due_date">תאריך בתוקף עד</string>
     <string name="property_due_date_next">תאריך בתוקף עד הבא</string>
-    <string name="property_due_days">ימי תוקף עד</string>
     <string name="property_due_days_default">ימי תוקף עד כבררת מחדל</string>
     <string name="property_due_days_default_opened">ימי תוקף עד כבררת מחדל לאחר הפתיחה</string>
     <string name="property_location">מיקום</string>

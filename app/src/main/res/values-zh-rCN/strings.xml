@@ -249,7 +249,6 @@
     <string name="property_barcodes">条形码</string>
     <string name="property_due_date">保质期</string>
     <string name="property_due_date_next">下个保质期</string>
-    <string name="property_due_days">保质期</string>
     <string name="property_due_days_default">默认保质期</string>
     <string name="property_due_days_default_opened">默认开封后保质期</string>
     <string name="property_location">位置</string>

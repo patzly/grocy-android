@@ -246,7 +246,6 @@
     <string name="property_barcodes">Streepjescodes</string>
     <string name="property_due_date">Tenminste houdbaar tot</string>
     <string name="property_due_date_next">Volgende houdbaarheidsdatum</string>
-    <string name="property_due_days">THT dagen</string>
     <string name="property_due_days_default">Standaard THT dagen</string>
     <string name="property_due_days_default_opened">Standaard THT dagen na openen</string>
     <string name="property_location">Locatie</string>

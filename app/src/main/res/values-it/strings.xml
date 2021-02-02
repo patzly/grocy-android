@@ -249,7 +249,6 @@
     <string name="property_barcodes">Codici a barre</string>
     <string name="property_due_date">Data di scadenza</string>
     <string name="property_due_date_next">Prossima data di scadenza</string>
-    <string name="property_due_days">Da consumarsi preferibilmente entro giorni</string>
     <string name="property_due_days_default">Scadenza predefinita</string>
     <string name="property_due_days_default_opened">Dopo aperto da consumarsi preferibilmente entro</string>
     <string name="property_location">Posizione</string>

@@ -248,7 +248,6 @@
     <string name="property_barcodes">Strekkoder</string>
     <string name="property_due_date">Best før dato</string>
     <string name="property_due_date_next">Neste best før dato</string>
-    <string name="property_due_days">Best før dager</string>
     <string name="property_due_days_default">Standard best før dager</string>
     <string name="property_due_days_default_opened">Standard best før dager etter åpning</string>
     <string name="property_location">Lokasjon</string>
