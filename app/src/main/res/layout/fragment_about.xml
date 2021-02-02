@@ -2,6 +2,8 @@
 <layout>
     <data>
         <import type="android.view.View"/>
+        <variable name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.AboutFragment"/>
         <variable name="activity"
             type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
     </data>
@@ -172,7 +174,7 @@
             <LinearLayout
                 android:id="@+id/linear_translators"
                 style="@style/Theme.Grocy.ListItem.TwoLine.Clickable"
-                android:visibility="@{translators.getText().toString().trim().length() > 0 ? View.VISIBLE : View.GONE}">
+                android:visibility="@{fragment.translators != null ? View.VISIBLE : View.GONE}">
 
                 <ImageView
                     android:id="@+id/image_translators"
@@ -190,7 +192,7 @@
                     <TextView
                         android:id="@+id/translators"
                         style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/language_translators"
+                        android:text="@{fragment.translators}"
                         android:maxLines="9"/>
 
                 </LinearLayout>
