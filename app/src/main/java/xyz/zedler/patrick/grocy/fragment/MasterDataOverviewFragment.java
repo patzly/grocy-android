@@ -164,38 +164,38 @@ public class MasterDataOverviewFragment extends BaseFragment {
         viewModel.getProductsLive().observe(
                 getViewLifecycleOwner(),
                 products -> binding.countProducts.setText(
-                        products != null ? getString(R.string.subtitle_count, products.size())
-                                : getString(R.string.subtitle_count_unknown)
+                        products != null ? String.valueOf(products.size())
+                                : getString(R.string.subtitle_unknown)
                 )
         );
         viewModel.getLocationsLive().observe(
                 getViewLifecycleOwner(),
                 locations -> binding.countLocations.setText(
-                        locations != null ? getString(R.string.subtitle_count, locations.size())
-                                : getString(R.string.subtitle_count_unknown)
+                        locations != null ? String.valueOf(locations.size())
+                                : getString(R.string.subtitle_unknown)
                 )
         );
         viewModel.getStoresLive().observe(
                 getViewLifecycleOwner(),
                 stores -> binding.countStores.setText(
-                        stores != null ? getString(R.string.subtitle_count, stores.size())
-                                : getString(R.string.subtitle_count_unknown)
+                        stores != null ? String.valueOf(stores.size())
+                                : getString(R.string.subtitle_unknown)
                 )
         );
         viewModel.getQuantityUnitsLive().observe(
                 getViewLifecycleOwner(),
                 quantityUnits -> binding.countQuantityUnits.setText(
                         quantityUnits != null
-                                ? getString(R.string.subtitle_count, quantityUnits.size())
-                                : getString(R.string.subtitle_count_unknown)
+                                ? String.valueOf(quantityUnits.size())
+                                : getString(R.string.subtitle_unknown)
                 )
         );
         viewModel.getProductGroupsLive().observe(
                 getViewLifecycleOwner(),
                 productGroups -> binding.countProductGroups.setText(
                         productGroups != null
-                                ? getString(R.string.subtitle_count, productGroups.size())
-                                : getString(R.string.subtitle_count_unknown)
+                                ? String.valueOf(productGroups.size())
+                                : getString(R.string.subtitle_unknown)
                 )
         );
 

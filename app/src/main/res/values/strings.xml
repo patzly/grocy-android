@@ -266,6 +266,7 @@
     <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
     <string name="title_product_cat_optional">Optional properties</string>
     <string name="title_product_cat_location">Default location</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="title_product_cat_due_date">Due date</string>
     <string name="title_product_cat_amount">Amount</string>
     <string name="title_product_cat_quantity_unit">Quantity unit</string>
@@ -286,6 +287,7 @@
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Never overdue</string>
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
@@ -295,9 +297,6 @@
     <string name="subtitle_stock_entry">Due on %1$s; amount: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Entry %1$d of %2$d</string>
-    <!-- %1$s is a number -->
-    <string name="subtitle_count">Count: %1$d</string>
-    <string name="subtitle_count_unknown">Count: Unknown</string>
     <!-- %1$s is an amount, %2$s is a quantity unit -->
     <string name="subtitle_amount_compare">This equals %1$s %2$s.</string>
     <!-- %1$s is a price, %2$s is a quantity unit -->
@@ -371,9 +370,13 @@
     <string name="property_barcodes">Barcodes</string>
     <string name="property_days">Days</string>
     <string name="property_purchased_date">Purchased date</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_date_type">Due date type</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_type_best_before">Best before date</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_type_expiration">Expiration date</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="property_due_date">Due date</string>
     <string name="property_due_date_next">Next due date</string>
     <string name="property_due_days">Due days</string>
