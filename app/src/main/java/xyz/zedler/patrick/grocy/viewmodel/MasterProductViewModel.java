@@ -177,6 +177,13 @@ public class MasterProductViewModel extends BaseViewModel {
         downloadData(null);
     }
 
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.apply();
+        downloadData();
+    }
+
     private void onQueueEmpty() {
         repository.updateDatabase(products, () -> {});
     }

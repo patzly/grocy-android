@@ -134,19 +134,11 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
             return;
         }
 
-        // get last offline db-changed-time values
-        String lastTimeShoppingLists = getLastTime(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS);
-
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        if(lastTimeShoppingLists == null || !lastTimeShoppingLists.equals(dbChangedTime)) {
-            queue.append(dlHelper.getShoppingLists(shoppingLists -> {
-                this.shoppingLists = shoppingLists;
-                formData.setShoppingListNames(getShoppingListNames(shoppingLists));
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ShoppingLists download");
+        queue.append(dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
+            this.shoppingLists = shoppingLists;
+            formData.setShoppingListNames(getShoppingListNames(shoppingLists));
+        }));
 
         if(queue.isEmpty()) return;
 
@@ -156,6 +148,13 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
 
     public void downloadData() {
         downloadData(null);
+    }
+
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+        editPrefs.apply();
+        downloadData();
     }
 
     private void onQueueEmpty() {

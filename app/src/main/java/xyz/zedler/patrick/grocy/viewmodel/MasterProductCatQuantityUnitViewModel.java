@@ -141,6 +141,13 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         downloadData(null);
     }
 
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        editPrefs.apply();
+        downloadData();
+    }
+
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
         formData.fillWithProductIfNecessary(args.getProduct());
