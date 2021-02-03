@@ -176,6 +176,17 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         downloadData(null);
     }
 
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        editPrefs.apply();
+        downloadData();
+    }
+
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
         fillWithSoppingListItemIfNecessary();

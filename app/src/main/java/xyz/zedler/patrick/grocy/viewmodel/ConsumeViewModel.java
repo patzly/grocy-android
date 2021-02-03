@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataConsume;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -57,8 +56,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
+import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -70,15 +68,13 @@ public class ConsumeViewModel extends BaseViewModel {
 
     private final DownloadHelper dlHelper;
     private final GrocyApi grocyApi;
-    private final PurchaseRepository repository;
+    private final ConsumeRepository repository;
     private final FormDataConsume formData;
 
     private ArrayList<Product> products;
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<QuantityUnitConversion> unitConversions;
     private ArrayList<ProductBarcode> barcodes;
-    private ArrayList<Store> stores;
-    private ArrayList<Location> locations;
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -95,7 +91,7 @@ public class ConsumeViewModel extends BaseViewModel {
         isLoadingLive = new MutableLiveData<>(false);
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
-        repository = new PurchaseRepository(application);
+        repository = new ConsumeRepository(application);
         formData = new FormDataConsume(application, sharedPrefs);
 
         infoFullscreenLive = new MutableLiveData<>();
@@ -112,13 +108,11 @@ public class ConsumeViewModel extends BaseViewModel {
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
-        repository.loadFromDatabase((products, barcodes, qUs, conversions, stores, locations) -> {
+        repository.loadFromDatabase((products, barcodes, qUs, conversions) -> {
             this.products = products;
             this.barcodes = barcodes;
             this.quantityUnits = qUs;
             this.unitConversions = conversions;
-            this.stores = stores;
-            this.locations = locations;
             formData.getProductsLive().setValue(products);
             if(downloadAfterLoading) downloadData();
         });
@@ -145,10 +139,6 @@ public class ConsumeViewModel extends BaseViewModel {
                         dbChangedTime, barcodes -> this.barcodes = barcodes
                 ), dlHelper.updateQuantityUnits(
                         dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
-                ), dlHelper.updateStores(
-                        dbChangedTime, stores -> this.stores = stores
-                ), dlHelper.updateLocations(
-                        dbChangedTime, locations -> this.locations = locations
                 )
         );
         if(queue.isEmpty()) {
@@ -167,9 +157,19 @@ public class ConsumeViewModel extends BaseViewModel {
         downloadData(null);
     }
 
+    public void downloadDataForceUpdate() {
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.apply();
+        downloadData();
+    }
+
     private void onQueueEmpty() {
         repository.updateDatabase(products, barcodes,
-                quantityUnits, unitConversions, stores, locations, () -> {});
+                quantityUnits, unitConversions, () -> {});
         if(queueEmptyAction != null) {
             queueEmptyAction.run();
             queueEmptyAction = null;
