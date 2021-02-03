@@ -44,10 +44,11 @@ public class StockEntryAdapter
 
     private final static String TAG = StockEntryAdapter.class.getSimpleName();
 
-    private Context context;
-    private ArrayList<StockEntry> stockEntries;
-    private String selectedId;
-    private StockEntryAdapterListener listener;
+    private final Context context;
+    private final ArrayList<StockEntry> stockEntries;
+    private final String selectedId;
+    private final StockEntryAdapterListener listener;
+    private final DateUtil dateUtil;
 
     public StockEntryAdapter(
             Context context,
@@ -59,12 +60,14 @@ public class StockEntryAdapter
         this.stockEntries = stockEntries;
         this.selectedId = selectedId;
         this.listener = listener;
+        this.dateUtil = new DateUtil(context);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer;
-        private TextView textViewName, textViewSubtitle;
-        private ImageView imageViewSelected;
+        private final LinearLayout linearLayoutContainer;
+        private final TextView textViewName;
+        private final TextView textViewSubtitle;
+        private final ImageView imageViewSelected;
 
         public ViewHolder(View view) {
             super(view);
@@ -110,8 +113,6 @@ public class StockEntryAdapter
                 holder.imageViewSelected.setVisibility(View.INVISIBLE);
             }
         } else {
-            DateUtil dateUtil = new DateUtil(context);
-
             // NAME
             holder.textViewName.setText(
                     context.getString(

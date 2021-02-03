@@ -162,7 +162,7 @@ public class GrocyApi {
      * Returns all locations where the given product currently has stock
      */
     public String getStockLocationsFromProduct(int productId) {
-        return getUrl("/stock/products/" + productId + "/locations");
+        return getUrl("/stock/products/" + productId + "/locations?include_sub_products=true");
     }
 
     /**
@@ -170,7 +170,7 @@ public class GrocyApi {
      * (first expiring first, then first in first out)
      */
     public String getStockEntriesFromProduct(int productId) {
-        return getUrl("/stock/products/" + productId + "/entries");
+        return getUrl("/stock/products/" + productId + "/entries?include_sub_products=true");
     }
 
     /**

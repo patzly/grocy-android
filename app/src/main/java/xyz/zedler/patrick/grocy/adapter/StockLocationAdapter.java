@@ -41,10 +41,10 @@ public class StockLocationAdapter
 
     private final static String TAG = StockLocationAdapter.class.getSimpleName();
 
-    private ArrayList<StockLocation> stockLocations;
-    private ProductDetails productDetails;
-    private int selectedId;
-    private StockLocationAdapterListener listener;
+    private final ArrayList<StockLocation> stockLocations;
+    private final ProductDetails productDetails;
+    private final int selectedId;
+    private final StockLocationAdapterListener listener;
 
     public StockLocationAdapter(
             ArrayList<StockLocation> stockLocations,
@@ -59,9 +59,10 @@ public class StockLocationAdapter
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer, linearLayoutDefault;
-        private TextView textViewName;
-        private ImageView imageViewSelected;
+        private final LinearLayout linearLayoutContainer;
+        private final LinearLayout linearLayoutDefault;
+        private final TextView textViewName;
+        private final ImageView imageViewSelected;
 
         public ViewHolder(View view) {
             super(view);

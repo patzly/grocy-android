@@ -51,6 +51,8 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class BaseFragment extends Fragment {
@@ -113,6 +115,10 @@ public class BaseFragment extends Fragment {
     public void selectPurchasedDate(String purchasedDate) {}
 
     public void selectDueDate(String dueDate) {}
+
+    public void selectStockLocation(StockLocation stockLocation) {}
+
+    public void selectStockEntry(StockEntry stockEntry) {}
 
     public void selectProductGroup(ProductGroup productGroup) {}
 

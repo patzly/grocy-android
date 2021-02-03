@@ -39,12 +39,11 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataConsume;
@@ -56,10 +55,11 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ConsumeViewModel extends BaseViewModel {
@@ -100,8 +100,8 @@ public class ConsumeViewModel extends BaseViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_CONSUME
         ));
 
         barcodes = new ArrayList<>();
@@ -182,13 +182,23 @@ public class ConsumeViewModel extends BaseViewModel {
     }
 
     public void setProduct(int productId, ProductBarcode barcode) {
-        DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
+        DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+            ProductDetails productDetails = formData.getProductDetailsLive().getValue();
+            assert productDetails != null;
             Product updatedProduct = productDetails.getProduct();
+
+            if(productDetails.getStockAmountAggregated() == 0) {
+                String name = updatedProduct.getName();
+                showMessage(getApplication().getString(R.string.msg_not_in_stock, name));
+                formData.clearForm();
+                return;
+            }
+
             formData.getProductDetailsLive().setValue(productDetails);
             formData.getProductNameLive().setValue(updatedProduct.getName());
 
             // quantity unit
-            double initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+            setProductQuantityUnitsAndFactors(updatedProduct, barcode);
 
             // amount
             boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -198,8 +208,8 @@ public class ConsumeViewModel extends BaseViewModel {
                 formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
             } else if(!isTareWeightEnabled && !isScanModeEnabled()) {
                 String defaultAmount = sharedPrefs.getString(
-                        Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
-                        Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
+                        Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
+                        Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
                 );
                 if(NumUtil.isStringDouble(defaultAmount)) {
                     defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
@@ -213,64 +223,39 @@ public class ConsumeViewModel extends BaseViewModel {
                 formData.getAmountLive().setValue(NumUtil.trim(1));
             }
 
-            // purchased date
-            if(formData.getPurchasedDateEnabled()) {
-                formData.getPurchasedDateLive().setValue(DateUtil.getDateStringToday());
-            }
+            // stock location
+            ArrayList<StockEntry> stockEntries = formData.getStockEntries();
+            StockLocation stockLocation = getStockLocation(
+                    formData.getStockLocations(),
+                    stockEntries.get(0).getLocationId()
+            );
+            formData.getStockLocationLive().setValue(stockLocation);
 
-            // due days
-            int dueDays = productDetails.getProduct().getDefaultDueDays();
-            if(dueDays < 0) {
-                formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
-            } else if (dueDays == 0) {
-                formData.getDueDateLive().setValue(null);
-            } else {
-                formData.getDueDateLive()
-                        .setValue(DateUtil.getTodayWithDaysAdded(dueDays));
-            }
-
-            // price
-            String lastPrice;
-            if(barcode != null && barcode.hasLastPrice()) {
-                // if barcode contains last price, take this
-                lastPrice = barcode.getLastPrice();
-            } else {
-                lastPrice = productDetails.getLastPrice();
-            }
-            if(lastPrice != null && !lastPrice.isEmpty()) {
-                lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor);
-            }
-            formData.getPriceLive().setValue(lastPrice);
-
-            // store
-            String storeId;
-            if(barcode != null && barcode.hasStoreId()) {
-                // if barcode contains store, take this
-                storeId = barcode.getStoreId();
-            } else {
-                storeId = productDetails.getLastShoppingLocationId();
-            }
-            if(!NumUtil.isStringInt(storeId)) {
-                storeId = productDetails.getDefaultShoppingLocationId();
-            }
-            Store store = NumUtil.isStringInt(storeId)
-                    ? getStore(Integer.parseInt(storeId)) : null;
-            formData.getStoreLive().setValue(store);
-
-            // location
-            formData.getLocationLive().setValue(productDetails.getLocation());
+            // stock entry
+            formData.getSpecificStockEntryLive().setValue(null);
 
             formData.isFormValid();
             if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         };
 
-        dlHelper.getProductDetails(productId, listener, error -> {
+        dlHelper.newQueue(onQueueEmptyListener, error -> {
             showMessage(getString(R.string.error_no_product_details));
             formData.clearForm();
-        }).perform(dlHelper.getUuid());
+        }).append(
+                dlHelper.getProductDetails(
+                        productId,
+                        productDetails -> formData.getProductDetailsLive().setValue(productDetails)
+                ), dlHelper.getStockLocations(
+                        productId,
+                        formData::setStockLocations
+                ), dlHelper.getStockEntries(
+                        productId,
+                        formData::setStockEntries
+                )
+        ).start();
     }
 
-    private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
+    private void setProductQuantityUnitsAndFactors( // returns factor for unit which was set
             Product product,
             ProductBarcode barcode
     ) {
@@ -279,7 +264,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
         if(stock == null || purchase == null) {
             showMessage(getString(R.string.error_loading_qus));
-            return 1;
+            return;
         }
 
         HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
@@ -301,15 +286,11 @@ public class ConsumeViewModel extends BaseViewModel {
         if(barcode != null && barcode.hasQuId()) {
             barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
         }
-        Double factor;
         if(barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
             formData.getQuantityUnitLive().setValue(barcodeUnit);
-            factor =  unitFactors.get(barcodeUnit);
         } else {
             formData.getQuantityUnitLive().setValue(purchase);
-            factor = unitFactors.get(purchase);
         }
-        return factor != null && factor != -1 ? factor : 1;
     }
 
     public void onBarcodeRecognized(String barcode) {
@@ -453,9 +434,9 @@ public class ConsumeViewModel extends BaseViewModel {
         } return null;
     }
 
-    private Store getStore(int id) {
-        for(Store store : stores) {
-            if(store.getId() == id) return store;
+    private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
+        for(StockLocation stockLocation : locations) {
+            if(stockLocation.getLocationId() == locationId) return stockLocation;
         } return null;
     }
 
@@ -477,61 +458,38 @@ public class ConsumeViewModel extends BaseViewModel {
         showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
     }
 
-    public void showPurchasedDateBottomSheet() {
+    public void showStockEntriesBottomSheet() {
         if(!formData.isProductNameValid()) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW, String.valueOf(0));
-        bundle.putString(
-                Constants.ARGUMENT.SELECTED_DATE,
-                formData.getPurchasedDateLive().getValue()
-        );
-        bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.PURCHASED_DATE);
-        showBottomSheet(new DateBottomSheet(), bundle);
-    }
-
-    public void showDueDateBottomSheet(boolean hasFocus) {
-        if(!hasFocus || !formData.isProductNameValid()) return;
-        Product product = formData.getProductDetailsLive().getValue().getProduct();
-        Bundle bundle = new Bundle();
-        bundle.putString(
-                Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
-                String.valueOf(product.getDefaultDueDays())
-        );
-        bundle.putString(
-                Constants.ARGUMENT.SELECTED_DATE,
-                formData.getDueDateLive().getValue()
-        );
-        bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.DUE_DATE);
-        showBottomSheet(new DateBottomSheet(), bundle);
-    }
-
-    public void showStoresBottomSheet() {
-        if(!formData.isProductNameValid()) return;
-        Bundle bundle = new Bundle();
-        if(stores.get(0).getId() != -1) {
-            stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
+        ArrayList<StockEntry> stockEntries = formData.getStockEntries();
+        StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
+        String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
+        ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
+        StockLocation stockLocation = formData.getStockLocationLive().getValue();
+        assert stockLocation != null;
+        int locationId = stockLocation.getLocationId();
+        for(StockEntry stockEntry : stockEntries) {
+            if(stockEntry.getLocationId() == locationId) filteredStockEntries.add(stockEntry);
         }
-        bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
-        bundle.putInt(
-                Constants.ARGUMENT.SELECTED_ID,
-                formData.getStoreLive().getValue() != null
-                        ? formData.getStoreLive().getValue().getId()
-                        : -1
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(
+                Constants.ARGUMENT.STOCK_ENTRIES,
+                filteredStockEntries
         );
-        showBottomSheet(new StoresBottomSheet(), bundle);
+        bundle.putString(Constants.ARGUMENT.SELECTED_ID, selectedId);
+        showBottomSheet(new StockEntriesBottomSheet(), bundle);
     }
 
     public void showLocationsBottomSheet() {
         if(!formData.isProductNameValid()) return;
+        ArrayList<StockLocation> stockLocations = formData.getStockLocations();
+        StockLocation currentStockLocation = formData.getStockLocationLive().getValue();
+        int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
+        ProductDetails productDetails = formData.getProductDetailsLive().getValue();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
-        bundle.putInt(
-                Constants.ARGUMENT.SELECTED_ID,
-                formData.getLocationLive().getValue() != null
-                        ? formData.getLocationLive().getValue().getId()
-                        : -1
-        );
-        showBottomSheet(new LocationsBottomSheet(), bundle);
+        bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
+        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
+        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+        showBottomSheet(new StockLocationsBottomSheet(), bundle);
     }
 
     public void showConfirmationBottomSheet() {

@@ -26,20 +26,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -76,8 +73,6 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
         // Add entry for automatic selection
         stockEntries.add(0, new StockEntry(-1, null));
 
-        MaterialButton button = view.findViewById(R.id.button_stock_entries_discard);
-
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -88,9 +83,7 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(
-                new StockEntryAdapter(
-                        activity, stockEntries, selectedStockId, this
-                )
+                new StockEntryAdapter(activity, stockEntries, selectedStockId, this)
         );
 
         return view;
@@ -98,13 +91,8 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-        if(currentFragment.getClass() == ConsumeFragment.class) {
-            ((ConsumeFragment) currentFragment).selectStockEntry(
-                    stockEntries.get(position).getStockId()
-            );
-        }
-
+        StockEntry stockEntry = stockEntries.get(position);
+        activity.getCurrentFragment().selectStockEntry(stockEntry.getId() != -1 ? stockEntry : null);
         dismiss();
     }
 

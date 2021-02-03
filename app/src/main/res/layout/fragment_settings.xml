@@ -115,7 +115,7 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
@@ -132,10 +132,6 @@
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/category_appearance" />
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_dark_mode" />
-
                 </LinearLayout>
 
                 <ImageView
@@ -149,7 +145,7 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
@@ -166,10 +162,6 @@
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/category_network" />
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_timeout" />
-
                 </LinearLayout>
 
                 <ImageView
@@ -183,7 +175,7 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
@@ -201,10 +193,6 @@
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/category_behavior" />
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_manage_shortcuts" />
-
                 </LinearLayout>
 
                 <ImageView
@@ -218,7 +206,7 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
@@ -234,10 +222,6 @@
                     <TextView
                         style="@style/Theme.Grocy.ListItem.Title"
                         android:text="@string/category_scanner" />
-
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_external_support" />
 
                 </LinearLayout>
 

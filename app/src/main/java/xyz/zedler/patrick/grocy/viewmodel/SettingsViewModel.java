@@ -229,6 +229,18 @@ public class SettingsViewModel extends BaseViewModel {
                 .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM, enabled).apply();
     }
 
+    public boolean getScanModeConsumeEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_CONSUME
+        );
+    }
+
+    public void setScanModeConsumeEnabled(boolean enabled) {
+        sharedPrefs.edit()
+                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME, enabled).apply();
+    }
+
     public boolean getScanModePurchaseEnabled() {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,

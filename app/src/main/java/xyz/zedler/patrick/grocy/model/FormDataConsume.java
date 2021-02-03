@@ -40,7 +40,6 @@ import java.util.Map;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -49,7 +48,6 @@ public class FormDataConsume {
 
     private final Application application;
     private final SharedPreferences sharedPrefs;
-    private final String currency;
     private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<Boolean> scannerVisibilityLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
@@ -68,31 +66,20 @@ public class FormDataConsume {
     private final MediatorLiveData<String> amountHelperLive;
     private final LiveData<String> amountHintLive;
     private final MediatorLiveData<String> amountStockLive;
-    private final MutableLiveData<String> purchasedDateLive;
-    private final LiveData<String> purchasedDateTextLive;
-    private final LiveData<String> purchasedDateTextHumanLive;
-    private final MutableLiveData<String> dueDateLive;
-    private final LiveData<String> dueDateTextLive;
-    private final LiveData<String> dueDateTextHumanLive;
-    private final MutableLiveData<Boolean> dueDateErrorLive;
-    private final MutableLiveData<String> priceLive;
-    private final MediatorLiveData<String> priceStockLive;
-    private final MutableLiveData<String> priceErrorLive;
-    private final MediatorLiveData<String> priceHelperLive;
-    private final String priceHint;
-    private final LiveData<String> unitPriceTextLive;
-    private final MutableLiveData<Boolean> isTotalPriceLive;
-    private final MutableLiveData<Store> storeLive;
-    private final LiveData<String> storeNameLive;
-    private final MutableLiveData<Location> locationLive;
-    private final LiveData<String> locationNameLive;
+    private ArrayList<StockLocation> stockLocations;
+    private final MutableLiveData<StockLocation> stockLocationLive;
+    private final LiveData<String> stockLocationNameLive;
+    private final MutableLiveData<Boolean> spoiledLive;
+    private final MutableLiveData<Boolean> useSpecificLive;
+    private ArrayList<StockEntry> stockEntries;
+    private final MutableLiveData<StockEntry> specificStockEntryLive;
+    /*private final MutableLiveData<Recipe> recipeLive;
+    private final LiveData<String> recipeNameLive;*/
     private boolean torchOn = false;
 
     public FormDataConsume(Application application, SharedPreferences sharedPrefs) {
-        DateUtil dateUtil = new DateUtil(application);
         this.application = application;
         this.sharedPrefs = sharedPrefs;
-        currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
         displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
@@ -139,80 +126,14 @@ public class FormDataConsume {
         amountHelperLive = new MediatorLiveData<>();
         amountHelperLive.addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
         amountHelperLive.addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-        purchasedDateLive = new MutableLiveData<>();
-        purchasedDateTextLive = Transformations.map(
-                purchasedDateLive,
-                date -> {
-                    if(date == null) {
-                        return getString(R.string.subtitle_none_selected);
-                    } else {
-                        return dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM);
-                    }
-                }
+        stockLocationLive = new MutableLiveData<>();
+        stockLocationNameLive = Transformations.map(
+                stockLocationLive,
+                location -> location != null ? location.getLocationName() : null
         );
-        purchasedDateTextHumanLive = Transformations.map(
-                purchasedDateLive,
-                date -> {
-                    if(date == null || date.equals(Constants.DATE.NEVER_OVERDUE)) return null;
-                    return dateUtil.getHumanForDaysFromNow(date);
-                }
-        );
-        purchasedDateLive.setValue(null);
-        dueDateLive = new MutableLiveData<>();
-        dueDateTextLive = Transformations.map(
-                dueDateLive,
-                date -> {
-                    if(date == null) {
-                        return getString(R.string.subtitle_none_selected);
-                    } else if(date.equals(Constants.DATE.NEVER_OVERDUE)) {
-                        return getString(R.string.subtitle_never_overdue);
-                    } else {
-                        return dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM);
-                    }
-                }
-        );
-        dueDateTextHumanLive = Transformations.map(
-                dueDateLive,
-                date -> {
-                    if(date == null || date.equals(Constants.DATE.NEVER_OVERDUE)) return null;
-                    return dateUtil.getHumanForDaysFromNow(date);
-                }
-        );
-        dueDateLive.setValue(null);
-        dueDateErrorLive = new MutableLiveData<>();
-        priceLive = new MutableLiveData<>();
-        isTotalPriceLive = new MutableLiveData<>(false);
-        priceStockLive = new MediatorLiveData<>();
-        priceStockLive.addSource(amountLive, i -> priceStockLive.setValue(getPriceStock()));
-        priceStockLive.addSource(priceLive, i -> priceStockLive.setValue(getPriceStock()));
-        priceStockLive.addSource(isTotalPriceLive, i -> priceStockLive.setValue(getPriceStock()));
-        priceStockLive.addSource(quantityUnitLive, i -> priceStockLive.setValue(getPriceStock()));
-        priceErrorLive = new MutableLiveData<>();
-        priceHelperLive = new MediatorLiveData<>();
-        priceHelperLive.addSource(priceStockLive, i -> priceHelperLive.setValue(getPriceHelpText()));
-        priceHelperLive.addSource(quantityUnitLive, i -> priceHelperLive.setValue(getPriceHelpText()));
-        if(currency != null && !currency.isEmpty()) {
-            priceHint = application.getString(R.string.property_price_in, currency);
-        } else {
-            priceHint = getString(R.string.property_price);
-        }
-        unitPriceTextLive = Transformations.map(
-                quantityUnitLive,
-                quantityUnit -> quantityUnit != null
-                        ? application
-                        .getString(R.string.title_unit_price_specific, quantityUnit.getName())
-                        : getString(R.string.title_unit_price)
-        );
-        storeLive = new MutableLiveData<>();
-        storeNameLive = Transformations.map(
-                storeLive,
-                store -> store != null ? store.getName() : null
-        );
-        locationLive = new MutableLiveData<>();
-        locationNameLive = Transformations.map(
-                locationLive,
-                location -> location != null ? location.getName() : null
-        );
+        spoiledLive = new MutableLiveData<>(false);
+        useSpecificLive = new MutableLiveData<>(false);
+        specificStockEntryLive = new MutableLiveData<>();
     }
 
     public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -395,146 +316,40 @@ public class FormDataConsume {
         );
     }
 
-    public MutableLiveData<String> getPurchasedDateLive() {
-        return purchasedDateLive;
+    public MutableLiveData<Boolean> getSpoiledLive() {
+        return spoiledLive;
     }
 
-    public LiveData<String> getPurchasedDateTextLive() {
-        return purchasedDateTextLive;
+    public MutableLiveData<Boolean> getUseSpecificLive() {
+        return useSpecificLive;
     }
 
-    public LiveData<String> getPurchasedDateTextHumanLive() {
-        return purchasedDateTextHumanLive;
+    public ArrayList<StockEntry> getStockEntries() {
+        return stockEntries;
     }
 
-    public MutableLiveData<String> getDueDateLive() {
-        return dueDateLive;
+    public void setStockEntries(ArrayList<StockEntry> stockEntries) {
+        this.stockEntries = stockEntries;
     }
 
-    public LiveData<String> getDueDateTextLive() {
-        return dueDateTextLive;
+    public MutableLiveData<StockEntry> getSpecificStockEntryLive() {
+        return specificStockEntryLive;
     }
 
-    public LiveData<String> getDueDateTextHumanLive() {
-        return dueDateTextHumanLive;
+    public ArrayList<StockLocation> getStockLocations() {
+        return stockLocations;
     }
 
-    public MutableLiveData<Boolean> getDueDateErrorLive() {
-        return dueDateErrorLive;
+    public void setStockLocations(ArrayList<StockLocation> stockLocations) {
+        this.stockLocations = stockLocations;
     }
 
-    public MutableLiveData<String> getPriceLive() {
-        return priceLive;
+    public MutableLiveData<StockLocation> getStockLocationLive() {
+        return stockLocationLive;
     }
 
-    private String getPriceStock() {
-        ProductDetails productDetails = productDetailsLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
-        QuantityUnit current = quantityUnitLive.getValue();
-        HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-        String amountString = amountLive.getValue();
-        String priceString = priceLive.getValue();
-        boolean isTotalPrice = isTotalPriceLive.getValue();
-
-        if(!NumUtil.isStringDouble(priceString) || !NumUtil.isStringDouble(amountString)) return null;
-        if(stock == null || current == null || productDetails == null || hashMap == null) return null;
-
-        double amount = Double.parseDouble(amountString);
-        double price = Double.parseDouble(priceString);
-        Object currentFactor = hashMap.get(current);
-        if(currentFactor == null) return null;
-
-        double priceMultiplied;
-        if(isTareWeightEnabled() || (double) currentFactor == -1) {
-            priceMultiplied = price;
-        } else if(current.getId() == productDetails.getProduct()
-                .getQuIdPurchase()) {
-            priceMultiplied = price / (double) currentFactor;
-        } else {
-            priceMultiplied = price * (double) currentFactor;
-        }
-        if(isTotalPrice) priceMultiplied /= amount;
-        return NumUtil.trimPrice(priceMultiplied);
-    }
-
-    public MediatorLiveData<String> getPriceStockLive() {
-        return priceStockLive;
-    }
-
-    public MutableLiveData<String> getPriceErrorLive() {
-        return priceErrorLive;
-    }
-
-    public String getPriceHint() {
-        return priceHint;
-    }
-
-    public LiveData<String> getPriceHelperLive() {
-        return priceHelperLive;
-    }
-
-    private String getPriceHelpText() {
-        QuantityUnit current = quantityUnitLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
-        if(current == null || stock == null
-                || current.getId() == stock.getId() && !isTotalPriceLive.getValue()) return " ";
-        if(priceStockLive.getValue() == null) return " ";
-        String priceWithCurrency = priceStockLive.getValue();
-        if(currency != null && !currency.isEmpty()) {
-            priceWithCurrency += " " + currency;
-        }
-        return application.getString(
-                R.string.subtitle_price_means,
-                priceWithCurrency,
-                stock.getName()
-        );
-    }
-
-    public void morePrice() {
-        if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
-            priceLive.setValue(NumUtil.trimPrice(1));
-        } else {
-            double priceNew = NumUtil.toDouble(priceLive.getValue()) + 1;
-            priceLive.setValue(NumUtil.trimPrice(priceNew));
-        }
-    }
-
-    public void lessPrice() {
-        if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) return;
-        double priceNew = NumUtil.toDouble(priceLive.getValue()) - 1;
-        if(priceNew >= 0) {
-            priceLive.setValue(NumUtil.trimPrice(priceNew));
-        } else {
-            priceLive.setValue(null);
-        }
-    }
-
-    public MutableLiveData<Boolean> getIsTotalPriceLive() {
-        return isTotalPriceLive;
-    }
-
-    public void setIsTotalPriceLive(boolean isTotal) {
-        isTotalPriceLive.setValue(isTotal);
-    }
-
-    public LiveData<String> getUnitPriceTextLive() {
-        return unitPriceTextLive;
-    }
-
-    public MutableLiveData<Store> getStoreLive() {
-        return storeLive;
-    }
-
-    public LiveData<String> getStoreNameLive() {
-        return storeNameLive;
-    }
-
-    public MutableLiveData<Location> getLocationLive() {
-        return locationLive;
-    }
-
-    public LiveData<String> getLocationNameLive() {
-        return locationNameLive;
+    public LiveData<String> getStockLocationNameLive() {
+        return stockLocationNameLive;
     }
 
     public boolean isTorchOn() {
@@ -615,40 +430,15 @@ public class FormDataConsume {
         return true;
     }
 
-    public boolean isDueDateValid() {
-        if(dueDateLive.getValue() == null || dueDateLive.getValue().isEmpty()) {
-            dueDateErrorLive.setValue(true);
-            return false;
-        } else {
-            dueDateErrorLive.setValue(false);
-            return true;
-        }
-    }
-
-    public boolean isPriceValid() {
-        if(priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
-            priceErrorLive.setValue(null);
-            return true;
-        }
-        if(!NumUtil.isStringNum(priceLive.getValue())) {
-            priceErrorLive.setValue(getString(R.string.error_invalid_price));
-            return false;
-        }
-        amountErrorLive.setValue(null);
-        return true;
-    }
-
     public boolean isFormValid() {
         boolean valid = isProductNameValid();
         valid = isQuantityUnitValid() && valid;
         valid = isAmountValid() && valid;
-        valid = isDueDateValid() && valid;
-        valid = isPriceValid() && valid;
         return valid;
     }
 
     public String getConfirmationText() {
-        double amountAdded = Double.parseDouble(amountStockLive.getValue());
+        /*double amountAdded = Double.parseDouble(amountStockLive.getValue());
         if(isTareWeightEnabled()) {
             amountAdded -= productDetailsLive.getValue().getStockAmount();
             amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
@@ -670,33 +460,20 @@ public class FormDataConsume {
                 price,
                 storeNameLive.getValue(),
                 locationNameLive.getValue()
-        );
+        );*/
+        return "";
     }
 
     public JSONObject getFilledJSONObject() {
         String amount = getAmountStock();
         assert amount != null;
-        String price = priceStockLive.getValue();
-        Store store = storeLive.getValue();
-        String storeId = store != null ? String.valueOf(store.getId()) : null;
-        Location location = locationLive.getValue();
-        String purchasedDate = purchasedDateLive.getValue();
-        String dueDate = dueDateLive.getValue();
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-            dueDate = Constants.DATE.NEVER_OVERDUE;
-        }
+        StockLocation location = stockLocationLive.getValue();
 
         JSONObject json = new JSONObject();
         try {
             json.put("amount", amount);
-            if(NumUtil.isStringDouble(price)) json.put("price", price);
-            if(getPurchasedDateEnabled() && purchasedDate != null) {
-                json.put("purchased_date", purchasedDate);
-            }
-            json.put("best_before_date", dueDate);
-            if(storeId != null) json.put("shopping_location_id", storeId);
             if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
-                json.put("location_id", String.valueOf(location.getId()));
+                json.put("location_id", String.valueOf(location.getId())); // TODO
             }
         } catch (JSONException e) {
             if(isDebuggingEnabled()) Log.e(TAG, "purchaseProduct: " + e);
@@ -708,12 +485,10 @@ public class FormDataConsume {
         if(!isFormValid()) return null;
         String barcode = barcodeLive.getValue();
         Product product = productDetailsLive.getValue().getProduct();
-        Store store = storeLive.getValue();
 
         ProductBarcode productBarcode = new ProductBarcode();
         productBarcode.setProductId(product.getId());
         productBarcode.setBarcode(barcode);
-        if(store != null) productBarcode.setStoreId(String.valueOf(store.getId()));
         return productBarcode;
     }
 
@@ -723,29 +498,24 @@ public class FormDataConsume {
         quantityUnitsFactorsLive.setValue(null);
         productDetailsLive.setValue(null);
         productNameLive.setValue(null);
-        purchasedDateLive.setValue(null);
-        dueDateLive.setValue(null);
-        priceLive.setValue(null);
-        storeLive.setValue(null);
-        locationLive.setValue(null);
+        stockLocationLive.setValue(null);
+        spoiledLive.setValue(false);
+        useSpecificLive.setValue(false);
+        specificStockEntryLive.setValue(null);
         new Handler().postDelayed(() -> {
             productNameErrorLive.setValue(null);
             quantityUnitErrorLive.setValue(false);
             amountErrorLive.setValue(null);
-            dueDateErrorLive.setValue(false);
         }, 50);
-    }
-
-    public boolean getPurchasedDateEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
-                Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
-        );
     }
 
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    public boolean isRecipesFeatureEnabled() {
+        return isFeatureEnabled(Constants.PREF.FEATURE_RECIPES);
     }
 
     private boolean isDebuggingEnabled() {

@@ -34,26 +34,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_stock_locations_discard"
-                style="@style/Widget.Grocy.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="end"
-                android:visibility="gone"
-                app:rippleColor="@color/highlight"
-                android:textColor="@color/on_background_secondary"
-                android:text="@string/action_discard" />
-
-        </LinearLayout>
-
     </LinearLayout>
 
 

@@ -634,7 +634,7 @@ public class FormDataPurchase {
             priceErrorLive.setValue(getString(R.string.error_invalid_price));
             return false;
         }
-        amountErrorLive.setValue(null);
+        priceErrorLive.setValue(null);
         return true;
     }
 

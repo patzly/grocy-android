@@ -34,7 +34,9 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
@@ -1018,6 +1020,86 @@ public class DownloadHelper {
         return getProductDetails(productId, onResponseListener, null);
     }
 
+    public QueueItem getStockLocations(
+            int productId,
+            OnStockLocationsResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnStringResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getStockLocationsFromProduct(productId),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<ArrayList<StockLocation>>(){}.getType();
+                            ArrayList<StockLocation> stockLocations = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download StockLocations: " + stockLocations);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(stockLocations);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getStockLocations(
+            int productId,
+            OnStockLocationsResponseListener onResponseListener
+    ) {
+        return getStockLocations(productId, onResponseListener, null);
+    }
+
+    public QueueItem getStockEntries(
+            int productId,
+            OnStockEntriesResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnStringResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getStockEntriesFromProduct(productId),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<ArrayList<StockEntry>>(){}.getType();
+                            ArrayList<StockEntry> stockEntries = new Gson().fromJson(response, type);
+                            if(debug) Log.i(tag, "download StockEntries: " + stockEntries);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(stockEntries);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getStockEntries(
+            int productId,
+            OnStockEntriesResponseListener onResponseListener
+    ) {
+        return getStockEntries(productId, onResponseListener, null);
+    }
+
     public QueueItem getShoppingListItems(
             OnShoppingListItemsResponseListener onResponseListener,
             OnErrorListener onErrorListener
@@ -1450,31 +1532,31 @@ public class DownloadHelper {
     }
 
     public interface OnObjectsResponseListener {
-        void onResponse(ArrayList<Object> arrayList);
+        void onResponse(ArrayList<Object> objects);
     }
 
     public interface OnProductGroupsResponseListener {
-        void onResponse(ArrayList<ProductGroup> arrayList);
+        void onResponse(ArrayList<ProductGroup> productGroups);
     }
 
     public interface OnQuantityUnitsResponseListener {
-        void onResponse(ArrayList<QuantityUnit> arrayList);
+        void onResponse(ArrayList<QuantityUnit> quantityUnits);
     }
 
     public interface OnQuantityUnitConversionsResponseListener {
-        void onResponse(ArrayList<QuantityUnitConversion> arrayList);
+        void onResponse(ArrayList<QuantityUnitConversion> quantityUnitConversions);
     }
 
     public interface OnLocationsResponseListener {
-        void onResponse(ArrayList<Location> arrayList);
+        void onResponse(ArrayList<Location> locations);
     }
 
     public interface OnProductsResponseListener {
-        void onResponse(ArrayList<Product> arrayList);
+        void onResponse(ArrayList<Product> products);
     }
 
     public interface OnProductBarcodesResponseListener {
-        void onResponse(ArrayList<ProductBarcode> arrayList);
+        void onResponse(ArrayList<ProductBarcode> productBarcodes);
     }
 
     public interface OnProductBarcodeResponseListener {
@@ -1482,7 +1564,7 @@ public class DownloadHelper {
     }
 
     public interface OnStockItemsResponseListener {
-        void onResponse(ArrayList<StockItem> arrayList);
+        void onResponse(ArrayList<StockItem> stockItems);
     }
 
     public interface OnVolatileResponseListener {
@@ -1502,16 +1584,24 @@ public class DownloadHelper {
         void onResponse(ProductDetails productDetails);
     }
 
+    public interface OnStockLocationsResponseListener {
+        void onResponse(ArrayList<StockLocation> stockLocations);
+    }
+
+    public interface OnStockEntriesResponseListener {
+        void onResponse(ArrayList<StockEntry> stockEntries);
+    }
+
     public interface OnShoppingListItemsResponseListener {
-        void onResponse(ArrayList<ShoppingListItem> arrayList);
+        void onResponse(ArrayList<ShoppingListItem> shoppingListItems);
     }
 
     public interface OnShoppingListsResponseListener {
-        void onResponse(ArrayList<ShoppingList> arrayList);
+        void onResponse(ArrayList<ShoppingList> shoppingLists);
     }
 
     public interface OnStoresResponseListener {
-        void onResponse(ArrayList<Store> arrayList);
+        void onResponse(ArrayList<Store> stores);
     }
 
     public interface OnStringResponseListener {

@@ -31,6 +31,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -41,15 +42,17 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeNewBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -110,7 +113,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
                 infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
         );
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-                binding.swipePurchase.setRefreshing(isDownloading)
+                binding.swipe.setRefreshing(isDownloading)
         );
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -157,8 +160,16 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
             }
         });
         // following lines are necessary because no observers are set in Views
-        viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {});
         viewModel.getFormData().getQuantityUnitStock().observe(getViewLifecycleOwner(), i -> {});
+        viewModel.getFormData().getProductDetailsLive().observe(
+                getViewLifecycleOwner(),
+                productDetails -> {
+                    MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
+                    if(productDetails != null && productDetails.getProduct()
+                            .getEnableTareWeightHandlingBoolean() || menuItem == null) return;
+                    menuItem.setVisible(productDetails != null);
+                }
+        );
 
         //hideDisabledFeatures();
 
@@ -190,7 +201,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
-                R.menu.menu_purchase,
+                R.menu.menu_consume,
                 animated,
                 this::setUpBottomMenu
         );
@@ -262,31 +273,26 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
     }
 
     @Override
-    public void selectPurchasedDate(String purchasedDate) {
-        viewModel.getFormData().getPurchasedDateLive().setValue(purchasedDate);
+    public void selectStockLocation(StockLocation stockLocation) {
+        MutableLiveData<StockLocation> stockLocationLive = viewModel.getFormData()
+                .getStockLocationLive();
+        boolean locationChanged = stockLocation != stockLocationLive.getValue();
+        stockLocationLive.setValue(stockLocation);
+        if(!locationChanged) return;
+        viewModel.getFormData().getUseSpecificLive().setValue(false);
+        viewModel.getFormData().getSpecificStockEntryLive().setValue(null);
     }
 
     @Override
-    public void selectDueDate(String dueDate) {
-        viewModel.getFormData().getDueDateLive().setValue(dueDate);
-        viewModel.getFormData().isDueDateValid();
-    }
-
-    @Override
-    public void selectStore(Store store) {
-        viewModel.getFormData().getStoreLive().setValue(store.getId() != -1 ? store : null);
-    }
-
-    @Override
-    public void selectLocation(Location location) {
-        viewModel.getFormData().getLocationLive().setValue(location);
+    public void selectStockEntry(StockEntry stockEntry) {
+        viewModel.getFormData().getSpecificStockEntryLive().setValue(stockEntry);
     }
 
     @Override
     public void addBarcodeToExistingProduct(String barcode) {
         viewModel.addBarcodeToExistingProduct(barcode);
-        binding.autoCompletePurchaseProduct.requestFocus();
-        activity.showKeyboard(binding.autoCompletePurchaseProduct);
+        binding.autoCompleteConsumeProduct.requestFocus();
+        activity.showKeyboard(binding.autoCompleteConsumeProduct);
     }
 
     @Override
@@ -301,11 +307,11 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
 
     public void clearInputFocus() {
         activity.hideKeyboard();
-        binding.autoCompletePurchaseProduct.clearFocus();
+        binding.autoCompleteConsumeProduct.clearFocus();
         binding.quantityUnitContainer.clearFocus();
         binding.textInputShoppingListItemEditAmount.clearFocus();
-        binding.linearDueDate.clearFocus();
-        binding.textInputPurchasePrice.clearFocus();
+        /*binding.linearDueDate.clearFocus();
+        binding.textInputPurchasePrice.clearFocus();*/
     }
 
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -325,11 +331,11 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
         ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
         String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
         if(productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
-            binding.autoCompletePurchaseProduct.requestFocus();
+            binding.autoCompleteConsumeProduct.requestFocus();
             if(viewModel.getExternalScannerEnabled()) {
                 activity.hideKeyboard();
             } else {
-                activity.showKeyboard(binding.autoCompletePurchaseProduct);
+                activity.showKeyboard(binding.autoCompleteConsumeProduct);
             }
         }
     }
@@ -341,12 +347,12 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
         }
         View nextView = null;
         if(!viewModel.getFormData().isProductNameValid()) {
-            nextView = binding.autoCompletePurchaseProduct;
+            nextView = binding.autoCompleteConsumeProduct;
         } else if(!viewModel.getFormData().isAmountValid()) {
             nextView = binding.editTextShoppingListItemEditAmount;
-        } else if(!viewModel.getFormData().isDueDateValid()) {
+        }/* else if(!viewModel.getFormData().isDueDateValid()) {
             nextView = binding.linearDueDate;
-        }
+        }*/
         if(nextView == null) {
             clearInputFocus();
             viewModel.showConfirmationBottomSheet();
@@ -369,16 +375,9 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
     }
 
     private void hideDisabledFeatures() {
-        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-            binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
-            binding.linearPurchasePrice.setVisibility(View.GONE);
-        }
-        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        /*if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             binding.linearPurchaseLocation.setVisibility(View.GONE);
-        }
-        if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-            binding.linearDueDate.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     private void setUpBottomMenu() {
@@ -390,9 +389,12 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(!viewModel.getFormData().isProductNameValid()) return false;
-            navigate(PurchaseFragmentDirections
-                    .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
-                    .setProductDetails(viewModel.getFormData().getProductDetailsLive().getValue()));
+            activity.showBottomSheet(
+                    new ProductOverviewBottomSheet(),
+                    new ProductOverviewBottomSheetArgs.Builder().setProductDetails(
+                            viewModel.getFormData().getProductDetailsLive().getValue()
+                    ).build().toBundle()
+            );
             return true;
         });
         menuItemClear.setOnMenuItemClickListener(item -> {

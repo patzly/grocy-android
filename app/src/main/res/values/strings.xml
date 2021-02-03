@@ -143,32 +143,35 @@
     <string name="msg_choose_option_below">Please choose one option from below.</string>
     <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
     <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days">For purchases this amount of days will be added to today for the due date suggestion (-1 means that this product will be never overdue).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_opened">When this product was marked as opened, the due date will be replaced by today + this amount of days (a value of 0 disables this).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_freezing">On moving this product to a freezer location (so when freezing it), the due date will be replaced by today + this amount of days (-1 means that this product will be never overdue).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_tare_weight">Tare weight handling is useful e.g. for flour in jars - on purchase/consume/inventory you always weigh the whole jar, the amount to be posted is then automatically calculated based on what is in stock and the tare weight defined below.</string>
-    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_tare_weight_purchase">Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculated.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
-    <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
     <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
+    <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_specific_item_consume">The first item in this list would be picked by the default rule which is "Opened first, then first due first, then first in first out".</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
     <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
     <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
@@ -263,6 +266,8 @@
     <string name="title_https" translatable="false">HTTPS</string>
     <string name="title_spoiled">Spoiled</string>
     <string name="title_use_specific">Use specific stock item</string>
+    <string name="title_specific">Specific stock item</string>
+    <string name="title_recipe">Recipe</string>
     <string name="title_total_price">Total price</string>
     <string name="title_unit_price">Unit price</string>
     <!-- %1$s is a quantity unit -->
@@ -278,7 +283,7 @@
     <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
     <string name="title_product_cat_optional">Optional properties</string>
     <string name="title_product_cat_location">Default location</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="title_product_cat_due_date">Due date</string>
     <string name="title_product_cat_amount">Amount</string>
     <string name="title_product_cat_quantity_unit">Quantity unit</string>
@@ -299,12 +304,12 @@
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>
     <string name="subtitle_undone">Undone</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Never overdue</string>
     <string name="subtitle_selected">Selected</string>
     <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
     <!-- %1$s is a purchase date -->
-    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Bought on %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
     <string name="subtitle_stock_entry">Due on %1$s; amount: %2$s; %3$s</string>
@@ -373,33 +378,33 @@
     <string name="property_price_in">Price in %1$s</string>
     <string name="property_quantity_unit">Quantity unit</string>
     <string name="property_quantity_units">Quantity units</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_default_qu_purchase">Default quantity unit purchase</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_stock">Quantity unit stock</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_factor">Factor purchase to stock quantity unit</string>
     <string name="property_barcode">Barcode</string>
     <string name="property_barcodes">Barcodes</string>
     <string name="property_days">Days</string>
     <string name="property_purchased_date">Purchased date</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_type">Due date type</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_type_best_before">Best before date</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_type_expiration">Expiration date</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date">Due date</string>
-    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_next">Next due date</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default">Default due days</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_opened">Default due days after opened</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_freezing">Default due days after freezing</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_thawing">Default due days after thawing</string>
     <string name="property_location">Location</string>
     <string name="property_location_default">Default location</string>
@@ -411,13 +416,13 @@
     <string name="property_stores">Stores</string>
     <string name="property_shopping_list">Shopping list</string>
     <string name="property_shopping_lists">Shopping lists</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_purchased">Last purchased</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_used">Last used</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_price">Last price</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_average_shelf_life">Average shelf life</string>
     <string name="property_spoil_rate">Spoil rate</string>
     <string name="property_price_history">Price history</string>
@@ -429,22 +434,22 @@
     <!-- kcal (kilo calories) is a unit for energy -->
     <string name="property_energy">Energy (kcal)</string>
     <string name="property_active">Active</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_never_show">Never show on stock overview</string>
     <string name="property_number">Number</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_enable_tare_weight">Enable tare weight handling</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_tare_weight">Tare weight</string>
     <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_tare_weight_in">Tare weight in %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_disable_stock_check">Disable stock fulfillment checking for this ingredient</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_amount_quick_consume">Quick consume amount</string>
     <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_amount_quick_consume_in">Quick consume amount in %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
     <string name="property_picture">Picture</string>
 
@@ -543,6 +548,7 @@
     <string name="setting_use_front_cam_description">For barcode scanning</string>
     <string name="setting_external_support">External scanner support</string>
     <string name="setting_external_support_description">Via USB or Bluetooth</string>
+    <string name="setting_scan_mode_consume">Start consume page in scan mode</string>
     <string name="setting_scan_mode_purchase">Start purchase page in scan mode</string>
     <string name="setting_scan_mode_shopping_item">Start shopping list item page in scan mode</string>
     <string name="setting_reload_config">Reload configuration</string>
@@ -557,14 +563,14 @@
     <string name="setting_keep_screen_on_description">While in shopping mode</string>
     <string name="setting_show_done_items">Show done items</string>
     <string name="setting_show_done_items_description">At the bottom</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_expiring_soon_days">Expiring soon days</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_purchase">Default amount for purchase</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_consume">Default amount for consume</string>
     <string name="setting_purchased_date">Ask for purchased date</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_purchased_date_description">On purchase and inventory page</string>
     <string name="setting_empty_value">Empty</string>
     <string name="setting_sync_off">Sync off</string>

@@ -34,6 +34,7 @@ public final class Constants {
         public final static String FEATURE_STOCK_BBD_TRACKING = "feature_stock_bbd_tracking";
         public final static String FEATURE_STOCK_OPENED_TRACKING = "feature_stock_opened_tracking";
         public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
+        public final static String FEATURE_RECIPES = "feature_recipes";
 
         public final static String STOCK_SORT_MODE = "stock_sort_mode";
         public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
@@ -150,6 +151,7 @@ public final class Constants {
         public final static class BEHAVIOR {
             public final static boolean BEGINNER_MODE = true;
             public final static boolean EXPAND_BOTTOM_SHEETS = false;
+            public final static boolean SCAN_MODE_CONSUME = false;
             public final static boolean SCAN_MODE_PURCHASE = false;
             public final static boolean SCAN_MODE_SHOPPING_ITEM = false;
         }

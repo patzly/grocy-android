@@ -39,6 +39,8 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -431,9 +433,12 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
             if(!viewModel.getFormData().isProductNameValid()) return false;
-            navigate(PurchaseFragmentDirections
-                    .actionPurchaseFragmentToProductOverviewBottomSheetDialogFragment()
-                    .setProductDetails(viewModel.getFormData().getProductDetailsLive().getValue()));
+            activity.showBottomSheet(
+                    new ProductOverviewBottomSheet(),
+                    new ProductOverviewBottomSheetArgs.Builder().setProductDetails(
+                            viewModel.getFormData().getProductDetailsLive().getValue()
+                    ).build().toBundle()
+            );
             return true;
         });
         menuItemClear.setOnMenuItemClickListener(item -> {

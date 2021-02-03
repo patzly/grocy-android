@@ -575,7 +575,7 @@ public class ConsumeFragment extends BaseFragment {
         }
 
         // SPECIFIC
-        selectStockEntry(null);
+        //selectStockEntry(null);
         loadStockEntries();
 
         // SPOILED

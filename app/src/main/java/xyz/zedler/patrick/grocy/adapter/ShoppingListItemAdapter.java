@@ -639,7 +639,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                 ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
                 ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
                 if(!compareContent) return newItem.getId() == oldItem.getId();
-                
+
+                Integer productIdOld = NumUtil.isStringInt(oldItem.getProductId()) ? Integer.parseInt(oldItem.getProductId()) : null;
+                Product productOld = productIdOld != null ? productHashMapOld.get(productIdOld) : null;
                 Integer idOld = productHashMapOld != null ? productHashMapOld.get(oldItem.getProductId()).getId() : null;
 
                 /*boolean isInOldMissingProducts = missingProductIdsOld != null && missingProductIdsOld.contains(oldItem.getProductId());

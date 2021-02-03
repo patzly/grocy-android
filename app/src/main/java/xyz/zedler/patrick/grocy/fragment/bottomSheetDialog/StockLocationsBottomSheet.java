@@ -27,20 +27,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -88,8 +85,6 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
             textViewSubtitle.setVisibility(View.GONE);
         }
 
-        MaterialButton button = view.findViewById(R.id.button_stock_locations_discard);
-
         RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_locations);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
@@ -99,24 +94,16 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
                 )
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                new StockLocationAdapter(
-                        stockLocations, productDetails, selected, this
-                )
-        );
+        recyclerView.setAdapter(new StockLocationAdapter(
+                stockLocations, productDetails, selected, this
+        ));
 
         return view;
     }
 
     @Override
     public void onItemRowClicked(int position) {
-        Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-        if(currentFragment.getClass() == ConsumeFragment.class) {
-            ((ConsumeFragment) currentFragment).selectLocation(
-                    stockLocations.get(position).getLocationId()
-            );
-        }
-
+        activity.getCurrentFragment().selectStockLocation(stockLocations.get(position));
         dismiss();
     }
 
