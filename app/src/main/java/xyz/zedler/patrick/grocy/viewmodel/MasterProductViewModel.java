@@ -208,13 +208,6 @@ public class MasterProductViewModel extends BaseViewModel {
             return;
         }
 
-        if(!isActionEdit()) {
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, 10);
-            sendEvent(Event.SET_PRODUCT_ID, bundle);
-            sendEvent(Event.NAVIGATE_UP);
-        }
-
         Product product = getFilledProduct();
         JSONObject jsonObject = product.getJsonFromProduct(debug, TAG);
 
