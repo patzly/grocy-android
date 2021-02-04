@@ -97,13 +97,17 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
                     android:paddingBottom="90dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    transitionTypeChanging="@{true}">
 
                     <LinearLayout
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{() -> formData.toggleActiveLive()}">
+                        android:onClick="@{() -> formData.toggleActiveLive()}"
+                        android:animateLayoutChanges="true"
+                        transitionTypeChanging="@{true}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
