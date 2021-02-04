@@ -263,7 +263,7 @@
                             app:cardElevation="0dp"
                             app:cardCornerRadius="12dp"
                             app:cardBackgroundColor="@color/on_background_variant"
-                            android:onClick="@{() -> fragment.navigate(R.id.consumeFragmentNew)}"
+                            android:onClick="@{() -> fragment.navigate(R.id.consumeFragment)}"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView

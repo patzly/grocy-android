@@ -22,27 +22,6 @@
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
-        android:id="@+id/consumeFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
-        android:label="ConsumeFragment"
-        tools:layout="@layout/fragment_consume">
-        <argument
-            android:name="closeWhenFinished"
-            android:defaultValue="false"
-            app:argType="boolean" />
-        <argument
-            android:name="productName"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <action
-            android:id="@+id/action_consumeFragment_to_productOverviewBottomSheetDialogFragment"
-            app:destination="@id/productOverviewBottomSheetDialogFragment" />
-        <deepLink
-            android:id="@+id/deepLink13"
-            app:uri="@string/deep_link_consumeFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/purchaseFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
         android:label="PurchaseFragment"
@@ -61,9 +40,6 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_purchaseFragment_to_productOverviewBottomSheetDialogFragment"
-            app:destination="@id/productOverviewBottomSheetDialogFragment" />
         <argument
             android:name="shoppingListItems"
             android:defaultValue="@null"
@@ -111,18 +87,6 @@
             android:name="showActions"
             android:defaultValue="false"
             app:argType="boolean" />
-        <action
-            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
-            app:destination="@id/consumeFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
-        <action
-            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
-            app:destination="@id/purchaseFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
     </dialog>
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
@@ -136,9 +100,6 @@
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_purchaseFragment"
             app:destination="@id/purchaseFragment" />
         <action
-            android:id="@+id/action_drawerBottomSheetDialogFragment_to_consumeFragment"
-            app:destination="@id/consumeFragment" />
-        <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
             app:destination="@id/settingsActivity" />
         <action
@@ -150,6 +111,9 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockFragment"
             app:destination="@id/stockFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_consumeFragment"
+            app:destination="@id/consumeFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <fragment
@@ -698,9 +662,10 @@
         </fragment>
     </navigation>
     <fragment
-        android:id="@+id/consumeFragmentNew"
-        android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragmentNew"
-        android:label="ConsumeFragmentNew">
+        android:id="@+id/consumeFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
+        android:label="ConsumeFragmentNew"
+        tools:layout="@layout/fragment_consume">
         <argument
             android:name="closeWhenFinished"
             android:defaultValue="false"
@@ -719,5 +684,8 @@
             android:name="animateStart"
             android:defaultValue="true"
             app:argType="boolean" />
+        <deepLink
+            android:id="@+id/deepLink4"
+            app:uri="@string/deep_link_consumeFragment" />
     </fragment>
 </navigation>

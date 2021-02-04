@@ -36,7 +36,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -193,22 +192,22 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_purchase) {
-				NavHostFragment.findNavController(this).navigate(
+				/*NavHostFragment.findNavController(this).navigate(
 						ProductOverviewBottomSheetDirections
 								.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
 								.setCloseWhenFinished(true)
 								.setProductName(product.getName()) // TODO: Doesn't work yet
 				);
-				dismiss();
+				dismiss();*/
 				return true;
 			} else if(item.getItemId() == R.id.action_consume) {
-				NavHostFragment.findNavController(this).navigate(
+				/*NavHostFragment.findNavController(this).navigate(
 						ProductOverviewBottomSheetDirections
 								.actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
 								.setCloseWhenFinished(true)
 								.setProductName(product.getName())
 				);
-				dismiss();
+				dismiss();*/
 				return true;
 			} else if(item.getItemId() == R.id.action_edit_product) {
 				String productId = String.valueOf(product.getId());

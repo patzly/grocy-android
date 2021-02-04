@@ -54,7 +54,7 @@ I you want to test the first alpha version (v2.0.0_alpha1), you can download the
 You can install the APK over your current installation, because it has the same signature.
 After update, some or all app preferences may have the default status because their identifiers changed internally and I won't write migrations for them.
 
-Please report any bug or misbehavior in a [new issue](https://github.com/patzly/grocy-android/issues) if there isn't already an open one.
+Please report any bug or misbehavior in a [new issue](https://github.com/patzly/grocy-android/issues) **if there isn't already an open one**.
 New or rewritten pages may also contain issues which were fixed in previous releases (so they may have a closed issue here) – please report them too in a new issue.
 
 If you just want to say thanks for my work and this new version or motivate us, you can write a comment in the new issue #276.
