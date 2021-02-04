@@ -250,6 +250,31 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        style="@style/Theme.Grocy.ListItem.SingleLine.Icon.Clickable"
+                        android:onClick="@{() -> checkboxExactAmount.setChecked(!checkboxExactAmount.isChecked())}"
+                        android:visibility="@{formData.isTareWeightEnabledLive ? View.VISIBLE : View.GONE}">
+
+                        <ImageView
+                            style="@style/Theme.Grocy.ListItem.Icon"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+
+                            <TextView
+                                style="@style/Theme.Grocy.ListItem.Title"
+                                android:text="@string/title_exact_amount"
+                                android:maxLines="3"/>
+
+                        </LinearLayout>
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox_exact_amount"
+                            style="@style/Widget.Grocy.Switch"
+                            android:checked="@={formData.consumeExactAmountLive}"/>
+
+                    </LinearLayout>
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -260,7 +285,7 @@
                         app:cardElevation="0dp"
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
-                        android:visibility="@{formData.isTareWeightEnabledLive ? View.VISIBLE : View.GONE}">
+                        android:visibility="@{formData.isTareWeightEnabledLive &amp;&amp; !formData.consumeExactAmountLive ? View.VISIBLE : View.GONE}">
 
                         <TextView
                             android:layout_width="match_parent"

@@ -214,7 +214,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
                     if(viewModel.isScanModeEnabled()) {
                         focusNextInvalidView();
                     } else {
-                        viewModel.purchaseProduct();
+                        viewModel.consumeProduct(false);
                     }
                 }
         );
@@ -287,6 +287,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
     @Override
     public void selectStockEntry(StockEntry stockEntry) {
         viewModel.getFormData().getSpecificStockEntryLive().setValue(stockEntry);
+        viewModel.getFormData().isAmountValid();
     }
 
     @Override
@@ -311,8 +312,6 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
         binding.autoCompleteConsumeProduct.clearFocus();
         binding.quantityUnitContainer.clearFocus();
         binding.textInputShoppingListItemEditAmount.clearFocus();
-        /*binding.linearDueDate.clearFocus();
-        binding.textInputPurchasePrice.clearFocus();*/
     }
 
     public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -351,9 +350,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
             nextView = binding.autoCompleteConsumeProduct;
         } else if(!viewModel.getFormData().isAmountValid()) {
             nextView = binding.editTextShoppingListItemEditAmount;
-        }/* else if(!viewModel.getFormData().isDueDateValid()) {
-            nextView = binding.linearDueDate;
-        }*/
+        }
         if(nextView == null) {
             clearInputFocus();
             viewModel.showConfirmationBottomSheet();
@@ -367,7 +364,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
 
     @Override
     public void startTransaction() {
-        viewModel.purchaseProduct();
+        viewModel.consumeProduct(false);
     }
 
     @Override
@@ -382,10 +379,11 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
     }
 
     private void setUpBottomMenu() {
-        MenuItem menuItemDetails, menuItemClear;
+        MenuItem menuItemDetails, menuItemClear, menuItemOpen;
         menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
         menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
-        if(menuItemDetails == null || menuItemClear == null) return;
+        menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
+        if(menuItemDetails == null || menuItemClear == null || menuItemOpen == null) return;
 
         menuItemDetails.setOnMenuItemClickListener(item -> {
             IconUtil.start(menuItemDetails);
@@ -402,6 +400,18 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
             IconUtil.start(menuItemClear);
             clearInputFocus();
             viewModel.getFormData().clearForm();
+            if(viewModel.getFormData().isScannerVisible()) {
+                capture.onResume();
+                capture.decode();
+            }
+            return true;
+        });
+        menuItemOpen.setOnMenuItemClickListener(item -> {
+            if(viewModel.isScanModeEnabled()) {
+                focusNextInvalidView();
+            } else {
+                viewModel.consumeProduct(true);
+            }
             return true;
         });
     }

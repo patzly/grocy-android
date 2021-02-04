@@ -315,24 +315,21 @@ public class FormDataPurchase {
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
         assert amountLive.getValue() != null;
 
-        if(stock != null && current != null && productDetails != null) {
-            HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-            double amount = Double.parseDouble(amountLive.getValue());
-            Object currentFactor = hashMap.get(current);
-            if(currentFactor == null) return null;
-            double amountMultiplied;
-            if(isTareWeightEnabled() || (double) currentFactor == -1) {
-                amountMultiplied = amount;
-            } else if(current.getId() == productDetails.getProduct()
-                    .getQuIdPurchase()) {
-                amountMultiplied = amount * (double) currentFactor;
-            } else {
-                amountMultiplied = amount / (double) currentFactor;
-            }
-            return NumUtil.trim(amountMultiplied);
+        if(stock == null || current == null || productDetails == null) return null;
+        HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
+        double amount = Double.parseDouble(amountLive.getValue());
+        Object currentFactor = hashMap.get(current);
+        if(currentFactor == null) return null;
+        double amountMultiplied;
+        if(isTareWeightEnabled() || (double) currentFactor == -1) {
+            amountMultiplied = amount;
+        } else if(current.getId() == productDetails.getProduct()
+                .getQuIdPurchase()) {
+            amountMultiplied = amount * (double) currentFactor;
         } else {
-            return null;
+            amountMultiplied = amount / (double) currentFactor;
         }
+        return NumUtil.trim(amountMultiplied);
     }
 
     private String getAmountHelpText() {

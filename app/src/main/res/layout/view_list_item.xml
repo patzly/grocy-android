@@ -28,7 +28,8 @@
             android:id="@+id/text_list_item_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
+            android:singleLine="false"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
     </LinearLayout>

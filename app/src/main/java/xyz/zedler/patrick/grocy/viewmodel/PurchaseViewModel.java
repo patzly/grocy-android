@@ -413,6 +413,7 @@ public class PurchaseViewModel extends BaseViewModel {
                                 getString(R.string.action_undo),
                                 v -> undoTransaction(transId)
                         );
+                        snackbarMessage.setDurationSecs(20);
                     }
                     showSnackbar(snackbarMessage);
                     sendEvent(Event.PURCHASE_SUCCESS);

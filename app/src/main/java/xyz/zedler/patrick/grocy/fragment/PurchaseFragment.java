@@ -445,6 +445,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             IconUtil.start(menuItemClear);
             clearInputFocus();
             viewModel.getFormData().clearForm();
+            if(viewModel.getFormData().isScannerVisible()) {
+                capture.onResume();
+                capture.decode();
+            }
             return true;
         });
         if(args.getShoppingListItems() != null) {

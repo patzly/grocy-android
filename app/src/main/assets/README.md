@@ -26,7 +26,7 @@ Here is a changelog for this first alpha:
 
 **New pages**
 - Start overview
-- Product
+- Product create/edit
 - External scanner
 
 **Removed pages**
@@ -41,13 +41,12 @@ Here is a changelog for this first alpha:
 
 **:warning:Not fully working yet (coming in later test versions):warning:**
 Please don't report issues yet for these points!
-- Consume page
 - Purchase action from shopping list not implemented yet
 - Stock page
 - Product page (barcodes and unit conversions functionality not implemented yet)
 - Settings page (not all options implemented yet)
 - Tor and SOCKS support (not implemented yet)
-- **Deactivated features: if Due Date Tracking feature is disabled, there can be misbehavior!**
+- **Deactivated features: if Due Date Tracking or Location Tracking feature is disabled, there can be misbehavior!**
 - Online->offline & offline->online changes a bit buggy
 
 **Testing**
@@ -67,7 +66,7 @@ There are lots of new string to translate, so you can start translating them on 
 ---
 Sorry to the guys whose comments I marked as off-topic or spam: It was not against you, but I did it because else maybe more people would answer the same and spam email notifications to everyone like @towo wrote.
 
-And sorry, my English is not *brilliant* yet... If your mother tongue is English and you find mistakes in the app, please report them also in the issue tracker.
+And sorry, my English is not *brilliant* yet... If your mother tongue is English and you find language mistakes in the app, please report them also in the issue tracker.
 
 And finally, sorry for the long waiting time – I'm studying computer science since a few months now and hence I don't have that much time anymore to develop this app.
 

@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
     public void showMessage(String message) {
         Snackbar bar = Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG);
         View v = bar.getView();
-        TextView text = (TextView) v.findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
         text.setMaxLines(3);
         showSnackbar(bar);
     }

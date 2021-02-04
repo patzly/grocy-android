@@ -329,7 +329,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/TextAppearance.Grocy.ListItem.OverLine</item>
-        <item name="android:singleLine">true</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:maxLines">2</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
 
@@ -479,7 +480,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_background_secondary</item>
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style

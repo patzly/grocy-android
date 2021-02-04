@@ -196,6 +196,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
             formData.getProductDetailsLive().setValue(productDetails);
             formData.getProductNameLive().setValue(product.getName());
+            formData.getConsumeExactAmountLive().setValue(false);
 
             // quantity unit
             setProductQuantityUnitsAndFactors(product, barcode);
@@ -349,20 +350,22 @@ public class ConsumeViewModel extends BaseViewModel {
         formData.getProductNameLive().setValue(null);
     }
 
-    public void purchaseProduct() {
+    public void consumeProduct(boolean isActionOpen) {
         if(!formData.isFormValid()) {
             showMessage(R.string.error_missing_information);
             return;
         }
         if(formData.getBarcodeLive().getValue() != null) {
-            uploadProductBarcode(this::purchaseProduct);
+            uploadProductBarcode(() -> consumeProduct(isActionOpen));
             return;
         }
 
         Product product = formData.getProductDetailsLive().getValue().getProduct();
-        JSONObject body = formData.getFilledJSONObject();
+        JSONObject body = formData.getFilledJSONObject(isActionOpen);
         dlHelper.postWithArray(
-                grocyApi.purchaseProduct(product.getId()),
+                isActionOpen
+                        ? grocyApi.openProduct(product.getId())
+                        : grocyApi.consumeProduct(product.getId()),
                 body,
                 response -> {
                     // UNDO OPTION
@@ -371,12 +374,12 @@ public class ConsumeViewModel extends BaseViewModel {
                         JSONObject jsonObject = (JSONObject) response.get(0);
                         transactionId = jsonObject.getString("transaction_id");
                     } catch (JSONException e) {
-                        if(debug) Log.e(TAG, "purchaseProduct: " + e);
+                        if(debug) Log.e(TAG, "consumeProduct: " + e);
                     }
-                    if(debug) Log.i(TAG, "purchaseProduct: transaction successful");
+                    if(debug) Log.i(TAG, "consumeProduct: transaction successful");
 
                     SnackbarMessage snackbarMessage = new SnackbarMessage(
-                            formData.getTransactionSuccessMsg()
+                            formData.getTransactionSuccessMsg(isActionOpen)
                     );
                     if(transactionId != null) {
                         String transId = transactionId;
@@ -384,13 +387,14 @@ public class ConsumeViewModel extends BaseViewModel {
                                 getString(R.string.action_undo),
                                 v -> undoTransaction(transId)
                         );
+                        snackbarMessage.setDurationSecs(20);
                     }
                     showSnackbar(snackbarMessage);
                     sendEvent(Event.PURCHASE_SUCCESS);
                 },
                 error -> {
                     showErrorMessage();
-                    if(debug) Log.i(TAG, "purchaseProduct: " + error);
+                    if(debug) Log.i(TAG, "consumeProduct: " + error);
                 }
         );
     }
