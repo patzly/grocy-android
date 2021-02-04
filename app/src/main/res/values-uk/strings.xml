@@ -139,32 +139,35 @@
     <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
     <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
     <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
     <string name="msg_help_due_date_type">Залежно від вибраного типу терміну, підсвічування на сторінці огляду запасів буде різним. \"Краще вжити до\" означає, що продукт, можливо, все ще безпечний для споживання після закінчення його терміну. «Термін придатності» означає, що продукт не є безпечним для споживання після закінчення його терміну.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days">Для покупок ця кількість днів буде додана до сьогоднішнього дня для пропозиції терміну (-1 означає, що цей продукт ніколи не буде прострочений).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_opened">Коли цей продукт був позначений як відкритий, термін буде замінено на сьогодні + така кількість днів (значення 0 вимикає це).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_freezing">При переміщенні цього продукту в морозильну камеру (при його заморожуванні) термін буде замінений на сьогодні + вказана кількість днів (-1 означає, що цей продукт ніколи не буде прострочений).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_thawing">При переміщенні цього продукту з морозильної камери (при його розморожуванні) термін буде замінений на сьогодні + вказана кількість днів.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_stock">Кількісний запас не можна змінювати після першої покупки.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_purchase">Це одиниця кількості за замовчуванням, яка використовується при додаванні цього товару до списку покупок.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_accumulate_min_amount">Якщо увімкнено, мінімальна кількість під продуктів буде накопичиться в цьому продукті, тобто під продукт ніколи не буде \"відсутнім\", лише цей продукт.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_quick_consume_amount">Ця кількість використовується для \"кнопок швидкого споживання / відкриття\" на сторінці огляду запасу (стосується одиниці запасу кількості).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_tare_weight">Обробка ваги тари корисна, наприклад для борошна в банках - при покупці/споживанні/інвентаризації ви завжди зважуєте цілу банку, кількість, яку потрібно оприбуткувати, автоматично розраховується на основі того, що є в наявності, і ваги тара, визначеної нижче.</string>
-    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_tare_weight_purchase">Увімкнено обробку ваги тари - зважте весь контейнер, кількість, яку потрібно оприбуткувати, буде автоматично розрахована.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_disable_stock_check">Цей продукт буде використано як типовий під час додавання цього продукту як складової рецепта.</string>
-    <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
     <string name="msg_help_external_scanner_ready">Ви можете використовувати зовнішній сканер для поля нижче, коли на нього встановлено фокус та воно порожнє.</string>
+    <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_specific_item_consume">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_recipe_consume">Це лише для статистичних цілей.</string>
     <string name="msg_help_scan_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати режим сканування. Клацніть на цій картці, щоб змінити поведінку за замовчуванням.</string>
     <string name="msg_help_loading_circle_settings">На кожній сторінці, де щось потрібно завантажити з сервера, програма спочатку перевіряє крихітним запитом, чи є зміни в базі даних сервера з минулого разу, і оновлює лише застарілі дані. Увімкніть опцію нижче, щоб показати коло завантаження навіть для цього крихітного запиту.</string>
     <string name="msg_help_start">Активний режим для початківців: Тексти довідки відображаються за замовчуванням на всіх сторінках, якщо такі є. Ви можете змінити цю поведінку, натиснувши цю картку.</string>
@@ -257,6 +260,8 @@
 
     <string name="title_spoiled">Зіпсовано</string>
     <string name="title_use_specific">Використовувати конкретний запас</string>
+    <string name="title_specific">Конкретный запас</string>
+    <string name="title_recipe">Рецепт</string>
     <string name="title_total_price">Загальна ціна</string>
     <string name="title_unit_price">Ціна одиниці</string>
     <!-- %1$s is a quantity unit -->
@@ -272,7 +277,7 @@
     <string name="title_batch_mode_shopping_list">Пакетний режим списку покупок</string>
     <string name="title_product_cat_optional">Необов\'язкові властивості</string>
     <string name="title_product_cat_location">Місце за замовчуванням</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="title_product_cat_due_date">Термін</string>
     <string name="title_product_cat_amount">Кількість</string>
     <string name="title_product_cat_quantity_unit">Одиниця виміру</string>
@@ -293,12 +298,12 @@
     <string name="subtitle_empty">Порожньо</string>
     <string name="subtitle_done">Виконано</string>
     <string name="subtitle_undone">Скасовано</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Ніколи не спливає</string>
     <string name="subtitle_selected">Вибрано</string>
     <string name="subtitle_stock_entry_no_specific">Спочатку термін дії закінчується у першого, потім перший прийшов - перший пішов</string>
     <!-- %1$s is a purchase date -->
-    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Куплено на %1$s</string>
     <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
     <string name="subtitle_stock_entry">Термін минає %1$s; Кількість:%2$s; %3$s</string>
@@ -375,33 +380,33 @@
     <string name="property_price_in">Ціна в %1$s</string>
     <string name="property_quantity_unit">Одиниця виміру</string>
     <string name="property_quantity_units">Одиниці виміру</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_default_qu_purchase">Одиниці виміру покупки</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_stock">Одиниця виміру запасу</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_factor">Коефіцієнт закупівлі до одиниці кількості запасу</string>
     <string name="property_barcode">Штрих-код</string>
     <string name="property_barcodes">Штрих-коди</string>
     <string name="property_days">Днів</string>
     <string name="property_purchased_date">Дата купівлі</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_type">Вид терміну</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_type_best_before">Краще вжити до</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_type_expiration">Термін придатності</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date">Термін</string>
-    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_next">Наступний термін</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default">Термін за замовчуванням</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_opened">Термін за замовчанням після відкриття</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_freezing">Термін за замовчуванням після заморожування</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_days_default_thawing">Термін за замовчуванням після розморожування</string>
     <string name="property_location">Місце</string>
     <string name="property_location_default">Місце за замовчуванням</string>
@@ -413,13 +418,13 @@
     <string name="property_stores">Магазини</string>
     <string name="property_shopping_list">Список покупок</string>
     <string name="property_shopping_lists">Списки покупок</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_purchased">Востаннє придбано</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_used">В останнє використано</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_price">Остання ціна</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_average_shelf_life">Зазвичай зберігається</string>
     <string name="property_spoil_rate">Відсоток зіпсованого</string>
     <string name="property_price_history">Історія цін</string>
@@ -431,22 +436,22 @@
     <!-- kcal (kilo calories) is a unit for energy -->
     <string name="property_energy">Енергетична цінність (ккал)</string>
     <string name="property_active">Активний</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_never_show">Ніколи не показувати в запасах огляд</string>
     <string name="property_number">Номер</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_enable_tare_weight">Увімкнути обробку ваги тари</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_tare_weight">Вага тара</string>
     <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_tare_weight_in">Вага тари в %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_disable_stock_check">Вимкніть перевірку наявності запасів для цього інгредієнта</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_amount_quick_consume">Кількість швидкого споживання</string>
     <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_amount_quick_consume_in">Кількість для швидкого споживання в %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_accumulate_amount">Накопичування під продуктів мін. запасу</string>
     <string name="property_picture">Зображення</string>
 
@@ -562,6 +567,7 @@
     <string name="setting_use_front_cam_description">Для сканування штрих-коду</string>
     <string name="setting_external_support">Підтримка зовнішнього сканера</string>
     <string name="setting_external_support_description">Через USB або Bluetooth</string>
+    <string name="setting_scan_mode_consume">Показувати спочатку сторінку споживання в режимі сканування</string>
     <string name="setting_scan_mode_purchase">Показувати спочатку сторінку покупок в режимі сканування</string>
     <string name="setting_scan_mode_shopping_item">Показувати спочатку сторінку елемента списку покупок у режимі сканування</string>
     <string name="setting_reload_config">Перезавантажити конфігурацію</string>
@@ -576,14 +582,14 @@
     <string name="setting_keep_screen_on_description">В режимі покупок</string>
     <string name="setting_show_done_items">Показати виконані елементи</string>
     <string name="setting_show_done_items_description">Знизу</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_expiring_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_purchase">Кількість для покупки за замовчуванням</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_consume">Кількість для споживання за замовчуванням</string>
     <string name="setting_purchased_date">Запитувати дату купівлі</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there prevent different translations for the same string) -->
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_purchased_date_description">На сторінці купівлі та інвентаризації</string>
     <string name="setting_empty_value">Порожньо</string>
     <string name="setting_sync_off">Синхронізацію вимкнено</string>
