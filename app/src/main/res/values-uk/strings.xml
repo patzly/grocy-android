@@ -288,7 +288,7 @@
     <string name="subtitle_amount_opened">(відкрито %1$s) </string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Де є запас %1$s</string>
-    <string name="subtitle_default_selection">Вибір за замовчуванням</string>
+    <string name="subtitle_default_location">Вибір за замовчуванням</string>
     <string name="subtitle_none_selected">Нічого не вибрано</string>
     <string name="subtitle_empty">Порожньо</string>
     <string name="subtitle_done">Виконано</string>

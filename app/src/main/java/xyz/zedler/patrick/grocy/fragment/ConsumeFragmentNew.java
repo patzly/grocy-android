@@ -160,7 +160,7 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
             }
         });
         // following lines are necessary because no observers are set in Views
-        viewModel.getFormData().getQuantityUnitStock().observe(getViewLifecycleOwner(), i -> {});
+        viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {});
         viewModel.getFormData().getProductDetailsLive().observe(
                 getViewLifecycleOwner(),
                 productDetails -> {
@@ -276,11 +276,12 @@ public class ConsumeFragmentNew extends BaseFragment implements ScanInputCapture
     public void selectStockLocation(StockLocation stockLocation) {
         MutableLiveData<StockLocation> stockLocationLive = viewModel.getFormData()
                 .getStockLocationLive();
-        boolean locationChanged = stockLocation != stockLocationLive.getValue();
+        boolean locationHasChanged = stockLocation != stockLocationLive.getValue();
         stockLocationLive.setValue(stockLocation);
-        if(!locationChanged) return;
+        if(!locationHasChanged) return;
         viewModel.getFormData().getUseSpecificLive().setValue(false);
         viewModel.getFormData().getSpecificStockEntryLive().setValue(null);
+        viewModel.getFormData().isAmountValid();
     }
 
     @Override

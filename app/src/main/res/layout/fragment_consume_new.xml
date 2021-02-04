@@ -379,7 +379,7 @@
 
                     <LinearLayout
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:onClick="@{() -> viewModel.showLocationsBottomSheet()}">
+                        android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
 
                         <ImageView
                             style="@style/Theme.Grocy.ListItem.Icon"
@@ -519,7 +519,7 @@
 
                     <LinearLayout
                         style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                        android:onClick="@{() -> viewModel.showLocationsBottomSheet()}"
+                        android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}"
                         android:visibility="@{View.GONE}">
 
                         <ImageView

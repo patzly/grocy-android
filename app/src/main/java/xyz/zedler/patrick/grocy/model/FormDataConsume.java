@@ -57,7 +57,7 @@ public class FormDataConsume {
     private final MutableLiveData<Integer> productNameErrorLive;
     private final MutableLiveData<String> barcodeLive;
     private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
-    private final LiveData<QuantityUnit> quantityUnitStock;
+    private final LiveData<QuantityUnit> quantityUnitStockLive;
     private final MutableLiveData<QuantityUnit> quantityUnitLive;
     private final LiveData<String> quantityUnitNameLive;
     private final MutableLiveData<Boolean> quantityUnitErrorLive;
@@ -97,7 +97,7 @@ public class FormDataConsume {
         productNameErrorLive = new MutableLiveData<>();
         barcodeLive = new MutableLiveData<>();
         quantityUnitsFactorsLive = new MutableLiveData<>();
-        quantityUnitStock = Transformations.map(
+        quantityUnitStockLive = Transformations.map(
                 quantityUnitsFactorsLive,
                 this::getStockQuantityUnit
         );
@@ -186,8 +186,8 @@ public class FormDataConsume {
         return quantityUnitsFactorsLive;
     }
 
-    public LiveData<QuantityUnit> getQuantityUnitStock() {
-        return quantityUnitStock;
+    public LiveData<QuantityUnit> getQuantityUnitStockLive() {
+        return quantityUnitStockLive;
     }
 
     public MutableLiveData<QuantityUnit> getQuantityUnitLive() {
@@ -231,7 +231,7 @@ public class FormDataConsume {
 
     private String getAmountStock() {
         ProductDetails productDetails = productDetailsLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         QuantityUnit current = quantityUnitLive.getValue();
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
         assert amountLive.getValue() != null;
@@ -257,7 +257,7 @@ public class FormDataConsume {
     }
 
     private String getAmountHelpText() {
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         QuantityUnit current = quantityUnitLive.getValue();
         if(stock == null || current == null || stock.getId() == current.getId()
                 || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
@@ -276,8 +276,7 @@ public class FormDataConsume {
                 amountLive.setValue(String.valueOf(1));
             } else {
                 amountLive.setValue(NumUtil.trim(productDetailsLive.getValue()
-                        .getProduct().getTareWeightDouble()
-                        + productDetailsLive.getValue().getStockAmount() + 1));
+                        .getProduct().getTareWeightDouble() + 1));
             }
         } else {
             double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
@@ -290,13 +289,7 @@ public class FormDataConsume {
         if(amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
             double amountCurrent = Double.parseDouble(amountLive.getValue());
             Double amountNew = null;
-            if(amountCurrent > 1) {
-                amountNew = amountCurrent - 1;
-            } else if(amountCurrent > 0.1) {
-                amountNew = amountCurrent - 0.1;
-            } else if(amountCurrent > 0.01) {
-                amountNew = amountCurrent - 0.01;
-            }
+            if(amountCurrent > 1) amountNew = amountCurrent - 1;
             if(amountNew != null) amountLive.setValue(NumUtil.trim(amountNew));
         }
     }
@@ -307,7 +300,7 @@ public class FormDataConsume {
             amountAdded -= productDetailsLive.getValue().getStockAmount();
             amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
         }
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         return application.getString(
                 R.string.msg_purchased,
                 NumUtil.trim(amountAdded),
@@ -409,6 +402,7 @@ public class FormDataConsume {
             amountErrorLive.setValue(getString(R.string.error_invalid_amount));
             return false;
         }
+        // below
         if(!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
             amountErrorLive.setValue(application.getString(
                     R.string.error_bounds_higher, String.valueOf(0)
@@ -416,13 +410,35 @@ public class FormDataConsume {
             return false;
         } else if(isTareWeightEnabled() && productDetailsLive.getValue() != null
                 && Double.parseDouble(amountLive.getValue())
-                <= productDetailsLive.getValue().getProduct().getTareWeightDouble()
-                + productDetailsLive.getValue().getStockAmount()
+                < productDetailsLive.getValue().getProduct().getTareWeightDouble()
         ) {
             amountErrorLive.setValue(application.getString(
-                    R.string.error_bounds_higher,
+                    R.string.error_bounds_min,
                     NumUtil.trim(productDetailsLive.getValue().getProduct()
-                            .getTareWeightDouble() + productDetailsLive.getValue().getStockAmount())
+                            .getTareWeightDouble())
+            ));
+            return false;
+        }
+        // over
+        StockLocation currentLocation = stockLocationLive.getValue();
+        if(currentLocation == null) {
+            amountErrorLive.setValue(null);
+            return true;
+        }
+        double stockAmount = currentLocation.getAmountDouble();
+        if(!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) > stockAmount) {
+            amountErrorLive.setValue(application.getString(
+                    R.string.error_bounds_max, NumUtil.trim(stockAmount)
+            ));
+            return false;
+        } else if(isTareWeightEnabled() && productDetailsLive.getValue() != null
+                && Double.parseDouble(amountLive.getValue())
+                > productDetailsLive.getValue().getProduct().getTareWeightDouble() + stockAmount
+        ) {
+            amountErrorLive.setValue(application.getString(
+                    R.string.error_bounds_max,
+                    NumUtil.trim(productDetailsLive.getValue().getProduct()
+                            .getTareWeightDouble() + stockAmount)
             ));
             return false;
         }

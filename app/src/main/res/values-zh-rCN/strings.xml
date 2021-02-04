@@ -202,7 +202,7 @@
     <string name="subtitle_amount_opened">(%1$s已打开)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">%1$s有存货的地方</string>
-    <string name="subtitle_default_selection">默认</string>
+    <string name="subtitle_default_location">默认</string>
     <string name="subtitle_none_selected">未选择</string>
     <string name="subtitle_empty">空</string>
     <string name="subtitle_done">完成</string>

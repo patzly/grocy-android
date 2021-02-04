@@ -202,7 +202,7 @@
     <string name="subtitle_amount_opened">(%1$s abertos)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Onde %1$s há no estoque</string>
-    <string name="subtitle_default_selection">Padrão</string>
+    <string name="subtitle_default_location">Padrão</string>
     <string name="subtitle_none_selected">Nenhum selecionado</string>
     <string name="subtitle_empty">Vazio</string>
     <string name="subtitle_done">Feito</string>

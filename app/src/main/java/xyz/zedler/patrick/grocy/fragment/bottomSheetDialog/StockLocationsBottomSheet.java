@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -71,6 +72,7 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
 
         stockLocations = bundle.getParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS);
         ProductDetails productDetails = bundle.getParcelable(Constants.ARGUMENT.PRODUCT_DETAILS);
+        QuantityUnit quantityUnitStock = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
         int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, 0);
 
         TextView textViewSubtitle = view.findViewById(R.id.text_stock_locations_subtitle);
@@ -95,7 +97,7 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
         );
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new StockLocationAdapter(
-                stockLocations, productDetails, selected, this
+                stockLocations, productDetails, quantityUnitStock, selected, this
         ));
 
         return view;

@@ -26,26 +26,32 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import xyz.zedler.patrick.grocy.util.NumUtil;
+
 public class StockLocation implements Parcelable {
 
     @SerializedName("id")
-    private int id;
+    private final int id;
 
     @SerializedName("product_id")
-    private int productId;
+    private final int productId;
+
+    @SerializedName("amount")
+    private final String amount;
 
     @SerializedName("location_id")
-    private int locationId;
+    private final int locationId;
 
     @SerializedName("location_name")
-    private String locationName;
+    private final String locationName;
 
     @SerializedName("location_is_freezer")
-    private int isFreezer;
+    private final int isFreezer;
 
     private StockLocation(Parcel parcel) {
         id = parcel.readInt();
         productId = parcel.readInt();
+        amount = parcel.readString();
         locationId = parcel.readInt();
         locationName = parcel.readString();
         isFreezer = parcel.readInt();
@@ -55,6 +61,7 @@ public class StockLocation implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeInt(productId);
+        dest.writeString(amount);
         dest.writeInt(locationId);
         dest.writeString(locationName);
         dest.writeInt(isFreezer);
@@ -79,6 +86,14 @@ public class StockLocation implements Parcelable {
 
     public int getProductId() {
         return productId;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public double getAmountDouble() {
+        return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
     }
 
     public int getLocationId() {

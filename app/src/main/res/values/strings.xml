@@ -169,7 +169,7 @@
     <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
     <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_specific_item_consume">The first item in this list would be picked by the default rule which is "Opened first, then first due first, then first in first out".</string>
+    <string name="msg_help_specific_item_consume">The first item in this list would be picked by the default rule which is \"Opened first, then first due first, then first in first out\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
@@ -206,11 +206,13 @@
     <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
     <string name="error_loading_qus">Failed to load quantity units from product</string>
     <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-    <string name="error_bounds_min_max">Between %1$s and %2$s</string>
+    <string name="error_bounds_min_max">Must be between %1$s and %2$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_min">Equal to or higher than %1$s</string>
+    <string name="error_bounds_min">Must be equal to or higher than %1$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_higher">Higher than %1$s</string>
+    <string name="error_bounds_max">Must be lower than or equal to %1$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_higher">Must be higher than %1$s</string>
     <string name="error_offline">Offline</string>
     <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
     <string name="error_name_exists">Name already exists</string>
@@ -299,7 +301,7 @@
     <string name="subtitle_amount_opened">(%1$s opened)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Where %1$s has stock</string>
-    <string name="subtitle_default_selection">Default selection</string>
+    <string name="subtitle_default_location">Default location</string>
     <string name="subtitle_none_selected">None selected</string>
     <string name="subtitle_empty">Empty</string>
     <string name="subtitle_done">Done</string>

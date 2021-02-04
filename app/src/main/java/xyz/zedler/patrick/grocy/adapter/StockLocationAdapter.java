@@ -34,7 +34,9 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class StockLocationAdapter
         extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
@@ -43,34 +45,39 @@ public class StockLocationAdapter
 
     private final ArrayList<StockLocation> stockLocations;
     private final ProductDetails productDetails;
+    private final QuantityUnit quantityUnitStock;
     private final int selectedId;
     private final StockLocationAdapterListener listener;
 
     public StockLocationAdapter(
             ArrayList<StockLocation> stockLocations,
             ProductDetails productDetails,
+            QuantityUnit quantityUnitStock,
             int selectedId,
             StockLocationAdapterListener listener
     ) {
         this.stockLocations = stockLocations;
         this.productDetails = productDetails;
+        this.quantityUnitStock = quantityUnitStock;
         this.selectedId = selectedId;
         this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final LinearLayout linearLayoutContainer;
-        private final LinearLayout linearLayoutDefault;
+        private final TextView textDefault;
         private final TextView textViewName;
+        private final TextView textViewAmount;
         private final ImageView imageViewSelected;
 
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutContainer = view.findViewById(R.id.linear_stock_location_container);
-            linearLayoutDefault = view.findViewById(R.id.linear_stock_location_default);
-            textViewName = view.findViewById(R.id.text_stock_location_name);
-            imageViewSelected = view.findViewById(R.id.image_stock_location_selected);
+            linearLayoutContainer = view.findViewById(R.id.linear_container);
+            textDefault = view.findViewById(R.id.text_default);
+            textViewName = view.findViewById(R.id.text_name);
+            textViewAmount = view.findViewById(R.id.text_amount);
+            imageViewSelected = view.findViewById(R.id.image_selected);
         }
     }
 
@@ -101,8 +108,24 @@ public class StockLocationAdapter
         // DEFAULT
 
         if(stockLocation.getLocationId() == productDetails.getLocation().getId()) {
-            holder.linearLayoutDefault.setVisibility(View.VISIBLE);
+            holder.textDefault.setVisibility(View.VISIBLE);
         }
+
+        // AMOUNT
+
+        String unit = "";
+        if(quantityUnitStock != null && stockLocation.getAmountDouble() == 1) {
+            unit = quantityUnitStock.getName();
+        } else if (quantityUnitStock != null) {
+            unit = quantityUnitStock.getNamePlural();
+        }
+        holder.textViewAmount.setText(
+                holder.textViewAmount.getContext().getString(
+                        R.string.subtitle_amount,
+                        NumUtil.trim(stockLocation.getAmountDouble()),
+                        unit
+                )
+        );
 
         // SELECTED
 

@@ -162,7 +162,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         });
         // following lines are necessary because no observers are set in Views
         viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {});
-        viewModel.getFormData().getQuantityUnitStock().observe(getViewLifecycleOwner(), i -> {});
+        viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {});
 
         //hideDisabledFeatures();
 

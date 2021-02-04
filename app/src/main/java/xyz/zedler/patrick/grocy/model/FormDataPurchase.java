@@ -59,7 +59,7 @@ public class FormDataPurchase {
     private final MutableLiveData<Integer> productNameErrorLive;
     private final MutableLiveData<String> barcodeLive;
     private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
-    private final LiveData<QuantityUnit> quantityUnitStock;
+    private final LiveData<QuantityUnit> quantityUnitStockLive;
     private final MutableLiveData<QuantityUnit> quantityUnitLive;
     private final LiveData<String> quantityUnitNameLive;
     private final MutableLiveData<Boolean> quantityUnitErrorLive;
@@ -110,7 +110,7 @@ public class FormDataPurchase {
         productNameErrorLive = new MutableLiveData<>();
         barcodeLive = new MutableLiveData<>();
         quantityUnitsFactorsLive = new MutableLiveData<>();
-        quantityUnitStock = Transformations.map(
+        quantityUnitStockLive = Transformations.map(
                 quantityUnitsFactorsLive,
                 this::getStockQuantityUnit
         );
@@ -265,8 +265,8 @@ public class FormDataPurchase {
         return quantityUnitsFactorsLive;
     }
 
-    public LiveData<QuantityUnit> getQuantityUnitStock() {
-        return quantityUnitStock;
+    public LiveData<QuantityUnit> getQuantityUnitStockLive() {
+        return quantityUnitStockLive;
     }
 
     public MutableLiveData<QuantityUnit> getQuantityUnitLive() {
@@ -310,7 +310,7 @@ public class FormDataPurchase {
 
     private String getAmountStock() {
         ProductDetails productDetails = productDetailsLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         QuantityUnit current = quantityUnitLive.getValue();
         if(!isAmountValid() || quantityUnitsFactorsLive.getValue() == null) return null;
         assert amountLive.getValue() != null;
@@ -336,7 +336,7 @@ public class FormDataPurchase {
     }
 
     private String getAmountHelpText() {
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         QuantityUnit current = quantityUnitLive.getValue();
         if(stock == null || current == null || stock.getId() == current.getId()
                 || !NumUtil.isStringDouble(amountStockLive.getValue())) return null;
@@ -386,7 +386,7 @@ public class FormDataPurchase {
             amountAdded -= productDetailsLive.getValue().getStockAmount();
             amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
         }
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         return application.getString(
                 R.string.msg_purchased,
                 NumUtil.trim(amountAdded),
@@ -429,7 +429,7 @@ public class FormDataPurchase {
 
     private String getPriceStock() {
         ProductDetails productDetails = productDetailsLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         QuantityUnit current = quantityUnitLive.getValue();
         HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
         String amountString = amountLive.getValue();
@@ -475,7 +475,7 @@ public class FormDataPurchase {
 
     private String getPriceHelpText() {
         QuantityUnit current = quantityUnitLive.getValue();
-        QuantityUnit stock = quantityUnitStock.getValue();
+        QuantityUnit stock = quantityUnitStockLive.getValue();
         if(current == null || stock == null
                 || current.getId() == stock.getId() && !isTotalPriceLive.getValue()) return " ";
         if(priceStockLive.getValue() == null) return " ";

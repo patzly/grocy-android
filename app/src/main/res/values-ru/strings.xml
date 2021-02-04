@@ -204,7 +204,7 @@
     <string name="subtitle_amount_opened">(открыто %1$s) </string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Где есть запасы %1$s</string>
-    <string name="subtitle_default_selection">По умолчанию</string>
+    <string name="subtitle_default_location">По умолчанию</string>
     <string name="subtitle_none_selected">Ничего не выбрано</string>
     <string name="subtitle_empty">Пусто</string>
     <string name="subtitle_done">Выполнено</string>

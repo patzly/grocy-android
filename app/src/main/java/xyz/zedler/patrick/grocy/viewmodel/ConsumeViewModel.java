@@ -185,20 +185,20 @@ public class ConsumeViewModel extends BaseViewModel {
         DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
             ProductDetails productDetails = formData.getProductDetailsLive().getValue();
             assert productDetails != null;
-            Product updatedProduct = productDetails.getProduct();
+            Product product = productDetails.getProduct();
 
             if(productDetails.getStockAmountAggregated() == 0) {
-                String name = updatedProduct.getName();
+                String name = product.getName();
                 showMessage(getApplication().getString(R.string.msg_not_in_stock, name));
                 formData.clearForm();
                 return;
             }
 
             formData.getProductDetailsLive().setValue(productDetails);
-            formData.getProductNameLive().setValue(updatedProduct.getName());
+            formData.getProductNameLive().setValue(product.getName());
 
             // quantity unit
-            setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+            setProductQuantityUnitsAndFactors(product, barcode);
 
             // amount
             boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -224,14 +224,16 @@ public class ConsumeViewModel extends BaseViewModel {
             }
 
             // stock location
-            ArrayList<StockEntry> stockEntries = formData.getStockEntries();
+            ArrayList<StockLocation> stockLocations = formData.getStockLocations();
             StockLocation stockLocation = getStockLocation(
-                    formData.getStockLocations(),
-                    stockEntries.get(0).getLocationId()
+                    stockLocations,
+                    product.getLocationIdInt()
             );
+            if(stockLocation == null) stockLocation = stockLocations.get(stockLocations.size()-1);
             formData.getStockLocationLive().setValue(stockLocation);
 
             // stock entry
+            formData.getUseSpecificLive().setValue(false);
             formData.getSpecificStockEntryLive().setValue(null);
 
             formData.isFormValid();
@@ -255,7 +257,7 @@ public class ConsumeViewModel extends BaseViewModel {
         ).start();
     }
 
-    private void setProductQuantityUnitsAndFactors( // returns factor for unit which was set
+    private void setProductQuantityUnitsAndFactors(
             Product product,
             ProductBarcode barcode
     ) {
@@ -289,7 +291,7 @@ public class ConsumeViewModel extends BaseViewModel {
         if(barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
             formData.getQuantityUnitLive().setValue(barcodeUnit);
         } else {
-            formData.getQuantityUnitLive().setValue(purchase);
+            formData.getQuantityUnitLive().setValue(stock);
         }
     }
 
@@ -479,16 +481,18 @@ public class ConsumeViewModel extends BaseViewModel {
         showBottomSheet(new StockEntriesBottomSheet(), bundle);
     }
 
-    public void showLocationsBottomSheet() {
+    public void showStockLocationsBottomSheet() {
         if(!formData.isProductNameValid()) return;
         ArrayList<StockLocation> stockLocations = formData.getStockLocations();
         StockLocation currentStockLocation = formData.getStockLocationLive().getValue();
         int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
         ProductDetails productDetails = formData.getProductDetailsLive().getValue();
+        QuantityUnit quantityUnitStock = formData.getQuantityUnitStockLive().getValue();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.ARGUMENT.STOCK_LOCATIONS, stockLocations);
         bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
         bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
+        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnitStock);
         showBottomSheet(new StockLocationsBottomSheet(), bundle);
     }
 
