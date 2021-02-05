@@ -49,77 +49,10 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
 
     private final ArrayList<GroupedListItem> groupedListItems;
-    private HashMap<Integer, Product> productHashMap;
-    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+    private final HashMap<Integer, Product> productHashMap;
+    private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+    private final ArrayList<Integer> missingProductIds;
     private final ShoppingModeItemClickListener listener;
-
-    static class DiffCallback extends DiffUtil.Callback {
-
-        ArrayList<GroupedListItem> oldItems;
-        ArrayList<GroupedListItem> newItems;
-
-        public DiffCallback(
-                ArrayList<GroupedListItem> newItems,
-                ArrayList<GroupedListItem> oldItems
-        ) {
-            this.newItems = newItems;
-            this.oldItems = oldItems;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldItems.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            return newItems.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, false);
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, true);
-        }
-
-        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-            int oldItemType = oldItems.get(oldItemPos).getType();
-            int newItemType = newItems.get(newItemPos).getType();
-            if(oldItemType != newItemType) return false;
-            if(oldItemType == GroupedListItem.TYPE_ENTRY) {
-                ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
-                ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
-                return compareContent
-                        ? newItem.equals(oldItem)
-                        : newItem.getId() == oldItem.getId();
-            } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
-                ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
-                ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);
-                return compareContent ? newItem.equals(oldItem) : newItem.getId() == oldItem.getId();
-            } else {
-                return true; // Bottom notes is always one item at the bottom
-            }
-        }
-    }
-
-    public void updateData(
-            ArrayList<GroupedListItem> newList,
-            HashMap<Integer, Product> productHashMap,
-            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-            ArrayList<Integer> missingProductIds
-    ) {
-        this.productHashMap = productHashMap;
-        this.quantityUnitHashMap = quantityUnitHashMap;
-        DiffCallback diffCallback = new DiffCallback(newList, this.groupedListItems);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        groupedListItems.clear();
-        groupedListItems.addAll(newList);
-        diffResult.dispatchUpdatesTo(this);
-    }
 
     public ShoppingModeItemAdapter(
             ArrayList<GroupedListItem> groupedListItems,
@@ -129,8 +62,9 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             ShoppingModeItemClickListener listener
     ) {
         this.groupedListItems = new ArrayList<>(groupedListItems);
-        this.productHashMap = productHashMap;
-        this.quantityUnitHashMap = quantityUnitHashMap;
+        this.productHashMap = new HashMap<>(productHashMap);
+        this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+        this.missingProductIds = new ArrayList<>(missingProductIds);
         this.listener = listener;
     }
 
@@ -348,6 +282,127 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
         holder.cardViewContainer.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
 
+    }
+
+    public void updateData(
+            ArrayList<GroupedListItem> newList,
+            HashMap<Integer, Product> productHashMap,
+            HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+            ArrayList<Integer> missingProductIds
+    ) {
+        ShoppingModeItemAdapter.DiffCallback diffCallback = new ShoppingModeItemAdapter.DiffCallback(
+                newList,
+                this.groupedListItems,
+                this.productHashMap,
+                productHashMap,
+                this.quantityUnitHashMap,
+                quantityUnitHashMap,
+                this.missingProductIds,
+                missingProductIds
+        );
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        this.groupedListItems.clear();
+        this.groupedListItems.addAll(newList);
+        this.productHashMap.clear();
+        this.productHashMap.putAll(productHashMap);
+        this.quantityUnitHashMap.clear();
+        this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+        this.missingProductIds.clear();
+        this.missingProductIds.addAll(missingProductIds);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    static class DiffCallback extends DiffUtil.Callback {
+        ArrayList<GroupedListItem> oldItems;
+        ArrayList<GroupedListItem> newItems;
+        HashMap<Integer, Product> productHashMapOld;
+        HashMap<Integer, Product> productHashMapNew;
+        HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
+        HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+        ArrayList<Integer> missingProductIdsOld;
+        ArrayList<Integer> missingProductIdsNew;
+
+        public DiffCallback(
+                ArrayList<GroupedListItem> newItems,
+                ArrayList<GroupedListItem> oldItems,
+                HashMap<Integer, Product> productHashMapOld,
+                HashMap<Integer, Product> productHashMapNew,
+                HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
+                HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+                ArrayList<Integer> missingProductIdsOld,
+                ArrayList<Integer> missingProductIdsNew
+        ) {
+            this.newItems = newItems;
+            this.oldItems = oldItems;
+            this.productHashMapOld = productHashMapOld;
+            this.productHashMapNew = productHashMapNew;
+            this.quantityUnitHashMapOld = quantityUnitHashMapOld;
+            this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+            this.missingProductIdsOld = missingProductIdsOld;
+            this.missingProductIdsNew = missingProductIdsNew;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldItems.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newItems.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, false);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return compare(oldItemPosition, newItemPosition, true);
+        }
+
+        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
+            int oldItemType = oldItems.get(oldItemPos).getType();
+            int newItemType = newItems.get(newItemPos).getType();
+            if(oldItemType != newItemType) return false;
+            if(oldItemType == GroupedListItem.TYPE_ENTRY) {
+                ShoppingListItem newItem = (ShoppingListItem) newItems.get(newItemPos);
+                ShoppingListItem oldItem = (ShoppingListItem) oldItems.get(oldItemPos);
+                if(!compareContent) return newItem.getId() == oldItem.getId();
+
+                Integer productIdOld = NumUtil.isStringInt(oldItem.getProductId()) ? Integer.parseInt(oldItem.getProductId()) : null;
+                Product productOld = productIdOld != null ? productHashMapOld.get(productIdOld) : null;
+
+                Integer productIdNew = NumUtil.isStringInt(newItem.getProductId()) ? Integer.parseInt(newItem.getProductId()) : null;
+                Product productNew = productIdNew != null ? productHashMapNew.get(productIdNew) : null;
+
+                Integer quIdOld = NumUtil.isStringInt(oldItem.getQuId()) ? Integer.parseInt(oldItem.getQuId()) : null;
+                QuantityUnit quOld = quIdOld != null ? quantityUnitHashMapOld.get(quIdOld) : null;
+
+                Integer quIdNew = NumUtil.isStringInt(newItem.getQuId()) ? Integer.parseInt(newItem.getQuId()) : null;
+                QuantityUnit quNew = quIdNew != null ? quantityUnitHashMapNew.get(quIdNew) : null;
+
+                Boolean missingOld = productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
+                Boolean missingNew = productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
+
+                if(productOld == null && productNew != null
+                        || productOld != null && productNew != null && productOld.getId() != productNew.getId()
+                        || quOld == null && quNew != null
+                        || quOld != null && quNew != null && quOld.getId() != quNew.getId()
+                        || missingOld == null && missingNew != null
+                        || missingOld != null && missingNew != null && missingOld != missingNew
+                ) return false;
+
+                return newItem.equals(oldItem);
+            } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
+                ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
+                ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);
+                return newItem.equals(oldItem);
+            } else {
+                return true; // Bottom notes is always one item at the bottom
+            }
+        }
     }
 
     @Override

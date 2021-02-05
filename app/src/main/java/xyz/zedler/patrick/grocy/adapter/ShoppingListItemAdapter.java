@@ -63,9 +63,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     private Context context;
     private final ArrayList<GroupedListItem> groupedListItems;
-    private HashMap<Integer, Product> productHashMap;
-    private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-    private ArrayList<Integer> missingProductIds;
+    private final HashMap<Integer, Product> productHashMap;
+    private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+    private final ArrayList<Integer> missingProductIds;
     private final ShoppingListItemAdapterListener listener;
 
     private int filterState;
@@ -88,9 +88,9 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     ) {
         this.context = context;
         this.groupedListItems = new ArrayList<>(groupedListItems);
-        this.productHashMap = productHashMap;
-        this.quantityUnitHashMap = quantityUnitHashMap;
-        this.missingProductIds = missingProductIds;
+        this.productHashMap = new HashMap<>(productHashMap);
+        this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+        this.missingProductIds = new ArrayList<>(missingProductIds);
         this.listener = listener;
 
         this.filterState = filterState;
@@ -573,11 +573,12 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.groupedListItems.clear();
         this.groupedListItems.addAll(newList);
-
-        this.productHashMap = productHashMap;
-        this.quantityUnitHashMap = quantityUnitHashMap;
-        this.missingProductIds = missingProductIds;
-
+        this.productHashMap.clear();
+        this.productHashMap.putAll(productHashMap);
+        this.quantityUnitHashMap.clear();
+        this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+        this.missingProductIds.clear();
+        this.missingProductIds.addAll(missingProductIds);
         diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
     }
 
@@ -642,15 +643,28 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
                 Integer productIdOld = NumUtil.isStringInt(oldItem.getProductId()) ? Integer.parseInt(oldItem.getProductId()) : null;
                 Product productOld = productIdOld != null ? productHashMapOld.get(productIdOld) : null;
-                Integer idOld = productHashMapOld != null ? productHashMapOld.get(oldItem.getProductId()).getId() : null;
 
-                /*boolean isInOldMissingProducts = missingProductIdsOld != null && missingProductIdsOld.contains(oldItem.getProductId());
-                boolean isInNewMissingProducts = missingProductIdsNew != null && missingProductIdsNew.contains(newItem.getProductId());
-                if(isInOldMissingProducts != isInNewMissingProducts) return false;*/
+                Integer productIdNew = NumUtil.isStringInt(newItem.getProductId()) ? Integer.parseInt(newItem.getProductId()) : null;
+                Product productNew = productIdNew != null ? productHashMapNew.get(productIdNew) : null;
 
+                Integer quIdOld = NumUtil.isStringInt(oldItem.getQuId()) ? Integer.parseInt(oldItem.getQuId()) : null;
+                QuantityUnit quOld = quIdOld != null ? quantityUnitHashMapOld.get(quIdOld) : null;
 
+                Integer quIdNew = NumUtil.isStringInt(newItem.getQuId()) ? Integer.parseInt(newItem.getQuId()) : null;
+                QuantityUnit quNew = quIdNew != null ? quantityUnitHashMapNew.get(quIdNew) : null;
 
-                return false;
+                Boolean missingOld = productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
+                Boolean missingNew = productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
+
+                if(productOld == null && productNew != null
+                        || productOld != null && productNew != null && productOld.getId() != productNew.getId()
+                        || quOld == null && quNew != null
+                        || quOld != null && quNew != null && quOld.getId() != quNew.getId()
+                        || missingOld == null && missingNew != null
+                        || missingOld != null && missingNew != null && missingOld != missingNew
+                ) return false;
+
+                return newItem.equals(oldItem);
             } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
                 ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
                 ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);
