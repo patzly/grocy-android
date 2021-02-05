@@ -328,7 +328,10 @@ public class ConsumeViewModel extends BaseViewModel {
                     product = getProduct(code.getProductId());
                 }
             }
-            if(product != null) setProduct(product.getId(), productBarcode);
+            if(product != null) {
+                setProduct(product.getId(), productBarcode);
+                return;
+            }
         }
 
         ProductDetails currentProductDetails = formData.getProductDetailsLive().getValue();

@@ -313,7 +313,7 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Never overdue</string>
     <string name="subtitle_selected">Selected</string>
-    <string name="subtitle_stock_entry_no_specific">First expiring first, then first in – first out</string>
+    <string name="subtitle_stock_entry_no_specific">Opened first, then first due first, then first in first out</string>
     <!-- %1$s is a purchase date -->
     <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Bought on %1$s</string>
