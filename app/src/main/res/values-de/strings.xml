@@ -124,6 +124,8 @@
     <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft : %6$s\nStandort: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
     <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
     <string name="msg_logout_demo">Sie verwenden die Demo-Instanz auf <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (ein Mal am Tag).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
@@ -135,7 +137,7 @@
     <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
     <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
     <string name="msg_press_hold_confirm">Drücken und halten Sie, um zu bestätigen.</string>
-    <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server.\”Wenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
+    <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
     <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
     <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
     <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
@@ -263,6 +265,8 @@
     <string name="title_spoiled">Verdorben</string>
     <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
     <string name="title_specific">Bestimmter Bestandseintrag</string>
+    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_exact_amount">Exakte Menge verbrauchen</string>
     <string name="title_recipe">Rezept</string>
     <string name="title_total_price">Gesamtpreis</string>
     <string name="title_unit_price">Einzelpreis</string>
