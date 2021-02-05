@@ -69,6 +69,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
         binding.setActivity(activity);
+        binding.setFragment(this);
 
         setOnClickListeners(
                 view,
