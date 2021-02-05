@@ -307,7 +307,7 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Nie überfällig</string>
     <string name="subtitle_selected">Ausgewählt</string>
-    <string name="subtitle_stock_entry_no_specific">Zuerst ablaufende zuerst, dann First In - First Out</string>
+    <string name="subtitle_stock_entry_no_specific">Geöffnete zuerst, dann zuerst fällige, dann First In - First Out</string>
     <!-- %1$s is a purchase date -->
     <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Gekauft am %1$s</string>
