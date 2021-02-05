@@ -307,7 +307,7 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Ніколи не спливає</string>
     <string name="subtitle_selected">Вибрано</string>
-    <string name="subtitle_stock_entry_no_specific">Спочатку термін дії закінчується у першого, потім перший прийшов - перший пішов</string>
+    <string name="subtitle_stock_entry_no_specific">Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло</string>
     <!-- %1$s is a purchase date -->
     <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Куплено на %1$s</string>
