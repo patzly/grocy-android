@@ -123,7 +123,7 @@
     <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
     <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft : %6$s\nStandort: %7$s</string>
+    <string name="msg_scan_mode_confirm">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
