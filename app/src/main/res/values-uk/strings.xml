@@ -124,6 +124,8 @@
     <string name="msg_batch_no_products">Нові продукти створювати не потрібно</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
     <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
     <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
     <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер grocy <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
@@ -202,11 +204,13 @@
     <string name="error_api_qr_code">Це не QR-код з обліковими даними API grocy</string>
     <string name="error_loading_qus">Не вдалося завантажити одиниці виміру з продукту</string>
     <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-    <string name="error_bounds_min_max">Між %1$s та %2$s</string>
+    <string name="error_bounds_min_max">Має бути в межах від %1$s до %2$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_min">Дорівнює або перевищує %1$s</string>
+    <string name="error_bounds_min">Має дорівнювати або бути більшим за %1$s</string>
     <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_higher">Більше ніж %1$s</string>
+    <string name="error_bounds_max">Має бути меншим або рівним %1$s</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_higher">Має бути більшим за %1$s</string>
     <string name="error_offline">Офлайн</string>
     <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
     <string name="error_name_exists">Назва вже існує</string>
@@ -261,6 +265,8 @@
     <string name="title_spoiled">Зіпсовано</string>
     <string name="title_use_specific">Використовувати конкретний запас</string>
     <string name="title_specific">Конкретный запас</string>
+    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_exact_amount">Споживати точну кількість</string>
     <string name="title_recipe">Рецепт</string>
     <string name="title_total_price">Загальна ціна</string>
     <string name="title_unit_price">Ціна одиниці</string>
@@ -293,7 +299,7 @@
     <string name="subtitle_amount_opened">(відкрито %1$s) </string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Де є запас %1$s</string>
-    <string name="subtitle_default_location">Вибір за замовчуванням</string>
+    <string name="subtitle_default_location">Місце за замовчуванням</string>
     <string name="subtitle_none_selected">Нічого не вибрано</string>
     <string name="subtitle_empty">Порожньо</string>
     <string name="subtitle_done">Виконано</string>
