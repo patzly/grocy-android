@@ -30,22 +30,29 @@
         android:orientation="vertical"
         android:animateLayoutChanges="true">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="?android:actionBarSize">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="start|center_vertical"
+                android:src="@drawable/ic_round_grocy"
+                tools:ignore="ContentDescription,TooDeepLayout" />
 
             <TextView
                 android:text="@string/title_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:singleLine="true"
                 android:textAlignment="center"
                 android:fontFamily="@font/roboto_mono_bold"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/linear_offline_error"
@@ -101,20 +108,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:paddingStart="@dimen/main_card_margin"
+                        android:paddingEnd="@dimen/main_card_margin"
+                        android:clipToPadding="false"
                         android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:contentPadding="16dp"
-                            app:cardElevation="0dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardBackgroundColor="@color/retro_dirt_bg"
-                            app:strokeColor="@color/retro_dirt_dark"
-                            app:strokeWidth="@dimen/help_card_border_size"
+                            style="@style/Widget.Grocy.Card.Filled"
+                            android:layout_marginBottom="8dp"
                             android:visibility="@{viewModel.beginnerModeEnabled ? View.VISIBLE : View.GONE}"
                             android:onClick="@{() -> fragment.navigateToSettingsCatBehavior()}"
                             app:clickUtil="@{clickUtil}">
@@ -123,33 +124,29 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:textSize="12.5sp"
+                                android:textSize="14sp"
+                                android:justificationMode="inter_word"
+                                android:breakStrategy="high_quality"
+                                android:hyphenationFrequency="full"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                                android:text="@string/msg_help_start"/>
+                                android:text="@string/msg_help_start"
+                                tools:targetApi="o" />
 
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:contentPadding="16dp"
-                            app:cardElevation="0dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardBackgroundColor="@color/background"
-                            app:strokeColor="@color/retro_red_fg"
-                            app:strokeWidth="3dp"
+                            style="@style/Widget.Grocy.Card.Filled"
                             android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"
                             android:onClick="@{() -> fragment.navigateToSettingsCatServer()}"
+                            app:strokeWidth="2dp"
+                            app:strokeColor="@color/retro_red_fg"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:textSize="12.5sp"
+                                android:textSize="14sp"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@string/msg_logout_demo_short"/>
 
@@ -158,22 +155,18 @@
                         <View
                             android:layout_width="70dp"
                             android:layout_height="1dp"
-                            android:background="@color/on_background_secondary"
+                            android:background="@color/stroke_secondary"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"/>
 
                     </LinearLayout>
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
+                        style="@style/Widget.Grocy.Card"
+                        android:layout_marginStart="@dimen/main_card_margin"
+                        android:layout_marginEnd="@dimen/main_card_margin"
+                        android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}"
                         app:clickUtil="@{clickUtil}">
 
@@ -186,18 +179,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_stock_overview"
-                                android:layout_gravity="center_vertical"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:textColor="@color/on_surface"
-                                android:fontFamily="@font/roboto_mono_bold"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                android:layout_marginBottom="8dp"
-                                app:drawableStartCompat="@drawable/ic_round_category" />
+                                android:fontFamily="@font/roboto_mono_bold" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
+                                android:textColor="@color/on_surface"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
 
@@ -206,15 +195,10 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
+                        style="@style/Widget.Grocy.Card"
+                        android:layout_marginStart="@dimen/main_card_margin"
+                        android:layout_marginEnd="@dimen/main_card_margin"
+                        android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
                         app:clickUtil="@{clickUtil}">
 
@@ -227,18 +211,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_shopping_list"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/roboto_mono_bold"
                                 android:textColor="@color/on_surface"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                android:layout_marginBottom="8dp"
-                                app:drawableStartCompat="@drawable/ic_round_shopping_list" />
+                                android:gravity="center_vertical" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
+                                android:textColor="@color/on_surface"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.shoppingListDescriptionTextLive}"/>
 
@@ -250,73 +232,95 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:paddingStart="@dimen/main_card_margin"
+                        android:paddingEnd="@dimen/main_card_margin"
+                        android:paddingBottom="16dp"
+                        android:clipToPadding="false"
+                        android:clipChildren="false">
 
                         <com.google.android.material.card.MaterialCardView
+                            style="@style/Widget.Grocy.Card"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_weight="1"
-                            app:contentPadding="16dp"
-                            app:cardElevation="0dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardBackgroundColor="@color/on_background_variant"
                             android:onClick="@{() -> fragment.navigate(R.id.consumeFragment)}"
                             app:clickUtil="@{clickUtil}">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/title_consume"
-                                android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/roboto_mono_bold"
-                                android:textColor="@color/on_surface"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                app:drawableStartCompat="@drawable/ic_round_consume_product" />
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                tools:ignore="UseCompoundDrawables">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginBottom="4dp"
+                                    android:src="@drawable/ic_round_consume_product"
+                                    tools:ignore="ContentDescription,TooDeepLayout" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/title_consume"
+                                    android:fontFamily="@font/roboto_mono_bold"
+                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
+                                    android:textColor="@color/on_surface"
+                                    android:gravity="center_vertical" />
+
+                            </LinearLayout>
 
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.material.card.MaterialCardView
+                            style="@style/Widget.Grocy.Card"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            app:contentPadding="16dp"
-                            app:cardElevation="0dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardBackgroundColor="@color/on_background_variant"
                             android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
                             app:clickUtil="@{clickUtil}">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/title_purchase"
-                                android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/roboto_mono_bold"
-                                android:textColor="@color/on_surface"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                app:drawableStartCompat="@drawable/ic_round_local_grocery_store" />
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                tools:ignore="UseCompoundDrawables">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginBottom="4dp"
+                                    android:src="@drawable/ic_round_local_grocery_store"
+                                    tools:ignore="ContentDescription,TooDeepLayout" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/title_purchase"
+                                    android:fontFamily="@font/roboto_mono_bold"
+                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
+                                    android:textColor="@color/on_surface"
+                                    android:gravity="center_vertical" />
+
+                            </LinearLayout>
 
                         </com.google.android.material.card.MaterialCardView>
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="1dp"
+                        android:background="@color/stroke_secondary"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"/>
+
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
+                        style="@style/Widget.Grocy.Card"
+                        android:layout_marginStart="@dimen/main_card_margin"
+                        android:layout_marginEnd="@dimen/main_card_margin"
                         android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
                         app:clickUtil="@{clickUtil}">
 
@@ -329,12 +333,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_master_data"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/roboto_mono_bold"
                                 android:textColor="@color/on_surface"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                app:drawableStartCompat="@drawable/ic_round_view_list" />
+                                android:gravity="center_vertical" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/on_surface"
+                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
+                                android:text="You have 83 products registered in Grocy."/>
 
                         </LinearLayout>
 
@@ -343,6 +353,7 @@
                     <View
                         android:layout_width="70dp"
                         android:layout_height="1dp"
+                        android:visibility="gone"
                         android:background="@color/on_background_secondary"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="16dp"/>
@@ -383,6 +394,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
@@ -409,6 +421,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"

@@ -83,7 +83,7 @@
     <!-- HIGHLIGHT -->
 
     <color name="highlight">#11000000</color>
-    <color name="highlight_secondary">#13000000</color>
+    <color name="highlight_secondary">#05000000</color>
     <color name="highlight_on_secondary">#22ffffff</color>
 
     <!-- ERROR -->

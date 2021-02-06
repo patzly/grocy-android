@@ -133,7 +133,7 @@
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
     <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
     <string name="msg_logout_demo">You\'re using the grocy public demo server of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
-    <string name="msg_logout_demo_short">Public demo server. Click for details.</string>
+    <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
     <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
     <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
     <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
@@ -176,7 +176,7 @@
     <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
     <string name="msg_help_scan_mode">You can long click on the title bar above to activate scan mode. Click on this card to change default behavior.</string>
     <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
-    <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. You can change this behavior by clicking on this card.</string>
+    <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
     <string name="msg_help_purchased_date_settings">If the option below is enabled, a field for purchased date will be displayed on purchase and inventory page. Otherwise the purchased date defaults to today.</string>
 
     <string name="error_api_not_working">API key not working</string>

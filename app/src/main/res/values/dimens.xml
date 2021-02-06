@@ -2,7 +2,6 @@
 <resources>
 
     <dimen name="login_margin">0dp</dimen>
-
-    <dimen name="help_card_border_size">0dp</dimen>
+    <dimen name="main_card_margin">16dp</dimen>
 
 </resources>
