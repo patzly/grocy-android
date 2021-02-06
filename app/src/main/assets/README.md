@@ -50,7 +50,7 @@ Please don't report issues yet for these points!
 - Online->offline & offline->online changes a bit buggy
 
 **Testing**
-I you want to test the first alpha version (v2.0.0_alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there may be a popup with a toggle "Allow from this source".
+I you want to test the first alpha version (v2.0.0_alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there might be a popup with a toggle "Allow from this source".
 You can install the APK over your current installation, because it has the same signature.
 After update, some or all app preferences may have the default status because their identifiers changed internally and I won't write migrations for them.
 
@@ -60,7 +60,7 @@ New or rewritten pages may also contain issues which were fixed in previous rele
 If you just want to say thanks for my work and this new version or motivate us, you can write a comment in the new issue #276.
 Thanks!
 
---- Translating
+**Translating**
 There are lots of new string to translate, so you can start translating them on [Transifex](https://www.transifex.com/grocy-android/grocy-android). :-)
 
 ---
@@ -69,6 +69,9 @@ Sorry to the guys whose comments I marked as off-topic or spam: It was not again
 And sorry, my English is not *brilliant* yet... If your mother tongue is English and you find language mistakes in the app, please report them also in the issue tracker.
 
 And finally, sorry for the long waiting time – I'm studying computer science since a few months now and hence I don't have that much time anymore to develop this app.
+
+Best regards
+Dominic & Patrick
 
 ## Improvements
 

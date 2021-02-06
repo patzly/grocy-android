@@ -162,6 +162,10 @@ public class OverviewStartFragment extends BaseFragment {
         }
     }
 
+    public void navigateToOldSettings() {
+        navigate(R.id.settingsActivity);
+    }
+
     public void openFeedbackBottomSheet() {
         activity.showBottomSheet(new FeedbackBottomSheet());
     }

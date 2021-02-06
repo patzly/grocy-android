@@ -43,7 +43,7 @@
                 tools:ignore="ContentDescription,TooDeepLayout" />
 
             <TextView
-                android:text="@string/title_overview"
+                android:text="@string/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -170,6 +170,7 @@
                         android:layout_marginEnd="@dimen/main_card_margin"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}"
+                        android:onLongClickVoid="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout
@@ -363,6 +364,7 @@
                         app:cardCornerRadius="12dp"
                         app:cardBackgroundColor="@color/on_background_variant"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsFragment)}"
+                        android:onLongClickVoid="@{() -> fragment.navigateToOldSettings()}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout

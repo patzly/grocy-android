@@ -114,6 +114,9 @@
         <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_consumeFragment"
             app:destination="@id/consumeFragment" />
+        <action
+            android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockOverviewFragment"
+            app:destination="@id/stockOverviewFragment" />
     </dialog>
     <action android:id="@+id/action_global_drawerBottomSheetDialogFragment" app:destination="@id/drawerBottomSheetDialogFragment" />
     <fragment
@@ -687,5 +690,15 @@
         <deepLink
             android:id="@+id/deepLink4"
             app:uri="@string/deep_link_consumeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stockOverviewFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.StockOverviewFragment"
+        android:label="StockOverviewFragment"
+        tools:layout="@layout/fragment_stock_overview">
+        <argument
+            android:name="animateStart"
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
 </navigation>

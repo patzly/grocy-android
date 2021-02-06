@@ -139,4 +139,12 @@ public class BindingAdaptersUtil {
             if(listener != null) listener.onClick(view);
         });
     }
+
+    @BindingAdapter("android:onLongClickVoid")
+    public static void setOnLongClickListener(View view, Runnable listener) {
+        view.setOnLongClickListener(v -> {
+            listener.run();
+            return true;
+        });
+    }
 }
