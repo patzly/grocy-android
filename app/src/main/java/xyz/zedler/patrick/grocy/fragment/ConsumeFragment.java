@@ -159,8 +159,9 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 capture.onPause();
             }
         });
-        // following lines are necessary because no observers are set in Views
+        // following line is necessary because no observers are set in Views
         viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {});
+
         viewModel.getFormData().getProductDetailsLive().observe(
                 getViewLifecycleOwner(),
                 productDetails -> {
@@ -197,7 +198,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     }
 
     private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
+        activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
         activity.getScrollBehavior().setHideOnScroll(false);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
@@ -206,9 +207,9 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 this::setUpBottomMenu
         );
         activity.updateFab(
-                R.drawable.ic_round_local_grocery_store,
-                R.string.action_purchase,
-                Constants.FAB.TAG.PURCHASE,
+                R.drawable.ic_round_consume_product,
+                R.string.action_consume,
+                Constants.FAB.TAG.CONSUME,
                 animated,
                 () -> {
                     if(viewModel.isScanModeEnabled()) {
