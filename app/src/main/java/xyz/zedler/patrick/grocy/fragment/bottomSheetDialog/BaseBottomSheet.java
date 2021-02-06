@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -57,37 +58,58 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
+                requireContext()
+        );
         boolean expandBottomSheets = sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
         );
 
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if(view.getViewTreeObserver().isAlive()) {
-                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
+        view.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if(view.getViewTreeObserver().isAlive()) {
+                            view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
 
-                BottomSheetBehavior<View> behavior = getBehavior();
-                if(behavior == null) return;
+                        BottomSheetBehavior<View> behavior = getBehavior();
+                        if(behavior == null) return;
 
-                int orientation = getResources().getConfiguration().orientation;
-                if(orientation == Configuration.ORIENTATION_PORTRAIT && skipCollapsedStateInPortrait) {
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    behavior.setPeekHeight(metrics.heightPixels);
-                    behavior.setSkipCollapsed(true);
-                } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    behavior.setPeekHeight(
-                            expandBottomSheets ? metrics.heightPixels : metrics.heightPixels / 2
-                    );
-                }
-            }
-        });
+                        int orientation = getResources().getConfiguration().orientation;
+                        if(orientation == Configuration.ORIENTATION_PORTRAIT
+                                && skipCollapsedStateInPortrait
+                        ) {
+                            behavior.setPeekHeight(getDisplayHeight(requireActivity()));
+                            behavior.setSkipCollapsed(true);
+                        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            behavior.setPeekHeight(getDisplayHeight(requireActivity()) / 2);
+                        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            behavior.setPeekHeight(
+                                    expandBottomSheets
+                                            ? getDisplayHeight(requireActivity())
+                                            : getDisplayHeight(requireActivity()) / 2
+                            );
+                        }
+                    }
+                });
+    }
+
+    private static int getDisplayHeight(Activity activity) {
+        // important for targeting SDK 11
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = activity.getWindowManager().getCurrentWindowMetrics();
+            Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(
+                    WindowInsets.Type.systemBars()
+            );
+            return (windowMetrics.getBounds().height() - insets.top - insets.bottom) / 2;
+        } else {*/
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics.heightPixels;
+        //}
     }
 
     @Nullable

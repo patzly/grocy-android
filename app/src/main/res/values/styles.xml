@@ -450,8 +450,9 @@
     </style>
 
     <style name="TextAppearance.Grocy.BottomSheet.Item" parent="TextAppearance.Grocy.Body">
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_surface</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 </resources>

@@ -31,17 +31,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
@@ -164,21 +160,6 @@ public class OverviewStartFragment extends BaseFragment {
 
     public void navigateToOldSettings() {
         navigate(R.id.settingsActivity);
-    }
-
-    public void openFeedbackBottomSheet() {
-        activity.showBottomSheet(new FeedbackBottomSheet());
-    }
-
-    public void openHelpWebsite() {
-        boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
-        if(!success) {
-            Snackbar.make(
-                    activity.binding.frameMainContainer,
-                    R.string.error_no_browser,
-                    Snackbar.LENGTH_LONG
-            ).show();
-        }
     }
 
     @Override

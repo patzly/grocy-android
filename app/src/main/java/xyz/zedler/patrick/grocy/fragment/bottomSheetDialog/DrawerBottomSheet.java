@@ -29,33 +29,36 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDrawerBinding;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
 import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.SettingsFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickListener {
 
     private final static String TAG = DrawerBottomSheet.class.getSimpleName();
 
+    private FragmentBottomsheetDrawerBinding binding;
     private MainActivity activity;
-    private View view;
     private SharedPreferences sharedPrefs;
     private final ClickUtil clickUtil = new ClickUtil();
 
@@ -71,71 +74,88 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        view = inflater.inflate(
-                R.layout.fragment_bottomsheet_drawer, container, false
+        binding = FragmentBottomsheetDrawerBinding.inflate(
+                inflater, container, false
         );
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+        activity = (MainActivity) requireActivity();
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        view.findViewById(R.id.button_drawer_shopping_mode).setOnClickListener(
+        binding.buttonDrawerShoppingMode.setOnClickListener(
                 v -> navigateDeepLink(getString(R.string.deep_link_shoppingModeFragment))
         );
 
-        setOnClickListeners(
-                R.id.linear_drawer_stock,
-                R.id.linear_drawer_shopping_list,
-                R.id.linear_drawer_consume,
-                R.id.linear_drawer_purchase,
-                R.id.linear_drawer_master_data,
-                R.id.linear_settings
+        ClickUtil.setOnClickListeners(
+                this,
+                binding.linearDrawerStock,
+                binding.linearDrawerShoppingList,
+                binding.linearDrawerConsume,
+                binding.linearDrawerPurchase,
+                binding.linearDrawerMasterData,
+                binding.linearDrawerSettings,
+                binding.linearDrawerFeedback,
+                binding.linearDrawerHelp
         );
 
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment instanceof ShoppingListFragment) {
-            select(R.id.linear_drawer_shopping_list, R.id.text_drawer_shopping_list, false);
-        } else if(currentFragment instanceof ConsumeFragment) {
-            select(R.id.linear_drawer_consume, R.id.text_drawer_consume, false);
-        } else if(currentFragment instanceof PurchaseFragment) {
-            select(R.id.linear_drawer_purchase, R.id.text_drawer_purchase, false);
-        } else if(currentFragment instanceof MasterObjectListFragment) {
-            select(R.id.linear_drawer_master_data, R.id.text_drawer_master_data, true);
+        BaseFragment currentFragment = activity.getCurrentFragment();
+        if (currentFragment instanceof StockFragment) {
+            select(binding.linearDrawerStock, binding.textDrawerStock);
+        } else if (currentFragment instanceof ShoppingListFragment) {
+            select(binding.linearDrawerShoppingList, binding.textDrawerShoppingList);
+        } else if (currentFragment instanceof ConsumeFragment) {
+            select(binding.linearDrawerConsume, binding.textDrawerConsume);
+        } else if (currentFragment instanceof PurchaseFragment) {
+            select(binding.linearDrawerPurchase, binding.textDrawerPurchase);
+        } else if (currentFragment instanceof MasterObjectListFragment) {
+            select(binding.linearDrawerMasterData, binding.textDrawerMasterData);
+        } else if (currentFragment instanceof SettingsFragment) {
+            select(binding.linearDrawerSettings, binding.textDrawerSettings);
         }
 
         hideDisabledFeatures();
 
-        return view;
+        return binding.getRoot();
     }
 
-    private void setOnClickListeners(@IdRes int... viewIds) {
-        for (int viewId : viewIds) {
-            view.findViewById(viewId).setOnClickListener(this);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
     public void onClick(View v) {
-        if(clickUtil.isDisabled()) return;
+        if (clickUtil.isDisabled()) return;
 
-        if(v.getId() == R.id.linear_drawer_stock) {
+        if (v.getId() == R.id.linear_drawer_stock) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToStockFragment());
-        } else if(v.getId() == R.id.linear_drawer_shopping_list) {
+        } else if (v.getId() == R.id.linear_drawer_shopping_list) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
-        } else if(v.getId() == R.id.linear_drawer_consume) {
+        } else if (v.getId() == R.id.linear_drawer_consume) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
-        } else if(v.getId() == R.id.linear_drawer_purchase) {
+        } else if (v.getId() == R.id.linear_drawer_purchase) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
-        } else if(v.getId() == R.id.linear_drawer_master_data) {
+        } else if (v.getId() == R.id.linear_drawer_master_data) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
-        } else if(v.getId() == R.id.linear_settings) {
-            IconUtil.start(view, R.id.image_settings);
-            navigateCustom(R.id.navigation_settings);
+        } else if (v.getId() == R.id.linear_drawer_settings) {
+            navigateCustom(DrawerBottomSheetDirections
+                    .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
+        } else if (v.getId() == R.id.linear_drawer_feedback) {
+            activity.showBottomSheet(new FeedbackBottomSheet());
+            dismiss();
+        } else if (v.getId() == R.id.linear_drawer_help) {
+            if (!NetUtil.openURL(activity, Constants.URL.HELP)) {
+                Snackbar.make(
+                        activity.binding.frameMainContainer,
+                        R.string.error_no_browser,
+                        Snackbar.LENGTH_LONG
+                ).show();
+            }
         }
     }
 
@@ -143,7 +163,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
         builder.setPopUpTo(R.id.overviewStartFragment, false);
-        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+        if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         } else {
             builder.setExitAnim(R.anim.slide_no);
@@ -157,7 +177,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         NavOptions.Builder builder = new NavOptions.Builder();
         builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
         builder.setPopUpTo(R.id.overviewStartFragment, false);
-        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+        if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
             builder.setExitAnim(R.anim.slide_out_down);
         } else {
             builder.setExitAnim(R.anim.slide_no);
@@ -166,38 +186,22 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         findNavController().navigate(Uri.parse(uri), builder.build());
     }
 
-    private void navigateCustom(@IdRes int direction) {
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-        builder.setPopUpTo(R.id.overviewStartFragment, false);
-        if(! (activity.getCurrentFragment() instanceof OverviewStartFragment)) {
-            builder.setExitAnim(R.anim.slide_out_down);
-        } else {
-            builder.setExitAnim(R.anim.slide_no);
-        }
-        dismiss();
-        navigate(direction, builder.build());
-    }
-
-    private void select(@IdRes int linearLayoutId, @IdRes int textViewId, boolean clickable) {
-        LinearLayout linearLayout = view.findViewById(linearLayoutId);
+    private void select(LinearLayout linearLayout, TextView textView) {
         linearLayout.setBackgroundResource(R.drawable.bg_drawer_item_selected);
-        linearLayout.setClickable(clickable);  // so selected entries can be disabled
-        ((TextView) view.findViewById(textViewId)).setTextColor(
-                ContextCompat.getColor(activity, R.color.retro_green_fg)
-        );
+        linearLayout.setClickable(false);
+        textView.setTextColor(ContextCompat.getColor(activity, R.color.retro_green_fg));
     }
 
     private void hideDisabledFeatures() {
-        if(!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-            view.findViewById(R.id.linear_drawer_shopping_list).setVisibility(View.GONE);
-            view.findViewById(R.id.divider_drawer_shopping_list).setVisibility(View.GONE);
+        if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
+            binding.linearDrawerShoppingList.setVisibility(View.GONE);
+            binding.dividerDrawerShoppingList.setVisibility(View.GONE);
         }
     }
 
     @SuppressWarnings("SameParameterValue")
     private boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
+        if (pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
     }
 

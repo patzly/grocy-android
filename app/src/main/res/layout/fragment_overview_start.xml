@@ -387,60 +387,6 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.openFeedbackBottomSheet()}"
-                        app:clickUtil="@{clickUtil}">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/action_feedback"
-                            android:layout_gravity="center_vertical"
-                            android:fontFamily="@font/roboto_mono_bold"
-                            android:textColor="@color/on_surface"
-                            android:drawablePadding="8dp"
-                            android:gravity="center_vertical"
-                            app:drawableStartCompat="@drawable/ic_round_feedback_anim" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.openHelpWebsite()}"
-                        app:clickUtil="@{clickUtil}">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/title_help"
-                            android:layout_gravity="center_vertical"
-                            android:fontFamily="@font/roboto_mono_bold"
-                            android:textColor="@color/on_surface"
-                            android:drawablePadding="8dp"
-                            android:gravity="center_vertical"
-                            app:drawableStartCompat="@drawable/ic_round_help_anim" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

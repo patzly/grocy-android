@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.util;
 */
 
 import android.os.SystemClock;
+import android.view.View;
 
 public class ClickUtil {
 
@@ -43,5 +44,9 @@ public class ClickUtil {
         if(SystemClock.elapsedRealtime() - lastClick < idle) return true;
         update();
         return false;
+    }
+
+    public static void setOnClickListeners(View.OnClickListener listener, View... views) {
+        for (View view : views) view.setOnClickListener(listener);
     }
 }

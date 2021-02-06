@@ -35,6 +35,7 @@
                 <TextView
                     android:id="@+id/text_drawer_stock"
                     style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:fontFamily="@font/text_title"
                     android:text="@string/title_stock_overview" />
 
             </LinearLayout>
@@ -55,6 +56,7 @@
                     <TextView
                         android:id="@+id/text_drawer_shopping_list"
                         style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:fontFamily="@font/text_title"
                         android:text="@string/title_shopping_list" />
 
                 </LinearLayout>
@@ -122,6 +124,7 @@
                     <TextView
                         android:id="@+id/text_drawer_consume"
                         style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:fontFamily="@font/text_title"
                         android:text="@string/title_consume" />
 
                 </LinearLayout>
@@ -144,6 +147,7 @@
                     <TextView
                         android:id="@+id/text_drawer_purchase"
                         style="@style/Theme.Grocy.DrawerItem.Text"
+                        android:fontFamily="@font/text_title"
                         android:text="@string/title_purchase" />
 
                 </LinearLayout>
@@ -164,6 +168,7 @@
                 <TextView
                     android:id="@+id/text_drawer_master_data"
                     style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:fontFamily="@font/text_title"
                     android:text="@string/title_master_data" />
 
             </LinearLayout>
@@ -171,18 +176,54 @@
             <View style="@style/Theme.Grocy.Divider" />
 
             <LinearLayout
-                android:id="@+id/linear_settings"
+                android:id="@+id/linear_drawer_settings"
                 style="@style/Theme.Grocy.DrawerItem">
 
                 <ImageView
-                    android:id="@+id/image_settings"
+                    android:id="@+id/image_drawer_settings"
                     style="@style/Theme.Grocy.DrawerItem.Icon"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_settings_anim" />
 
                 <TextView
+                    android:id="@+id/text_drawer_settings"
                     style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:fontFamily="@font/text_title"
                     android:text="@string/title_settings" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_drawer_feedback"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    android:id="@+id/image_drawer_feedback"
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_feedback_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:fontFamily="@font/text_title"
+                    android:text="@string/action_feedback" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_drawer_help"
+                style="@style/Theme.Grocy.DrawerItem">
+
+                <ImageView
+                    android:id="@+id/image_drawer_help"
+                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_help_anim" />
+
+                <TextView
+                    style="@style/Theme.Grocy.DrawerItem.Text"
+                    android:fontFamily="@font/text_title"
+                    android:text="@string/title_help" />
 
             </LinearLayout>
 
