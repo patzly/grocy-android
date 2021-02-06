@@ -124,12 +124,14 @@
     <string name="msg_batch_no_products">Žádný nový produkt nebyl vytvořen</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\n Odebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
     <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>
     <string name="msg_logout">Nic na vašem serveru nebylo změněno. Budete přesměrování na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
     <string name="msg_logout_demo_short">Veřejný demo server. Klikněte pro více informací.</string>
     <string name="msg_restart">Je vyžadován restart aplikace pro řádné načtení nové konfigurace Grocy.</string>
-    <string name="msg_shortcuts">Můžete povolit 4 zkratky.</string>
+    <string name="msg_shortcuts">Můžete povolit až 4 zkratky.</string>
     <string name="msg_shortcuts_not_supported">Zkratky nejsou na této verzi Android podporovány.</string>
     <string name="msg_features">Intro pustíte znova v \"O programu\"</string>
     <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomožte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
@@ -263,6 +265,8 @@
     <string name="title_spoiled">Zkaženo</string>
     <string name="title_use_specific">Použit specifickou položku zásob</string>
     <string name="title_specific">Specifická položka zásob</string>
+    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_exact_amount">Spotřebovat přesné množství</string>
     <string name="title_recipe">Recept</string>
     <string name="title_total_price">Celková cena</string>
     <string name="title_unit_price">Jednotková cena</string>
@@ -303,7 +307,7 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Nemá datum spotřeby</string>
     <string name="subtitle_selected">Vybráno</string>
-    <string name="subtitle_stock_entry_no_specific">První expiruje první, pravidlo FIFO \"První dovnitř, první ven.\"</string>
+    <string name="subtitle_stock_entry_no_specific">Nejprve otevřené, poté s nejbližší expirací, pak první dovnitř, první ven</string>
     <!-- %1$s is a purchase date -->
     <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Koupeno dne %1$s</string>
