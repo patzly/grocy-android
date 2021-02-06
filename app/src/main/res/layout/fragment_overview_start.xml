@@ -35,8 +35,8 @@
             android:layout_height="?android:actionBarSize">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_marginStart="16dp"
                 android:layout_gravity="start|center_vertical"
                 android:src="@drawable/ic_round_grocy"
@@ -339,49 +339,7 @@
                                 android:textColor="@color/on_background"
                                 android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                                android:text="You have 83 products registered in Grocy."/>
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <View
-                        android:layout_width="70dp"
-                        android:layout_height="1dp"
-                        android:visibility="gone"
-                        android:background="@color/on_background_secondary"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="16dp"/>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        app:contentPadding="16dp"
-                        app:cardElevation="0dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="@color/on_background_variant"
-                        android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsFragment)}"
-                        android:onLongClickVoid="@{() -> fragment.navigateToOldSettings()}"
-                        app:clickUtil="@{clickUtil}">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/title_settings"
-                                android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/text_title"
-                                android:textColor="@color/on_surface"
-                                android:drawablePadding="8dp"
-                                android:gravity="center_vertical"
-                                app:drawableStartCompat="@drawable/ic_round_settings_anim" />
+                                android:text="I am a placeholder for some facts about your master data."/>
 
                         </LinearLayout>
 
