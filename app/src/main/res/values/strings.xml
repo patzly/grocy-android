@@ -135,7 +135,7 @@
     <string name="msg_logout_demo">You\'re using the grocy public demo server of <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
     <string name="msg_logout_demo_short">Public demo server. Click for details.</string>
     <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
-    <string name="msg_shortcuts">You can enable 4 shortcuts.</string>
+    <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
     <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
     <string name="msg_features">Start intro again in \"About this app\"</string>
     <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
