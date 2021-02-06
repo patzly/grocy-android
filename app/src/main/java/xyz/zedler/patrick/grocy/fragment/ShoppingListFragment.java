@@ -346,6 +346,10 @@ public class ShoppingListFragment extends BaseFragment implements
         MenuItem purchaseItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
         if(purchaseItems != null) {
             purchaseItems.setOnMenuItemClickListener(item -> {
+                if(true) {
+                    showMessage(getString(R.string.msg_not_implemented_yet));
+                    return true;
+                }
                 ArrayList<ShoppingListItem> shoppingListItemsSelected
                         = viewModel.getFilteredShoppingListItems();
                 if(shoppingListItemsSelected == null) {

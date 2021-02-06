@@ -474,10 +474,13 @@ public class ShoppingListViewModel extends BaseViewModel {
         dlHelper.post(
                 grocyApi.addMissingProducts(),
                 jsonObject,
-                response -> showMessage(getApplication().getString(
-                        R.string.msg_added_missing_products,
-                        shoppingList.getName()
-                )),
+                response -> {
+                    showMessage(getApplication().getString(
+                            R.string.msg_added_missing_products,
+                            shoppingList.getName()
+                    ));
+                    downloadData();
+                },
                 error -> {
                     showMessage(getString(R.string.error_undefined));
                     if(debug) Log.e(
