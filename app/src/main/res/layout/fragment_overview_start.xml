@@ -49,7 +49,7 @@
                 android:layout_gravity="center"
                 android:singleLine="true"
                 android:textAlignment="center"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/text_title"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </FrameLayout>
