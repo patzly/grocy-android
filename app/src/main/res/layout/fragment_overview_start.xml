@@ -128,6 +128,7 @@
                                 android:justificationMode="inter_word"
                                 android:breakStrategy="high_quality"
                                 android:hyphenationFrequency="full"
+                                android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@string/msg_help_start"
                                 tools:targetApi="o" />
@@ -147,6 +148,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
                                 android:textSize="14sp"
+                                android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@string/msg_logout_demo_short"/>
 
@@ -180,13 +182,13 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_stock_overview"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:textColor="@color/on_surface"
-                                android:fontFamily="@font/roboto_mono_bold" />
+                                android:fontFamily="@font/text_title" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/on_background"
+                                android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
 
@@ -212,15 +214,13 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_shopping_list"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/roboto_mono_bold"
-                                android:textColor="@color/on_surface"
-                                android:gravity="center_vertical" />
+                                android:fontFamily="@font/text_title" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/on_background"
+                                android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.shoppingListDescriptionTextLive}"/>
 
@@ -264,10 +264,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/title_consume"
-                                    android:fontFamily="@font/roboto_mono_bold"
-                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                    android:textColor="@color/on_surface"
-                                    android:gravity="center_vertical" />
+                                    android:fontFamily="@font/text_title"
+                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
                             </LinearLayout>
 
@@ -298,10 +296,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/title_purchase"
-                                    android:fontFamily="@font/roboto_mono_bold"
-                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                    android:textColor="@color/on_surface"
-                                    android:gravity="center_vertical" />
+                                    android:fontFamily="@font/text_title"
+                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
                             </LinearLayout>
 
@@ -334,15 +330,13 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_master_data"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/roboto_mono_bold"
-                                android:textColor="@color/on_surface"
-                                android:gravity="center_vertical" />
+                                android:fontFamily="@font/text_title" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_surface"
+                                android:textColor="@color/on_background"
+                                android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="You have 83 products registered in Grocy."/>
 
@@ -381,7 +375,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_settings"
                                 android:layout_gravity="center_vertical"
-                                android:fontFamily="@font/roboto_mono_bold"
+                                android:fontFamily="@font/text_title"
                                 android:textColor="@color/on_surface"
                                 android:drawablePadding="8dp"
                                 android:gravity="center_vertical"

@@ -53,7 +53,7 @@
 
             <TextView
                 android:id="@+id/text_onboarding_description_land"
-                style="@style/TextAppearance.Grocy.Body1"
+                style="@style/TextAppearance.Grocy.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

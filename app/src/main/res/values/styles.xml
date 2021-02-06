@@ -375,19 +375,6 @@
         <item name="android:minHeight">38dp</item>
     </style>
 
-    <style name="Widget.Grocy.Slider" parent="Widget.MaterialComponents.Slider">
-        <item name="trackColorActive">@color/secondary</item>
-        <item name="trackColorInactive">@color/stroke_primary</item>
-        <item name="thumbColor">@color/secondary</item>
-        <item name="haloColor">@color/highlight</item>
-        <item name="tickColorActive">@color/background</item>
-        <item name="labelStyle">@style/Widget.Grocy.Tooltip</item>
-    </style>
-
-    <style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
-        <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
-    </style>
-
     <style name="Widget.Grocy.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -406,113 +393,65 @@
 
     <!-- TEXT APPEARANCES -->
 
-    <style name="TextAppearance.Grocy.Body1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.Body" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/on_background</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:fontFamily">@font/roboto_mono_regular</item>
-        <item name="fontFamily">@font/roboto_mono_regular</item>
+        <item name="android:fontFamily">@font/text_body</item>
+        <item name="fontFamily">@font/text_body</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Paragraph" parent="TextAppearance.Grocy.Body">
+        <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
         <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
+        <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
     </style>
 
-    <style name="TextAppearance.Grocy.Body2" parent="TextAppearance.Grocy.Body1">
-        <item name="android:textSize">13sp</item>
-    </style>
-
-    <style name="TextAppearance.Grocy.Chip" parent="TextAppearance.Grocy.Body1">
-        <item name="android:textColor">@color/on_background</item>
+    <style name="TextAppearance.Grocy.Chip" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/roboto_mono_medium</item>
     </style>
 
-    <style name="TextAppearance.Grocy.Title" parent="TextAppearance.Grocy.Body1">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.Grocy.ListItem.Title">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/background</item>
-    </style>
-
-    <style name="TextAppearance.Grocy.Toolbar" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.Toolbar" parent="TextAppearance.Grocy.Body">
         <item name="android:textColor">@color/on_primary</item>
         <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
-        <item name="android:textAlignment">viewStart</item>
+        <item name="android:fontFamily">@font/text_title</item>
+        <item name="fontFamily">@font/text_title</item>
     </style>
 
-    <style name="TextAppearance.Grocy.Category" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.Category" parent="TextAppearance.Grocy.Body">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/retro_green_fg</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="TextAppearance.Grocy.Tab" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/on_primary</item>
-        <item name="fontFamily">@font/roboto_mono_medium</item>
-    </style>
-
-    <style
-        name="TextAppearance.Grocy.ListItem.OverLine"
-        parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.ListItem.OverLine" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_background_secondary</item>
-        <item name="android:textAlignment">viewStart</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style
-        name="TextAppearance.Grocy.ListItem.Title"
-        parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.ListItem.Title" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/on_background</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style
-        name="TextAppearance.Grocy.ListItem.Description"
-        parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Grocy.ListItem.Description" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/on_background_secondary</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style
-        name="TextAppearance.Grocy.BottomSheet.Title"
-        parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/on_background</item>
+    <style name="TextAppearance.Grocy.BottomSheet.Title" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">19sp</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style
-        name="TextAppearance.Grocy.BottomSheet.Text"
-        parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/on_background</item>
+    <style name="TextAppearance.Grocy.BottomSheet.Text" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">14sp</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style
-        name="TextAppearance.Grocy.BottomSheet.Text.Small"
-        parent="TextAppearance.Grocy.BottomSheet.Text">
-        <item name="android:textSize">13sp</item>
-    </style>
-
-    <style
-        name="TextAppearance.Grocy.BottomSheet.Item"
-        parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.Grocy.BottomSheet.Item" parent="TextAppearance.Grocy.Body">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_surface</item>
-    </style>
-
-    <style
-        name="TextAppearance.Grocy.BottomSheet.Item.Secondary"
-        parent="TextAppearance.Grocy.BottomSheet.Item">
-        <item name="android:textStyle">normal</item>
     </style>
 
 </resources>

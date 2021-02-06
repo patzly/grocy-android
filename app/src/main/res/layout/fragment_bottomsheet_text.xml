@@ -60,7 +60,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textAlignment="viewStart"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text.Small"/>
+            android:textSize="13sp"
+            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
 
     </androidx.core.widget.NestedScrollView>
 
