@@ -105,7 +105,7 @@ public class TextBottomSheet extends BaseBottomSheet {
 		}
 
 		if(file.equals("CHANGELOG.txt")) {
-			List<String> keyWords = Arrays.asList("New", "Improved", "Fixed");
+			List<String> keyWords = Arrays.asList("New:", "Improved:", "Fixed:");
 			String content = readFromFile(context, file);
 			if(content != null) {
 				((TextView) view.findViewById(R.id.text_text)).setText(
