@@ -333,7 +333,6 @@
     <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
     <string name="description_input_product_option2">Créer un produit et utiliser l\'entrée en tant que code barre</string>
     <string name="description_input_product_option3">Ajouter en tant que code barre à un produit existant</string>
-    <string name="description_clear_shopping_list">Voulez-vous supprimer tous les éléments ou seulement les éléments terminés?</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">

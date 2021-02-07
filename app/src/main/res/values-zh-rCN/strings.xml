@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">条目%2$d之%1$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">您要删除全部还是仅删除已完成的项目？</string>
 
     <string name="property_name">名称</string>
     <string name="property_name_singular">名称（单数形式）</string>

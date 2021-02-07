@@ -333,7 +333,6 @@
     <string name="description_input_product_option1">Neues Produkt erstellen und Eingabe als Namen eintragen</string>
     <string name="description_input_product_option2">Neues Produkt erstellen und Eingabe als Barcode hinzufügen</string>
     <string name="description_input_product_option3">Eingabe als Barcode zu existierendem Produkt hinzufügen</string>
-    <string name="description_clear_shopping_list">Möchten Sie alle oder nur erledigte Einträge löschen?</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">

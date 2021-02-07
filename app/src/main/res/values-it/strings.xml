@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">Voce %1$d di %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Vuoi cancellare tutte le voce o solo quelle già completate?</string>
 
     <string name="property_name">Nome</string>
     <string name="property_name_singular">Nome (forma singolare)</string>

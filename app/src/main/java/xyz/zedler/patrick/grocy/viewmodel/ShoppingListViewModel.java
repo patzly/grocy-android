@@ -579,10 +579,7 @@ public class ShoppingListViewModel extends BaseViewModel {
         );
     }
 
-    public void clearAllItems(
-            ShoppingList shoppingList,
-            Runnable onResponse
-    ) {
+    public void clearAllItems(ShoppingList shoppingList, Runnable onSuccess) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("list_id", shoppingList.getId());
@@ -593,7 +590,15 @@ public class ShoppingListViewModel extends BaseViewModel {
                 grocyApi.clearShoppingList(),
                 jsonObject,
                 response -> {
-                    if(onResponse != null) onResponse.run();
+                    if(onSuccess != null) {
+                        onSuccess.run();
+                        return;
+                    }
+                    showMessage(getApplication().getString(
+                            R.string.msg_shopping_list_cleared,
+                            shoppingList.getName()
+                    ));
+                    downloadData();
                 },
                 error -> {
                     showMessage(getString(R.string.error_undefined));
@@ -602,6 +607,7 @@ public class ShoppingListViewModel extends BaseViewModel {
                                     + shoppingList.getName()
                                     + ": " + error
                     );
+                    downloadData();
                 }
         );
     }
@@ -609,12 +615,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     public void clearDoneItems(ShoppingList shoppingList) {
         DownloadHelper.Queue queue = dlHelper.newQueue(
                 () -> {
-                    showMessage(
-                            getApplication().getString(
-                                    R.string.msg_shopping_list_cleared,
-                                    shoppingList.getName()
-                            )
-                    );
+                    showMessage(getApplication().getString(
+                            R.string.msg_shopping_list_cleared,
+                            shoppingList.getName()
+                    ));
                     downloadData();
                 }, volleyError -> {
                     showMessage(getString(R.string.error_undefined));

@@ -333,7 +333,6 @@
     <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
     <string name="description_input_product_option2">Створіть новий продукт і використовуйте введення як штрих-код</string>
     <string name="description_input_product_option3">Пов’язати штрих-код із продуктом</string>
-    <string name="description_clear_shopping_list">Видалити всі або лише виконані елементи?</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">

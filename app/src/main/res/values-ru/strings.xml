@@ -220,7 +220,6 @@
     <string name="subtitle_entry_num_of_num">Запись %1$d из %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Вы хотите удалить все или только выполненные элементы?</string>
 
     <string name="property_name">Название</string>
     <string name="property_name_singular">Название</string>

@@ -402,12 +402,13 @@ public class ShoppingListFragment extends BaseFragment implements
         }
     }
 
-    public void clearAllItems(ShoppingList shoppingList, Runnable onResponse) {
-        viewModel.clearAllItems(shoppingList, onResponse);
-    }
-
-    public void clearDoneItems(ShoppingList shoppingList) {
-        viewModel.clearDoneItems(shoppingList);
+    @Override
+    public void clearShoppingList(ShoppingList shoppingList, boolean onlyDoneItems) {
+        if(onlyDoneItems) {
+            viewModel.clearDoneItems(shoppingList);
+        } else {
+            viewModel.clearAllItems(shoppingList, null);
+        }
     }
 
     @Override

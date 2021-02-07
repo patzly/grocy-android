@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">Entrada %1$d de %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Você quer apagar todos os itens ou só os feitos?</string>
 
     <string name="property_name">Nome</string>
     <string name="property_name_singular">Nome (no singular)</string>

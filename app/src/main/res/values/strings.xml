@@ -339,7 +339,10 @@
     <string name="description_input_product_option1">Create new product and use input as name</string>
     <string name="description_input_product_option2">Create new product and use input as barcode</string>
     <string name="description_input_product_option3">Add as barcode to existing product</string>
-    <string name="description_clear_shopping_list">Do you want to delete all or only done items?</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Delete only done items</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Delete all items</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">

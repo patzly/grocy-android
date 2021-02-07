@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">רשומה %1$d מתוך %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">למחוק את הכול או רק את הפריטים שבוצעו?</string>
 
     <string name="property_name">שם</string>
     <string name="property_name_singular">שם (צורת יחיד)</string>

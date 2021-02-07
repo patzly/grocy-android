@@ -215,7 +215,6 @@
     <string name="subtitle_entry_num_of_num">Item %1$d van %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Wil je alle items verwijderen of alleen die klaar zijn?</string>
 
     <string name="property_name">Naam</string>
     <string name="property_name_singular">Naam (Enkelvoud)</string>

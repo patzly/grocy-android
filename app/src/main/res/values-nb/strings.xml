@@ -217,7 +217,6 @@
     <string name="subtitle_entry_num_of_num">Oppføring %1$d av %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Vil du slette alle eller bare ferdige elementer?</string>
 
     <string name="property_name">Navn</string>
     <string name="property_name_singular">Navn (entall)</string>

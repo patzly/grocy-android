@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">Registro %1$d de %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Quieres eliminar todos los artículos o sólo los marcados como \"Hecho\"?</string>
 
     <string name="property_name">Nombre</string>
     <string name="property_name_singular">Nombre (en singular)</string>

@@ -26,14 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListClearBinding;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -42,6 +42,10 @@ public class ShoppingListClearBottomSheet extends BaseBottomSheet {
     private final static String TAG = ShoppingListClearBottomSheet.class.getSimpleName();
 
     private MainActivity activity;
+    private FragmentBottomsheetShoppingListClearBinding binding;
+
+    private ShoppingList shoppingList;
+    private MutableLiveData<Integer> selectionLive;
 
     @NonNull
     @Override
@@ -55,52 +59,41 @@ public class ShoppingListClearBottomSheet extends BaseBottomSheet {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_shopping_list_clear, container, false
+        binding = FragmentBottomsheetShoppingListClearBinding.inflate(
+                inflater, container, false
         );
-
-        activity = (MainActivity) getActivity();
-        assert activity != null;
-
-        Fragment currentFragment = activity.getCurrentFragment();
-        if(currentFragment.getClass() != ShoppingListFragment.class) {
-            dismiss();
-            showMessage(activity.getString(R.string.error_undefined));
-            return view;
-        }
-        ShoppingListFragment fragment = (ShoppingListFragment) activity.getCurrentFragment();
-        assert getArguments() != null;
-        ShoppingList shoppingList = getArguments().getParcelable(Constants.ARGUMENT.SHOPPING_LIST);
-        assert shoppingList != null;
-
-        view.findViewById(R.id.button_clear_shopping_list_all).setOnClickListener(v -> {
-            dismiss();
-            fragment.clearAllItems(
-                    shoppingList,
-                    () -> showMessage(
-                            activity.getString(
-                                    R.string.msg_shopping_list_cleared,
-                                    shoppingList.getName()
-                            )
-                    ));
-        });
-
-        view.findViewById(R.id.button_clear_shopping_list_done).setOnClickListener(v -> {
-            dismiss();
-            fragment.clearDoneItems(shoppingList);
-        });
-
-        view.findViewById(R.id.button_clear_shopping_list_cancel).setOnClickListener(
-                v -> dismiss()
-        );
-
-        return view;
+        return binding.getRoot();
     }
 
-    private void showMessage(String msg) {
-        activity.showSnackbar(
-                Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setSkipCollapsedInPortrait();
+        super.onViewCreated(view, savedInstanceState);
+
+        activity = (MainActivity) requireActivity();
+        binding.setBottomsheet(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+
+        shoppingList = requireArguments().getParcelable(Constants.ARGUMENT.SHOPPING_LIST);
+
+        selectionLive = new MutableLiveData<>(1);
+    }
+
+    public void proceed() {
+        assert selectionLive.getValue() != null;
+        activity.getCurrentFragment().clearShoppingList(
+                shoppingList,
+                selectionLive.getValue() == 1
         );
+        dismiss();
+    }
+
+    public MutableLiveData<Integer> getSelectionLive() {
+        return selectionLive;
+    }
+
+    public void setSelectionLive(int selection) {
+        selectionLive.setValue(selection);
     }
 
     @NonNull

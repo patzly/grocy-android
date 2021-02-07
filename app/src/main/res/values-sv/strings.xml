@@ -217,7 +217,6 @@
     <string name="subtitle_entry_num_of_num">Objekt %1$d av %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Vill du radera alla objekt eller bara de som är markerade som klara?</string>
 
     <string name="property_name">Namn</string>
     <string name="property_name_singular">Namn (singularform)</string>

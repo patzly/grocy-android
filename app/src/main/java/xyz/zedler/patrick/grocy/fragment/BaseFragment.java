@@ -95,6 +95,8 @@ public class BaseFragment extends Fragment {
 
     public void deleteShoppingList(ShoppingList shoppingList) {}
 
+    public void clearShoppingList(ShoppingList shoppingList, boolean onlyDoneItems) {}
+
     @Nullable
     public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
         return null;

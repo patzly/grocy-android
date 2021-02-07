@@ -218,7 +218,6 @@
     <string name="subtitle_entry_num_of_num">Wpis %1$d z %2$d</string>
 
     <!-- %1$s is a product name -->
-    <string name="description_clear_shopping_list">Chcesz usunąć wszystkie, czy tylko wykonane pozycje?</string>
 
     <string name="property_name">Nazwa</string>
     <string name="property_name_singular">Nazwa (liczba pojedyncza)</string>
