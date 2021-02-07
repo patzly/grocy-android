@@ -28,7 +28,6 @@ import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import xyz.zedler.patrick.grocy.R;
@@ -84,14 +83,8 @@ public class OverviewStartFragment extends BaseFragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-            binding.swipe.setRefreshing(state);
             if(!state) viewModel.setCurrentQueueLoading(null);
         });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-        binding.swipe.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
