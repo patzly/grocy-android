@@ -52,6 +52,16 @@
                 android:fontFamily="@font/text_title"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
+            <xyz.zedler.patrick.grocy.view.ActionButton
+                android:id="@+id/button_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_round_info_outline_anim"
+                app:tint="@color/icon"
+                app:dense="true"/>
+
         </FrameLayout>
 
         <LinearLayout
