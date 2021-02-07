@@ -160,7 +160,10 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
             barcodeScannerView.setTorchOff();
             CameraSettings cameraSettings = new CameraSettings();
             cameraSettings.setRequestedCameraId(
-                    sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
+                    sharedPrefs.getBoolean(
+                            Constants.SETTINGS.SCANNER.FRONT_CAM,
+                            Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+                    ) ? 1 : 0
             );
             barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
 

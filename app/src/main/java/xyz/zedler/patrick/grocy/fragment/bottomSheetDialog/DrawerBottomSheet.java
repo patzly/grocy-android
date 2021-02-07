@@ -36,7 +36,6 @@ import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -100,6 +99,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
 
         binding.linearDrawerSettings.setOnLongClickListener(v -> {
             activity.getCurrentFragment().navigate(R.id.settingsActivity);
+            dismiss();
             return true;
         });
 
@@ -155,12 +155,9 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
             dismiss();
         } else if (v.getId() == R.id.linear_drawer_help) {
             if (!NetUtil.openURL(activity, Constants.URL.HELP)) {
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        R.string.error_no_browser,
-                        Snackbar.LENGTH_LONG
-                ).show();
+                activity.showMessage(R.string.error_no_browser);
             }
+            dismiss();
         }
     }
 
