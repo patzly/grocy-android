@@ -61,7 +61,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     private final static String TAG = ConsumeFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private PurchaseFragmentArgs args;
+    private ConsumeFragmentArgs args;
     private FragmentConsumeBinding binding;
     private ConsumeViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
@@ -92,9 +92,11 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
 
-        args = PurchaseFragmentArgs.fromBundle(requireArguments());
+        args = ConsumeFragmentArgs.fromBundle(requireArguments());
 
-        viewModel = new ViewModelProvider(this).get(ConsumeViewModel.class);
+        viewModel = new ViewModelProvider(this, new ConsumeViewModel
+                .ConsumeViewModelFactory(activity.getApplication(), args)
+        ).get(ConsumeViewModel.class);
         binding.setActivity(activity);
         binding.setViewModel(viewModel);
         binding.setFragment(this);

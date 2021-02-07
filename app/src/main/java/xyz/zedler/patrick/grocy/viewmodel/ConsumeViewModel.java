@@ -27,6 +27,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
@@ -39,6 +41,7 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
@@ -82,7 +85,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
     private Runnable queueEmptyAction;
 
-    public ConsumeViewModel(@NonNull Application application) {
+    public ConsumeViewModel(@NonNull Application application, ConsumeFragmentArgs args) {
         super(application);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -92,13 +95,14 @@ public class ConsumeViewModel extends BaseViewModel {
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
         repository = new ConsumeRepository(application);
-        formData = new FormDataConsume(application, sharedPrefs);
+        formData = new FormDataConsume(application, sharedPrefs, args);
 
         infoFullscreenLive = new MutableLiveData<>();
         scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME,
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_CONSUME
         ));
+        if(args.getStartWithScanner()) scanModeEnabled.setValue(true);
 
         barcodes = new ArrayList<>();
     }
@@ -561,5 +565,22 @@ public class ConsumeViewModel extends BaseViewModel {
     protected void onCleared() {
         dlHelper.destroy();
         super.onCleared();
+    }
+
+    public static class ConsumeViewModelFactory implements ViewModelProvider.Factory {
+        private final Application application;
+        private final ConsumeFragmentArgs args;
+
+        public ConsumeViewModelFactory(Application application, ConsumeFragmentArgs args) {
+            this.application = application;
+            this.args = args;
+        }
+
+        @NonNull
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new ConsumeViewModel(application, args);
+        }
     }
 }

@@ -374,18 +374,10 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         activity.getScrollBehavior().setUpScroll(R.id.scroll_stock);
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
-                Constants.FAB.POSITION.CENTER,
+                Constants.FAB.POSITION.GONE,
                 R.menu.menu_stock,
                 animated,
                 this::setUpBottomMenu
-        );
-        activity.updateFab(
-                R.drawable.ic_round_barcode_scan,
-                R.string.action_scan,
-                Constants.FAB.TAG.SCAN,
-                animated,
-                () -> {
-                }
         );
     }
 

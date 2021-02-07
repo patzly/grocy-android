@@ -52,6 +52,10 @@
         <deepLink
             android:id="@+id/deepLink5"
             app:uri="@string/deep_link_purchaseFragment" />
+        <argument
+            android:name="startWithScanner"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <activity
         android:id="@+id/settingsActivity"
@@ -690,6 +694,10 @@
         <deepLink
             android:id="@+id/deepLink4"
             app:uri="@string/deep_link_consumeFragment" />
+        <argument
+            android:name="startWithScanner"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/stockOverviewFragment"

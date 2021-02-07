@@ -135,8 +135,15 @@ public class OverviewStartFragment extends BaseFragment {
                 R.string.action_scan,
                 Constants.FAB.TAG.SCAN,
                 animated,
-                () -> navigate(R.id.consumeFragment),
-                () -> navigate(R.id.purchaseFragment)
+                () -> navigate(
+                        R.id.consumeFragment,
+                        new ConsumeFragmentArgs.Builder()
+                                .setStartWithScanner(true).build().toBundle()
+                ), () -> navigate(
+                        R.id.purchaseFragment,
+                        new PurchaseFragmentArgs.Builder()
+                                .setStartWithScanner(true).build().toBundle()
+                )
         );
     }
 

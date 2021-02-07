@@ -94,7 +94,9 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
         args = PurchaseFragmentArgs.fromBundle(requireArguments());
 
-        viewModel = new ViewModelProvider(this).get(PurchaseViewModel.class);
+        viewModel = new ViewModelProvider(this, new PurchaseViewModel
+                .PurchaseViewModelFactory(activity.getApplication(), args)
+        ).get(PurchaseViewModel.class);
         binding.setActivity(activity);
         binding.setViewModel(viewModel);
         binding.setFragment(this);

@@ -27,6 +27,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
@@ -39,6 +41,7 @@ import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
@@ -86,7 +89,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
     private Runnable queueEmptyAction;
 
-    public PurchaseViewModel(@NonNull Application application) {
+    public PurchaseViewModel(@NonNull Application application, PurchaseFragmentArgs args) {
         super(application);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -96,13 +99,14 @@ public class PurchaseViewModel extends BaseViewModel {
         dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
         grocyApi = new GrocyApi(getApplication());
         repository = new PurchaseRepository(application);
-        formData = new FormDataPurchase(application, sharedPrefs);
+        formData = new FormDataPurchase(application, sharedPrefs, args);
 
         infoFullscreenLive = new MutableLiveData<>();
         scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
                 Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
         ));
+        if(args.getStartWithScanner()) scanModeEnabled.setValue(true);
 
         barcodes = new ArrayList<>();
     }
@@ -608,5 +612,22 @@ public class PurchaseViewModel extends BaseViewModel {
     protected void onCleared() {
         dlHelper.destroy();
         super.onCleared();
+    }
+
+    public static class PurchaseViewModelFactory implements ViewModelProvider.Factory {
+        private final Application application;
+        private final PurchaseFragmentArgs args;
+
+        public PurchaseViewModelFactory(Application application, PurchaseFragmentArgs args) {
+            this.application = application;
+            this.args = args;
+        }
+
+        @NonNull
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new PurchaseViewModel(application, args);
+        }
     }
 }

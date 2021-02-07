@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -78,7 +79,11 @@ public class FormDataConsume {
     private final LiveData<String> recipeNameLive;*/
     private boolean torchOn = false;
 
-    public FormDataConsume(Application application, SharedPreferences sharedPrefs) {
+    public FormDataConsume(
+            Application application,
+            SharedPreferences sharedPrefs,
+            ConsumeFragmentArgs args
+    ) {
         this.application = application;
         this.sharedPrefs = sharedPrefs;
         displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
@@ -86,6 +91,9 @@ public class FormDataConsume {
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
         ));
         scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
+        if(args.getStartWithScanner() && !getExternalScannerEnabled()) {
+            scannerVisibilityLive.setValue(true);
+        }
         productsLive = new MutableLiveData<>(new ArrayList<>());
         productDetailsLive = new MutableLiveData<>();
         isTareWeightEnabledLive = Transformations.map(
@@ -568,6 +576,13 @@ public class FormDataConsume {
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    public boolean getExternalScannerEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+        );
     }
 
     public boolean isRecipesFeatureEnabled() {

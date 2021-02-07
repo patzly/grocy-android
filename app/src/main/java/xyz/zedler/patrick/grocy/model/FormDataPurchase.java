@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -88,7 +90,11 @@ public class FormDataPurchase {
     private final LiveData<String> locationNameLive;
     private boolean torchOn = false;
 
-    public FormDataPurchase(Application application, SharedPreferences sharedPrefs) {
+    public FormDataPurchase(
+            Application application,
+            SharedPreferences sharedPrefs,
+            PurchaseFragmentArgs args
+    ) {
         DateUtil dateUtil = new DateUtil(application);
         this.application = application;
         this.sharedPrefs = sharedPrefs;
@@ -98,6 +104,9 @@ public class FormDataPurchase {
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
         ));
         scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
+        if(args.getStartWithScanner() && !getExternalScannerEnabled()) {
+            scannerVisibilityLive.setValue(true);
+        }
         productsLive = new MutableLiveData<>(new ArrayList<>());
         productDetailsLive = new MutableLiveData<>();
         isTareWeightEnabledLive = Transformations.map(
@@ -737,6 +746,13 @@ public class FormDataPurchase {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
                 Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
+        );
+    }
+
+    public boolean getExternalScannerEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
         );
     }
 
