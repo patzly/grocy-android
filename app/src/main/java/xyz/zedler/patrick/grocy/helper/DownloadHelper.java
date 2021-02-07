@@ -1383,7 +1383,7 @@ public class DownloadHelper {
                     }
                 },
                 error -> onErrorListener.onError(),
-                sharedPrefs.getBoolean(
+                !sharedPrefs.getBoolean(
                         Constants.SETTINGS.NETWORK.LOADING_CIRCLE,
                         Constants.SETTINGS_DEFAULT.NETWORK.LOADING_CIRCLE
                 )
