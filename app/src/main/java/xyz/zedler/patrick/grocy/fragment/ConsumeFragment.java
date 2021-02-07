@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,7 +32,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -63,7 +61,6 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     private final static String TAG = ConsumeFragment.class.getSimpleName();
 
     private MainActivity activity;
-    private SharedPreferences sharedPrefs;
     private PurchaseFragmentArgs args;
     private FragmentConsumeBinding binding;
     private ConsumeViewModel viewModel;
@@ -103,8 +100,6 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
         binding.setFragment(this);
         binding.setFormData(viewModel.getFormData());
         binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
         infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -186,9 +181,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
             }
         });
         CameraSettings cameraSettings = new CameraSettings();
-        cameraSettings.setRequestedCameraId(
-                sharedPrefs.getBoolean(Constants.PREF.USE_FRONT_CAM, false) ? 1 : 0
-        );
+        cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
         binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
         capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
 
@@ -346,7 +339,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
             clearInputFocus();
             return;
         }
-        View nextView = null;
+        EditText nextView = null;
         if(!viewModel.getFormData().isProductNameValid()) {
             nextView = binding.autoCompleteConsumeProduct;
         } else if(!viewModel.getFormData().isAmountValid()) {
@@ -358,9 +351,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
             return;
         }
         nextView.requestFocus();
-        if(nextView instanceof EditText) {
-            activity.showKeyboard((EditText) nextView);
-        }
+        activity.showKeyboard(nextView);
     }
 
     @Override

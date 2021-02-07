@@ -82,7 +82,6 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
     public final static int PAGE_SERVER_FORM = 2;
 
     final static String TAG = LoginFragment.class.getSimpleName();
-    private final static boolean DEBUG = false;
 
     private FragmentLoginPage0Binding bindingPage0;
     private FragmentLoginPage1Binding bindingPage1;
@@ -93,6 +92,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
     private DownloadHelper dlHelper;
     private ScanInputCaptureManager capture;
     private final ClickUtil clickUtil = new ClickUtil();
+    private boolean debug;
 
     @Override
     public View onCreateView(
@@ -127,6 +127,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
         activity = (MainActivity) requireActivity();
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
         credentials = activity.getSharedPreferences(
                 Constants.PREF.CREDENTIALS,
                 Context.MODE_PRIVATE
@@ -363,7 +364,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
         dlHelper.get(
                 server + "/api/system/info?GROCY-API-KEY=" + key,
                 response -> {
-                    Log.i(TAG, "requestLogin: " + response);
+                    if(debug) Log.i(TAG, "requestLogin: " + response);
                     if(!response.contains("grocy_version")) {
                         if(getPageType() == 2) {
                             bindingPage2.textInputLoginServer.setError(
@@ -409,7 +410,7 @@ public class LoginFragment extends BaseFragment implements ScanInputCaptureManag
                         Log.e(TAG, "requestLogin: " + e);
                     }
 
-                    if(DEBUG) Log.i(TAG, "requestLogin: successfully logged in");
+                    if(debug) Log.i(TAG, "requestLogin: successfully logged in");
                     sharedPrefs.edit()
                             .putString(Constants.PREF.SERVER_URL, server)
                             .putString(Constants.PREF.API_KEY, key)
