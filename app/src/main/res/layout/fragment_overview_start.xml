@@ -355,7 +355,7 @@
                                 android:textColor="@color/on_background"
                                 android:fontFamily="@font/text_body"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                                android:text="I am a placeholder for some facts about your master data."/>
+                                android:text="@{viewModel.masterDataDescriptionTextLive}"/>
 
                         </LinearLayout>
 

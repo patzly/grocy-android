@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
@@ -57,8 +58,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     private final MutableLiveData<ArrayList<StockItem>> stockItemsLive;
     private final MutableLiveData<ArrayList<ShoppingListItem>> shoppingListItemsLive;
+    private final MutableLiveData<ArrayList<Product>> productsLive;
     private final LiveData<String> stockDescriptionTextLive;
     private final LiveData<String> shoppingListDescriptionTextLive;
+    private final LiveData<String> masterDataDescriptionTextLive;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -77,6 +80,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         offlineLive = new MutableLiveData<>(false);
         stockItemsLive = new MutableLiveData<>();
         shoppingListItemsLive = new MutableLiveData<>();
+        productsLive = new MutableLiveData<>();
 
         stockDescriptionTextLive = Transformations.map(
                 stockItemsLive,
@@ -118,13 +122,24 @@ public class OverviewStartViewModel extends BaseViewModel {
                     }
                 }
         );
+        masterDataDescriptionTextLive = Transformations.map(
+                productsLive,
+                products -> {
+                    if(products == null) return null;
+                    int size = products.size();
+                    return application.getResources().getQuantityString(
+                            R.plurals.description_overview_master_data, size, size
+                    );
+                }
+        );
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (stockItems, shoppingListItems) -> {
+                (stockItems, shoppingListItems, products) -> {
                     this.stockItemsLive.setValue(stockItems);
                     this.shoppingListItemsLive.setValue(shoppingListItems);
+                    this.productsLive.setValue(products);
                     if(downloadAfterLoading) downloadData();
                 }
         );
@@ -140,17 +155,15 @@ public class OverviewStartViewModel extends BaseViewModel {
             return;
         }
         if(dbChangedTime == null) {
-            dlHelper.getTimeDbChanged(
-                    (DownloadHelper.OnStringResponseListener) this::downloadData,
-                    () -> onDownloadError(null)
-            );
+            dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
             return;
         }
 
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
         queue.append(
                 dlHelper.updateStockItems(dbChangedTime, this.stockItemsLive::setValue),
-                dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue)
+                dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue),
+                dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue)
         );
         if(queue.isEmpty()) return;
 
@@ -175,6 +188,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         repository.updateDatabase(
                 this.stockItemsLive.getValue(),
                 this.shoppingListItemsLive.getValue(),
+                this.productsLive.getValue(),
                 () -> {}
         );
     }
@@ -219,6 +233,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     public LiveData<String> getShoppingListDescriptionTextLive() {
         return shoppingListDescriptionTextLive;
+    }
+
+    public LiveData<String> getMasterDataDescriptionTextLive() {
+        return masterDataDescriptionTextLive;
     }
 
     public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {

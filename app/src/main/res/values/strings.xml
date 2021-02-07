@@ -364,6 +364,11 @@
         <item quantity="one">One item is on your shopping list.</item>
         <item quantity="other">%1$d items are on your shopping list.</item>
     </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Your database contains one product.</item>
+        <item quantity="other">Your database contains %1$d products.</item>
+    </plurals>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (singular form)</string>
