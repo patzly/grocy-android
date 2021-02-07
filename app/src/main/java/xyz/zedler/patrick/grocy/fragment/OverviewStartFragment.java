@@ -158,10 +158,6 @@ public class OverviewStartFragment extends BaseFragment {
         }
     }
 
-    public void navigateToOldSettings() {
-        navigate(R.id.settingsActivity);
-    }
-
     @Override
     public void updateConnectivity(boolean online) {
         if(!online == viewModel.isOffline()) return;
