@@ -358,6 +358,11 @@
         <item quantity="one">Ein Eintrag ist auf Ihrer Einkaufsliste.</item>
         <item quantity="other">%1$d Einträge sind auf Ihrer Einkaufsliste.</item>
     </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Ihre Datenbank enthält ein Produkt.</item>
+        <item quantity="other">Ihre Datenbank enthält %1$d Produkte.</item>
+    </plurals>
 
     <string name="property_name">Name</string>
     <string name="property_name_singular">Name (Singular)</string>
