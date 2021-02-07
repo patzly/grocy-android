@@ -207,6 +207,8 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 () -> {
                     if(viewModel.isScanModeEnabled()) {
                         focusNextInvalidView();
+                    } else if(!viewModel.getFormData().isProductNameValid()) {
+                        clearFocusAndCheckProductInput();
                     } else {
                         viewModel.consumeProduct(false);
                     }

@@ -204,6 +204,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 () -> {
                     if(viewModel.isScanModeEnabled()) {
                         focusNextInvalidView();
+                    } else if(!viewModel.getFormData().isProductNameValid()) {
+                        clearFocusAndCheckProductInput();
                     } else {
                         viewModel.purchaseProduct();
                     }
