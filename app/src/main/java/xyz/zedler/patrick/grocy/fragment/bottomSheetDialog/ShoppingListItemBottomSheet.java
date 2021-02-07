@@ -100,7 +100,8 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_purchase) {
-				((ShoppingListFragment) fragmentCurrent).purchaseItem(shoppingListItem);
+				activity.showMessage(R.string.msg_not_implemented_yet);
+				//((ShoppingListFragment) fragmentCurrent).purchaseItem(shoppingListItem);
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_edit) {
