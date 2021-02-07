@@ -141,6 +141,13 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                     R.string.license_material_components,
                     R.string.url_material_components
             );
+        } else if(v.getId() == R.id.linear_license_material_icons) {
+            IconUtil.start(activity, R.id.image_license_material_icons);
+            showTextBottomSheet(
+                    "APACHE",
+                    R.string.license_material_icons,
+                    R.string.url_material_icons
+            );
         } else if(v.getId() == R.id.linear_license_roboto) {
             IconUtil.start(activity, R.id.image_license_roboto);
             showTextBottomSheet(

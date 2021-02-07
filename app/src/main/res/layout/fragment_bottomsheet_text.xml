@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -60,8 +61,12 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textAlignment="viewStart"
-            android:textSize="13sp"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+            android:justificationMode="inter_word"
+            android:breakStrategy="high_quality"
+            android:hyphenationFrequency="full"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"
+            tools:targetApi="o" />
 
     </androidx.core.widget.NestedScrollView>
 

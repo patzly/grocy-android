@@ -53,8 +53,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:layout_marginEnd="16dp"
-                android:textAlignment="viewStart"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/text_title"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>
@@ -105,7 +104,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="16dp"
+                    android:paddingTop="8dp"
                     android:paddingBottom="80dp"
                     android:orientation="vertical">
 

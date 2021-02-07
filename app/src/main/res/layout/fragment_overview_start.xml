@@ -182,6 +182,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_stock_overview"
+                                android:textSize="17sp"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:fontFamily="@font/text_title" />
 
@@ -214,6 +215,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_shopping_list"
+                                android:textSize="17sp"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:fontFamily="@font/text_title" />
 
@@ -265,6 +267,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/title_consume"
+                                    android:textSize="17sp"
                                     android:fontFamily="@font/text_title"
                                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
@@ -297,6 +300,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/title_purchase"
+                                    android:textSize="17sp"
                                     android:fontFamily="@font/text_title"
                                     android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
 
@@ -330,6 +334,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/title_master_data"
+                                android:textSize="17sp"
                                 android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
                                 android:fontFamily="@font/text_title" />
 

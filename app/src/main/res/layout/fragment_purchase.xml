@@ -153,10 +153,12 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/on_background"
-                            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                            android:fontFamily="@font/roboto_mono_regular"
-                            android:text="@string/msg_help_scan_mode"/>
+                            android:textAppearance="@style/TextAppearance.Grocy.Beginner"
+                            android:justificationMode="inter_word"
+                            android:breakStrategy="high_quality"
+                            android:hyphenationFrequency="full"
+                            android:text="@string/msg_help_scan_mode"
+                            tools:targetApi="o" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -225,10 +227,12 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/on_background"
-                            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                            android:fontFamily="@font/roboto_mono_regular"
-                            android:text="@string/msg_help_external_scanner_ready"/>
+                            android:textAppearance="@style/TextAppearance.Grocy.Beginner"
+                            android:justificationMode="inter_word"
+                            android:breakStrategy="high_quality"
+                            android:hyphenationFrequency="full"
+                            android:text="@string/msg_help_external_scanner_ready"
+                            tools:targetApi="o" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -309,10 +313,12 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/on_background"
-                            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                            android:fontFamily="@font/roboto_mono_regular"
-                            android:text="@string/msg_help_tare_weight_purchase"/>
+                            android:textAppearance="@style/TextAppearance.Grocy.Beginner"
+                            android:justificationMode="inter_word"
+                            android:breakStrategy="high_quality"
+                            android:hyphenationFrequency="full"
+                            android:text="@string/msg_help_tare_weight_purchase"
+                            tools:targetApi="o" />
 
                     </com.google.android.material.card.MaterialCardView>
 

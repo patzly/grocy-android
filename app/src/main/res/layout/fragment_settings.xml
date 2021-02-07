@@ -60,7 +60,7 @@
                 android:layout_marginEnd="16dp"
                 android:singleLine="true"
                 android:text="@string/title_settings"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/text_title"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>
@@ -79,7 +79,7 @@
             android:id="@+id/linear_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:paddingBottom="80dp"
             android:orientation="vertical">
 

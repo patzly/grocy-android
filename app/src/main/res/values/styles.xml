@@ -407,6 +407,10 @@
         <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
     </style>
 
+    <style name="TextAppearance.Grocy.Beginner" parent="TextAppearance.Grocy.Paragraph">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="TextAppearance.Grocy.Chip" parent="TextAppearance.Grocy.Body">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/roboto_mono_medium</item>
@@ -417,6 +421,7 @@
         <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
         <item name="android:fontFamily">@font/text_title</item>
         <item name="fontFamily">@font/text_title</item>
+        <item name="singleLine">true</item>
     </style>
 
     <style name="TextAppearance.Grocy.Category" parent="TextAppearance.Grocy.Body">

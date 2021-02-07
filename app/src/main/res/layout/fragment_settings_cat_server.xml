@@ -66,7 +66,7 @@
                 android:layout_marginEnd="16dp"
                 android:singleLine="true"
                 android:text="@string/category_server"
-                android:fontFamily="@font/roboto_mono_bold"
+                android:fontFamily="@font/text_title"
                 android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
 
         </LinearLayout>
@@ -90,17 +90,12 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.Card.Filled"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/retro_red_fg"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:contentPadding="16dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/background"
-                app:strokeColor="@color/retro_red_fg"
-                app:strokeWidth="3dp"
                 android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
                 <TextView
@@ -141,7 +136,7 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                style="@style/Theme.Grocy.ListItem.TwoLine.Icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> viewModel.showCompatibilityBottomSheet()}"
