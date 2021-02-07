@@ -29,7 +29,7 @@
     <string name="action_new">Neu</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Vorheriges</string>
-    <string name="action_feedback">Feedback geben</string>
+    <string name="action_feedback">Feedback senden</string>
     <string name="action_reset">Zurücksetzen</string>
     <string name="action_reload">Neu laden</string>
     <string name="action_top_scroll">Nach oben scrollen</string>
@@ -129,9 +129,9 @@
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
     <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
     <string name="msg_logout_demo">Sie verwenden die Demo-Instanz auf <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (ein Mal am Tag).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
-    <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details klicken.</string>
+    <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details tippen.</string>
     <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration des Servers anzuwenden.</string>
-    <string name="msg_shortcuts">Sie können 4 Verknüpfungen aktivieren.</string>
+    <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
     <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
     <string name="msg_features">Intro erneut starten in \"Über diese App\"</string>
     <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
@@ -172,7 +172,7 @@
     <string name="msg_help_recipe_consume">Dies wird nur für Auswertezwecke benötigt.</string>
     <string name="msg_help_scan_mode">Sie können auf die Titelzeile oben lange klicken, um den Scan-Modus zu aktivieren oder auf diese Karte klicken, um dessen Default-Verhalten zu ändern.</string>
     <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
-    <string name="msg_help_start">Beginner-Modus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn sie verfügbar sind. Sie können dieses Verhalten ändern, indem Sie auf diese Karte klicken.</string>
+    <string name="msg_help_start">Beginner-Modus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn sie verfügbar sind. Tippen, um das Verhalten zu ändern.</string>
     <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
 
     <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
@@ -329,10 +329,14 @@
     <string name="subtitle_not_supported">Nicht unterstützt</string>
 
     <string name="description_input_product_part1">Produkt-Feld enthält:</string>
-    <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten.</string>
+    <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
     <string name="description_input_product_option1">Neues Produkt erstellen und Eingabe als Namen eintragen</string>
     <string name="description_input_product_option2">Neues Produkt erstellen und Eingabe als Barcode hinzufügen</string>
     <string name="description_input_product_option3">Eingabe als Barcode zu existierendem Produkt hinzufügen</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Nur erledigte Einträge entfernen</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Alle Einträge entfernen</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
