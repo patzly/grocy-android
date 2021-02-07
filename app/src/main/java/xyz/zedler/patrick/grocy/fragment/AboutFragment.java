@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,30 +109,21 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
         if(v.getId() == R.id.linear_intro) {
             IconUtil.start(activity, R.id.image_intro);
-            new Handler().postDelayed(
-                    () -> navigate(R.id.onboardingFragment),
-                    150
-            );
+            navigate(R.id.onboardingFragment);
         } else if(v.getId() == R.id.linear_changelog) {
             IconUtil.start(activity, R.id.image_changelog);
             showTextBottomSheet("CHANGELOG", R.string.info_changelog, 0);
         } else if(v.getId() == R.id.linear_developers) {
             IconUtil.start(activity, R.id.image_developers);
-            new Handler().postDelayed(
-                    () -> startActivity(
-                            new Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(getString(R.string.url_developer))
-                            )
-                    ), 300
-            );
+            startActivity(new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(getString(R.string.url_developer))
+            ));
         } else if(v.getId() == R.id.linear_github) {
-            startActivity(
-                    new Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(getString(R.string.url_github))
-                    )
-            );
+            startActivity(new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(getString(R.string.url_github))
+            ));
         } else if(v.getId() == R.id.linear_license_material_components) {
             IconUtil.start(activity, R.id.image_license_material_components);
             showTextBottomSheet(
