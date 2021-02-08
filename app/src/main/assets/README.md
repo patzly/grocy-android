@@ -3,6 +3,7 @@
 ## Alpha testing text
 
 **Changelog**
+- Remove annoying update info
 - Updated translations
 
 ## Improvements
