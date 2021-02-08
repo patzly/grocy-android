@@ -33,17 +33,20 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
+import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
@@ -75,6 +78,7 @@ public class ShoppingListFragment extends BaseFragment implements
     private ShoppingListViewModel viewModel;
     private AppBarBehaviorNew appBarBehavior;
     private ClickUtil clickUtil;
+    private SwipeBehavior swipeBehavior;
     private FragmentShoppingListBinding binding;
     private InfoFullscreenHelper infoFullscreenHelper;
 
@@ -207,6 +211,30 @@ public class ShoppingListFragment extends BaseFragment implements
                 ));
             }
         });
+
+        if(swipeBehavior == null) {
+            swipeBehavior = new SwipeBehavior(activity) {
+                @Override
+                public void instantiateUnderlayButton(
+                        RecyclerView.ViewHolder viewHolder,
+                        List<UnderlayButton> underlayButtons
+                ) {
+                    ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive().getValue();
+                    if(viewHolder.getAdapterPosition() >= groupedListItems.size()) return;
+                    GroupedListItem item = groupedListItems.get(viewHolder.getAdapterPosition());
+                    if(!(item instanceof ShoppingListItem)) return;
+                    ShoppingListItem shoppingListItem = (ShoppingListItem) item;
+                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                            R.drawable.ic_round_done,
+                            position -> {
+                                if(position >= groupedListItems.size()) return;
+                                viewModel.toggleDoneStatus(shoppingListItem);
+                            }
+                    ));
+                }
+            };
+            swipeBehavior.attachToRecyclerView(binding.recycler);
+        }
 
         hideDisabledFeatures();
 
