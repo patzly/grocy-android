@@ -219,14 +219,15 @@ public class ShoppingListFragment extends BaseFragment implements
                         RecyclerView.ViewHolder viewHolder,
                         List<UnderlayButton> underlayButtons
                 ) {
+                    int position = viewHolder.getAdapterPosition()-1;
                     ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive().getValue();
-                    if(viewHolder.getAdapterPosition() >= groupedListItems.size()) return;
-                    GroupedListItem item = groupedListItems.get(viewHolder.getAdapterPosition());
+                    if(groupedListItems == null || position < 0 || position >= groupedListItems.size()) return;
+                    GroupedListItem item = groupedListItems.get(position);
                     if(!(item instanceof ShoppingListItem)) return;
                     ShoppingListItem shoppingListItem = (ShoppingListItem) item;
                     underlayButtons.add(new SwipeBehavior.UnderlayButton(
                             R.drawable.ic_round_done,
-                            position -> {
+                            pos -> {
                                 if(position >= groupedListItems.size()) return;
                                 viewModel.toggleDoneStatus(shoppingListItem);
                             }

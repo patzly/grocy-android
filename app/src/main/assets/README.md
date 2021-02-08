@@ -2,6 +2,11 @@
 
 ## Alpha testing text
 Thank you that so many of you want to test the new version while it's in alpha/beta stage!
+
+**TL;DR: Don't install this version if you want a fully working app, some pages or features are not complete yet – especially actions on the stock overview page are not implemented yet.
+You need grocy v3.0.0 or v3.0.1 on your server. And don't install this version if you have Due date tracking or Location tracking feature disabled on your server, else there may be crashes/misbehavior!
+For more details read the text below.**
+
 Here is a changelog for this first alpha:
 
 **Compatibility**
@@ -62,7 +67,7 @@ If you just want to say thanks for our work and this new version or motivate us,
 Thanks!
 
 **Translating**
-There are lots of new string to translate, so you can start translating them on [Transifex](https://www.transifex.com/grocy-android/grocy-android) :)
+There are lots of new string to translate, so you can start translating them on [Transifex](https://www.transifex.com/grocy-android/grocy-android). :)
 
 ---
 Sorry to the guys whose comments I marked as off-topic: It was not against you, but I did it because else maybe more people would answer the same and spam email notifications to everyone like @towo wrote.
