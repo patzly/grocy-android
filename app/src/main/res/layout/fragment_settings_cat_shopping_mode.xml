@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
         <import type="android.view.View"/>
         <import type="xyz.zedler.patrick.grocy.R"/>
@@ -18,144 +19,143 @@
             type="xyz.zedler.patrick.grocy.util.ClickUtil"/>
     </data>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linear_app_bar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize">
+
+            <LinearLayout
+                android:id="@+id/linear_app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@color/primary">
+
+                <FrameLayout
+                    android:id="@+id/frame_back"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="?attr/actionBarItemBackground"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:contentDescription="@string/action_back"
+                    android:tooltipText="@string/action_back"
+                    android:focusable="true"
+                    tools:targetApi="o"
+                    android:onClick="@{v -> activity.navigateUp()}">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_arrow_back" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/app_bar_title"
+                    style="@style/Widget.Grocy.TextView.Toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/title_shopping_mode" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
+            android:background="@color/background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@color/primary">
-
-            <FrameLayout
-                android:id="@+id/frame_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
-                android:focusable="true"
-                tools:targetApi="o"
-                android:onClick="@{v -> activity.navigateUp()}">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/app_bar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:singleLine="true"
-                android:text="@string/title_shopping_mode"
-                android:fontFamily="@font/roboto_mono_bold"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll"
-        android:background="@color/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never">
-
-        <LinearLayout
-            android:id="@+id/linear_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingBottom="80dp"
-            android:orientation="vertical">
+            android:layout_marginTop="?android:actionBarSize"
+            android:overScrollMode="never">
 
             <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                android:id="@+id/linear_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> switchFrontCam.setChecked(!switchFrontCam.isChecked())}">
+                android:paddingTop="8dp"
+                android:paddingBottom="80dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/image_screen_on"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_preview"/>
+                <LinearLayout
+                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> switchFrontCam.setChecked(!switchFrontCam.isChecked())}">
 
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                    <ImageView
+                        android:id="@+id/image_screen_on"
+                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                        android:src="@drawable/ic_round_preview"
+                        tools:ignore="ContentDescription"/>
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_keep_screen_on"/>
+                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_keep_screen_on_description"/>
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.ListItem.Title"
+                            android:text="@string/setting_keep_screen_on"/>
+
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.ListItem.Description"
+                            android:text="@string/setting_keep_screen_on_description"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_front_cam"
+                        style="@style/Widget.Grocy.Switch"
+                        android:onCheckedChanged="@{() -> activity.startIconAnimation(imageScreenOn, true)}"
+                        android:checked="@={viewModel.keepScreenOnEnabled}"/>
 
                 </LinearLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_front_cam"
-                    style="@style/Widget.Grocy.Switch"
-                    android:onCheckedChanged="@{() -> activity.startIconAnimation(imageScreenOn, true)}"
-                    android:checked="@={viewModel.keepScreenOnEnabled}"/>
+                <LinearLayout
+                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> switchShowDone.setChecked(!switchShowDone.isChecked())}">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/image_show_done"
+                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                        android:src="@drawable/ic_round_done"
+                        tools:ignore="ContentDescription" />
 
-            <LinearLayout
-                style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{v -> switchShowDone.setChecked(!switchShowDone.isChecked())}">
+                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-                <ImageView
-                    android:id="@+id/image_show_done"
-                    style="@style/Theme.Grocy.ListItem.Icon"
-                    tools:ignore="ContentDescription"
-                    android:src="@drawable/ic_round_done"/>
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.ListItem.Title"
+                            android:text="@string/setting_show_done_items"/>
 
-                <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.ListItem.Description"
+                            android:text="@string/setting_show_done_items_description"/>
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Title"
-                        android:text="@string/setting_show_done_items"/>
+                    </LinearLayout>
 
-                    <TextView
-                        style="@style/Theme.Grocy.ListItem.Description"
-                        android:text="@string/setting_show_done_items_description"/>
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_show_done"
+                        style="@style/Widget.Grocy.Switch"
+                        android:onCheckedChanged="@{() -> activity.startIconAnimation(imageShowDone, true)}"
+                        android:checked="@={viewModel.showDoneItemsEnabled}"/>
 
                 </LinearLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_show_done"
-                    style="@style/Widget.Grocy.Switch"
-                    android:onCheckedChanged="@{() -> activity.startIconAnimation(imageShowDone, true)}"
-                    android:checked="@={viewModel.showDoneItemsEnabled}"/>
-
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

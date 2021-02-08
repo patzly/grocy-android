@@ -1,140 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
         <import type="android.view.View"/>
-        <variable name="formData"
+        <variable
+            name="formData"
             type="xyz.zedler.patrick.grocy.model.FormDataShoppingListEdit"/>
-        <variable name="viewModel"
+        <variable
+            name="viewModel"
             type="xyz.zedler.patrick.grocy.viewmodel.ShoppingListEditViewModel"/>
-        <variable name="activity"
+        <variable
+            name="activity"
             type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
     </data>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@color/primary">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
-                android:focusable="true"
-                tools:targetApi="o"
-                android:onClick="@{() -> activity.navigateUp()}">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:textAlignment="viewStart"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/roboto_mono_bold"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar"
-                android:text="@{formData.isActionEdit ? @string/title_shopping_list_edit : @string/title_shopping_list_new}"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:overScrollMode="never"
-        app:progressBackgroundColor="@{@color/surface}"
-        app:progressForegroundColor="@{@color/secondary}"
-        app:setRefreshing="@{viewModel.isLoadingLive}"
-        app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+        android:background="@color/background">
 
-        <FrameLayout
-            android:id="@+id/container"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/primary">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:id="@+id/back"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="?attr/actionBarItemBackground"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:contentDescription="@string/action_back"
+                    android:tooltipText="@string/action_back"
+                    android:focusable="true"
+                    tools:targetApi="o"
+                    android:onClick="@{() -> activity.navigateUp()}">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_round_arrow_back" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/Widget.Grocy.TextView.Toolbar"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="90dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{formData.isActionEdit ? @string/title_shopping_list_edit : @string/title_shopping_list_new}"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?android:actionBarSize"
+            android:overScrollMode="never"
+            app:progressBackgroundColor="@{@color/surface}"
+            app:progressForegroundColor="@{@color/secondary}"
+            app:setRefreshing="@{viewModel.isLoadingLive}"
+            app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never">
 
                     <LinearLayout
-                        style="@style/Theme.Grocy.ListItem"
-                        android:paddingTop="0dp"
-                        android:paddingBottom="0dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="90dp"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/image_name"
-                            style="@style/Theme.Grocy.ListItem.Icon.Top"
-                            android:src="@drawable/ic_round_label_anim"
-                            android:layout_marginTop="16sp"
-                            tools:ignore="ContentDescription" />
+                        <LinearLayout
+                            style="@style/Widget.Grocy.LinearLayout.ListItem"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/text_input_name"
-                            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                            android:hint="@string/property_name"
-                            app:errorText="@{formData.nameErrorLive}">
+                            <ImageView
+                                android:id="@+id/image_name"
+                                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                                android:src="@drawable/ic_round_label_anim"
+                                android:layout_marginTop="16sp"
+                                tools:ignore="ContentDescription" />
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/edit_text_name"
-                                android:text="@={formData.nameLive}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
-                                android:inputType="text|textCapSentences"
-                                android:afterTextChanged="@{() -> formData.isNameValid()}"
-                                app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/text_input_name"
+                                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                                android:hint="@string/property_name"
+                                app:errorText="@{formData.nameErrorLive}">
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_text_name"
+                                    android:text="@={formData.nameLive}"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/on_background"
+                                    android:inputType="text|textCapSentences"
+                                    android:afterTextChanged="@{() -> formData.isNameValid()}"
+                                    app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
 
-            </androidx.core.widget.NestedScrollView>
+            </FrameLayout>
 
-        </FrameLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout></layout>

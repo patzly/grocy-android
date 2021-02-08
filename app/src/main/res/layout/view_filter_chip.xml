@@ -57,7 +57,7 @@
                 android:layout_marginStart="8dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:fontFamily="@font/roboto_mono_medium"/>
+                android:fontFamily="@font/text_chip"/>
 
         </LinearLayout>
 

@@ -47,14 +47,12 @@
 
             <TextView
                 android:id="@+id/title"
+                style="@style/Widget.Grocy.TextView.Toolbar"
                 android:text="@string/title_master_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/text_title"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                android:layout_marginEnd="16dp" />
 
         </LinearLayout>
 
@@ -69,13 +67,11 @@
             android:visibility="gone">
 
             <TextView
+                style="@style/Widget.Grocy.TextView.OfflineIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:text="@string/error_offline"/>
 
         </LinearLayout>
@@ -110,28 +106,28 @@
 
                     <LinearLayout
                         android:id="@+id/linear_products"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
                             android:id="@+id/image"
-                            style="@style/Theme.Grocy.ListItem.Icon"
+                            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_round_widgets"
                             tools:ignore="ContentDescription" />
 
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                             <TextView
                                 android:id="@+id/title_products"
+                                style="@style/Widget.Grocy.TextView.ListItem.Title"
                                 android:text="@string/property_products"
-                                style="@style/Theme.Grocy.ListItem.Title"
                                 android:transitionName="@string/transition_overview_products" />
 
                             <TextView
                                 android:id="@+id/count_products"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
                         </LinearLayout>
 
@@ -139,27 +135,27 @@
 
                     <LinearLayout
                         android:id="@+id/linear_locations"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
+                            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_round_place"
                             tools:ignore="ContentDescription" />
 
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                             <TextView
                                 android:id="@+id/title_locations"
+                                style="@style/Widget.Grocy.TextView.ListItem.Title"
                                 android:text="@string/property_locations"
-                                style="@style/Theme.Grocy.ListItem.Title"
                                 android:transitionName="@string/transition_overview_locations" />
 
                             <TextView
                                 android:id="@+id/count_locations"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
                         </LinearLayout>
 
@@ -167,27 +163,27 @@
 
                     <LinearLayout
                         android:id="@+id/linear_stores"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
+                            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_round_store"
                             tools:ignore="ContentDescription" />
 
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                             <TextView
                                 android:id="@+id/title_stores"
+                                style="@style/Widget.Grocy.TextView.ListItem.Title"
                                 android:text="@string/property_stores"
-                                style="@style/Theme.Grocy.ListItem.Title"
                                 android:transitionName="@string/transition_overview_stores" />
 
                             <TextView
                                 android:id="@+id/count_stores"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
                         </LinearLayout>
 
@@ -195,27 +191,27 @@
 
                     <LinearLayout
                         android:id="@+id/linear_quantity_units"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
+                            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_round_weights"
                             tools:ignore="ContentDescription" />
 
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                             <TextView
                                 android:id="@+id/title_quantity_units"
+                                style="@style/Widget.Grocy.TextView.ListItem.Title"
                                 android:text="@string/property_quantity_units"
-                                style="@style/Theme.Grocy.ListItem.Title"
                                 android:transitionName="@string/transition_overview_qus" />
 
                             <TextView
                                 android:id="@+id/count_quantity_units"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
                         </LinearLayout>
 
@@ -223,27 +219,27 @@
 
                     <LinearLayout
                         android:id="@+id/linear_product_groups"
-                        style="@style/Theme.Grocy.ListItem.TwoLine.Icon.Clickable"
+                        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            style="@style/Theme.Grocy.ListItem.Icon"
+                            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_round_category"
                             tools:ignore="ContentDescription" />
 
-                        <LinearLayout style="@style/Theme.Grocy.ListItem.TextBox.Stretch">
+                        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                             <TextView
                                 android:id="@+id/title_product_groups"
+                                style="@style/Widget.Grocy.TextView.ListItem.Title"
                                 android:text="@string/property_product_groups"
-                                style="@style/Theme.Grocy.ListItem.Title"
                                 android:transitionName="@string/transition_overview_product_groups" />
 
                             <TextView
                                 android:id="@+id/count_product_groups"
-                                style="@style/Theme.Grocy.ListItem.Description" />
+                                style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
                         </LinearLayout>
 

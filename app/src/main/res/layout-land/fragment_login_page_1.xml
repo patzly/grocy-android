@@ -27,11 +27,10 @@
         app:contentPadding="12dp">
 
         <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/msg_qr_code_scan"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-            android:textColor="@color/on_background" />
+            android:text="@string/msg_qr_code_scan" />
 
     </com.google.android.material.card.MaterialCardView>
 

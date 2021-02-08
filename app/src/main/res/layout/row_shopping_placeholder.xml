@@ -24,15 +24,14 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:singleLine="true"
-                android:fontFamily="@font/roboto_mono_medium"
                 android:textSize="26sp"
                 android:background="@drawable/bg_placeholder_text"
-                android:backgroundTint="@color/on_background_tertiary"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+                android:backgroundTint="@color/on_background_tertiary" />
 
             <TextView
                 android:layout_width="100dp"
@@ -40,7 +39,6 @@
                 android:textSize="18sp"
                 android:background="@drawable/bg_placeholder_text"
                 android:backgroundTint="@color/on_background_tertiary"
-                android:fontFamily="@font/roboto_mono_medium"
                 android:singleLine="true" />
 
         </LinearLayout>

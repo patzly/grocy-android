@@ -16,7 +16,6 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:defaultNavHost="true" />
 
     </FrameLayout>
@@ -37,10 +36,10 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_round_barcode_scan"
         android:tint="@color/on_secondary"
+        android:contentDescription="@string/action_scan"
         app:layout_anchor="@id/bottom_app_bar"
         app:rippleColor="@color/highlight_on_secondary"
-        app:fabSize="auto"
-        android:contentDescription="@string/action_scan" />
+        app:fabSize="auto" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_scroll"

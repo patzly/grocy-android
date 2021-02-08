@@ -17,19 +17,18 @@
 
         <TextView
             android:id="@+id/text_expandable_card_collapsed"
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:maxLines="3"
-            android:visibility="invisible"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/text_expandable_card_expanded"
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/on_background"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:layout_height="wrap_content" />
 
     </FrameLayout>
 

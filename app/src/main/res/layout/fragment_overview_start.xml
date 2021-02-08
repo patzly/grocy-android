@@ -43,14 +43,12 @@
                 tools:ignore="ContentDescription,TooDeepLayout" />
 
             <TextView
+                style="@style/Widget.Grocy.TextView.Toolbar"
                 android:text="@string/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:singleLine="true"
-                android:textAlignment="center"
-                android:fontFamily="@font/text_title"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                android:textAlignment="center" />
 
             <xyz.zedler.patrick.grocy.view.ActionButton
                 android:id="@+id/button_info"
@@ -76,13 +74,11 @@
             android:visibility="gone">
 
             <TextView
+                style="@style/Widget.Grocy.TextView.OfflineIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:text="@string/error_offline"/>
 
         </LinearLayout>
@@ -136,17 +132,10 @@
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Help"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
-                                android:textSize="14sp"
-                                android:justificationMode="inter_word"
-                                android:breakStrategy="high_quality"
-                                android:hyphenationFrequency="full"
-                                android:fontFamily="@font/text_body"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
-                                android:text="@string/msg_help_start"
-                                tools:targetApi="o" />
+                                android:text="@string/msg_help_start" />
 
                         </com.google.android.material.card.MaterialCardView>
 
@@ -159,12 +148,9 @@
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Help"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/text_body"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@string/msg_logout_demo_short"/>
 
                         </com.google.android.material.card.MaterialCardView>
@@ -194,19 +180,16 @@
                             android:orientation="vertical">
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/title_stock_overview"
-                                android:textSize="17sp"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:fontFamily="@font/text_title" />
+                                android:text="@string/title_stock_overview" />
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:fontFamily="@font/text_body"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
 
                         </LinearLayout>
@@ -227,19 +210,16 @@
                             android:orientation="vertical">
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/title_shopping_list"
-                                android:textSize="17sp"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:fontFamily="@font/text_title" />
+                                android:text="@string/title_shopping_list" />
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:fontFamily="@font/text_body"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.shoppingListDescriptionTextLive}"/>
 
                         </LinearLayout>
@@ -279,12 +259,10 @@
                                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                                 <TextView
+                                    style="@style/Widget.Grocy.TextView.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/title_consume"
-                                    android:textSize="17sp"
-                                    android:fontFamily="@font/text_title"
-                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+                                    android:text="@string/title_consume" />
 
                             </LinearLayout>
 
@@ -312,12 +290,10 @@
                                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                                 <TextView
+                                    style="@style/Widget.Grocy.TextView.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/title_purchase"
-                                    android:textSize="17sp"
-                                    android:fontFamily="@font/text_title"
-                                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+                                    android:text="@string/title_purchase" />
 
                             </LinearLayout>
 
@@ -346,19 +322,16 @@
                             android:orientation="vertical">
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/title_master_data"
-                                android:textSize="17sp"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
-                                android:fontFamily="@font/text_title" />
+                                android:text="@string/title_master_data" />
 
                             <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/on_background"
-                                android:fontFamily="@font/text_body"
-                                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                                 android:text="@{viewModel.masterDataDescriptionTextLive}"/>
 
                         </LinearLayout>

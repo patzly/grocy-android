@@ -90,13 +90,15 @@
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/https"
+                    style="@style/Widget.Grocy.RadioButton.BottomSheet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@string/title_https"/>
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/http"
+                    style="@style/Widget.Grocy.RadioButton.BottomSheet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_http"/>

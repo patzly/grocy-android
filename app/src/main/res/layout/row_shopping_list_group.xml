@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/name"
-        style="@style/Theme.Grocy.Category"
+        style="@style/Widget.Grocy.TextView.Category"
         android:textAlignment="viewStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

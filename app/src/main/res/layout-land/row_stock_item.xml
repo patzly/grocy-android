@@ -21,12 +21,11 @@
 
         <TextView
             android:id="@+id/text_stock_item_name"
+            style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:singleLine="true"
-            android:fontFamily="@font/roboto_mono_medium"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+            android:singleLine="true" />
 
         <View
             android:id="@+id/view_stock_item_on_shopping_list"
@@ -42,10 +41,10 @@
 
     <TextView
         android:id="@+id/text_stock_item_amount"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+        android:singleLine="true" />
 
     <LinearLayout
         android:id="@+id/linear_stock_item_days"
@@ -64,10 +63,10 @@
 
         <TextView
             android:id="@+id/text_stock_item_days"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:singleLine="true" />
 
     </LinearLayout>
 

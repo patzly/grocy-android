@@ -27,43 +27,40 @@
 
             <TextView
                 android:id="@+id/text_shopping_item_name"
+                style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textSize="26sp"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+                android:textSize="26sp" />
 
             <TextView
                 android:id="@+id/text_shopping_note_as_name"
+                style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:textStyle="italic"
                 android:visibility="gone"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textSize="26sp"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+                android:textSize="26sp" />
 
             <TextView
                 android:id="@+id/text_shopping_item_amount"
+                style="@style/Widget.Grocy.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:fontFamily="@font/roboto_mono_medium"
                 android:textColor="@color/retro_blue_fg"
                 android:singleLine="true" />
 
             <TextView
                 android:id="@+id/text_shopping_item_note"
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:visibility="gone"
                 android:textSize="18sp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/retro_red_fg"
-                android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+                android:textColor="@color/retro_red_fg" />
 
         </LinearLayout>
 

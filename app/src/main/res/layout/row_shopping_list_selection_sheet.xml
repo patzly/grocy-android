@@ -45,12 +45,12 @@
 
     <TextView
         android:id="@+id/name"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:singleLine="false"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+        android:singleLine="false" />
 
     <xyz.zedler.patrick.grocy.view.ActionButton
         android:id="@+id/delete"

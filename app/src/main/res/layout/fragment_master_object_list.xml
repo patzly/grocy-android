@@ -48,14 +48,11 @@
 
             <TextView
                 android:id="@+id/title"
+                style="@style/Widget.Grocy.TextView.Toolbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:layout_marginEnd="16dp"
-                android:textAlignment="viewStart"
-                android:fontFamily="@font/roboto_mono_bold"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                android:layout_marginEnd="16dp" />
 
         </LinearLayout>
 
@@ -93,7 +90,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_search"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -102,7 +99,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_search"
-                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
+                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionSearch"
@@ -125,13 +122,11 @@
             android:visibility="gone">
 
             <TextView
+                style="@style/Widget.Grocy.TextView.OfflineIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:text="@string/error_offline"/>
 
         </LinearLayout>

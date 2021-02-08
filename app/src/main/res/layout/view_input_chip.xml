@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/roboto_mono_medium"
+                android:fontFamily="@font/text_chip"
                 android:textColor="@color/on_background"
                 android:textSize="14sp" />
 

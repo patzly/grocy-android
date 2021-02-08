@@ -27,20 +27,19 @@
 
         <TextView
             android:id="@+id/title"
+            style="@style/Widget.Grocy.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_mono_medium"
             android:textAlignment="center"
             android:layout_margin="16dp"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/subtitle"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:textAlignment="center" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/retry"
@@ -52,12 +51,12 @@
 
         <TextView
             android:id="@+id/exact"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:textSize="12sp"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:gravity="center" />
 
         <View
             android:layout_width="match_parent"

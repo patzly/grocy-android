@@ -15,14 +15,11 @@
 
         <TextView
             android:id="@+id/text_text_title"
+            style="@style/Widget.Grocy.TextView.Title.BottomSheet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:textAlignment="viewStart"
-            android:fontFamily="@font/roboto_mono_bold"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
+            android:layout_weight="1"/>
 
         <FrameLayout
             android:id="@+id/frame_text_open_link"
@@ -57,16 +54,11 @@
 
         <TextView
             android:id="@+id/text_text"
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:textAlignment="viewStart"
-            android:justificationMode="inter_word"
-            android:breakStrategy="high_quality"
-            android:hyphenationFrequency="full"
-            android:textSize="14sp"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"
-            tools:targetApi="o" />
+            android:textSize="14sp" />
 
     </androidx.core.widget.NestedScrollView>
 

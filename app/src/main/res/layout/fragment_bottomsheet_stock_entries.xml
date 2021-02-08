@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:singleLine="true"
-            android:text="@string/title_stock_entries"
-            android:textAlignment="viewStart"
-            android:fontFamily="@font/roboto_mono_bold"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
-
-    </LinearLayout>
+        android:padding="16dp"
+        android:text="@string/title_stock_entries"/>
 
     <View
         style="@style/Theme.Grocy.Divider"

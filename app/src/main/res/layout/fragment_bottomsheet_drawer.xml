@@ -25,17 +25,16 @@
 
             <LinearLayout
                 android:id="@+id/linear_drawer_stock"
-                style="@style/Theme.Grocy.DrawerItem">
+                style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                 <ImageView
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    style="@style/Widget.Grocy.ImageView.Drawer"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_category" />
 
                 <TextView
                     android:id="@+id/text_drawer_stock"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:fontFamily="@font/text_title"
+                    style="@style/Widget.Grocy.TextView.DrawerItem"
                     android:text="@string/title_stock_overview" />
 
             </LinearLayout>
@@ -46,17 +45,16 @@
 
                 <LinearLayout
                     android:id="@+id/linear_drawer_shopping_list"
-                    style="@style/Theme.Grocy.DrawerItem">
+                    style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                     <ImageView
-                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        style="@style/Widget.Grocy.ImageView.Drawer"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_round_shopping_list" />
 
                     <TextView
                         android:id="@+id/text_drawer_shopping_list"
-                        style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:fontFamily="@font/text_title"
+                        style="@style/Widget.Grocy.TextView.DrawerItem"
                         android:text="@string/title_shopping_list" />
 
                 </LinearLayout>
@@ -114,17 +112,16 @@
 
                 <LinearLayout
                     android:id="@+id/linear_drawer_consume"
-                    style="@style/Theme.Grocy.DrawerItem">
+                    style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                     <ImageView
-                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        style="@style/Widget.Grocy.ImageView.Drawer"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_round_consume_product" />
 
                     <TextView
                         android:id="@+id/text_drawer_consume"
-                        style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:fontFamily="@font/text_title"
+                        style="@style/Widget.Grocy.TextView.DrawerItem"
                         android:text="@string/title_consume" />
 
                 </LinearLayout>
@@ -137,17 +134,16 @@
 
                 <LinearLayout
                     android:id="@+id/linear_drawer_purchase"
-                    style="@style/Theme.Grocy.DrawerItem">
+                    style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                     <ImageView
-                        style="@style/Theme.Grocy.DrawerItem.Icon"
+                        style="@style/Widget.Grocy.ImageView.Drawer"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_round_local_grocery_store" />
 
                     <TextView
                         android:id="@+id/text_drawer_purchase"
-                        style="@style/Theme.Grocy.DrawerItem.Text"
-                        android:fontFamily="@font/text_title"
+                        style="@style/Widget.Grocy.TextView.DrawerItem"
                         android:text="@string/title_purchase" />
 
                 </LinearLayout>
@@ -158,17 +154,16 @@
 
             <LinearLayout
                 android:id="@+id/linear_drawer_master_data"
-                style="@style/Theme.Grocy.DrawerItem">
+                style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                 <ImageView
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    style="@style/Widget.Grocy.ImageView.Drawer"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_view_list" />
 
                 <TextView
                     android:id="@+id/text_drawer_master_data"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:fontFamily="@font/text_title"
+                    style="@style/Widget.Grocy.TextView.DrawerItem"
                     android:text="@string/title_master_data" />
 
             </LinearLayout>
@@ -177,52 +172,49 @@
 
             <LinearLayout
                 android:id="@+id/linear_drawer_settings"
-                style="@style/Theme.Grocy.DrawerItem">
+                style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                 <ImageView
                     android:id="@+id/image_drawer_settings"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    style="@style/Widget.Grocy.ImageView.Drawer"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_settings_anim" />
 
                 <TextView
                     android:id="@+id/text_drawer_settings"
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:fontFamily="@font/text_title"
+                    style="@style/Widget.Grocy.TextView.DrawerItem"
                     android:text="@string/title_settings" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_drawer_feedback"
-                style="@style/Theme.Grocy.DrawerItem">
+                style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                 <ImageView
                     android:id="@+id/image_drawer_feedback"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    style="@style/Widget.Grocy.ImageView.Drawer"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_feedback_anim" />
 
                 <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:fontFamily="@font/text_title"
+                    style="@style/Widget.Grocy.TextView.DrawerItem"
                     android:text="@string/action_feedback" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_drawer_help"
-                style="@style/Theme.Grocy.DrawerItem">
+                style="@style/Widget.Grocy.LinearLayout.Drawer">
 
                 <ImageView
                     android:id="@+id/image_drawer_help"
-                    style="@style/Theme.Grocy.DrawerItem.Icon"
+                    style="@style/Widget.Grocy.ImageView.Drawer"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_round_help_anim" />
 
                 <TextView
-                    style="@style/Theme.Grocy.DrawerItem.Text"
-                    android:fontFamily="@font/text_title"
+                    style="@style/Widget.Grocy.TextView.DrawerItem"
                     android:text="@string/title_help" />
 
             </LinearLayout>

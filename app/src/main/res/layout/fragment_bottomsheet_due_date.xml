@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_bbd_title"
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textAlignment="viewStart"
-        android:fontFamily="@font/roboto_mono_bold"
-        android:text="@string/property_due_date"
-        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
+        android:text="@string/property_due_date" />
 
     <View
         style="@style/Theme.Grocy.Divider"
@@ -22,7 +21,7 @@
 
     <LinearLayout
         android:id="@+id/linear_bbd_never_expires"
-        style="@style/Theme.Grocy.ListItem.SingleLine.Clickable"
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
         android:background="@null"
         android:paddingTop="16dp"
         android:paddingStart="16dp"
@@ -30,14 +29,14 @@
         android:paddingBottom="0dp">
 
         <TextView
-            style="@style/Theme.Grocy.ListItem.Title"
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="@string/subtitle_never_overdue" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkbox_bbd_never_expires"
-            style="@style/Widget.Grocy.CheckBox"
+            style="@style/Widget.Grocy.CheckBox.Dense"
             android:layout_width="wrap_content"
             android:layout_height="24dp"/>
 

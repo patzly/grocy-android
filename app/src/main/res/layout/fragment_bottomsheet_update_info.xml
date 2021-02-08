@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_compatibility_title"
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textAlignment="viewStart"
-        android:fontFamily="@font/roboto_mono_bold"
-        android:text="Update warning"
-        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
+        android:text="Update warning" />
 
     <View
         style="@style/Theme.Grocy.Divider"
@@ -35,10 +33,10 @@
 
             <TextView
                 android:id="@+id/text_compatibility_msg"
+                style="@style/Widget.Grocy.TextView.Paragraph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:textAlignment="viewStart"
                 android:text="The developer of the grocy server application has announced a new version 3.0.0 for the end of December.
 Among other great things it contains breaking changes in the API, which means that this unofficial Android app will not work properly after updating the server to version 3.0.0.
 \n\nSo if you want to continue using this Android app as usual, you should wait for our update to version 2.0.0 before updating your server to version 3.0.0.
@@ -46,9 +44,7 @@ Among other great things it contains breaking changes in the API, which means th
 \n\nAgain in 'easy' language:
 \n• Grocy Android 1.x.x requires grocy Server 2.7.1
 \n• Grocy Android 2.x.x requires grocy Server 3.0.0 or higher
-\n\nCurrently you are using Grocy Android 1.10.1 on this device."
-                android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+\n\nCurrently you are using Grocy Android 1.10.1 on this device."/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,9 +59,9 @@ Among other great things it contains breaking changes in the API, which means th
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:textColor="@color/white"
+                    android:text="OK"
                     app:backgroundTint="@color/retro_green_bg_white"
-                    app:rippleColor="@color/highlight_on_secondary"
-                    android:text="OK" />
+                    app:rippleColor="@color/highlight_on_secondary" />
 
             </LinearLayout>
 

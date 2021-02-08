@@ -13,53 +13,42 @@
         android:orientation="vertical"
         android:background="@color/primary">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true">
+            android:gravity="center_vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <FrameLayout
+                android:id="@+id/frame_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/actionBarItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:contentDescription="@string/action_back"
+                android:tooltipText="@string/action_back"
+                android:focusable="true"
+                tools:targetApi="o">
 
-                <FrameLayout
-                    android:id="@+id/frame_back"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_back"
-                    android:tooltipText="@string/action_back"
-                    android:focusable="true"
-                    tools:targetApi="o">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_round_arrow_back" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_arrow_back" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <TextView
+                style="@style/Widget.Grocy.TextView.Toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/title_barcode_input" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="@string/title_barcode_input"
-                    android:fontFamily="@font/roboto_mono_bold"
-                    android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
-
-            </LinearLayout>
-
-        </FrameLayout>
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

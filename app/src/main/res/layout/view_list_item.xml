@@ -12,10 +12,10 @@
 
     <TextView
         android:id="@+id/text_list_item_property"
+        style="@style/Widget.Grocy.TextView.ListItem.OverLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.OverLine" />
+        android:layout_gravity="center_vertical" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,11 +26,11 @@
 
         <TextView
             android:id="@+id/text_list_item_value"
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
-            android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+            android:maxLines="2" />
 
     </LinearLayout>
 
@@ -44,10 +44,10 @@
 
         <TextView
             android:id="@+id/text_list_item_extra"
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+            android:singleLine="true" />
 
     </LinearLayout>
 

@@ -20,21 +20,20 @@
 
     <TextView
         android:id="@+id/text_empty_title"
+        style="@style/Widget.Grocy.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:fontFamily="@font/roboto_mono_medium"
-        android:textSize="18sp"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Title" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/text_empty_subtitle"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_gravity="center"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description" />
+        android:textAlignment="center" />
 
 </LinearLayout>

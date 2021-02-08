@@ -43,27 +43,24 @@
 
             <TextView
                 android:id="@+id/text_onboarding_title_land"
+                style="@style/Widget.Grocy.TextView.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:fontFamily="@font/roboto_mono_bold"
                 android:textSize="22sp"
-                android:maxLines="2"
-                android:textColor="@color/on_background"/>
+                android:maxLines="2"/>
 
             <TextView
                 android:id="@+id/text_onboarding_description_land"
-                style="@style/TextAppearance.Grocy.Body"
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textAlignment="center"
-                android:fontFamily="@font/roboto_mono_regular"
+                android:gravity="center"
                 android:text="@string/feature_1_description"
                 android:lineSpacingExtra="8sp"
-                android:textSize="15sp"
-                android:textColor="@color/on_background_secondary"
-                android:maxLines="3"/>
+                android:textSize="15sp"/>
 
         </LinearLayout>
 

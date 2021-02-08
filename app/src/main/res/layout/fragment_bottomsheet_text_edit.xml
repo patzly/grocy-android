@@ -8,13 +8,10 @@
 
     <TextView
         android:id="@+id/text_text_edit_title"
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:singleLine="true"
-        android:fontFamily="@font/roboto_mono_bold"
-        android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
+        android:padding="16dp"/>
 
     <View
         style="@style/Theme.Grocy.Divider"

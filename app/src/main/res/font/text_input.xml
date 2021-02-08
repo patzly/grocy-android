@@ -2,5 +2,5 @@
 <font-family xmlns:app="http://schemas.android.com/apk/res-auto">
     <font
         app:fontStyle="normal"
-        app:font="@font/roboto_mono_bold" />
+        app:font="@font/roboto_mono_regular" />
 </font-family>

@@ -75,14 +75,12 @@
 
                     <TextView
                         android:id="@+id/text_shopping_list_title"
+                        style="@style/Widget.Grocy.TextView.Toolbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="@string/title_shopping_list"
-                        android:fontFamily="@font/roboto_mono_bold"
-                        android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                        android:text="@string/title_shopping_list" />
 
                     <xyz.zedler.patrick.grocy.view.ActionButton
                         android:id="@+id/button_shopping_list_lists"
@@ -111,13 +109,11 @@
             android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
 
             <TextView
+                style="@style/Widget.Grocy.TextView.OfflineIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:text="@string/error_offline"/>
 
         </LinearLayout>

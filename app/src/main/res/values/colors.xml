@@ -53,7 +53,7 @@
 
     <!-- SECONDARY -->
 
-    <color name="secondary">@color/retro_green_bg_white</color>
+    <color name="secondary">@color/retro_green_fg</color>
     <color name="secondary_translucent">#226bad9e</color>
     <color name="secondary_dark">@color/retro_dark</color>
     <color name="on_secondary">@color/white</color>

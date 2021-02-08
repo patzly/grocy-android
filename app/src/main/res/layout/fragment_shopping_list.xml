@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
         <import type="android.view.View"/>
         <variable name="viewModel"
@@ -10,214 +11,211 @@
             type="xyz.zedler.patrick.grocy.fragment.ShoppingListFragment"/>
     </data>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?android:actionBarSize"
-        android:background="@color/primary"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/app_bar_default"
-                android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
-
-                <FrameLayout
-                    android:id="@+id/frame_shopping_list_back"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_back"
-                    android:tooltipText="@string/action_back"
-                    android:focusable="true"
-                    tools:targetApi="o"
-                    android:onClick="@{() -> activity.navigateUp()}">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_arrow_back" />
-
-                </FrameLayout>
-
-                <TableLayout
-                    android:id="@+id/table_title_app_bar"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:shrinkColumns="0"
-                    android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:ignore="UselessParent">
-
-                        <TextView
-                            android:id="@+id/text_shopping_list_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="@string/title_shopping_list"
-                            android:fontFamily="@font/roboto_mono_bold"
-                            android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
-
-                        <xyz.zedler.patrick.grocy.view.ActionButton
-                            android:id="@+id/button_shopping_list_lists"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            app:icon="@drawable/ic_round_expand_more"
-                            app:tint="@color/icon"
-                            app:enabled="@{false}"/>
-
-                    </TableRow>
-
-                </TableLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/app_bar_search"
-                android:layout_width="match_parent"
-                android:layout_height="?android:actionBarSize"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:baselineAligned="false">
-
-                <FrameLayout
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_close"
-                    android:tooltipText="@string/action_close"
-                    android:focusable="true"
-                    tools:targetApi="o"
-                    android:onClick="@{() -> fragment.dismissSearch()}">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_close" />
-
-                </FrameLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_shopping_list_search"
-                    style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="72dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_text_shopping_list_search"
-                        style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionSearch"
-                        android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                        android:singleLine="true"
-                        android:textColor="@color/on_background"
-                        android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
-                        app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/retro_red_bg_black"
-            android:gravity="center"
-            android:alpha="0.9"
-            android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:fontFamily="@font/roboto_mono_medium"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:text="@string/error_offline"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_shopping_list"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:layout_below="@id/app_bar"
-        android:animateLayoutChanges="true"
-        app:transitionTypeChanging="@{true}"
-        app:progressBackgroundColor="@{@color/surface}"
-        app:progressForegroundColor="@{@color/secondary}"
-        app:setRefreshing="@{viewModel.isLoadingLive}"
-        app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+        android:background="@color/background">
 
-        <FrameLayout
-            android:id="@+id/frame"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:minHeight="?android:actionBarSize"
+            android:background="@color/primary"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="8dp"
-                android:paddingBottom="120dp"
-                android:overScrollMode="never"
-                android:clipToPadding="false" />
+                android:layout_height="match_parent">
 
-        </FrameLayout>
+                <LinearLayout
+                    android:id="@+id/app_bar_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:actionBarSize"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <FrameLayout
+                        android:id="@+id/frame_shopping_list_back"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:contentDescription="@string/action_back"
+                        android:tooltipText="@string/action_back"
+                        android:focusable="true"
+                        tools:targetApi="o"
+                        android:onClick="@{() -> activity.navigateUp()}">
 
-</RelativeLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_arrow_back" />
+
+                    </FrameLayout>
+
+                    <TableLayout
+                        android:id="@+id/table_title_app_bar"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:shrinkColumns="0"
+                        android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:ignore="UselessParent">
+
+                            <TextView
+                                android:id="@+id/text_shopping_list_title"
+                                style="@style/Widget.Grocy.TextView.Toolbar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:ellipsize="end"
+                                android:text="@string/title_shopping_list" />
+
+                            <xyz.zedler.patrick.grocy.view.ActionButton
+                                android:id="@+id/button_shopping_list_lists"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|center_vertical"
+                                android:paddingStart="4dp"
+                                android:paddingEnd="4dp"
+                                app:icon="@drawable/ic_round_expand_more"
+                                app:tint="@color/icon"
+                                app:enabled="@{false}"/>
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/app_bar_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:actionBarSize"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:baselineAligned="false">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:contentDescription="@string/action_close"
+                        android:tooltipText="@string/action_close"
+                        android:focusable="true"
+                        tools:targetApi="o"
+                        android:onClick="@{() -> fragment.dismissSearch()}">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_round_close" />
+
+                    </FrameLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/text_input_shopping_list_search"
+                        style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="72dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_shopping_list_search"
+                            style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionSearch"
+                            android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+                            android:singleLine="true"
+                            android:textColor="@color/on_background"
+                            android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
+                            app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/retro_red_bg_black"
+                android:gravity="center"
+                android:alpha="0.9"
+                android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    style="@style/Widget.Grocy.TextView.OfflineIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/error_offline"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_shopping_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_below="@id/app_bar"
+            android:animateLayoutChanges="true"
+            app:transitionTypeChanging="@{true}"
+            app:progressBackgroundColor="@{@color/surface}"
+            app:progressForegroundColor="@{@color/secondary}"
+            app:setRefreshing="@{viewModel.isLoadingLive}"
+            app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+
+            <FrameLayout
+                android:id="@+id/frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="120dp"
+                    android:overScrollMode="never"
+                    android:clipToPadding="false" />
+
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </RelativeLayout>
+
 </layout>

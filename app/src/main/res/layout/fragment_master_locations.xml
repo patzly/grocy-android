@@ -42,15 +42,12 @@
             </FrameLayout>
 
             <TextView
+                style="@style/Widget.Grocy.TextView.Toolbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
                 android:text="@string/property_locations"
-                android:layout_marginEnd="16dp"
-                android:textAlignment="viewStart"
-                android:fontFamily="@font/roboto_mono_bold"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                android:layout_marginEnd="16dp" />
 
         </LinearLayout>
 
@@ -88,7 +85,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_master_locations_search"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Mini"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,7 +94,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_text_master_locations_search"
-                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Mini"
+                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionSearch"

@@ -41,10 +41,9 @@
 
                 <TextView
                     android:id="@+id/text"
+                    style="@style/Widget.Grocy.TextView.Paragraph"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/on_background"
-                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                     android:text="@string/msg_welcome_to_grocy"/>
 
             </com.google.android.material.card.MaterialCardView>
@@ -59,10 +58,9 @@
                 app:cardBackgroundColor="@color/on_background_variant">
 
                 <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/on_background"
-                    android:textAppearance="@style/TextAppearance.Grocy.ListItem.Description"
                     android:text="@string/msg_choose_option_below"/>
 
             </com.google.android.material.card.MaterialCardView>

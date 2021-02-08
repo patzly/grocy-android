@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_logout_title"
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textAlignment="viewStart"
-        android:fontFamily="@font/roboto_mono_bold"
-        android:text="@string/title_restart"
-        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title" />
+        android:text="@string/title_restart" />
 
     <View
         style="@style/Theme.Grocy.Divider"
@@ -35,13 +33,11 @@
 
             <TextView
                 android:id="@+id/text_logout_msg"
+                style="@style/Widget.Grocy.TextView.Paragraph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textAlignment="viewStart"
-                android:text="@string/msg_restart"
-                android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+                android:text="@string/msg_restart"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

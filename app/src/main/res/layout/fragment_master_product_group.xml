@@ -42,15 +42,12 @@
             </FrameLayout>
 
             <TextView
+                style="@style/Widget.Grocy.TextView.Toolbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
                 android:text="@string/property_product_group"
-                android:textAlignment="viewStart"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/roboto_mono_bold"
-                android:textAppearance="@style/TextAppearance.Grocy.Toolbar" />
+                android:layout_marginEnd="16dp" />
 
         </LinearLayout>
 
@@ -77,13 +74,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    style="@style/Theme.Grocy.ListItem"
+                    style="@style/Widget.Grocy.LinearLayout.ListItem"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
                         android:id="@+id/image_master_product_group_name"
-                        style="@style/Theme.Grocy.ListItem.Icon"
+                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                         android:src="@drawable/ic_round_label_anim"
                         android:layout_marginBottom="5dp"
                         tools:ignore="ContentDescription" />
@@ -108,13 +105,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    style="@style/Theme.Grocy.ListItem"
-                    android:paddingTop="8dp"
+                    style="@style/Widget.Grocy.LinearLayout.ListItem"
+                    android:paddingTop="4dp"
                     android:paddingBottom="0dp">
 
                     <ImageView
                         android:id="@+id/image_master_product_group_description"
-                        style="@style/Theme.Grocy.ListItem.Icon.Top"
+                        style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                         android:src="@drawable/ic_round_subject_anim"
                         android:layout_marginTop="16sp"
                         tools:ignore="ContentDescription" />

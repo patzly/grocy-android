@@ -7,12 +7,10 @@
 
     <TextView
         android:id="@+id/text_message_title"
+        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:singleLine="true"
-        android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Title"/>
+        android:padding="16dp"/>
 
     <View
         style="@style/Theme.Grocy.Divider"
@@ -26,12 +24,10 @@
 
         <TextView
             android:id="@+id/text_message"
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textAlignment="viewStart"
-            android:textSize="14.5sp"
-            android:textAppearance="@style/TextAppearance.Grocy.BottomSheet.Text"/>
+            android:padding="16dp"/>
 
     </androidx.core.widget.NestedScrollView>
 
