@@ -351,6 +351,15 @@
         <item name="android:minHeight">24dp</item>
     </style>
 
+    <!-- TOOLTIP -->
+
+    <style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">@color/tooltip_background</item>
+        <item name="android:textColor">@color/tooltip_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/text_body</item>
+    </style>
+
     <!-- SHAPE -->
 
     <style name="Shape.Grocy.BottomSheet" parent="">
@@ -395,7 +404,7 @@
     </style>
 
     <style name="Widget.Grocy.TextView.Help" parent="Widget.Grocy.TextView.Paragraph">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView">

@@ -77,8 +77,8 @@
 
     <!-- TOOLTIP -->
 
-    <color name="tooltip_background">#e6616161</color>
-    <color name="tooltip_foreground">@android:color/background_dark</color>
+    <color name="tooltip_background">@color/grey700</color>
+    <color name="tooltip_text">@color/white</color>
 
     <!-- HIGHLIGHT -->
 

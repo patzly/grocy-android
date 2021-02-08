@@ -58,6 +58,9 @@
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="popupTheme">@style/Theme.Grocy</item>
 
+        <!-- not working, tooltip is inverted -->
+        <item name="tooltipStyle">@style/Widget.Grocy.Tooltip</item>
+
         <item name="android:colorControlNormal">@color/on_background</item>
         <item name="android:colorControlActivated">@color/secondary</item>
         <item name="android:colorControlHighlight">@color/highlight</item>

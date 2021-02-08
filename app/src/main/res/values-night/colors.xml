@@ -39,8 +39,8 @@
 
     <!-- TOOLTIP -->
 
-    <color name="tooltip_background">#e6FFFFFF</color>
-    <color name="tooltip_foreground">@android:color/background_light</color>
+    <color name="tooltip_background">#ddffffff</color>
+    <color name="tooltip_text">@color/black</color>
 
     <!-- HIGHLIGHT -->
 
