@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,6 +71,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView cardViewContainer;
+        private final LinearLayout linearLayoutContainer;
         private final TextView textViewName;
         private final TextView textViewAmount;
         private final TextView textViewGroupName;
@@ -81,6 +83,7 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
         public ViewHolder(View view) {
             super(view);
             cardViewContainer = view.findViewById(R.id.card_shopping_item_container);
+            linearLayoutContainer = view.findViewById(R.id.linear_shopping_item_container);
             textViewName = view.findViewById(R.id.text_shopping_item_name);
             textViewAmount = view.findViewById(R.id.text_shopping_item_amount);
             textViewNote = view.findViewById(R.id.text_shopping_item_note);
@@ -272,16 +275,13 @@ public class ShoppingModeItemAdapter extends RecyclerView.Adapter<ShoppingModeIt
             }
         }
 
-        if(item.getDone() == 1) {
-            holder.cardViewContainer.setAlpha((float) 0.5);
-        } else {
-            holder.cardViewContainer.setAlpha((float) 1.0);
-        }
+        holder.linearLayoutContainer.setAlpha(item.getDone() == 1 ? 0.4f : 1);
 
         // CONTAINER
 
-        holder.cardViewContainer.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
-
+        holder.cardViewContainer.setOnClickListener(
+                view -> listener.onItemRowClicked(groupedListItem)
+        );
     }
 
     public void updateData(

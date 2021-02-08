@@ -387,9 +387,9 @@
 
     <style name="Widget.Grocy.TextView.ShoppingModeGroup" parent="Widget.Grocy.TextView">
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/retro_green_fg</item>
-        <item name="android:letterSpacing">0.1</item>
+        <item name="android:letterSpacing">0.06</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:singleLine">true</item>
     </style>

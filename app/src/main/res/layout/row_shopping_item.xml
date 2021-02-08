@@ -16,11 +16,13 @@
         android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/surface_secondary"
         app:contentPadding="16dp"
+        android:stateListAnimator="@animator/card_elevation"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
-        app:rippleColor="@color/highlight">
+        app:rippleColor="@color/highlight_secondary">
 
         <LinearLayout
+            android:id="@+id/linear_shopping_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
