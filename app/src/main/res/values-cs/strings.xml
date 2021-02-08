@@ -125,13 +125,13 @@
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\n Odebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
+    <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
     <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>
     <string name="msg_logout">Nic na vašem serveru nebylo změněno. Budete přesměrování na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
     <string name="msg_logout_demo_short">Veřejný demo server. Klikněte pro více informací.</string>
     <string name="msg_restart">Je vyžadován restart aplikace pro řádné načtení nové konfigurace Grocy.</string>
-    <string name="msg_shortcuts">Můžete povolit až 4 zkratky.</string>
+    <string name="msg_shortcuts">Můžete povolit až 4 zkratky:</string>
     <string name="msg_shortcuts_not_supported">Zkratky nejsou na této verzi Android podporovány.</string>
     <string name="msg_features">Intro pustíte znova v \"O programu\"</string>
     <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomožte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
@@ -172,7 +172,7 @@
     <string name="msg_help_recipe_consume">Toto je pouze pro statistické údaje.</string>
     <string name="msg_help_scan_mode">Můžete dlouze podržet na liště záhlaví výše pro aktivaci skenovacího režimu. Klikněte na tuto kartu pro změnu výchozího chování.</string>
     <string name="msg_help_loading_circle_settings">Na každé stránce, kde něco musí být načteno ze serveru, aplikace nejprve zkontroluje pomocí maličkého požadavku, zda se databáze na serveru změnila od poslední aktualizace a pouze načte zastaralá data. Zapněte volbu níže, pokud chcete zobrazit načítací kolečko i pro tyto maličké požadavky.</string>
-    <string name="msg_help_start">Začátečnický režim je aktivní. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Toto chování můžete změnit po kliknutí na tuto kartu.</string>
+    <string name="msg_help_start">Začátečnický režim je aktivní. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klikněte pro změnu.</string>
     <string name="msg_help_purchased_date_settings">Pokud je zapnuta volba níže, políčko pro datum nákupu se bude zobrazovat na stránce nákupu a v inventáři. Pokud není zapnuta, datum nákupu se automaticky doplní s dnešním datem.</string>
 
     <string name="error_api_not_working">API key nefunguje</string>
@@ -329,10 +329,14 @@
     <string name="subtitle_not_supported">Není podporováno</string>
 
     <string name="description_input_product_part1">Pole produktu obsahuje:</string>
-    <string name="description_input_product_part2">Prosím zvolte jak s tím naložit.</string>
+    <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
     <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>
     <string name="description_input_product_option2">Vytvořit produkt a použít zadanou hodnotu jako čárový kód</string>
     <string name="description_input_product_option3">Přidat jako čárový kód k existujícímu produktu</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Vymazat pouze hotové položky</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Vymazat všechny položky</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
@@ -361,6 +365,13 @@
         <item quantity="few">%1$d položky jsou ve vašem nákupním košíku.</item>
         <item quantity="many">%1$d položek je ve vašem nákupním košíku.</item>
         <item quantity="other">%1$d položek je ve vašem nákupním košíku.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Vaše databáze obsahuje jeden produkt.</item>
+        <item quantity="few">Vaše databáze obsahuje %1$d produkty.</item>
+        <item quantity="many">Vaše databáze obsahuje %1$d produktů.</item>
+        <item quantity="other">Vaše databáze obsahuje %1$d produktů.</item>
     </plurals>
 
     <string name="property_name">Jméno</string>
