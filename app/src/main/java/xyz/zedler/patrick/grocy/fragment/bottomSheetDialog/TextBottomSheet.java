@@ -30,7 +30,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,14 +46,18 @@ import java.util.List;
 import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
 
 	private final static String TAG = TextBottomSheet.class.getSimpleName();
 	private boolean debug;
+
+	private FragmentBottomsheetTextBinding binding;
 
 	@NonNull
 	@Override
@@ -64,12 +67,12 @@ public class TextBottomSheet extends BaseBottomSheet {
 
 	@Override
 	public View onCreateView(
-			LayoutInflater inflater,
+			@NonNull LayoutInflater inflater,
 			ViewGroup container,
 			Bundle savedInstanceState
 	) {
-		View view = inflater.inflate(
-				R.layout.fragment_bottomsheet_text,
+		binding = FragmentBottomsheetTextBinding.inflate(
+				inflater,
 				container,
 				false
 		);
@@ -86,29 +89,28 @@ public class TextBottomSheet extends BaseBottomSheet {
 				+ ".txt";
 		if(readFromFile(context, fileLocalized) != null) file = fileLocalized;
 
-		((TextView) view.findViewById(R.id.text_text_title)).setText(
+		binding.textTextTitle.setText(
 				bundle.getString(Constants.ARGUMENT.TITLE)
 		);
 
-		FrameLayout frameLayoutLink = view.findViewById(R.id.frame_text_open_link);
 		String link = bundle.getString(Constants.ARGUMENT.LINK);
 		if (link != null) {
-			frameLayoutLink.setOnClickListener(v -> {
-				IconUtil.start(view, R.id.image_text_open_link);
+			binding.frameTextOpenLink.setOnClickListener(v -> {
+				IconUtil.start(binding.imageTextOpenLink);
 				new Handler().postDelayed(
 						() -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
 						500
 				);
 			});
 		} else {
-			frameLayoutLink.setVisibility(View.GONE);
+			binding.frameTextOpenLink.setVisibility(View.GONE);
 		}
 
 		if(file.equals("CHANGELOG.txt")) {
 			List<String> keyWords = Arrays.asList("New:", "Improved:", "Fixed:");
 			String content = readFromFile(context, file);
 			if(content != null) {
-				((TextView) view.findViewById(R.id.text_text)).setText(
+				binding.textText.setText(
 						BulletUtil.makeBulletList(
 								context,
 								6,
@@ -120,12 +122,21 @@ public class TextBottomSheet extends BaseBottomSheet {
 						TextView.BufferType.SPANNABLE
 				);
 			} else {
-				((TextView) view.findViewById(R.id.text_text)).setText(null);
+				binding.textText.setText(null);
 			}
+			binding.textText.setLineSpacing(UnitUtil.getSp(requireContext(), 3), 1);
+			binding.textText.setTextSize(14.5f);
 		} else {
-			((TextView) view.findViewById(R.id.text_text)).setText(readFromFile(context, file));
+			binding.textText.setText(readFromFile(context, file));
 		}
-		return view;
+
+		return binding.getRoot();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		binding = null;
 	}
 
 	private String readFromFile(Context context, String file) {
