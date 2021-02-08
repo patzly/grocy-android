@@ -8,14 +8,7 @@
         android:id="@+id/action_product_overview"
         android:title="@string/title_product_overview"
         android:icon="@drawable/ic_round_info_outline_anim_menu"
-        app:showAsAction="ifRoom"
-        tools:ignore="AlwaysShowAction" />
-
-    <item
-        android:id="@+id/action_clear_form"
-        android:title="@string/action_clear_form"
-        android:icon="@drawable/ic_round_cancel"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
@@ -24,6 +17,13 @@
         android:icon="@drawable/ic_round_open_menu"
         app:showAsAction="always"
         android:visible="false"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_clear_form"
+        android:title="@string/action_clear_form"
+        android:icon="@drawable/ic_round_cancel"
+        app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
 </menu>
