@@ -1,83 +1,9 @@
 # TODO
 
 ## Alpha testing text
-Thank you that so many of you want to test the new version while it's in alpha/beta stage!
 
-**TL;DR: Don't install this version if you want a fully working app, some pages or features are not complete yet – especially actions on the stock overview page are not implemented yet.
-You need grocy v3.0.0 or v3.0.1 on your server. And don't install this version if you have Due date tracking or Location tracking feature disabled on your server, else there may be crashes/misbehavior!
-For more details read the text below.**
-
-Here is a changelog for this first alpha:
-
-**Compatibility**
-- Compatible with grocy v3.0.x
-- Not compatible anymore with grocy v2.7.x
-
-**General improvements**
-- Improved page loading speed by use of database
-- Less data usage by use of database (only fetch new data if necessary)
-- Offline usage (no transactions but viewing lists)
-- List difference animations are used in every list
-- Smooth & consistent navigation between pages
-- Product autocomplete lists now use fuzzy finder (idea from grocy/grocy#1275)
-- Server requests are now more secure with API key in header
-- Added many help texts which are also in the web interface (e.g. on master product pages)
-- No more buggy bottom app bar animations
-- Fixed layout for text on features pages
-- Rewritten font usage and styling system
-
-**New languages (Thanks for your efforts!)**
-- Russian
-- Ukrainian
-
-**New pages**
-- Overview
-- Product create/edit
-- External scanner
-
-**Removed pages**
-- Batch mode (consume & purchase forms now behave like web interface and have a scan mode instead)
-- Missing batch items (unnecessary without batch mode)
-
-**Rewritten & strongly edited pages**
-- Purchase
-- Consume
-- Settings (with lots of new options)
-- Login (New login flow for QR codes from grocy server)
-
-**:warning:Not fully working yet (coming in later test versions):warning:**
-Please don't report issues yet for these points!
-- Purchase action from shopping list not implemented yet
-- Stock overview (actions not working yet)
-- Product page (barcodes and unit conversions functionality not implemented yet)
-- Settings page (not all options implemented yet)
-- Tor and SOCKS support (not implemented yet)
-- **Deactivated features: if Due Date Tracking or Location Tracking feature is disabled, there can be misbehavior!**
-- Online->offline & offline->online changes a bit buggy
-
-**Testing**
-I you want to test the first alpha version (v2.0.0-alpha01), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there might be a popup with a toggle "Allow from this source".
-You can install the APK over your current installation, because it has the same signature.
-After update, some or all app preferences may have the default status because their identifiers changed internally and I won't write migrations for them.
-
-Please report any bug or misbehavior in a [new issue](https://github.com/patzly/grocy-android/issues) **if there isn't already an open one**.
-New or rewritten pages may also contain issues which were fixed in previous releases (so they may have a closed issue here) – please report them too in a new issue.
-
-If you just want to say thanks for our work and this new version or motivate us, you can write a message in the new Matrix room [#grocy-android:matrix.org](https://element.io/get-started) .
-Thanks!
-
-**Translating**
-There are lots of new string to translate, so you can start translating them on [Transifex](https://www.transifex.com/grocy-android/grocy-android). :)
-
----
-Sorry to the guys whose comments I marked as off-topic: It was not against you, but I did it because else maybe more people would answer the same and spam email notifications to everyone like @towo wrote.
-
-And sorry, our English is not *brilliant* yet... If your mother tongue is English and you find language mistakes in the app, please report them also in the issue tracker.
-
-And finally, sorry for the long waiting time – I'm studying computer science since a few months now and hence I don't have that much time anymore to work on this project and my brother @patzly also has a lot to do.
-
-Best regards
-Dominic & Patrick
+**Changelog**
+- Updated translations
 
 ## Improvements
 
