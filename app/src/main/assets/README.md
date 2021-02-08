@@ -58,7 +58,7 @@ After update, some or all app preferences may have the default status because th
 Please report any bug or misbehavior in a [new issue](https://github.com/patzly/grocy-android/issues) **if there isn't already an open one**.
 New or rewritten pages may also contain issues which were fixed in previous releases (so they may have a closed issue here) – please report them too in a new issue.
 
-If you just want to say thanks for our work and this new version or motivate us, you can write a comment in the new issue #276.
+If you just want to say thanks for our work and this new version or motivate us, you can write a message in the new Matrix room [#grocy-android:matrix.org](https://element.io/get-started) .
 Thanks!
 
 **Translating**
