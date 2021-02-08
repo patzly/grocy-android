@@ -98,6 +98,8 @@
                     <TextView
                         android:id="@+id/text_setting_grocy_version_incompatible"
                         style="@style/Widget.Grocy.TextView.Title"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:text="@string/subtitle_not_supported"
                         android:textStyle="bold"
                         android:textColor="@color/retro_red_fg"/>
