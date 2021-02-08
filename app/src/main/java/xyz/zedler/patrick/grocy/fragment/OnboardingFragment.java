@@ -303,7 +303,7 @@ public class OnboardingFragment extends BaseFragment {
             if (binding == null) return;
             if (binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) return;
             int frontOffset = 200, backOffset = -200;
-            int rotation = 50;
+            int rotation = 100;
             int titleOffset = 150;
             binding.imageOnboardingFront.setTranslationX(
                     position == this.position
