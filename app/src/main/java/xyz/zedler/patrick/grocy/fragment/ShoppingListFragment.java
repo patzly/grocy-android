@@ -454,6 +454,7 @@ public class ShoppingListFragment extends BaseFragment implements
     public void onItemRowClicked(GroupedListItem groupedListItem) {
         if(clickUtil.isDisabled()) return;
         if(groupedListItem == null) return;
+        if(swipeBehavior != null) swipeBehavior.recoverLatestSwipedItem();
         if(groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
             showItemBottomSheet((ShoppingListItem) groupedListItem);
         } else if(!viewModel.isOffline()) {  // Click on bottom notes

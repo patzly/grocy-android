@@ -137,7 +137,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
     public static class FilterRowViewHolder extends ViewHolder {
         private final WeakReference<Context> weakContext;
-        private FilterChip chipMissing;
+        private final FilterChip chipMissing;
         private FilterChip chipUndone;
 
         public FilterRowViewHolder(
@@ -368,7 +368,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
         // NOTE
 
-        if(item.getNote() != null && !item.getNote().isEmpty()) {
+        if(item.getNote() != null && !item.getNote().trim().isEmpty()) {
             if(binding.name.getVisibility() == View.VISIBLE) {
                 binding.noteContainer.setVisibility(View.VISIBLE);
                 binding.note.setText(item.getNote().trim());
