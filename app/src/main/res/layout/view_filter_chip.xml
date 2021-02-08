@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingStart="4dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="0dp"
             android:gravity="center_vertical">
 
             <FrameLayout
@@ -55,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="12dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:fontFamily="@font/text_chip"/>

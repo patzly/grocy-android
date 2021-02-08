@@ -1,16 +1,18 @@
 2.0.0
-- New: Compatibility with grocy version 3.0.x
-- New: Not compatible anymore with grocy version 2.7.x
+- New: Compatibility with grocy v3.0.x
+- New: Incompatibility with grocy v2.7.x
 - New: Overview page
 - New: Rewritten Settings, Purchase & Consume pages
-- New: Lots of new options for configuration (check them out)
+- New: Lots of new options for configuration (check them out!)
 - New: Login flow for QR codes from grocy server
 - Improved: Loading speed (by use of database)
 - Improved: Smooth & consistent navigation between pages
 - Improved: Product autocomplete lists now use fuzzy matching
 - Improved: Server requests are now more secure with API key in header
 - Improved: Many internal code changes & better techniques
-- Fixed: Onboarding layout
+- Improved: Font usage and styling system
+- Fixed: Onboarding page layout
+- Fixed: Filter chip layout for rtl languages
 - Updated translations
 
 1.10.1

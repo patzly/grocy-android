@@ -49,7 +49,7 @@ public class FilterChip extends LinearLayout {
 
     private final static String TAG = "FilterChip";
 
-    private Context context;
+    private final Context context;
     private ImageView imageViewIcon, imageViewIconBg;
     private FrameLayout frameLayoutIcon;
     private TextView textView;
