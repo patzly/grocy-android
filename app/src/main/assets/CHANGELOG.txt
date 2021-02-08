@@ -1,5 +1,5 @@
 2.0.0
-- New: Compatible with grocy version 3.0.x
+- New: Compatibility with grocy version 3.0.x
 - New: Not compatible anymore with grocy version 2.7.x
 - New: Overview page
 - New: Rewritten Settings, Purchase & Consume pages
