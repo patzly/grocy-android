@@ -116,7 +116,7 @@
     <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">%1$s \"%2$s\" wirklich löschen?</string>
     <!-- %1$s is a product name -->
-    <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadruch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehe stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn du dies behalten und nur das Produkt ausblenden willst.</string>
+    <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadurch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehe stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn du dies behalten und nur das Produkt ausblenden willst.</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
     <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
