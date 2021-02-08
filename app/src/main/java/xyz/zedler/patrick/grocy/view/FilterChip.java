@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class FilterChip extends LinearLayout {
 
-    private final static String TAG = "FilterChip";
+    private final static String TAG = FilterChip.class.getSimpleName();
 
     private final Context context;
     private ImageView imageViewIcon, imageViewIconBg;
