@@ -51,7 +51,7 @@ Please don't report issues yet for these points!
 - Online->offline & offline->online changes a bit buggy
 
 **Testing**
-I you want to test the first alpha version (v2.0.0 alpha1), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there might be a popup with a toggle "Allow from this source".
+I you want to test the first alpha version (v2.0.0-alpha01), you can download the attached APK file now and install it on your device. You may have to enable an option in your device's settings with a name like "Allow from unknown sources" or if you have a newer Android version there might be a popup with a toggle "Allow from this source".
 You can install the APK over your current installation, because it has the same signature.
 After update, some or all app preferences may have the default status because their identifiers changed internally and I won't write migrations for them.
 
