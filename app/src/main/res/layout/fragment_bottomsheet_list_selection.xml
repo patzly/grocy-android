@@ -75,6 +75,9 @@
         android:id="@+id/recycler_list_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
         android:nestedScrollingEnabled="true"
         android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"/>
