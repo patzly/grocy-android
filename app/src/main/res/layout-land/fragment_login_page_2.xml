@@ -18,57 +18,67 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:gravity="center"
-            android:paddingStart="32dp"
-            android:paddingEnd="0dp">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_round_grocy"
-                tools:ignore="ContentDescription"
-                android:layout_marginBottom="8dp"/>
+            android:gravity="center_vertical|end"
+            android:paddingStart="@dimen/main_side_margin"
+            android:paddingEnd="0dp"
+            android:layout_marginEnd="32dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_feedback"
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_round_grocy"
+                    tools:ignore="ContentDescription"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_feedback_anim"
-                    app:tint="@color/icon"/>
+                    android:orientation="horizontal">
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_help"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_help_outline_anim"
-                    app:tint="@color/icon"/>
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_login_feedback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_feedback_anim"
+                        app:tint="@color/icon"/>
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_info_outline_anim"
-                    app:tint="@color/icon"/>
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_login_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_help_outline_anim"
+                        app:tint="@color/icon"/>
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_open_in_browser_anim"
-                    app:tint="@color/icon"/>
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_login_about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_info_outline_anim"
+                        app:tint="@color/icon"/>
 
-                <xyz.zedler.patrick.grocy.view.ActionButton
-                    android:id="@+id/button_login_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_settings_anim"
-                    app:tint="@color/icon"/>
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_login_website"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_open_in_browser_anim"
+                        app:tint="@color/icon"/>
+
+                    <xyz.zedler.patrick.grocy.view.ActionButton
+                        android:id="@+id/button_login_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_round_settings_anim"
+                        app:tint="@color/icon"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -80,8 +90,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingStart="32dp"
-            android:paddingEnd="48dp">
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/main_side_margin">
 
             <LinearLayout
                 android:layout_width="match_parent"

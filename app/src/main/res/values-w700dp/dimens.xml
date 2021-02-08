@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="login_margin">80dp</dimen>
+    <dimen name="main_side_margin">72dp</dimen>
+
+</resources>

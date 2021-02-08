@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         repository = new MainRepository(getApplication());
 
         // VIEWS
+        Log.i(TAG, "onCreate: width" + getResources().getConfiguration().screenWidthDp);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

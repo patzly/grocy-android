@@ -135,8 +135,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingStart="@dimen/main_card_margin"
-                        android:paddingEnd="@dimen/main_card_margin"
+                        android:paddingStart="@dimen/main_side_margin"
+                        android:paddingEnd="@dimen/main_side_margin"
                         android:clipToPadding="false"
                         android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
@@ -183,8 +183,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         style="@style/Widget.Grocy.Card"
-                        android:layout_marginStart="@dimen/main_card_margin"
-                        android:layout_marginEnd="@dimen/main_card_margin"
+                        android:layout_marginStart="@dimen/main_side_margin"
+                        android:layout_marginEnd="@dimen/main_side_margin"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}"
                         android:onLongClickVoid="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
@@ -214,8 +214,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         style="@style/Widget.Grocy.Card"
-                        android:layout_marginStart="@dimen/main_card_margin"
-                        android:layout_marginEnd="@dimen/main_card_margin"
+                        android:layout_marginStart="@dimen/main_side_margin"
+                        android:layout_marginEnd="@dimen/main_side_margin"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
                         app:clickUtil="@{clickUtil}">
@@ -246,8 +246,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingStart="@dimen/main_card_margin"
-                        android:paddingEnd="@dimen/main_card_margin"
+                        android:paddingStart="@dimen/main_side_margin"
+                        android:paddingEnd="@dimen/main_side_margin"
                         android:paddingBottom="16dp"
                         android:clipToPadding="false"
                         android:clipChildren="false">
@@ -326,8 +326,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         style="@style/Widget.Grocy.Card"
-                        android:layout_marginStart="@dimen/main_card_margin"
-                        android:layout_marginEnd="@dimen/main_card_margin"
+                        android:layout_marginStart="@dimen/main_side_margin"
+                        android:layout_marginEnd="@dimen/main_side_margin"
                         android:layout_marginBottom="16dp"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
                         app:clickUtil="@{clickUtil}">

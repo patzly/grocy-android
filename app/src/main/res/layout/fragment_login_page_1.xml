@@ -17,10 +17,12 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="@dimen/main_side_margin"
+        android:layout_marginEnd="@dimen/main_side_margin"
         android:layout_centerInParent="true"
         android:layout_alignParentTop="true"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         app:contentPadding="12dp"
         app:cardBackgroundColor="@color/on_background_variant">

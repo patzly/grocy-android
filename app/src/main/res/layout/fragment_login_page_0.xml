@@ -18,9 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:padding="32dp"
-            android:layout_marginStart="@dimen/login_margin"
-            android:layout_marginEnd="@dimen/login_margin">
+            android:paddingTop="32dp"
+            android:paddingBottom="32dp"
+            android:layout_marginStart="@dimen/main_side_margin"
+            android:layout_marginEnd="@dimen/main_side_margin">
 
             <ImageView
                 android:layout_width="56dp"

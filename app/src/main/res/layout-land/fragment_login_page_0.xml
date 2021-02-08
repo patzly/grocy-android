@@ -25,8 +25,9 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingStart="32dp"
-                android:paddingEnd="0dp">
+                android:paddingStart="@dimen/main_side_margin"
+                android:paddingEnd="0dp"
+                android:layout_marginEnd="32dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -53,12 +54,12 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingStart="32dp"
-                android:paddingEnd="48dp">
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/main_side_margin">
 
                 <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_marginBottom="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_round_grocy"
