@@ -1,5 +1,9 @@
 <resources>
 
+    <!-- Here you can append your name (without the ":"), but only if you have translated some strings, please.
+     Append your name with the prefix \n (means newline) if there are already some other names.-->
+    <string name="language_translators">: 4lloyd</string>
+
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->
     <string name="action_purchase">Kopen</string>
@@ -37,7 +41,7 @@
     <string name="action_clear">Leegmaken</string>
     <string name="action_clear_shopping_list">Boodschappenlijst leegmaken</string>
     <string name="action_rate">Beoordeel op Google Play</string>
-    <string name="action_rate_description">Support de ontwikkelaars</string>
+    <string name="action_rate_description">Ondersteun de ontwikkelaars</string>
     <string name="action_email">Email versturen</string>
     <string name="action_email_description">Neem contact met de ontwikkelaars</string>
     <string name="action_new_issue">Open een nieuw issue op GitHub</string>
@@ -49,6 +53,7 @@
     <string name="action_undo">Annuleren</string>
     <string name="action_retry">Opnieuw proberen</string>
     <string name="action_edit">Wijzigen</string>
+    <string name="action_proceed">Doorgaan</string>
     <string name="action_delete">Verwijderen</string>
     <string name="action_save">Opslaan</string>
     <string name="action_logout">Uitloggen</string>
@@ -57,11 +62,13 @@
     <string name="action_link">Linken</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Verwerp</string>
+    <string name="action_clear_form">Formulier leegmaken</string>
     <string name="action_toggle_done">Verander status</string>
     <string name="action_edit_notes">Notitie bewerken</string>
     <string name="action_add_missing">Missende producten toevoegen</string>
     <string name="action_purchase_all_items">Koop alle items</string>
     <string name="action_skip_entry">Invoer overslaan</string>
+    <string name="action_toggle_flash">Lamp aan/uit</string>
     <string name="action_delete_shopping_list">Boodschappenlijst verwijderen</string>
     <string name="action_create_key">Sleutel aanmaken</string>
     <string name="action_login">Inloggen</string>
@@ -70,6 +77,10 @@
     <string name="action_clear_all">Alle</string>
     <!-- This string should follow the equality between "done" and "Clear done items" -->
     <string name="action_clear_done">Afgerond</string>
+    <string name="action_display_help">Help tekst weergeven</string>
+    <string name="action_demo_server">Test server</string>
+    <string name="action_own_server">Eigen server</string>
+    <string name="action_enter_data_manually">Gegevens handmatig invoeren</string>
 
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d verloopt binnenkort</string>
@@ -82,7 +93,6 @@
     <string name="msg_opened">%1$s %2$s van %3$s gemarkeerd als geopend</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d nog niet gedaan</string>
-    <!-- %1$s is a product name -->
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">%1$s %2$s van %3$s aan voorraad toegevoegd</string>
     <!-- %1$s is a product name -->
@@ -103,22 +113,70 @@
     <!-- %1$s is a shopping list name -->
     <string name="msg_shopping_list_deleted">%1$s succesvol verwijderd</string>
     <string name="msg_barcode_duplicate">Streepjescode bestaat al</string>
-    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
-    <string name="msg_master_delete">Verwijder %1$s \"%2$s\"?</string>
+    <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+    <string name="msg_master_delete">%1$s \"%2$s\" echt verwijderen?</string>
+    <!-- %1$s is a product name -->
+    <string name="msg_master_delete_product">Weet je zeker dat het product \"%1$s\" wil verwijderen?\n\nDit verwijdert ook alle voorraad, het dagboek en andere referenties naar dit product. Als je dit wil behouden dan is het mogelijk beter om het product te deactiveren.</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
     <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_scan_mode_confirm">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
     <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
-    <string name="msg_logout_demo">Je maakt momenteel gebruik van de demo op <u>https://grocy.info</u>.  <b>Daar worden geen wijzigingen opgeslagen! Ze blijven openbaar totdat de server ze automatisch overschrijft.</b>  Op het login-scherm kun je je eigen serveradres invoeren.</string>
+    <string name="msg_logout_demo">Je maakt gebruik van de openbare demo server <u>https://grocy.info</u>.\n\n<b>Wijzigingen worden daar niet definitief opgeslagen!\nZe blijven openbaar totdat de server ze automatisch overschrijft.</b> \n\nOp het login-scherm kun je je eigen serveradres invoeren.</string>
+    <string name="msg_logout_demo_short">Openbare demo server. Tik voor details.</string>
     <string name="msg_restart">Herstart de app om de nieuwe Grocy configuratie in te laden.</string>
-    <string name="msg_features">Start de intro opnieuw in \"Over\"</string>
+    <string name="msg_shortcuts">Je kan tot 4 snelkoppelingen activeren:</string>
+    <string name="msg_shortcuts_not_supported">Snelkoppelingen worden niet ondersteunt door deze Android versie.</string>
+    <string name="msg_features">Start de intro opnieuw in \"Over deze app\"</string>
     <string name="msg_feedback">Heb je wensen, vragen of fouten gevonden? Neem contact met ons op, wij helpen je graag. Anders zouden we het heel fijn vinden als je een leuke recensie achter laat in de Play Store.</string>
     <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
+    <string name="msg_press_hold_confirm">Druk en houd ingedrukt op te bevestigen</string>
+    <string name="msg_welcome_to_grocy">Welkom bij Grocy Android!\n\nOm deze app te kunnen gebruiken heb je een eigen server nodig.\nAls je alleen deze app wil testen dan kan je de test server van Bernd Bestel, de bedenker van grocy, gebruiken.</string>
+    <string name="msg_choose_option_below">Kies een van de onderstaande opties.</string>
+    <string name="msg_qr_code_scan">Bezoek op een ander apparaat jouw grocy en ga naar de \'API sleutels\' pagina. Klik op \'Toevoegen\', klik daarna op het kleine QR-code symbooltje en scan de QR-code.</string>
+    <string name="msg_not_implemented_yet">Dit komt binnenkort beschikbaar. Gebruik voor nu de server weergave.</string>
+    <string name="msg_help_due_date_type">De markeringen op de voorraadoverzicht pagina zijn, gebaseerd op het geselecteerde vervaldatum type, verschillend. \"Tenminste houdbaar tot\" betekent dat het product mogelijk nog steeds veilig om te consumeren is nadat de vervaldatum bereikt is. \"Houdbaarheidsdatum\" betekent dat het product niet meer veilig is om te eten na de vervaldatum.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days">Bij aankopen wordt dit aantal dagen toegevoegd aan vandaag voor de vervaldatum suggestie (-1 betekent dat dit product nooit verloopt)</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_opened">Als het product als open wordt gemarkeerd dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen (de waarde 0 schakelt dit uit)</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_freezing">Als het product naar een vriezer locatie wordt verplaatst (dus wanneer het ingevroren wordt), dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen (-1 betekent dat dit product nooit verloopt)</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_thawing">Als het product uit een vriezer locatie wordt verplaatst (dus wanneer het ontdooid wordt), dan wordt de vervaldatum vervangen door vandaag + het aantal ingevulde dagen.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_qu_stock">Voorraadeenheid kan niet gewijzigd worden na eerste aankoop.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_qu_purchase">Dit is de standaard hoeveelheid die word gebruikt bij het toevoegen van dit product aan de boodschappenlijst.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_accumulate_min_amount">Indien ingeschakeld, de min. voorraad van sub producten zal worden verzameld in dit product, wat betekent dat het sub product nooit zal \"ontbreken\", alleen dit product</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_quick_consume_amount">Deze hoeveelheid wordt gebruikt voor de \"snel consumeer/open knoppen\" op de voorraadoverzicht pagina (relatief aan de voorraadeenheid).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_tare_weight">Dit is nuttig voor b.v. meel in potten - bij aankoop/consumptie/inventaris weeg je altijd de hele pot, de te boeken hoeveelheid wordt dan automatisch berekend op basis van wat op voorraad is en het tarragewicht hieronder gedefinieerd.</string>
+    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_tare_weight_purchase">Tare weight handling ingeschakeld - weeg de hele container af, het te boeken aantal wordt automatisch berekend.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_disable_stock_check">Dit wordt gebruikt als de standaardinstelling bij het toevoegen van dit product als recept ingrediënt</string>
+    <string name="msg_help_external_scanner_ready">Je kan een externe scanner gebruiken voor het veld hieronder als het geselecteerd is en leeg.</string>
+    <string name="msg_help_external_scanner_settings">Deze app ondersteunt externe scanner apparaten die zich voordoen als toetsenbord en verbonden kunnen worden via USB of Bluetooth. De volgende opties moeten worden ingesteld in de externe scanner:\n\nVoorvoegsel: Geen\nAchtervoegsel: TAB of ENTER</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_specific_item_consume">Het eerste item in deze lijst wordt gekozen met de standaardregel: \"Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit\".</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_recipe_consume">Dit is alleen voor de statistiek</string>
+    <string name="msg_help_scan_mode">Je kan de scan modus activeren door de titelbalk lang ingedrukt te houden. Tik op deze kaart om het standaard gedrag te veranderen.</string>
+    <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>
+    <string name="msg_help_start">Beginnersmode is actief: Help tekst wordt standaard weergegeven op alle pagina\'s. Tik om dit te veranderen.</string>
+    <string name="msg_help_purchased_date_settings">Als deze optie is ingeschakeld wordt een veld voor de aankoopdatum weergegeven op de aankoop en voorraad pagina. Indien uitgeschakeld wordt vandaag gebruikt als aankoopdatum.</string>
 
     <string name="error_api_not_working">API sleutel werkt niet</string>
+    <string name="error_orbot_not_installed">Orbot is niet geïnstalleerd</string>
     <string name="error_select_product">Selecteer een product</string>
     <string name="error_empty">Verplicht</string>
     <string name="error_empty_stock">Voorraad is leeg</string>
@@ -140,38 +198,57 @@
     <string name="error_invalid_product">Ongeldig product</string>
     <string name="error_invalid_url">Ongeldige URL</string>
     <string name="error_invalid_amount">Ongeldige hoeveelheid</string>
+    <string name="error_invalid_price">Ongeldige prijs</string>
     <string name="error_invalid_best_before_days">Gebruik -1 om nooit te laten vervallen</string>
     <string name="error_invalid_factor">Ongeldige factor</string>
+    <string name="error_api_qr_code">Geen QR code met grocy API inloggegevens</string>
+    <string name="error_loading_qus">Kan geen eenheden laden van dit product</string>
     <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-    <string name="error_bounds_min_max">Tussen %1$s en %2$s</string>
+    <string name="error_bounds_min_max">Moet tussen %1$s en %2$s zijn</string>
     <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_min">Groter of gelijk aan %1$s</string>
+    <string name="error_bounds_min">Moet gelijk of groter dan %1$s zijn</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_max">Moet lager of gelijk aan %1$s zijn</string>
+    <!-- %1$s is a number like 0, 1, 2 -->
+    <string name="error_bounds_higher">Moet hoger dan %1$s zijn</string>
     <string name="error_offline">Offline</string>
+    <string name="error_offline_subtitle">Deze pagina werk alleen met internet toegang. Controleer je verbinding.</string>
     <string name="error_name_exists">Naam bestaat al</string>
-    <string name="error_offline_subtitle">Controleer je verbinding en probeer opnieuw</string>
+    <string name="error_network">Netwerk fout</string>
+    <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
     <string name="error_unknown">Oeps!</string>
     <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
     <string name="error_timeout">Timeout fout</string>
+    <string name="error_no_product_selected">Geen product geselecteerd</string>
     <!-- %1$s is a server URL -->
     <string name="error_failed_to_connect_to">Verbinding met %1$s mislukt</string>
     <string name="error_handshake">Certificaat ontbreekt</string>
+    <string name="error_missing_information">Niet alle benodigde velden zijn ingevuld</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s heeft een certificaat dat niet wordt herkend door Android.\nHet servercertificaat moet worden ondertekend door een vertrouwde certificeringsinstantie (CA)\nOm aan deze vereisten te voldoen, kunt u een gratis certificaat aanmaken via letsencrypt.org</string>
     <string name="error_unexpected_response_code">Onverwachte reactie met code: %1$d</string>
     <string name="error_unexpected_response">Onverwachte reactie van server</string>
+    <string name="error_no_browser">Installeer een webbrowser om de help website weer te geven</string>
+    <string name="error_barcode_not_linked">Barcode is niet gekoppeld aan een product</string>
+    <string name="error_no_product_details">Geen product details gekregen</string>
+    <string name="error_failed_barcode_upload">Kan geen barcode uploaden</string>
     <string name="error_undefined">Er is een fout opgetreden</string>
 
+    <string name="title_overview">Overzicht</string>
     <string name="title_stock_overview">Voorraad</string>
     <string name="title_purchase">Koop</string>
     <string name="title_consume">Consumeer</string>
+    <string name="title_barcode_input">Streepjescode invoer</string>
     <string name="title_product_overview">Productoverzicht</string>
     <string name="title_product">Product</string>
+    <string name="title_product_create">Product aanmaken</string>
+    <string name="title_product_edit">Product aanpassen</string>
     <string name="title_master_data">Masterdata</string>
     <string name="title_stock_entries">Voorraadvermeldingen</string>
     <string name="title_shopping_list">Boodschappenlijst</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Instellingen</string>
-    <string name="title_about_this_app">Over</string>
+    <string name="title_about_this_app">Over deze app</string>
     <string name="title_info">Informatie</string>
     <string name="title_help">Help</string>
     <string name="title_logs">Logs</string>
@@ -180,9 +257,21 @@
     <string name="title_restart">Grocy herstarten?</string>
     <string name="title_logout_demo">Demomodus uitloggen?</string>
     <string name="title_manage_master_data">Masterdaata beheren</string>
+    <string name="title_edit_description">Omschrijving aanpassen</string>
+    <string name="title_input_number">Getal invoer</string>
+    <string name="title_external_barcode_input">Externe scanner</string>
+    <string name="title_confirmation">Bevestiging</string>
 
     <string name="title_spoiled">Bedorven</string>
     <string name="title_use_specific">Gebruik specifiek voorraadartikel</string>
+    <string name="title_specific">Specifiek voorraadartikel</string>
+    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_exact_amount">Consumeer specifieke hoeveelheid</string>
+    <string name="title_recipe">Recept</string>
+    <string name="title_total_price">Totaalprijs</string>
+    <string name="title_unit_price">Stukprijs</string>
+    <!-- %1$s is a quantity unit -->
+    <string name="title_unit_price_specific">%1$s prijs</string>
     <string name="title_stock_entry_no_specific">Geen specifieke vermelding</string>
     <string name="title_shopping_list_ungrouped">Ongegroepeerd</string>
     <string name="title_list_entry">Lijstvermelding</string>
@@ -192,6 +281,17 @@
     <string name="title_shopping_list_new">Nieuwe boodschappenlijst</string>
     <string name="title_shopping_mode">Winkelmodus</string>
     <string name="title_batch_mode_shopping_list">Boodschappelijst batchmodus</string>
+    <string name="title_product_cat_optional">Optionele eigenschappen</string>
+    <string name="title_product_cat_location">Standaard locatie</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_product_cat_due_date">Vervaldatum</string>
+    <string name="title_product_cat_amount">Aantal</string>
+    <string name="title_product_cat_quantity_unit">Hoeveelheid eenheid</string>
+    <string name="title_product_cat_barcodes">Streepjescodes</string>
+    <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+    <string name="title_product_cat_qu_conversions">Hoeveelheidseenheidsconversies</string>
+    <string name="title_unknown_input">Onbekende invoer</string>
+    <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
 
     <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
     <string name="subtitle_amount">%1$s %2$s</string>
@@ -199,22 +299,70 @@
     <string name="subtitle_amount_opened">(%1$s geopend)</string>
     <!-- %1$s is a product name -->
     <string name="subtitle_stock_locations">Waar %1$s voorraad heeft</string>
-    <string name="subtitle_default_location">Standaard</string>
+    <string name="subtitle_default_location">Standaard locatie</string>
     <string name="subtitle_none_selected">Niks geselecteerd</string>
     <string name="subtitle_empty">Leeg</string>
     <string name="subtitle_done">Klaar</string>
     <string name="subtitle_undone">Niet klaar</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Verloopt nooit</string>
     <string name="subtitle_selected">Geselecteerd</string>
-    <string name="subtitle_stock_entry_no_specific">Eerst verloopt eerst, dan eerst in - eerst uit</string>
+    <string name="subtitle_stock_entry_no_specific">Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit</string>
     <!-- %1$s is a purchase date -->
-    <string name="subtitle_stock_entry_name">Ingekocht: %1$s</string>
-    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
-    <string name="subtitle_stock_entry">THT: %1$s; Aantal: %2$s; %3$s</string>
+    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="subtitle_stock_entry_name">Gekocht op %1$s</string>
+    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+    <string name="subtitle_stock_entry">Verloopt op %1$s; aantal: %2$s; %3$s</string>
     <!-- %1$s and %2$s are numbers -->
     <string name="subtitle_entry_num_of_num">Item %1$d van %2$d</string>
+    <!-- %1$s is an amount, %2$s is a quantity unit -->
+    <string name="subtitle_amount_compare">Gelijk aan %1$s %2$s.</string>
+    <!-- %1$s is a price, %2$s is a quantity unit -->
+    <string name="subtitle_price_means">Dit betekend %1$s per %2$s.</string>
+    <string name="subtitle_product_hidden">Product is verborgen</string>
+    <string name="subtitle_product_not_hidden">Product is niet verborgen</string>
+    <string name="subtitle_product_not_on_server">Product is niet op de server</string>
+    <string name="subtitle_unknown">Onbekend</string>
+    <!-- Like the word 'supported' from 'This version is supported.'-->
+    <string name="subtitle_supported">Ondersteund</string>
+    <!-- Like the words 'not supported' from 'This version is not supported.'-->
+    <string name="subtitle_not_supported">Niet ondersteund</string>
 
-    <!-- %1$s is a product name -->
+    <string name="description_input_product_part1">Product veld bevat:</string>
+    <string name="description_input_product_part2">Kies hoe je door wil gaan:</string>
+    <string name="description_input_product_option1">Maak een nieuw product aan en gebruik de invoer als naam</string>
+    <string name="description_input_product_option2">Maak een nieuw product aan en gebruik de invoer als streepjescode</string>
+    <string name="description_input_product_option3">Voeg toe als barcode bij een bestaand product</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Alleen voltooide items verwijderen</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Verwijder alle items</string>
+
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock">
+        <item quantity="one">Je hebt één product in voorraad</item>
+        <item quantity="other">Je hebt %1$d producten in voorraad</item>
+    </plurals>
+    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+    <plurals name="description_overview_stock_value">
+        <item quantity="one">Je hebt %1$d producten in voorraad met een waarde van %2$s%3$s.</item>
+        <item quantity="other">Je hebt %1$d producten in voorraad met een waarde van %2$s %3$s.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list_multi">
+        <item quantity="one">Één item staat op je boodschappenlijst</item>
+        <item quantity="other">%1$d items staan op je boodschappenlijst</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list">
+        <item quantity="one">Één item staat op je boodschappenlijst.</item>
+        <item quantity="other">%1$d items staan op je boodschappenlijst.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Je database bevat één product.</item>
+        <item quantity="other">Je database bevat %1$d producten.</item>
+    </plurals>
 
     <string name="property_name">Naam</string>
     <string name="property_name_singular">Naam (Enkelvoud)</string>
@@ -231,22 +379,41 @@
     <!-- %1$d is a number (amount of seconds) -->
     <string name="property_seconds_num">%1$d seconden</string>
     <string name="property_amount_min_stock">Min. aantal in voorraad</string>
-    <!-- &1$s is a quantity unit like "bottles" -->
+    <!-- %1$s is a quantity unit like "bottles" -->
     <string name="property_amount_in">Aantal in %1$s</string>
     <string name="property_price">Prijs</string>
-    <!-- &1$s is a currency like "USD", or "EUR" -->
+    <!-- %1$s is a currency like "USD", or "EUR" -->
     <string name="property_price_in">Prijs in %1$s</string>
     <string name="property_quantity_unit">Hoeveelheid eenheid</string>
     <string name="property_quantity_units">Aantal eenheden</string>
-    <string name="property_default_qu_purchase">Aankoopeenheid</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_default_qu_purchase">Standaard aankoopeenheid</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_stock">Voorraadeenheid</string>
-    <string name="property_qu_factor">Factor van aankoop- naar voorraadeenheid</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_qu_factor">Factor aankoop- naar voorraadeenheid</string>
     <string name="property_barcode">Streepjescode</string>
     <string name="property_barcodes">Streepjescodes</string>
-    <string name="property_due_date">Tenminste houdbaar tot</string>
+    <string name="property_days">Dagen</string>
+    <string name="property_purchased_date">Aankoopdatum</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_date_type">Vervaldatum soort</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_type_best_before">Tenminste houdbaar tot</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_type_expiration">Houdbaarheidsdatum</string>
+    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_date">Vervaldatum</string>
+    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_next">Volgende houdbaarheidsdatum</string>
-    <string name="property_due_days_default">Standaard THT dagen</string>
-    <string name="property_due_days_default_opened">Standaard THT dagen na openen</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_days_default">Standaard houdbaarheidsdagen</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_days_default_opened">Standaard houdbaarheidsdagen na openen</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_days_default_freezing">Standaard houdbaarheidsdagen na invriezen</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_due_days_default_thawing">Standaard houdbaarheidsdagen na ontdooien</string>
     <string name="property_location">Locatie</string>
     <string name="property_location_default">Standaard locatie</string>
     <string name="property_notes">Notities</string>
@@ -257,9 +424,13 @@
     <string name="property_stores">Winkels</string>
     <string name="property_shopping_list">Boodschappenlijst</string>
     <string name="property_shopping_lists">Boodschappenlijstjes</string>
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_purchased">Laatste aankoop</string>
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_used">Laatst gebruikt</string>
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_last_price">Laatste prijs</string>
+    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_average_shelf_life">Gemiddelde houdbaarheid</string>
     <string name="property_spoil_rate">Verspillingsratio</string>
     <string name="property_price_history">Prijshistorie</string>
@@ -268,24 +439,94 @@
     <string name="property_opened">geopend</string>
     <string name="property_not_opened">niet geopend</string>
     <string name="property_is_freezer">Is een vriezer</string>
+    <!-- kcal (kilo calories) is a unit for energy -->
+    <string name="property_energy">Energie (kcal)</string>
+    <string name="property_active">Actief</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_never_show">Niet weergeven op voorraadoverzicht</string>
+    <string name="property_number">Nummer</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_enable_tare_weight">Gebruik tarragewicht afhandeling</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_tare_weight">Tarragewicht</string>
+    <!-- %1$s is a quantity unit like "bottles" -->
+    <string name="property_tare_weight_in">Tarragewicht in %1$s</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_disable_stock_check">Schakel voorraadcontrole voor dit ingrediënt uit</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_amount_quick_consume">Snel gebruik hoeveelheid</string>
+    <!-- %1$s is a quantity unit like "bottles" -->
+    <string name="property_amount_quick_consume_in">Snel gebruik hoeveelheid in %1$s</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="property_accumulate_amount">Verzamel minimale voorraad sub producten</string>
+    <string name="property_picture">Afbeelding</string>
 
     <string name="date_today">Vandaag</string>
     <string name="date_unknown">Onbekend</string>
+    <!-- This means the 'time' context -->
     <string name="date_unlimited">Onbeperkt</string>
+    <!-- This means the 'time' context, like 'Last used date: Never' -->
     <string name="date_never">Nooit</string>
 
-    <string name="info_acknowledgement">We willen Bernd Bestel bedanken, zonder wiens geweldige werk deze app nooit mogelijk zou zijn geweest.</string>
+    <plurals name="date_days">
+        <item quantity="one">%d dag</item>
+        <item quantity="other">%d dagen</item>
+    </plurals>
+    <plurals name="date_months">
+        <item quantity="one">%d maand</item>
+        <item quantity="other">%d maanden</item>
+    </plurals>
+    <plurals name="date_years">
+        <item quantity="one">%d jaar</item>
+        <item quantity="other">%d jaren</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_ago">
+        <item quantity="one">%d dag geleden</item>
+        <item quantity="other">%d dagen geleden</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_ago">
+        <item quantity="one">%d maand geleden</item>
+        <item quantity="other">%d maanden geleden</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_ago">
+        <item quantity="one">%d jaar geleden</item>
+        <item quantity="other">%d jaren geleden</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_days_from_now">
+        <item quantity="one">In %d dag</item>
+        <item quantity="other">In %d dagen</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_months_from_now">
+        <item quantity="one">In %d maand</item>
+        <item quantity="other">In %d maanden</item>
+    </plurals>
+    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+    <plurals name="date_years_from_now">
+        <item quantity="one">In %d jaar</item>
+        <item quantity="other">In %d jaren</item>
+    </plurals>
+
+    <string name="info_acknowledgement">We willen ontwikkelaar van grocy, Bernd Bestel, bedanken. Zonder zijn geweldige werk zou deze app nooit mogelijk zijn geweest.</string>
     <string name="info_intro">Intro opnieuw afspelen</string>
     <string name="info_intro_description">Features demonstreren</string>
+    <string name="info_dev_beginning">Begin van ontwikkeling</string>
+    <string name="info_dev_beginning_date">April 2020</string>
     <string name="info_material_components_built_with">Gemaakt met</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy Version</string>
-    <string name="subtitle_not_supported">Niet ondersteund</string>
     <string name="info_changelog">Changelog</string>
     <string name="info_changelog_description">Wat is nieuw?</string>
     <string name="info_developers">Ontwikkelaars</string>
+    <string name="info_translators">Vertalers van deze taal</string>
     <string name="info_github">Grocy Android op GitHub</string>
     <string name="info_github_description">Broncode</string>
+    <string name="info_website">Open Grocy website</string>
+
     <string name="feature_1_title">Grocy voor Android</string>
     <string name="feature_1_description">Zelfgehost boodschappen management tool voor thuis</string>
     <string name="feature_2_title">Intuïtief ontwerp</string>
@@ -295,9 +536,13 @@
 
     <string name="category_licenses">Open Source licenties</string>
     <string name="category_general">Algemeen</string>
+    <string name="category_stock">Voorraad</string>
     <string name="category_server">Server</string>
+    <string name="category_scanner">Scanner</string>
+    <string name="category_appearance">Weergave</string>
+    <string name="category_network">Netwerk</string>
+    <string name="category_behavior">Gedrag</string>
     <string name="category_debugging">Debugging</string>
-    <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
 
     <string name="hint_server">Server URL</string>
     <string name="hint_key">Geldige API sleutel</string>
@@ -308,24 +553,49 @@
     <string name="setting_open_food_facts_description">Info van streepjescode gebruiken</string>
     <string name="setting_use_front_cam">Gebruik selfie-camera</string>
     <string name="setting_use_front_cam_description">Voor streepjescode te scannen</string>
+    <string name="setting_external_support">Ondersteuning voor externe scanners</string>
+    <string name="setting_external_support_description">Via USB of Bluetooth</string>
+    <string name="setting_scan_mode_consume">Consumeer pagina in scan mode starten</string>
+    <string name="setting_scan_mode_purchase">Aankoop pagina in scan mode starten</string>
+    <string name="setting_scan_mode_shopping_item">Boodschappenlijst pagina in scan mode starten</string>
     <string name="setting_reload_config">Configuratie opnieuw inladen</string>
     <string name="setting_reload_config_description">App herstart nodig</string>
     <string name="setting_logout">Uitloggen</string>
     <string name="setting_logout_description">Terug naar loginpagina</string>
+    <string name="setting_manage_shortcuts">Beheer snelkoppelingen</string>
     <string name="setting_list_indicator">Product markeren</string>
     <string name="setting_list_indicator_description">Blauwe punt tonen, als product zich in boodschappenlijst bevindt</string>
     <string name="setting_shopping_mode_update_interval">Winkelmodus update interval</string>
     <string name="setting_keep_screen_on">Houd het scherm aan</string>
     <string name="setting_keep_screen_on_description">Wanneer in winkelmodus</string>
+    <string name="setting_show_done_items">Voltooide items weergeven</string>
+    <string name="setting_show_done_items_description">Onderaan</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_expiring_soon_days">\"Vervalt binnenkort\" dagen</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_purchase">Standaard aantal voor inkoop</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_consume">Standaard aantal bij consumeren</string>
+    <string name="setting_purchased_date">Vraag naar aanschafdatum</string>
+    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="setting_purchased_date_description">Op aankoop en voorraad pagina</string>
     <string name="setting_empty_value">Leeg</string>
     <string name="setting_sync_off">Synchonisatie uit</string>
     <string name="setting_not_loaded">Kon niet worden geladen</string>
     <string name="setting_debug">Logging aangezet</string>
+    <string name="setting_debug_description">Toon errors in de logbestanden</string>
     <string name="setting_info_logs">Info-Logs bekijken</string>
     <string name="setting_logs_description">Logcat van dit proces bekijken</string>
+    <string name="setting_timeout">Laad timeout</string>
+    <string name="setting_timeout_descriptions">Na hoelang het laden gestopt wordt</string>
+    <string name="setting_beginner_mode">Beginnersmodus</string>
+    <string name="setting_beginner_mode_description">Help tekst standaard weergeven</string>
+    <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+    <string name="setting_expand_bottom_sheets">Bottom sheets volledig weergeven</string>
+    <string name="setting_expand_bottom_sheets_description">In landschapsmode</string>
+    <string name="setting_loading_circle">Laat een laad cirkel zien voor alle verzoeken</string>
+    <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
+    <string name="setting_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
 
     <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
     Examples: 'de' for German; 'fr' for French -->
