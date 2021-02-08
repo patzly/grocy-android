@@ -75,7 +75,6 @@ import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UpdateInfoBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -196,13 +195,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> supportedVersions = new ArrayList<>(
                     Arrays.asList(getResources().getStringArray(R.array.compatible_grocy_versions))
             );
-            if(supportedVersions.contains(version)) {
-                if(!isDemo() && !sharedPrefs.getBoolean(
-                        Constants.PREF.UPDATE_INFO_READ,
-                        false
-                )) showBottomSheet(new UpdateInfoBottomSheet(), null);
-                return;
-            }
+            if(supportedVersions.contains(version)) return;
 
             // If user already ignored warning, do not display again
             String ignoredVersion = sharedPrefs.getString(
@@ -396,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
         Snackbar bar = Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG);
         View v = bar.getView();
         TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setMaxLines(3);
+        text.setMaxLines(4);
         showSnackbar(bar);
     }
 
