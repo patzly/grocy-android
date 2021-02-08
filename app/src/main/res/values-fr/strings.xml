@@ -29,7 +29,7 @@
     <string name="action_new">Nouveau</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Précedent</string>
-    <string name="action_feedback">Donner votre avis</string>
+    <string name="action_feedback">Envoyer un commentaire</string>
     <string name="action_reset">Réinitialiser</string>
     <string name="action_reload">Recharger</string>
     <string name="action_top_scroll">Faire défiler vers le haut</string>
@@ -128,10 +128,10 @@
     <string name="msg_scan_mode_confirm_consume">Transaction qui sera exécutée:\n\nSupprimer : %1$s %2$s de %3$s du stock\nEmplacement : %4$s</string>
     <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
     <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
-    <string name="msg_logout_demo">Vous utilisez l\'instance de démonstration grocy publique à <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer votre propre adresse de serveur.</string>
-    <string name="msg_logout_demo_short">Serveur publique de démonstration. Cliquez pour les détails.</string>
+    <string name="msg_logout_demo">Vous utilisez le serveur de démonstration grocy publique <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
+    <string name="msg_logout_demo_short">Serveur publique de démonstration. Tapez pour les détails.</string>
     <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle de Grocy.</string>
-    <string name="msg_shortcuts">Vous pouvez activer 4 raccourcis.</string>
+    <string name="msg_shortcuts">Vous pouvez activer jusqu\'à 4 raccourcis :</string>
     <string name="msg_shortcuts_not_supported">Les raccourcis ne sont pas supportés sur cette version d\'Android.</string>
     <string name="msg_features">Recommencer l\'intro dans \"À propos de cette application\"</string>
     <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs? Contactez-nous et laissez-nous vous aider!\nSinon, nous serions très heureux de recevoir une bonne critique dans le Play Store.</string>
@@ -172,7 +172,7 @@
     <string name="msg_help_recipe_consume">À des fins statistiques uniquement</string>
     <string name="msg_help_scan_mode">Vous pouvez faire un appui long sur la bar de titre ci-dessus pour activer le mode scan. Cliquez sur cette carte pour changer le comportement par défaut.</string>
     <string name="msg_help_loading_circle_settings">Sur chaque page où quelque chose a été chargé depuis le serveur, l\'application vérifie en premier, avec une petite requête, si la base de donnée du serveur a changé depuis la dernière fois et ne met à jour que les données obsolètes. Activez l\'option ci-dessous pour afficher une animation de chargement durant cette petite requête.</string>
-    <string name="msg_help_start">Le mode débutant est actif : Les textes d\'aide sont affichés par défaut sur toutes les pages, si disponible. Vous pouvez changer ce comportement en cliquant sur cette carte.</string>
+    <string name="msg_help_start">Le mode débutant est actif : Les textes d\'aide sont affichés par défaut sur toutes les pages, si disponible. Tapez pour changer.</string>
     <string name="msg_help_purchased_date_settings">Si l\'option ci-dessous est activée, un champ pour la date d\'achat sera affiché sur les pages d\'achat et d\'inventaire. Sinon, la date d\'achat par défaut est le jour même.</string>
 
     <string name="error_api_not_working">La clé API ne fonctionne pas</string>
@@ -307,7 +307,7 @@
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_never_overdue">Jamais dépassé</string>
     <string name="subtitle_selected">Sélectionner</string>
-    <string name="subtitle_stock_entry_no_specific">Expirant d\'abord, puis premier entré - premier sorti</string>
+    <string name="subtitle_stock_entry_no_specific">Ouvert en premier, puis première péremption en premier, puis premier entré / premier sorti.</string>
     <!-- %1$s is a purchase date -->
     <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="subtitle_stock_entry_name">Acheté le %1$s</string>
@@ -329,10 +329,14 @@
     <string name="subtitle_not_supported">Non supporté</string>
 
     <string name="description_input_product_part1">Le champ du produit contient :</string>
-    <string name="description_input_product_part2">Merci de choisir comment gérer ça.</string>
+    <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
     <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
     <string name="description_input_product_option2">Créer un produit et utiliser l\'entrée en tant que code barre</string>
     <string name="description_input_product_option3">Ajouter en tant que code barre à un produit existant</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Ne supprimer que les produits validés</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Supprimer tous les produits</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
@@ -353,6 +357,11 @@
     <plurals name="description_overview_shopping_list">
         <item quantity="one">Un article est dans vos listes de course.</item>
         <item quantity="other">%1$d articles sont dans vos listes de course.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Votre base de donnée contient un produit.</item>
+        <item quantity="other">Votre base de donnée contient %1$d produits.</item>
     </plurals>
 
     <string name="property_name">Nom</string>
