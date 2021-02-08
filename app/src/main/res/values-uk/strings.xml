@@ -29,7 +29,7 @@
     <string name="action_new">Новий</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Назад</string>
-    <string name="action_feedback">Залиште відгук</string>
+    <string name="action_feedback">Надіслати відгук</string>
     <string name="action_reset">Скинути</string>
     <string name="action_reload">Оновити</string>
     <string name="action_top_scroll">На початок</string>
@@ -128,7 +128,7 @@
     <string name="msg_scan_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
     <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
     <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
-    <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер grocy <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
+    <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер </u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
     <string name="msg_logout_demo_short">Публічний демонстраційний сервер. Торкніться для деталей.</string>
     <string name="msg_restart">Щоб правильно застосувати поточну конфігурацію Grocy, потрібно перезапустити програму.</string>
     <string name="msg_shortcuts">Можна ввімкнути до 4-х ярликів:</string>
@@ -333,6 +333,10 @@
     <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
     <string name="description_input_product_option2">Створіть новий продукт і використовуйте введення як штрих-код</string>
     <string name="description_input_product_option3">Пов’язати штрих-код із продуктом</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option1">Видалення лише виконані елементи</string>
+    <!-- Context: Clear shopping list -->
+    <string name="description_clear_shopping_list_option2">Видалити все</string>
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
@@ -361,6 +365,13 @@
         <item quantity="few">%1$d пункти у списку покупок.</item>
         <item quantity="many">%1$d пунктів у списку покупок.</item>
         <item quantity="other">%1$d пунктів у списку покупок.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">База даних містить один продукт.</item>
+        <item quantity="few">Ваша база даних містить %1$d продукти.</item>
+        <item quantity="many">Ваша база даних містить %1$d продуктів.</item>
+        <item quantity="other">Ваша база даних містить %1$d продуктів.</item>
     </plurals>
 
     <string name="property_name">Назва</string>
