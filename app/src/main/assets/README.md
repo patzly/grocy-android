@@ -3,7 +3,7 @@
 ## Alpha testing text
 
 **Changelog**
-- Remove annoying update info
+- Fixed: Annoying update info was displayed on every start
 - Fixed: Crash on quantity units list refresh (#331)
 - Fixed: Wrong product was created if name contained "&" (#333)
 - Updated translations
