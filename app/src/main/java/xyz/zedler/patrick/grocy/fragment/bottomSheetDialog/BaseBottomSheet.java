@@ -43,6 +43,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.net.URLEncoder;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -186,7 +188,9 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
             String key = pair.split("=")[0];
             Object valueBundle = argsBundle.get(key);
             if(valueBundle == null) continue;
-            finalDeepLink += key + "=" + valueBundle.toString();
+            try {
+                finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
+            } catch (Throwable ignore) {}
             if(i != pairs.length-1) finalDeepLink += "&";
         }
         return Uri.parse(finalDeepLink);

@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
@@ -110,7 +111,12 @@ public class MasterProductViewModel extends BaseViewModel {
             }
         } else {
             Product product = new Product(sharedPrefs);
-            if(args.getProductName() != null) product.setName(args.getProductName());
+            if(args.getProductName() != null) {
+                try {
+                    String productName = URLDecoder.decode(args.getProductName(), "UTF-8");
+                    product.setName(productName);
+                } catch (Throwable ignore) {}
+            }
             setCurrentProduct(product);
         }
     }

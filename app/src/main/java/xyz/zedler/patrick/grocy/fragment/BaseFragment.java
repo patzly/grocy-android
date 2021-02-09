@@ -45,6 +45,8 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.net.URLEncoder;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -228,7 +230,9 @@ public class BaseFragment extends Fragment {
             String key = pair.split("=")[0];
             Object valueBundle = argsBundle.get(key);
             if(valueBundle == null) continue;
-            finalDeepLink += key + "=" + valueBundle.toString();
+            try {
+                finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
+            } catch (Throwable ignore) {}
             if(i != pairs.length-1) finalDeepLink += "&";
         }
         return finalDeepLink;
