@@ -4,6 +4,8 @@
 
 **Changelog**
 - Remove annoying update info
+- Fixed: Crash on quantity units list refresh (#331)
+- Fixed: Wrong product was created if name contained "&" (#333)
 - Updated translations
 
 ## Improvements
