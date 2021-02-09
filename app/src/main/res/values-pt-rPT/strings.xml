@@ -389,7 +389,7 @@
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_default_qu_purchase">Unidade de produto comprada</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_qu_stock">Stock de quantidade de produto</string>
+    <string name="property_qu_stock">Stock de unidade de produto</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_qu_factor">Conversão de compra para unidades de produto</string>
     <string name="property_barcode">Código de barras</string>
