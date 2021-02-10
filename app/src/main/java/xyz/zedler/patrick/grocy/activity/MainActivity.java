@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -66,6 +67,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
@@ -81,6 +83,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 
@@ -118,6 +121,16 @@ public class MainActivity extends AppCompatActivity {
                         Constants.SETTINGS.APPEARANCE.DARK_MODE,
                         Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
                 ) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        );
+
+        // LANGUAGE
+
+        Locale locale = LocaleUtil.getUserLocale(getApplicationContext());
+        Locale.setDefault(locale);
+        Configuration appConfig = getApplicationContext().getResources().getConfiguration();
+        appConfig.setLocale(locale);
+        getApplicationContext().getResources().updateConfiguration(
+                appConfig, getApplicationContext().getResources().getDisplayMetrics()
         );
 
         super.onCreate(savedInstanceState);
@@ -571,5 +584,33 @@ public class MainActivity extends AppCompatActivity {
 
     public void executeOnStart() {
         onStart();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        Locale locale = LocaleUtil.getUserLocale(base);
+        Locale.setDefault(locale);
+
+        Configuration configuration;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+            configuration = new Configuration(base.getResources().getConfiguration());
+            configuration.setLocale(locale);
+        } else {
+            Resources resources = base.getResources();
+            configuration = resources.getConfiguration();
+            configuration.locale = locale;
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        }
+        super.attachBaseContext(base.createConfigurationContext(configuration));
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
+        ) {
+            overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
     }
 }

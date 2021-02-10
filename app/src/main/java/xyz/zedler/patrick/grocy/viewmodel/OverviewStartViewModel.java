@@ -92,14 +92,14 @@ public class OverviewStartViewModel extends BaseViewModel {
                         value += stockItem.getValueDouble(); // TODO: Wrong calculation? End value is other than on web interface
                     }
                     if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-                        return application.getResources().getQuantityString(
+                        return getResources().getQuantityString(
                                 R.plurals.description_overview_stock_value,
                                 products, products,
                                 NumUtil.trim(value),
                                 sharedPrefs.getString(Constants.PREF.CURRENCY, "")
                         );
                     } else {
-                        return application.getResources().getQuantityString(
+                        return getResources().getQuantityString(
                                 R.plurals.description_overview_stock,
                                 products, products
                         );
@@ -112,11 +112,11 @@ public class OverviewStartViewModel extends BaseViewModel {
                     if(shoppingListItems == null) return null;
                     int size = shoppingListItems.size();
                     if(isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
-                        return application.getResources().getQuantityString(
+                        return getResources().getQuantityString(
                                 R.plurals.description_overview_shopping_list_multi, size, size
                         );
                     } else {
-                        return application.getResources().getQuantityString(
+                        return getResources().getQuantityString(
                                 R.plurals.description_overview_shopping_list, size, size
                         );
                     }
@@ -127,7 +127,7 @@ public class OverviewStartViewModel extends BaseViewModel {
                 products -> {
                     if(products == null) return null;
                     int size = products.size();
-                    return application.getResources().getQuantityString(
+                    return getResources().getQuantityString(
                             R.plurals.description_overview_master_data, size, size
                     );
                 }

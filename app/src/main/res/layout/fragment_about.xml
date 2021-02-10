@@ -170,7 +170,7 @@
 
                 <LinearLayout
                     android:id="@+id/linear_translators"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
                     android:visibility="@{fragment.translators != null ? View.VISIBLE : View.GONE}">
 
                     <ImageView

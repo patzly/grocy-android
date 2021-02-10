@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 */
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -91,6 +92,10 @@ public class BaseViewModel extends AndroidViewModel {
 
     String getString(@StringRes int resId) {
         return getApplication().getString(resId);
+    }
+
+    Resources getResources() {
+        return getApplication().getResources();
     }
 
     public boolean isSearchVisible() {

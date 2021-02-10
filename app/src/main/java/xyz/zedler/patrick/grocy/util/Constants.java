@@ -95,6 +95,7 @@ public final class Constants {
         }
         public final static class APPEARANCE {
             public final static String DARK_MODE = "dark_mode";
+            public final static String LANGUAGE = "language";
         }
         public final static class NETWORK {
             public final static String ORBOT = "orbot";
@@ -143,6 +144,7 @@ public final class Constants {
         }
         public final static class APPEARANCE {
             public final static boolean DARK_MODE = false;
+            public final static String LANGUAGE = null;
         }
         public final static class NETWORK {
             public final static int LOADING_TIMEOUT = 30;

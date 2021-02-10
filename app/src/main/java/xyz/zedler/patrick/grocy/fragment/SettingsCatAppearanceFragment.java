@@ -32,12 +32,16 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Locale;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatAppearanceFragment extends BaseFragment {
@@ -97,12 +101,38 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     }
 
     public void setDarkMode(boolean dark) {
-        IconUtil.start(binding.image);
+        IconUtil.start(binding.imageDark);
         new Handler().postDelayed(() -> {
             darkModeLive.setValue(dark);
             updateTheme(dark);
         }, 300);
         viewModel.setDarkMode(dark);
+    }
+
+    public void setLanguage(String code) {
+        Locale locale = code != null
+                ? LocaleUtil.getLocaleFromCode(code)
+                : LocaleUtil.getDeviceLocale();
+        binding.textLanguage.setText(
+                code != null
+                        ? locale.getDisplayLanguage()
+                        : getString(R.string.setting_language_system, locale.getDisplayLanguage())
+        );
+    }
+
+    public String getLanguage() {
+        String code = viewModel.getLanguage();
+        Locale locale = code != null
+                ? LocaleUtil.getLocaleFromCode(code)
+                : LocaleUtil.getDeviceLocale();
+        return code != null
+                ? locale.getDisplayLanguage()
+                : getString(R.string.setting_language_system, locale.getDisplayLanguage());
+    }
+
+    public void showLanguageSelection() {
+        IconUtil.start(binding.imageLanguage);
+        activity.showBottomSheet(new LanguagesBottomSheet());
     }
 
     private void updateTheme(boolean forceDarkMode) {

@@ -151,6 +151,13 @@ public class SettingsViewModel extends BaseViewModel {
         sharedPrefs.edit().putBoolean(Constants.SETTINGS.APPEARANCE.DARK_MODE, dark).apply();
     }
 
+    public String getLanguage() {
+        return sharedPrefs.getString(
+                Constants.SETTINGS.APPEARANCE.LANGUAGE,
+                Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
+        );
+    }
+
     public void showLoadingTimeoutBottomSheet() {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());

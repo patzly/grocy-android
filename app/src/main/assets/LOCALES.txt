@@ -1,0 +1,47 @@
+cs
+InToSSH, Radimek
+
+de
+Dominic Zedler, Patrick Zedler
+
+en
+Dominic Zedler, Patrick Zedler
+
+es
+adrigrillo, recognitium
+
+fr
+prohand, Zorvalt, Clem844, erobertc, voslin
+
+he
+Yaron, sefi.ninio
+
+it
+Matte23, nuraiman, racerider, bonerserk
+
+nb
+teitrand
+
+nl
+Maarten Siersema, 4lloyd, Wazzaaam
+
+pl
+smiglo
+
+pt_BR
+recognitium, alemoh1234
+
+pt_PT
+JST, zedascouves
+
+ru
+unwarkz, Dside
+
+sv
+Busan15
+
+uk
+NazimUa, rrader
+
+zh_CN
+LuLuX

@@ -66,15 +66,12 @@ public class TextBottomSheet extends BaseBottomSheet {
 	}
 
 	@Override
-	public View onCreateView(
-			@NonNull LayoutInflater inflater,
-			ViewGroup container,
-			Bundle savedInstanceState
-	) {
+	public View onCreateView(@NonNull LayoutInflater inflater,
+							 ViewGroup container,
+							 Bundle savedInstanceState) {
+
 		binding = FragmentBottomsheetTextBinding.inflate(
-				inflater,
-				container,
-				false
+				inflater, container, false
 		);
 
 		Context context = requireContext();

@@ -97,7 +97,7 @@
                     android:onClick="@{v -> switchDark.setChecked(!switchDark.isChecked())}">
 
                     <ImageView
-                        android:id="@+id/image"
+                        android:id="@+id/image_dark"
                         style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                         tools:ignore="ContentDescription"
                         android:src="@{fragment.darkModeLive ? @drawable/ic_round_dark_to_light_anim : @drawable/ic_round_light_to_dark_anim}"/>
@@ -119,6 +119,33 @@
                         style="@style/Widget.Grocy.Switch"
                         android:onCheckedChanged="@{(view, isChecked) -> fragment.setDarkMode(isChecked)}"
                         android:checked="@{viewModel.darkMode}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> fragment.showLanguageSelection()}">
+
+                    <ImageView
+                        android:id="@+id/image_language"
+                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                        tools:ignore="ContentDescription"
+                        android:src="@drawable/ic_round_language_anim"/>
+
+                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.ListItem.Title"
+                            android:text="@string/setting_language"/>
+
+                        <TextView
+                            android:id="@+id/text_language"
+                            style="@style/Widget.Grocy.TextView.ListItem.Description"
+                            android:text="@{fragment.language}"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

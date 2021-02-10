@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -170,5 +171,15 @@ public class SortUtil {
                 }
         );
         shoppingListItems.addAll(itemsWithoutProduct);
+    }
+
+    public static void sortLanguagesByName(List<Language> languages) {
+        if(languages == null) return;
+        Collections.sort(
+                languages,
+                (item1, item2) -> item1.getName().toLowerCase().compareTo(
+                        item2.getName().toLowerCase()
+                )
+        );
     }
 }
