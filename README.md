@@ -62,7 +62,7 @@ To meet these requirements, you can use a free certificate from [letsencrypt.org
 
 ## FAQ
 
-Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of often asked questions.
+Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of frequently asked questions.
 
 ## Contribution
 
