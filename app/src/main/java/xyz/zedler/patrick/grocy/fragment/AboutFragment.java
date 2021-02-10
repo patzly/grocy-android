@@ -177,12 +177,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         activity.showBottomSheet(new TextBottomSheet(), bundle);
     }
 
-    public String getTranslators() {
-        String translators = getString(R.string.language_translators);
-        translators = translators.trim().replace(":", "");
-        return translators.length() > 0 ? translators : null;
-    }
-
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);

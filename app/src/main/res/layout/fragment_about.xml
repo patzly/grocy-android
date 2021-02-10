@@ -169,34 +169,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_translators"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-                    android:visibility="@{fragment.translators != null ? View.VISIBLE : View.GONE}">
-
-                    <ImageView
-                        android:id="@+id/image_translators"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_person_anim"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                            android:singleLine="false"
-                            android:text="@string/info_translators" />
-
-                        <TextView
-                            android:id="@+id/translators"
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@{fragment.translators}"
-                            android:maxLines="9"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/linear_github"
                     style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
