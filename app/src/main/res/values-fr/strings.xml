@@ -2,7 +2,7 @@
 
     <!-- Here you can append your name (without the ":"), but only if you have translated some strings, please.
      Append your name with the prefix \n (means newline) if there are already some other names.-->
-    <string name="language_translators">:</string>
+    <string name="language_translators">prohand\nZorvalt\nClem844\nerobertc\nvoslin</string>
 
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->

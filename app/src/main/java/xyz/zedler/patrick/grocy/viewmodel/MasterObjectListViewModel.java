@@ -121,10 +121,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
     }
 
-    private String getLastTime(String sharedPref) {
-        return sharedPrefs.getString(sharedPref, null);
-    }
-
     @SuppressWarnings("unchecked")
     public void downloadData(@Nullable String dbChangedTime) {
         if(currentQueueLoading != null) {
@@ -143,67 +139,46 @@ public class MasterObjectListViewModel extends BaseViewModel {
             return;
         }
 
-        // get last offline db-changed-time values
-        String lastTimeStores = getLastTime(Constants.PREF.DB_LAST_TIME_STORES);
-        String lastTimeLocations = getLastTime(Constants.PREF.DB_LAST_TIME_LOCATIONS);
-        String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-        String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
-        String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
-
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        if(entity.equals(GrocyApi.ENTITY.STORES)
-                && (lastTimeStores == null || !lastTimeStores.equals(dbChangedTime))) {
-            queue.append(dlHelper.getStores(stores -> {
-                objects = (ArrayList<Object>) (Object) stores;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Stores download");
-        if((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
-                && (lastTimeLocations == null || !lastTimeLocations.equals(dbChangedTime))) {
-            queue.append(dlHelper.getLocations(locations -> {
+        if(entity.equals(GrocyApi.ENTITY.STORES)) {
+            queue.append(dlHelper.updateStores(
+                    dbChangedTime,
+                    stores -> objects = (ArrayList<Object>) (Object) stores)
+            );
+        }
+        if((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
+            queue.append(dlHelper.updateLocations(dbChangedTime, locations -> {
                 if(entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
                     objects = (ArrayList<Object>) (Object) locations;
                 } else {
                     this.locations = locations;
                 }
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
-                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Locations download");
-        if((entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
-                && (lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime))) {
-            queue.append(dlHelper.getProductGroups(productGroups -> {
+        }
+        if((entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
+            queue.append(dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
                 if(entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
                     objects = (ArrayList<Object>) (Object) productGroups;
                 } else {
                     this.productGroups = productGroups;
                 }
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
-                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped ProductGroups download");
-        if((entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))
-                && (lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime))) {
-            queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
+        }
+        if((entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
+            queue.append(dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
                 if(entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
                     objects = (ArrayList<Object>) (Object) quantityUnits;
                 } else {
                     this.quantityUnits = quantityUnits;
                 }
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
-                editPrefs.apply();
             }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped QuantityUnits download");
-        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)
-                && (lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime))) {
-            queue.append(dlHelper.getProducts(products -> {
-                objects = (ArrayList<Object>) (Object) products;
-                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
-                editPrefs.apply();
-            }));
-        } else if(debug) Log.i(TAG, "downloadData: skipped Products download");
+        }
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
+            queue.append(dlHelper.updateProducts(
+                    dbChangedTime,
+                    products -> objects = (ArrayList<Object>) (Object) products)
+            );
+        }
 
         if(queue.isEmpty()) return;
 
@@ -217,11 +192,26 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     public void downloadDataForceUpdate() {
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        switch (entity) {
+            case GrocyApi.ENTITY.STORES:
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+                break;
+            case GrocyApi.ENTITY.LOCATIONS:
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+                break;
+            case GrocyApi.ENTITY.PRODUCT_GROUPS:
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+                break;
+            case GrocyApi.ENTITY.QUANTITY_UNITS:
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+                break;
+            default:  // products
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+                editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+                break;
+        }
         editPrefs.apply();
         downloadData();
     }

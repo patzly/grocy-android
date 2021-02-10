@@ -221,6 +221,7 @@ public class MasterObjectListRepository {
                 case GrocyApi.ENTITY.QUANTITY_UNITS:
                     appDatabase.quantityUnitDao().deleteAll();
                     appDatabase.quantityUnitDao().insertAll((List<QuantityUnit>) (Object) objects);
+                    break;
                 case GrocyApi.ENTITY.LOCATIONS:
                     appDatabase.locationDao().deleteAll();
                     appDatabase.locationDao().insertAll((List<Location>) (Object) objects);
