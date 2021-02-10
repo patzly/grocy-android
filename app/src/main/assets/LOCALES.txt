@@ -1,5 +1,5 @@
 cs
-InToSSH, Radimek
+Jarda Tesar, Radim Kabeláč
 
 de
 Dominic Zedler, Patrick Zedler
@@ -11,37 +11,37 @@ es
 adrigrillo, recognitium
 
 fr
-prohand, Zorvalt, Clem844, erobertc, voslin
+prohand, Zorvalt, Clément Chotard, Eric Robert, voslin
 
 he
-Yaron, sefi.ninio
+Yaron Shahrabani, Sefi Ninio
 
 it
-Matte23, nuraiman, racerider, bonerserk
+Matteo Schiff, Nur Fadel, racerider, Riccardo Bonesini
 
 nb
-teitrand
+Tor Eirik Trandal
 
 nl
-Maarten Siersema, 4lloyd, Wazzaaam
+Maarten Siersema, 4lloyd, Sam Bouwer
 
 pl
 smiglo
 
 pt_BR
-recognitium, alemoh1234
+recognitium, Alejandro Mohamad
 
 pt_PT
-JST, zedascouves
+Joao Santos, Duarte Grilo
 
 ru
-unwarkz, Dside
+unwarkz, Pavel Peganov
 
 sv
-Busan15
+Johan Hedlin
 
 uk
-NazimUa, rrader
+NazimUa, Roman Rader
 
 zh_CN
 LuLuX
