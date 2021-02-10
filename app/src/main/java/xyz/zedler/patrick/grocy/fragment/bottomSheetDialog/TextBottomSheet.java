@@ -42,14 +42,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
@@ -80,12 +79,6 @@ public class TextBottomSheet extends BaseBottomSheet {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
-		String fileLocalized = bundle.getString(Constants.ARGUMENT.FILE)
-				+ "-" + Locale.getDefault().getLanguage()
-				+ ".txt";
-		if(readFromFile(context, fileLocalized) != null) file = fileLocalized;
-
 		binding.textTextTitle.setText(
 				bundle.getString(Constants.ARGUMENT.TITLE)
 		);
@@ -103,28 +96,24 @@ public class TextBottomSheet extends BaseBottomSheet {
 			binding.frameTextOpenLink.setVisibility(View.GONE);
 		}
 
+		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
+		String content = TextUtil.readFromFile(context, file);
 		if(file.equals("CHANGELOG.txt")) {
-			List<String> keyWords = Arrays.asList("New:", "Improved:", "Fixed:");
-			String content = readFromFile(context, file);
-			if(content != null) {
-				binding.textText.setText(
-						BulletUtil.makeBulletList(
-								context,
-								6,
-								2,
-								"- ",
-								content,
-								keyWords
-						),
-						TextView.BufferType.SPANNABLE
-				);
-			} else {
-				binding.textText.setText(null);
-			}
+			binding.textText.setText(
+					BulletUtil.makeBulletList(
+							context,
+							6,
+							2,
+							"- ",
+							content,
+							Arrays.asList("New:", "Improved:", "Fixed:")
+					),
+					TextView.BufferType.SPANNABLE
+			);
 			binding.textText.setLineSpacing(UnitUtil.getSp(requireContext(), 3), 1);
 			binding.textText.setTextSize(14.5f);
 		} else {
-			binding.textText.setText(readFromFile(context, file));
+			binding.textText.setText(content);
 		}
 
 		return binding.getRoot();
