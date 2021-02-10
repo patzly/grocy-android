@@ -1,9 +1,5 @@
 <resources>
 
-    <!-- Here you can append your name (without the ":"), but only if you have translated some strings, please.
-     Append your name with the prefix \n (means newline) if there are already some other names.-->
-    <string name="language_translators">Jarda Tesar\nRadimek</string>
-
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->
     <string name="action_purchase">Nakoupit</string>
@@ -550,7 +546,6 @@
     <string name="info_changelog">Log změn</string>
     <string name="info_changelog_description">Co je nového?</string>
     <string name="info_developers">Vývojáři</string>
-    <string name="info_translators">Překladatelé tohoto jazyka</string>
     <string name="info_github">Grocy Android na GitHubu</string>
     <string name="info_github_description">Zdrojový kód</string>
     <string name="info_website">Otevřít stránku Grocy</string>
