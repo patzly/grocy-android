@@ -20,7 +20,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -136,12 +135,6 @@ public class LanguagesBottomSheet extends BaseBottomSheet
         } else {
             new Handler().postDelayed(() -> RestartUtil.restartApp(activity), 100);
         }
-    }
-
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        activity.getCurrentFragment().onBottomSheetDismissed();
-        super.onDismiss(dialog);
     }
 
     @NonNull
