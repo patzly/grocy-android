@@ -172,7 +172,7 @@
     <string name="msg_help_recipe_consume">Dies wird nur für Auswertezwecke benötigt.</string>
     <string name="msg_help_scan_mode">Sie können auf die Titelzeile oben lange klicken, um den Scan-Modus zu aktivieren oder auf diese Karte klicken, um dessen Default-Verhalten zu ändern.</string>
     <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
-    <string name="msg_help_start">Beginner-Modus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn sie verfügbar sind. Tippen, um das Verhalten zu ändern.</string>
+    <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
     <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
 
     <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
