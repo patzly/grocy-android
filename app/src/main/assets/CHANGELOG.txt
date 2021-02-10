@@ -2,8 +2,8 @@
 - New: Language option in appearance settings (#322)
 - Improved: Updated translations
 - Fixed: Old update info wrongly shown (#322)
-- Fixed: Master quantity units refresh crash (#331)
-- Fixed: Wrong product name after adding new product (#333)
+- Fixed: Crash on quantity units list refresh (#331)
+- Fixed: Wrong product name after adding new product with "&" in its name (#333)
 - Fixed: Wrong resource qualifier for Hebrew
 
 2.0.0-alpha01
