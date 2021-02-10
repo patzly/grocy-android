@@ -1,4 +1,12 @@
-2.0.0
+2.0.0-alpha02
+- New: Language option in appearance settings (#322)
+- Improved: Updated translations
+- Fixed: Old update info wrongly shown (#322)
+- Fixed: Master quantity units refresh crash (#331)
+- Fixed: Wrong product name after adding new product (#333)
+- Fixed: Wrong resource qualifier for Hebrew
+
+2.0.0-alpha01
 - New: Compatibility with grocy v3.0.x
 - New: Incompatibility with grocy v2.7.x
 - New: Overview page
@@ -11,9 +19,9 @@
 - Improved: Server requests are now more secure with API key in header
 - Improved: Many internal code changes & better techniques
 - Improved: Font usage and styling system
+- Improved: Updated translations
 - Fixed: Onboarding page layout
 - Fixed: Filter chip layout for rtl languages
-- Updated translations
 
 1.10.1
 - Hotfix which allows HTTP cleartext traffic again (#252)
