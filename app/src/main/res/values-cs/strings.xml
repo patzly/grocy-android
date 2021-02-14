@@ -149,7 +149,7 @@
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_stock">Jednotku množství zásoby není možné měnit po provedení prvního nákupu.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_qu_purchase">Toto je výchozí jednotka množství při přidání tohoto produktu do nákupního košíku.</string>
+    <string name="msg_help_qu_purchase">Toto je výchozí jednotka množství při přidání tohoto produktu do nákupního seznamu.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_accumulate_min_amount">Pokud je povoleno, minimální množství zásob podřízených produktů bude akumulováno do tohoto produktu. To znamená že podřízené produkty nikdy nebudou chybět, ale pouze tento produkt.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
