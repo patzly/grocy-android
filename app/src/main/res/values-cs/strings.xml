@@ -273,7 +273,7 @@
     <string name="title_list_entry">Seznam položek</string>
     <string name="title_edit_list_entry">Upravit seznam položek</string>
     <string name="title_create_list_entry">Vytvořit seznam položek</string>
-    <string name="title_shopping_list_edit">Editovat nákupní seznam</string>
+    <string name="title_shopping_list_edit">Nákupní nákupní seznam</string>
     <string name="title_shopping_list_new">Nový nákupní seznam</string>
     <string name="title_shopping_mode">Nákupní mód</string>
     <string name="title_batch_mode_shopping_list">Dávkový mód nákupního seznamu </string>
