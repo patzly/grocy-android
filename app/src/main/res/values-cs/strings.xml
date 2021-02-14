@@ -591,7 +591,7 @@
     <string name="setting_logout">Odhlásit</string>
     <string name="setting_logout_description">Návrat na přihlašovací stránku</string>
     <string name="setting_manage_shortcuts">Spravovat zkratky</string>
-    <string name="setting_list_indicator">Ukázat seznam pložek</string>
+    <string name="setting_list_indicator">Označit položky na seznamu</string>
     <string name="setting_list_indicator_description">Zobrazit modrou tečku, když je produkt na nákupním seznamu</string>
     <string name="setting_shopping_mode_update_interval">Interval aktualizace nákupního módu</string>
     <string name="setting_keep_screen_on">Nech rozsvícenou obrazovku</string>
