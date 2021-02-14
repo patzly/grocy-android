@@ -48,7 +48,7 @@
     <string name="action_sort">Seřadit</string>
     <string name="action_undo">Zpět</string>
     <string name="action_retry">Znovu</string>
-    <string name="action_edit">Editovat</string>
+    <string name="action_edit">Upravit</string>
     <string name="action_proceed">Pokračovat</string>
     <string name="action_delete">Smazat</string>
     <string name="action_save">Uložit</string>
