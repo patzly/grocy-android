@@ -357,10 +357,10 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list">
-        <item quantity="one">Jedna položka je ve vašem nákupním košíku.</item>
-        <item quantity="few">%1$d položky jsou ve vašem nákupním košíku.</item>
-        <item quantity="many">%1$d položek je ve vašem nákupním košíku.</item>
-        <item quantity="other">%1$d položek je ve vašem nákupním košíku.</item>
+        <item quantity="one">Ve vašem nákupním seznamu je jedna položka.</item>
+        <item quantity="few">Ve vašem nákupním seznamu jsou %1$d položky.</item>
+        <item quantity="many">Ve vašem nákupním seznamu je %1$d položek.</item>
+        <item quantity="other">Ve vašem nákupním seznamu je %1$d položek.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_master_data">
