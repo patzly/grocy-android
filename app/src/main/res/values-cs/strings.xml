@@ -571,7 +571,7 @@
     <string name="hint_key">Validní API klíč</string>
 
     <string name="setting_dark_mode">Vynutit tmavý kód</string>
-    <string name="setting_dark_mode_description">Vypnout pro systémové závislosti</string>
+    <string name="setting_dark_mode_description">Vypnout pro použití nastavení systému</string>
     <string name="setting_language">Jazyk</string>
     <string name="setting_language_description">Vyberte jazyk</string>
     <string name="setting_language_info">Velké díky všem dobrovolným překladatelům na Transifex!\nNavštivte nás, prosím, na GitHubu, pokud chcete zjistit, jak můžete pomoci přeložit Grocy Android i do vašeho jazyka.</string>
