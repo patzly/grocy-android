@@ -60,7 +60,7 @@
     <string name="action_discard">Zrušit</string>
     <string name="action_clear_form">Vyčistit formulář</string>
     <string name="action_toggle_done">Přepnout na hotovo</string>
-    <string name="action_edit_notes">Editovat notes</string>
+    <string name="action_edit_notes">Upravit poznámky</string>
     <string name="action_add_missing">Přidat chybějící produkt</string>
     <string name="action_purchase_all_items">Koupit všechny položky</string>
     <string name="action_skip_entry">Přeskočit položku</string>
