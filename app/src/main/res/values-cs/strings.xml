@@ -350,10 +350,10 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">Jedna položka je v nákupních košících.</item>
-        <item quantity="few">%1$d položky jsou v nákupních košících.</item>
-        <item quantity="many">%1$d položek je v nákupních košících.</item>
-        <item quantity="other">%1$d položek je v nákupních košících.</item>
+        <item quantity="one">V nákupních seznamech je jedna položka.</item>
+        <item quantity="few">V nákupních seznamech jsou %1$d položky.</item>
+        <item quantity="many">V nákupních seznamech je %1$d položek.</item>
+        <item quantity="other">V nákupních seznamech je %1$d položek.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list">
