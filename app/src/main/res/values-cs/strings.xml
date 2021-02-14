@@ -88,7 +88,7 @@
     <string name="msg_consumed_spoiled">Zkonzumováno %1$s %2$s z %3$s jako zkažené</string>
     <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
     <!-- %1$s is the number of undone items in shopping list -->
-    <string name="msg_undone_items">%1$d navráceno</string>
+    <string name="msg_undone_items">%1$d nehotovo</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Nakoupeno%1$s %2$s z %3$s</string>
     <!-- %1$s is a product name -->
