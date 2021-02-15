@@ -53,7 +53,6 @@
     <string name="action_save">Salva</string>
     <string name="action_logout">Esci</string>
     <string name="action_restart">Riavvia</string>
-    <string name="action_batch_mode">Modalità non interattiva</string>
     <string name="action_create">Crea</string>
     <string name="action_link">Collega</string>
     <string name="action_open_scanner">Apri lo scanner</string>
@@ -345,7 +344,6 @@
     <string name="category_general">Generale</string>
     <string name="category_server">Server</string>
     <string name="category_debugging">Debugging</string>
-    <string name="category_presets">Impostazioni predefinite per nuovi prodotti</string>
 
     <string name="hint_server">URL server</string>
     <string name="hint_key">Chiave API valida</string>

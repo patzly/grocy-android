@@ -62,21 +62,15 @@ public class CompatibilityBottomSheet extends BaseBottomSheet {
                 R.layout.fragment_bottomsheet_compatibility, container, false
         );
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
-
-        if(getArguments() == null) {
-            dismiss();
-            return view;
-        }
+        activity = (MainActivity) requireActivity();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        ArrayList<String> supportedVersions = getArguments().getStringArrayList(
+        ArrayList<String> supportedVersions = requireArguments().getStringArrayList(
                 Constants.ARGUMENT.SUPPORTED_VERSIONS
         );
         assert supportedVersions != null;
-        String currentVersion = getArguments().getString(Constants.ARGUMENT.VERSION);
+        String currentVersion = requireArguments().getString(Constants.ARGUMENT.VERSION);
 
         TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
         textViewMsg.setText(activity.getString(
@@ -94,14 +88,7 @@ public class CompatibilityBottomSheet extends BaseBottomSheet {
         view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
             prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
                     .apply();
-
-            String server = getArguments().getString(Constants.ARGUMENT.SERVER);
-            String key = getArguments().getString(Constants.ARGUMENT.KEY);
-            boolean isDemo = getArguments().getBoolean(Constants.ARGUMENT.DEMO_CHOSEN);
-            if(server != null) {
-                activity.getCurrentFragment().requestLogin(server, key, false, isDemo);
-                activity.getCurrentFragment().enableLoginButtons();
-            }
+            activity.getCurrentFragment().login(false);
             dismiss();
         });
 

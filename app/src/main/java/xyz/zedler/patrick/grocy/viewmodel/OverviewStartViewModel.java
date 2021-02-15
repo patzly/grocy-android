@@ -178,6 +178,8 @@ public class OverviewStartViewModel extends BaseViewModel {
     public void downloadDataForceUpdate() {
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
         editPrefs.apply();
         downloadData();
     }
@@ -199,7 +201,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         infoFullscreenLive.setValue(
                 new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
                     infoFullscreenLive.setValue(null);
-                    downloadData();
+                    downloadDataForceUpdate();
                 })
         );
     }

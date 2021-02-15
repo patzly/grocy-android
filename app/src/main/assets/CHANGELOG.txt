@@ -1,3 +1,7 @@
+2.0.0-alpha03
+- New: You can now use the app with the Home Assistant grocy add-on (#249)
+- Improved: Rewritten login flow
+
 2.0.0-alpha02
 - New: Language option in appearance settings (#322)
 - Improved: Updated translations

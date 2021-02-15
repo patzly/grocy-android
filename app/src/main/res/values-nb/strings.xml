@@ -53,7 +53,6 @@
     <string name="action_save">Lagre</string>
     <string name="action_logout">Logg ut</string>
     <string name="action_restart">Start på nytt</string>
-    <string name="action_batch_mode">Parti-modus</string>
     <string name="action_create">Opprett</string>
     <string name="action_link">Link</string>
     <string name="action_open_scanner">Åpne skanner</string>
@@ -173,7 +172,6 @@
     <string name="title_shopping_list">Handleliste</string>
     <string name="title_feedback">Tilbakemelding</string>
     <string name="title_settings">Innstillinger</string>
-    <string name="title_about_this_app">Om</string>
     <string name="title_info">Informasjon</string>
     <string name="title_help">Hjelp</string>
     <string name="title_logs">Logger</string>

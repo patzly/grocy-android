@@ -53,7 +53,6 @@
     <string name="action_save">保存</string>
     <string name="action_logout">退出</string>
     <string name="action_restart">重启</string>
-    <string name="action_batch_mode">批处理模式</string>
     <string name="action_create">创建</string>
     <string name="action_link">链接</string>
     <string name="action_open_scanner">打开扫描仪</string>
@@ -336,7 +335,6 @@
     <string name="category_general">通用</string>
     <string name="category_server">服务器</string>
     <string name="category_debugging">调试</string>
-    <string name="category_presets">新产品预设</string>
 
     <string name="hint_server">服务器URL</string>
     <string name="hint_key">有效的API密钥</string>

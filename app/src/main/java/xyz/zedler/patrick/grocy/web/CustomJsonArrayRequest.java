@@ -42,11 +42,13 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
 
     private final Runnable onRequestFinished;
     private final String apiKey;
+    private final String homeAssistantIngressSessionKey;
 
     public CustomJsonArrayRequest(
             int method,
             String url,
             String apiKey,
+            String homeAssistantIngressSessionKey,
             @Nullable JSONObject jsonRequest,
             Response.Listener<JSONArray> listener,
             @Nullable Response.ErrorListener errorListener,
@@ -63,6 +65,7 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
         });
         this.onRequestFinished = onRequestFinished;
         this.apiKey = apiKey;
+        this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
         if(tag != null) setTag(tag);
         setShouldCache(false);
         RetryPolicy policy = new DefaultRetryPolicy(
@@ -100,6 +103,9 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
     public Map<String, String> getHeaders() {
         Map<String, String> params = new HashMap<>();
         if(apiKey != null && !apiKey.isEmpty()) params.put("GROCY-API-KEY", apiKey);
+        if(homeAssistantIngressSessionKey != null) {
+            params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
+        }
         return params.isEmpty() ? Collections.emptyMap() : params;
     }
 }

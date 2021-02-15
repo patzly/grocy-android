@@ -129,42 +129,18 @@
         android:label="ScanInputFragment"
         tools:layout="@layout/fragment_scan_input" />
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/fragment_login_page_2" >
-        <argument
-            android:name="page"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <action
-            android:id="@+id/action_loginFragment_self"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_from_end"
-            app:exitAnim="@anim/slide_to_start"
-            app:popEnterAnim="@anim/slide_from_start"
-            app:popExitAnim="@anim/slide_to_end" />
-    </fragment>
-    <action
-        android:id="@+id/action_global_loginFragment"
-        app:destination="@id/loginFragment"
-        app:enterAnim="@anim/slide_no"
-        app:exitAnim="@anim/slide_no"
-        app:popEnterAnim="@anim/slide_from_end"
-        app:popExitAnim="@anim/slide_to_start" />
-    <fragment
         android:id="@+id/onboardingFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.OnboardingFragment"
         android:label="OnboardingFragment"
         tools:layout="@layout/fragment_onboarding" >
         <action
-            android:id="@+id/action_onboardingFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_onboardingFragment_to_navigation_login"
+            app:destination="@id/navigation_login"
             app:enterAnim="@anim/slide_from_end"
             app:exitAnim="@anim/slide_to_start"
             app:popEnterAnim="@anim/slide_from_start"
             app:popExitAnim="@anim/slide_to_end"
-            app:popUpTo="@id/navigation_main"
+            app:popUpTo="@id/navigation_login"
             app:popUpToInclusive="true" />
     </fragment>
     <action
@@ -179,6 +155,95 @@
         android:name="xyz.zedler.patrick.grocy.fragment.OverviewStartFragment"
         android:label="OverviewStartFragment"
         tools:layout="@layout/fragment_overview_start"/>
+    <navigation
+        android:id="@+id/navigation_login"
+        app:startDestination="@id/loginIntroFragment">
+        <fragment
+            android:id="@+id/loginIntroFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.LoginIntroFragment"
+            android:label="LoginIntroFragment"
+            tools:layout="@layout/fragment_login_intro">
+            <action
+                android:id="@+id/action_loginIntroFragment_to_loginRequestFragment"
+                app:destination="@id/loginRequestFragment"
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
+            <action
+                android:id="@+id/action_loginIntroFragment_to_loginApiQrCodeFragment"
+                app:destination="@id/loginApiQrCodeFragment"
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
+        </fragment>
+        <fragment
+            android:id="@+id/loginRequestFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.LoginRequestFragment"
+            android:label="LoginRequestFragment"
+            tools:layout="@layout/fragment_login_request">
+            <argument
+                android:name="grocyServerUrl"
+                app:argType="string" />
+            <argument
+                android:name="grocyApiKey"
+                app:argType="string" />
+            <argument
+                android:name="homeAssistantServerUrl"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="homeAssistantToken"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+        <fragment
+            android:id="@+id/loginApiQrCodeFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.LoginApiQrCodeFragment"
+            android:label="LoginApiQrCodeFragment"
+            tools:layout="@layout/fragment_login_api_qr_code">
+            <action
+                android:id="@+id/action_loginApiQrCodeFragment_to_loginRequestFragment"
+                app:destination="@id/loginRequestFragment"
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
+            <action
+                android:id="@+id/action_loginApiQrCodeFragment_to_loginApiFormFragment"
+                app:destination="@id/loginApiFormFragment"
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
+        </fragment>
+        <fragment
+            android:id="@+id/loginApiFormFragment"
+            android:name="xyz.zedler.patrick.grocy.fragment.LoginApiFormFragment"
+            android:label="LoginApiFormFragment"
+            tools:layout="@layout/fragment_login_api_form">
+            <action
+                android:id="@+id/action_loginApiFormFragment_to_loginRequestFragment"
+                app:destination="@id/loginRequestFragment"
+                app:enterAnim="@anim/slide_from_end"
+                app:exitAnim="@anim/slide_to_start"
+                app:popEnterAnim="@anim/slide_from_start"
+                app:popExitAnim="@anim/slide_to_end"/>
+            <argument
+                android:name="grocyIngressProxyId"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="grocyApiKey"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+    </navigation>
     <navigation android:id="@+id/navigation_shopping"
         app:startDestination="@id/shoppingListFragment">
         <fragment

@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         // API
 
-        grocyApi = new GrocyApi(this);
+        grocyApi = new GrocyApi(getApplication());
         repository = new MainRepository(getApplication());
 
         // VIEWS
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         if(!introShown) {
             graph.setStartDestination(R.id.onboardingFragment);
         } else if(isServerUrlEmpty()){
-            graph.setStartDestination(R.id.loginFragment);
+            graph.setStartDestination(R.id.navigation_login);
         } else {
             graph.setStartDestination(R.id.overviewStartFragment);
         }
@@ -504,6 +504,14 @@ public class MainActivity extends AppCompatActivity {
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS);
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES);
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
+
+        editPrefs.remove(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
+        editPrefs.remove(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME);
+        editPrefs.remove(Constants.PREF.SERVER_URL);
+        editPrefs.remove(Constants.PREF.HOME_ASSISTANT_SERVER_URL);
+        editPrefs.remove(Constants.PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
+        editPrefs.remove(Constants.PREF.API_KEY);
+        editPrefs.remove(Constants.PREF.SHOPPING_LIST_LAST_ID);
         editPrefs.apply();
         new Handler().postDelayed(() -> RestartUtil.restartApp(this), 1000);
     }
@@ -563,7 +571,11 @@ public class MainActivity extends AppCompatActivity {
         if(binding.bottomAppBar.getVisibility() == View.GONE) {
             int orientation = getResources().getConfiguration().orientation;
             if(orientation == Configuration.ORIENTATION_PORTRAIT) {
-                if(dest.getId() == R.id.loginFragment) {
+                if(dest.getId() == R.id.loginIntroFragment
+                        || dest.getId() == R.id.loginRequestFragment
+                        || dest.getId() == R.id.loginApiFormFragment
+                        || dest.getId() == R.id.loginApiQrCodeFragment
+                ) {
                     setNavBarDividerColor(R.color.transparent);
                 } else {
                     new Handler().postDelayed(

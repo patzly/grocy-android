@@ -129,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity
 
 		// API
 
-		grocyApi = new GrocyApi(this);
+		grocyApi = new GrocyApi(getApplication());
 
 		// INITIALIZE VIEWS
 

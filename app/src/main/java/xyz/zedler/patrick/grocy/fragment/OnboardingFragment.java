@@ -164,7 +164,7 @@ public class OnboardingFragment extends BaseFragment {
             sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
         }
         if(getBackStackSize() == 2){ // TODO: Better condition
-            navigate(OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment());
+            navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
             return true;
         } else {
             return false;

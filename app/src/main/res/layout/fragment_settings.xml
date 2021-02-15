@@ -340,7 +340,7 @@
                         style="@style/Widget.Grocy.TextView.ListItem.Title"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="@string/title_about_this_app"/>
+                        android:text="@string/title_about"/>
 
                     <ImageView
                         android:layout_height="24dp"

@@ -28,13 +28,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.util.Constants;
 
 public class LogoutBottomSheet extends BaseBottomSheet {
 
@@ -72,11 +70,6 @@ public class LogoutBottomSheet extends BaseBottomSheet {
         view.findViewById(R.id.button_logout_cancel).setOnClickListener(v -> dismiss());
 
         view.findViewById(R.id.button_logout_logout).setOnClickListener(v -> {
-            PreferenceManager.getDefaultSharedPreferences(activity).edit()
-                    .remove(Constants.PREF.SERVER_URL)
-                    .remove(Constants.PREF.API_KEY)
-                    .remove(Constants.PREF.SHOPPING_LIST_LAST_ID)
-                    .commit();
             activity.clearOfflineDataAndRestart();
             dismiss();
         });

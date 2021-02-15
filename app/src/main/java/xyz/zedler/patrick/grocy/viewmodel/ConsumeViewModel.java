@@ -397,7 +397,7 @@ public class ConsumeViewModel extends BaseViewModel {
                         snackbarMessage.setDurationSecs(20);
                     }
                     showSnackbar(snackbarMessage);
-                    sendEvent(Event.PURCHASE_SUCCESS);
+                    sendEvent(Event.CONSUME_SUCCESS);
                 },
                 error -> {
                     showErrorMessage();

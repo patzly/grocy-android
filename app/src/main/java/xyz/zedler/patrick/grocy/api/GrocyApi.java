@@ -19,7 +19,7 @@ package xyz.zedler.patrick.grocy.api;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
-import android.content.Context;
+import android.app.Application;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
@@ -31,9 +31,8 @@ public class GrocyApi {
 
     private final static String TAG = GrocyApi.class.getSimpleName();
 
-    private final SharedPreferences sharedPrefs;
-    private final Context context;
-    private String baseUrl;
+    private SharedPreferences sharedPrefs;
+    private final String baseUrl;
 
     public final static class ENTITY {
         public final static String PRODUCTS = "products";
@@ -51,17 +50,21 @@ public class GrocyApi {
         public final static String MEAL_PLAN = "meal_plan";
     }
 
-    public GrocyApi(Context context) {
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        this.context = context;
-        loadCredentials();
+    public GrocyApi(Application application) {
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+        baseUrl = sharedPrefs.getString(
+                Constants.PREF.SERVER_URL,
+                application.getString(R.string.url_grocy_demo)
+        );
+    }
+
+    public GrocyApi(Application application, String serverUrl) {
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+        baseUrl = serverUrl;
     }
 
     public void loadCredentials() {
-        baseUrl = sharedPrefs.getString(
-                Constants.PREF.SERVER_URL,
-                context.getString(R.string.url_grocy_demo)
-        );
+
     }
 
     private String getUrl(String command) {

@@ -118,7 +118,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                         activity,
                         activity.binding.frameMainContainer
                 ));
-            } else if(event.getType() == Event.PURCHASE_SUCCESS) {
+            } else if(event.getType() == Event.CONSUME_SUCCESS) {
                 assert getArguments() != null;
                 if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
                     activity.navigateUp();

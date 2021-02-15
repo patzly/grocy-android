@@ -36,12 +36,14 @@ public class CustomStringRequest extends StringRequest {
 
     private final Runnable onRequestFinished;
     private final String apiKey;
+    private final String homeAssistantIngressSessionKey;
     private final String userAgent;
 
     public CustomStringRequest(
             int method,
             String url,
             String apiKey,
+            String homeAssistantIngressSessionKey,
             Response.Listener<String> listener,
             @Nullable Response.ErrorListener errorListener,
             @Nullable Runnable onRequestFinished,
@@ -77,6 +79,7 @@ public class CustomStringRequest extends StringRequest {
         );
         this.onRequestFinished = onRequestFinished;
         this.apiKey = apiKey;
+        this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
         this.userAgent = userAgent;
         if(tag != null) setTag(tag);
         setShouldCache(false);
@@ -92,6 +95,7 @@ public class CustomStringRequest extends StringRequest {
             int method,
             String url,
             String apiKey,
+            String homeAssistantIngressSessionKey,
             Response.Listener<String> listener,
             @Nullable Response.ErrorListener errorListener,
             @Nullable Runnable onRequestFinished,
@@ -102,6 +106,7 @@ public class CustomStringRequest extends StringRequest {
                 method,
                 url,
                 apiKey,
+                homeAssistantIngressSessionKey,
                 listener,
                 errorListener,
                 onRequestFinished,
@@ -117,6 +122,7 @@ public class CustomStringRequest extends StringRequest {
             int method,
             String url,
             String apiKey,
+            String homeAssistantIngressSessionKey,
             Response.Listener<String> listener,
             @Nullable Response.ErrorListener errorListener,
             @Nullable Runnable onRequestFinished,
@@ -128,6 +134,7 @@ public class CustomStringRequest extends StringRequest {
                 method,
                 url,
                 apiKey,
+                homeAssistantIngressSessionKey,
                 listener,
                 errorListener,
                 onRequestFinished,
@@ -143,6 +150,7 @@ public class CustomStringRequest extends StringRequest {
             int method,
             String url,
             String apiKey,
+            String homeAssistantIngressSessionKey,
             Response.Listener<String> listener,
             @Nullable Response.ErrorListener errorListener,
             @Nullable Runnable onRequestFinished,
@@ -155,6 +163,7 @@ public class CustomStringRequest extends StringRequest {
                 method,
                 url,
                 apiKey,
+                homeAssistantIngressSessionKey,
                 listener,
                 errorListener,
                 onRequestFinished,
@@ -176,6 +185,9 @@ public class CustomStringRequest extends StringRequest {
     public Map<String, String> getHeaders() {
         Map<String, String> params = new HashMap<>();
         if(apiKey != null && !apiKey.isEmpty()) params.put("GROCY-API-KEY", apiKey);
+        if(userAgent == null && homeAssistantIngressSessionKey != null) { // should not put key into requests for OpenFoodFacts
+            params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
+        }
         if(userAgent != null) params.put("User-Agent", userAgent);
         return params.isEmpty() ? Collections.emptyMap() : params;
     }

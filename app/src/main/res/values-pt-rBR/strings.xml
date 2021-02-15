@@ -53,7 +53,6 @@
     <string name="action_save">Salvar</string>
     <string name="action_logout">Fechar sessão</string>
     <string name="action_restart">Reiniciar</string>
-    <string name="action_batch_mode">Modo em lote</string>
     <string name="action_create">Criar</string>
     <string name="action_link">Link</string>
     <string name="action_open_scanner">Abrir scanner</string>
@@ -345,7 +344,6 @@
     <string name="category_general">Geral</string>
     <string name="category_server">Servidor</string>
     <string name="category_debugging">Inspeção de erros</string>
-    <string name="category_presets">Padrões para novos produtos</string>
 
     <string name="hint_server">URL do Servidor</string>
     <string name="hint_key">Chave API válida</string>

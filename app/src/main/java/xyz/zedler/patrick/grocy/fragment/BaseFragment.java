@@ -144,6 +144,8 @@ public class BaseFragment extends Fragment {
 
     public void enableLoginButtons() {}
 
+    public void login(boolean checkVersion) {}
+
     public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {}
 
     @Override
@@ -160,14 +162,14 @@ public class BaseFragment extends Fragment {
             public void onAnimationRepeat(Animation animation) {}
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(enter) BaseFragment.this.onAnimationEnd();
+                if(enter) BaseFragment.this.onEnterAnimationEnd();
             }
         });
 
         return anim;
     }
 
-    void onAnimationEnd() {}
+    void onEnterAnimationEnd() {}
 
     @NonNull
     NavController findNavController() {
@@ -361,6 +363,7 @@ public class BaseFragment extends Fragment {
             public void onAnimationEnd(Animation animation) {
                 activity.setStatusBarColor(color);
                 if(onAnimationEnd != null) onAnimationEnd.run();
+                BaseFragment.this.onEnterAnimationEnd();
             }
         });
         return anim;

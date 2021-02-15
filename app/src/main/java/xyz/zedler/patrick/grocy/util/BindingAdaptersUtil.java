@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.adapter.MatchProductsArrayAdapter;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class BindingAdaptersUtil {
 
@@ -127,15 +129,23 @@ public class BindingAdaptersUtil {
         });
     }
 
-    @BindingAdapter(value={"android:onClick", "clickUtil"}, requireAll=false)
+    @BindingAdapter(value={"android:onClick", "clickUtil", "iconToAnimate"}, requireAll=false)
     public static void setOnClickListener(
             View view,
             View.OnClickListener listener,
-            ClickUtil clickUtil
+            ClickUtil clickUtil,
+            View iconToAnimate
     ) {
         if(view == null) return;
         view.setOnClickListener(v -> {
             if(clickUtil != null && clickUtil.isDisabled()) return;
+            if(iconToAnimate instanceof ActionButton) {
+                ((ActionButton) iconToAnimate).startIconAnimation();
+            } else if(view instanceof ActionButton) {
+                ((ActionButton) view).startIconAnimation();
+            } else if(iconToAnimate instanceof ImageView) {
+                IconUtil.start(iconToAnimate);
+            }
             if(listener != null) listener.onClick(view);
         });
     }

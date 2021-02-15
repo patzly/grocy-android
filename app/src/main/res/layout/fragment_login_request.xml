@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="fragment"
+            type="xyz.zedler.patrick.grocy.fragment.LoginRequestFragment"/>
+        <variable
+            name="clickUtil"
+            type="xyz.zedler.patrick.grocy.util.ClickUtil"/>
+        <variable
+            name="viewModel"
+            type="xyz.zedler.patrick.grocy.viewmodel.LoginRequestViewModel"/>
+        <variable
+            name="activity"
+            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinate_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:overScrollMode="never"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="32dp"
+                android:paddingBottom="32dp"
+                android:layout_marginStart="@dimen/main_side_margin"
+                android:layout_marginEnd="@dimen/main_side_margin"
+                android:animateLayoutChanges="true"
+                transitionTypeChanging="@{true}">
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_round_grocy"
+                    tools:ignore="ContentDescription"/>
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:indeterminate="true"
+                    android:visibility="@{viewModel.isLoadingLive ? View.VISIBLE : View.GONE}"
+                    app:trackColor="@color/surface"
+                    app:indicatorColor="@color/secondary"
+                    app:trackCornerRadius="6dp"
+                    app:trackThickness="6dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.loginErrorOccurred ? View.VISIBLE : View.GONE}"
+                    android:layout_marginTop="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:contentPadding="16dp"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardBackgroundColor="@color/on_background_variant">
+
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.Paragraph"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.loginErrorMsg}"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        app:contentPadding="16dp"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardBackgroundColor="@color/on_background_variant"
+                        android:visibility="@{viewModel.loginErrorExactMsg != null ? View.VISIBLE : View.GONE}">
+
+                        <TextView
+                            style="@style/Widget.Grocy.TextView.Paragraph"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.loginErrorExactMsg}"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Grocy.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:text="@string/action_back"
+                            android:onClick="@{() -> activity.navigateUp()}"
+                            app:clickUtil="@{clickUtil}"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Grocy.Button.UnelevatedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/action_try_again"
+                            android:onClick="@{() -> fragment.login(true)}"
+                            app:clickUtil="@{clickUtil}"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

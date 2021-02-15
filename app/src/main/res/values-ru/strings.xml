@@ -25,7 +25,6 @@
     <string name="action_new">Новый</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
     <string name="action_prev">Назад</string>
-    <string name="action_send_feedback">Обратная связь</string>
     <string name="action_reset">Сброс</string>
     <string name="action_reload">Обновить</string>
     <string name="action_top_scroll">Наверх</string>
@@ -53,7 +52,6 @@
     <string name="action_save">Сохранить</string>
     <string name="action_logout">Выйти</string>
     <string name="action_restart">Перезапустить</string>
-    <string name="action_batch_mode">Групповое действие</string>
     <string name="action_create">Создать</string>
     <string name="action_link">Ссылка</string>
     <string name="action_open_scanner">Открыть сканер</string>
@@ -66,7 +64,6 @@
     <string name="action_delete_shopping_list">Удалить список покупок</string>
     <string name="action_create_key">Создать ключ</string>
     <string name="action_login">Войти</string>
-    <string name="action_use_demo_account">Использовать  демо аккаунт</string>
     <string name="action_ignore">Игнорировать</string>
     <!-- This string should follow the equality between "all" and "Clear all items" -->
     <string name="action_clear_all">Все</string>
@@ -107,7 +104,6 @@
     <string name="msg_barcode_duplicate">Штрихкод уже существует</string>
     <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
     <string name="msg_master_delete">Удалить %1$s \"%2$s\"?</string>
-    <string name="msg_master_delete_stock">У продукта есть запас</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">%1$s еще используется</string>
     <string name="msg_item_marked_as_done">Пункт выполнен</string>
@@ -209,7 +205,6 @@
     <string name="subtitle_empty">Пусто</string>
     <string name="subtitle_done">Выполнено</string>
     <string name="subtitle_undone">Отменено</string>
-    <string name="subtitle_never_expires">Срок годности не ограничен</string>
     <string name="subtitle_selected">Выбрано</string>
     <string name="subtitle_stock_entry_no_specific">Первым истекает первый, потом первый пришел - первый ушел</string>
     <!-- %1$s is a purchase date -->
@@ -243,16 +238,10 @@
     <string name="property_price_in">Цена в %1$s</string>
     <string name="property_quantity_unit">Единица измерения</string>
     <string name="property_quantity_units">Единицы измерения</string>
-    <string name="property_qu_purchase">Единица измерения покупок</string>
     <string name="property_qu_stock">Единица измерения запасов</string>
     <string name="property_qu_factor">Коэффициент закупа к запасам</string>
     <string name="property_barcode">Штрихкод</string>
     <string name="property_barcodes">Штрихкоды</string>
-    <string name="property_bbd">Срок годности</string>
-    <string name="property_bbd_next">Следующий срок годности</string>
-    <string name="property_bb_days">Дней до срока годности</string>
-    <string name="property_bb_days_default">Дней до срока годности по умолчанию</string>
-    <string name="property_bb_days_default_opened">Дней до срока годности после вскрытия по умолчанию</string>
     <string name="property_location">Место</string>
     <string name="property_location_default">Место по умолчанию</string>
     <string name="property_notes">Заметки</string>
@@ -364,10 +353,8 @@
 
     <string name="category_licenses">Лицензии open source</string>
     <string name="category_general">Общее</string>
-    <string name="category_purchase_consume">Закупки &amp; использование</string>
     <string name="category_server">Сервер</string>
     <string name="category_debugging">Отладка</string>
-    <string name="category_presets">предустановки для новых продуктов</string>
 
     <string name="hint_server">Адрес сервера</string>
     <string name="hint_key">Действительный ключ доступа к API</string>

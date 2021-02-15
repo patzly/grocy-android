@@ -42,6 +42,9 @@ public class DateUtil {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.ENGLISH
     );
+    private static final SimpleDateFormat DATE_FORMAT_WITH_TIME = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
+    );
     private final Context context;
 
     public DateUtil(Context context) {
@@ -69,7 +72,7 @@ public class DateUtil {
         try {
             date = DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
-            Log.e(TAG, "getDaysFromNow: ");
+            Log.e(TAG, "getDaysFromNow: " + e);
         }
         if(date == null) return 0;
         long diff = date.getTime() - getCurrentDate().getTime();
@@ -91,6 +94,33 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    public static Date getCurrentDateWithTime() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    public String getCurrentDateWithTimeStr() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
+        return DATE_FORMAT_WITH_TIME.format(cal.getTime());
+    }
+
+    public boolean isTimeLessThanOneMinuteAway(String dateWithTimeStr) {
+        if(dateWithTimeStr == null) return true;
+        Date currentDateWithTime = getCurrentDateWithTime();
+        Date askedDateWithTime = null;
+        try {
+            askedDateWithTime = DATE_FORMAT_WITH_TIME.parse(dateWithTimeStr);
+        } catch (ParseException e) {
+            Log.e(TAG, "isTimeMoreThanOneMinuteAway: " + e);
+        }
+        if(askedDateWithTime == null) return true;
+        long diff = currentDateWithTime.getTime() - askedDateWithTime.getTime();
+        long secondsDiff = TimeUnit.SECONDS.convert(diff, TimeUnit.MILLISECONDS);
+        return Math.abs(secondsDiff) < 60;
+    }
+
     public String getLocalizedDate(String dateString, int format) {
         if(dateString == null || dateString.isEmpty()) {
             return context.getString(R.string.date_unknown);
@@ -99,7 +129,7 @@ public class DateUtil {
         try {
             date = DATE_FORMAT.parse(dateString);
         } catch (ParseException e) {
-            Log.e(TAG, "getLocalizedDate: ");
+            Log.e(TAG, "getLocalizedDate: " + e);
         }
         if(date == null) return "";
         String localized;
