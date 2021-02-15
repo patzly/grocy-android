@@ -591,7 +591,8 @@
                         <LinearLayout
                             android:id="@+id/linear_purchase_store"
                             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-                            android:onClick="@{() -> viewModel.showStoresBottomSheet()}">
+                            android:onClick="@{() -> viewModel.showStoresBottomSheet()}"
+                            android:visibility="@{formData.showStoreSection ? View.VISIBLE : View.GONE}">
 
                             <ImageView
                                 android:id="@+id/image_purchase_store"

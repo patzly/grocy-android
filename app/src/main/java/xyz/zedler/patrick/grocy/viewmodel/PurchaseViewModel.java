@@ -272,6 +272,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Store store = NumUtil.isStringInt(storeId)
                     ? getStore(Integer.parseInt(storeId)) : null;
             formData.getStoreLive().setValue(store);
+            formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
 
             // location
             formData.getLocationLive().setValue(productDetails.getLocation());
@@ -526,7 +527,7 @@ public class PurchaseViewModel extends BaseViewModel {
     }
 
     public void showStoresBottomSheet() {
-        if(!formData.isProductNameValid()) return;
+        if(!formData.isProductNameValid() || stores == null || stores.isEmpty()) return;
         Bundle bundle = new Bundle();
         if(stores.get(0).getId() != -1) {
             stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));

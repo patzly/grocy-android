@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -84,6 +83,7 @@ public class FormDataPurchase {
     private final String priceHint;
     private final LiveData<String> unitPriceTextLive;
     private final MutableLiveData<Boolean> isTotalPriceLive;
+    private final MutableLiveData<Boolean> showStoreSection;
     private final MutableLiveData<Store> storeLive;
     private final LiveData<String> storeNameLive;
     private final MutableLiveData<Location> locationLive;
@@ -212,6 +212,7 @@ public class FormDataPurchase {
                         .getString(R.string.title_unit_price_specific, quantityUnit.getName())
                         : getString(R.string.title_unit_price)
         );
+        showStoreSection = new MutableLiveData<>(true);
         storeLive = new MutableLiveData<>();
         storeNameLive = Transformations.map(
                 storeLive,
@@ -527,6 +528,10 @@ public class FormDataPurchase {
         return unitPriceTextLive;
     }
 
+    public MutableLiveData<Boolean> getShowStoreSection() {
+        return showStoreSection;
+    }
+
     public MutableLiveData<Store> getStoreLive() {
         return storeLive;
     }
@@ -733,6 +738,7 @@ public class FormDataPurchase {
         dueDateLive.setValue(null);
         priceLive.setValue(null);
         storeLive.setValue(null);
+        showStoreSection.setValue(true);
         locationLive.setValue(null);
         new Handler().postDelayed(() -> {
             productNameErrorLive.setValue(null);
