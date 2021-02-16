@@ -97,9 +97,9 @@ If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/
 <br />
 
 <a name="faq4"></a>
-**(4) How can I use this app with Hass.io?**
+**(4) How can I use this app with the grocy Home Assistant add-on?**
 
-*In a later version of our app, there will be a possibility to login with a long-term token from Home Assistant (together with a grocy API key). You won't need to open a port then anymore. For further details, look [here](https://github.com/patzly/grocy-android/issues/249).*
+*In the v2.0.0 alpha preview version of our app you can login with a long-term token from Home Assistant (together with a grocy API key). You won't need to open a port then anymore.*
 
 In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.
 Change the host port (which will be exposed) from "null" to any other number like "40" (without the quotes) in the Network section.
