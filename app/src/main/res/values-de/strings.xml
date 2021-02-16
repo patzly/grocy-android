@@ -220,10 +220,10 @@
     <string name="error_timeout">Zeitüberschreitungsfehler</string>
     <string name="error_no_product_selected">Kein Produkt ausgewählt</string>
     <string name="error_failed_to_connect_to">Verbindung mit Server fehlgeschlagen</string>
-    <string name="error_handshake">Fehlendes Zertifikat</string>
     <string name="error_missing_information">Nicht alle benötigten Felder sind ausgefüllt</string>
+    <string name="error_handshake">Ungültiges Zertifikat</string>
     <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server Zertifikat muss von einer öffentlichen Stelle (CA) zertifiziert worden sein.\nUm diese Anforderungen zu erfüllen, können Sie ein kostenloses Zertifikat von letsencrypt.org für die Verschlüsselung verweden.</string>
+    <string name="error_handshake_description">Dieser Server benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server-Zertifikat muss von einer öffentlichen vertrauten Zertifizierungsstelle (CA) zertifiziert worden sein (e.g. letsencrypt.org) oder im Android Benutzer-Zertifikatspeicher liegen.</string>
     <string name="error_unexpected_response_code">Unerwarteter Antwort-Code</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
     <string name="error_no_browser">Installieren Sie einen Webbrowser, um die Hilfe-Seite anzuzeigen</string>
