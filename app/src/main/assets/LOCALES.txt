@@ -1,47 +1,63 @@
 cs
+cs.demo.grocy.info
 Jarda Tesar, Radim Kabeláč
 
 de
+de.demo.grocy.info
 Dominic Zedler, Patrick Zedler
 
 en
+en.demo.grocy.info
 Dominic Zedler, Patrick Zedler
 
 es
+es.demo.grocy.info
 adrigrillo, recognitium
 
 fr
+fr.demo.grocy.info
 prohand, Zorvalt, Clément Chotard, Eric Robert, voslin
 
 he
+en.demo.grocy.info
 Yaron Shahrabani, Sefi Ninio
 
 it
+it.demo.grocy.info
 Matteo Schiff, Nur Fadel, racerider, Riccardo Bonesini
 
 nb
+no.demo.grocy.info
 Tor Eirik Trandal
 
 nl
+nl.demo.grocy.info
 Maarten Siersema, 4lloyd, Sam Bouwer
 
 pl
+pl.demo.grocy.info
 smiglo
 
 pt_BR
+pt-br.demo.grocy.info
 recognitium, Alejandro Mohamad
 
 pt_PT
+pt-pt.demo.grocy.info
 Joao Santos, Duarte Grilo
 
 ru
+ru.demo.grocy.info
 unwarkz, Pavel Peganov
 
 sv
+sv.demo.grocy.info
 Johan Hedlin
 
 uk
+en.demo.grocy.info
 NazimUa, Roman Rader
 
 zh_CN
+zh-cn.demo.grocy.info
 LuLuX

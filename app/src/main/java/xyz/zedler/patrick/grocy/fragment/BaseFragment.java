@@ -130,6 +130,8 @@ public class BaseFragment extends Fragment {
 
     public void selectStore(Store store) {}
 
+    public void setLanguage(String code) {}
+
     public void addBarcodeToNewProduct(String barcode) {}
 
     public void addBarcodeToExistingProduct(String barcode) {}

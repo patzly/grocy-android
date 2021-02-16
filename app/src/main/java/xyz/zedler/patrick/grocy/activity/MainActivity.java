@@ -67,6 +67,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -78,6 +79,7 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
@@ -132,6 +134,22 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().getResources().updateConfiguration(
                 appConfig, getApplicationContext().getResources().getDisplayMetrics()
         );
+        String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        if(serverUrl != null && serverUrl.contains("demo.grocy.info")) {
+            List<Language> languages = LocaleUtil.getLanguages(getApplicationContext());
+            String demoDomain = null;
+            for(Language language : languages) {
+                if(language.getCode().equals(locale.getLanguage())) {
+                    demoDomain = language.getDemoDomain();
+                }
+            }
+            if(demoDomain != null && !serverUrl.contains(demoDomain)) {
+                serverUrl = serverUrl.replaceAll(
+                        "[a-z]+-?[a-z]*.demo.grocy.info", demoDomain
+                );
+                sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
+            }
+        }
 
         super.onCreate(savedInstanceState);
 

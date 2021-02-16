@@ -109,6 +109,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         viewModel.setDarkMode(dark);
     }
 
+    @Override
     public void setLanguage(String code) {
         Locale locale = code != null
                 ? LocaleUtil.getLocaleFromCode(code)

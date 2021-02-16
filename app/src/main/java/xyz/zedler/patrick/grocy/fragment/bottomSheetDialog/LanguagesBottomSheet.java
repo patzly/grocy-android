@@ -40,7 +40,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LanguageAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.fragment.SettingsCatAppearanceFragment;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
@@ -126,11 +125,7 @@ public class LanguagesBottomSheet extends BaseBottomSheet
 
         if (compare.equals(configCompare)) {
             BaseFragment current = activity.getCurrentFragment();
-            if (current instanceof SettingsCatAppearanceFragment) {
-                ((SettingsCatAppearanceFragment) current).setLanguage(
-                        language != null ? language.getCode() : null
-                );
-            }
+            current.setLanguage(language != null ? language.getCode() : null);
             dismiss();
         } else {
             new Handler().postDelayed(() -> RestartUtil.restartApp(activity), 100);
