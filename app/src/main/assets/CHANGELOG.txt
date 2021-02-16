@@ -2,6 +2,7 @@
 - New: You can now use the app with the Home Assistant grocy add-on (#249)
 - Improved: Rewritten login flow
 - Fixed: Crash when open store selection on purchase page (#347)
+- Fixed: Crash on consume page when location could not be found
 
 2.0.0-alpha02
 - New: Language option in appearance settings (#322)

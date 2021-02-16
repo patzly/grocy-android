@@ -226,7 +226,7 @@
     <string name="error_handshake">Certificate missing</string>
     <string name="error_missing_information">Not all required fields are filled</string>
     <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate has to be signed by a trusted certificate authority (CA)\nTo meet these requirements, you can use a free certificate from letsencrypt.org for proper encryption.</string>
+    <string name="error_handshake_description">%1$s requires a certificate that is not known or trusted by Android.\nThe server certificate must either be signed by a trusted certificate authority (e.g. letsencrypt.org) or stored in the Android user certificate store of this device.</string>
     <string name="error_unexpected_response_code">Unexpected response code</string>
     <string name="error_unexpected_response">Unexpected server response</string>
     <string name="error_no_browser">Install a web browser to display the help website</string>
