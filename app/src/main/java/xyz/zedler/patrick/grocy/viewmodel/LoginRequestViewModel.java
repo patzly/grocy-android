@@ -175,7 +175,7 @@ public class LoginRequestViewModel extends BaseViewModel {
                         } else {
                             loginErrorOccurred.setValue(true);
                             loginErrorMsg.setValue(getString(R.string.error_failed_to_connect_to));
-                            loginErrorExactMsg.setValue("Server: " + serverUrl);
+                            loginErrorExactMsg.setValue("Server: " + serverUrl + "\n\nError: " + error.toString());
                         }
                     } else if(error instanceof ServerError && error.networkResponse != null) {
                         int code = error.networkResponse.statusCode;
