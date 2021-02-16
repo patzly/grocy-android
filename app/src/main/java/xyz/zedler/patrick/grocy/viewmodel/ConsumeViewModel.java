@@ -234,7 +234,9 @@ public class ConsumeViewModel extends BaseViewModel {
                     stockLocations,
                     product.getLocationIdInt()
             );
-            if(stockLocation == null) stockLocation = stockLocations.get(stockLocations.size()-1);
+            if(stockLocation == null && !stockLocations.isEmpty()) {
+                stockLocation = stockLocations.get(stockLocations.size()-1);
+            }
             formData.getStockLocationLive().setValue(stockLocation);
 
             // stock entry
