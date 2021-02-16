@@ -56,6 +56,7 @@
     <string name="action_restart">Zrestartuj</string>
     <string name="action_create">Utwórz</string>
     <string name="action_link">Połącz</string>
+    <string name="action_try_again">Spróbuj ponownie</string>
     <string name="action_open_scanner">Otwórz skaner</string>
     <string name="action_discard">Odrzuć</string>
     <string name="action_clear_form">Wyczyść formularz</string>
@@ -129,7 +130,7 @@
     <string name="msg_restart">Restart aplikacji jest wymagany, aby zatwierdzić obecną konfigurację Grocy.</string>
     <string name="msg_shortcuts">Możesz włączyć do 4 skrótów:</string>
     <string name="msg_shortcuts_not_supported">Skróty nie są obsługiwane przez tą wersję Androida</string>
-    <string name="msg_features">Zacznij jeszcze raz wstęp w zakładce \"O aplikacji\"</string>
+    <string name="msg_features">Ponownie odtwórz wstęp w sekcji \"O aplikacji\"</string>
     <string name="msg_feedback">Masz jakieś życzenia, pytania, bądź błędy? Skontaktuj się i pomóż nam pomóc!\nW innym wypadku będziemy bardzo szczęśliwi za fajną recenzję w Play Store.</string>
     <string name="msg_point_at_barcode">Skieruj swój aparat na kod kreskowy</string>
     <string name="msg_press_hold_confirm">Naciśnij i przytrzymaj aby potwierdzić</string>
@@ -170,6 +171,8 @@
     <string name="msg_help_loading_circle_settings">Na każdej stronie na której jakieś dane ładowane są z serwera, aplikacja najpierw sprawdza za pomocą małego pojedynczego żądania czy baza danych została zmieniona od ostatniego razu i aktualizuje jedynie nieaktualne dane. Włącz opcję poniżej aby widzieć kółko ładowania nawet dla tego żądania.</string>
     <string name="msg_help_start">Tryb początkującego jest aktywny: Teksty pomocy są wyświetlane domyślnie na wszystkich stronach na których są dostępne. Stuknij aby zmienić.</string>
     <string name="msg_help_purchased_date_settings">Jeżeli poniższa opcja jest włączona, pole dla daty zakupu będzie wyświetlane na stronach zakupu oraz zapasu. W innym wypadku data zakupu będzie ustawiana na dzisiaj.</string>
+    <string name="msg_help_normal_login">Stuknij na tą kartę, jeżeli używasz grocy jako dodatek w Home Assistant.</string>
+    <string name="msg_help_home_assistant_login">Używasz grocy jako dodatek w Home Assistant. Przez to potrzebne jest jeszcze kilka detali. Stuknij na tą kartę aby przełączyć na normalny login.</string>
 
     <string name="error_api_not_working">Klucz API nie działa</string>
     <string name="error_orbot_not_installed">Orbot nie jest zainstalowany</string>
@@ -216,13 +219,12 @@
     <string name="error_not_grocy_instance">Nieprawidłowa instancja grocy</string>
     <string name="error_timeout">Przekroczono czas połączenia</string>
     <string name="error_no_product_selected">Nie wybrano produktu</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Nie udało się połączyć z %1$s</string>
+    <string name="error_failed_to_connect_to">Nie udało się połączyć z serwerem</string>
     <string name="error_handshake">Brakuje certyfikatu</string>
     <string name="error_missing_information">Nie wszystkie wymagane pola zostały uzupełnione</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s wymaga certyfikatu znanego bądź zaufanego przez Androida.\nCertyfikat serwera musi być podpisany przez zaufany urząd certyfikacji (CA)\nAby spełnić te warunki, możesz użyć darmowego certyfikatu z letsencrypt.org w celu prawidłowego szyfrowania.</string>
-    <string name="error_unexpected_response_code">Niespodziewana odpowiedź: %1$d</string>
+    <string name="error_unexpected_response_code">Niespodziewany kod odpowiedzi</string>
     <string name="error_unexpected_response">Niespodziewana odpowiedź serwera</string>
     <string name="error_no_browser">Zainstaluj przeglądarkę internetową aby wyświetlić stronę pomocy</string>
     <string name="error_barcode_not_linked">Kod kreskowy nie jest powiązany z produktem</string>
@@ -244,6 +246,8 @@
     <string name="title_shopping_list">Lista zakupów</string>
     <string name="title_feedback">Informacja zwrotna</string>
     <string name="title_settings">Ustawienia</string>
+    <!-- Context: About this app -->
+    <string name="title_about">O aplikacji</string>
     <string name="title_info">Informacje</string>
     <string name="title_help">Pomoc</string>
     <string name="title_logs">Logi</string>
@@ -335,35 +339,35 @@
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
-        <item quantity="one">Masz jeden produkt na stanie</item>
+        <item quantity="one">Masz %1$d produkt na stanie</item>
         <item quantity="few">Masz %1$d produkty na stanie</item>
         <item quantity="many">Masz %1$d produktów na stanie</item>
         <item quantity="other">Masz %1$d produktów na stanie</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
-        <item quantity="one">Masz jeden produkt na stanie o wartości %2$s%3$s.</item>
-        <item quantity="few">Masz %1$d produkty na stanie o wartości %2$s%3$s.</item>
+        <item quantity="one">Masz %1$d produkt na stanie o wartości %2$s%3$s.</item>
+        <item quantity="few">Masz%1$d produkty na stanie o wartości %2$s%3$s. </item>
         <item quantity="many">Masz %1$d produktów na stanie o wartości %2$s%3$s.</item>
-        <item quantity="other">Masz %1$d produktów na stanie o wartości %2$s%3$s.</item>
+        <item quantity="other">Masz %1$d produktów na stanie o wartości %2$s %3$s.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">Jeden produkt na twoich listach zakupów.</item>
-        <item quantity="few">%1$d produkty na twoich listach zakupów.</item>
-        <item quantity="many">%1$d produktów na twoich listach zakupów.</item>
-        <item quantity="other">%1$d pozycji na twoich listach zakupów.</item>
+        <item quantity="one">%1$d pozycja jest na twoich listach zakupów.</item>
+        <item quantity="few">%1$d pozycje są na twoich listach zakupów.</item>
+        <item quantity="many">%1$d pozycji jest na twoich listach zakupów.</item>
+        <item quantity="other">%1$d pozycji jest na twoich listach zakupów.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list">
-        <item quantity="one">Jeden produkt na twojej liście zakupów.</item>
-        <item quantity="few">%1$d produkty na twojej liście zakupów.</item>
-        <item quantity="many">%1$d produktów na twojej liście zakupów.</item>
-        <item quantity="other">%1$d pozycji na twojej liście zakupów.</item>
+        <item quantity="one">%1$d pozycja jest na twojej liście zakupów.</item>
+        <item quantity="few">%1$d pozycje są na twojej liście zakupów.</item>
+        <item quantity="many">%1$d pozycji jest na twojej liście zakupów.</item>
+        <item quantity="other">%1$d pozycji jest na twojej liście zakupów.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_master_data">
-        <item quantity="one">Twoja baza danych zawiera jeden produkt.</item>
+        <item quantity="one">Twoja baza danych zawiera %1$d produkt.</item>
         <item quantity="few">Twoja baza danych zawiera %1$d produkty.</item>
         <item quantity="many">Twoja baza danych zawiera %1$d produktów.</item>
         <item quantity="other">Twoja baza danych zawiera %1$d produktów.</item>
