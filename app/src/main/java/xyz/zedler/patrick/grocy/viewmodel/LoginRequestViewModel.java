@@ -46,7 +46,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.LoginRequestFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MessageBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -166,16 +165,10 @@ public class LoginRequestViewModel extends BaseViewModel {
                         loginErrorMsg.setValue(getString(R.string.error_api_not_working));
                     } else if(error instanceof NoConnectionError) {
                         if(error.toString().contains("SSLHandshakeException")) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(
-                                    Constants.ARGUMENT.TITLE,
-                                    getString(R.string.error_handshake)
-                            );
-                            bundle.putString(
-                                    Constants.ARGUMENT.TEXT,
-                                    getApplication().getString(R.string.error_handshake_description, serverUrl)
-                            );
-                            showBottomSheet(new MessageBottomSheet(), bundle);
+                            showMessage("SSLHandshakeException");
+                            loginErrorOccurred.setValue(true);
+                            loginErrorMsg.setValue(getString(R.string.error_handshake));
+                            loginErrorExactMsg.setValue(getString(R.string.error_handshake_description));
                         } else if(error.toString().contains("Invalid host")) {
                             loginErrorOccurred.setValue(true);
                             loginErrorMsg.setValue(getString(R.string.error_invalid_url));
