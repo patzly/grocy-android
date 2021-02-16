@@ -56,6 +56,7 @@
     <string name="action_restart">Перезапустити</string>
     <string name="action_create">Створити</string>
     <string name="action_link">Посилання</string>
+    <string name="action_try_again">Спробуйте ще раз</string>
     <string name="action_open_scanner">Відкрити сканер</string>
     <string name="action_discard">Відхилити</string>
     <string name="action_clear_form">Очистити форму</string>
@@ -129,11 +130,11 @@
     <string name="msg_restart">Щоб правильно застосувати поточну конфігурацію Grocy, потрібно перезапустити програму.</string>
     <string name="msg_shortcuts">Можна ввімкнути до 4-х ярликів:</string>
     <string name="msg_shortcuts_not_supported">Ярлики не підтримуються в цій версії Android.</string>
-    <string name="msg_features">Запустити вступ знову можливо в розділі \"Про цей додаток\"</string>
+    <string name="msg_features">Запустити вступ знову можливо в розділі \"Про додаток\"</string>
     <string name="msg_feedback">Чи є у вас побажання, запитання чи помилки? Зв’яжіться з нами та ми допоможемо!\nЯкщо ні, ми будемо дуже раді приємному відгуку в Play Store.</string>
     <string name="msg_point_at_barcode">Наведіть камеру на штрих-код</string>
     <string name="msg_press_hold_confirm">Натисніть і утримуйте для підтвердження</string>
-    <string name="msg_welcome_to_grocy">Ласкаво просимо на Grocy Android!\n\nЩоб продуктивно використовувати grocy, вам потрібен власний сервер.\nЯкщо ви просто хочете випробувати цю програму, ви можете скористатися демо-сервером від Бернда Берселя, творця grocy.</string>
+    <string name="msg_welcome_to_grocy">Ласкаво просимо на Grocy Android!\n\nЩоб продуктивно використовувати Grocy, вам потрібен власний сервер або add-on Grocy для Home Assistant.\nЯкщо ви просто хочете випробувати цю програму, ви можете скористатися демо-сервером від Бернда Берселя, творця grocy.</string>
     <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
     <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
     <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
@@ -170,6 +171,8 @@
     <string name="msg_help_loading_circle_settings">На кожній сторінці, де щось потрібно завантажити з сервера, програма спочатку перевіряє крихітним запитом, чи є зміни в базі даних сервера з минулого разу, і оновлює лише застарілі дані. Увімкніть опцію нижче, щоб показати коло завантаження навіть для цього крихітного запиту.</string>
     <string name="msg_help_start">Активний режим для початківців: Тексти довідки відображаються за замовчуванням на всіх сторінках, якщо такі є. Торкніться, щоб змінити.</string>
     <string name="msg_help_purchased_date_settings">Якщо опція нижче ввімкнена, на сторінці купівлі та інвентаризації відображатиметься поле для дати придбання. В іншому випадку придбана дата за замовчуванням сьогодні.</string>
+    <string name="msg_help_normal_login">Натисніть на цю картку, якщо ви використовуєте Home Assistant з add-on Grocy.</string>
+    <string name="msg_help_home_assistant_login">Ви використовуєте add-on Grocy для Home Assistant. Тому потрібно ще кілька деталей. Натисніть на цю картку, щоб перейти до звичайного входу.</string>
 
     <string name="error_api_not_working">Ключ API не працює</string>
     <string name="error_orbot_not_installed">Orbot не встановлено</string>
@@ -216,13 +219,12 @@
     <string name="error_not_grocy_instance">Не дійсний сервер Grocy</string>
     <string name="error_timeout">Перевищено час очікування</string>
     <string name="error_no_product_selected">Продукт не вибрано</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Не вдалося під\'єднатися до %1$s</string>
-    <string name="error_handshake">Сертифікат відсутній</string>
+    <string name="error_failed_to_connect_to">Не вдалося під\'єднатися до сервера</string>
     <string name="error_missing_information">Заповнено не всі обов\'язкові поля</string>
+    <string name="error_handshake">Недійсний сертифікат</string>
     <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s потрібен сертифікат, який невідомий або довірений для Android. \nСертифікат сервера повинен бути підписаний надійним центром сертифікації (ЦС) \ nЩоб відповідати цим вимогам, ви можете скористатися безкоштовним сертифікатом від letsencrypt.org для належного шифрування.</string>
-    <string name="error_unexpected_response_code">Несподіваний код відповіді: %1$d</string>
+    <string name="error_handshake_description">Для цього сервера потрібен сертифікат, який невідомий або довірений для Android.\nСертифікат сервера повинен бути підписаний довіреним центром сертифікації (наприклад, letsencrypt.org) або зберігатися в сховищі сертифікатів користувачів Android цього пристрою.</string>
+    <string name="error_unexpected_response_code">Несподіваний код відповіді</string>
     <string name="error_unexpected_response">Несподівана відповідь сервера</string>
     <string name="error_no_browser">Встановіть веб-браузер для відображення веб-сайту довідки</string>
     <string name="error_barcode_not_linked">Штрих-код не зв\'язано з продуктом</string>
@@ -244,6 +246,8 @@
     <string name="title_shopping_list">Список покупок</string>
     <string name="title_feedback">Зворотній зв\'язок</string>
     <string name="title_settings">Налаштування</string>
+    <!-- Context: About this app -->
+    <string name="title_about">Про додаток</string>
     <string name="title_info">Інформація</string>
     <string name="title_help">Допомога</string>
     <string name="title_logs">Журнал</string>
@@ -335,36 +339,36 @@
 
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock">
-        <item quantity="one">У вас є один продукт на складі.</item>
-        <item quantity="few">У вас є %1$d продукти на складі.</item>
+        <item quantity="one">У вас є %1$d продуктів на складі.</item>
+        <item quantity="few">У вас є %1$d продуктів на складі.</item>
         <item quantity="many">У вас є %1$d продуктів на складі.</item>
         <item quantity="other">У вас є %1$d продуктів на складі.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
-        <item quantity="one">У вас є один товар на складі вартістю %2$s %3$s.</item>
-        <item quantity="few">У вас є %1$d товари на складі вартістю %2$s %3$s.</item>
+        <item quantity="one">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
+        <item quantity="few">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
         <item quantity="many">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
         <item quantity="other">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">Один пункт у списках покупок.</item>
-        <item quantity="few">%1$d пункти у списках покупок.</item>
+        <item quantity="one">%1$d пунктів у списках покупок.</item>
+        <item quantity="few">%1$d пунктів у списках покупок.</item>
         <item quantity="many">%1$d пунктів у списках покупок.</item>
         <item quantity="other">%1$d пунктів у списках покупок.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list">
-        <item quantity="one">Один пункт у списку покупок.</item>
-        <item quantity="few">%1$d пункти у списку покупок.</item>
+        <item quantity="one">%1$d пунктів у списку покупок.</item>
+        <item quantity="few">%1$d пунктів у списку покупок.</item>
         <item quantity="many">%1$d пунктів у списку покупок.</item>
         <item quantity="other">%1$d пунктів у списку покупок.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_master_data">
-        <item quantity="one">База даних містить один продукт.</item>
-        <item quantity="few">Ваша база даних містить %1$d продукти.</item>
+        <item quantity="one">Ваша база даних містить %1$d продуктів.</item>
+        <item quantity="few">Ваша база даних містить %1$d продуктів.</item>
         <item quantity="many">Ваша база даних містить %1$d продуктів.</item>
         <item quantity="other">Ваша база даних містить %1$d продуктів.</item>
     </plurals>
