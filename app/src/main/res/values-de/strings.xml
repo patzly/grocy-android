@@ -56,6 +56,7 @@
     <string name="action_restart">Neustarten</string>
     <string name="action_create">Erstellen</string>
     <string name="action_link">Verknüpfen</string>
+    <string name="action_try_again">Erneut versuchen</string>
     <string name="action_open_scanner">Scanner öffnen</string>
     <string name="action_discard">Verwerfen</string>
     <string name="action_clear_form">Formular leeren</string>
@@ -129,7 +130,7 @@
     <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration des Servers anzuwenden.</string>
     <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
     <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
-    <string name="msg_features">Intro erneut starten in \"Über diese App\"</string>
+    <string name="msg_features">Intro erneut starten in \"Über\"</string>
     <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
     <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
     <string name="msg_press_hold_confirm">Drücken und halten Sie, um zu bestätigen.</string>
@@ -170,6 +171,8 @@
     <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
     <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
     <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
+    <string name="msg_help_normal_login">Auf diese Karte tippen, wenn Sie Home Assistant mit dem grocy Add-on benutzen.</string>
+    <string name="msg_help_home_assistant_login">Sie benutzen das grocy Home Assistant Add-on. Deshalb sind ein paar weitere Eingaben erforderlich. Auf diese Karte tippen, um zum normalen Login zu wechseln.</string>
 
     <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
     <string name="error_orbot_not_installed">Orbot ist nicht installiert</string>
@@ -216,13 +219,12 @@
     <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
     <string name="error_timeout">Zeitüberschreitungsfehler</string>
     <string name="error_no_product_selected">Kein Produkt ausgewählt</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Verbindung mit %1$s fehlgeschlagen</string>
+    <string name="error_failed_to_connect_to">Verbindung mit Server fehlgeschlagen</string>
     <string name="error_handshake">Fehlendes Zertifikat</string>
     <string name="error_missing_information">Nicht alle benötigten Felder sind ausgefüllt</string>
     <!-- %1$s is an URL -->
     <string name="error_handshake_description">%1$s benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server Zertifikat muss von einer öffentlichen Stelle (CA) zertifiziert worden sein.\nUm diese Anforderungen zu erfüllen, können Sie ein kostenloses Zertifikat von letsencrypt.org für die Verschlüsselung verweden.</string>
-    <string name="error_unexpected_response_code">Unerwarteter Antwort-Code: %1$d</string>
+    <string name="error_unexpected_response_code">Unerwarteter Antwort-Code</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
     <string name="error_no_browser">Installieren Sie einen Webbrowser, um die Hilfe-Seite anzuzeigen</string>
     <string name="error_barcode_not_linked">Barcode ist nicht mit einem Produkt verknüpft</string>
@@ -244,6 +246,8 @@
     <string name="title_shopping_list">Einkaufszettel</string>
     <string name="title_feedback">Feedback</string>
     <string name="title_settings">Einstellungen</string>
+    <!-- Context: About this app -->
+    <string name="title_about">Über</string>
     <string name="title_info">Information</string>
     <string name="title_help">Hilfe</string>
     <string name="title_logs">Logs</string>
