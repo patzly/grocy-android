@@ -187,7 +187,7 @@ public class DateBottomSheet extends BaseBottomSheet {
             date = Constants.DATE.NEVER_OVERDUE;
         }
 
-        BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
+        BaseFragment currentFragment = activity.getCurrentFragment();
         if(args.getInt(DATE_TYPE) == DUE_DATE) {
             currentFragment.selectDueDate(date);
         } else {

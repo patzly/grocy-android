@@ -119,7 +119,7 @@
     <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
     <string name="msg_batch_no_products">Aucun nouveau produit à créer</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">La transaction sera exécutée :\n\nAjouter %1$s %2$s de %3$s au stock\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">La transaction sera exécutée :\n\nAjouter %1$s %2$s de %3$s au stock\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transaction qui sera exécutée:\n\nSupprimer : %1$s %2$s de %3$s du stock\nEmplacement : %4$s</string>
     <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>

@@ -119,7 +119,7 @@
     <string name="msg_item_marked_as_undone">Marcar item como não concluído</string>
     <string name="msg_batch_no_products">Não foi criado nenhum produto novo</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">Transação que será executada:\n\nAdicionar %1$s %2$s de %3$s ao stock\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">Transação que será executada:\n\nAdicionar %1$s %2$s de %3$s ao stock\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
     <string name="msg_compatibility">A versão desta aplicação não é compatível com a versão do grocy no servidor.\n\nVersão actual do servidor: %1$s\n\nRequisitos:\nVersão min. do servidor: %2$s\nVersão max. do servidor: %3$s\n\nSe ignorar este aviso, perda de dados (pouco provável) e falhas (muito provável) podem ocorrer.\nFicam avisados!</string>

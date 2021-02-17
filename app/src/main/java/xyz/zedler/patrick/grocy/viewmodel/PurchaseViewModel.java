@@ -204,7 +204,14 @@ public class PurchaseViewModel extends BaseViewModel {
             formData.getProductNameLive().setValue(updatedProduct.getName());
 
             // quantity unit
-            double initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+            double initialUnitFactor;
+            try {
+                initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+            } catch (IllegalArgumentException e) {
+                showMessage(e.getMessage());
+                formData.clearForm();
+                return;
+            }
 
             // amount
             boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -295,8 +302,7 @@ public class PurchaseViewModel extends BaseViewModel {
         QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
 
         if(stock == null || purchase == null) {
-            showMessage(getString(R.string.error_loading_qus));
-            return 1;
+            throw new IllegalArgumentException(getString(R.string.error_loading_qus));
         }
 
         HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();

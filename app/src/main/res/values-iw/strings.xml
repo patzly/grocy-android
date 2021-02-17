@@ -119,7 +119,7 @@
     <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
     <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">פעולה שתבוצע:\n\nהוספת %1$s %2$s של %3$s למלאי\nתאריך תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">פעולה שתבוצע:\n\nהוספת %1$s %2$s של %3$s למלאי\nתאריך תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
     <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
     <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
     <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>

@@ -119,7 +119,7 @@
     <string name="msg_item_marked_as_undone">Nastav položku jako nehotovou</string>
     <string name="msg_batch_no_products">Žádný nový produkt nebyl vytvořen</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
     <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>

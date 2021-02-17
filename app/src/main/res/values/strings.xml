@@ -123,7 +123,7 @@
     <string name="msg_item_marked_as_undone">Marked item as undone</string>
     <string name="msg_batch_no_products">No new products have to be created</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transaction which will be executed:\n\nRemove %1$s %2$s of %3$s from stock\nLocation: %4$s</string>
     <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>

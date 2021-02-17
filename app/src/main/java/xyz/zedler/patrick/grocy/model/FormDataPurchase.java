@@ -667,19 +667,24 @@ public class FormDataPurchase {
         QuantityUnit qU = quantityUnitLive.getValue();
         ProductDetails details = productDetailsLive.getValue();
         String price = priceLive.getValue();
-        assert qU != null && details != null && price != null;
-        price = NumUtil.trimPrice(Double.parseDouble(price));
-        if(currency != null && !currency.isEmpty()) {
-            price += " " + currency;
+        assert qU != null && details != null;
+        if(NumUtil.isStringDouble(price)) {
+            price = NumUtil.trimPrice(Double.parseDouble(price));
+            if(currency != null && !currency.isEmpty()) price += " " + currency;
+        } else {
+            price = getString(R.string.subtitle_empty);
         }
+        String store = storeNameLive.getValue();
+        if(store == null) store = getString(R.string.subtitle_none_selected);
+
         return application.getString(
-                R.string.msg_scan_mode_confirm,
+                R.string.msg_scan_mode_confirm_purchase,
                 NumUtil.trim(amountAdded),
                 amountAdded == 1 ? qU.getName() : qU.getNamePlural(),
                 details.getProduct().getName(),
                 dueDateTextLive.getValue(),
                 price,
-                storeNameLive.getValue(),
+                store,
                 locationNameLive.getValue()
         );
     }

@@ -119,7 +119,7 @@
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
     <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
+    <string name="msg_scan_mode_confirm_purchase">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
