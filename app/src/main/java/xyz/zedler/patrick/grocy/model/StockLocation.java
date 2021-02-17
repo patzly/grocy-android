@@ -46,7 +46,7 @@ public class StockLocation implements Parcelable {
     private final String locationName;
 
     @SerializedName("location_is_freezer")
-    private final int isFreezer;
+    private final String isFreezer;
 
     private StockLocation(Parcel parcel) {
         id = parcel.readInt();
@@ -54,7 +54,7 @@ public class StockLocation implements Parcelable {
         amount = parcel.readString();
         locationId = parcel.readInt();
         locationName = parcel.readString();
-        isFreezer = parcel.readInt();
+        isFreezer = parcel.readString();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class StockLocation implements Parcelable {
         dest.writeString(amount);
         dest.writeInt(locationId);
         dest.writeString(locationName);
-        dest.writeInt(isFreezer);
+        dest.writeString(isFreezer);
     }
 
     public static final Creator<StockLocation> CREATOR = new Creator<StockLocation>() {
@@ -104,8 +104,12 @@ public class StockLocation implements Parcelable {
         return locationName;
     }
 
-    public int getIsFreezer() {
+    public String getIsFreezer() {
         return isFreezer;
+    }
+
+    public boolean getIsFreezerBoolean() {
+        return NumUtil.isStringInt(isFreezer) && Integer.parseInt(isFreezer) == 1;
     }
 
     @Override

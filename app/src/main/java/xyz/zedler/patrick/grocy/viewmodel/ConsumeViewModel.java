@@ -203,7 +203,13 @@ public class ConsumeViewModel extends BaseViewModel {
             formData.getConsumeExactAmountLive().setValue(false);
 
             // quantity unit
-            setProductQuantityUnitsAndFactors(product, barcode);
+            try {
+                setProductQuantityUnitsAndFactors(product, barcode);
+            } catch (IllegalArgumentException e) {
+                showMessage(e.getMessage());
+                formData.clearForm();
+                return;
+            }
 
             // amount
             boolean isTareWeightEnabled = formData.isTareWeightEnabled();
@@ -272,8 +278,7 @@ public class ConsumeViewModel extends BaseViewModel {
         QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
 
         if(stock == null || purchase == null) {
-            showMessage(getString(R.string.error_loading_qus));
-            return;
+            throw new IllegalArgumentException(getString(R.string.error_loading_qus));
         }
 
         HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
