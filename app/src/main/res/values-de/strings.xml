@@ -600,7 +600,7 @@
     <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
     <string name="setting_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://de.demo.grocy.info</string>
     </resources>
