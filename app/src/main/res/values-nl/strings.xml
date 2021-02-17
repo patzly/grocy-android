@@ -118,8 +118,6 @@
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
     <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
@@ -129,11 +127,9 @@
     <string name="msg_restart">Herstart de app om de nieuwe Grocy configuratie in te laden.</string>
     <string name="msg_shortcuts">Je kan tot 4 snelkoppelingen activeren:</string>
     <string name="msg_shortcuts_not_supported">Snelkoppelingen worden niet ondersteunt door deze Android versie.</string>
-    <string name="msg_features">Start de intro opnieuw in \"Over deze app\"</string>
     <string name="msg_feedback">Heb je wensen, vragen of fouten gevonden? Neem contact met ons op, wij helpen je graag. Anders zouden we het heel fijn vinden als je een leuke recensie achter laat in de Play Store.</string>
     <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
     <string name="msg_press_hold_confirm">Druk en houd ingedrukt op te bevestigen</string>
-    <string name="msg_welcome_to_grocy">Welkom bij Grocy Android!\n\nOm deze app te kunnen gebruiken heb je een eigen server nodig.\nAls je alleen deze app wil testen dan kan je de test server van Bernd Bestel, de bedenker van grocy, gebruiken.</string>
     <string name="msg_choose_option_below">Kies een van de onderstaande opties.</string>
     <string name="msg_qr_code_scan">Bezoek op een ander apparaat jouw grocy en ga naar de \'API sleutels\' pagina. Klik op \'Toevoegen\', klik daarna op het kleine QR-code symbooltje en scan de QR-code.</string>
     <string name="msg_not_implemented_yet">Dit komt binnenkort beschikbaar. Gebruik voor nu de server weergave.</string>
@@ -170,7 +166,6 @@
     <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>
     <string name="msg_help_start">Beginnersmode is actief: Help tekst wordt standaard weergegeven op alle pagina\'s. Tik om dit te veranderen.</string>
     <string name="msg_help_purchased_date_settings">Als deze optie is ingeschakeld wordt een veld voor de aankoopdatum weergegeven op de aankoop en voorraad pagina. Indien uitgeschakeld wordt vandaag gebruikt als aankoopdatum.</string>
-
     <string name="error_api_not_working">API sleutel werkt niet</string>
     <string name="error_orbot_not_installed">Orbot is niet geïnstalleerd</string>
     <string name="error_select_product">Selecteer een product</string>
@@ -216,13 +211,7 @@
     <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
     <string name="error_timeout">Timeout fout</string>
     <string name="error_no_product_selected">Geen product geselecteerd</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Verbinding met %1$s mislukt</string>
-    <string name="error_handshake">Certificaat ontbreekt</string>
     <string name="error_missing_information">Niet alle benodigde velden zijn ingevuld</string>
-    <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s heeft een certificaat dat niet wordt herkend door Android.\nHet servercertificaat moet worden ondertekend door een vertrouwde certificeringsinstantie (CA)\nOm aan deze vereisten te voldoen, kunt u een gratis certificaat aanmaken via letsencrypt.org</string>
-    <string name="error_unexpected_response_code">Onverwachte reactie met code: %1$d</string>
     <string name="error_unexpected_response">Onverwachte reactie van server</string>
     <string name="error_no_browser">Installeer een webbrowser om de help website weer te geven</string>
     <string name="error_barcode_not_linked">Barcode is niet gekoppeld aan een product</string>
@@ -332,32 +321,6 @@
     <string name="description_clear_shopping_list_option1">Alleen voltooide items verwijderen</string>
     <!-- Context: Clear shopping list -->
     <string name="description_clear_shopping_list_option2">Verwijder alle items</string>
-
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock">
-        <item quantity="one">Je hebt één product in voorraad</item>
-        <item quantity="other">Je hebt %1$d producten in voorraad</item>
-    </plurals>
-    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
-    <plurals name="description_overview_stock_value">
-        <item quantity="one">Je hebt %1$d producten in voorraad met een waarde van %2$s%3$s.</item>
-        <item quantity="other">Je hebt %1$d producten in voorraad met een waarde van %2$s %3$s.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">Één item staat op je boodschappenlijst</item>
-        <item quantity="other">%1$d items staan op je boodschappenlijst</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list">
-        <item quantity="one">Één item staat op je boodschappenlijst.</item>
-        <item quantity="other">%1$d items staan op je boodschappenlijst.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_master_data">
-        <item quantity="one">Je database bevat één product.</item>
-        <item quantity="other">Je database bevat %1$d producten.</item>
-    </plurals>
 
     <string name="property_name">Naam</string>
     <string name="property_name_singular">Naam (Enkelvoud)</string>
@@ -591,7 +554,7 @@
     <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
     <string name="setting_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://nl.demo.grocy.info</string>
     </resources>
