@@ -56,6 +56,7 @@
     <string name="action_restart">הפעלה מחדש</string>
     <string name="action_create">יצירה</string>
     <string name="action_link">קישור</string>
+    <string name="action_try_again">לנסות שוב</string>
     <string name="action_open_scanner">פתיחת סורק</string>
     <string name="action_discard">התעלמות</string>
     <string name="action_clear_form">למחוק את הטופס</string>
@@ -118,8 +119,8 @@
     <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
     <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
     <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">פעולה שתבוצע:\n\nהוספת %1$s %2$s של %3$s למלאי\nתאריך תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">פעולה שתבוצע:\n\nהסרת %1$s %2$s של %3$s מהמלאי\nמיקום: %4$s</string>
     <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
     <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
     <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
@@ -131,10 +132,11 @@
     <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
     <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
     <string name="msg_press_hold_confirm">יש ללחוץ ולהחזיק כדי לאשר</string>
-    <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
+    <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך או את התוסף של grocy ל־Home Assistant.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
     <string name="msg_choose_option_below">נא לבחור אפשרות אחת מלמטה.</string>
     <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
     <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
+    <string name="msg_help_due_date_type">בהתאם לסוג תאריך התפוגה הנבחר, תשתנה ההדגשה בעמוד סקירת המלאי. „תאריך תוקף עד” משמעו שיתכן המוצר עדיין בטוח לצריכה לאחר תאריך התפוגה שלו. „תאריך תפוגה” משמעו שהמוצר אינו בטוח לצריכה לאחר שתאריך התפוגה שלו פג.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_opened">כאשר המוצר הזה סומן כפתוח, תאריך התפוגה יוחלף בהיום + כמות כזאת של ימים (ערך של 0 כדי להשבית את זה).</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -158,8 +160,9 @@
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">זה למטרות סטטיסטיות בלבד.</string>
     <string name="msg_help_scan_mode">ניתן ללחוץ לחיצה ארוכה על שורת הכותרת שלהלן כדי להפעיל מצב סריקה. יש ללחוץ על הכרטיס הזה כדי לשנות את התנהגות בררת המחדל.</string>
+    <string name="msg_help_start">מופעל מצב מתחילים: הודעות עזרה מוצגות כבררת מחדל בכל העמודים אם הן זמינות. יש לגעת כדי לשנות.</string>
     <string name="msg_help_purchased_date_settings">אם האפשרות שלהלן מופעלת, שדה תאריך הרכישה יוצג בעמוד הרכישה והמאגר. אם לא, תאריך הרכישה יוחזר להיום.</string>
-
+    <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
     <string name="error_api_not_working">מפתח ה־API לא עובד</string>
     <string name="error_orbot_not_installed">Orbot לא מותקן</string>
     <string name="error_select_product">נא לבחור מוצר</string>
@@ -205,13 +208,12 @@
     <string name="error_not_grocy_instance">מופע לא תקני של grocy</string>
     <string name="error_timeout">שגיאת תום זמן המתנה</string>
     <string name="error_no_product_selected">לא נבחרו מוצרים</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">ההתחברות אל %1$s נכשלה</string>
-    <string name="error_handshake">חסר אישור</string>
+    <string name="error_failed_to_connect_to">ההתחברות לשרת נכשלה</string>
     <string name="error_missing_information">לא מולאו כל השדות הנחוצים</string>
+    <string name="error_handshake">אישור שגוי</string>
     <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s דורש אישור שאינו מוכר או מהימן מול Android.\nעל אישור השרת לקבל חתימה מרשות אישורים מורשית (CA)\nכדי לעמוד בדרישות האלו, ניתן להשתמש באישור חינמי מ־letsencrypt.org להצפנה הולמת.</string>
-    <string name="error_unexpected_response_code">קוד שגיאה בלתי צפוי: %1$d</string>
+    <string name="error_handshake_description">שרת זה דורש אישור שאינו מוכר או מהימן מצד Android.\nאישור השרת חייב להיות חתום על ידי רשות אישורים מהימנה (למשל: letsencrypt.org) או מאוחסן באחסון אישורי המשתמש במכשיר הזה.</string>
+    <string name="error_unexpected_response_code">קוד תגובה בלתי צפוי</string>
     <string name="error_unexpected_response">תגובה בלתי צפויה מהשרת</string>
     <string name="error_no_browser">עליך להתקין דפדפן כדי להציג את דפי העזרה</string>
     <string name="error_barcode_not_linked">הברקוד לא מקושר למוצר</string>
@@ -233,6 +235,8 @@
     <string name="title_shopping_list">רשימת קניות</string>
     <string name="title_feedback">משוב</string>
     <string name="title_settings">הגדרות</string>
+    <!-- Context: About this app -->
+    <string name="title_about">על אודות</string>
     <string name="title_info">פרטים</string>
     <string name="title_help">עזרה</string>
     <string name="title_logs">יומנים</string>
@@ -249,6 +253,8 @@
     <string name="title_spoiled">מקולקל</string>
     <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
     <string name="title_specific">פריט מסוים במלאי</string>
+    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="title_exact_amount">לצרוך כמות מדויקת</string>
     <string name="title_recipe">מתכון</string>
     <string name="title_total_price">מחיר כולל</string>
     <string name="title_unit_price">מחיר ליחידה</string>
@@ -329,17 +335,17 @@
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
-        <item quantity="one">יש לך מוצר אחד במלאי שעולה %2$s %3$s.</item>
-        <item quantity="two">יש לך %1$d מוצרים במלאי שעולים %2$s %3$s.</item>
-        <item quantity="many">יש לך %1$d מוצרים במלאי שעולים %2$s %3$s.</item>
-        <item quantity="other">יש לך %1$d מוצרים במלאי שעולים %2$s %3$s.</item>
+        <item quantity="one">יש לך מוצר אחד במלאי בשווי של %2$s %3$s.</item>
+        <item quantity="two">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
+        <item quantity="many">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
+        <item quantity="other">יש לך %1$d מוצרים במלאי בשווי של %2$s %3$s.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">פריט אחד נמצא ברשימת הקניות שלך</item>
-        <item quantity="two">%1$d פריטים נמצאים ברשימת הקניות שלך</item>
-        <item quantity="many">%1$d פריטים נמצאים ברשימת הקניות שלך</item>
-        <item quantity="other">%1$d פריטים נמצאים ברשימת הקניות שלך</item>
+        <item quantity="one">פריט אחד נמצא ברשימות הקניות שלך.</item>
+        <item quantity="two">%1$d פריטים הם ברשימות הקניות שלך.</item>
+        <item quantity="many">%1$d פריטים הם ברשימות הקניות שלך.</item>
+        <item quantity="other">%1$d פריטים הם ברשימות הקניות שלך.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list">
@@ -554,6 +560,11 @@
 
     <string name="setting_dark_mode">אילוץ מצב חשוך</string>
     <string name="setting_dark_mode_description">כבוי עקב תלות מערכת</string>
+    <string name="setting_language">שפה</string>
+    <string name="setting_language_description">בחירת שפה</string>
+    <string name="setting_language_info">תודתנו נתונה לכל המתרגמים בהתנדבות ב־Transifex!\nנא לבקר ב־GitHub שלנו כדי ללמוד כיצד ניתן לקדם את Grocy ל־Android לדבר בשפה שלך.</string>
+    <string name="setting_language_system">בררת המחדל של המערכת (%1$s)</string>
+    <string name="setting_language_not_available">לא זמין</string>
     <string name="setting_open_food_facts">להשתמש ב־Open Food Facts</string>
     <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
     <string name="setting_use_front_cam">להשתמש במצלמה הקדמית</string>
@@ -601,7 +612,7 @@
     <string name="setting_loading_circle_description">חיוני לרשתות אטיות</string>
     <string name="setting_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://he.demo.grocy.info</string>
     </resources>
