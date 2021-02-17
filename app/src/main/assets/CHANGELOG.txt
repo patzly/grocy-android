@@ -5,6 +5,7 @@
 - Improved: Update certificate compatibility information
 - Improved: Demo server changes when the language is changed (#346)
 - Improved: Price and store lines on purchase page confirmation bottom sheet
+- Improved: Updated translations
 - Fixed: Crash when open store selection on purchase page (#347)
 - Fixed: Crash on purchase page when price was empty & scan mode active
 - Fixed: Behavior on purchase & consume pages when quantity units of product were missing
