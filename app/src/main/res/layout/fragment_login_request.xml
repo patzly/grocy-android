@@ -57,10 +57,10 @@
                     android:layout_marginTop="16dp"
                     android:indeterminate="true"
                     android:visibility="@{viewModel.isLoadingLive ? View.VISIBLE : View.GONE}"
-                    app:trackColor="@color/surface"
+                    app:trackColor="@color/secondary_translucent"
                     app:indicatorColor="@color/secondary"
-                    app:trackCornerRadius="6dp"
-                    app:trackThickness="6dp"/>
+                    app:trackCornerRadius="2dp"
+                    app:trackThickness="4dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
