@@ -119,8 +119,6 @@
     <string name="msg_item_marked_as_done">Pozycja oznaczona jako zakończona</string>
     <string name="msg_item_marked_as_undone">Pozycja oznaczona jako niezakończona</string>
     <string name="msg_batch_no_products">Nie jest wymagane tworzenie nowych produktów</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Transakcja zostanie wykonana:\n\nDodaj %1$s %2$s z %3$s do stanu zapasu\nData przydatności: %4$s\nCena: %5$s\nSklep: %6$s\nLokacja: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transakcja zostanie wykonana:\n\nUsuń %1$s %2$s z %3$s ze stanu\nLokacja: %4$s</string>
     <string name="msg_compatibility">Ta wersja aplikacji nie jest kompatybilna z wersją grocy na serwerze.\n\nAktualna wersja na serwerze: %1$s\n\nWymagana:\nMinimalna wersja na serwerze: %2$s\nMaksymalna wersja na serwerze: %3$s\n\nJeżeli zignorujesz tą wiadomość, może wystąpić utrata danych (mało prawdopodobne), bądź błędy (prawdopodobne).\nZostałeś ostrzeżony!</string>
@@ -220,10 +218,7 @@
     <string name="error_timeout">Przekroczono czas połączenia</string>
     <string name="error_no_product_selected">Nie wybrano produktu</string>
     <string name="error_failed_to_connect_to">Nie udało się połączyć z serwerem</string>
-    <string name="error_handshake">Brakuje certyfikatu</string>
     <string name="error_missing_information">Nie wszystkie wymagane pola zostały uzupełnione</string>
-    <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s wymaga certyfikatu znanego bądź zaufanego przez Androida.\nCertyfikat serwera musi być podpisany przez zaufany urząd certyfikacji (CA)\nAby spełnić te warunki, możesz użyć darmowego certyfikatu z letsencrypt.org w celu prawidłowego szyfrowania.</string>
     <string name="error_unexpected_response_code">Niespodziewany kod odpowiedzi</string>
     <string name="error_unexpected_response">Niespodziewana odpowiedź serwera</string>
     <string name="error_no_browser">Zainstaluj przeglądarkę internetową aby wyświetlić stronę pomocy</string>
@@ -628,7 +623,7 @@
     <string name="setting_loading_circle_description">Pomocne dla wolnych połączeń</string>
     <string name="setting_synchronized">Te ustawienia są synchronizowane z serwerem.</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://pl.demo.grocy.info</string>
     </resources>
