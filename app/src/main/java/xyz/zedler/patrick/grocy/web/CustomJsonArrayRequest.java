@@ -19,6 +19,8 @@ package xyz.zedler.patrick.grocy.web;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.util.Base64;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -37,10 +39,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
 
     private final Runnable onRequestFinished;
+    private final String url;
     private final String apiKey;
     private final String homeAssistantIngressSessionKey;
 
@@ -64,6 +69,7 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
             if(errorListener != null) errorListener.onErrorResponse(error);
         });
         this.onRequestFinished = onRequestFinished;
+        this.url = url;
         this.apiKey = apiKey;
         this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
         if(tag != null) setTag(tag);
@@ -102,6 +108,14 @@ public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
     @Override
     public Map<String, String> getHeaders() {
         Map<String, String> params = new HashMap<>();
+        Matcher matcher = Pattern.compile("(http|https)://(\\S+):(\\S+)@(\\S+)").matcher(url);
+        if(matcher.matches()) {
+            String user = matcher.group(2);
+            String password = matcher.group(3);
+            byte[] combination = (user + ":" + password).getBytes();
+            String encoded = Base64.encodeToString(combination, Base64.DEFAULT);
+            params.put( "Authorization", "Basic " + encoded);
+        }
         if(apiKey != null && !apiKey.isEmpty()) params.put("GROCY-API-KEY", apiKey);
         if(homeAssistantIngressSessionKey != null) {
             params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);

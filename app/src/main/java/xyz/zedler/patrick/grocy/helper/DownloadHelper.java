@@ -67,7 +67,7 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
     private final GrocyApi grocyApi;
-    private RequestQueue requestQueue;
+    private final RequestQueue requestQueue;
     private final Gson gson;
     private final String uuidHelper;
     private final OnLoadingListener onLoadingListener;
@@ -175,11 +175,6 @@ public class DownloadHelper {
 
     public String getUuid() {
         return uuidHelper;
-    }
-
-    public void reloadRequestQueue(Activity activity) {
-        requestQueue = RequestQueueSingleton
-                .getInstance(activity.getApplicationContext()).getRequestQueue();
     }
 
     public void get(

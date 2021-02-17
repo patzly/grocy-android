@@ -1,5 +1,6 @@
 2.0.0-alpha03
 - New: You can now use the app with the Home Assistant grocy add-on (#249)
+- New: App can handle username:password in server URL for HTTP authentication (#273)
 - Improved: Rewritten login flow
 - Improved: Update certificate compatibility information
 - Improved: Demo server changes when the language is changed (#346)

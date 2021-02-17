@@ -19,6 +19,8 @@ package xyz.zedler.patrick.grocy.web;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.util.Base64;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -29,12 +31,15 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 
 public class CustomStringRequest extends StringRequest {
 
     private final Runnable onRequestFinished;
+    private final String url;
     private final String apiKey;
     private final String homeAssistantIngressSessionKey;
     private final String userAgent;
@@ -78,6 +83,7 @@ public class CustomStringRequest extends StringRequest {
                 }
         );
         this.onRequestFinished = onRequestFinished;
+        this.url = url;
         this.apiKey = apiKey;
         this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
         this.userAgent = userAgent;
@@ -184,6 +190,15 @@ public class CustomStringRequest extends StringRequest {
     @Override
     public Map<String, String> getHeaders() {
         Map<String, String> params = new HashMap<>();
+
+        Matcher matcher = Pattern.compile("(http|https)://(\\S+):(\\S+)@(\\S+)").matcher(url);
+        if(matcher.matches()) {
+            String user = matcher.group(2);
+            String password = matcher.group(3);
+            byte[] combination = (user + ":" + password).getBytes();
+            String encoded = Base64.encodeToString(combination, Base64.DEFAULT);
+            params.put( "Authorization", "Basic " + encoded);
+        }
         if(apiKey != null && !apiKey.isEmpty()) params.put("GROCY-API-KEY", apiKey);
         if(userAgent == null && homeAssistantIngressSessionKey != null) { // should not put key into requests for OpenFoodFacts
             params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
