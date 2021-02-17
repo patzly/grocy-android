@@ -118,8 +118,6 @@
     <string name="msg_item_marked_as_done">Marcar item como concluído</string>
     <string name="msg_item_marked_as_undone">Marcar item como não concluído</string>
     <string name="msg_batch_no_products">Não foi criado nenhum produto novo</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Transação que será executada:\n\nAdicionar %1$s %2$s de %3$s ao stock\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
     <string name="msg_compatibility">A versão desta aplicação não é compatível com a versão do grocy no servidor.\n\nVersão actual do servidor: %1$s\n\nRequisitos:\nVersão min. do servidor: %2$s\nVersão max. do servidor: %3$s\n\nSe ignorar este aviso, perda de dados (pouco provável) e falhas (muito provável) podem ocorrer.\nFicam avisados!</string>
@@ -129,11 +127,9 @@
     <string name="msg_restart">A aplicação precisa ser reiniciada para aplicar correctamente a configuração actual do Grocy.</string>
     <string name="msg_shortcuts">Pode activar até 4 atalhos:</string>
     <string name="msg_shortcuts_not_supported">Atalhos não estão disponiveis nesta versão do Android.</string>
-    <string name="msg_features">Começar a introdução novamente em \"Sobre esta aplicação\"</string>
     <string name="msg_feedback">Têm alguns pedidos, questões ou erros? Contacte-nos e deixe-nos ajudar!\nDe qualquer forma, ficariamos muito contentes com uma boa crítica na Play Store.</string>
     <string name="msg_point_at_barcode">Aponte a camara para um código de barras</string>
     <string name="msg_press_hold_confirm">Mantenha pressionado para confirmar</string>
-    <string name="msg_welcome_to_grocy">Bem vindo ao Grocy Android!\n\nPara usar o grocy de forma produtiva precisa do seu próprio servidor.\nSe apenas quer experimentar esta aplicação pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
     <string name="msg_choose_option_below">Por favor seleccione uma das seguintes opções.</string>
     <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
     <string name="msg_not_implemented_yet">Isto será implementado em breve. Por favor utilize o seu interface do servidor por agora.</string>
@@ -170,7 +166,6 @@
     <string name="msg_help_loading_circle_settings">Em cada página em que algo tem que ser carregado do servidor, a aplicação confirma primeiro com um pequeno pedido se a base de dados foi modificada desde a última vez e apenas actualiza os dados desactualizados. Active a opção em baixo para mostrar a animação de carregamento mesmo para este pequeno pedido.</string>
     <string name="msg_help_start">Modo iniciante está activo: Os textos de ajuda são mostrados por defeito em todas as páginas se disponíveis. Pressione para alterar.</string>
     <string name="msg_help_purchased_date_settings">Se a opção em baixo estiver activa, um campo para data de compra será mostrado na página de compra e de inventário. Caso contrário a data de compra por defeito é a de hoje.</string>
-
     <string name="error_api_not_working">API key não está a funcionar</string>
     <string name="error_orbot_not_installed">Orbot não está instalado</string>
     <string name="error_select_product">Seleccione um produto</string>
@@ -216,13 +211,7 @@
     <string name="error_not_grocy_instance">Não é uma instância válida do grocy</string>
     <string name="error_timeout">Erro de conexão</string>
     <string name="error_no_product_selected">Nenhum produto seleccionado</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Falhou a conexão a %1$s</string>
-    <string name="error_handshake">Certificado em falta</string>
     <string name="error_missing_information">Nem todos os campos obrigatórios estão preenchidos</string>
-    <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s precisa de um certificado que não é conhecido nem confiado pelo Android.\nO certificado do servidor tem que ser assinado por uma autoridade de certificação confiàvel (CA)\nPara garantir estes requisitos, pode usar um certificado grátis de letsencrypt.org para uma encriptação adequada.</string>
-    <string name="error_unexpected_response_code">Código de resposta inesperado: %1$d</string>
     <string name="error_unexpected_response">Resposta do servidor inesperada</string>
     <string name="error_no_browser">Instale um navegador de internet para visualizar o website de ajuda</string>
     <string name="error_barcode_not_linked">Código de barras não está associado a um produto</string>
@@ -332,32 +321,6 @@
     <string name="description_clear_shopping_list_option1">Apagar apenas itens concluídos</string>
     <!-- Context: Clear shopping list -->
     <string name="description_clear_shopping_list_option2">Apagar todos os itens</string>
-
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock">
-        <item quantity="one">Tem um produto em stock</item>
-        <item quantity="other">Tem %1$d produtos em stock.</item>
-    </plurals>
-    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
-    <plurals name="description_overview_stock_value">
-        <item quantity="one">Tem um produto em stock com um valor de %2$s %3$s.</item>
-        <item quantity="other">Tem %1$d produtos em stock com um valor de %2$s %3$s.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">Tem um item nas suas listas de compras</item>
-        <item quantity="other">Tem %1$d itens nas suas listas de compras</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list">
-        <item quantity="one">Tem um item na sua lista de compras</item>
-        <item quantity="other">Tem %1$d itens na sua lista de compras</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_master_data">
-        <item quantity="one">A sua base de dados contém um produto.</item>
-        <item quantity="other">A sua base de dados contém %1$d produtos.</item>
-    </plurals>
 
     <string name="property_name">Nome</string>
     <string name="property_name_singular">Nome (singular)</string>
@@ -591,7 +554,7 @@
     <string name="setting_loading_circle_description">Útil em ligações lentas</string>
     <string name="setting_synchronized">Estas definições são sincronizadas com o seu servidor.</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
     Examples: 'de' for German; 'fr' for French -->
     <string name="url_grocy_demo">https://en.demo.grocy.info</string>
     </resources>
