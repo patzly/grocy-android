@@ -573,7 +573,7 @@
     <string name="hint_server">URL serveru</string>
     <string name="hint_key">Validní API klíč</string>
 
-    <string name="setting_dark_mode">Vynutit tmavý kód</string>
+    <string name="setting_dark_mode">Vynutit tmavý režim</string>
     <string name="setting_dark_mode_description">Vypnout pro použití nastavení systému</string>
     <string name="setting_language">Jazyk</string>
     <string name="setting_language_description">Vyberte jazyk</string>
