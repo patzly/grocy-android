@@ -181,7 +181,7 @@
     <string name="error_empty_stock">Nic v zásobách</string>
     <string name="error_empty_stock_sub">Nakoupit nějaké produkty</string>
     <string name="error_empty_shopping_list">Vyprázdnit nákupní seznam</string>
-    <string name="error_empty_shopping_list_sub">Přidat nějaké prodkuty, které jsou potřeba</string>
+    <string name="error_empty_shopping_list_sub">Přidejte nějaké produkty, které jsou potřeba</string>
     <string name="error_empty_master_data_sub">Vytvořte nějaké tlačítkem níže</string>
     <string name="error_empty_locations">Žádné umístění</string>
     <string name="error_empty_product_groups">Žádná skupina produktů</string>
