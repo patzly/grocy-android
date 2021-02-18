@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if(demoDomain != null && !serverUrl.contains(demoDomain)) {
                 serverUrl = serverUrl.replaceAll(
-                        "[a-z]+-?[a-z]*.demo.grocy.info", demoDomain
+                        "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain
                 );
                 sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
             }
