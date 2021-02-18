@@ -18,13 +18,13 @@ fr
 fr.demo.grocy.info
 prohand, Zorvalt, Clément Chotard, Eric Robert, voslin
 
-he
-en.demo.grocy.info
-Yaron Shahrabani, Sefi Ninio
-
 it
 it.demo.grocy.info
 Matteo Schiff, Nur Fadel, racerider, Riccardo Bonesini
+
+iw
+en.demo.grocy.info
+Yaron Shahrabani, Sefi Ninio
 
 nb
 no.demo.grocy.info
