@@ -116,8 +116,8 @@
     <string name="msg_master_delete_product">Opravdu chcete smazat produkt \"%1$s\"?\n\nTímto taktéž dojde ke smazání skladového množství, deníku a všech ostatních referencí tohoto produktu - zvažte pouze deaktivaci produktu, pokud vše chcete zachovat a jen produkt skrýt.</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
-    <string name="msg_item_marked_as_done">Nastav položku jako hotovou</string>
-    <string name="msg_item_marked_as_undone">Nastav položku jako nehotovou</string>
+    <string name="msg_item_marked_as_done">Položka nastavena jako hotová</string>
+    <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
     <string name="msg_batch_no_products">Není třeba vytvořit žádný nový produkt</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_scan_mode_confirm_purchase">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
