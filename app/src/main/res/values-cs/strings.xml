@@ -527,7 +527,7 @@
     <plurals name="date_months_from_now">
         <item quantity="one">%d měsíc od teď</item>
         <item quantity="few">%d měsíce od teď</item>
-        <item quantity="many">%d měsců od teď</item>
+        <item quantity="many">%d měsíců od teď</item>
         <item quantity="other">%d měsíců od teď</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
