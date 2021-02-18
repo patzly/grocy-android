@@ -102,7 +102,7 @@
     <string name="msg_not_found">Produkt nenalezen</string>
     <string name="msg_undone_transaction">Vrácené transakce</string>
     <string name="msg_failed_to_sync">Chyba synchronizace vstupů</string>
-    <string name="msg_synced">Záznamy synchronizovány úspěšně </string>
+    <string name="msg_synced">Záznamy úspěšně synchronizovány</string>
     <!-- %1$s is a shopping list name -->
     <string name="msg_added_missing_products">Přidat chybějící produkty do %1$s</string>
     <!-- %1$s is a shopping list name -->
