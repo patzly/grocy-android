@@ -49,7 +49,9 @@ public class TextEditBottomSheet extends BaseBottomSheet {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+        return new BottomSheetDialog(
+                requireContext(), R.style.Theme_Grocy_BottomSheetDialog_SoftInput
+        );
     }
 
     @Override

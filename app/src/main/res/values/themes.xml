@@ -80,4 +80,8 @@
         <item name="android:navigationBarColor">@color/black</item>
     </style>
 
+    <style name="Theme.Grocy.BottomSheetDialog.SoftInput" parent="Theme.Grocy.BottomSheetDialog">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
 </resources>
