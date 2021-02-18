@@ -131,7 +131,7 @@
     <string name="msg_shortcuts">Můžete povolit až 4 zkratky:</string>
     <string name="msg_shortcuts_not_supported">Zkratky nejsou na této verzi Android podporovány.</string>
     <string name="msg_features">Intro pustíte znova v \"O programu\"</string>
-    <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomožte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
+    <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomozte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
     <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
     <string name="msg_press_hold_confirm">Stiskněte a podržte pro potvrzení</string>
     <string name="msg_welcome_to_grocy">Vítejte v Grocy Android!\n\nChcete-li používat Grocy se vším všudy, je potřeba vlastní server nebo grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernd Bestel, tvůrce Grocy.</string>
