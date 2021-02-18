@@ -127,19 +127,25 @@ public class MainActivity extends AppCompatActivity {
 
         // LANGUAGE
 
-        Locale locale = LocaleUtil.getUserLocale(getApplicationContext());
-        Locale.setDefault(locale);
-        Configuration appConfig = getApplicationContext().getResources().getConfiguration();
-        appConfig.setLocale(locale);
-        getApplicationContext().getResources().updateConfiguration(
-                appConfig, getApplicationContext().getResources().getDisplayMetrics()
-        );
+        Locale userLocale = LocaleUtil.getUserLocale(this);
+        Locale.setDefault(userLocale);
+        // base
+        Resources resBase = getBaseContext().getResources();
+        Configuration configBase = resBase.getConfiguration();
+        configBase.setLocale(userLocale);
+        resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
+        // app
+        Resources resApp = getApplicationContext().getResources();
+        Configuration configApp = resApp.getConfiguration();
+        configApp.setLocale(userLocale);
+        resApp.updateConfiguration(configApp, getResources().getDisplayMetrics());
+        // set localized demo instance
         String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
         if(serverUrl != null && serverUrl.contains("demo.grocy.info")) {
-            List<Language> languages = LocaleUtil.getLanguages(getApplicationContext());
+            List<Language> languages = LocaleUtil.getLanguages(this);
             String demoDomain = null;
             for(Language language : languages) {
-                if(language.getCode().equals(locale.getLanguage())) {
+                if(language.getCode().equals(userLocale.getLanguage())) {
                     demoDomain = language.getDemoDomain();
                 }
             }
@@ -618,27 +624,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context base) {
-        Locale locale = LocaleUtil.getUserLocale(base);
-        Locale.setDefault(locale);
+        Locale userLocale = LocaleUtil.getUserLocale(base);
+        Locale.setDefault(userLocale);
+        Resources resources = base.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.setLocale(userLocale);
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
 
-        Configuration configuration;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-            configuration = new Configuration(base.getResources().getConfiguration());
-            configuration.setLocale(locale);
-        } else {
-            Resources resources = base.getResources();
-            configuration = resources.getConfiguration();
-            configuration.locale = locale;
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        }
         super.attachBaseContext(base.createConfigurationContext(configuration));
     }
 
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1
-        ) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
             overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
         }
         super.applyOverrideConfiguration(overrideConfiguration);
