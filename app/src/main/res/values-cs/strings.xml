@@ -82,7 +82,7 @@
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiruje brzy</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d expirovalo</string>
+    <string name="msg_expired_products">%1$d po expiraci</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d nemá dostatečnou min. zásobu</string>
     <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
