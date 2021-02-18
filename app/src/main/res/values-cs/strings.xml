@@ -123,7 +123,7 @@
     <string name="msg_scan_mode_confirm_purchase">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
-    <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>
+    <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, může nastat ztráta dat (nepravděpodobné) a pády aplikace (pravděpodobné).\nByli jste varováni!</string>
     <string name="msg_logout">Na vašem serveru nebude nic změněno. Budete přesměrováni na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
     <string name="msg_logout_demo_short">Veřejný demo server. Klikněte pro více informací.</string>
