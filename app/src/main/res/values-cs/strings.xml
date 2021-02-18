@@ -9,7 +9,7 @@
     <!-- This is an action – in English, it contains a verb. -->
     <string name="action_consume_all">Spotřebovat vše</string>
 
-    <string name="action_consume_one_spoiled">Spotřebovat jako zkažený</string>
+    <string name="action_consume_one_spoiled">Spotřebovat 1 jako zkažený</string>
     <!-- %1$s is a quantity unit and %2$s is a product name -->
     <string name="action_consume_one">Spotřebovat 1 %1$s z %2$s</string>
     <string name="action_open">Označit jako otevřené</string>
@@ -40,7 +40,7 @@
     <string name="action_rate_description">Motivujte vývojáře</string>
     <string name="action_email">Poslat email</string>
     <string name="action_email_description">Kontaktovat vývojáře</string>
-    <string name="action_new_issue">Otevřít nevý požadavek na GitHubu</string>
+    <string name="action_new_issue">Otevřít nový požadavek na GitHubu</string>
     <string name="action_new_issue_description">Nahlásit chybu nebo požadavek na funkci</string>
     <string name="action_get_started">Začít</string>
     <string name="action_ascending">Vzestupný</string>
@@ -56,6 +56,7 @@
     <string name="action_restart">Restartovat</string>
     <string name="action_create">Vytvořit</string>
     <string name="action_link">Odkaz</string>
+    <string name="action_try_again">Zkusit znovu</string>
     <string name="action_open_scanner">Otevřít skener</string>
     <string name="action_discard">Zrušit</string>
     <string name="action_clear_form">Vyčistit formulář</string>
@@ -81,16 +82,16 @@
     <!-- %1$s is the number of products which expire soon -->
     <string name="msg_expiring_products">%1$d expiruje brzy</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d expirovalo</string>
+    <string name="msg_expired_products">%1$d po expiraci</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">%1$d produktů nemá dostatečnou minimální zásobu</string>
+    <string name="msg_missing_products">%1$d nemá dostatečnou min. zásobu</string>
     <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
     <string name="msg_consumed_spoiled">Zkonzumováno %1$s %2$s z %3$s jako zkažené</string>
     <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
     <!-- %1$s is the number of undone items in shopping list -->
     <string name="msg_undone_items">%1$d nehotovo</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-    <string name="msg_purchased">Nakoupeno%1$s %2$s z %3$s</string>
+    <string name="msg_purchased">Nakoupeno %1$s %2$s z %3$s</string>
     <!-- %1$s is a product name -->
     <string name="msg_not_in_stock">%1$s není v zásobách</string>
     <string name="msg_no_connection">Není připojení</string>
@@ -100,8 +101,8 @@
     <string name="msg_no_stock_entries">Žádná položka zásob pro %1$s</string>
     <string name="msg_not_found">Produkt nenalezen</string>
     <string name="msg_undone_transaction">Vrácené transakce</string>
-    <string name="msg_failed_to_sync">Chyba synchronizace vstupů</string>
-    <string name="msg_synced">Vstupy synchonizovány úspěšně </string>
+    <string name="msg_failed_to_sync">Chyba synchronizace záznamů</string>
+    <string name="msg_synced">Záznamy úspěšně synchronizovány</string>
     <!-- %1$s is a shopping list name -->
     <string name="msg_added_missing_products">Přidat chybějící produkty do %1$s</string>
     <!-- %1$s is a shopping list name -->
@@ -115,21 +116,25 @@
     <string name="msg_master_delete_product">Opravdu chcete smazat produkt \"%1$s\"?\n\nTímto taktéž dojde ke smazání skladového množství, deníku a všech ostatních referencí tohoto produktu - zvažte pouze deaktivaci produktu, pokud vše chcete zachovat a jen produkt skrýt.</string>
     <!-- %1$s is a master data type like "location" or "product" -->
     <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
-    <string name="msg_item_marked_as_done">Nastav položku jako hotovou</string>
-    <string name="msg_item_marked_as_undone">Nastav položku jako nehotovou</string>
-    <string name="msg_batch_no_products">Žádný nový produkt nebyl vytvořen</string>
+    <string name="msg_item_marked_as_done">Položka nastavena jako hotová</string>
+    <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
+    <string name="msg_batch_no_products">Není třeba vytvořit žádný nový produkt</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_scan_mode_confirm_purchase">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
-    <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, ztráta dat (nepravděpodoně) a pády apliakce (pravděpodobně) můžou nastat.\nByli jste varováni!</string>
-    <string name="msg_logout">Nic na vašem serveru nebylo změněno. Budete přesměrování na přihlašovací stránku.</string>
+    <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, může nastat ztráta dat (nepravděpodobné) a pády aplikace (pravděpodobné).\nByli jste varováni!</string>
+    <string name="msg_logout">Na vašem serveru nebude nic změněno. Budete přesměrováni na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
     <string name="msg_logout_demo_short">Veřejný demo server. Klikněte pro více informací.</string>
     <string name="msg_restart">Je vyžadován restart aplikace pro řádné načtení nové konfigurace Grocy.</string>
     <string name="msg_shortcuts">Můžete povolit až 4 zkratky:</string>
     <string name="msg_shortcuts_not_supported">Zkratky nejsou na této verzi Android podporovány.</string>
-    <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomožte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
+    <string name="msg_features">Intro pustíte znova v \"O programu\"</string>
+    <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomozte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
     <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
     <string name="msg_press_hold_confirm">Stiskněte a podržte pro potvrzení</string>
+    <string name="msg_welcome_to_grocy">Vítejte v Grocy Android!\n\nChcete-li používat Grocy se vším všudy, je potřeba vlastní server nebo grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernd Bestel, tvůrce Grocy.</string>
     <string name="msg_choose_option_below">Prosíme vyberte jednu z možností níže.</string>
     <string name="msg_qr_code_scan">Na jiném zařízení navštivte web vašeho grocy serveru a jděte na stránku \'API klíče\'. Klikněte \"Přidat\", poté klikněte na ikonku QR kódu a naskenujte jej.</string>
     <string name="msg_not_implemented_yet">Toto bude již brzy implementováno. Zatím, prosím, použijte rozhraní svého serveru.</string>
@@ -166,6 +171,9 @@
     <string name="msg_help_loading_circle_settings">Na každé stránce, kde něco musí být načteno ze serveru, aplikace nejprve zkontroluje pomocí maličkého požadavku, zda se databáze na serveru změnila od poslední aktualizace a pouze načte zastaralá data. Zapněte volbu níže, pokud chcete zobrazit načítací kolečko i pro tyto maličké požadavky.</string>
     <string name="msg_help_start">Začátečnický režim je aktivní. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klikněte pro změnu.</string>
     <string name="msg_help_purchased_date_settings">Pokud je zapnuta volba níže, políčko pro datum nákupu se bude zobrazovat na stránce nákupu a v inventáři. Pokud není zapnuta, datum nákupu se automaticky doplní s dnešním datem.</string>
+    <string name="msg_help_normal_login">Klikněte na tuto kartu pokud používáte Home Assistant s grocy addonem.</string>
+    <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
+
     <string name="error_api_not_working">API key nefunguje</string>
     <string name="error_orbot_not_installed">Orbot není instalován</string>
     <string name="error_select_product">Vyber produkt</string>
@@ -173,14 +181,14 @@
     <string name="error_empty_stock">Nic v zásobách</string>
     <string name="error_empty_stock_sub">Nakoupit nějaké produkty</string>
     <string name="error_empty_shopping_list">Vyprázdnit nákupní seznam</string>
-    <string name="error_empty_shopping_list_sub">Přidat nějaké prodkuty, které jsou potřeba</string>
-    <string name="error_empty_master_data_sub">Vytvořit nějaké tlačítkem níže</string>
+    <string name="error_empty_shopping_list_sub">Přidejte nějaké produkty, které jsou potřeba</string>
+    <string name="error_empty_master_data_sub">Vytvořte nějaké tlačítkem níže</string>
     <string name="error_empty_locations">Žádné umístění</string>
     <string name="error_empty_product_groups">Žádná skupina produktů</string>
     <string name="error_empty_products">Žádný produkt</string>
     <string name="error_empty_qu">Žádné měrné jednotky</string>
     <string name="error_empty_stores">Žádné obchody</string>
-    <string name="error_search">Žádé výsledky hledáí</string>
+    <string name="error_search">Žádné výsledky hledání</string>
     <string name="error_search_sub">Vyzkoušej jinou položku</string>
     <string name="error_filter">Nic k zobrazení</string>
     <string name="error_filter_sub">Vykoušej jiný filtr</string>
@@ -190,7 +198,7 @@
     <string name="error_invalid_url">Neplatná URL</string>
     <string name="error_invalid_amount">Neplatné množství</string>
     <string name="error_invalid_price">Neplatná cena</string>
-    <string name="error_invalid_best_before_days">Použi -1 pro nikdy neexpirující</string>
+    <string name="error_invalid_best_before_days">Použij -1 pro nikdy neexpirující</string>
     <string name="error_invalid_factor">Neplatný faktor</string>
     <string name="error_api_qr_code">Tento QR kód neobsahuje autorizační údaje Grocy API</string>
     <string name="error_loading_qus">Nelze načíst jednotky množství z produktu</string>
@@ -211,7 +219,12 @@
     <string name="error_not_grocy_instance">Neplatná instance grocy</string>
     <string name="error_timeout">Chyba: čas vypršel</string>
     <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
+    <string name="error_failed_to_connect_to">Připojení k serveru selhalo</string>
     <string name="error_missing_information">Nejsou vyplněna všechna vyžadovaná pole</string>
+    <string name="error_handshake">Neplatný certifikát</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">Tento server vyžaduje certifikát který není známý nebo důvěryhodný Androidem.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) nebo uložen v uživatelském úložišti certifikátů v Androidu na tomto zařízení.</string>
+    <string name="error_unexpected_response_code">Neočekávaný kód odpovědi</string>
     <string name="error_unexpected_response">Neočekávaná odpověď serveru</string>
     <string name="error_no_browser">Nainstalujte webový prohlížeč pro zobrazení nápovědy</string>
     <string name="error_barcode_not_linked">Čárový kód není přiřazen žádnému produktu</string>
@@ -233,6 +246,8 @@
     <string name="title_shopping_list">Nákupní seznam</string>
     <string name="title_feedback">Zpětná vazba</string>
     <string name="title_settings">Nastavení</string>
+    <!-- Context: About this app -->
+    <string name="title_about">O aplikaci</string>
     <string name="title_info">Informace</string>
     <string name="title_help">Nápověda</string>
     <string name="title_logs">Logy</string>
@@ -321,6 +336,42 @@
     <string name="description_clear_shopping_list_option1">Vymazat pouze hotové položky</string>
     <!-- Context: Clear shopping list -->
     <string name="description_clear_shopping_list_option2">Vymazat všechny položky</string>
+
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock">
+        <item quantity="one">Máte %1$d produkt v zásobách.</item>
+        <item quantity="few">Máte %1$d produkty v zásobách.</item>
+        <item quantity="many">Máte %1$d produktů v zásobách.</item>
+        <item quantity="other">Máte %1$d produktu v zásobách.</item>
+    </plurals>
+    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+    <plurals name="description_overview_stock_value">
+        <item quantity="one">Máte %1$d produkt v zásobách v hodnotě %2$s %3$s.</item>
+        <item quantity="few">Máte %1$d produkty v zásobách v hodnotě %2$s %3$s.</item>
+        <item quantity="many">Máte %1$d produktů v zásobách v hodnotě %2$s %3$s.</item>
+        <item quantity="other">Máte %1$d produktu v zásobách v hodnotě %2$s %3$s.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list_multi">
+        <item quantity="one">Ve vašich nákupních seznamech je %1$d položka.</item>
+        <item quantity="few">Ve vašich nákupních seznamech jsou %1$d položky.</item>
+        <item quantity="many">Ve vašich nákupních seznamech je %1$d položek.</item>
+        <item quantity="other">Ve vašich nákupních seznamech je %1$d položek.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list">
+        <item quantity="one">Ve vašem nákupním seznamu je %1$d položka.</item>
+        <item quantity="few">Ve vašem nákupním seznamu jsou %1$d položky.</item>
+        <item quantity="many">Ve vašem nákupním seznamu je %1$d položek.</item>
+        <item quantity="other">Ve vašem nákupním seznamu je %1$d položek.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_master_data">
+        <item quantity="one">Vaše databáze obsahuje %1$d produkt.</item>
+        <item quantity="few">Vaše databáze obsahuje %1$d produkty.</item>
+        <item quantity="many">Vaše databáze obsahuje %1$d produktů.</item>
+        <item quantity="other">Vaše databáze obsahuje %1$d produktu.</item>
+    </plurals>
 
     <string name="property_name">Jméno</string>
     <string name="property_name_singular">Jméno (jednotné číslo)</string>
@@ -441,8 +492,8 @@
     <plurals name="date_years">
         <item quantity="one">%d rok</item>
         <item quantity="few">%d roky</item>
-        <item quantity="many">%d roků</item>
-        <item quantity="other">%d roků</item>
+        <item quantity="many">%d let</item>
+        <item quantity="other">%d roku</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
     <plurals name="date_days_ago">
@@ -476,7 +527,7 @@
     <plurals name="date_months_from_now">
         <item quantity="one">%d měsíc od teď</item>
         <item quantity="few">%d měsíce od teď</item>
-        <item quantity="many">%d měsců od teď</item>
+        <item quantity="many">%d měsíců od teď</item>
         <item quantity="other">%d měsíců od teď</item>
     </plurals>
     <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
@@ -506,8 +557,8 @@
     <string name="feature_1_description">Správa potravin pro váš domov na vlastním serveru</string>
     <string name="feature_2_title">Intuitivní design</string>
     <string name="feature_2_description">Otevři a zkonzumuj jedním tahem</string>
-    <string name="feature_3_title">Výkoné dávkové zpracování</string>
-    <string name="feature_3_description">Naskunejte celý nákup za pár sekund</string>
+    <string name="feature_3_title">Výkonné dávkové zpracování</string>
+    <string name="feature_3_description">Naskenujte celý nákup za pár sekund</string>
 
     <string name="category_licenses">Licence otevřených zdrojových kódů</string>
     <string name="category_general">Všeobecné</string>
@@ -522,7 +573,7 @@
     <string name="hint_server">URL serveru</string>
     <string name="hint_key">Validní API klíč</string>
 
-    <string name="setting_dark_mode">Vynutit tmavý kód</string>
+    <string name="setting_dark_mode">Vynutit tmavý režim</string>
     <string name="setting_dark_mode_description">Vypnout pro použití nastavení systému</string>
     <string name="setting_language">Jazyk</string>
     <string name="setting_language_description">Vyberte jazyk</string>

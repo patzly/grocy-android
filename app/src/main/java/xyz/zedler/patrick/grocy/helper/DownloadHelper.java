@@ -80,7 +80,6 @@ public class DownloadHelper {
     private final String hassServerUrl;
     private final String hassLongLivedAccessToken;
     private final boolean debug;
-    private final boolean useHassAuthFlow;
     private final int timeoutSeconds;
     private int loadingRequests;
 
@@ -105,7 +104,6 @@ public class DownloadHelper {
                 Constants.PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN,
                 null
         );
-        useHassAuthFlow = hassServerUrl != null && !hassServerUrl.isEmpty();
         uuidHelper = UUID.randomUUID().toString();
         queueArrayList = new ArrayList<>();
         loadingRequests = 0;
@@ -136,7 +134,6 @@ public class DownloadHelper {
         this.apiKey = apiKey;
         this.hassServerUrl = hassServerUrl;
         this.hassLongLivedAccessToken = hassLongLivedAccessToken;
-        this.useHassAuthFlow = true;
         uuidHelper = UUID.randomUUID().toString();
         queueArrayList = new ArrayList<>();
         loadingRequests = 0;
@@ -1553,7 +1550,7 @@ public class DownloadHelper {
             OnStringResponseListener onSuccessListener,
             OnStringResponseListener onErrorListener
     ) {
-        if(!useHassAuthFlow) {
+        if(hassServerUrl == null || hassServerUrl.isEmpty()) {
             onSuccessListener.onResponse(null);
             return;
         }

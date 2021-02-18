@@ -1,3 +1,6 @@
+2.0.0-alpha04
+- Fixed: RuntimeExceptions in log if Home Assistant grocy add-on is not used (#273)
+
 2.0.0-alpha03
 - New: Official support for Home Assistant grocy add-on (#249)
 - New: App can handle username:password in server URL for HTTP authentication (#273)
