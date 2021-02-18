@@ -188,7 +188,7 @@
     <string name="error_empty_products">Žádný produkt</string>
     <string name="error_empty_qu">Žádné měrné jednotky</string>
     <string name="error_empty_stores">Žádné obchody</string>
-    <string name="error_search">Žádé výsledky hledáí</string>
+    <string name="error_search">Žádné výsledky hledání</string>
     <string name="error_search_sub">Vyzkoušej jinou položku</string>
     <string name="error_filter">Nic k zobrazení</string>
     <string name="error_filter_sub">Vykoušej jiný filtr</string>
