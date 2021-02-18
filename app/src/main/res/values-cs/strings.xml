@@ -40,7 +40,7 @@
     <string name="action_rate_description">Motivujte vývojáře</string>
     <string name="action_email">Poslat email</string>
     <string name="action_email_description">Kontaktovat vývojáře</string>
-    <string name="action_new_issue">Otevřít nevý požadavek na GitHubu</string>
+    <string name="action_new_issue">Otevřít nový požadavek na GitHubu</string>
     <string name="action_new_issue_description">Nahlásit chybu nebo požadavek na funkci</string>
     <string name="action_get_started">Začít</string>
     <string name="action_ascending">Vzestupný</string>
