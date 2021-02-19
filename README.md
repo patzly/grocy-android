@@ -6,7 +6,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**Version 2.0.0 will come soon but it takes some time to test it before release.  
+**Version 2.0.0 will come soon but it takes some time to [test](https://github.com/patzly/grocy-android/issues/266) it before release.  
 Meanwhile you can use the web interface of grocy if you want to use the new server v3.0.0.  
 Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
 
