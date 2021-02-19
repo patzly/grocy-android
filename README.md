@@ -6,11 +6,11 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**Version 2.0.0 will come soon but maybe it will take some time to test it before release.  
-Meanwhile you can use the web interface of grocy if you want to use the new server v3.0.0 .  
+**Version 2.0.0 will come soon but it takes some time to test it before release.  
+Meanwhile you can use the web interface of grocy if you want to use the new server v3.0.0.  
 Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
 
-⚠️ **Click [here](https://github.com/patzly/grocy-android/issues/266) if you want to test the new version when it's ready.** ⚠️
+⚠️ **Click [here](https://github.com/patzly/grocy-android/issues/266) if you want to test the new version before its official release.** ⚠️
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
@@ -66,7 +66,7 @@ Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) fo
 
 ## Contribution
 
-If you run into a bug or miss a feature, feel free to give feedback in the app, [send us an email](mailto:patrick@zedler.xyz) or [open an issue](https://github.com/patzly/grocy-android/issues) in this repository.
+If you run into a bug or miss a feature, please [open an issue](https://github.com/patzly/grocy-android/issues) in this repository.
 
 Like the grocy project, Grocy Android can be translated, too. The main language is English, but we also maintain the German translation because it's our mother tongue.
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete or not available yet.
@@ -78,8 +78,7 @@ Thanks for your contributions!
 
 ## About
 
-This app is a project of my brother and me. We mainly worked on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close.
-Now the main work is done, occasionally we release updates with improvements and bug fixes.
+This app is a project of my brother and me. We started working on it during the first months of the Corona pandemic in Germany, just before our Abitur, when the schools had to close.
 
 We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), without whose great work this app would never have been possible.
 
