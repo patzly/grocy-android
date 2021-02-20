@@ -6,6 +6,7 @@
 - Fixed: Mixed languages if activity is restarted (#260)
 - Fixed: Language variants not working (#264)
 - Fixed: Updates to master data were pushed to the wrong server (#363)
+- Fixed: Login with Home Assistant grocy add-on using Nabu Casa service (#249)
 
 2.0.0-alpha03
 - New: Official support for Home Assistant grocy add-on (#249)

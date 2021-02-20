@@ -127,7 +127,7 @@
                         <TextView
                             style="@style/Widget.Grocy.TextView.ListItem.Title"
                             android:text="@{sharedPrefs.getString(Constants.PREF.SERVER_URL, fragment.getString(R.string.subtitle_unknown))}"
-                            android:maxLines="4"/>
+                            android:maxLines="6"/>
 
                     </LinearLayout>
 
