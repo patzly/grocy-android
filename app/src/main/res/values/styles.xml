@@ -355,9 +355,7 @@
 
     <style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
         <item name="backgroundTint">@color/tooltip_background</item>
-        <item name="android:textColor">@color/tooltip_text</item>
-        <item name="android:textSize">15sp</item>
-        <item name="fontFamily">@font/text_body</item>
+        <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
     </style>
 
     <!-- SHAPE -->
@@ -467,6 +465,12 @@
         <item name="android:textColor">@color/on_surface</item>
         <item name="android:fontFamily">@font/roboto_mono_medium</item>
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
+        <item name="android:textColor">@color/tooltip_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
     </style>
 
 </resources>
