@@ -8,6 +8,8 @@
 - Fixed: Language variants not working (#264)
 - Fixed: Updates to master data were pushed to the wrong server (#363)
 - Fixed: Login with Home Assistant grocy add-on using Nabu Casa service (#249)
+- Fixed: Save bottom notes on shopping mode page not working (#362)
+- Fixed: Updated bottom notes not displayed in shopping list
 
 2.0.0-alpha03
 - New: Official support for Home Assistant grocy add-on (#249)

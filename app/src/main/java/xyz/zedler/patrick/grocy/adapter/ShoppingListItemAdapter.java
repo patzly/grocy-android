@@ -666,11 +666,13 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
 
                 return newItem.equals(oldItem);
             } else if(oldItemType == GroupedListItem.TYPE_HEADER) {
-                ProductGroup newItem = (ProductGroup) newItems.get(newItemPos);
-                ProductGroup oldItem = (ProductGroup) oldItems.get(oldItemPos);
-                return newItem.equals(oldItem);
-            } else {
-                return true; // Bottom notes is always one item at the bottom
+                ProductGroup newGroup = (ProductGroup) newItems.get(newItemPos);
+                ProductGroup oldGroup = (ProductGroup) oldItems.get(oldItemPos);
+                return newGroup.equals(oldGroup);
+            } else { // Type: Bottom notes
+                ShoppingListBottomNotes newNotes = (ShoppingListBottomNotes) newItems.get(newItemPos);
+                ShoppingListBottomNotes oldNotes = (ShoppingListBottomNotes) oldItems.get(oldItemPos);
+                return newNotes.equals(oldNotes);
             }
         }
     }

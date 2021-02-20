@@ -23,6 +23,8 @@ import android.text.Spanned;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class ShoppingListBottomNotes extends GroupedListItem {
 
     private Spanned notes;
@@ -38,6 +40,19 @@ public class ShoppingListBottomNotes extends GroupedListItem {
     @Override
     public int getType() {
         return TYPE_BOTTOM_NOTES;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingListBottomNotes that = (ShoppingListBottomNotes) o;
+        return Objects.equals(notes, that.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notes);
     }
 
     @NonNull

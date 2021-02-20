@@ -244,7 +244,8 @@ public class ShoppingModeFragment extends BaseFragment implements
         viewModel.toggleDoneStatus(shoppingListItem);
     }
 
-    public void saveNotes(Spanned notes) {
+    @Override
+    public void saveText(Spanned notes) {
         viewModel.saveNotes(notes);
     }
 
