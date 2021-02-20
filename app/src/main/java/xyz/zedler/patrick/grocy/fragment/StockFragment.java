@@ -179,7 +179,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         // WEB REQUESTS
 
         dlHelper = new DownloadHelper(activity, TAG);
-        grocyApi = activity.getGrocy();
+        grocyApi = activity.getGrocyApi();
         gson = new Gson();
 
         // INITIALIZE VARIABLES

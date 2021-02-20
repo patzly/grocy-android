@@ -81,6 +81,7 @@ public class LoginRequestFragment extends BaseFragment {
                         activity.binding.frameMainContainer
                 ));
             } else if(event.getType() == Event.LOGIN_SUCCESS) {
+                activity.updateGrocyApi();
                 navigateToStartDestination();
             } else if(event.getType() == Event.BOTTOM_SHEET) {
                 BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;

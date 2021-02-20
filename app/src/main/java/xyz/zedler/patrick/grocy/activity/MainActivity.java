@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         // API
 
-        grocyApi = new GrocyApi(getApplication());
+        updateGrocyApi();
         repository = new MainRepository(getApplication());
 
         // VIEWS
@@ -494,13 +494,12 @@ public class MainActivity extends AppCompatActivity {
         return server == null || server.isEmpty();
     }
 
-    private boolean isDemo() {
-        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-        return server != null && server.contains("grocy.info");
+    public GrocyApi getGrocyApi() {
+        return grocyApi;
     }
 
-    public GrocyApi getGrocy() {
-        return grocyApi;
+    public void updateGrocyApi() {
+        grocyApi = new GrocyApi(getApplication());
     }
 
     public Menu getBottomMenu() {

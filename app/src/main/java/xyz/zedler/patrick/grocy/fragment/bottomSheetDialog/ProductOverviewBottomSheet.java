@@ -115,9 +115,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 		activity = (MainActivity) requireActivity();
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-		assert getArguments() != null;
 		ProductOverviewBottomSheetArgs args =
-				ProductOverviewBottomSheetArgs.fromBundle(getArguments());
+				ProductOverviewBottomSheetArgs.fromBundle(requireArguments());
 
 		boolean showActions = args.getShowActions();
 
@@ -297,7 +296,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
 		if(activity.isOnline() && !hasDetails()) {
 			dlHelper.get(
-					activity.getGrocy().getStockProductDetails(product.getId()),
+					activity.getGrocyApi().getStockProductDetails(product.getId()),
 					response -> {
 						Type listType = new TypeToken<ProductDetails>(){}.getType();
 						productDetails = new Gson().fromJson(response, listType);
@@ -429,7 +428,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 			return;
 		}
 		dlHelper.get(
-				activity.getGrocy().getPriceHistory(product.getId()),
+				activity.getGrocyApi().getPriceHistory(product.getId()),
 				response -> {
 					Type listType = new TypeToken<ArrayList<PriceHistoryEntry>>(){}.getType();
 					ArrayList<PriceHistoryEntry> priceHistoryEntries;

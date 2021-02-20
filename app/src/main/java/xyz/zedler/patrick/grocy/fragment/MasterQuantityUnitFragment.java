@@ -101,7 +101,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
         // WEB
 
         dlHelper = new DownloadHelper(activity, TAG);
-        grocyApi = activity.getGrocy();
+        grocyApi = activity.getGrocyApi();
         gson = new Gson();
 
         // VARIABLES
