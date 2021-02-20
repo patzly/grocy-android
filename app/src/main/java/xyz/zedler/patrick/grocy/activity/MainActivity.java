@@ -535,6 +535,7 @@ public class MainActivity extends AppCompatActivity {
         editPrefs.remove(Constants.PREF.HOME_ASSISTANT_LONG_LIVED_TOKEN);
         editPrefs.remove(Constants.PREF.API_KEY);
         editPrefs.remove(Constants.PREF.SHOPPING_LIST_LAST_ID);
+        editPrefs.remove(Constants.PREF.GROCY_VERSION);
         editPrefs.apply();
         new Handler().postDelayed(() -> RestartUtil.restartApp(this), 1000);
     }

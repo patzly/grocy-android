@@ -81,7 +81,7 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     public boolean isDemo() {
-        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+        String server = getServerUrl();
         return server != null && server.contains("grocy.info");
     }
 

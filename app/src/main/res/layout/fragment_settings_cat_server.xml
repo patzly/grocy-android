@@ -135,6 +135,7 @@
 
                 <LinearLayout
                     style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+                    android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{v -> viewModel.showCompatibilityBottomSheet()}"
@@ -167,6 +168,7 @@
 
                 <LinearLayout
                     style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+                    android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{v -> viewModel.reloadConfiguration()}"
@@ -193,6 +195,7 @@
 
                 <LinearLayout
                     style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+                    android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{v -> viewModel.showLogoutBottomSheet()}"
