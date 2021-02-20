@@ -18,7 +18,6 @@
     <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
         <item name="android:navigationBarColor">@color/background</item>
         <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>
-        <item name="android:windowSplashscreenContent">@drawable/splash_content_primary</item>
     </style>
 
     <style name="Theme.Grocy.BottomAppBar.SwipeToRefresh" parent="Theme.Grocy.BottomAppBar">

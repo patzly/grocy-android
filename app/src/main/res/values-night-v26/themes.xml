@@ -6,12 +6,10 @@
         <item name="android:statusBarColor">@color/background</item>
         <item name="android:navigationBarColor">@color/background</item>
         <item name="elevationOverlayEnabled">true</item>
-        <item name="android:windowSplashscreenContent">@drawable/splash_content</item>
     </style>
 
     <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
         <item name="android:navigationBarColor">@color/primary</item>
-        <item name="android:windowSplashscreenContent">@drawable/splash_content_primary</item>
     </style>
 
 </resources>

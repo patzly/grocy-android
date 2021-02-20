@@ -22,9 +22,8 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/Theme.Grocy.BottomAppBar.SwipeToRefresh"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".activity.SplashActivity"
+            android:theme="@style/Theme.Grocy.Splash">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +31,11 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/Theme.Grocy.BottomAppBar.SwipeToRefresh"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".activity.SettingsActivity"/>
 

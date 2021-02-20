@@ -1,9 +1,10 @@
 2.0.0-alpha04
+- New: Animated splash screen
 - Improved: Keyboard does't hide save/clear buttons on text input sheet anymore (#261)
 - Improved: Updated translations
 - Fixed: RuntimeExceptions in log if Home Assistant grocy add-on is not used (#273)
 - Fixed: Mixed languages if activity is restarted (#260)
-- Fixed: Portuguese not working caused by variant code (#264)
+- Fixed: Language variants not working (#264)
 - Fixed: Updates to master data were pushed to the wrong server (#363)
 
 2.0.0-alpha03

@@ -42,6 +42,10 @@
 
     <style name="Theme.Grocy.BottomAppBar.SwipeToRefresh" parent="Theme.Grocy.BottomAppBar"/>
 
+    <style name="Theme.Grocy.Splash" parent="Theme.Grocy.BottomAppBar.SwipeToRefresh">
+        <item name="android:colorBackground">@color/primary</item>
+    </style>
+
     <style name="Base.Grocy.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_variant</item>
