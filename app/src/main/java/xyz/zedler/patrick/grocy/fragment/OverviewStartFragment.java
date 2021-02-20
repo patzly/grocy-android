@@ -36,7 +36,9 @@ import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
@@ -47,6 +49,7 @@ public class OverviewStartFragment extends BaseFragment {
     private FragmentOverviewStartBinding binding;
     private OverviewStartViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
+    private ClickUtil clickUtil;
 
     @Override
     public View onCreateView(
@@ -81,6 +84,8 @@ public class OverviewStartFragment extends BaseFragment {
         binding.setFragment(this);
         binding.setActivity(activity);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+
+        clickUtil = new ClickUtil(1000);
 
         viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
             if(!state) viewModel.setCurrentQueueLoading(null);
@@ -156,6 +161,11 @@ public class OverviewStartFragment extends BaseFragment {
         } else {
             navigateDeepLink(R.string.deep_link_settingsCatServerFragment);
         }
+    }
+
+    public void startLogoAnimation() {
+        if (clickUtil.isDisabled()) return;
+        IconUtil.start(binding.imageLogo);
     }
 
     @Override

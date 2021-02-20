@@ -32,14 +32,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize">
+            android:layout_height="?android:actionBarSize"
+            android:onClick="@{() -> fragment.startLogoAnimation()}">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:id="@+id/image_logo"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="16dp"
                 android:layout_gravity="start|center_vertical"
-                android:src="@drawable/ic_round_grocy"
+                android:src="@drawable/ic_round_grocy_anim"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
