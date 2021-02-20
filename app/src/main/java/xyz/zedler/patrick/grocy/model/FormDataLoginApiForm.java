@@ -31,6 +31,7 @@ import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class FormDataLoginApiForm {
+    private final MutableLiveData<Boolean> showHelpTexts;
     private final MutableLiveData<Boolean> httpRadioButtonCheckedLive;
     private final MutableLiveData<Boolean> httpsRadioButtonCheckedLive;
     private final MutableLiveData<String> serverUrlLive;
@@ -44,6 +45,7 @@ public class FormDataLoginApiForm {
     private final MutableLiveData<Boolean> usingGrocyHassAddOnLive;
 
     public FormDataLoginApiForm(SharedPreferences sharedPrefsPrivate, LoginApiFormFragmentArgs args) {
+        showHelpTexts = new MutableLiveData<>(false);
         usingGrocyHassAddOnLive = new MutableLiveData<>(args.getGrocyIngressProxyId() != null);
         httpRadioButtonCheckedLive = new MutableLiveData<>(false);
         httpsRadioButtonCheckedLive = new MutableLiveData<>(false);
@@ -66,6 +68,15 @@ public class FormDataLoginApiForm {
                     sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null)
             );
         }
+    }
+
+    public MutableLiveData<Boolean> getShowHelpTexts() {
+        return showHelpTexts;
+    }
+
+    public void toggleShowHelpTexts() {
+        assert showHelpTexts.getValue() != null;
+        showHelpTexts.setValue(!showHelpTexts.getValue());
     }
 
     public MutableLiveData<Boolean> getUsingGrocyHassAddOnLive() {

@@ -1,6 +1,7 @@
 2.0.0-alpha04
 - New: Animated splash screen and logo
 - Improved: Keyboard does't hide save/clear buttons on text input sheet anymore (#261)
+- Improved: Added help texts to login form (shown with Home Assistant add-on)
 - Improved: Updated translations
 - Fixed: RuntimeExceptions in log if Home Assistant grocy add-on is not used (#273)
 - Fixed: Mixed languages if activity is restarted (#260)

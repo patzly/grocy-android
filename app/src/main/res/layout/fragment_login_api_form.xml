@@ -74,6 +74,26 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> formData.toggleShowHelpTexts()}"
+                    app:contentPadding="16dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/on_background_variant">
+
+                    <TextView
+                        style="@style/Widget.Grocy.TextView.Help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{formData.showHelpTexts ? @string/msg_help_home_assistant_login_help_hide : @string/msg_help_home_assistant_login_help_show}" />
+
+                </com.google.android.material.card.MaterialCardView>
+
                 <TextView
                     style="@style/Widget.Grocy.TextView.Category"
                     android:textAlignment="viewStart"
@@ -109,6 +129,26 @@
                         android:onClick="@{() -> formData.onCheckedHttpButton()}"/>
                 </LinearLayout>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="0dp"
+                    android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{() -> fragment.openNabuCasaWebsite()}"
+                    app:contentPadding="16dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/on_background_variant">
+
+                    <TextView
+                        style="@style/Widget.Grocy.TextView.Help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_help_home_assistant_login_server" />
+
+                </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
@@ -127,10 +167,29 @@
                         android:imeOptions="actionNext"
                         android:textColor="@color/on_background"
                         android:text="@={formData.serverUrlLive}"
-                        android:afterTextChanged="@{() -> formData.clearServerUrlErrorAndUpdateRadioButtons()}"
-                        />
+                        android:afterTextChanged="@{() -> formData.clearServerUrlErrorAndUpdateRadioButtons()}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="0dp"
+                    android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{() -> fragment.openHomeAssistantProfileWebsite()}"
+                    app:contentPadding="16dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/on_background_variant">
+
+                    <TextView
+                        style="@style/Widget.Grocy.TextView.Help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_help_home_assistant_login_token" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"
@@ -165,6 +224,26 @@
                     android:singleLine="true"
                     android:text="@string/title_grocy"
                     android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="0dp"
+                    android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{() -> activity.navigateUp()}"
+                    app:contentPadding="16dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/on_background_variant">
+
+                    <TextView
+                        style="@style/Widget.Grocy.TextView.Help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/msg_help_home_assistant_login_proxy_id" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"

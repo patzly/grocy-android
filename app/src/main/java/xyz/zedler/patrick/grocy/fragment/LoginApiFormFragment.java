@@ -74,6 +74,7 @@ public class LoginApiFormFragment extends BaseFragment {
         binding.setViewModel(viewModel);
         binding.setFormData(viewModel.getFormData());
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.setActivity(activity);
     }
 
     public void proceedWithLogin() {
@@ -108,6 +109,21 @@ public class LoginApiFormFragment extends BaseFragment {
         ));
     }
 
+    public void openHomeAssistantProfileWebsite() {
+        if(!viewModel.getFormData().isServerUrlValid()) return;
+        Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
+        String url = viewModel.getFormData().getServerUrlTrimmed();
+        if(url.replaceAll(":[0-9]+$", "").equals(url)
+                && !url.contains("ui.nabu.casa")
+        ) {
+            url += ":8123";
+        }
+        url += "/profile";
+        Uri uri = Uri.parse(url);
+        browserManageKeys.setData(uri);
+        startActivity(browserManageKeys);
+    }
+
     public void openApiKeysWebsite() {
         if(!viewModel.getFormData().isServerUrlValid()) return;
         Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
@@ -124,6 +140,13 @@ public class LoginApiFormFragment extends BaseFragment {
         Uri uri = Uri.parse(url);
         browserManageKeys.setData(uri);
         startActivity(browserManageKeys);
+    }
+
+    public void openNabuCasaWebsite() {
+        Uri uri = Uri.parse("https://www.nabucasa.com/");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
     public void openHelpWebsite() {

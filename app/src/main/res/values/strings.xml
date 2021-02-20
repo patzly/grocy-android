@@ -176,6 +176,11 @@
     <string name="msg_help_purchased_date_settings">If the option below is enabled, a field for purchased date will be displayed on purchase and inventory page. Otherwise the purchased date defaults to today.</string>
     <string name="msg_help_normal_login">Tap on this card if you use Home Assistant with the grocy add-on.</string>
     <string name="msg_help_home_assistant_login">You\'re using the grocy Home Assistant add-on. Therefore a few more details are required. Tap on this card to switch to normal login.</string>
+    <string name="msg_help_home_assistant_login_help_show">Tap here to show help texts.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Tap here to hide help texts.</string>
+    <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
+    <string name="msg_help_home_assistant_login_token">You can create an long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
+    <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
 
     <string name="error_api_not_working">API key not working</string>
     <string name="error_orbot_not_installed">Orbot is not installed</string>
