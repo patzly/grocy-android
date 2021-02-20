@@ -1,7 +1,9 @@
 2.0.0-alpha04
 - Improved: Keyboard does't hide save/clear buttons on text input sheet anymore (#261)
+- Improved: Updated translations
 - Fixed: RuntimeExceptions in log if Home Assistant grocy add-on is not used (#273)
 - Fixed: Mixed languages if activity is restarted (#260)
+- Fixed: Portuguese not working caused by variant code (#264)
 
 2.0.0-alpha03
 - New: Official support for Home Assistant grocy add-on (#249)

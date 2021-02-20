@@ -33,7 +33,7 @@ public class LocaleUtil {
         );
         if (code == null) return getDeviceLocale();
         try {
-            return new Locale(code);
+            return LocaleUtil.getLocaleFromCode(code);
         } catch (Exception e) {
             return getDeviceLocale();
         }
