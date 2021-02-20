@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Grocy"
         android:hardwareAccelerated="true"
         android:networkSecurityConfig="@xml/network_security_configuration"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        tools:ignore="UnusedAttribute">
 
         <activity
             android:name=".activity.SplashActivity"
