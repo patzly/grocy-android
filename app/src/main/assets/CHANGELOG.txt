@@ -1,3 +1,6 @@
+2.0.0-alpha05
+- Fixed: Wrong factor for unit multiplies on shopping list item edit page (#356)
+
 2.0.0-alpha04
 - New: Animated splash screen and logo
 - Improved: Keyboard does't hide save/clear buttons on text input sheet anymore (#261)

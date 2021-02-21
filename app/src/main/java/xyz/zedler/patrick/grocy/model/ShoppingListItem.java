@@ -218,6 +218,10 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
         return quId;
     }
 
+    public int getQuIdInt() {
+        return NumUtil.isStringInt(quId) ? Integer.parseInt(quId) : -1;
+    }
+
     public void setQuId(String quId) {
         this.quId = quId;
     }

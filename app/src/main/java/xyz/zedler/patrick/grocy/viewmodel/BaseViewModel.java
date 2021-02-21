@@ -24,6 +24,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
 
@@ -48,7 +49,8 @@ public class BaseViewModel extends AndroidViewModel {
         showMessage(getString(R.string.error_undefined));
     }
 
-    public void showMessage(@NonNull String message) {
+    public void showMessage(@Nullable String message) {
+        if(message == null) return;
         showSnackbar(new SnackbarMessage(message));
     }
 

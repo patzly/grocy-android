@@ -254,30 +254,27 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         formData.getShoppingListLive().setValue(shoppingList);
 
         double amount = item.getAmountDouble();
+        QuantityUnit quantityUnit = null;
 
-        if(item.getProductId() != null) {
-            Product product = getProduct(Integer.parseInt(item.getProductId()));
+        Product product = item.getProductId() != null ? getProduct(item.getProductIdInt()) : null;
+        if(product != null) {
             formData.getProductLive().setValue(product);
             formData.getProductNameLive().setValue(product.getName());
             HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
 
-            if(item.getQuId() != null && !item.getQuId().isEmpty()) {
-                QuantityUnit quantityUnit = getQuantityUnit(Integer.parseInt(item.getQuId()));
-                if(unitFactors != null && unitFactors.containsKey(quantityUnit)) {
-                    Double factor = unitFactors.get(quantityUnit);
-                    assert factor != null;
-                    if(factor == -1) factor = product.getQuFactorPurchaseToStockDouble();
-                    formData.getAmountLive().setValue(NumUtil.trim(amount * factor));
-                } else {
-                    formData.getAmountLive().setValue(NumUtil.trim(amount));
+            quantityUnit = getQuantityUnit(item.getQuIdInt());
+            if(unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
+                Double factor = unitFactors.get(quantityUnit);
+                assert factor != null;
+                if(factor != -1 && quantityUnit.getId() == product.getQuIdPurchase()) {
+                    amount = amount / factor;
+                } else if(factor != -1) {
+                    amount = amount * factor;
                 }
-                formData.getQuantityUnitLive().setValue(quantityUnit);
-            } else {
-                formData.getAmountLive().setValue(NumUtil.trim(amount));
             }
-        } else {
-            formData.getAmountLive().setValue(NumUtil.trim(amount));
         }
+        formData.getAmountLive().setValue(NumUtil.trim(amount));
+        formData.getQuantityUnitLive().setValue(quantityUnit);
 
         formData.getNoteLive().setValue(item.getNote());
         formData.setFilledWithShoppingListItem(true);
@@ -396,6 +393,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         } return null;
     }
 
+    @Nullable
     public Product getProduct(int id) {
         for(Product product : products) {
             if(product.getId() == id) return product;
