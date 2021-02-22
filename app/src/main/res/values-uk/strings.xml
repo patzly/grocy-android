@@ -173,6 +173,11 @@
     <string name="msg_help_purchased_date_settings">Якщо опція нижче ввімкнена, на сторінці купівлі та інвентаризації відображатиметься поле для дати придбання. В іншому випадку придбана дата за замовчуванням сьогодні.</string>
     <string name="msg_help_normal_login">Натисніть на цю картку, якщо ви використовуєте Home Assistant з add-on Grocy.</string>
     <string name="msg_help_home_assistant_login">Ви використовуєте add-on Grocy для Home Assistant. Тому потрібно ще кілька деталей. Натисніть на цю картку, щоб перейти до звичайного входу.</string>
+    <string name="msg_help_home_assistant_login_help_show">Торкніться тут, щоб показати довідкові тексти.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Торкніться тут, щоб приховати довідкові тексти.</string>
+    <string name="msg_help_home_assistant_login_server">У поле нижче ви також можете ввести URL-адресу хмари Nabu Casa, якщо ви використовуєте цю послугу. Торкніться цієї картки, щоб відвідати вебсайт Nabu Casa.</string>
+    <string name="msg_help_home_assistant_login_token">Ви можете створити довготривалий маркер доступу в налаштуваннях профілю Home Assistant (останній розділ). Натисніть тут, щоб відкрити URL-адресу зверху.</string>
+    <string name="msg_help_home_assistant_login_proxy_id">Перейдіть назад або торкніться цієї картки, щоб відсканувати QR-код, який заповнює поля нижче.</string>
 
     <string name="error_api_not_working">Ключ API не працює</string>
     <string name="error_orbot_not_installed">Orbot не встановлено</string>
