@@ -114,7 +114,7 @@ public class LanguagesBottomSheet extends BaseBottomSheet
         } else {
             config = getResources().getConfiguration().locale;
         }
-        Locale configCompare = new Locale(config.getLanguage(), "", config.getVariant());
+        Locale configCompare = new Locale(config.getLanguage(), config.getVariant());
 
         Locale device = LocaleUtil.getDeviceLocale();
         Locale deviceCompare = new Locale(device.getLanguage(), "", device.getVariant());
