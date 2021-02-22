@@ -1,5 +1,6 @@
 2.0.0-alpha05
 - Fixed: Wrong factor for unit multiplies on shopping list item edit page (#356)
+- Fixed: Wrong language selected if code contains specific region (#372)
 
 2.0.0-alpha04
 - New: Animated splash screen and logo

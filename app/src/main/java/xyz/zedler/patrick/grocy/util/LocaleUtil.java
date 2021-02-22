@@ -54,7 +54,7 @@ public class LocaleUtil {
     public static Locale getLocaleFromCode(String languageCode) {
         String[] codeParts = languageCode.split("_");
         if (codeParts.length > 1) {
-            return new Locale(codeParts[0], "", codeParts[1]);
+            return new Locale(codeParts[0], codeParts[1]);
         } else {
             return new Locale(languageCode);
         }
