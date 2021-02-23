@@ -163,6 +163,7 @@ public class LoginRequestViewModel extends BaseViewModel {
                     if(error instanceof AuthFailureError) {
                         loginErrorOccurred.setValue(true);
                         loginErrorMsg.setValue(getString(R.string.error_api_not_working));
+                        loginErrorExactMsg.setValue(error.toString());
                     } else if(error instanceof NoConnectionError) {
                         if(error.toString().contains("SSLHandshakeException")) {
                             showMessage("SSLHandshakeException");
