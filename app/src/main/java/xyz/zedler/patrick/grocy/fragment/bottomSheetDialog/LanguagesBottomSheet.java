@@ -21,6 +21,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -40,10 +42,12 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LanguageAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
+import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
 public class LanguagesBottomSheet extends BaseBottomSheet
         implements LanguageAdapter.LanguageAdapterListener {
@@ -114,10 +118,10 @@ public class LanguagesBottomSheet extends BaseBottomSheet
         } else {
             config = getResources().getConfiguration().locale;
         }
-        Locale configCompare = new Locale(config.getLanguage(), config.getVariant());
+        Locale configCompare = new Locale(config.getLanguage(), config.getCountry());
 
         Locale device = LocaleUtil.getDeviceLocale();
-        Locale deviceCompare = new Locale(device.getLanguage(), "", device.getVariant());
+        Locale deviceCompare = new Locale(device.getLanguage(), device.getCountry());
 
         Locale compare = language != null
                 ? LocaleUtil.getLocaleFromCode(language.getCode())
@@ -128,7 +132,18 @@ public class LanguagesBottomSheet extends BaseBottomSheet
             current.setLanguage(language != null ? language.getCode() : null);
             dismiss();
         } else {
-            new Handler().postDelayed(() -> RestartUtil.restartApp(activity), 100);
+            new Handler().postDelayed(() -> {
+                Configuration configuration = getResources().getConfiguration();
+                configuration.setLocale(compare);
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                Uri uriAddToShoppingListDeepLink = getUriWithArgs(
+                        R.string.deep_link_shoppingListItemEditFragment,
+                        new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                                .build().toBundle()
+                );
+                ShortcutUtil.refreshShortcuts(requireContext(), uriAddToShoppingListDeepLink);
+                RestartUtil.restartApp(activity);
+            }, 100);
         }
     }
 

@@ -20,10 +20,9 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 */
 
 import android.app.Dialog;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,16 +46,11 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
 public class ShortcutsBottomSheet extends BaseBottomSheet {
 
     private final static String TAG = ShortcutsBottomSheet.class.getSimpleName();
-
-    private final static String SHOPPING_LIST = "shortcut_shopping_list";
-    private final static String ADD_TO_SHOPPING_LIST = "shortcut_add_to_shopping_list";
-    private final static String SHOPPING_MODE = "shortcut_shopping_mode";
-    private final static String PURCHASE = "shortcut_purchase";
-    private final static String CONSUME = "shortcut_consume";
 
     private MainActivity activity;
     private FragmentBottomsheetShortcutsBinding binding;
@@ -93,18 +87,17 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
             return;
         }
 
-        ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
-        List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
+        List<ShortcutInfo> shortcutInfos = ShortcutUtil.getDynamicShortcuts(requireContext());
         for(ShortcutInfo shortcutInfo : shortcutInfos) {
-            if(shortcutInfo.getId().equals(SHOPPING_LIST)) {
+            if(shortcutInfo.getId().equals(ShortcutUtil.SHOPPING_LIST)) {
                 setCheckBoxChecked(R.id.shopping_list);
-            } else if(shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
+            } else if(shortcutInfo.getId().equals(ShortcutUtil.ADD_TO_SHOPPING_LIST)) {
                 setCheckBoxChecked(R.id.add_to_shopping_list);
-            } else if(shortcutInfo.getId().equals(SHOPPING_MODE)) {
+            } else if(shortcutInfo.getId().equals(ShortcutUtil.SHOPPING_MODE)) {
                 setCheckBoxChecked(R.id.shopping_mode);
-            } else if(shortcutInfo.getId().equals(PURCHASE)) {
+            } else if(shortcutInfo.getId().equals(ShortcutUtil.PURCHASE)) {
                 setCheckBoxChecked(R.id.purchase);
-            } else if(shortcutInfo.getId().equals(CONSUME)) {
+            } else if(shortcutInfo.getId().equals(ShortcutUtil.CONSUME)) {
                 setCheckBoxChecked(R.id.consume);
             }
         }
@@ -135,19 +128,26 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
     public void saveShortcuts() {
         ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
         List<ShortcutInfo> shortcutInfos = new ArrayList<>();
+        Context context = requireContext();
         for(int i=0; i<=binding.checkboxContainer.getChildCount(); i++) {
             MaterialCheckBox checkBox = (MaterialCheckBox) binding.checkboxContainer.getChildAt(i);
             if (checkBox == null || !checkBox.isChecked()) continue;
             if(checkBox.getId() == R.id.shopping_list) {
-                shortcutInfos.add(createShortcutShoppingList(checkBox.getText()));
+                shortcutInfos.add(ShortcutUtil.createShortcutShoppingList(context, checkBox.getText()));
             } else if(checkBox.getId() == R.id.add_to_shopping_list) {
-                shortcutInfos.add(createShortcutAddToShoppingList(checkBox.getText()));
+                Uri uriWithArgs = getUriWithArgs(R.string.deep_link_shoppingListItemEditFragment,
+                        new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                                .build().toBundle()
+                );
+                shortcutInfos.add(ShortcutUtil.createShortcutAddToShoppingList(
+                        context, uriWithArgs, checkBox.getText()
+                ));
             } else if(checkBox.getId() == R.id.shopping_mode) {
-                shortcutInfos.add(createShortcutShoppingMode(checkBox.getText()));
+                shortcutInfos.add(ShortcutUtil.createShortcutShoppingMode(context, checkBox.getText()));
             } else if(checkBox.getId() == R.id.purchase) {
-                shortcutInfos.add(createShortcutPurchase(checkBox.getText()));
+                shortcutInfos.add(ShortcutUtil.createShortcutPurchase(context, checkBox.getText()));
             } else if(checkBox.getId() == R.id.consume) {
-                shortcutInfos.add(createShortcutConsume(checkBox.getText()));
+                shortcutInfos.add(ShortcutUtil.createShortcutConsume(context, checkBox.getText()));
             }
         }
 
@@ -155,68 +155,6 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         shortcutManager.setDynamicShortcuts(shortcutInfos);
         activity.getCurrentFragment().updateShortcuts();
         dismiss();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutShoppingList(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingListFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return new ShortcutInfo.Builder(requireContext(), SHOPPING_LIST)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_shopping_list))
-                .setIntent(intent).build();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutAddToShoppingList(CharSequence label) {
-        Intent intent = getIntent(getUriWithArgs(R.string.deep_link_shoppingListItemEditFragment,
-                new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-                        .build().toBundle()
-        ));
-        return new ShortcutInfo.Builder(requireContext(), ADD_TO_SHOPPING_LIST)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_add))
-                .setIntent(intent).build();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutShoppingMode(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_shoppingModeFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return new ShortcutInfo.Builder(requireContext(), SHOPPING_MODE)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_shopping_mode))
-                .setIntent(intent).build();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutPurchase(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_purchaseFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return new ShortcutInfo.Builder(requireContext(), PURCHASE)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_purchase))
-                .setIntent(intent).build();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    private ShortcutInfo createShortcutConsume(CharSequence label) {
-        Uri uri = Uri.parse(getString(R.string.deep_link_consumeFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return new ShortcutInfo.Builder(requireContext(), CONSUME)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(requireContext(), R.mipmap.ic_consume))
-                .setIntent(intent).build();
-    }
-
-    private Intent getIntent(Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(requireContext(), MainActivity.class);
-        return intent;
     }
 
     @NonNull

@@ -19,6 +19,11 @@ package xyz.zedler.patrick.grocy.util;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.pm.ShortcutInfo;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -181,5 +186,22 @@ public class SortUtil {
                         item2.getName().toLowerCase()
                 )
         );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+    public static List<ShortcutInfo> sortShortcutsById(
+            List<ShortcutInfo> shortcutInfos,
+            List<String> shortcutIdsSorted
+    ) {
+        HashMap<String, ShortcutInfo> shortcutInfoHashMap = new HashMap<>();
+        for(ShortcutInfo shortcutInfo : shortcutInfos) {
+            shortcutInfoHashMap.put(shortcutInfo.getId(), shortcutInfo);
+        }
+        List<ShortcutInfo> sorted = new ArrayList<>();
+        for(String id : shortcutIdsSorted) {
+            ShortcutInfo info = shortcutInfoHashMap.get(id);
+            if(info != null) sorted.add(info);
+        }
+        return sorted;
     }
 }
