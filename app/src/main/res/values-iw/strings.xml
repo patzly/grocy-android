@@ -119,6 +119,8 @@
     <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
     <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
     <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_scan_mode_confirm_purchase">ההעברה שתתבצע:\n\nהוספת %1$s%2$s של %3$s למלאי\nמועד תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">פעולה שתבוצע:\n\nהסרת %1$s %2$s של %3$s מהמלאי\nמיקום: %4$s</string>
     <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
@@ -204,7 +206,6 @@
     <string name="error_name_exists">השם כבר קיים</string>
     <string name="error_network">שגיאת רשת</string>
     <string name="error_network_subtitle">לא ניתן לגמרי לטעון את הנתונים הדרושים</string>
-    <string name="error_unknown">אוווופס!</string>
     <string name="error_not_grocy_instance">מופע לא תקני של grocy</string>
     <string name="error_timeout">שגיאת תום זמן המתנה</string>
     <string name="error_no_product_selected">לא נבחרו מוצרים</string>
@@ -563,7 +564,6 @@
     <string name="setting_language">שפה</string>
     <string name="setting_language_description">בחירת שפה</string>
     <string name="setting_language_info">תודתנו נתונה לכל המתרגמים בהתנדבות ב־Transifex!\nנא לבקר ב־GitHub שלנו כדי ללמוד כיצד ניתן לקדם את Grocy ל־Android לדבר בשפה שלך.</string>
-    <string name="setting_language_system">בררת המחדל של המערכת (%1$s)</string>
     <string name="setting_language_not_available">לא זמין</string>
     <string name="setting_open_food_facts">להשתמש ב־Open Food Facts</string>
     <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
