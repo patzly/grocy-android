@@ -1,6 +1,7 @@
 2.0.0-alpha05
 - Improved: Language selection and behavior
 - Improved: Display exact error message if there was an AuthFailureError at login (#249)
+- Improved: Updated translations
 - Fixed: Wrong factor for unit multiplies on shopping list item edit page (#356)
 - Fixed: Wrong language selected if code contains specific region (#372)
 - Fixed: Language change does not effect shortcuts (#373)
