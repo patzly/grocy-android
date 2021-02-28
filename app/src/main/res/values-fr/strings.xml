@@ -56,6 +56,7 @@
     <string name="action_restart">Redémarrer</string>
     <string name="action_create">Créer</string>
     <string name="action_link">Lien</string>
+    <string name="action_try_again">Réessayez</string>
     <string name="action_open_scanner">Ouvrir le scanner</string>
     <string name="action_discard">Jeter</string>
     <string name="action_clear_form">Effacer le formulaire</string>
@@ -118,6 +119,8 @@
     <string name="msg_item_marked_as_done">Élément marqué comme terminé</string>
     <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
     <string name="msg_batch_no_products">Aucun nouveau produit à créer</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_scan_mode_confirm_purchase">Transaction qui sera exécutée: \n\nAjouter %1$s %2$sde %3$s au stock\nDate de péremption: %4$s\nPrix: %5$s\nMagasin: %6$s\nEmplacement: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_scan_mode_confirm_consume">Transaction qui sera exécutée:\n\nSupprimer : %1$s %2$s de %3$s du stock\nEmplacement : %4$s</string>
     <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
@@ -131,6 +134,7 @@
     <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs? Contactez-nous et laissez-nous vous aider!\nSinon, nous serions très heureux de recevoir une bonne critique dans le Play Store.</string>
     <string name="msg_point_at_barcode">Dirigez votre appareil photo vers un code-barres</string>
     <string name="msg_press_hold_confirm">Laissez appuyé pour confirmer.</string>
+    <string name="msg_welcome_to_grocy">Bienvenue sur Gorcy Android !\n\nPour utiliser grocy de manière productive vous avez besoin de votre propre serveur ou de l\'add-on pour Home Assistant.\nSi vous voulez seulement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
     <string name="msg_choose_option_below">Merci de choisir une des options ci-dessous.</string>
     <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et aller sur la page \"Clefs API\". Cliquer sur \"Ajouter\", puis cliquez sur la petite icône de code QR et scannez le code QR.</string>
     <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
@@ -167,6 +171,9 @@
     <string name="msg_help_loading_circle_settings">Sur chaque page où quelque chose a été chargé depuis le serveur, l\'application vérifie en premier, avec une petite requête, si la base de donnée du serveur a changé depuis la dernière fois et ne met à jour que les données obsolètes. Activez l\'option ci-dessous pour afficher une animation de chargement durant cette petite requête.</string>
     <string name="msg_help_start">Le mode débutant est actif : Les textes d\'aide sont affichés par défaut sur toutes les pages, si disponible. Tapez pour changer.</string>
     <string name="msg_help_purchased_date_settings">Si l\'option ci-dessous est activée, un champ pour la date d\'achat sera affiché sur les pages d\'achat et d\'inventaire. Sinon, la date d\'achat par défaut est le jour même.</string>
+    <string name="msg_help_normal_login">Appuyez ici si vous utilisez Home Assistant avec l\'add-on grocy.</string>
+    <string name="msg_help_home_assistant_login_help_show">Appuyez ici pour afficher les aides.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Appuyez ici pour cacher les aides.</string>
     <string name="error_api_not_working">La clé API ne fonctionne pas</string>
     <string name="error_orbot_not_installed">Orbot n\'est pas installé</string>
     <string name="error_select_product">Sélectionnez un produit</string>
@@ -208,7 +215,7 @@
     <string name="error_name_exists">Le nom existe déjà</string>
     <string name="error_network">Erreur réseau</string>
     <string name="error_network_subtitle">Les données requises n\'ont pas pu être chargées complètement</string>
-    <string name="error_unknown">Uups!</string>
+    <string name="error_unknown">Oups !</string>
     <string name="error_not_grocy_instance">Ce n\'est pas une instance de grocy valide</string>
     <string name="error_timeout">Erreur de temporisation</string>
     <string name="error_no_product_selected">Pas de produit sélectionné</string>
@@ -335,8 +342,13 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">%1$darticle est dans vos listes de course.</item>
-        <item quantity="other">%1$darticles sont dans vos listes de courses.</item>
+        <item quantity="one">%1$d article est dans vos listes de course.</item>
+        <item quantity="other">%1$d articles sont dans vos listes de courses.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_shopping_list">
+        <item quantity="one">%1$d article est dans votre liste de courses.</item>
+        <item quantity="other">%1$d articles sont dans votre liste de course.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_master_data">
@@ -531,7 +543,6 @@
     <string name="setting_language">Langue</string>
     <string name="setting_language_description">Choisir une langue</string>
     <string name="setting_language_info">Remerciement à tous les traducteurs volontaires de Transifex !\nVisitez le projet sur GitHub pour rendre Grocy Android disponible dans votre langue.</string>
-    <string name="setting_language_system">Comme le système (%1$s)</string>
     <string name="setting_language_not_available">Non disponible</string>
     <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
     <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
