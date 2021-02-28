@@ -173,7 +173,6 @@
     <string name="msg_help_purchased_date_settings">Pokud je zapnuta volba níže, políčko pro datum nákupu se bude zobrazovat na stránce nákupu a v inventáři. Pokud není zapnuta, datum nákupu se automaticky doplní s dnešním datem.</string>
     <string name="msg_help_normal_login">Klikněte na tuto kartu pokud používáte Home Assistant s grocy addonem.</string>
     <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
-
     <string name="error_api_not_working">API key nefunguje</string>
     <string name="error_orbot_not_installed">Orbot není instalován</string>
     <string name="error_select_product">Vyber produkt</string>
@@ -215,7 +214,6 @@
     <string name="error_name_exists">Jméno již existuje</string>
     <string name="error_network">Chyba sítě</string>
     <string name="error_network_subtitle">Vyžadovaná data nemohla být načtena</string>
-    <string name="error_unknown">Upsss!</string>
     <string name="error_not_grocy_instance">Neplatná instance grocy</string>
     <string name="error_timeout">Chyba: čas vypršel</string>
     <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
@@ -578,7 +576,6 @@
     <string name="setting_language">Jazyk</string>
     <string name="setting_language_description">Vyberte jazyk</string>
     <string name="setting_language_info">Velké díky všem dobrovolným překladatelům na Transifex!\nNavštivte nás, prosím, na GitHubu, pokud chcete zjistit, jak můžete pomoci přeložit Grocy Android i do vašeho jazyka.</string>
-    <string name="setting_language_system">Výchozí nastavení systému (%1$s)</string>
     <string name="setting_language_not_available">Není dostupný</string>
     <string name="setting_open_food_facts">Použij Open Food Facts</string>
     <string name="setting_open_food_facts_description">Získaz informace z čárových kódů</string>
