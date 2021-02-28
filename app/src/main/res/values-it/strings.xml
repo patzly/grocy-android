@@ -24,9 +24,9 @@
     <string name="action_next">Avanti</string>
     <string name="action_new">Nuovo</string>
     <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
-    <string name="action_prev">Indietro</string>
+    <string name="action_prev">Precedente</string>
     <string name="action_feedback">Invia feedback</string>
-    <string name="action_reset">Resetta</string>
+    <string name="action_reset">Ripristina</string>
     <string name="action_reload">Ricarica</string>
     <string name="action_top_scroll">Torna in cima</string>
     <string name="action_send">Invia</string>
@@ -34,16 +34,16 @@
     <string name="action_scan">Scansiona</string>
     <string name="action_cancel">Annulla</string>
     <string name="action_add">Aggiungi</string>
-    <string name="action_clear">Cancella</string>
-    <string name="action_clear_shopping_list">Cancella la lista della spesa</string>
+    <string name="action_clear">Pulisci</string>
+    <string name="action_clear_shopping_list">Pulisci la lista della spesa</string>
     <string name="action_rate">Vota sul Google Play</string>
     <string name="action_rate_description">Supporta lo sviluppo</string>
     <string name="action_email">Invia email</string>
     <string name="action_email_description">Contatta lo sviluppatore</string>
-    <string name="action_new_issue">Apri una nuova discussione su GitHub </string>
-    <string name="action_new_issue_description">Segnala un errore o richiedi una funzionalità</string>
+    <string name="action_new_issue">Apri una nuova issue su GitHub </string>
+    <string name="action_new_issue_description">Segnala un bug o richiedi una funzionalità</string>
     <string name="action_get_started">Inizia</string>
-    <string name="action_ascending">ascendente</string>
+    <string name="action_ascending">Ascendente</string>
     <string name="action_filter">Filtra</string>
     <string name="action_sort">Ordina</string>
     <string name="action_undo">Annulla</string>
@@ -65,7 +65,7 @@
     <string name="action_add_missing">Aggiungi prodotto mancante</string>
     <string name="action_purchase_all_items">Compra tutti gli articoli</string>
     <string name="action_skip_entry">Salta la voce</string>
-    <string name="action_toggle_flash">Attiva/Disattiva flash</string>
+    <string name="action_toggle_flash">Usa flash</string>
     <string name="action_delete_shopping_list">Elimina lista della spesa</string>
     <string name="action_create_key">Crea chiave</string>
     <string name="action_login">Entra</string>
@@ -76,33 +76,33 @@
     <string name="action_clear_done">Fatto</string>
     <string name="action_display_help">Mostra testi guida</string>
     <string name="action_demo_server">Server demo</string>
-    <string name="action_own_server">Server proprio</string>
+    <string name="action_own_server">Server personale</string>
     <string name="action_enter_data_manually">Inserisci dati manualmente</string>
 
     <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$d in scadenza</string>
+    <string name="msg_expiring_products">%1$d presto in scadenza</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d scaduti</string>
+    <string name="msg_expired_products">%1$d scaduto</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">%1$d sotto quantità minima in dispensa</string>
+    <string name="msg_missing_products">%1$d sotto min. quantità in dispensa</string>
     <string name="msg_consumed">Consumato %1$s %2$s di %3$s</string>
     <string name="msg_consumed_spoiled">Consumato %1$s %2$s di %3$s come avariato</string>
     <string name="msg_opened">Segna %1$s %2$s di %3$s come aperto</string>
     <!-- %1$s is the number of undone items in shopping list -->
-    <string name="msg_undone_items">%1$d annulla</string>
+    <string name="msg_undone_items">%1$d annullato</string>
     <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
     <string name="msg_purchased">Aquistato %1$s %2$s di %3$s</string>
     <!-- %1$s is a product name -->
-    <string name="msg_not_in_stock">Questo %1$s non è disponibile</string>
+    <string name="msg_not_in_stock">%1$s  non è in dispensa</string>
     <string name="msg_no_connection">Nessuna connessione</string>
     <!-- %1$s is a product name -->
     <string name="msg_no_stock_locations">Nessuna posizione in dispensa per %1$s</string>
     <!-- %1$s is a product name -->
-    <string name="msg_no_stock_entries">%1$s non in dispensa</string>
+    <string name="msg_no_stock_entries">%1$s non ha prodotti in dispensa</string>
     <string name="msg_not_found">Prodotto non trovato</string>
     <string name="msg_undone_transaction">Transazione annullata</string>
-    <string name="msg_failed_to_sync">Sincronizzazione delle voci fallita</string>
-    <string name="msg_synced">Voci sincronizzate correttamente</string>
+    <string name="msg_failed_to_sync">Sincronizzazione fallita</string>
+    <string name="msg_synced">Sincronizzazione effettuata correttamente</string>
     <!-- %1$s is a shopping list name -->
     <string name="msg_added_missing_products">I prodotti mancanti sono stati aggiunti a %1$s</string>
     <!-- %1$s is a shopping list name -->
@@ -119,6 +119,12 @@
     <string name="msg_item_marked_as_done">Segna come fatto</string>
     <string name="msg_item_marked_as_undone">Segna da fare</string>
     <string name="msg_batch_no_products">Nessun nuovo prodotto deve essere creato</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_scan_mode_confirm_purchase">Operazione che verrà eseguita :\n\nAggiungi %1$s %2$s di %3$s nella dispensa\nIn scadenza il: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nLuogo: %7$s
+ </string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_scan_mode_confirm_consume">Operazione che verrà eseguita :\n\nRimuovi %1$s %2$s di %3$s dalla dispensa\nLuogo: %4$s
+ </string>
     <string name="msg_compatibility">Questa versione dell\'applicazione non è compatibile con la versione di grocy sul server.\n\n Versione del server corrente: %1$s\n\n Richiesta:\nVersione minima del server: %2$s\nVersione massima del server:%3$s\n\nSe ignori questo avertimento, si potrebbe verificare perdita di dati (improbabile) e crashes (probabile).\n Sei stato avvertito!</string>
     <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
     <string name="msg_logout_demo">Stai utilizzando l\'istanza di prova di grocy su <u>https://grocy.info</u>.\n\n<b>Nessun cambiamento verrà salvato!\n Questi rimangono pubblichi finché il server non li sovrascrive automaticamente.</b>\n\nNella schermata di accesso puoi inserire l\'indirizzo del tuo server.</string>
@@ -129,9 +135,29 @@
     <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
     <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
     <string name="msg_press_hold_confirm">Tieni premuto per confermare</string>
+    <string name="msg_welcome_to_grocy">Benvenuto su Grocy Android!\n\nPer usare Grocy hai bisogno del tuo server, oppure l\'add-on Grocy per Home Assistant.\nPuoi provare questa app utilizzando la demo da Bernd Bestel, il creatore di Grocy.</string>
     <string name="msg_choose_option_below">Per favore scegli una delle opzioni qui sotto.</string>
     <string name="msg_qr_code_scan">Da un altro dispositivo, visita il tuo sito web Grocy e vai alla pagina \'Chiavi API\'. Clicca \'Aggiungi\', quindi clicca sul piccolo simbolo QR code e scannerizza il QR code.</string>
     <string name="msg_not_implemented_yet">Questo sarà implementato presto. Per favore usa l\'interfaccia server per il momento.</string>
+    <string name="msg_help_due_date_type">A seconda del tipo di scadenza, i filtri disponibili in dispensa cambieranno. \"Da consumarsi preferibilmente prima\" denota un prodotto che potrebbe essere consumato dopo la data di scadenza. \"Da consumarsi prima\" un prodotto che va consumato assolutamente prima che scada.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days">Per gli acquisti questo ammontare di giorni verrà aggiunto ad oggi per calcolare la data di scadenza. (-1 significa che il prodotto non ha data di scadenza).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_opened">Quando questo prodotto viene segnato come \'aperto\', la data di scadenza viene cambiata da oggi + l\'ammontare di questi giorni. (Il valore 0 disabilita questa funzione).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_freezing">Spostando questo prodotto nel freezer, la data di scadenza verrà cambiata da oggi + questo numero di giorni. (-1 significa che il prodotto non ha data di scadenza).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_default_due_days_thawing">Spostando questo prodotto fuori dal freezer, la data di scadenza verrà cambiata da oggi + questo numero di giorni. (-1 significa che il prodotto non ha data di scadenza).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_qu_purchase">Questa è la quantità predefinita utilizzata quando il prodotto viene aggiunto alla lista della spesa.</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_recipe_consume">Usato solo per motivi statistici.</string>
+    <string name="msg_help_scan_mode">Puoi mantenere premuto la barra del titolo per abilitare la modalità di scansionamento. Clicca qui se vuoi cambiare questo comportamento predefinito della app.</string>
+    <string name="msg_help_loading_circle_settings">Su ogni pagina, l\'app invia una richiesta al server per trovare eventuali cambiamenti nel database. Abilita questa opzione se vuoi visualizzare il cerchio di caricamento anche per questa richiesta.</string>
+    <string name="msg_help_start">Modalità principiante attivata: I messaggi di aiuto verranno visualizzati su ogni pagina disponibile. Fai tap per cambiare.</string>
+    <string name="msg_help_purchased_date_settings">Abilitando questa opzione un campo per scegliere la data di acquisto verrà mostrato sulle pagine di acquisto e di inventario. Altrimenti verrà utilizzata la data di oggi.</string>
+    <string name="msg_help_normal_login">Fai tap qui se utilizzi Home Assistant con l\'add-on per Grocy.</string>
+    <string name="msg_help_home_assistant_login">Stai usando l\'add-on di Grocy per Home Assistant. Sono necessarie più informazioni. Fai tap per passare al login normale.</string>
     <string name="error_api_not_working">La chiave API non funziona</string>
     <string name="error_orbot_not_installed">Orbot non è installato</string>
     <string name="error_select_product">Seleziona un prodotto</string>
@@ -179,6 +205,9 @@
     <string name="error_no_product_selected">Nessun prodotto selezionato</string>
     <string name="error_failed_to_connect_to">Connessione al server non riuscita</string>
     <string name="error_missing_information">Non sono stati compilati tutti i campi richiesti</string>
+    <string name="error_handshake">Certificato Invalido</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">Questo server richiede un certificato che non è riconosciuto o affidabile.\nIl certificato deve essere firmato da una autorità valida (esempio letsencrypt.org) oppure salvato nello store dei certificati di questo dispositivo Android.</string>
     <string name="error_unexpected_response_code">Codice di risposta inaspettato</string>
     <string name="error_unexpected_response">Risposta del server inaspettata</string>
     <string name="error_no_browser">Installa un browser per visualizzare la pagina di aiuto</string>
@@ -353,9 +382,9 @@
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date_type">Tipo di data di scadenza</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_type_best_before">Data entro la quale è preferibile da consumarsi</string>
+    <string name="property_due_type_best_before">Da consumarsi preferibilmente prima</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_type_expiration">Data di scadenza</string>
+    <string name="property_due_type_expiration">Da consumarsi prima</string>
     <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="property_due_date">Data di scadenza</string>
     <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -505,7 +534,6 @@
     <string name="setting_language">Lingua</string>
     <string name="setting_language_description">Seleziona lingua</string>
     <string name="setting_language_info">Grazie mille a tutti i traduttori volontari su Transifex!\nPer favore vieni a trovarci su GitHub per sapere come puoi rendere disponibile Grocy Android nella tua lingua.</string>
-    <string name="setting_language_system">Predefinita del sistema (%1$s)</string>
     <string name="setting_language_not_available">Non disponibile</string>
     <string name="setting_open_food_facts">Usa Open Food Facts</string>
     <string name="setting_open_food_facts_description">Informazioni dal codice a barre</string>
