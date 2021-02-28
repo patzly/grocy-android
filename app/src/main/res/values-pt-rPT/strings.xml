@@ -173,7 +173,6 @@
     <string name="msg_help_purchased_date_settings">Se a opção em baixo estiver activa, um campo para data de compra será mostrado na página de compra e de inventário. Caso contrário a data de compra por defeito é a de hoje.</string>
     <string name="msg_help_normal_login">Seleccione esta opção se usa o Home Assistant com o add-on do grocy.</string>
     <string name="msg_help_home_assistant_login">Você está a usar o add-on grocy do Home Assistant. Por essa razão são necessários alguns detalhes extra. Seleccione esta opção para mudar para o registo normal.</string>
-
     <string name="error_api_not_working">API key não está a funcionar</string>
     <string name="error_orbot_not_installed">Orbot não está instalado</string>
     <string name="error_select_product">Seleccione um produto</string>
@@ -550,7 +549,6 @@
     <string name="setting_language">Idioma</string>
     <string name="setting_language_description">Seleccione idioma</string>
     <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários no Transifex!\nPor favor visite-nos no GitHub para descubrir como pode ajudar a tornar o Grocy Android no seu idioma.</string>
-    <string name="setting_language_system">Pré-definição do sistema (%1$s)</string>
     <string name="setting_language_not_available">Não disponível</string>
     <string name="setting_open_food_facts">Utilizar Open Food Facts</string>
     <string name="setting_open_food_facts_description">Obter detalhes dos códigos de barra</string>
