@@ -49,6 +49,7 @@ import java.net.URLEncoder;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -130,7 +131,7 @@ public class BaseFragment extends Fragment {
 
     public void selectStore(Store store) {}
 
-    public void setLanguage(String code) {}
+    public void setLanguage(Language language) {}
 
     public void addBarcodeToNewProduct(String barcode) {}
 

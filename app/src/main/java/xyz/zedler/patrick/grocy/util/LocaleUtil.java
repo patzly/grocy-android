@@ -24,9 +24,11 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,11 +52,13 @@ public class LocaleUtil {
                 Constants.SETTINGS.APPEARANCE.LANGUAGE,
                 Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
         );
-        if (code == null) return getDeviceLocale();
+        if (code == null) {
+            return getNearestSupportedLocale(context, getDeviceLocale());
+        }
         try {
             return LocaleUtil.getLocaleFromCode(code);
         } catch (Exception e) {
-            return getDeviceLocale();
+            return getNearestSupportedLocale(context, getDeviceLocale());
         }
     }
 
@@ -77,5 +81,33 @@ public class LocaleUtil {
         } else {
             return new Locale(languageCode);
         }
+    }
+
+    public static Locale getNearestSupportedLocale(Context context, @NonNull Locale input) {
+        final HashMap<String, Language> languageHashMap = getLanguagesHashMap(context);
+        return getNearestSupportedLocale(languageHashMap, input);
+    }
+
+    public static Locale getNearestSupportedLocale(HashMap<String, Language> languageHashMap,
+                                                   @NonNull Locale input) {
+        Language language = languageHashMap.get(input.toString());
+        if (language == null) language = languageHashMap.get(input.getLanguage());
+        if (language == null) {
+            return input;
+        } else {
+            try {
+                return getLocaleFromCode(language.getCode());
+            } catch (Exception e) {
+                return input;
+            }
+        }
+    }
+
+    public static HashMap<String, Language> getLanguagesHashMap(Context context) {
+        final HashMap<String, Language> languageHashMap = new HashMap<>();
+        for (Language language : getLanguages(context)) {
+            languageHashMap.put(language.getCode(), language);
+        }
+        return languageHashMap;
     }
 }

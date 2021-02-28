@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -106,45 +107,54 @@ public class LanguagesBottomSheet extends BaseBottomSheet
 
     @Override
     public void onItemRowClicked(Language language) {
-        sharedPrefs.edit()
-                .putString(
-                        Constants.SETTINGS.APPEARANCE.LANGUAGE,
-                        language != null ? language.getCode() : null)
-                .apply();
+        String previousCode = sharedPrefs.getString(
+                Constants.SETTINGS.APPEARANCE.LANGUAGE, null
+        );
+        String selectedCode = language != null ? language.getCode() : null;
 
-        Locale config;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            config = getResources().getConfiguration().getLocales().get(0);
-        } else {
-            config = getResources().getConfiguration().locale;
-        }
-        Locale configCompare = new Locale(config.getLanguage(), config.getCountry());
-
-        Locale device = LocaleUtil.getDeviceLocale();
-        Locale deviceCompare = new Locale(device.getLanguage(), device.getCountry());
-
-        Locale compare = language != null
-                ? LocaleUtil.getLocaleFromCode(language.getCode())
-                : deviceCompare;
-
-        if (compare.equals(configCompare)) {
-            BaseFragment current = activity.getCurrentFragment();
-            current.setLanguage(language != null ? language.getCode() : null);
-            dismiss();
+        if (Objects.equals(previousCode, selectedCode)) {
+            return;
+        } else if (previousCode == null || selectedCode == null) {
+            Locale localeDevice = LocaleUtil.getNearestSupportedLocale(
+                    activity, LocaleUtil.getDeviceLocale()
+            );
+            String codeToCompare = previousCode == null ? selectedCode : previousCode;
+            if (Objects.equals(localeDevice.toString(), codeToCompare)) {
+                BaseFragment current = activity.getCurrentFragment();
+                current.setLanguage(language);
+                dismiss();
+            } else {
+                new Handler().postDelayed(() -> {
+                    updateShortcuts(
+                            selectedCode != null
+                                    ? LocaleUtil.getLocaleFromCode(selectedCode)
+                                    : localeDevice
+                    );
+                    RestartUtil.restartApp(activity);
+                }, 100);
+            }
         } else {
             new Handler().postDelayed(() -> {
-                Configuration configuration = getResources().getConfiguration();
-                configuration.setLocale(compare);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                Uri uriAddToShoppingListDeepLink = getUriWithArgs(
-                        R.string.deep_link_shoppingListItemEditFragment,
-                        new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-                                .build().toBundle()
-                );
-                ShortcutUtil.refreshShortcuts(requireContext(), uriAddToShoppingListDeepLink);
+                updateShortcuts(LocaleUtil.getLocaleFromCode(selectedCode));
                 RestartUtil.restartApp(activity);
             }, 100);
         }
+
+        sharedPrefs.edit().putString(Constants.SETTINGS.APPEARANCE.LANGUAGE, selectedCode).apply();
+    }
+
+    private void updateShortcuts(@NonNull Locale locale) {
+        Configuration configuration = getResources().getConfiguration();
+        configuration.setLocale(locale);
+        getResources().updateConfiguration(
+                configuration, getResources().getDisplayMetrics()
+        );
+        Uri uriAddToShoppingListDeepLink = getUriWithArgs(
+                R.string.deep_link_shoppingListItemEditFragment,
+                new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                        .build().toBundle()
+        );
+        ShortcutUtil.refreshShortcuts(requireContext(), uriAddToShoppingListDeepLink);
     }
 
     @NonNull

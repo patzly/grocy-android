@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
+import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -110,14 +111,14 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     }
 
     @Override
-    public void setLanguage(String code) {
-        Locale locale = code != null
-                ? LocaleUtil.getLocaleFromCode(code)
-                : LocaleUtil.getDeviceLocale();
+    public void setLanguage(Language language) {
+        Locale locale = language != null
+                ? LocaleUtil.getLocaleFromCode(language.getCode())
+                : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
         binding.textLanguage.setText(
-                code != null
-                        ? locale.getDisplayLanguage()
-                        : getString(R.string.setting_language_system, locale.getDisplayLanguage())
+                language != null
+                        ? locale.getDisplayName()
+                        : getString(R.string.setting_language_system, locale.getDisplayName())
         );
     }
 
@@ -125,10 +126,10 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         String code = viewModel.getLanguage();
         Locale locale = code != null
                 ? LocaleUtil.getLocaleFromCode(code)
-                : LocaleUtil.getDeviceLocale();
+                : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
         return code != null
-                ? locale.getDisplayLanguage()
-                : getString(R.string.setting_language_system, locale.getDisplayLanguage());
+                ? locale.getDisplayName()
+                : getString(R.string.setting_language_system, locale.getDisplayName());
     }
 
     public void showLanguageSelection() {

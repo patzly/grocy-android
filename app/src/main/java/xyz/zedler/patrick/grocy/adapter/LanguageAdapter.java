@@ -82,8 +82,12 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
             int position
     ) {
         if (position == 0) {
-            Locale localeSystem = LocaleUtil.getDeviceLocale();
-            Language language = languageHashMap.get(localeSystem.getLanguage());
+            Locale localeSystem = LocaleUtil.getNearestSupportedLocale(
+                    languageHashMap, LocaleUtil.getDeviceLocale()
+            );
+            Language language = languageHashMap.get(localeSystem.toString());
+            if (language == null) language = languageHashMap.get(localeSystem.getLanguage());
+
             String translators = language != null
                     ? language.getTranslators()
                     : holder.binding.getRoot().getContext().getString(
@@ -93,7 +97,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
             holder.binding.textLanguageName.setText(
                     holder.binding.textLanguageName.getContext().getString(
                             R.string.setting_language_system,
-                            localeSystem.getDisplayLanguage(localeSystem)
+                            localeSystem.getDisplayName(localeSystem)
                     )
             );
             holder.binding.textLanguageTranslators.setText(translators);

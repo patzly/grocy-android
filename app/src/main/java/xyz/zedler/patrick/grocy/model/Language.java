@@ -9,8 +9,8 @@ public class Language {
     private final String translators;
     private final String name;
 
-    public Language(String codeAndTranslators) {
-        String[] parts = codeAndTranslators.split("\n");
+    public Language(String codeDomainTranslators) {
+        String[] parts = codeDomainTranslators.split("\n");
         code = parts[0];
         demoDomain = parts[1];
         translators = parts[2];
