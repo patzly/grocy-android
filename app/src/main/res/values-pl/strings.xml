@@ -171,7 +171,6 @@
     <string name="msg_help_purchased_date_settings">Jeżeli poniższa opcja jest włączona, pole dla daty zakupu będzie wyświetlane na stronach zakupu oraz zapasu. W innym wypadku data zakupu będzie ustawiana na dzisiaj.</string>
     <string name="msg_help_normal_login">Stuknij na tą kartę, jeżeli używasz grocy jako dodatek w Home Assistant.</string>
     <string name="msg_help_home_assistant_login">Używasz grocy jako dodatek w Home Assistant. Przez to potrzebne jest jeszcze kilka detali. Stuknij na tą kartę aby przełączyć na normalny login.</string>
-
     <string name="error_api_not_working">Klucz API nie działa</string>
     <string name="error_orbot_not_installed">Orbot nie jest zainstalowany</string>
     <string name="error_select_product">Wybierz produkt</string>
@@ -213,7 +212,6 @@
     <string name="error_name_exists">Nazwa już istnieje</string>
     <string name="error_network">Błąd sieci</string>
     <string name="error_network_subtitle">Żądane dane nie mogły zostać w całości załadowane</string>
-    <string name="error_unknown">Ojejku!</string>
     <string name="error_not_grocy_instance">Nieprawidłowa instancja grocy</string>
     <string name="error_timeout">Przekroczono czas połączenia</string>
     <string name="error_no_product_selected">Nie wybrano produktu</string>
@@ -573,7 +571,6 @@
     <string name="setting_language">Język</string>
     <string name="setting_language_description">Wybierz język</string>
     <string name="setting_language_info">Duże podziękowania dla wszystkich wolontariuszy tłumaczących na Transifex!\nOdwiedź nas na GitHub aby dowiedzieć się jak możesz pomóc w udostępnieniu Grocy Android w twoim języku.</string>
-    <string name="setting_language_system">Domyślne systemowe (%1$s)</string>
     <string name="setting_language_not_available">Nie dostępne</string>
     <string name="setting_open_food_facts">Użyj Open Food Facts</string>
     <string name="setting_open_food_facts_description">Zbierz informacje z kodów kreskowych</string>
