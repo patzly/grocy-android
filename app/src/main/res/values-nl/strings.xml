@@ -207,7 +207,6 @@
     <string name="error_name_exists">Naam bestaat al</string>
     <string name="error_network">Netwerk fout</string>
     <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
-    <string name="error_unknown">Oeps!</string>
     <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
     <string name="error_timeout">Timeout fout</string>
     <string name="error_no_product_selected">Geen product geselecteerd</string>
