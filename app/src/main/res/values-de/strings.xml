@@ -173,6 +173,11 @@
     <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
     <string name="msg_help_normal_login">Auf diese Karte tippen, wenn Sie Home Assistant mit dem grocy Add-on benutzen.</string>
     <string name="msg_help_home_assistant_login">Sie benutzen das grocy Home Assistant Add-on. Deshalb sind ein paar weitere Eingaben erforderlich. Auf diese Karte tippen, um zum normalen Login zu wechseln.</string>
+    <string name="msg_help_home_assistant_login_help_show">Hier tippen, um Hinweise anzuzeigen.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Hier tippen, um Hinweise zu verstecken.</string>
+    <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
+    <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
+    <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
 
     <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
     <string name="error_orbot_not_installed">Orbot ist nicht installiert</string>
@@ -550,7 +555,7 @@
     <string name="setting_language">Sprache</string>
     <string name="setting_language_description">Sprache auswählen</string>
     <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
-    <string name="setting_language_system">Systemvorgabe (%1$s)</string>
+    <string name="setting_language_system">Systemvorgabe: %1$s</string>
     <string name="setting_language_not_available">Nicht verfügbar</string>
     <string name="setting_open_food_facts">Open Food Facts benutzen</string>
     <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
