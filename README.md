@@ -12,6 +12,8 @@ Compatibility details are [here](https://github.com/patzly/grocy-android/blob/ma
 
 ⚠️ **Click [here](https://github.com/patzly/grocy-android/issues/266) if you want to test the new version before its official release.** ⚠️
 
+⚠️ **Currently no development (until beginning of April)** ⚠️
+
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
