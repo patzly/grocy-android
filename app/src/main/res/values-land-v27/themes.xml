@@ -8,8 +8,6 @@
         <item name="android:navigationBarDividerColor">@color/stroke_secondary</item>
     </style>
 
-    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy"/>
-
     <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
         <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:navigationBarDividerColor">@color/transparent</item>

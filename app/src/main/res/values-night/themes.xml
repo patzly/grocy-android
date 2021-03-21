@@ -11,9 +11,6 @@
 
     <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
         <item name="android:navigationBarColor">@color/primary</item>
-    </style>
-
-    <style name="Theme.Grocy.BottomAppBar.SwipeToRefresh" parent="Theme.Grocy.BottomAppBar">
         <item name="android:statusBarColor">@color/primary</item>
     </style>
 

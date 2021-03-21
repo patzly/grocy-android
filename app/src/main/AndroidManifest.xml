@@ -34,7 +34,7 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/Theme.Grocy.BottomAppBar.SwipeToRefresh"
+            android:theme="@style/Theme.Grocy.BottomAppBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".activity.SettingsActivity"/>
