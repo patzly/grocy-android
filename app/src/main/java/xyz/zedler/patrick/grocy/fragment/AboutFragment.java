@@ -78,7 +78,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                 R.id.linear_github,
                 R.id.linear_license_material_components,
                 R.id.linear_license_material_icons,
-                R.id.linear_license_roboto,
+                R.id.linear_license_jost,
                 R.id.linear_license_volley,
                 R.id.linear_license_gson,
                 R.id.linear_license_xzing_android
@@ -138,12 +138,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                     R.string.license_material_icons,
                     R.string.url_material_icons
             );
-        } else if(v.getId() == R.id.linear_license_roboto) {
-            IconUtil.start(activity, R.id.image_license_roboto);
+        } else if(v.getId() == R.id.linear_license_jost) {
+            IconUtil.start(activity, R.id.image_license_jost);
             showTextBottomSheet(
-                    "APACHE",
-                    R.string.license_roboto,
-                    R.string.url_roboto
+                    "OFL",
+                    R.string.license_jost,
+                    R.string.url_jost
             );
         } else if(v.getId() == R.id.linear_license_volley) {
             IconUtil.start(activity, R.id.image_license_volley);

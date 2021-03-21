@@ -140,11 +140,11 @@ public class BezierCurveChart extends View {
         paintBadgeText.setColor(Color.BLACK);
         paintBadgeText.setAntiAlias(true);
         paintBadgeText.setTextSize(UnitUtil.getSp(context, 14));
-        paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_mono_medium));
+        paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
 
         paintLabel.setColor(getColor(R.color.on_background_secondary));
         paintLabel.setTextSize(UnitUtil.getSp(context, 13));
-        paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_mono_regular));
+        paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_book));
         paintLabel.setAntiAlias(true);
     }
 

@@ -7,7 +7,7 @@
     <style
         name="Widget.Grocy.Button.TextButton.Snackbar"
         parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
-        <item name="android:fontFamily">@font/text_button</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
     </style>
 
     <!-- TOOLBAR MENU BUTTON -->
@@ -158,7 +158,7 @@
         <item name="iconTint">@color/icon</item>
         <item name="android:textColor">@color/secondary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/text_button</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="strokeColor">@color/stroke_secondary</item>
         <item name="strokeWidth">1dp</item>
         <item name="cornerRadius">6dp</item>
@@ -170,7 +170,7 @@
         <item name="rippleColor">@color/highlight_on_secondary</item>
         <item name="android:textColor">@color/button_text_color_selector</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/text_button</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="backgroundTint">@color/button_bg_color_selector</item>
         <item name="cornerRadius">6dp</item>
     </style>
@@ -181,7 +181,7 @@
         <item name="rippleColor">@color/secondary_translucent</item>
         <item name="android:textColor">@color/button_text_color_secondary_selector</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/text_button</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="cornerRadius">6dp</item>
     </style>
 
@@ -323,7 +323,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:paddingStart">12dp</item>
-        <item name="android:fontFamily">@font/text_body</item>
+        <item name="android:fontFamily">@font/jost_book</item>
         <item name="android:textColor">@color/on_background</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
@@ -367,10 +367,11 @@
     <!-- TEXT -->
 
     <style name="Widget.Grocy.TextView" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">15.5sp</item>
+        <item name="android:lineSpacingExtra">-1.5sp</item>
         <item name="android:textColor">@color/on_background</item>
         <item name="android:textAlignment">viewStart</item>
-        <item name="android:fontFamily">@font/text_body</item>
+        <item name="android:fontFamily">@font/jost_book</item>
     </style>
 
     <style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
@@ -381,20 +382,20 @@
 
     <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
         <item name="android:textColor">@color/on_primary</item>
-        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
-        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">21.5dp</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="android:singleLine">true</item>
     </style>
 
     <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView">
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/jost_medium</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Widget.Grocy.TextView.ShoppingModeGroup" parent="Widget.Grocy.TextView">
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="android:textColor">@color/retro_green_fg</item>
         <item name="android:letterSpacing">0.06</item>
         <item name="android:textAllCaps">true</item>
@@ -407,7 +408,7 @@
 
     <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView">
         <item name="android:textSize">17sp</item>
-        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="singleLine">true</item>
     </style>
 
@@ -421,8 +422,8 @@
         <item name="android:layout_marginStart">72dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">3dp</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:fontFamily">@font/jost_bold</item>
         <item name="android:textColor">@color/secondary</item>
     </style>
 
@@ -430,9 +431,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:maxLines">2</item>
-        <item name="android:textSize">12.5sp</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:letterSpacing">0.07</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/on_background_secondary</item>
         <item name="android:textAllCaps">true</item>
     </style>
@@ -440,20 +441,20 @@
     <style name="Widget.Grocy.TextView.ListItem.Title" parent="Widget.Grocy.TextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16.5sp</item>
         <item name="android:maxLines">2</item>
     </style>
 
     <style
         name="Widget.Grocy.TextView.ListItem.Title.Stock"
         parent="Widget.Grocy.TextView.ListItem.Title">
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/jost_medium</item>
     </style>
 
     <style name="Widget.Grocy.TextView.ListItem.Description" parent="Widget.Grocy.TextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/on_background_secondary</item>
         <item name="android:maxLines">10</item>
     </style>
@@ -463,14 +464,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/on_surface</item>
-        <item name="android:fontFamily">@font/roboto_mono_medium</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/jost_medium</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
         <item name="android:textColor">@color/tooltip_text</item>
         <item name="android:textSize">16sp</item>
-        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="fontFamily">@font/jost_book</item>
     </style>
 
 </resources>

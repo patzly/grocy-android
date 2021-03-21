@@ -58,7 +58,7 @@
                 android:layout_marginEnd="12dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:fontFamily="@font/text_chip"/>
+                android:fontFamily="@font/jost_medium"/>
 
         </LinearLayout>
 

@@ -1,3 +1,6 @@
+2.0.0-alpha06
+- Improved: new typeface
+
 2.0.0-alpha05
 - Improved: Language selection and behavior
 - Improved: Display exact error message if there was an AuthFailureError at login (#249)
