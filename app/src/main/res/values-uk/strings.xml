@@ -583,6 +583,7 @@
     <string name="setting_language">Мова</string>
     <string name="setting_language_description">Оберіть мову</string>
     <string name="setting_language_info">Дуже дякую всім перекладачам-добровольцям у Transifex!\nБудь ласка, відвідайте нас на GitHub, щоб дізнатись, як ви можете допомогти зробити Grocy Android доступною для вашої мови.</string>
+    <string name="setting_language_system">Визначено системою %1$s</string>
     <string name="setting_language_not_available">Недоступно</string>
     <string name="setting_open_food_facts">Використовувати Open Food Facts</string>
     <string name="setting_open_food_facts_description">Отримувати інформацію зі штрих-кодів</string>

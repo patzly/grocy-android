@@ -132,6 +132,7 @@
     <string name="msg_restart">È necessario riaprire l\'app per applicare correttamente la configurazione corrente di Grocy</string>
     <string name="msg_shortcuts">Puoi abilitare fino a 4 scorciatoie:</string>
     <string name="msg_shortcuts_not_supported">Le scorciatoie non sono supportate da questa versione Android.</string>
+    <string name="msg_features">Visualizza nuovamente l\'introduzione in \"Riguardo a\"</string>
     <string name="msg_feedback">Hai desideri, domande o errori? Contattaci e permettici di aiutarti!\nAltrimenti saremmo molto felici di ricevere una recensione positiva sul Play Store.</string>
     <string name="msg_point_at_barcode">Punta la fotocamera verso il codice a barre</string>
     <string name="msg_press_hold_confirm">Tieni premuto per confermare</string>
@@ -149,7 +150,23 @@
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days_thawing">Spostando questo prodotto fuori dal freezer, la data di scadenza verrà cambiata da oggi + questo numero di giorni. (-1 significa che il prodotto non ha data di scadenza).</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_qu_stock">Tipo di unità di quantità non può essere cambiata dopo il primo acquisto.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_qu_purchase">Questa è la quantità predefinita utilizzata quando il prodotto viene aggiunto alla lista della spesa.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_accumulate_min_amount">Se abilitato, la quantità minima di sottoprodotti sarà sommata in questo prodotto, ciò significa che il sottoprodotto non sarà mai \"mancante\", solo questo prodotto.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_quick_consume_amount">Questa quantità è utilizzata per il \"Consuma rapido/apri bottoni\" sulla pagina di panoramica della dispensa (legata alle quantità di unità in dispensa).</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_tare_weight">La gestione del peso della tara è utile es. per farina nei contenitori - in fase di acquisto/consumo/inventario tu peserai sempre l\'intero contenitore e in automatico il valore sarà calcolato in base a quanto in dispensa e al peso della tara definito qui sotto.</string>
+    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_tare_weight_purchase">Gestione del peso della tara abilitato - per favore pesa l\'intero contenitore, e la quantità da scalare verrà calcolata automaticamente.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_disable_stock_check">Questa sarà l\'impostazione predefinita utilizzata quando il prodotto viene aggiunto come ingrediente di una ricetta.</string>
+    <string name="msg_help_external_scanner_ready">Puoi utilizzare uno scanner esterno per il campo sottostante mentre è selezionato e vuoto.</string>
+    <string name="msg_help_external_scanner_settings">Questa applicazione supporta dispositivi di scansione esterni che agiscono come tastiere e possono essere connessi via USB o Bluetooth. Le seguenti opzioni devono essere configurate nel tuo scanner esterno:\n\nPrefisso: Nessuno\nSuffisso: TAB o INVIO</string>
+    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_specific_item_consume">Il primo oggetto in questa lista sarà selezionato dalla regola predefinita che è \"Aperto per primo, quindi da consumarsi per primo, ovvero aggiunto prima uscito prima\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Usato solo per motivi statistici.</string>
     <string name="msg_help_scan_mode">Puoi mantenere premuto la barra del titolo per abilitare la modalità di scansionamento. Clicca qui se vuoi cambiare questo comportamento predefinito della app.</string>
@@ -158,6 +175,12 @@
     <string name="msg_help_purchased_date_settings">Abilitando questa opzione un campo per scegliere la data di acquisto verrà mostrato sulle pagine di acquisto e di inventario. Altrimenti verrà utilizzata la data di oggi.</string>
     <string name="msg_help_normal_login">Fai tap qui se utilizzi Home Assistant con l\'add-on per Grocy.</string>
     <string name="msg_help_home_assistant_login">Stai usando l\'add-on di Grocy per Home Assistant. Sono necessarie più informazioni. Fai tap per passare al login normale.</string>
+    <string name="msg_help_home_assistant_login_help_show">Premi qui per mostrare testi guida.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Premi qui per nascondere testi guida.</string>
+    <string name="msg_help_home_assistant_login_server">Nel campo sottostante puoi anche inserire l\'indirizzo web del tuo spazio Nabu Casa se stai utilizzando quel servizio. Premi questo riquadro per visitare il sito web di Nabu Casa.</string>
+    <string name="msg_help_home_assistant_login_token">Puoi creare un token di accesso permanente nelle impostazioni del tuo profilo Home Assistant (ultima sezione). Premi qui per aprire l\'indirizzo web qui sopra.</string>
+    <string name="msg_help_home_assistant_login_proxy_id">Torna indietro o premi questo riquadro per scannerizzare il codice QR che riempirà i campi qui sotto.</string>
+
     <string name="error_api_not_working">La chiave API non funziona</string>
     <string name="error_orbot_not_installed">Orbot non è installato</string>
     <string name="error_select_product">Seleziona un prodotto</string>
@@ -534,6 +557,7 @@
     <string name="setting_language">Lingua</string>
     <string name="setting_language_description">Seleziona lingua</string>
     <string name="setting_language_info">Grazie mille a tutti i traduttori volontari su Transifex!\nPer favore vieni a trovarci su GitHub per sapere come puoi rendere disponibile Grocy Android nella tua lingua.</string>
+    <string name="setting_language_system">Predefinito del sistema: (%1$s)</string>
     <string name="setting_language_not_available">Non disponibile</string>
     <string name="setting_open_food_facts">Usa Open Food Facts</string>
     <string name="setting_open_food_facts_description">Informazioni dal codice a barre</string>
