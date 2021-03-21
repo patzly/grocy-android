@@ -152,7 +152,7 @@
                         android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
                         <TextView
-                            style="@style/Widget.Grocy.TextView.Help"
+                            style="@style/Widget.Grocy.TextView.Paragraph"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/msg_help_accumulate_min_amount"/>
@@ -203,7 +203,7 @@
                         android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
                         <TextView
-                            style="@style/Widget.Grocy.TextView.Help"
+                            style="@style/Widget.Grocy.TextView.Paragraph"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/msg_help_quick_consume_amount"/>
@@ -272,7 +272,7 @@
                         android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
                         <TextView
-                            style="@style/Widget.Grocy.TextView.Help"
+                            style="@style/Widget.Grocy.TextView.Paragraph"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/msg_help_tare_weight"/>
@@ -347,7 +347,7 @@
                         android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
                         <TextView
-                            style="@style/Widget.Grocy.TextView.Help"
+                            style="@style/Widget.Grocy.TextView.Paragraph"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/msg_help_disable_stock_check"/>

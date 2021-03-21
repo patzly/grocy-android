@@ -150,7 +150,7 @@
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
-                                style="@style/Widget.Grocy.TextView.Help"
+                                style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/msg_help_start" />
@@ -161,14 +161,14 @@
                             style="@style/Widget.Grocy.Card.Filled"
                             android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"
                             android:onClick="@{() -> fragment.navigateToSettingsCatServer()}"
-                            app:strokeWidth="2dp"
-                            app:strokeColor="@color/retro_red_fg"
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
-                                style="@style/Widget.Grocy.TextView.Help"
+                                style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/retro_red_fg"
+                                android:fontFamily="@font/jost_medium"
                                 android:text="@string/msg_logout_demo_short"/>
 
                         </com.google.android.material.card.MaterialCardView>
@@ -207,7 +207,6 @@
                                 style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
 
                         </LinearLayout>
@@ -237,7 +236,6 @@
                                 style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
                                 android:text="@{viewModel.shoppingListDescriptionTextLive}"/>
 
                         </LinearLayout>
@@ -349,7 +347,6 @@
                                 style="@style/Widget.Grocy.TextView.Paragraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/on_background"
                                 android:text="@{viewModel.masterDataDescriptionTextLive}"/>
 
                         </LinearLayout>

@@ -90,7 +90,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/info_acknowledgement" />

@@ -67,7 +67,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{formData.usingGrocyHassAddOnLive ? @string/msg_help_home_assistant_login : @string/msg_help_normal_login}" />
@@ -87,7 +87,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{formData.showHelpTexts ? @string/msg_help_home_assistant_login_help_hide : @string/msg_help_home_assistant_login_help_show}" />
@@ -142,7 +142,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/msg_help_home_assistant_login_server" />
@@ -184,7 +184,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/msg_help_home_assistant_login_token" />
@@ -238,7 +238,7 @@
                     app:cardBackgroundColor="@color/on_background_variant">
 
                     <TextView
-                        style="@style/Widget.Grocy.TextView.Help"
+                        style="@style/Widget.Grocy.TextView.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/msg_help_home_assistant_login_proxy_id" />
