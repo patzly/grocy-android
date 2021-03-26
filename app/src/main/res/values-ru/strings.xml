@@ -627,7 +627,7 @@
     <string name="setting_beginner_mode">Режим для начинающих</string>
     <string name="setting_beginner_mode_description">Показывать подсказки по умолчанию</string>
     <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
-    <string name="setting_expand_bottom_sheets">Расширить Bottom Sheets</string>
+    <string name="setting_expand_bottom_sheets">Расширить Bottom Sheets (выдвигающийся снизу экран)</string>
     <string name="setting_expand_bottom_sheets_description">В альбомном режиме</string>
     <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
     <string name="setting_loading_circle_description">Полезно для медленных соединений</string>
