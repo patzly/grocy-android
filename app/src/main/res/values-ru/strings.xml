@@ -84,7 +84,7 @@
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d испортилось</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">на %1$d меньше минимального запаса</string>
+    <string name="msg_missing_products">%1$d меньше минимального запаса</string>
     <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
     <string name="msg_consumed_spoiled">Испортилось %1$s %2$s %3$s</string>
     <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
