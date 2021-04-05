@@ -2,7 +2,7 @@
 
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in purchase screen for example. -->
-    <string name="action_purchase">Achat</string>
+    <string name="action_purchase">Acheter</string>
     <!-- This is an action – in English, it contains a verb.
      The string is visible after clicking long on the action button in consume screen for example. -->
     <string name="action_consume">Consommer</string>
@@ -172,8 +172,13 @@
     <string name="msg_help_start">Le mode débutant est actif : Les textes d\'aide sont affichés par défaut sur toutes les pages, si disponible. Tapez pour changer.</string>
     <string name="msg_help_purchased_date_settings">Si l\'option ci-dessous est activée, un champ pour la date d\'achat sera affiché sur les pages d\'achat et d\'inventaire. Sinon, la date d\'achat par défaut est le jour même.</string>
     <string name="msg_help_normal_login">Appuyez ici si vous utilisez Home Assistant avec l\'add-on grocy.</string>
+    <string name="msg_help_home_assistant_login">Vous utilisez l\'extension pour Home Assistant. Quelques informations supplémentaires sont requises. Appuyez ici pour passer à l\'authentification classique.</string>
     <string name="msg_help_home_assistant_login_help_show">Appuyez ici pour afficher les aides.</string>
     <string name="msg_help_home_assistant_login_help_hide">Appuyez ici pour cacher les aides.</string>
+    <string name="msg_help_home_assistant_login_server">Le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
+    <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès longue durée dans votre profil Home Assistant (bas de page). Appuyer ici pour ouvrir l\'URL ci-dessus.</string>
+    <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
+
     <string name="error_api_not_working">La clé API ne fonctionne pas</string>
     <string name="error_orbot_not_installed">Orbot n\'est pas installé</string>
     <string name="error_select_product">Sélectionnez un produit</string>
@@ -222,6 +227,8 @@
     <string name="error_failed_to_connect_to">Impossible de se connecter au serveur</string>
     <string name="error_missing_information">Tous les champs obligatoires ne sont pas remplis</string>
     <string name="error_handshake">Certificat invalide</string>
+    <!-- %1$s is an URL -->
+    <string name="error_handshake_description">Ce serveur utilise un certificat qui n\'est pas connu ou validé par Android.\nLe certificat du serveur doit être signé par un autorité de confiance (ex : letsencrypt.org) ou être enregistré dans le magasin de certificat de cet appareil.</string>
     <string name="error_unexpected_response_code">Code de réponse inattendu</string>
     <string name="error_unexpected_response">Réponse inattendue du serveur</string>
     <string name="error_no_browser">Installez un navigateur pour voir la site web d\'aide</string>
@@ -339,6 +346,11 @@
     <plurals name="description_overview_stock">
         <item quantity="one">Vous avez %1$dproduit en stock.</item>
         <item quantity="other">Vous avez %1$dproduits en stock.</item>
+    </plurals>
+    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+    <plurals name="description_overview_stock_value">
+        <item quantity="one">Vous avez %1$d produit en stock pour une valeur de %2$s%3$s.</item>
+        <item quantity="other">Vous avez %1$d produits en stock pour une valeur de %2$s%3$s.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_shopping_list_multi">
@@ -543,6 +555,7 @@
     <string name="setting_language">Langue</string>
     <string name="setting_language_description">Choisir une langue</string>
     <string name="setting_language_info">Remerciement à tous les traducteurs volontaires de Transifex !\nVisitez le projet sur GitHub pour rendre Grocy Android disponible dans votre langue.</string>
+    <string name="setting_language_system">Valeur par défaut : %1$s</string>
     <string name="setting_language_not_available">Non disponible</string>
     <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
     <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
