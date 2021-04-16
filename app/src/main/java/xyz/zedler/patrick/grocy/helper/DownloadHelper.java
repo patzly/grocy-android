@@ -1573,6 +1573,7 @@ public class DownloadHelper {
                             if(isOk && response.has("data")) {
                                 JSONObject data = response.getJSONObject("data");
                                 if(!data.has("session")) {
+                                    Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): data doesn't contain session");
                                     onErrorListener.onResponse(null);
                                     return;
                                 }
@@ -1584,17 +1585,21 @@ public class DownloadHelper {
                                         dateUtil.getCurrentDateWithTimeStr()
                                 ).apply();
                                 onSuccessListener.onResponse(data.getString("session"));
-                            } else {
+                            } else if(!isOk) {
+                                Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): isOk is false");
+                                onErrorListener.onResponse(null);
+                            } else if(!response.has("data")) {
+                                Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): response doesn't contain data");
                                 onErrorListener.onResponse(null);
                             }
                         } catch (JSONException e) {
+                            Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): JSONException:");
                             e.printStackTrace();
-                            Log.e(tag, "validateHassIngressSession: JSONException");
                             onErrorListener.onResponse(null);
                         }
                     },
                     error -> {
-                        Log.e(tag, "validateHassIngressSession: error: " + error);
+                        Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): error: " + error);
                         onErrorListener.onResponse(null);
                     }
             );
@@ -1606,6 +1611,7 @@ public class DownloadHelper {
         try {
             jsonObject.put("session", sessionKey);
         } catch (JSONException e) {
+            Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/validate_session): JSONException1:");
             e.printStackTrace();
         }
         postHassIngress(
@@ -1614,10 +1620,10 @@ public class DownloadHelper {
                 response -> {
                     try {
                         boolean isOk = response.get("result").equals("ok");
-                        if(debug) Log.i(tag, "validateHassIngressSession: isOk: " + isOk);
                         if(!isOk && response.has("data")) {
                             JSONObject data = response.getJSONObject("data");
                             if(!data.has("session")) {
+                                Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/validate_session): data doesn't contain session");
                                 onErrorListener.onResponse(null);
                                 return;
                             }
@@ -1631,8 +1637,8 @@ public class DownloadHelper {
                         }
                         onSuccessListener.onResponse(sessionKey);
                     } catch (JSONException e) {
+                        Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/validate_session): JSONException2:");
                         e.printStackTrace();
-                        Log.e(tag, "validateHassIngressSession: JSONException");
                         onErrorListener.onResponse(null);
                     }
                 },
@@ -1659,7 +1665,8 @@ public class DownloadHelper {
                                                     dateUtil.getCurrentDateWithTimeStr()
                                             ).apply();
                                             onSuccessListener.onResponse(data.getString("session"));
-                                        } else {
+                                        } else if(!isOk) {
+                                            Log.e(tag, "validateHassIngressSession: isOk is false");
                                             onErrorListener.onResponse(null);
                                         }
                                     } catch (JSONException e) {
