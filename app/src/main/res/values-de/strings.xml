@@ -118,6 +118,10 @@
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
     <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
     <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+    <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
+    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+    <string name="msg_quick_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
     <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
     <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
     <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
@@ -162,6 +166,7 @@
     <string name="msg_help_specific_item_consume">Der erste Eintrag in dieser Liste würde von der Standardregel \"Geöffnete zuerst, dann zuerst fällige, dann First In - First Out\" ausgewählt werden.</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Dies wird nur für Auswertezwecke benötigt.</string>
+    <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
     <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
     <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
     <string name="msg_help_purchased_date_settings">Wenn die nächste Option aktiviert ist, wird auf der Einkauf- und Inventur-Seite ein Feld für das Einkaufsdatum angezeigt. Ansonsten wird heute als Einkaufsdatum verwendet.</string>
