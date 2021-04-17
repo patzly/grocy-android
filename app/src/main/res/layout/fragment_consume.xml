@@ -161,8 +161,9 @@
 
                         <com.journeyapps.barcodescanner.DecoratedBarcodeView
                             android:id="@+id/barcode_scan"
-                            android:layout_width="match_parent"
+                            android:layout_width="350dp"
                             android:layout_height="160dp"
+                            android:layout_gravity="center_horizontal"
                             android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
                             android:onClick="@{() -> fragment.toggleTorch()}"
                             app:zxing_scanner_layout="@layout/partial_scanner_embedded"/>
