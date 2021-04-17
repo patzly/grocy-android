@@ -164,7 +164,7 @@
                             app:clickUtil="@{clickUtil}">
 
                             <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                style="@style/Widget.Grocy.TextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/retro_red_fg"

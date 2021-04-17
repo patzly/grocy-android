@@ -19,6 +19,8 @@ Bei Batch Scanner Best before Date bottom sheet wird "speichern" umgebrochen
 Im Product overview bottom sheet wird zB. "5 Packungen (2 geöff..." angezeigt, Umbruch nötig
 -> in Produktübersicht erledigt
 
+Replace color on_primary with on_background and delete on_primary (it's always the same as on_background)
+
 # ROLL OUT
 
 - versionCode +1

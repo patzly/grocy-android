@@ -372,12 +372,20 @@
         <item name="android:textColor">@color/on_background</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:fontFamily">@font/jost_book</item>
+        <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
+        <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
+    </style>
+
+    <!-- This style is overridden in the Hebrew res (iw) folder
+    Fallback to system font, extra styling needed for non-latin languages
+    "bold" is automatically applied to the fallback, only "medium" handling needed
+    Cyrillic alphabet is supported by Jost, no extra styling needed (Russian, Ukrainian) -->
+    <style name="Widget.Grocy.TextView.Medium" parent="Widget.Grocy.TextView">
+        <item name="android:fontFamily">@font/jost_medium</item>
     </style>
 
     <style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
         <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
-        <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
-        <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
     </style>
 
     <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
@@ -387,9 +395,8 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView">
+    <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView.Medium">
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/jost_medium</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -402,9 +409,8 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView">
-        <item name="android:textSize">17sp</item>
-        <item name="android:fontFamily">@font/jost_bold</item>
+    <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView.Medium">
+        <item name="android:textSize">18sp</item>
         <item name="singleLine">true</item>
     </style>
 
@@ -443,8 +449,11 @@
 
     <style
         name="Widget.Grocy.TextView.ListItem.Title.Stock"
-        parent="Widget.Grocy.TextView.ListItem.Title">
-        <item name="android:fontFamily">@font/jost_medium</item>
+        parent="Widget.Grocy.TextView.Title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16.5sp</item>
+        <item name="android:maxLines">2</item>
     </style>
 
     <style name="Widget.Grocy.TextView.ListItem.Description" parent="Widget.Grocy.TextView">
@@ -455,12 +464,11 @@
         <item name="android:maxLines">10</item>
     </style>
 
-    <style name="Widget.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView">
+    <style name="Widget.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView.Medium">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/on_surface</item>
-        <item name="android:fontFamily">@font/jost_medium</item>
         <item name="android:textSize">16sp</item>
     </style>
 
