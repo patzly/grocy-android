@@ -118,10 +118,6 @@
     <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
     <string name="msg_item_marked_as_done">Položka nastavena jako hotová</string>
     <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_quick_mode_confirm_purchase">Transakce, která bude provedena:\n\nPřidat %1$s %2$s %3$s do zásob\nDatum spotřeby: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_quick_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
     <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, může nastat ztráta dat (nepravděpodobné) a pády aplikace (pravděpodobné).\nByli jste varováni!</string>
     <string name="msg_logout">Na vašem serveru nebude nic změněno. Budete přesměrováni na přihlašovací stránku.</string>
     <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
@@ -166,7 +162,6 @@
     <string name="msg_help_specific_item_consume">První položka v tomto seznamu by byla vybrána automaticky, dle výchozího pravidla, které zní: \"Nejprve otevřené, poté s nejbližší expirací a pak první přidané do zásob\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Toto je pouze pro statistické údaje.</string>
-    <string name="msg_help_quick_mode">Můžete dlouze podržet na liště záhlaví výše pro aktivaci skenovacího režimu. Klikněte na tuto kartu pro změnu výchozího chování.</string>
     <string name="msg_help_loading_circle_settings">Na každé stránce, kde něco musí být načteno ze serveru, aplikace nejprve zkontroluje pomocí maličkého požadavku, zda se databáze na serveru změnila od poslední aktualizace a pouze načte zastaralá data. Zapněte volbu níže, pokud chcete zobrazit načítací kolečko i pro tyto maličké požadavky.</string>
     <string name="msg_help_start">Začátečnický režim je aktivní. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klikněte pro změnu.</string>
     <string name="msg_help_purchased_date_settings">Pokud je zapnuta volba níže, políčko pro datum nákupu se bude zobrazovat na stránce nákupu a v inventáři. Pokud není zapnuta, datum nákupu se automaticky doplní s dnešním datem.</string>
