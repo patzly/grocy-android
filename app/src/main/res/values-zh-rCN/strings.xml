@@ -118,10 +118,6 @@
     <string name="msg_master_delete_usage">这个%1$s还在用</string>
     <string name="msg_item_marked_as_done">将项目标记为已完成</string>
     <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_quick_mode_confirm_purchase">将执行的事务：\n\n 在库存中添加%1$s%2$s%3$s\n 到期日：%4$s \n 价格：%5$s \n 商店：%6$s \n 位置：%7$s</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_quick_mode_confirm_consume">将执行的事务：\n\n 在库存中删除%1$s%2$s%3$s \n\n 位置：%4$s</string>
     <string name="msg_compatibility">此应用版本与服务器上的常规版本不兼容。\n \n当前服务器版本：%1$s\n\n必填：\nMin。伺服器版本：%2$s\nMax。服务器版本：%3$s\n\n如果忽略此警告，可能会导致数据丢失（不太可能）和崩溃（可能）。\n已警告您！</string>
     <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
     <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
@@ -166,7 +162,6 @@
     <string name="msg_help_specific_item_consume">此列表中的第一个项目将由“首先打开，然后先到期，然后先进先出 ”的默认规则。</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">这仅用于统计目的。</string>
-    <string name="msg_help_quick_mode">您可以长点击上面的标题栏以激活扫描模式。单击此卡以更改默认行为。</string>
     <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
     <string name="msg_help_start">初学者模式是活动的：如果可用，则默认情况下显示帮助文本。点按以更改。</string>
     <string name="msg_help_purchased_date_settings">如果启用了以下选项，则购买和库存页面将显示购买日期的字段。否则购买的日期默认为今天。</string>
