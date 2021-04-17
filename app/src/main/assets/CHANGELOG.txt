@@ -5,6 +5,7 @@
 - Improved: Camera scanner frame now has a fixed size (#334)
 - Improved: Updated translations
 - Fixed: Don't show inactive products on consume & purchase page (#382)
+- Fixed: 'Add' button was gone in shopping lists bottom sheet
 
 2.0.0-alpha05
 - Improved: Language selection and behavior
