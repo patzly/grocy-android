@@ -30,8 +30,8 @@ public abstract class Event {
     public final static int NAVIGATE_UP = 8;
     public final static int SET_SHOPPING_LIST_ID = 10;
     public final static int FOCUS_INVALID_VIEWS = 12;
-    public final static int SCAN_MODE_DISABLED = 14;
-    public final static int SCAN_MODE_ENABLED = 16;
+    public final static int QUICK_MODE_DISABLED = 14;
+    public final static int QUICK_MODE_ENABLED = 16;
     public final static int SET_PRODUCT_ID = 18;
     public final static int LOGIN_SUCCESS = 20;
     public final static int CONSUME_SUCCESS = 22;

@@ -120,9 +120,9 @@
     <string name="msg_item_marked_as_undone">Пункт скасовано</string>
     <string name="msg_batch_no_products">Нові продукти створювати не потрібно</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
+    <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
+    <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
     <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
     <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
     <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
@@ -167,7 +167,7 @@
     <string name="msg_help_specific_item_consume">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Це лише для статистичних цілей.</string>
-    <string name="msg_help_scan_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати режим сканування. Клацніть на цій картці, щоб змінити поведінку за замовчуванням.</string>
+    <string name="msg_help_quick_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати режим сканування. Клацніть на цій картці, щоб змінити поведінку за замовчуванням.</string>
     <string name="msg_help_loading_circle_settings">На кожній сторінці, де щось потрібно завантажити з сервера, програма спочатку перевіряє крихітним запитом, чи є зміни в базі даних сервера з минулого разу, і оновлює лише застарілі дані. Увімкніть опцію нижче, щоб показати коло завантаження навіть для цього крихітного запиту.</string>
     <string name="msg_help_start">Активний режим для початківців: Тексти довідки відображаються за замовчуванням на всіх сторінках, якщо такі є. Торкніться, щоб змінити.</string>
     <string name="msg_help_purchased_date_settings">Якщо опція нижче ввімкнена, на сторінці купівлі та інвентаризації відображатиметься поле для дати придбання. В іншому випадку придбана дата за замовчуванням сьогодні.</string>
@@ -591,9 +591,6 @@
     <string name="setting_use_front_cam_description">Для сканування штрих-коду</string>
     <string name="setting_external_support">Підтримка зовнішнього сканера</string>
     <string name="setting_external_support_description">Через USB або Bluetooth</string>
-    <string name="setting_scan_mode_consume">Показувати спочатку сторінку споживання в режимі сканування</string>
-    <string name="setting_scan_mode_purchase">Показувати спочатку сторінку покупок в режимі сканування</string>
-    <string name="setting_scan_mode_shopping_item">Показувати спочатку сторінку елемента списку покупок у режимі сканування</string>
     <string name="setting_reload_config">Перезавантажити конфігурацію</string>
     <string name="setting_reload_config_description">Потрібне перезавантаження застосунку</string>
     <string name="setting_logout">Вийти</string>

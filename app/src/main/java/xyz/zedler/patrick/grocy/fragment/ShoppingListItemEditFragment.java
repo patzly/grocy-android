@@ -21,13 +21,11 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 
@@ -124,7 +122,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
-        viewModel.getScanModeEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
+        /*viewModel.getQuickModeEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
             if(isEnabled) {
                 binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT
                         | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -136,7 +134,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 binding.editTextShoppingListItemEditNote.setImeOptions(EditorInfo.IME_ACTION_NONE);
             }
             clearInputFocus();
-        });
+        });*/
 
         // necessary because else getValue() doesn't give current value (?)
         viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {});
@@ -187,23 +185,21 @@ public class ShoppingListItemEditFragment extends BaseFragment {
 
     public void onProductInputNextClick() {
         viewModel.checkProductInput();
-        if(viewModel.isScanModeEnabled()) {
-            focusNextView();
-        } else {
-            clearInputFocus();
-        }
+        focusNextView();
     }
 
     public void focusNextView() {
-        if(!viewModel.isScanModeEnabled()) {
-            clearInputFocus();
-            return;
-        }
         View nextView = FocusFinder.getInstance()
                 .findNextFocus(binding.container, activity.getCurrentFocus(), View.FOCUS_DOWN);
         if(nextView == null) {
             clearInputFocus();
             return;
+        }
+        if(nextView.getId() == R.id.quantity_unit_container
+                && viewModel.getFormData().getQuantityUnitsLive().getValue() != null
+                && viewModel.getFormData().getQuantityUnitsLive().getValue().size() <= 1
+        ) {
+            nextView = binding.container.findViewById(R.id.edit_text_shopping_list_item_edit_amount);
         }
         nextView.requestFocus();
         if(nextView instanceof EditText) {

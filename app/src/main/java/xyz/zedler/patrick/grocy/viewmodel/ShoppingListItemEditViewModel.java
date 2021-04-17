@@ -78,7 +78,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
-    private final MutableLiveData<Boolean> scanModeEnabled;
 
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<Product> products;
@@ -110,10 +109,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
-        scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM
-        ));
     }
 
     public FormDataShoppingListItemEdit getFormData() {
@@ -370,7 +365,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
             setProduct(product);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, input);
+            bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
             showBottomSheet(new InputProductBottomSheet(), bundle);
         }
         return product;
@@ -420,24 +415,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         return sharedPrefs.getBoolean(
                 Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
         );
-    }
-
-    public boolean isScanModeEnabled() {
-        if(scanModeEnabled.getValue() == null) return false;
-        return scanModeEnabled.getValue();
-    }
-
-    public MutableLiveData<Boolean> getScanModeEnabled() {
-        return scanModeEnabled;
-    }
-
-    public void setScanModeEnabled(boolean enabled) {
-        scanModeEnabled.setValue(enabled);
-    }
-
-    public boolean toggleScanModeEnabled() {
-        scanModeEnabled.setValue(!isScanModeEnabled());
-        return true;
     }
 
     @NonNull

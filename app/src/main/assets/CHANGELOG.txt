@@ -1,5 +1,6 @@
 2.0.0-alpha06
-- Improved: new typeface
+- New: 'Scan mode' is now 'Quick mode' (#332)
+- Improved: New typeface
 - Improved: Updated translations
 
 2.0.0-alpha05

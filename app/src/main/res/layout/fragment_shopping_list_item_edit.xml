@@ -35,8 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:onLongClick="@{() -> viewModel.toggleScanModeEnabled()}">
+                android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="48dp"
@@ -67,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="16dp"
-                    android:textColor="@{viewModel.scanModeEnabled ? @color/retro_blue : @color/on_primary}"
+                    android:textColor="@color/on_primary"
                     android:text="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}"/>
 
             </LinearLayout>
@@ -313,8 +312,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/on_background"
-                                    android:text="@={formData.noteLive}"
-                                    app:onDoneClickInSoftKeyboard="@{() -> viewModel.setScanModeEnabled(false)}"/>
+                                    android:text="@={formData.noteLive}"/>
 
                             </com.google.android.material.textfield.TextInputLayout>
 

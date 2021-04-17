@@ -59,14 +59,6 @@ public final class Constants {
         public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
         public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
 
-        public final static String BATCH_CONFIG_BBD = "batch_config_bbd";
-        public final static String BATCH_CONFIG_PRICE = "batch_config_price";
-        public final static String BATCH_CONFIG_STORE = "batch_config_store";
-        public final static String BATCH_CONFIG_LOCATION = "batch_config_location";
-        public final static String BATCH_CONFIG_STOCK_LOCATION = "batch_config_stock_location";
-        public final static String BATCH_CONFIG_SPECIFIC = "batch_config_specific";
-        public final static String BATCH_CONFIG_CONSUME_ALL = "batch_config_consume_all";
-
         public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
         public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
         public final static String DB_LAST_TIME_LOCATIONS = "db_last_time_locations";
@@ -78,6 +70,13 @@ public final class Constants {
         public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
         public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
         public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
+
+        public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
+        public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
+        public final static String QUICK_MODE_ACTIVE_SHOPPING_ITEM = "quick_mode_active_shopping_item";
+        public final static String CAMERA_SCANNER_VISIBLE_CONSUME = "camera_scanner_visible_consume";
+        public final static String CAMERA_SCANNER_VISIBLE_PURCHASE = "camera_scanner_visible_purchase";
+        public final static String CAMERA_SCANNER_VISIBLE_SHOPPING_ITEM = "camera_scanner_visible_shopping_item";
 
         public final static String DARK_MODE = "force_dark_mode";
         public final static String FOOD_FACTS = "use_open_food_facts";
@@ -112,9 +111,9 @@ public final class Constants {
             public final static String SHORTCUTS = "shortcuts";
             public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
             public final static String START_DESTINATION = "start_destination";
-            public final static String SCAN_MODE_CONSUME = "scan_mode_consume_enabled";
-            public final static String SCAN_MODE_PURCHASE = "scan_mode_purchase_enabled";
-            public final static String SCAN_MODE_SHOPPING_ITEM = "scan_mode_shopping_item";
+            public final static String QUICK_MODE_CONSUME = "scan_mode_consume_enabled";
+            public final static String QUICK_MODE_PURCHASE = "scan_mode_purchase_enabled";
+            public final static String QUICK_MODE_SHOPPING_ITEM = "scan_mode_shopping_item";
         }
         public final static class SCANNER {
             public final static String FOOD_FACTS = "food_facts";
@@ -157,9 +156,9 @@ public final class Constants {
         public final static class BEHAVIOR {
             public final static boolean BEGINNER_MODE = true;
             public final static boolean EXPAND_BOTTOM_SHEETS = false;
-            public final static boolean SCAN_MODE_CONSUME = false;
-            public final static boolean SCAN_MODE_PURCHASE = false;
-            public final static boolean SCAN_MODE_SHOPPING_ITEM = false;
+            public final static boolean QUICK_MODE_CONSUME = false;
+            public final static boolean QUICK_MODE_PURCHASE = false;
+            public final static boolean QUICK_MODE_SHOPPING_ITEM = false;
         }
         public final static class SCANNER {
             public final static boolean FOOD_FACTS = false;

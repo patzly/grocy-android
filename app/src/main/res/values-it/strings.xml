@@ -120,10 +120,10 @@
     <string name="msg_item_marked_as_undone">Segna da fare</string>
     <string name="msg_batch_no_products">Nessun nuovo prodotto deve essere creato</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Operazione che verrà eseguita :\n\nAggiungi %1$s %2$s di %3$s nella dispensa\nIn scadenza il: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nLuogo: %7$s
+    <string name="msg_quick_mode_confirm_purchase">Operazione che verrà eseguita :\n\nAggiungi %1$s %2$s di %3$s nella dispensa\nIn scadenza il: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nLuogo: %7$s
  </string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">Operazione che verrà eseguita :\n\nRimuovi %1$s %2$s di %3$s dalla dispensa\nLuogo: %4$s
+    <string name="msg_quick_mode_confirm_consume">Operazione che verrà eseguita :\n\nRimuovi %1$s %2$s di %3$s dalla dispensa\nLuogo: %4$s
  </string>
     <string name="msg_compatibility">Questa versione dell\'applicazione non è compatibile con la versione di grocy sul server.\n\n Versione del server corrente: %1$s\n\n Richiesta:\nVersione minima del server: %2$s\nVersione massima del server:%3$s\n\nSe ignori questo avertimento, si potrebbe verificare perdita di dati (improbabile) e crashes (probabile).\n Sei stato avvertito!</string>
     <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
@@ -169,7 +169,7 @@
     <string name="msg_help_specific_item_consume">Il primo oggetto in questa lista sarà selezionato dalla regola predefinita che è \"Aperto per primo, quindi da consumarsi per primo, ovvero aggiunto prima uscito prima\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Usato solo per motivi statistici.</string>
-    <string name="msg_help_scan_mode">Puoi mantenere premuto la barra del titolo per abilitare la modalità di scansionamento. Clicca qui se vuoi cambiare questo comportamento predefinito della app.</string>
+    <string name="msg_help_quick_mode">Puoi mantenere premuto la barra del titolo per abilitare la modalità di scansionamento. Clicca qui se vuoi cambiare questo comportamento predefinito della app.</string>
     <string name="msg_help_loading_circle_settings">Su ogni pagina, l\'app invia una richiesta al server per trovare eventuali cambiamenti nel database. Abilita questa opzione se vuoi visualizzare il cerchio di caricamento anche per questa richiesta.</string>
     <string name="msg_help_start">Modalità principiante attivata: I messaggi di aiuto verranno visualizzati su ogni pagina disponibile. Fai tap per cambiare.</string>
     <string name="msg_help_purchased_date_settings">Abilitando questa opzione un campo per scegliere la data di acquisto verrà mostrato sulle pagine di acquisto e di inventario. Altrimenti verrà utilizzata la data di oggi.</string>
@@ -565,9 +565,6 @@
     <string name="setting_use_front_cam_description">Per scansionare il codice a barre</string>
     <string name="setting_external_support">Supporto scanner esterno</string>
     <string name="setting_external_support_description">Via USB o Bluetooth</string>
-    <string name="setting_scan_mode_consume">Inizia con la pagina consuma in modalità scanner</string>
-    <string name="setting_scan_mode_purchase">Inizia con la pagina acquista in modalità scanner</string>
-    <string name="setting_scan_mode_shopping_item">Inizia con la pagina lista della spesa in modalità scanner</string>
     <string name="setting_reload_config">Ricarica la configurazione</string>
     <string name="setting_reload_config_description">Necessario riavviare l\'app</string>
     <string name="setting_logout">Esci</string>

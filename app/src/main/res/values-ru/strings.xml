@@ -120,9 +120,9 @@
     <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
     <string name="msg_batch_no_products">Новые продукты создавать не требуется</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
+    <string name="msg_quick_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">Операция, которая будет выполнена:\n\nУдалить %1$s %2$s %3$s из запасов\nМесто: %4$s</string>
+    <string name="msg_quick_mode_confirm_consume">Операция, которая будет выполнена:\n\nУдалить %1$s %2$s %3$s из запасов\nМесто: %4$s</string>
     <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере,\n\nТекущая версия сервера %1$s\n\nТребуется:\nминимальная версия: %2$s\nмаксимальная версия: %3$s\n\nЕсли вы проигнорируете это предупреждение, могут возникнуть потери данных (маловероятно) и сбои (весьма вероятно).\nВас предупредили!</string>
     <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
     <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
@@ -167,7 +167,7 @@
     <string name="msg_help_specific_item_consume">Первый элемент в этом списке будет выбран по правилу \"сначала вскрытый, потом с меньшим сроком годности, остальные по очереди\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Это только для статистических целей.</string>
-    <string name="msg_help_scan_mode">Вы можете удерживать заголовок выше, чтобы активировать режим сканирования. Нажмите на эту карточку, чтобы изменить действие по умолчанию.</string>
+    <string name="msg_help_quick_mode">Вы можете удерживать заголовок выше, чтобы активировать режим сканирования. Нажмите на эту карточку, чтобы изменить действие по умолчанию.</string>
     <string name="msg_help_loading_circle_settings">На каждой странице, где что-то должно быть загружено с сервера, приложение сначала проверяет небольшим запросом, изменилась ли база данных сервера с прошлого раза, и обновляет только устаревшие данные. Включите опцию ниже, чтобы показать анимацию загрузки для этого запроса.</string>
     <string name="msg_help_start">Активен режим для начинающих: подсказки по умолчанию отображаются на всех страницах, если они доступны. Нажмите, чтобы изменить.</string>
     <string name="msg_help_purchased_date_settings">Если опция ниже включена, поле для даты покупки будет отображаться на странице покупки и инвентаря. В противном случае дата покупки по умолчанию - сегодня.</string>
@@ -591,9 +591,6 @@
     <string name="setting_use_front_cam_description">Для сканирования штрихкодов</string>
     <string name="setting_external_support">Поддержка внешнего сканера</string>
     <string name="setting_external_support_description">Через USB или Bluetooth</string>
-    <string name="setting_scan_mode_consume">Открывать страницу использования в режиме сканирования</string>
-    <string name="setting_scan_mode_purchase">Открывать страницу покупок в режиме сканирования</string>
-    <string name="setting_scan_mode_shopping_item">Открывать список покупок в режиме сканирования</string>
     <string name="setting_reload_config">Перезагрузить конфигурацию</string>
     <string name="setting_reload_config_description">Требуется перезапуск приложения</string>
     <string name="setting_logout">Выйти</string>

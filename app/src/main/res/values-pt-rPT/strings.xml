@@ -120,9 +120,9 @@
     <string name="msg_item_marked_as_undone">Marcar item como não concluído</string>
     <string name="msg_batch_no_products">Não foi criado nenhum produto novo</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">Transacção:\n\nAdicionar %1$s %2$s de %3$s ao stock\nData de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
+    <string name="msg_quick_mode_confirm_purchase">Transacção:\n\nAdicionar %1$s %2$s de %3$s ao stock\nData de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
+    <string name="msg_quick_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
     <string name="msg_compatibility">A versão desta aplicação não é compatível com a versão do grocy no servidor.\n\nVersão actual do servidor: %1$s\n\nRequisitos:\nVersão min. do servidor: %2$s\nVersão max. do servidor: %3$s\n\nSe ignorar este aviso, perda de dados (pouco provável) e falhas (muito provável) podem ocorrer.\nFicam avisados!</string>
     <string name="msg_logout">Nada será alterado no servidor. Será redireccionado para a página de autenticação</string>
     <string name="msg_logout_demo">Está a usar o servidor publico de demonstração <u>https://grocy.info</u>.\n\n<b>Nenhuma das suas alterações aqui são gravadas!\nElas mantém-se públicas até que o servidor as apague uma vez por dia.</b>\n\nNo ecrã de autenticação pode colocar os detalhes do seu servidor.</string>
@@ -167,7 +167,7 @@
     <string name="msg_help_specific_item_consume">O primeiro item nesta lista seria seleccionado de acordo com a regra por defeito que é \"Aberto primeiro, depois primeiro a expirar primeiro,depois primeiro a entrar primerio a sair\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Isto é apenas para análise estatistica.</string>
-    <string name="msg_help_scan_mode">Pode pressionar durante alguns segundos na barra de título para activar o modo de digitalização. Pressionar nesta ficha para mudar o comportamento por defeito.</string>
+    <string name="msg_help_quick_mode">Pode pressionar durante alguns segundos na barra de título para activar o modo de digitalização. Pressionar nesta ficha para mudar o comportamento por defeito.</string>
     <string name="msg_help_loading_circle_settings">Em cada página em que algo tem que ser carregado do servidor, a aplicação confirma primeiro com um pequeno pedido se a base de dados foi modificada desde a última vez e apenas actualiza os dados desactualizados. Active a opção em baixo para mostrar a animação de carregamento mesmo para este pequeno pedido.</string>
     <string name="msg_help_start">Modo iniciante está activo: Os textos de ajuda são mostrados por defeito em todas as páginas se disponíveis. Pressione para alterar.</string>
     <string name="msg_help_purchased_date_settings">Se a opção em baixo estiver activa, um campo para data de compra será mostrado na página de compra e de inventário. Caso contrário a data de compra por defeito é a de hoje.</string>
@@ -556,9 +556,6 @@
     <string name="setting_use_front_cam_description">Para digitalização de códigos de barra</string>
     <string name="setting_external_support">Suporte para scanner externo</string>
     <string name="setting_external_support_description">Via USB ou Bluetooth</string>
-    <string name="setting_scan_mode_consume">Iniciar página de consumo em modo scan</string>
-    <string name="setting_scan_mode_purchase">Inicar página de compras em modo scan</string>
-    <string name="setting_scan_mode_shopping_item">Iniciar página da lista de compra em modo scan</string>
     <string name="setting_reload_config">Recarregar configuração</string>
     <string name="setting_reload_config_description">Necessário reiniciar aplicação</string>
     <string name="setting_logout">Sair</string>

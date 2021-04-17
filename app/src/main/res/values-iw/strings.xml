@@ -120,9 +120,9 @@
     <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
     <string name="msg_batch_no_products">לא נוצרו מוצרים חדשים</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_scan_mode_confirm_purchase">ההעברה שתתבצע:\n\nהוספת %1$s%2$s של %3$s למלאי\nמועד תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
+    <string name="msg_quick_mode_confirm_purchase">ההעברה שתתבצע:\n\nהוספת %1$s%2$s של %3$s למלאי\nמועד תפוגה: %4$s\nמחיר: %5$s\nחנות: %6$s\nמיקום: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_scan_mode_confirm_consume">פעולה שתבוצע:\n\nהסרת %1$s %2$s של %3$s מהמלאי\nמיקום: %4$s</string>
+    <string name="msg_quick_mode_confirm_consume">פעולה שתבוצע:\n\nהסרת %1$s %2$s של %3$s מהמלאי\nמיקום: %4$s</string>
     <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
     <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
     <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
@@ -161,7 +161,7 @@
     <string name="msg_help_external_scanner_settings">יישומון זה תומך בהתקני סריקה חיצוניים שמכהנים כמקלדת וניתן לחבר אותם דרך USB או Bluetooth (בלוטות׳). יש להגדיר את האפשרויות הבאות בסורק החיצוני שלך:\n\nקידומת: ללא\nסיומת: TAB או ENTER</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">זה למטרות סטטיסטיות בלבד.</string>
-    <string name="msg_help_scan_mode">ניתן ללחוץ לחיצה ארוכה על שורת הכותרת שלהלן כדי להפעיל מצב סריקה. יש ללחוץ על הכרטיס הזה כדי לשנות את התנהגות בררת המחדל.</string>
+    <string name="msg_help_quick_mode">ניתן ללחוץ לחיצה ארוכה על שורת הכותרת שלהלן כדי להפעיל מצב סריקה. יש ללחוץ על הכרטיס הזה כדי לשנות את התנהגות בררת המחדל.</string>
     <string name="msg_help_start">מופעל מצב מתחילים: הודעות עזרה מוצגות כבררת מחדל בכל העמודים אם הן זמינות. יש לגעת כדי לשנות.</string>
     <string name="msg_help_purchased_date_settings">אם האפשרות שלהלן מופעלת, שדה תאריך הרכישה יוצג בעמוד הרכישה והמאגר. אם לא, תאריך הרכישה יוחזר להיום.</string>
     <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
@@ -571,8 +571,6 @@
     <string name="setting_use_front_cam_description">לסריקת ברקודים</string>
     <string name="setting_external_support">תמיכה בסורק חיצוני</string>
     <string name="setting_external_support_description">דרך USB או בלוטות׳</string>
-    <string name="setting_scan_mode_purchase">להתחיל את עמוד הרכישה במצב סריקה</string>
-    <string name="setting_scan_mode_shopping_item">להתחיל את עמוד הפריט ברשימת הקניות במצב סריקה</string>
     <string name="setting_reload_config">לרענן את ההגדרות</string>
     <string name="setting_reload_config_description">נדרשת הפעלת היישומון מחדש</string>
     <string name="setting_logout">יציאה</string>

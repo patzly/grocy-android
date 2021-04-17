@@ -224,42 +224,6 @@ public class SettingsViewModel extends BaseViewModel {
                 .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
     }
 
-    public boolean getScanModeShoppingItemEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM
-        );
-    }
-
-    public void setScanModeShoppingItemEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_SHOPPING_ITEM, enabled).apply();
-    }
-
-    public boolean getScanModeConsumeEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_CONSUME
-        );
-    }
-
-    public void setScanModeConsumeEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_CONSUME, enabled).apply();
-    }
-
-    public boolean getScanModePurchaseEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
-        );
-    }
-
-    public void setScanModePurchaseEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE, enabled).apply();
-    }
-
     public boolean getFrontCamEnabled() {
         return sharedPrefs.getBoolean(
                 Constants.SETTINGS.SCANNER.FRONT_CAM,

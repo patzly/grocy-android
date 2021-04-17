@@ -39,10 +39,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class ScanModeConfirmBottomSheet extends BaseBottomSheet {
+public class QuickModeConfirmBottomSheet extends BaseBottomSheet {
 
     private final static int CONFIRMATION_DURATION = 3000;
-    private final static String TAG = ScanModeConfirmBottomSheet.class.getSimpleName();
+    private final static String TAG = QuickModeConfirmBottomSheet.class.getSimpleName();
 
     private MainActivity activity;
 

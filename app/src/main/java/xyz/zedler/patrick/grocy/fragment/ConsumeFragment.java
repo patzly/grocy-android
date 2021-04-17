@@ -135,9 +135,9 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
             } else if(event.getType() == Event.FOCUS_INVALID_VIEWS) {
                 focusNextInvalidView();
-            } else if(event.getType() == Event.SCAN_MODE_ENABLED) {
+            } else if(event.getType() == Event.QUICK_MODE_ENABLED) {
                 focusProductInputIfNecessary();
-            } else if(event.getType() == Event.SCAN_MODE_DISABLED) {
+            } else if(event.getType() == Event.QUICK_MODE_DISABLED) {
                 clearInputFocus();
             }
         });
@@ -207,7 +207,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 Constants.FAB.TAG.CONSUME,
                 animated,
                 () -> {
-                    if(viewModel.isScanModeEnabled()) {
+                    if(viewModel.isQuickModeEnabled()) {
                         focusNextInvalidView();
                     } else if(!viewModel.getFormData().isProductNameValid()) {
                         clearFocusAndCheckProductInput();
@@ -246,7 +246,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     @Override
     public void onBarcodeResult(BarcodeResult result) {
         if(result.getText().isEmpty()) resumeScan();
-        if(!viewModel.isScanModeEnabled()) viewModel.getFormData().toggleScannerVisibility();
+        if(!viewModel.isQuickModeEnabled()) viewModel.getFormData().toggleScannerVisibility();
         viewModel.onBarcodeRecognized(result.getText());
     }
 
@@ -325,12 +325,12 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     }
 
     public void focusProductInputIfNecessary() {
-        if(!viewModel.isScanModeEnabled() || viewModel.getFormData().isScannerVisible()) return;
+        if(!viewModel.isQuickModeEnabled() || viewModel.getFormData().isScannerVisible()) return;
         ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
         String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
         if(productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
             binding.autoCompleteConsumeProduct.requestFocus();
-            if(viewModel.getExternalScannerEnabled()) {
+            if(viewModel.getFormData().getExternalScannerEnabled()) {
                 activity.hideKeyboard();
             } else {
                 activity.showKeyboard(binding.autoCompleteConsumeProduct);
@@ -339,7 +339,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     }
 
     public void focusNextInvalidView() {
-        if(!viewModel.isScanModeEnabled()) {
+        if(!viewModel.isQuickModeEnabled()) {
             clearInputFocus();
             return;
         }
@@ -403,7 +403,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
             return true;
         });
         menuItemOpen.setOnMenuItemClickListener(item -> {
-            if(viewModel.isScanModeEnabled()) {
+            if(viewModel.isQuickModeEnabled()) {
                 focusNextInvalidView();
             } else {
                 viewModel.consumeProduct(true);

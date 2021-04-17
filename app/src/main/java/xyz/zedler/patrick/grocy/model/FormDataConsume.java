@@ -90,8 +90,10 @@ public class FormDataConsume {
                 Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
         ));
-        scannerVisibilityLive = new MutableLiveData<>(false); // TODO: What on start?
+        scannerVisibilityLive = new MutableLiveData<>(false);
         if(args.getStartWithScanner() && !getExternalScannerEnabled()) {
+            scannerVisibilityLive.setValue(true);
+        } else if(getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled()) {
             scannerVisibilityLive.setValue(true);
         }
         productsLive = new MutableLiveData<>(new ArrayList<>());
@@ -167,6 +169,9 @@ public class FormDataConsume {
 
     public void toggleScannerVisibility() {
         scannerVisibilityLive.setValue(!isScannerVisible());
+        sharedPrefs.edit()
+                .putBoolean(Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME, isScannerVisible())
+                .apply();
     }
 
     public MutableLiveData<ArrayList<Product>> getProductsLive() {
@@ -506,7 +511,7 @@ public class FormDataConsume {
         StockLocation stockLocation = stockLocationLive.getValue();
         assert qU != null && stockLocation != null;
         return application.getString(
-                R.string.msg_scan_mode_confirm_consume,
+                R.string.msg_quick_mode_confirm_consume,
                 NumUtil.trim(amountRemoved),
                 amountRemoved == 1 ? qU.getName() : qU.getNamePlural(),
                 productDetails.getProduct().getName(),
@@ -576,6 +581,13 @@ public class FormDataConsume {
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    public boolean getCameraScannerWasVisibleLastTime() {
+        return sharedPrefs.getBoolean(
+                Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME,
+                false
+        );
     }
 
     public boolean getExternalScannerEnabled() {

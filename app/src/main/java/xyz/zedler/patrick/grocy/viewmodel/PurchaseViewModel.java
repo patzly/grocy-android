@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ScanModeConfirmBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -85,7 +85,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Boolean> scanModeEnabled;
+    private final MutableLiveData<Boolean> quickModeEnabled;
 
     private Runnable queueEmptyAction;
 
@@ -102,11 +102,11 @@ public class PurchaseViewModel extends BaseViewModel {
         formData = new FormDataPurchase(application, sharedPrefs, args);
 
         infoFullscreenLive = new MutableLiveData<>();
-        scanModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.SCAN_MODE_PURCHASE,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.SCAN_MODE_PURCHASE
+        quickModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
+                Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
+                false
         ));
-        if(args.getStartWithScanner()) scanModeEnabled.setValue(true);
+        if(args.getStartWithScanner()) quickModeEnabled.setValue(true);
 
         barcodes = new ArrayList<>();
     }
@@ -217,9 +217,9 @@ public class PurchaseViewModel extends BaseViewModel {
             boolean isTareWeightEnabled = formData.isTareWeightEnabled();
             if(!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
                 // if barcode contains amount, take this (with tare weight handling off)
-                // scan mode status doesn't matter
+                // quick mode status doesn't matter
                 formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-            } else if(!isTareWeightEnabled && !isScanModeEnabled()) {
+            } else if(!isTareWeightEnabled && !isQuickModeEnabled()) {
                 String defaultAmount = sharedPrefs.getString(
                         Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
                         Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
@@ -232,7 +232,7 @@ public class PurchaseViewModel extends BaseViewModel {
                     formData.getAmountLive().setValue(defaultAmount);
                 }
             } else if(!isTareWeightEnabled) {
-                // if scan mode enabled, always fill with amount 1
+                // if quick mode enabled, always fill with amount 1
                 formData.getAmountLive().setValue(NumUtil.trim(1));
             }
 
@@ -285,7 +285,7 @@ public class PurchaseViewModel extends BaseViewModel {
             formData.getLocationLive().setValue(productDetails.getLocation());
 
             formData.isFormValid();
-            if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+            if(isQuickModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         };
 
         dlHelper.getProductDetails(productId, listener, error -> {
@@ -349,7 +349,7 @@ public class PurchaseViewModel extends BaseViewModel {
         } else {
             formData.getBarcodeLive().setValue(barcode);
             formData.isFormValid();
-            if(isScanModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+            if(isQuickModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
         }
     }
 
@@ -564,7 +564,7 @@ public class PurchaseViewModel extends BaseViewModel {
     public void showConfirmationBottomSheet() {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
-        showBottomSheet(new ScanModeConfirmBottomSheet(), bundle);
+        showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
     }
 
     @NonNull
@@ -581,26 +581,22 @@ public class PurchaseViewModel extends BaseViewModel {
         this.queueEmptyAction = queueEmptyAction;
     }
 
-    public boolean isScanModeEnabled() {
-        if(scanModeEnabled.getValue() == null) return false;
-        return scanModeEnabled.getValue();
+    public boolean isQuickModeEnabled() {
+        if(quickModeEnabled.getValue() == null) return false;
+        return quickModeEnabled.getValue();
     }
 
-    public MutableLiveData<Boolean> getScanModeEnabled() {
-        return scanModeEnabled;
+    public MutableLiveData<Boolean> getQuickModeEnabled() {
+        return quickModeEnabled;
     }
 
-    public boolean toggleScanModeEnabled() {
-        scanModeEnabled.setValue(!isScanModeEnabled());
-        sendEvent(isScanModeEnabled() ? Event.SCAN_MODE_ENABLED : Event.SCAN_MODE_DISABLED);
+    public boolean toggleQuickModeEnabled() {
+        quickModeEnabled.setValue(!isQuickModeEnabled());
+        sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
+        sharedPrefs.edit()
+                .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE, isQuickModeEnabled())
+                .apply();
         return true;
-    }
-
-    public boolean getExternalScannerEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
-                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
-        );
     }
 
     public boolean getUseFrontCam() {
