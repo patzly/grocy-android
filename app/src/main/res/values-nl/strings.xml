@@ -56,6 +56,7 @@
     <string name="action_restart">Herstarten</string>
     <string name="action_create">Aanmaken</string>
     <string name="action_link">Linken</string>
+    <string name="action_try_again">Probeer opnieuw</string>
     <string name="action_open_scanner">Open scanner</string>
     <string name="action_discard">Verwerp</string>
     <string name="action_clear_form">Formulier leegmaken</string>
@@ -117,8 +118,6 @@
     <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_quick_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
     <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
     <string name="msg_logout_demo">Je maakt gebruik van de openbare demo server <u>https://grocy.info</u>.\n\n<b>Wijzigingen worden daar niet definitief opgeslagen!\nZe blijven openbaar totdat de server ze automatisch overschrijft.</b> \n\nOp het login-scherm kun je je eigen serveradres invoeren.</string>
@@ -161,10 +160,11 @@
     <string name="msg_help_specific_item_consume">Het eerste item in deze lijst wordt gekozen met de standaardregel: \"Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit\".</string>
     <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_recipe_consume">Dit is alleen voor de statistiek</string>
-    <string name="msg_help_quick_mode">Je kan de scan modus activeren door de titelbalk lang ingedrukt te houden. Tik op deze kaart om het standaard gedrag te veranderen.</string>
     <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>
     <string name="msg_help_start">Beginnersmode is actief: Help tekst wordt standaard weergegeven op alle pagina\'s. Tik om dit te veranderen.</string>
     <string name="msg_help_purchased_date_settings">Als deze optie is ingeschakeld wordt een veld voor de aankoopdatum weergegeven op de aankoop en voorraad pagina. Indien uitgeschakeld wordt vandaag gebruikt als aankoopdatum.</string>
+    <string name="msg_help_home_assistant_login_help_show">Klik hier om hulpteksten weer te geven.</string>
+    <string name="msg_help_home_assistant_login_help_hide">Klik hier om hulpteksten te verbergen.</string>
     <string name="error_api_not_working">API sleutel werkt niet</string>
     <string name="error_orbot_not_installed">Orbot is niet geïnstalleerd</string>
     <string name="error_select_product">Selecteer een product</string>
@@ -206,10 +206,13 @@
     <string name="error_name_exists">Naam bestaat al</string>
     <string name="error_network">Netwerk fout</string>
     <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
+    <string name="error_unknown">Oeps!</string>
     <string name="error_not_grocy_instance">Geen geldige Grocy instance</string>
     <string name="error_timeout">Timeout fout</string>
     <string name="error_no_product_selected">Geen product geselecteerd</string>
+    <string name="error_failed_to_connect_to">Verbinding met de server is mislukt</string>
     <string name="error_missing_information">Niet alle benodigde velden zijn ingevuld</string>
+    <string name="error_handshake">Ongeldig certificaat</string>
     <string name="error_unexpected_response">Onverwachte reactie van server</string>
     <string name="error_no_browser">Installeer een webbrowser om de help website weer te geven</string>
     <string name="error_barcode_not_linked">Barcode is niet gekoppeld aan een product</string>
@@ -504,6 +507,9 @@
 
     <string name="setting_dark_mode">Forceer darkmode</string>
     <string name="setting_dark_mode_description">Uit voor systeemafhankelijkheid</string>
+    <string name="setting_language">Taal</string>
+    <string name="setting_language_description">Selecteer taal</string>
+    <string name="setting_language_not_available">Niet beschikbaar</string>
     <string name="setting_open_food_facts">Open Food Facts gebruiken</string>
     <string name="setting_open_food_facts_description">Info van streepjescode gebruiken</string>
     <string name="setting_use_front_cam">Gebruik selfie-camera</string>
