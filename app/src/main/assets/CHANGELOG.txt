@@ -1,6 +1,7 @@
 2.0.0-alpha06
 - New: 'Scan mode' is now 'Quick mode' (#332)
 - Improved: New typeface
+- Improved: Lock current screen orientation while camera scanner frame is visible (#358)
 - Improved: Updated translations
 - Fixed: Don't show inactive products on consume & purchase page (#382)
 

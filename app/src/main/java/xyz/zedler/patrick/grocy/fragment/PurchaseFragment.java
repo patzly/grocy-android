@@ -19,6 +19,7 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -85,6 +86,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             infoFullscreenHelper = null;
         }
         binding.barcodeScan.setTorchOff();
+        lockOrUnlockRotation(false);
         binding = null;
     }
 
@@ -161,6 +163,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             } else {
                 capture.onPause();
             }
+            lockOrUnlockRotation(visible);
         });
         // following lines are necessary because no observers are set in Views
         viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {});
@@ -361,6 +364,14 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         nextView.requestFocus();
         if(nextView instanceof EditText) {
             activity.showKeyboard((EditText) nextView);
+        }
+    }
+    
+    private void lockOrUnlockRotation(boolean scannerIsVisible) {
+        if(scannerIsVisible) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
         }
     }
 
