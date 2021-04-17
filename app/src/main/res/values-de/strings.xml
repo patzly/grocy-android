@@ -118,7 +118,6 @@
     <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
     <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
     <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
-    <string name="msg_batch_no_products">Es müssen keine neuen Produkte erstellt werden</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->

@@ -118,7 +118,6 @@
     <string name="msg_master_delete_usage">这个%1$s还在用</string>
     <string name="msg_item_marked_as_done">将项目标记为已完成</string>
     <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
-    <string name="msg_batch_no_products">无需创建新产品</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_quick_mode_confirm_purchase">将执行的事务：\n\n 在库存中添加%1$s%2$s%3$s\n 到期日：%4$s \n 价格：%5$s \n 商店：%6$s \n 位置：%7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->

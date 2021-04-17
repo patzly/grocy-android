@@ -109,7 +109,6 @@
     <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
     <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>
     <string name="msg_item_marked_as_undone">Markerade objekt som ej slutfört</string>
-    <string name="msg_batch_no_products">Inga nya produkter behöver skapas</string>
     <string name="msg_compatibility">Den här appversionen är inte kompatibel med den version av grocy som körs på servern.\n\nNuvarande serverversion: %1$s\n\nKrav:\nLägsta serverversion: %2$s\nHögsta serverversion: %3$s\n\nOm du ignorerar denna varning kan dataförlust (mindre troligt) och krascher (mer troligt) uppstå.\nDu har blivit varnad!</string>
     <string name="msg_logout">Ingenting på din server kommer att ändras. Du kommer att omdirigeras till inloggningssidan.</string>
     <string name="msg_logout_demo">Du använder demo-instansen av grocy från <u>https://grocy.info</u>.\n\n<b>Inga ändringar kommer att sparas!\nDe kommer att vara publika tills servern automatiskt skriver över dem.</b>\n\nDu kan ange en egen serveradress på inloggningssidan.</string>

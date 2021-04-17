@@ -109,7 +109,6 @@
     <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
     <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>
     <string name="msg_item_marked_as_undone">Elemento marcado como deshecho</string>
-    <string name="msg_batch_no_products">No hay productos nuevos que se tengan que crear</string>
     <string name="msg_compatibility">Esta versión de la aplicación no es compatible con la versión de Grocy en el servidor.\n\nVersión actual del servidor: %1$s.\nVersión mínima requerida del servidor: %2$s.\nVersión máxima posible del servidor: %3$s.\n\nSi ignoras esta advertencia, pueden suceder errores (muy posible) o pérdida de datos (improbable). Te advertimos!</string>
     <string name="msg_logout">Nada será cambiado en tu servidor. Serás redireccionado a la página de inicio de sesión.</string>
     <string name="msg_logout_demo">Estás ejecutando la instancia de demostración de Grocy en <u>https://grocy.info</u>.\n\n<b>Ninguno de tus cambios aquí serán guardados!\nSe mantiene públicos hasta que el servidor automáticamente los re-escribe.</b>\n\nEn la página de inicio de sesión puedes ingresar tu propia dirección de servidor.</string>

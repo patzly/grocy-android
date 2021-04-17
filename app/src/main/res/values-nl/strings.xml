@@ -117,7 +117,6 @@
     <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
     <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
     <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
-    <string name="msg_batch_no_products">Er hoeven geen nieuwe producten aangemaakt te worden</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_quick_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
     <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.  Huidige serverversion: %1$s  Verplicht: Minimale serverversie: %2$s Maximale serverversie: %3$s  Als u deze waarschuwing negeert, kunnen gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>

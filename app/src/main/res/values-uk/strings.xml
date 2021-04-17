@@ -118,7 +118,6 @@
     <string name="msg_master_delete_usage">%1$s ще використовується</string>
     <string name="msg_item_marked_as_done">Пункт виконано</string>
     <string name="msg_item_marked_as_undone">Пункт скасовано</string>
-    <string name="msg_batch_no_products">Нові продукти створювати не потрібно</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->

@@ -117,7 +117,7 @@ public class ConsumeViewModel extends BaseViewModel {
             this.barcodes = barcodes;
             this.quantityUnits = qUs;
             this.unitConversions = conversions;
-            formData.getProductsLive().setValue(products);
+            formData.getProductsLive().setValue(getActiveProductsOnly(products));
             if(downloadAfterLoading) downloadData();
         });
     }
@@ -136,7 +136,7 @@ public class ConsumeViewModel extends BaseViewModel {
         queue.append(
                 dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
-                    formData.getProductsLive().setValue(products);
+                    formData.getProductsLive().setValue(getActiveProductsOnly(products));
                 }), dlHelper.updateQuantityUnitConversions(
                         dbChangedTime, conversions -> this.unitConversions = conversions
                 ), dlHelper.updateProductBarcodes(
@@ -446,6 +446,14 @@ public class ConsumeViewModel extends BaseViewModel {
         for(Product product : products) {
             if(product.getId() == id) return product;
         } return null;
+    }
+
+    private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
+        ArrayList<Product> activeProductsOnly = new ArrayList<>();
+        for(Product product : allProducts) {
+            if(product.isActive()) activeProductsOnly.add(product);
+        }
+        return activeProductsOnly;
     }
 
     private QuantityUnit getQuantityUnit(int id) {

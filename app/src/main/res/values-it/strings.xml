@@ -118,7 +118,6 @@
     <string name="msg_master_delete_usage">Questo %1$s è ancora utilizzato</string>
     <string name="msg_item_marked_as_done">Segna come fatto</string>
     <string name="msg_item_marked_as_undone">Segna da fare</string>
-    <string name="msg_batch_no_products">Nessun nuovo prodotto deve essere creato</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
     <string name="msg_quick_mode_confirm_purchase">Operazione che verrà eseguita :\n\nAggiungi %1$s %2$s di %3$s nella dispensa\nIn scadenza il: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nLuogo: %7$s
  </string>

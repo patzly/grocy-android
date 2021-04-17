@@ -123,7 +123,7 @@ public class PurchaseViewModel extends BaseViewModel {
             this.unitConversions = conversions;
             this.stores = stores;
             this.locations = locations;
-            formData.getProductsLive().setValue(products);
+            formData.getProductsLive().setValue(getActiveProductsOnly(products));
             if(downloadAfterLoading) downloadData();
         });
     }
@@ -142,7 +142,7 @@ public class PurchaseViewModel extends BaseViewModel {
         queue.append(
                 dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
-                    formData.getProductsLive().setValue(products);
+                    formData.getProductsLive().setValue(getActiveProductsOnly(products));
                 }), dlHelper.updateQuantityUnitConversions(
                         dbChangedTime, conversions -> this.unitConversions = conversions
                 ), dlHelper.updateProductBarcodes(
@@ -472,6 +472,14 @@ public class PurchaseViewModel extends BaseViewModel {
         for(Product product : products) {
             if(product.getId() == id) return product;
         } return null;
+    }
+
+    private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
+        ArrayList<Product> activeProductsOnly = new ArrayList<>();
+        for(Product product : allProducts) {
+            if(product.isActive()) activeProductsOnly.add(product);
+        }
+        return activeProductsOnly;
     }
 
     private QuantityUnit getQuantityUnit(int id) {

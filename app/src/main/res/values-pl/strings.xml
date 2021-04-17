@@ -118,7 +118,6 @@
     <string name="msg_master_delete_usage">%1$s jest wciąż w użyciu</string>
     <string name="msg_item_marked_as_done">Pozycja oznaczona jako zakończona</string>
     <string name="msg_item_marked_as_undone">Pozycja oznaczona jako niezakończona</string>
-    <string name="msg_batch_no_products">Nie jest wymagane tworzenie nowych produktów</string>
     <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
     <string name="msg_quick_mode_confirm_consume">Transakcja zostanie wykonana:\n\nUsuń %1$s %2$s z %3$s ze stanu\nLokacja: %4$s</string>
     <string name="msg_compatibility">Ta wersja aplikacji nie jest kompatybilna z wersją grocy na serwerze.\n\nAktualna wersja na serwerze: %1$s\n\nWymagana:\nMinimalna wersja na serwerze: %2$s\nMaksymalna wersja na serwerze: %3$s\n\nJeżeli zignorujesz tą wiadomość, może wystąpić utrata danych (mało prawdopodobne), bądź błędy (prawdopodobne).\nZostałeś ostrzeżony!</string>
