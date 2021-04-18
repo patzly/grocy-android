@@ -1,8 +1,8 @@
 2.0.0-alpha06
-- New: 'Scan mode' is now 'Quick mode' (#332)
+- New: 'Scan mode' is now 'Quick mode' and has a better help text (#332)
 - New: Jost* typeface by Owen Earl
 - Improved: Lock current screen orientation while camera scanner frame is visible (#358)
-- Improved: Camera scanner frame now has a fixed size (#334)
+- Improved: Camera scanner frame now has a fixed width (#334)
 - Improved: Updated translations
 - Fixed: Filter didn't work on master data products page (#370)
 - Fixed: Don't show inactive products on consume & purchase page (#382)
