@@ -197,8 +197,6 @@ public class InputChip extends LinearLayout {
     }
 
     public void close() {
-        setText(null);
-        if(true) return;
         // DURATIONS
         int fade = 200, disappear = 300;
         // run action

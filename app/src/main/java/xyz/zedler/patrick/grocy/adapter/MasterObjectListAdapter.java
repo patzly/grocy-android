@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.adapter;
 */
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,34 +31,57 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
+import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectListAdapter.ViewHolder> {
 
     private final static String TAG = MasterObjectListAdapter.class.getSimpleName();
 
+    private Context context;
     private final ArrayList<Object> objects;
     private final MasterObjectListAdapterListener listener;
     private final String entity;
+    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
 
     public MasterObjectListAdapter(
+            Context context,
             String entity,
             ArrayList<Object> objects,
-            MasterObjectListAdapterListener listener
+            MasterObjectListAdapterListener listener,
+            HorizontalFilterBarMulti horizontalFilterBarMulti
     ) {
+        this.context = context;
         this.objects = new ArrayList<>(objects);
         this.listener = listener;
         this.entity = entity;
+        this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.context = null;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View view) {
+            super(view);
+        }
+    }
+
+    public static class ItemViewHolder extends ViewHolder {
         private final LinearLayout linearLayoutItemContainer;
         private final TextView textViewName;
 
-        public ViewHolder(View view) {
+        public ItemViewHolder(View view) {
             super(view);
 
             linearLayoutItemContainer = view.findViewById(R.id.linear_master_item_container);
@@ -65,30 +89,97 @@ public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectLi
         }
     }
 
+    public static class FilterRowViewHolder extends ViewHolder {
+        private final WeakReference<Context> weakContext;
+        private final RowFilterChipsBinding binding;
+        private InputChip chipProductGroup;
+        private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+
+        public FilterRowViewHolder(
+                RowFilterChipsBinding binding,
+                Context context,
+                HorizontalFilterBarMulti horizontalFilterBarMulti
+        ) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+            weakContext = new WeakReference<>(context);
+        }
+
+        public void bind() {
+            HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti.getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+            if(filter != null && chipProductGroup == null) {
+                chipProductGroup = new InputChip(
+                        weakContext.get(),
+                        filter.getObjectName(),
+                        R.drawable.ic_round_category,
+                        true,
+                        () -> {
+                            horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+                            chipProductGroup = null;
+                        }
+                );
+                binding.container.addView(chipProductGroup);
+            } else if(filter != null) {
+                chipProductGroup.setText(filter.getObjectName());
+            }
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS) && position == 0) return -1; // filter row
+        return 0;
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_item,
-                        parent,
-                        false
-                )
-        );
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == -1) { // filter row
+            RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
+                    LayoutInflater.from(parent.getContext()),
+                    parent,
+                    false
+            );
+            return new FilterRowViewHolder(
+                    binding,
+                    context,
+                    horizontalFilterBarMulti
+            );
+        } else {
+            return new ItemViewHolder(
+                    LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.row_master_item,
+                            parent,
+                            false
+                    )
+            );
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS) && position == 0) { // Filter row
+            ((FilterRowViewHolder) viewHolder).bind();
+            return;
+        }
+
+        ItemViewHolder holder = (ItemViewHolder) viewHolder;
+        int movedPosition;
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
+            movedPosition = holder.getAdapterPosition() - 1;
+        } else {
+            movedPosition = holder.getAdapterPosition();
+        }
+        Object object = objects.get(movedPosition);
+
         // NAME
-        holder.textViewName.setText(ObjectUtil.getObjectName(
-                objects.get(holder.getAdapterPosition()),
-                entity
-        ));
+        holder.textViewName.setText(ObjectUtil.getObjectName(object, entity));
 
         // CONTAINER
         holder.linearLayoutItemContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(holder.getAdapterPosition())
+                view -> listener.onItemRowClicked(object)
         );
     }
 
@@ -159,6 +250,6 @@ public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectLi
     }
 
     public interface MasterObjectListAdapterListener {
-        void onItemRowClicked(int position);
+        void onItemRowClicked(Object object);
     }
 }

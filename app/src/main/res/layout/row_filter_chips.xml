@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:paddingStart="12dp"
-        android:paddingEnd="12dp"/>
+        android:paddingEnd="12dp"
+        android:animateLayoutChanges="true"/>
 
 </HorizontalScrollView>

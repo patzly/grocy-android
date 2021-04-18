@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBot
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -76,6 +77,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     private ArrayList<Location> locations;
 
     private DownloadHelper.Queue currentQueueLoading;
+    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
     private boolean sortAscending;
     private String search;
     private final boolean debug;
@@ -99,6 +101,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
         objects = new ArrayList<>();
 
+        horizontalFilterBarMulti = new HorizontalFilterBarMulti(this::displayItems);
         sortAscending = true;
     }
 
@@ -235,21 +238,36 @@ public class MasterObjectListViewModel extends BaseViewModel {
     }
 
     public void displayItems() {
-        // filter items
-        ArrayList<Object> filteredItems;
+        // search items
+        ArrayList<Object> searchedItems;
         if(search != null && !search.isEmpty()) {
-            filteredItems = new ArrayList<>();
+            searchedItems = new ArrayList<>();
             for(Object object : objects) {
                 String name = ObjectUtil.getObjectName(object, entity);
                 String description = ObjectUtil.getObjectDescription(object, entity);
                 name = name != null ? name.toLowerCase() : "";
                 description = description != null ? description.toLowerCase() : "";
                 if(name.contains(search) || description.contains(search)) {
+                    searchedItems.add(object);
+                }
+            }
+        } else {
+            searchedItems = new ArrayList<>(objects);
+        }
+
+        // filter items
+        ArrayList<Object> filteredItems;
+        if(entity.equals(GrocyApi.ENTITY.PRODUCTS) && horizontalFilterBarMulti.areFiltersActive()) {
+            filteredItems = new ArrayList<>();
+            HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti.getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+            for(Object object : searchedItems) {
+                int productGroupId = (int) NumUtil.toDouble(((Product) object).getProductGroupId());
+                if(productGroupId != -1 && productGroupId == filter.getObjectId()) {
                     filteredItems.add(object);
                 }
             }
         } else {
-            filteredItems = new ArrayList<>(objects);
+            filteredItems = searchedItems;
         }
 
         // sort items
@@ -267,8 +285,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         });
     }
 
-    public void showObjectBottomSheetOfDisplayedItem(int position) {
-        Object object = getDisplayedItem(position);
+    public void showObjectBottomSheetOfDisplayedItem(Object object) {
         if(object == null) return;
         Bundle bundle = new Bundle();
         switch (entity) {
@@ -405,6 +422,10 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     public void setOfflineLive(boolean isOffline) {
         offlineLive.setValue(isOffline);
+    }
+
+    public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
+        return horizontalFilterBarMulti;
     }
 
     @NonNull

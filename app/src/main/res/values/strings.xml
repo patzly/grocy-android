@@ -229,7 +229,6 @@
     <string name="error_failed_to_connect_to">Failed to connect to server</string>
     <string name="error_missing_information">Not all required fields are filled</string>
     <string name="error_handshake">Invalid certificate</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">This server requires a certificate that is not known or trusted by Android.\nThe server certificate must either be signed by a trusted certificate authority (e.g. letsencrypt.org) or stored in the Android user certificate store of this device.</string>
     <string name="error_unexpected_response_code">Unexpected response code</string>
     <string name="error_unexpected_response">Unexpected server response</string>

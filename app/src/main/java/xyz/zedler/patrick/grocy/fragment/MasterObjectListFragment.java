@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -193,9 +194,13 @@ public class MasterObjectListFragment extends BaseFragment
             if(binding.recycler.getAdapter() instanceof MasterObjectListAdapter) {
                 ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
             } else {
-                binding.recycler.setAdapter(
-                        new MasterObjectListAdapter(entity, objects, this)
-                );
+                binding.recycler.setAdapter(new MasterObjectListAdapter(
+                        getContext(),
+                        entity,
+                        objects,
+                        this,
+                        viewModel.getHorizontalFilterBarMulti()
+                ));
             }
         });
 
@@ -397,7 +402,12 @@ public class MasterObjectListFragment extends BaseFragment
                 SortUtil.sortProductGroupsByName(sorted, true);
                 for(ProductGroup pg : sorted) {
                     menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
-                        //filterProductGroup(productGroup); TODO
+                        if(binding.recycler.getAdapter() == null) return false;
+                        viewModel.getHorizontalFilterBarMulti().addFilter(
+                                HorizontalFilterBarMulti.PRODUCT_GROUP,
+                                new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
+                        );
+                        binding.recycler.getAdapter().notifyItemChanged(0);
                         return true;
                     });
                 }
@@ -409,9 +419,9 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     @Override
-    public void onItemRowClicked(int position) {
+    public void onItemRowClicked(Object object) {
         if(clickUtil.isDisabled()) return;
-        viewModel.showObjectBottomSheetOfDisplayedItem(position);
+        viewModel.showObjectBottomSheetOfDisplayedItem(object);
     }
 
     @Override
