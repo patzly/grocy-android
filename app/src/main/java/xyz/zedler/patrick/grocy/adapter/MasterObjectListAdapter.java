@@ -273,7 +273,7 @@ public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectLi
 
     @Override
     public int getItemCount() {
-        return objects.size();
+        return entity.equals(GrocyApi.ENTITY.PRODUCTS) ? objects.size()+1 : objects.size();
     }
 
     public interface MasterObjectListAdapterListener {
