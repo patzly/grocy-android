@@ -167,7 +167,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 InfoFullscreen info;
                 if(viewModel.isSearchActive()) {
                     info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-                } else if(viewModel.getFilterState() != -1) {
+                } else if(!viewModel.getHorizontalFilterBarSingle().isNoFilterActive()) {
                     info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
                 } else {
                     info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
@@ -194,10 +194,7 @@ public class ShoppingListFragment extends BaseFragment implements
                                 viewModel.getQuantityUnitHashMap(),
                                 viewModel.getMissingProductIds(),
                                 this,
-                                viewModel.getFilterState(),
-                                state -> viewModel.onFilterChanged(state),
-                                viewModel.getItemsMissingCount(),
-                                viewModel.getItemsUndoneCount()
+                                viewModel.getHorizontalFilterBarSingle()
                         )
                 );
             }

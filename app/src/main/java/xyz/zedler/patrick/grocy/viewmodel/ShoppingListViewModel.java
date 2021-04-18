@@ -39,11 +39,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -82,7 +82,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
-    private int filterState;
+    private HorizontalFilterBarSingle horizontalFilterBarSingle;
     private int itemsMissingCount;
     private int itemsUndoneCount;
     private final boolean debug;
@@ -103,7 +103,11 @@ public class ShoppingListViewModel extends BaseViewModel {
         selectedShoppingListIdLive = new MutableLiveData<>(1);
         filteredGroupedListItemsLive = new MutableLiveData<>();
 
-        filterState = ShoppingListItemAdapter.FILTER_NOTHING;
+        horizontalFilterBarSingle = new HorizontalFilterBarSingle(
+                this::updateFilteredShoppingListItems,
+                HorizontalFilterBarSingle.MISSING,
+                HorizontalFilterBarSingle.UNDONE
+        );
         itemsMissingCount = 0;
         itemsUndoneCount = 0;
 
@@ -186,10 +190,10 @@ public class ShoppingListViewModel extends BaseViewModel {
             }
             if(!searchContainsItem) continue;
 
-            if(filterState == ShoppingListItemAdapter.FILTER_NOTHING
-                    || filterState == ShoppingListItemAdapter.FILTER_MISSING
+            if(horizontalFilterBarSingle.isNoFilterActive()
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
                     && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
-                    || filterState == ShoppingListItemAdapter.FILTER_UNDONE
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)
                     && item.isUndone()
             ) filteredShoppingListItems.add(item);
         }
@@ -198,15 +202,6 @@ public class ShoppingListViewModel extends BaseViewModel {
 
     public boolean isSearchActive() {
         return searchInput != null && !searchInput.isEmpty();
-    }
-
-    public int getFilterState() {
-        return filterState;
-    }
-
-    public void onFilterChanged(int state) {
-        this.filterState = state;
-        updateFilteredShoppingListItems();
     }
 
     public void resetSearch() {
@@ -654,6 +649,10 @@ public class ShoppingListViewModel extends BaseViewModel {
 
     public ArrayList<Integer> getMissingProductIds() {
         return missingProductIds;
+    }
+
+    public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
+        return horizontalFilterBarSingle;
     }
 
     public HashMap<Integer, Product> getProductHashMap() {

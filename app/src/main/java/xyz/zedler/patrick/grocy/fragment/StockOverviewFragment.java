@@ -175,7 +175,7 @@ public class StockOverviewFragment extends BaseFragment implements
                         viewModel.getItemsUndoneCount()
                 );
             } else {
-                binding.recycler.setAdapter(
+                /*binding.recycler.setAdapter(
                         new ShoppingListItemAdapter(
                                 requireContext(),
                                 items,
@@ -188,7 +188,7 @@ public class StockOverviewFragment extends BaseFragment implements
                                 viewModel.getItemsMissingCount(),
                                 viewModel.getItemsUndoneCount()
                         )
-                );
+                );*/
             }
         });
 

@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -67,11 +68,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
     private final ArrayList<Integer> missingProductIds;
     private final ShoppingListItemAdapterListener listener;
-
-    private int filterState;
-    private int itemsMissingCount;
-    private int itemsUndoneCount;
-    private final OnFilterChangedListener filterListenerOutput;
+    private final HorizontalFilterBarSingle horizontalFilterBarSingle;
 
 
     public ShoppingListItemAdapter(
@@ -81,10 +78,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             HashMap<Integer, QuantityUnit> quantityUnitHashMap,
             ArrayList<Integer> missingProductIds,
             ShoppingListItemAdapterListener listener,
-            int filterState,
-            OnFilterChangedListener filterListenerOutput,
-            int itemsMissingCount,
-            int itemsUndoneCount
+            HorizontalFilterBarSingle horizontalFilterBarSingle
     ) {
         this.context = context;
         this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -92,11 +86,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
         this.missingProductIds = new ArrayList<>(missingProductIds);
         this.listener = listener;
-
-        this.filterState = filterState;
-        this.filterListenerOutput = filterListenerOutput;
-        this.itemsMissingCount = itemsMissingCount;
-        this.itemsUndoneCount = itemsUndoneCount;
+        this.horizontalFilterBarSingle = horizontalFilterBarSingle;
     }
 
     @Override
@@ -139,15 +129,16 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         private final WeakReference<Context> weakContext;
         private final FilterChip chipMissing;
         private FilterChip chipUndone;
+        private final HorizontalFilterBarSingle horizontalFilterBarSingle;
 
         public FilterRowViewHolder(
                 RowFilterChipsBinding binding,
                 Context context,
-                int filterInitial,
-                OnFilterChangedListener filterListenerOutput
+                HorizontalFilterBarSingle horizontalFilterBarSingle
         ) {
             super(binding.getRoot());
 
+            this.horizontalFilterBarSingle = horizontalFilterBarSingle;
             weakContext = new WeakReference<>(context);
             chipMissing = new FilterChip(
                     context,
@@ -155,52 +146,46 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     context.getString(R.string.msg_missing_products, 0),
                     () -> {
                         if(chipUndone.isActive()) chipUndone.changeState(false);
-                        filterListenerOutput.onChanged(FILTER_MISSING);
+                        horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.MISSING);
                     },
-                    () -> filterListenerOutput.onChanged(FILTER_NOTHING)
+                    horizontalFilterBarSingle::resetAllFilters
             );
-            chipMissing.setId(R.id.chip_shopping_filter_missing);
             chipUndone = new FilterChip(
                     context,
                     R.color.retro_yellow_bg,
                     context.getString(R.string.msg_undone_items, 0),
                     () -> {
                         if(chipMissing.isActive()) chipMissing.changeState(false);
-                        filterListenerOutput.onChanged(FILTER_UNDONE);
+                        horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.UNDONE);
                     },
-                    () -> filterListenerOutput.onChanged(FILTER_NOTHING)
+                    horizontalFilterBarSingle::resetAllFilters
             );
+            chipMissing.setId(R.id.chip_shopping_filter_missing);
             chipUndone.setId(R.id.chip_shopping_filter_undone);
             binding.container.addView(chipMissing);
             binding.container.addView(chipUndone);
-            if(filterInitial == FILTER_MISSING) {
-                chipMissing.setActive(true);
-            } else if(filterInitial == FILTER_UNDONE) {
-                chipUndone.setActive(true);
-            }
         }
 
-        public void bind(int state, int itemsMissingCount, int itemsUndoneCount) {
-            if(state == FILTER_NOTHING) {
+        public void bind() {
+            if(horizontalFilterBarSingle.isNoFilterActive()) {
                 if(chipMissing.isActive()) chipMissing.changeState(false);
                 if(chipUndone.isActive()) chipUndone.changeState(false);
-            } else if(state == FILTER_MISSING) {
+            } else if(horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)) {
                 if(!chipMissing.isActive()) chipMissing.changeState(true);
                 if(chipUndone.isActive()) chipUndone.changeState(false);
-            } else if(state == FILTER_UNDONE) {
+            } else if(horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)) {
                 if(chipMissing.isActive()) chipMissing.changeState(false);
                 if(!chipUndone.isActive()) chipUndone.changeState(true);
             }
-            chipMissing.setText(weakContext.get()
-                    .getString(R.string.msg_missing_products, itemsMissingCount));
-            chipUndone.setText(weakContext.get()
-                    .getString(R.string.msg_undone_items, itemsUndoneCount));
+            chipMissing.setText(weakContext.get().getString(
+                    R.string.msg_missing_products,
+                    horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
+            ));
+            chipUndone.setText(weakContext.get().getString(
+                    R.string.msg_undone_items,
+                    horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
+            ));
         }
-    }
-
-    public void setFilterState(int state) {
-        filterState = state;
-        notifyItemChanged(0);
     }
 
     @Override
@@ -221,11 +206,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             return new FilterRowViewHolder(
                     binding,
                     context,
-                    filterState,
-                    state -> {
-                        filterState = state;
-                        filterListenerOutput.onChanged(state);
-                    }
+                    horizontalFilterBarSingle
             );
         } else if(viewType == GroupedListItem.TYPE_HEADER) {
             return new ShoppingListGroupViewHolder(
@@ -262,11 +243,7 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         int movedPosition = position - 1;
 
         if(position == 0) { // Filter row
-            ((FilterRowViewHolder) viewHolder).bind(
-                    filterState,
-                    itemsMissingCount,
-                    itemsUndoneCount
-            );
+            ((FilterRowViewHolder) viewHolder).bind();
             return;
         }
 
@@ -553,10 +530,10 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
             int itemsMissingCount,
             int itemsUndoneCount
     ) {
-        if(this.itemsMissingCount != itemsMissingCount
-                || this.itemsUndoneCount != itemsUndoneCount) {
-            this.itemsMissingCount = itemsMissingCount;
-            this.itemsUndoneCount = itemsUndoneCount;
+        if(horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING) != itemsMissingCount
+                || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE) != itemsUndoneCount) {
+            horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCount);
+            horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.UNDONE, itemsUndoneCount);
             notifyItemChanged(0); // update viewHolder with filter row
         }
 
@@ -704,9 +681,5 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
         public void onChanged(int position, int count, Object payload) {
             mAdapter.notifyItemRangeChanged(position + 1, count, payload);
         }
-    }
-
-    public interface OnFilterChangedListener {
-        void onChanged(int state);
     }
 }
