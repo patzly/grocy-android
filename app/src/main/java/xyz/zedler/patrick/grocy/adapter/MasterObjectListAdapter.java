@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
@@ -192,7 +193,7 @@ public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectLi
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.objects.clear();
         this.objects.addAll(newObjects);
-        diffResult.dispatchUpdatesTo(this);
+        diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, entity));
     }
 
     static class DiffCallback extends DiffUtil.Callback {
@@ -239,9 +240,35 @@ public class MasterObjectListAdapter extends RecyclerView.Adapter<MasterObjectLi
         }
     }
 
-    @Override
-    public long getItemId(int position) {
-        return ObjectUtil.getObjectId(objects.get(position), entity);
+    /**
+     * Custom ListUpdateCallback that dispatches update events to the given adapter
+     * with offset of 1, because the first item is the filter row.
+     */
+    public static final class AdapterListUpdateCallback implements ListUpdateCallback {
+        @NonNull
+        private final MasterObjectListAdapter mAdapter;
+        private final int offset;
+
+        public AdapterListUpdateCallback(@NonNull MasterObjectListAdapter adapter, String entity) {
+            mAdapter = adapter;
+            offset = entity.equals(GrocyApi.ENTITY.PRODUCTS) ? 1 : 0;
+        }
+        @Override
+        public void onInserted(int position, int count) {
+            mAdapter.notifyItemRangeInserted(position + offset, count);
+        }
+        @Override
+        public void onRemoved(int position, int count) {
+            mAdapter.notifyItemRangeRemoved(position + offset, count);
+        }
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            mAdapter.notifyItemMoved(fromPosition + offset, toPosition + offset);
+        }
+        @Override
+        public void onChanged(int position, int count, Object payload) {
+            mAdapter.notifyItemRangeChanged(position + offset, count, payload);
+        }
     }
 
     @Override
