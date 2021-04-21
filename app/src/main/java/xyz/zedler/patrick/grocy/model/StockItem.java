@@ -299,6 +299,7 @@ public class StockItem implements Parcelable {
         StockItem stockItem = (StockItem) o;
         return isAggregatedAmount == stockItem.isAggregatedAmount &&
                 productId == stockItem.productId &&
+                dueType == stockItem.dueType &&
                 Objects.equals(amount, stockItem.amount) &&
                 Objects.equals(amountAggregated, stockItem.amountAggregated) &&
                 Objects.equals(value, stockItem.value) &&

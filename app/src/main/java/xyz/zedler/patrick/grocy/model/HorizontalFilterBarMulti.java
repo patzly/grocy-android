@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 public class HorizontalFilterBarMulti {
     public final static String PRODUCT_GROUP = "product_group";
+    public final static String LOCATION = "location";
 
     private final HashMap<String, Filter> filtersActive;
     private final FilterChangedListener filterChangedListener;
@@ -52,6 +53,7 @@ public class HorizontalFilterBarMulti {
     }
 
     public void onFilterChanged() {
+        if(filterChangedListener == null) return;
         filterChangedListener.onChanged();
     }
 

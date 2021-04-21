@@ -46,8 +46,11 @@ import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -55,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
@@ -144,8 +148,10 @@ public class StockOverviewFragment extends BaseFragment implements
                     info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
                 } else if(!viewModel.getHorizontalFilterBarSingle().isNoFilterActive()) {
                     info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
+                } else if(viewModel.getHorizontalFilterBarMulti().areFiltersActive()) {
+                    info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
                 } else {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
+                    info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
                 }
                 viewModel.getInfoFullscreenLive().setValue(info);
             } else {
@@ -174,6 +180,7 @@ public class StockOverviewFragment extends BaseFragment implements
                                 viewModel.getProductIdsMissingItems(),
                                 this,
                                 viewModel.getHorizontalFilterBarSingle(),
+                                viewModel.getHorizontalFilterBarMulti(),
                                 true,
                                 5,
                                 viewModel.getSortMode()
@@ -294,6 +301,46 @@ public class StockOverviewFragment extends BaseFragment implements
                 return true;
             });
         }
+        viewModel.getProductGroupsLive().observe(getViewLifecycleOwner(), productGroups -> {
+            if(productGroups == null) return;
+            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_product_group);
+            if(menuItem == null) return;
+            SubMenu menuProductGroups = menuItem.getSubMenu();
+            menuProductGroups.clear();
+            SortUtil.sortProductGroupsByName(productGroups, true);
+            for(ProductGroup pg : productGroups) {
+                menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
+                    if(binding.recycler.getAdapter() == null) return false;
+                    viewModel.getHorizontalFilterBarMulti().addFilter(
+                            HorizontalFilterBarMulti.PRODUCT_GROUP,
+                            new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
+                    );
+                    binding.recycler.getAdapter().notifyItemChanged(1);
+                    return true;
+                });
+            }
+            menuItem.setVisible(!productGroups.isEmpty());
+        });
+        viewModel.getLocationsLive().observe(getViewLifecycleOwner(), locations -> {
+            if(locations == null) return;
+            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
+            if(menuItem == null) return;
+            SubMenu menuLocations = menuItem.getSubMenu();
+            menuLocations.clear();
+            SortUtil.sortLocationsByName(locations, true);
+            for(Location loc : locations) {
+                menuLocations.add(loc.getName()).setOnMenuItemClickListener(item -> {
+                    if(binding.recycler.getAdapter() == null) return false;
+                    viewModel.getHorizontalFilterBarMulti().addFilter(
+                            HorizontalFilterBarMulti.LOCATION,
+                            new HorizontalFilterBarMulti.Filter(loc.getName(), loc.getId())
+                    );
+                    binding.recycler.getAdapter().notifyItemChanged(1);
+                    return true;
+                });
+            }
+            menuItem.setVisible(!locations.isEmpty());
+        });
     }
 
     @Override
@@ -309,12 +356,6 @@ public class StockOverviewFragment extends BaseFragment implements
         if(!isOnline == viewModel.isOffline()) return;
         viewModel.setOfflineLive(!isOnline);
         if(isOnline) viewModel.downloadData();
-        if(isOnline) activity.updateBottomAppBar(
-                Constants.FAB.POSITION.CENTER,
-                R.menu.menu_shopping_list,
-                true,
-                this::setUpBottomMenu
-        );
     }
 
     private void hideDisabledFeatures() {

@@ -40,6 +40,7 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -47,6 +48,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
+import xyz.zedler.patrick.grocy.view.InputChip;
 
 public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
 
@@ -60,6 +62,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
     private final ArrayList<Integer> missingItemsProductIds;
     private final StockOverviewItemAdapterListener listener;
     private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
     private final boolean showDateTracking;
     private final int daysExpiringSoon;
     private String sortMode;
@@ -72,6 +75,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             ArrayList<Integer> missingItemsProductIds,
             StockOverviewItemAdapterListener listener,
             HorizontalFilterBarSingle horizontalFilterBarSingle,
+            HorizontalFilterBarMulti horizontalFilterBarMulti,
             boolean showDateTracking,
             int daysExpiringSoon,
             String sortMode
@@ -83,6 +87,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
         this.listener = listener;
         this.horizontalFilterBarSingle = horizontalFilterBarSingle;
+        this.horizontalFilterBarMulti = horizontalFilterBarMulti;
         this.showDateTracking = showDateTracking;
         this.daysExpiringSoon = daysExpiringSoon;
         this.sortMode = sortMode;
@@ -108,7 +113,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         }
     }
 
-    public static class FilterRowViewHolder extends ViewHolder {
+    public static class FilterSingleRowViewHolder extends ViewHolder {
         private final WeakReference<Context> weakContext;
         private final FilterChip chipDueNext;
         private FilterChip chipOverdue;
@@ -117,7 +122,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         private FilterChip chipInStock;
         private final HorizontalFilterBarSingle horizontalFilterBarSingle;
 
-        public FilterRowViewHolder(
+        public FilterSingleRowViewHolder(
                 RowFilterChipsBinding binding,
                 Context context,
                 HorizontalFilterBarSingle horizontalFilterBarSingle
@@ -225,25 +230,92 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         }
     }
 
+    public static class FilterMultiRowViewHolder extends ViewHolder {
+        private final WeakReference<Context> weakContext;
+        private final RowFilterChipsBinding binding;
+        private InputChip chipProductGroup;
+        private InputChip chipLocation;
+        private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+
+        public FilterMultiRowViewHolder(
+                RowFilterChipsBinding binding,
+                Context context,
+                HorizontalFilterBarMulti horizontalFilterBarMulti
+        ) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+            weakContext = new WeakReference<>(context);
+        }
+
+        public void bind() {
+            HorizontalFilterBarMulti.Filter filterPg = horizontalFilterBarMulti.getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+            if(filterPg != null && chipProductGroup == null) {
+                chipProductGroup = new InputChip(
+                        weakContext.get(),
+                        filterPg.getObjectName(),
+                        R.drawable.ic_round_category,
+                        true,
+                        () -> {
+                            horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+                            chipProductGroup = null;
+                        }
+                );
+                binding.container.addView(chipProductGroup);
+            } else if(filterPg != null) {
+                chipProductGroup.setText(filterPg.getObjectName());
+            }
+
+            HorizontalFilterBarMulti.Filter filterLoc = horizontalFilterBarMulti.getFilter(HorizontalFilterBarMulti.LOCATION);
+            if(filterLoc != null && chipLocation == null) {
+                chipLocation = new InputChip(
+                        weakContext.get(),
+                        filterLoc.getObjectName(),
+                        R.drawable.ic_round_place,
+                        true,
+                        () -> {
+                            horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.LOCATION);
+                            chipLocation = null;
+                        }
+                );
+                binding.container.addView(chipLocation);
+            } else if(filterLoc != null) {
+                chipLocation.setText(filterLoc.getObjectName());
+            }
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if(position == 0) return -1; // filter row
+        if(position == 0) return -2; // filter single row
+        if(position == 1) return -1; // filter multi row
         return 0;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == -1) { // filter row
+        if(viewType == -2) { // filter single row
             RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
                     LayoutInflater.from(parent.getContext()),
                     parent,
                     false
             );
-            return new FilterRowViewHolder(
+            return new FilterSingleRowViewHolder(
                     binding,
                     context,
                     horizontalFilterBarSingle
+            );
+        } else if(viewType == -1) { // filter multi row
+            RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
+                    LayoutInflater.from(parent.getContext()),
+                    parent,
+                    false
+            );
+            return new FilterMultiRowViewHolder(
+                    binding,
+                    context,
+                    horizontalFilterBarMulti
             );
         } else {
             return new StockItemViewHolder(RowStockItemBinding.inflate(
@@ -259,10 +331,13 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
 
         int position = viewHolder.getAdapterPosition();
-        int movedPosition = position - 1;
+        int movedPosition = position - 2;
 
-        if(position == 0) { // Filter row
-            ((FilterRowViewHolder) viewHolder).bind();
+        if(viewHolder.getItemViewType() == -2) { // Filter single row
+            ((FilterSingleRowViewHolder) viewHolder).bind();
+            return;
+        } else if(viewHolder.getItemViewType() == -1) { // Filter multi row
+            ((FilterMultiRowViewHolder) viewHolder).bind();
             return;
         }
 
@@ -392,7 +467,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
 
     @Override
     public int getItemCount() {
-        return stockItems.size() + 1;
+        return stockItems.size() + 2;
     }
 
     public interface StockOverviewItemAdapterListener {
@@ -547,19 +622,19 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         }
         @Override
         public void onInserted(int position, int count) {
-            mAdapter.notifyItemRangeInserted(position + 1, count);
+            mAdapter.notifyItemRangeInserted(position + 2, count);
         }
         @Override
         public void onRemoved(int position, int count) {
-            mAdapter.notifyItemRangeRemoved(position + 1, count);
+            mAdapter.notifyItemRangeRemoved(position + 2, count);
         }
         @Override
         public void onMoved(int fromPosition, int toPosition) {
-            mAdapter.notifyItemMoved(fromPosition + 1, toPosition + 1);
+            mAdapter.notifyItemMoved(fromPosition + 2, toPosition + 2);
         }
         @Override
         public void onChanged(int position, int count, Object payload) {
-            mAdapter.notifyItemRangeChanged(position + 1, count, payload);
+            mAdapter.notifyItemRangeChanged(position + 2, count, payload);
         }
     }
 }

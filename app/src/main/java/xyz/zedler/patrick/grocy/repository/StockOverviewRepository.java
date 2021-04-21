@@ -107,7 +107,6 @@ public class StockOverviewRepository {
             ArrayList<StockItem> stockItems,
             ArrayList<Product> products,
             ArrayList<MissingItem> missingItems,
-            ArrayList<StockItem> missingStockItems,
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<Location> locations,
             StockOverviewDataUpdatedListener listener
@@ -119,7 +118,6 @@ public class StockOverviewRepository {
                 stockItems,
                 products,
                 missingItems,
-                missingStockItems,
                 shoppingListItems,
                 locations,
                 listener
@@ -135,7 +133,6 @@ public class StockOverviewRepository {
         private final ArrayList<StockItem> stockItems;
         private final ArrayList<Product> products;
         private final ArrayList<MissingItem> missingItems;
-        private final ArrayList<StockItem> missingStockItems;
         private final ArrayList<ShoppingListItem> shoppingListItems;
         private final ArrayList<Location> locations;
 
@@ -146,7 +143,6 @@ public class StockOverviewRepository {
                 ArrayList<StockItem> stockItems,
                 ArrayList<Product> products,
                 ArrayList<MissingItem> missingItems,
-                ArrayList<StockItem> missingStockItems,
                 ArrayList<ShoppingListItem> shoppingListItems,
                 ArrayList<Location> locations,
                 StockOverviewDataUpdatedListener listener
@@ -158,7 +154,6 @@ public class StockOverviewRepository {
             this.stockItems = stockItems;
             this.products = products;
             this.missingItems = missingItems;
-            this.missingStockItems = missingStockItems;
             this.shoppingListItems = shoppingListItems;
             this.locations = locations;
         }
@@ -173,26 +168,12 @@ public class StockOverviewRepository {
             appDatabase.stockItemDao().insertAll(stockItems);
             appDatabase.productDao().deleteAll();
             appDatabase.productDao().insertAll(products);
-
             appDatabase.missingItemDao().deleteAll();
             appDatabase.missingItemDao().insertAll(missingItems);
-
             appDatabase.shoppingListItemDao().deleteAll();
             appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
             appDatabase.locationDao().deleteAll();
             appDatabase.locationDao().insertAll(locations);
-            /*appDatabase.shoppingListItemDao().deleteAll();
-            appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
-            appDatabase.shoppingListDao().deleteAll();
-            appDatabase.shoppingListDao().insertAll(shoppingLists);
-            appDatabase.productGroupDao().deleteAll();
-            appDatabase.productGroupDao().insertAll(productGroups);
-            appDatabase.quantityUnitDao().deleteAll();
-            appDatabase.quantityUnitDao().insertAll(quantityUnits);
-            appDatabase.productDao().deleteAll();
-            appDatabase.productDao().insertAll(products);
-            appDatabase.missingItemDao().deleteAll();
-            appDatabase.missingItemDao().insertAll(missingItems);*/
             return null;
         }
 

@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
@@ -66,21 +67,20 @@ public class StockOverviewViewModel extends BaseViewModel {
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
     private final MutableLiveData<Boolean> offlineLive;
     private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
+    private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
+    private final MutableLiveData<ArrayList<Location>> locationsLive;
 
     private ArrayList<StockItem> stockItems;
     private ArrayList<Product> products;
     private HashMap<Integer, Product> productHashMap;
     private ArrayList<ShoppingListItem> shoppingListItems;
     private ArrayList<String> shoppingListItemsProductIds;
-    private ArrayList<Location> locations;
-    private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
     private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
     private ArrayList<StockItem> dueItemsTemp;
     private ArrayList<StockItem> overdueItemsTemp;
     private ArrayList<StockItem> expiredItemsTemp;
     private ArrayList<MissingItem> missingItems;
-    private ArrayList<StockItem> missingStockItems;
     private HashMap<Integer, MissingItem> productIdsMissingItems;
 
     private DownloadHelper.Queue currentQueueLoading;
@@ -110,6 +110,8 @@ public class StockOverviewViewModel extends BaseViewModel {
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
         filteredStockItemsLive = new MutableLiveData<>();
+        productGroupsLive = new MutableLiveData<>();
+        locationsLive = new MutableLiveData<>();
 
         horizontalFilterBarSingle = new HorizontalFilterBarSingle(
                 this::updateFilteredStockItems,
@@ -139,7 +141,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     for(QuantityUnit quantityUnit : quantityUnits) {
                         quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
                     }
-                    this.productGroups = productGroups;
+                    this.productGroupsLive.setValue(productGroups);
                     this.products = products;
                     productHashMap = new HashMap<>();
                     for(Product product : products) {
@@ -168,7 +170,6 @@ public class StockOverviewViewModel extends BaseViewModel {
                     for(MissingItem item : missingItems) {
                         productIdsMissingItems.put(item.getId(), item);
                     }
-                    this.missingStockItems = missingStockItems;
                     this.shoppingListItems = shoppingListItems;
                     shoppingListItemsProductIds = new ArrayList<>();
                     for(ShoppingListItem item : shoppingListItems) {
@@ -176,7 +177,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                             shoppingListItemsProductIds.add(item.getProductId());
                         }
                     }
-                    this.locations = locations;
+                    this.locationsLive.setValue(locations);
 
                     updateFilteredStockItems();
                     if(downloadAfterLoading) downloadData();
@@ -222,18 +223,13 @@ public class StockOverviewViewModel extends BaseViewModel {
             }
 
             DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-            missingStockItems = new ArrayList<>();
             for(MissingItem missingItem : missingItems) {
                 StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
-                if(missingStockItem != null) { // already downloaded
-                    missingStockItems.add(missingStockItem);
-                } else {
-                    queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
-                        StockItem stockItem = new StockItem(productDetails);
-                        stockItems.add(stockItem);
-                        missingStockItems.add(stockItem);
-                    }));
-                }
+                if(missingStockItem != null) continue;
+                queue.append(dlHelper.getProductDetails(
+                        missingItem.getId(),
+                        productDetails -> stockItems.add(new StockItem(productDetails)))
+                );
             }
             if(queue.getSize() == 0) {
                 onQueueEmpty();
@@ -250,11 +246,8 @@ public class StockOverviewViewModel extends BaseViewModel {
                     for(QuantityUnit quantityUnit : quantityUnits) {
                         quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
                     }
-                }), dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
-                    this.productGroups = productGroups;
-                    //setMenuProductGroupFilters();
-                    //updateMenuFilterVisibility();
-                }), dlHelper.updateStockItems(
+                }), dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
+                dlHelper.updateStockItems(
                         dbChangedTime, stockItems -> this.stockItems = stockItems
                 ), dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
@@ -287,9 +280,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                             shoppingListItemsProductIds.add(item.getProductId());
                         }
                     }
-                }), dlHelper.updateLocations(
-                        dbChangedTime, locations -> this.locations = locations
-                )
+                }), dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue)
         );
 
         if(queue.isEmpty()) {
@@ -321,13 +312,12 @@ public class StockOverviewViewModel extends BaseViewModel {
     private void onQueueEmpty() {
         repository.updateDatabase(
                 this.quantityUnits,
-                this.productGroups,
+                this.productGroupsLive.getValue(),
                 this.stockItems,
                 this.products,
                 this.missingItems,
-                this.missingStockItems,
                 this.shoppingListItems,
-                this.locations,
+                this.locationsLive.getValue(),
                 this::updateFilteredStockItems
         );
     }
@@ -347,6 +337,19 @@ public class StockOverviewViewModel extends BaseViewModel {
                 searchContainsItem = item.getProduct().getName().toLowerCase().contains(searchInput);
             }
             if(!searchContainsItem) continue;
+
+            if(horizontalFilterBarMulti.areFiltersActive()) {
+                HorizontalFilterBarMulti.Filter productGroup = horizontalFilterBarMulti
+                        .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+                HorizontalFilterBarMulti.Filter location = horizontalFilterBarMulti
+                        .getFilter(HorizontalFilterBarMulti.LOCATION);
+                if(productGroup != null && NumUtil.isStringInt(item.getProduct().getProductGroupId()) && productGroup.getObjectId() != Integer.parseInt(item.getProduct().getProductGroupId())) {
+                    continue;
+                }
+                if(location != null && NumUtil.isStringInt(item.getProduct().getLocationId()) && location.getObjectId() != Integer.parseInt(item.getProduct().getLocationId())) {
+                    continue;
+                }
+            }
 
             if(horizontalFilterBarSingle.isNoFilterActive()
                     || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)
@@ -518,6 +521,14 @@ public class StockOverviewViewModel extends BaseViewModel {
         this.sortAscending = sortAscending;
         sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
         updateFilteredStockItems();
+    }
+
+    public MutableLiveData<ArrayList<ProductGroup>> getProductGroupsLive() {
+        return productGroupsLive;
+    }
+
+    public MutableLiveData<ArrayList<Location>> getLocationsLive() {
+        return locationsLive;
     }
 
     public HashMap<Integer, Product> getProductHashMap() {
