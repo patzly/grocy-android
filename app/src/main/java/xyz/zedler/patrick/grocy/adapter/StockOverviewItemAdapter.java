@@ -514,6 +514,12 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
 
             if(!newItem.getProduct().equals(oldItem.getProduct())) return false;
 
+            QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStock());
+            QuantityUnit quNew = quantityUnitHashMapOld.get(newItem.getProduct().getQuIdStock());
+            if(quOld == null && quNew != null
+                    || quOld != null && quNew != null && quOld.getId() != quNew.getId()
+            ) return false;
+
             boolean isOnShoppingListOld = shoppingListItemsProductIdsOld
                     .contains(String.valueOf(oldItem.getProduct().getId()));
             boolean isOnShoppingListNew = shoppingListItemsProductIdsNew
