@@ -80,14 +80,14 @@ public class StockOverviewViewModel extends BaseViewModel {
     private ArrayList<StockItem> dueItemsTemp;
     private ArrayList<StockItem> overdueItemsTemp;
     private ArrayList<StockItem> expiredItemsTemp;
-    private ArrayList<MissingItem> missingItems;
-    private HashMap<Integer, MissingItem> productIdsMissingItems;
+    private ArrayList<MissingItem> missingItemsTemp;
+    private HashMap<Integer, StockItem> productIdsMissingStockItems;
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
     private String sortMode;
-    private HorizontalFilterBarSingle horizontalFilterBarSingle;
-    private HorizontalFilterBarMulti horizontalFilterBarMulti;
+    private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
     private int itemsDueCount;
     private int itemsOverdueCount;
     private int itemsExpiredCount;
@@ -135,7 +135,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (quantityUnits, productGroups, stockItems, products, missingItems, missingStockItems, shoppingListItems, locations) -> {
+                (quantityUnits, productGroups, stockItems, products, shoppingListItems, locations) -> {
                     this.quantityUnits = quantityUnits;
                     quantityUnitHashMap = new HashMap<>();
                     for(QuantityUnit quantityUnit : quantityUnits) {
@@ -152,24 +152,23 @@ public class StockOverviewViewModel extends BaseViewModel {
                     itemsOverdueCount = 0;
                     itemsExpiredCount = 0;
                     itemsMissingCount = 0;
+                    itemsInStockCount = 0;
+                    productIdsMissingStockItems = new HashMap<>();
                     this.stockItems = stockItems;
                     for(StockItem stockItem : stockItems) {
                         stockItem.setProduct(productHashMap.get(stockItem.getProductId()));
                         if(stockItem.isItemDue()) itemsDueCount++;
                         if(stockItem.isItemOverdue()) itemsOverdueCount++;
                         if(stockItem.isItemExpired()) itemsExpiredCount++;
+                        if(stockItem.isItemMissing()) {
+                            itemsMissingCount++;
+                            productIdsMissingStockItems.put(stockItem.getProductId(), stockItem);
+                        }
+                        if(!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
+                            itemsInStockCount++;
+                        }
                     }
 
-                    this.missingItems = missingItems;
-                    itemsMissingCount = missingItems.size();
-                    itemsInStockCount = stockItems.size();
-                    for(MissingItem missingItem : missingItems) {
-                        if(missingItem.getIsPartlyInStock() == 0) itemsInStockCount--;
-                    }
-                    productIdsMissingItems = new HashMap<>();
-                    for(MissingItem item : missingItems) {
-                        productIdsMissingItems.put(item.getId(), item);
-                    }
                     this.shoppingListItems = shoppingListItems;
                     shoppingListItemsProductIds = new ArrayList<>();
                     for(ShoppingListItem item : shoppingListItems) {
@@ -223,13 +222,24 @@ public class StockOverviewViewModel extends BaseViewModel {
             }
 
             DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-            for(MissingItem missingItem : missingItems) {
+
+            productIdsMissingStockItems = new HashMap<>();
+            for(MissingItem missingItem : missingItemsTemp) {
+
                 StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
-                if(missingStockItem != null) continue;
-                queue.append(dlHelper.getProductDetails(
-                        missingItem.getId(),
-                        productDetails -> stockItems.add(new StockItem(productDetails)))
-                );
+                if(missingStockItem != null) {
+                    missingStockItem.setItemMissing(true);
+                    missingStockItem.setItemMissingAndPartlyInStock(true);
+                    productIdsMissingStockItems.put(missingItem.getId(), missingStockItem);
+                    continue;
+                }
+                queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
+                    StockItem stockItem = new StockItem(productDetails);
+                    stockItem.setItemMissing(true);
+                    stockItem.setItemMissingAndPartlyInStock(false);
+                    productIdsMissingStockItems.put(missingItem.getId(), stockItem);
+                    stockItems.add(stockItem);
+                }));
             }
             if(queue.getSize() == 0) {
                 onQueueEmpty();
@@ -247,9 +257,10 @@ public class StockOverviewViewModel extends BaseViewModel {
                         quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
                     }
                 }), dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
-                dlHelper.updateStockItems(
-                        dbChangedTime, stockItems -> this.stockItems = stockItems
-                ), dlHelper.updateProducts(dbChangedTime, products -> {
+                dlHelper.updateStockItems(dbChangedTime, stockItems -> {
+                    this.stockItems = stockItems;
+                    itemsInStockCount = stockItems.size();
+                }), dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
                     productHashMap = new HashMap<>();
                     for(Product product : products) {
@@ -262,16 +273,8 @@ public class StockOverviewViewModel extends BaseViewModel {
                     itemsOverdueCount = overdue.size();
                     this.expiredItemsTemp = expired;
                     itemsExpiredCount = expired.size();
-                    this.missingItems = missing;
+                    this.missingItemsTemp = missing;
                     itemsMissingCount = missing.size();
-                    itemsInStockCount = stockItems.size();
-                    for(MissingItem missingItem : missingItems) {
-                        if(missingItem.getIsPartlyInStock() == 0) itemsInStockCount--;
-                    }
-                    productIdsMissingItems = new HashMap<>();
-                    for(MissingItem item : missingItems) {
-                        productIdsMissingItems.put(item.getId(), item);
-                    }
                 }), dlHelper.updateShoppingListItems(dbChangedTime, shoppingListItems -> {
                     this.shoppingListItems = shoppingListItems;
                     shoppingListItemsProductIds = new ArrayList<>();
@@ -315,7 +318,6 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this.productGroupsLive.getValue(),
                 this.stockItems,
                 this.products,
-                this.missingItems,
                 this.shoppingListItems,
                 this.locationsLive.getValue(),
                 this::updateFilteredStockItems
@@ -359,10 +361,10 @@ public class StockOverviewViewModel extends BaseViewModel {
                     || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)
                     && item.isItemExpired()
                     || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
-                    && productIdsMissingItems.containsKey(item.getProductId())
+                    && productIdsMissingStockItems.containsKey(item.getProductId())
                     || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)
-                    && (!productIdsMissingItems.containsKey(item.getProductId())
-                    || productIdsMissingItems.get(item.getProductId()).getIsPartlyInStock() == 1)
+                    && (!productIdsMissingStockItems.containsKey(item.getProductId())
+                    || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
             ) filteredStockItems.add(item);
         }
 
@@ -487,8 +489,8 @@ public class StockOverviewViewModel extends BaseViewModel {
         );*/
     }
 
-    public ArrayList<Integer> getProductIdsMissingItems() {
-        return new ArrayList<>(productIdsMissingItems.keySet());
+    public ArrayList<Integer> getProductIdsMissingStockItems() {
+        return new ArrayList<>(productIdsMissingStockItems.keySet());
     }
 
     public ArrayList<String> getShoppingListItemsProductIds() {

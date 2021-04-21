@@ -90,6 +90,12 @@ public class StockItem implements Parcelable {
     @ColumnInfo(name = "item_expired")
     private boolean itemExpired = false;
 
+    @ColumnInfo(name = "item_missing")
+    private boolean itemMissing = false;
+
+    @ColumnInfo(name = "item_missing_partly_in_stock")
+    private boolean itemMissingAndPartlyInStock = false;
+
     public StockItem() {}
 
     @Ignore
@@ -285,6 +291,22 @@ public class StockItem implements Parcelable {
 
     public void setItemExpired(boolean itemExpired) {
         this.itemExpired = itemExpired;
+    }
+
+    public boolean isItemMissing() {
+        return itemMissing;
+    }
+
+    public void setItemMissing(boolean itemMissing) {
+        this.itemMissing = itemMissing;
+    }
+
+    public boolean isItemMissingAndPartlyInStock() {
+        return itemMissingAndPartlyInStock;
+    }
+
+    public void setItemMissingAndPartlyInStock(boolean itemMissingAndPartlyInStock) {
+        this.itemMissingAndPartlyInStock = itemMissingAndPartlyInStock;
     }
 
     @Override

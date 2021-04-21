@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -46,8 +45,6 @@ public class StockOverviewRepository {
                 ArrayList<ProductGroup> productGroups,
                 ArrayList<StockItem> stockItems,
                 ArrayList<Product> products,
-                ArrayList<MissingItem> missingItems,
-                ArrayList<StockItem> missingStockItems,
                 ArrayList<ShoppingListItem> shoppingListItems,
                 ArrayList<Location> locations
         );
@@ -69,8 +66,6 @@ public class StockOverviewRepository {
         private ArrayList<ProductGroup> productGroups;
         private ArrayList<StockItem> stockItems;
         private ArrayList<Product> products;
-        private ArrayList<MissingItem> missingItems;
-        private ArrayList<StockItem> missingStockItems;
         private ArrayList<ShoppingListItem> shoppingListItems;
         private ArrayList<Location> locations;
 
@@ -85,11 +80,6 @@ public class StockOverviewRepository {
             productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
             stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
             products = new ArrayList<>(appDatabase.productDao().getAll());
-
-            missingStockItems = new ArrayList<>();
-
-            missingItems = new ArrayList<>(appDatabase.missingItemDao().getAll());
-
             shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
             locations = new ArrayList<>(appDatabase.locationDao().getAll());
             return null;
@@ -97,7 +87,7 @@ public class StockOverviewRepository {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(quantityUnits, productGroups, stockItems, products, missingItems, missingStockItems, shoppingListItems, locations);
+            if(listener != null) listener.actionFinished(quantityUnits, productGroups, stockItems, products, shoppingListItems, locations);
         }
     }
 
@@ -106,7 +96,6 @@ public class StockOverviewRepository {
             ArrayList<ProductGroup> productGroups,
             ArrayList<StockItem> stockItems,
             ArrayList<Product> products,
-            ArrayList<MissingItem> missingItems,
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<Location> locations,
             StockOverviewDataUpdatedListener listener
@@ -117,7 +106,6 @@ public class StockOverviewRepository {
                 productGroups,
                 stockItems,
                 products,
-                missingItems,
                 shoppingListItems,
                 locations,
                 listener
@@ -132,7 +120,6 @@ public class StockOverviewRepository {
         private final ArrayList<ProductGroup> productGroups;
         private final ArrayList<StockItem> stockItems;
         private final ArrayList<Product> products;
-        private final ArrayList<MissingItem> missingItems;
         private final ArrayList<ShoppingListItem> shoppingListItems;
         private final ArrayList<Location> locations;
 
@@ -142,7 +129,6 @@ public class StockOverviewRepository {
                 ArrayList<ProductGroup> productGroups,
                 ArrayList<StockItem> stockItems,
                 ArrayList<Product> products,
-                ArrayList<MissingItem> missingItems,
                 ArrayList<ShoppingListItem> shoppingListItems,
                 ArrayList<Location> locations,
                 StockOverviewDataUpdatedListener listener
@@ -153,7 +139,6 @@ public class StockOverviewRepository {
             this.productGroups = productGroups;
             this.stockItems = stockItems;
             this.products = products;
-            this.missingItems = missingItems;
             this.shoppingListItems = shoppingListItems;
             this.locations = locations;
         }
@@ -168,8 +153,6 @@ public class StockOverviewRepository {
             appDatabase.stockItemDao().insertAll(stockItems);
             appDatabase.productDao().deleteAll();
             appDatabase.productDao().insertAll(products);
-            appDatabase.missingItemDao().deleteAll();
-            appDatabase.missingItemDao().insertAll(missingItems);
             appDatabase.shoppingListItemDao().deleteAll();
             appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
             appDatabase.locationDao().deleteAll();
