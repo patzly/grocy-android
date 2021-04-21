@@ -255,7 +255,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         chipExpiring = new FilterChip(
                 activity,
                 R.color.retro_yellow_bg,
-                activity.getString(R.string.msg_expiring_products, 0),
+                activity.getString(R.string.msg_due_products, 0),
                 () -> {
                     chipExpired.changeState(false);
                     chipMissing.changeState(false);
@@ -443,7 +443,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         );
 
         chipExpiring.setText(
-                activity.getString(R.string.msg_expiring_products, expiringItems.size())
+                activity.getString(R.string.msg_due_products, expiringItems.size())
         );
         chipExpired.setText(
                 activity.getString(R.string.msg_expired_products, expiredItems.size())
@@ -539,7 +539,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                     expiredItems = expired;
                     missingItems = missing;
                     chipExpiring.setText(
-                            activity.getString(R.string.msg_expiring_products, expiringItems.size())
+                            activity.getString(R.string.msg_due_products, expiringItems.size())
                     );
                     chipExpired.setText(
                             activity.getString(R.string.msg_expired_products, expired.size())
@@ -596,7 +596,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         // update of chip is necessary because number of items maybe has changed
         // (if this lambda function was executed after the one of getVolatile)
         chipExpiring.setText(
-                activity.getString(R.string.msg_expiring_products, expiringItems.size())
+                activity.getString(R.string.msg_due_products, expiringItems.size())
         );
 
         missingStockItems.clear();

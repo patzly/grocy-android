@@ -27,7 +27,7 @@ public class HorizontalFilterBarSingle {
     public final static String DUE_NEXT = "due_next";
     public final static String OVERDUE = "overdue";
     public final static String EXPIRED = "expired";
-    public final static String BELOW_MIN = "below_min";
+    public final static String IN_STOCK = "in_stock";
 
     private final HashMap<String, Integer> itemsFilteredCounts;
     private final HashMap<String, Boolean> filterStates;

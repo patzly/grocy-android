@@ -156,7 +156,20 @@ public class FilterChip extends LinearLayout {
         changeState(!isActive);
     }
 
+    public static void changeStateToInactive(FilterChip... filterChips) {
+        for(FilterChip filterChip : filterChips) {
+            filterChip.changeState(false);
+        }
+    }
+
+    public static void changeStateToActive(FilterChip... filterChips) {
+        for(FilterChip filterChip : filterChips) {
+            filterChip.changeState(true);
+        }
+    }
+
     public void changeState(boolean active) {
+        if(active == isActive) return;
         isActive = active;
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(

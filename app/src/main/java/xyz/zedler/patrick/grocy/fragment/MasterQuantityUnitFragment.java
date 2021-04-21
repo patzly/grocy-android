@@ -20,6 +20,7 @@ package xyz.zedler.patrick.grocy.fragment;
 */
 
 import android.content.SharedPreferences;
+import android.icu.text.PluralRules;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -51,6 +52,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterQuantityUnitFragment extends BaseFragment {
@@ -111,6 +113,8 @@ public class MasterQuantityUnitFragment extends BaseFragment {
         editQuantityUnit = null;
 
         isRefresh = false;
+
+        PluralRules pluralRules = PluralRules.forLocale(LocaleUtil.getUserLocale(activity));
 
         // VIEWS
 

@@ -87,12 +87,12 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         public ViewHolder(View view) {
             super(view);
 
-            linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_container);
+            /*linearLayoutItemContainer = view.findViewById(R.id.linear_stock_item_container);
             linearLayoutDays = view.findViewById(R.id.linear_stock_item_days);
             textViewName = view.findViewById(R.id.text_stock_item_name);
             textViewAmount = view.findViewById(R.id.text_stock_item_amount);
             textViewDays = view.findViewById(R.id.text_stock_item_days);
-            iconIsOnShoppingList = view.findViewById(R.id.view_stock_item_on_shopping_list);
+            iconIsOnShoppingList = view.findViewById(R.id.view_stock_item_on_shopping_list);*/
         }
     }
 

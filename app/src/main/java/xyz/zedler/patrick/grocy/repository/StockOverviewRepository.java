@@ -22,19 +22,16 @@ package xyz.zedler.patrick.grocy.repository;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class StockOverviewRepository {
     private final AppDatabase appDatabase;
@@ -43,141 +40,148 @@ public class StockOverviewRepository {
         this.appDatabase = AppDatabase.getAppDatabase(application);
     }
 
-    public interface ShoppingListDataListener {
+    public interface StockOverviewDataListener {
         void actionFinished(
-                ArrayList<ShoppingListItem> shoppingListItems,
-                ArrayList<ShoppingList> shoppingLists,
-                ArrayList<ProductGroup> productGroups,
                 ArrayList<QuantityUnit> quantityUnits,
+                ArrayList<ProductGroup> productGroups,
+                ArrayList<StockItem> stockItems,
                 ArrayList<Product> products,
-                ArrayList<MissingItem> missingItems
+                ArrayList<MissingItem> missingItems,
+                ArrayList<StockItem> missingStockItems,
+                ArrayList<ShoppingListItem> shoppingListItems,
+                ArrayList<Location> locations
         );
     }
 
-    public interface ShoppingListDataUpdatedListener {
-        void actionFinished(
-                ArrayList<ShoppingListItem> offlineChangedItems,
-                HashMap<Integer, ShoppingListItem> serverItemsHashMap
-        );
-    }
-
-    public interface ShoppingListItemsInsertedListener {
+    public interface StockOverviewDataUpdatedListener {
         void actionFinished();
     }
 
-    public void loadFromDatabase(ShoppingListDataListener listener) {
+    public void loadFromDatabase(StockOverviewDataListener listener) {
         new loadAsyncTask(appDatabase, listener).execute();
     }
 
     private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
         private final AppDatabase appDatabase;
-        private final ShoppingListDataListener listener;
+        private final StockOverviewDataListener listener;
 
-        private ArrayList<ShoppingListItem> shoppingListItems;
-        private ArrayList<ShoppingList> shoppingLists;
-        private ArrayList<ProductGroup> productGroups;
         private ArrayList<QuantityUnit> quantityUnits;
+        private ArrayList<ProductGroup> productGroups;
+        private ArrayList<StockItem> stockItems;
         private ArrayList<Product> products;
         private ArrayList<MissingItem> missingItems;
+        private ArrayList<StockItem> missingStockItems;
+        private ArrayList<ShoppingListItem> shoppingListItems;
+        private ArrayList<Location> locations;
 
-        loadAsyncTask(AppDatabase appDatabase, ShoppingListDataListener listener) {
+        loadAsyncTask(AppDatabase appDatabase, StockOverviewDataListener listener) {
             this.appDatabase = appDatabase;
             this.listener = listener;
         }
 
         @Override
         protected final Void doInBackground(Void... params) {
-            shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll()); // TODO: List instead of ArrayList maybe
-            shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
-            productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
             quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
+            productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
+            stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
             products = new ArrayList<>(appDatabase.productDao().getAll());
+
+            missingStockItems = new ArrayList<>();
+
             missingItems = new ArrayList<>(appDatabase.missingItemDao().getAll());
+
+            shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
+            locations = new ArrayList<>(appDatabase.locationDao().getAll());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(shoppingListItems, shoppingLists, productGroups, quantityUnits, products, missingItems);
+            if(listener != null) listener.actionFinished(quantityUnits, productGroups, stockItems, products, missingItems, missingStockItems, shoppingListItems, locations);
         }
     }
 
     public void updateDatabase(
-            ArrayList<ShoppingListItem> shoppingListItems,
-            ArrayList<ShoppingList> shoppingLists,
-            ArrayList<ProductGroup> productGroups,
             ArrayList<QuantityUnit> quantityUnits,
+            ArrayList<ProductGroup> productGroups,
+            ArrayList<StockItem> stockItems,
             ArrayList<Product> products,
             ArrayList<MissingItem> missingItems,
-            ShoppingListDataUpdatedListener listener
+            ArrayList<StockItem> missingStockItems,
+            ArrayList<ShoppingListItem> shoppingListItems,
+            ArrayList<Location> locations,
+            StockOverviewDataUpdatedListener listener
     ) {
         new updateAsyncTask(
                 appDatabase,
-                shoppingListItems,
-                shoppingLists,
-                productGroups,
                 quantityUnits,
+                productGroups,
+                stockItems,
                 products,
                 missingItems,
+                missingStockItems,
+                shoppingListItems,
+                locations,
                 listener
         ).execute();
     }
 
     private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
         private final AppDatabase appDatabase;
-        private final ShoppingListDataUpdatedListener listener;
+        private final StockOverviewDataUpdatedListener listener;
 
-        private final ArrayList<ShoppingListItem> shoppingListItems;
-        private final ArrayList<ShoppingList> shoppingLists;
-        private final ArrayList<ProductGroup> productGroups;
         private final ArrayList<QuantityUnit> quantityUnits;
+        private final ArrayList<ProductGroup> productGroups;
+        private final ArrayList<StockItem> stockItems;
         private final ArrayList<Product> products;
         private final ArrayList<MissingItem> missingItems;
-        private final ArrayList<ShoppingListItem> itemsToSync;
-        private final HashMap<Integer, ShoppingListItem> serverItemsHashMap;
+        private final ArrayList<StockItem> missingStockItems;
+        private final ArrayList<ShoppingListItem> shoppingListItems;
+        private final ArrayList<Location> locations;
 
         updateAsyncTask(
                 AppDatabase appDatabase,
-                ArrayList<ShoppingListItem> shoppingListItems,
-                ArrayList<ShoppingList> shoppingLists,
-                ArrayList<ProductGroup> productGroups,
                 ArrayList<QuantityUnit> quantityUnits,
+                ArrayList<ProductGroup> productGroups,
+                ArrayList<StockItem> stockItems,
                 ArrayList<Product> products,
                 ArrayList<MissingItem> missingItems,
-                ShoppingListDataUpdatedListener listener
+                ArrayList<StockItem> missingStockItems,
+                ArrayList<ShoppingListItem> shoppingListItems,
+                ArrayList<Location> locations,
+                StockOverviewDataUpdatedListener listener
         ) {
             this.appDatabase = appDatabase;
             this.listener = listener;
-            this.shoppingListItems = shoppingListItems;
-            this.shoppingLists = shoppingLists;
-            this.productGroups = productGroups;
             this.quantityUnits = quantityUnits;
+            this.productGroups = productGroups;
+            this.stockItems = stockItems;
             this.products = products;
             this.missingItems = missingItems;
-            this.itemsToSync = new ArrayList<>();
-            this.serverItemsHashMap = new HashMap<>();
+            this.missingStockItems = missingStockItems;
+            this.shoppingListItems = shoppingListItems;
+            this.locations = locations;
         }
 
         @Override
         protected final Void doInBackground(Void... params) {
-            for(ShoppingListItem s : shoppingListItems) serverItemsHashMap.put(s.getId(), s);
+            appDatabase.quantityUnitDao().deleteAll();
+            appDatabase.quantityUnitDao().insertAll(quantityUnits);
+            appDatabase.productGroupDao().deleteAll();
+            appDatabase.productGroupDao().insertAll(productGroups);
+            appDatabase.stockItemDao().deleteAll();
+            appDatabase.stockItemDao().insertAll(stockItems);
+            appDatabase.productDao().deleteAll();
+            appDatabase.productDao().insertAll(products);
 
-            List<ShoppingListItem> offlineItems = appDatabase.shoppingListItemDao().getAll();
-            // compare server items with offline items and add modified to separate list
-            for(ShoppingListItem offlineItem : offlineItems) {
-                ShoppingListItem serverItem = serverItemsHashMap.get(offlineItem.getId());
-                if(serverItem != null  // sync only items which are still on server
-                        && offlineItem.getDoneSynced() != -1
-                        && offlineItem.getDone() != offlineItem.getDoneSynced()
-                        && offlineItem.getDone() != serverItem.getDone()
-                        || serverItem != null
-                        && serverItem.getDoneSynced() != -1  // server database hasn't changed
-                        && offlineItem.getDoneSynced() != -1
-                        && offlineItem.getDone() != offlineItem.getDoneSynced()
-                ) itemsToSync.add(offlineItem);
-            }
+            appDatabase.missingItemDao().deleteAll();
+            appDatabase.missingItemDao().insertAll(missingItems);
 
             appDatabase.shoppingListItemDao().deleteAll();
+            appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
+            appDatabase.locationDao().deleteAll();
+            appDatabase.locationDao().insertAll(locations);
+            /*appDatabase.shoppingListItemDao().deleteAll();
             appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
             appDatabase.shoppingListDao().deleteAll();
             appDatabase.shoppingListDao().insertAll(shoppingLists);
@@ -188,117 +192,7 @@ public class StockOverviewRepository {
             appDatabase.productDao().deleteAll();
             appDatabase.productDao().insertAll(products);
             appDatabase.missingItemDao().deleteAll();
-            appDatabase.missingItemDao().insertAll(missingItems);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(itemsToSync, serverItemsHashMap);
-        }
-    }
-
-    public void insertShoppingListItems(
-            ShoppingListItemsInsertedListener listener,
-            ShoppingListItem... shoppingListItems
-    ) {
-        new insertShoppingListItemsAsyncTask(appDatabase, listener).execute(shoppingListItems);
-    }
-
-    private static class insertShoppingListItemsAsyncTask extends AsyncTask<ShoppingListItem, Void, Void> {
-        private final AppDatabase appDatabase;
-        private final ShoppingListItemsInsertedListener listener;
-
-        insertShoppingListItemsAsyncTask(
-                AppDatabase appDatabase,
-                ShoppingListItemsInsertedListener listener
-        ) {
-            this.appDatabase = appDatabase;
-            this.listener = listener;
-        }
-
-        @Override
-        protected final Void doInBackground(ShoppingListItem... items) {
-            appDatabase.shoppingListItemDao().insertAll(items);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished();
-        }
-    }
-
-    public interface ShoppingListsListener {
-        void actionFinished(ArrayList<ShoppingList> shoppingLists);
-    }
-
-    public void loadShoppingListsFromDatabase(ShoppingListsListener listener) {
-        new loadShoppingListsAsyncTask(appDatabase, listener).execute();
-    }
-
-    private static class loadShoppingListsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AppDatabase appDatabase;
-        private final ShoppingListsListener listener;
-
-        private ArrayList<ShoppingList> shoppingLists;
-
-        loadShoppingListsAsyncTask(AppDatabase appDatabase, ShoppingListsListener listener) {
-            this.appDatabase = appDatabase;
-            this.listener = listener;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(shoppingLists);
-        }
-    }
-
-    public LiveData<List<ShoppingList>> getShoppingListsLive() {
-        return appDatabase.shoppingListDao().getAllLive();
-    }
-
-    public interface ShoppingListsUpdatedListener {
-        void actionFinished();
-    }
-
-    public void updateDatabase(
-            ArrayList<ShoppingList> shoppingLists,
-            ShoppingListsUpdatedListener listener
-    ) {
-        new updateShoppingListsAsyncTask(
-                appDatabase,
-                shoppingLists,
-                listener
-        ).execute();
-    }
-
-    private static class updateShoppingListsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AppDatabase appDatabase;
-        private final ShoppingListsUpdatedListener listener;
-
-        private final ArrayList<ShoppingList> shoppingLists;
-
-        updateShoppingListsAsyncTask(
-                AppDatabase appDatabase,
-                ArrayList<ShoppingList> shoppingLists,
-                ShoppingListsUpdatedListener listener
-        ) {
-            this.appDatabase = appDatabase;
-            this.listener = listener;
-            this.shoppingLists = shoppingLists;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            appDatabase.shoppingListDao().deleteAll();
-            appDatabase.shoppingListDao().insertAll(shoppingLists);
+            appDatabase.missingItemDao().insertAll(missingItems);*/
             return null;
         }
 

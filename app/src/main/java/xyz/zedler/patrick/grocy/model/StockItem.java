@@ -30,6 +30,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_item_table")
@@ -71,6 +73,15 @@ public class StockItem implements Parcelable {
     @Ignore
     @SerializedName("product")
     private Product product;
+
+    @ColumnInfo(name = "item_due")
+    private boolean itemDue = false;
+
+    @ColumnInfo(name = "item_overdue")
+    private boolean itemOverdue = false;
+
+    @ColumnInfo(name = "item_expired")
+    private boolean itemExpired = false;
 
     public StockItem() {}
 
@@ -234,9 +245,54 @@ public class StockItem implements Parcelable {
         return amountOpenedAggregated;
     }
 
+    public boolean isItemDue() {
+        return itemDue;
+    }
+
+    public void setItemDue(boolean itemDue) {
+        this.itemDue = itemDue;
+    }
+
+    public boolean isItemOverdue() {
+        return itemOverdue;
+    }
+
+    public void setItemOverdue(boolean itemOverdue) {
+        this.itemOverdue = itemOverdue;
+    }
+
+    public boolean isItemExpired() {
+        return itemExpired;
+    }
+
+    public void setItemExpired(boolean itemExpired) {
+        this.itemExpired = itemExpired;
+    }
+
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StockItem stockItem = (StockItem) o;
+        return isAggregatedAmount == stockItem.isAggregatedAmount &&
+                productId == stockItem.productId &&
+                Objects.equals(amount, stockItem.amount) &&
+                Objects.equals(amountAggregated, stockItem.amountAggregated) &&
+                Objects.equals(value, stockItem.value) &&
+                Objects.equals(bestBeforeDate, stockItem.bestBeforeDate) &&
+                Objects.equals(amountOpened, stockItem.amountOpened) &&
+                Objects.equals(amountOpenedAggregated, stockItem.amountOpenedAggregated) &&
+                Objects.equals(product, stockItem.product);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, amountAggregated, value, bestBeforeDate, amountOpened, amountOpenedAggregated, isAggregatedAmount, productId, product);
     }
 
     @NonNull

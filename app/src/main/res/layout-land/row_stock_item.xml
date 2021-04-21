@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_stock_item_container"
+    android:id="@+id/linear__container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:gravity="start">
 
         <TextView
-            android:id="@+id/text_stock_item_name"
+            android:id="@+id/text__name"
             style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:singleLine="true" />
 
         <View
-            android:id="@+id/view_stock_item_on_shopping_list"
+            android:id="@+id/view__on_shopping_list"
             android:layout_width="5dp"
             android:layout_height="5dp"
             android:layout_gravity="center_vertical"
@@ -40,14 +40,14 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text_stock_item_amount"
+        android:id="@+id/text__amount"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true" />
 
     <LinearLayout
-        android:id="@+id/linear_stock_item_days"
+        android:id="@+id/linear__days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -62,7 +62,7 @@
             android:background="@drawable/shape_is_on_shopping_list"/>
 
         <TextView
-            android:id="@+id/text_stock_item_days"
+            android:id="@+id/text__days"
             style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

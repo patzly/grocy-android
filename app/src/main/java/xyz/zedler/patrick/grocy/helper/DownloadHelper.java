@@ -994,6 +994,29 @@ public class DownloadHelper {
         return getVolatile(onResponseListener, null);
     }
 
+    public QueueItem updateVolatile(
+            String dbChangedTime,
+            OnVolatileResponseListener onResponseListener
+    ) {
+        OnVolatileResponseListener newOnResponseListener = (due, overdue, expired, missing) -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(
+                    Constants.PREF.DB_LAST_TIME_VOLATILE, dbChangedTime
+            );
+            editPrefs.apply();
+            onResponseListener.onResponse(due, overdue, expired, missing);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_VOLATILE, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getVolatile(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped Volatile download");
+            return null;
+        }
+    }
+
     public QueueItem getMissingItems(
             OnMissingItemsResponseListener onResponseListener,
             OnErrorListener onErrorListener

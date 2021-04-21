@@ -21,8 +21,6 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -39,25 +37,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
-import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
-    private static final String TAG = StockOverviewViewModel.class.getSimpleName();
-    private static final int DEFAULT_SHOPPING_LIST_ID = 1;
+    private static final String TAG = ShoppingListViewModel.class.getSimpleName();
 
     private final SharedPreferences sharedPrefs;
     private final DownloadHelper dlHelper;
@@ -66,25 +63,34 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     private final MutableLiveData<Boolean> isLoadingLive;
     private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Integer> selectedShoppingListIdLive;
     private final MutableLiveData<Boolean> offlineLive;
-    private final MutableLiveData<ArrayList<GroupedListItem>> filteredGroupedListItemsLive;
+    private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
 
+    private ArrayList<StockItem> stockItems;
+    private ArrayList<Product> products;
+    private HashMap<Integer, Product> productHashMap;
     private ArrayList<ShoppingListItem> shoppingListItems;
-    private ArrayList<ShoppingList> shoppingLists;
+    private ArrayList<String> shoppingListItemsProductIds;
+    private ArrayList<Location> locations;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
     private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-    private ArrayList<Product> products;
-    private HashMap<Integer, Product> productHashMap;
+    private ArrayList<StockItem> dueItemsTemp;
+    private ArrayList<StockItem> overdueItemsTemp;
+    private ArrayList<StockItem> expiredItemsTemp;
     private ArrayList<MissingItem> missingItems;
-    private ArrayList<Integer> missingProductIds;
+    private ArrayList<StockItem> missingStockItems;
+    private HashMap<Integer, MissingItem> productIdsMissingItems;
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
-    private int filterState;
+    private HorizontalFilterBarSingle horizontalFilterBarSingle;
+    private HorizontalFilterBarMulti horizontalFilterBarMulti;
+    private int itemsDueCount;
+    private int itemsOverdueCount;
+    private int itemsExpiredCount;
     private int itemsMissingCount;
-    private int itemsUndoneCount;
+    private int itemsInStockCount;
     private final boolean debug;
 
     public StockOverviewViewModel(@NonNull Application application) {
@@ -100,138 +106,77 @@ public class StockOverviewViewModel extends BaseViewModel {
 
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
-        selectedShoppingListIdLive = new MutableLiveData<>(1);
-        filteredGroupedListItemsLive = new MutableLiveData<>();
+        filteredStockItemsLive = new MutableLiveData<>();
 
-        filterState = ShoppingListItemAdapter.FILTER_NOTHING;
+        horizontalFilterBarSingle = new HorizontalFilterBarSingle(
+                this::updateFilteredStockItems,
+                HorizontalFilterBarSingle.DUE_NEXT,
+                HorizontalFilterBarSingle.OVERDUE,
+                HorizontalFilterBarSingle.EXPIRED,
+                HorizontalFilterBarSingle.MISSING,
+                HorizontalFilterBarSingle.IN_STOCK
+        );
+        itemsDueCount = 0;
+        itemsOverdueCount = 0;
+        itemsExpiredCount = 0;
         itemsMissingCount = 0;
-        itemsUndoneCount = 0;
-
-        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
-        if(lastId != DEFAULT_SHOPPING_LIST_ID
-                && !isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
-            sharedPrefs.edit()
-                    .putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, DEFAULT_SHOPPING_LIST_ID)
-                    .apply();
-            lastId = DEFAULT_SHOPPING_LIST_ID;
-        }
-        selectedShoppingListIdLive.setValue(lastId);
+        itemsInStockCount = 0;
+        horizontalFilterBarMulti = new HorizontalFilterBarMulti(
+                this::updateFilteredStockItems
+        );
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (shoppingListItems, shoppingLists, productGroups, quantityUnits, products, missingItems) -> {
-                    this.shoppingListItems = shoppingListItems;
-                    this.shoppingLists = shoppingLists;
-                    this.productGroups = productGroups;
+                (quantityUnits, productGroups, stockItems, products, missingItems, missingStockItems, shoppingListItems, locations) -> {
                     this.quantityUnits = quantityUnits;
                     quantityUnitHashMap = new HashMap<>();
                     for(QuantityUnit quantityUnit : quantityUnits) {
                         quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
                     }
-                    this.missingItems = missingItems;
-                    missingProductIds = new ArrayList<>();
-                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
+                    this.productGroups = productGroups;
                     this.products = products;
                     productHashMap = new HashMap<>();
-                    for(Product product : products) productHashMap.put(product.getId(), product);
-                    updateFilteredShoppingListItems();
+                    for(Product product : products) {
+                        productHashMap.put(product.getId(), product);
+                    }
+
+                    itemsDueCount = 0;
+                    itemsOverdueCount = 0;
+                    itemsExpiredCount = 0;
+                    itemsMissingCount = 0;
+                    this.stockItems = stockItems;
+                    for(StockItem stockItem : stockItems) {
+                        stockItem.setProduct(productHashMap.get(stockItem.getProductId()));
+                        if(stockItem.isItemDue()) itemsDueCount++;
+                        if(stockItem.isItemOverdue()) itemsOverdueCount++;
+                        if(stockItem.isItemExpired()) itemsExpiredCount++;
+                    }
+
+                    this.missingItems = missingItems;
+                    itemsMissingCount = missingItems.size();
+                    itemsInStockCount = stockItems.size();
+                    for(MissingItem missingItem : missingItems) {
+                        if(missingItem.getIsPartlyInStock() == 0) itemsInStockCount--;
+                    }
+                    productIdsMissingItems = new HashMap<>();
+                    for(MissingItem item : missingItems) {
+                        productIdsMissingItems.put(item.getId(), item);
+                    }
+                    this.missingStockItems = missingStockItems;
+                    this.shoppingListItems = shoppingListItems;
+                    shoppingListItemsProductIds = new ArrayList<>();
+                    for(ShoppingListItem item : shoppingListItems) {
+                        if(item.getProductId() != null && !item.getProductId().isEmpty()) {
+                            shoppingListItemsProductIds.add(item.getProductId());
+                        }
+                    }
+                    this.locations = locations;
+
+                    updateFilteredStockItems();
                     if(downloadAfterLoading) downloadData();
                 }
         );
-    }
-
-    public void updateFilteredShoppingListItems() {
-        filteredGroupedListItemsLive.setValue(
-                ShoppingListHelper.groupItems(
-                        getApplication(),
-                        getFilteredShoppingListItems(),
-                        this.productHashMap,
-                        getProductNamesHashMap(),
-                        this.productGroups,
-                        this.shoppingLists,
-                        getSelectedShoppingListId(),
-                        true
-                )
-        );
-        selectedShoppingListIdLive.setValue(selectedShoppingListIdLive.getValue());
-    }
-
-    @Nullable
-    public ArrayList<ShoppingListItem> getFilteredShoppingListItems() {
-        if(this.shoppingListItems == null) return null;
-
-        ArrayList<ShoppingListItem> filteredShoppingListItems = new ArrayList<>();
-        itemsMissingCount = 0;
-        itemsUndoneCount = 0;
-
-        for(ShoppingListItem item : this.shoppingListItems) {
-            if(item.getShoppingListId() != getSelectedShoppingListId()) continue;
-            if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-                itemsMissingCount += 1;
-            }
-            if(item.isUndone()) itemsUndoneCount += 1;
-
-            boolean searchContainsItem = true;
-            if(searchInput != null && !searchInput.isEmpty()) {
-                String name;
-                if(item.hasProduct()) {
-                    Product product = productHashMap.get(item.getProductIdInt());
-                    name = product.getName();
-                } else {
-                    name = item.getNote();
-                }
-                name = name != null ? name.toLowerCase() : "";
-                searchContainsItem = name.contains(searchInput);
-            }
-            if(!searchContainsItem) continue;
-
-            if(filterState == ShoppingListItemAdapter.FILTER_NOTHING
-                    || filterState == ShoppingListItemAdapter.FILTER_MISSING
-                    && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
-                    || filterState == ShoppingListItemAdapter.FILTER_UNDONE
-                    && item.isUndone()
-            ) filteredShoppingListItems.add(item);
-        }
-        return filteredShoppingListItems;
-    }
-
-    public boolean isSearchActive() {
-        return searchInput != null && !searchInput.isEmpty();
-    }
-
-    public int getFilterState() {
-        return filterState;
-    }
-
-    public void onFilterChanged(int state) {
-        this.filterState = state;
-        updateFilteredShoppingListItems();
-    }
-
-    public void resetSearch() {
-        searchInput = null;
-    }
-
-    public MutableLiveData<ArrayList<GroupedListItem>> getFilteredGroupedListItemsLive() {
-        return filteredGroupedListItemsLive;
-    }
-
-    public int getItemsMissingCount() {
-        return itemsMissingCount;
-    }
-
-    public int getItemsUndoneCount() {
-        return itemsUndoneCount;
-    }
-
-    public void updateSearchInput(String input) {
-        this.searchInput = input.toLowerCase();
-        updateFilteredShoppingListItems();
-    }
-
-    public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
-        return selectedShoppingListIdLive;
     }
 
     public void downloadData(@Nullable String dbChangedTime) {
@@ -241,42 +186,105 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
         if(isOffline()) { // skip downloading and update recyclerview
             isLoadingLive.setValue(false);
-            updateFilteredShoppingListItems();
+            updateFilteredStockItems();
             return;
         }
         if(dbChangedTime == null) {
-            dlHelper.getTimeDbChanged(
-                    this::downloadData,
-                    () -> onDownloadError(null)
-            );
+            dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
             return;
         }
 
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+            HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
+            for(StockItem stockItem : stockItems) {
+                stockItemHashMap.put(stockItem.getProductId(), stockItem);
+            }
+
+            for(StockItem stockItemDue : dueItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemDue.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemDue(true);
+            }
+            for(StockItem stockItemOverdue : overdueItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemOverdue.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemOverdue(true);
+            }
+            for(StockItem stockItemExpired : expiredItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemExpired.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemExpired(true);
+            }
+
+            DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+            missingStockItems = new ArrayList<>();
+            for(MissingItem missingItem : missingItems) {
+                StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
+                if(missingStockItem != null) { // already downloaded
+                    missingStockItems.add(missingStockItem);
+                } else {
+                    queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
+                        StockItem stockItem = new StockItem(productDetails);
+                        stockItems.add(stockItem);
+                        missingStockItems.add(stockItem);
+                    }));
+                }
+            }
+            if(queue.getSize() == 0) {
+                onQueueEmpty();
+                return;
+            }
+            queue.start();
+        };
+
+        DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
         queue.append(
-                dlHelper.updateShoppingListItems(
-                        dbChangedTime, shoppingListItems -> this.shoppingListItems = shoppingListItems
-                ), dlHelper.updateShoppingLists(
-                        dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
-                ), dlHelper.updateProductGroups(
-                        dbChangedTime, productGroups -> this.productGroups = productGroups
-                ), dlHelper.updateQuantityUnits(
-                        dbChangedTime, quantityUnits -> {
-                            this.quantityUnits = quantityUnits;
-                            quantityUnitHashMap = new HashMap<>();
-                            for(QuantityUnit quantityUnit : quantityUnits) {
-                                quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
-                            }
-                        }
+                dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+                    this.quantityUnits = quantityUnits;
+                    quantityUnitHashMap = new HashMap<>();
+                    for(QuantityUnit quantityUnit : quantityUnits) {
+                        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+                    }
+                }), dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
+                    this.productGroups = productGroups;
+                    //setMenuProductGroupFilters();
+                    //updateMenuFilterVisibility();
+                }), dlHelper.updateStockItems(
+                        dbChangedTime, stockItems -> this.stockItems = stockItems
                 ), dlHelper.updateProducts(dbChangedTime, products -> {
                     this.products = products;
-                    for(Product product : products) productHashMap.put(product.getId(), product);
-                }),
-                dlHelper.updateMissingItems(dbChangedTime, missing -> {
+                    productHashMap = new HashMap<>();
+                    for(Product product : products) {
+                        productHashMap.put(product.getId(), product);
+                    }
+                }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
+                    this.dueItemsTemp = due;
+                    itemsDueCount = due.size();
+                    this.overdueItemsTemp = overdue;
+                    itemsOverdueCount = overdue.size();
+                    this.expiredItemsTemp = expired;
+                    itemsExpiredCount = expired.size();
                     this.missingItems = missing;
-                    missingProductIds = new ArrayList<>();
-                    for(MissingItem missingItem : missingItems) missingProductIds.add(missingItem.getId());
-                })
+                    itemsMissingCount = missing.size();
+                    itemsInStockCount = stockItems.size();
+                    for(MissingItem missingItem : missingItems) {
+                        if(missingItem.getIsPartlyInStock() == 0) itemsInStockCount--;
+                    }
+                    productIdsMissingItems = new HashMap<>();
+                    for(MissingItem item : missingItems) {
+                        productIdsMissingItems.put(item.getId(), item);
+                    }
+                }), dlHelper.updateShoppingListItems(dbChangedTime, shoppingListItems -> {
+                    this.shoppingListItems = shoppingListItems;
+                    shoppingListItemsProductIds = new ArrayList<>();
+                    for(ShoppingListItem item : shoppingListItems) {
+                        if(item.getProductId() != null && !item.getProductId().isEmpty()) {
+                            shoppingListItemsProductIds.add(item.getProductId());
+                        }
+                    }
+                }), dlHelper.updateLocations(
+                        dbChangedTime, locations -> this.locations = locations
+                )
         );
 
         if(queue.isEmpty()) {
@@ -294,69 +302,28 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public void downloadDataForceUpdate() {
         SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
         editPrefs.apply();
         downloadData();
     }
 
     private void onQueueEmpty() {
         repository.updateDatabase(
-                this.shoppingListItems,
-                this.shoppingLists,
-                this.productGroups,
                 this.quantityUnits,
+                this.productGroups,
+                this.stockItems,
                 this.products,
                 this.missingItems,
-                (itemsToSync, serverItemHashMap) -> {
-                    if(itemsToSync.isEmpty()) {
-                        tidyUpItems(itemsChanged -> {
-                            if(itemsChanged) {
-                                downloadData();
-                            } else {
-                                updateFilteredShoppingListItems();
-                            }
-                        });
-                        return;
-                    }
-                    DownloadHelper.OnQueueEmptyListener emptyListener = () -> {
-                        ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
-                        for(ShoppingListItem itemToSync : itemsToSync) {
-                            int itemId = itemToSync.getId();
-                            ShoppingListItem itemToUpdate = serverItemHashMap.get(itemId);
-                            if(itemToUpdate == null) continue;
-                            itemToUpdate.setDone(itemToSync.getDone());
-                            itemsToUpdate.add(itemToUpdate);
-                        }
-                        repository.insertShoppingListItems(
-                                () -> {
-                                    showMessage(getString(R.string.msg_synced));
-                                    loadFromDatabase(true);
-                                },
-                                itemsToUpdate.toArray(new ShoppingListItem[0])
-                        );
-                    };
-                    DownloadHelper.OnErrorListener errorListener = error -> {
-                        showMessage(getString(R.string.msg_failed_to_sync));
-                        downloadData();
-                    };
-                    DownloadHelper.Queue queue = dlHelper.newQueue(emptyListener, errorListener);
-                    for(ShoppingListItem itemToSync : itemsToSync) {
-                        JSONObject body = new JSONObject();
-                        try {
-                            body.put("done", itemToSync.getDone());
-                        } catch (JSONException e) {
-                            if(debug) Log.e(TAG, "syncItems: " + e);
-                        }
-                        queue.append(dlHelper.editShoppingListItem(itemToSync.getId(), body));
-                    }
-                    currentQueueLoading = queue;
-                    queue.start();
-                }
+                this.missingStockItems,
+                this.shoppingListItems,
+                this.locations,
+                this::updateFilteredStockItems
         );
     }
 
@@ -366,55 +333,69 @@ public class StockOverviewViewModel extends BaseViewModel {
         if(!isOffline()) setOfflineLive(true);
     }
 
-    private void tidyUpItems(OnTidyUpFinishedListener onFinished) {
-        // Tidy up lost shopping list items, which have deleted shopping lists
-        // as an id – else they will never show up on any shopping list
-        ArrayList<Integer> listIds = new ArrayList<>();
-        if(isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
-            for(ShoppingList shoppingList : shoppingLists) listIds.add(shoppingList.getId());
-            if(listIds.isEmpty()) {
-                if(onFinished != null) onFinished.run(false);
-                return;  // possible if download error happened
+    public void updateFilteredStockItems() {
+        ArrayList<StockItem> filteredStockItems = new ArrayList<>();
+
+        for(StockItem item : this.stockItems) {
+            boolean searchContainsItem = true;
+            if(searchInput != null && !searchInput.isEmpty()) {
+                searchContainsItem = item.getProduct().getName().toLowerCase().contains(searchInput);
             }
-        } else {
-            listIds.add(1);  // id of first and single shopping list
+            if(!searchContainsItem) continue;
+
+            if(horizontalFilterBarSingle.isNoFilterActive()
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)
+                    && item.isItemDue()
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.OVERDUE)
+                    && item.isItemOverdue()
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)
+                    && item.isItemExpired()
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+                    && productIdsMissingItems.containsKey(item.getProductId())
+                    || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)
+                    && (!productIdsMissingItems.containsKey(item.getProductId())
+                    || productIdsMissingItems.get(item.getProductId()).getIsPartlyInStock() == 1)
+            ) filteredStockItems.add(item);
         }
 
-        DownloadHelper.Queue queue = dlHelper.newQueue(
-                () -> { if(onFinished != null) onFinished.run(true); },
-                error -> { if(onFinished != null) onFinished.run(true); }
-        );
-        for(ShoppingListItem listItem : shoppingListItems) {
-            if(listIds.contains(listItem.getShoppingListId())) continue;
-            if(debug) Log.i(TAG, "tidyUpItems: " + listItem);
-            queue.append(dlHelper.deleteShoppingListItem(listItem.getId()));
-        }
-        if(queue.getSize() == 0) {
-            onFinished.run(false);
-            return;
-        }
-        currentQueueLoading = queue;
-        queue.start();
+        filteredStockItemsLive.setValue(filteredStockItems);
     }
 
-    private interface OnTidyUpFinishedListener {
-        void run(boolean itemsChanged);
+    public boolean isSearchActive() {
+        return searchInput != null && !searchInput.isEmpty();
     }
 
-    public int getSelectedShoppingListId() {
-        if(selectedShoppingListIdLive.getValue() == null) return -1;
-        return selectedShoppingListIdLive.getValue();
+    public void resetSearch() {
+        searchInput = null;
     }
 
-    public void selectShoppingList(int shoppingListId) {
-        if(shoppingListId == getSelectedShoppingListId()) return;
-        sharedPrefs.edit().putInt(Constants.PREF.SHOPPING_LIST_LAST_ID, shoppingListId).apply();
-        selectedShoppingListIdLive.setValue(shoppingListId);
-        updateFilteredShoppingListItems();
+    public MutableLiveData<ArrayList<StockItem>> getFilteredStockItemsLive() {
+        return filteredStockItemsLive;
     }
 
-    public void selectShoppingList(ShoppingList shoppingList) {
-        selectShoppingList(shoppingList.getId());
+    public int getItemsDueCount() {
+        return itemsDueCount;
+    }
+
+    public int getItemsOverdueCount() {
+        return itemsOverdueCount;
+    }
+
+    public int getItemsExpiredCount() {
+        return itemsExpiredCount;
+    }
+
+    public int getItemsMissingCount() {
+        return itemsMissingCount;
+    }
+
+    public int getItemsInStockCount() {
+        return itemsInStockCount;
+    }
+
+    public void updateSearchInput(String input) {
+        this.searchInput = input.toLowerCase();
+        updateFilteredStockItems();
     }
 
     public void toggleDoneStatus(ShoppingListItem listItem) {
@@ -453,14 +434,11 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
 
     private void updateDoneStatus(ShoppingListItem shoppingListItem) {
-        repository.insertShoppingListItems(
-                () -> loadFromDatabase(false),
-                shoppingListItem
-        );
+
     }
 
     public void addMissingItems() {
-        ShoppingList shoppingList = getSelectedShoppingList();
+        /*ShoppingList shoppingList = getSelectedShoppingList();
         if(shoppingList == null) {
             showMessage(getString(R.string.error_undefined));
             return;
@@ -474,10 +452,13 @@ public class StockOverviewViewModel extends BaseViewModel {
         dlHelper.post(
                 grocyApi.addMissingProducts(),
                 jsonObject,
-                response -> showMessage(getApplication().getString(
-                        R.string.msg_added_missing_products,
-                        shoppingList.getName()
-                )),
+                response -> {
+                    showMessage(getApplication().getString(
+                            R.string.msg_added_missing_products,
+                            shoppingList.getName()
+                    ));
+                    downloadData();
+                },
                 error -> {
                     showMessage(getString(R.string.error_undefined));
                     if(debug) Log.e(
@@ -486,167 +467,23 @@ public class StockOverviewViewModel extends BaseViewModel {
                                     + ": " + error
                     );
                 }
-        );
+        );*/
     }
 
-    public void saveNotes(Spanned notes) {
-        JSONObject body = new JSONObject();
-
-        String notesHtml = notes != null ? Html.toHtml(notes) : "";
-        try {
-            body.put("description", notesHtml);
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "saveNotes: " + e);
-        }
-        dlHelper.put(
-                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LISTS, getSelectedShoppingListId()),
-                body,
-                response -> {
-                    ShoppingList shoppingList = getSelectedShoppingList();
-                    if(shoppingList == null) return;
-                    shoppingList.setNotes(notesHtml);
-                    downloadData();
-                },
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(TAG, "saveNotes: " + error);
-                    downloadData();
-                }
-        );
+    public ArrayList<Integer> getProductIdsMissingItems() {
+        return new ArrayList<>(productIdsMissingItems.keySet());
     }
 
-    public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
-        dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, shoppingListItem.getId()),
-                response -> loadFromDatabase(true),
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    loadFromDatabase(true);
-                    if(debug) Log.e(TAG, "deleteItem: " + error);
-                }
-        );
+    public ArrayList<String> getShoppingListItemsProductIds() {
+        return shoppingListItemsProductIds;
     }
 
-    public void safeDeleteShoppingList(ShoppingList shoppingList) {
-        if(shoppingList == null) {
-            showMessage(getString(R.string.error_undefined));
-            return;
-        }
-        clearAllItems(
-                shoppingList,
-                () -> deleteShoppingList(shoppingList)
-        );
+    public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
+        return horizontalFilterBarSingle;
     }
 
-    public void deleteShoppingList(ShoppingList shoppingList) {
-        int selectedShoppingListId = getSelectedShoppingListId();
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("list_id", getSelectedShoppingListId());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "deleteShoppingList: delete list: " + e);
-        }
-        dlHelper.delete(
-                grocyApi.getObject(
-                        GrocyApi.ENTITY.SHOPPING_LISTS,
-                        shoppingList.getId()
-                ),
-                response -> {
-                    showMessage(
-                            getApplication().getString(
-                                    R.string.msg_shopping_list_deleted,
-                                    shoppingList.getName()
-                            )
-                    );
-                    shoppingLists.remove(shoppingList);
-                    if(selectedShoppingListId == shoppingList.getId()) {
-                        selectShoppingList(1);
-                    }
-                    tidyUpItems(itemsChanged -> downloadData());
-                },
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(
-                            TAG, "deleteShoppingList: delete "
-                                    + shoppingList.getName() + ": " + error
-                    );
-                    downloadData();
-                }
-        );
-    }
-
-    public void clearAllItems(
-            ShoppingList shoppingList,
-            Runnable onResponse
-    ) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("list_id", shoppingList.getId());
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "clearShoppingList: " + e);
-        }
-        dlHelper.post(
-                grocyApi.clearShoppingList(),
-                jsonObject,
-                response -> {
-                    if(onResponse != null) onResponse.run();
-                },
-                error -> {
-                    showMessage(getString(R.string.error_undefined));
-                    if(debug) Log.e(
-                            TAG, "clearShoppingList: "
-                                    + shoppingList.getName()
-                                    + ": " + error
-                    );
-                }
-        );
-    }
-
-    public void clearDoneItems(ShoppingList shoppingList) {
-        DownloadHelper.Queue queue = dlHelper.newQueue(
-                () -> {
-                    showMessage(
-                            getApplication().getString(
-                                    R.string.msg_shopping_list_cleared,
-                                    shoppingList.getName()
-                            )
-                    );
-                    downloadData();
-                }, volleyError -> {
-                    showMessage(getString(R.string.error_undefined));
-                    downloadData();
-                }
-        );
-        for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(shoppingListItem.getShoppingListId() != shoppingList.getId()) continue;
-            if(shoppingListItem.getDone() == 0) continue;
-            queue.append(dlHelper.deleteShoppingListItem(shoppingListItem.getId()));
-        }
-        queue.start();
-    }
-
-    @Nullable
-    public ShoppingList getShoppingListFromId(int id) {
-        if(shoppingLists == null) return null;
-        for(ShoppingList temp : shoppingLists) {
-            if(temp.getId() == id) return temp;
-        }
-        return null;
-    }
-
-    @Nullable
-    public ShoppingList getSelectedShoppingList() {
-        return getShoppingListFromId(getSelectedShoppingListId());
-    }
-
-    @Nullable
-    public ArrayList<ShoppingList> getShoppingLists() {
-        return shoppingLists;
-    }
-
-    public ArrayList<Integer> getMissingProductIds() {
-        return missingProductIds;
+    public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
+        return horizontalFilterBarMulti;
     }
 
     public HashMap<Integer, Product> getProductHashMap() {
@@ -659,15 +496,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public QuantityUnit getQuantityUnitFromId(int id) {
         return quantityUnitHashMap.get(id);
-    }
-
-    public HashMap<Integer, String> getProductNamesHashMap() {
-        if(products == null) return null;
-        HashMap<Integer, String> productNamesHashMap = new HashMap<>();
-        for(Product product : products) {
-            productNamesHashMap.put(product.getId(), product.getName());
-        }
-        return productNamesHashMap;
     }
 
     @NonNull

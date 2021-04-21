@@ -82,12 +82,16 @@
     <string name="action_own_server">Own server</string>
     <string name="action_enter_data_manually">Enter data manually</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$d expiring soon</string>
+    <!-- %1$s is the number of products which are due soon -->
+    <string name="msg_due_products">%1$d due soon</string>
+    <!-- %1$s is the number of products which are overdue -->
+    <string name="msg_overdue_products">%1$d overdue</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d expired</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d below min. stock amount</string>
+    <!-- %1$s is the number of products which are in stock -->
+    <string name="msg_in_stock_products">%1$d in stock</string>
     <string name="msg_consumed">Consumed %1$s %2$s of %3$s</string>
     <string name="msg_consumed_spoiled">Consumed %1$s %2$s of %3$s as spoiled</string>
     <string name="msg_opened">Mark %1$s %2$s of %3$s as opened</string>

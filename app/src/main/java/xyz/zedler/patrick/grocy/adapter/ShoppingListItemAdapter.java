@@ -58,10 +58,6 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
     private final static String TAG = ShoppingListItemAdapter.class.getSimpleName();
     private final static boolean DEBUG = false;
 
-    public final static int FILTER_NOTHING = -1;
-    public final static int FILTER_MISSING = 0;
-    public final static int FILTER_UNDONE = 1;
-
     private Context context;
     private final ArrayList<GroupedListItem> groupedListItems;
     private final HashMap<Integer, Product> productHashMap;
@@ -160,8 +156,6 @@ public class ShoppingListItemAdapter extends RecyclerView.Adapter<ShoppingListIt
                     },
                     horizontalFilterBarSingle::resetAllFilters
             );
-            chipMissing.setId(R.id.chip_shopping_filter_missing);
-            chipUndone.setId(R.id.chip_shopping_filter_undone);
             binding.container.addView(chipMissing);
             binding.container.addView(chipUndone);
         }

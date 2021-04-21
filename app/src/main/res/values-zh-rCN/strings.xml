@@ -80,7 +80,7 @@
     <string name="action_enter_data_manually">手动输入数据</string>
 
     <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$d即将到期</string>
+    <string name="msg_due_products">%1$d即将到期</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d已过期</string>
     <!-- %1$s is the number of products which are below min. stock amount -->

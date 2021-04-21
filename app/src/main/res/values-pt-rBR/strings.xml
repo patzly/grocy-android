@@ -72,7 +72,7 @@
     <string name="action_clear_done">Feito</string>
 
     <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_expiring_products">%1$d vencimento em breve</string>
+    <string name="msg_due_products">%1$d vencimento em breve</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d perdeu a validade</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
