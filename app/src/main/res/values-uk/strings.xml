@@ -79,12 +79,16 @@
     <string name="action_own_server">Власний сервер</string>
     <string name="action_enter_data_manually">Введіть дані вручну</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d скоро зіпсується</string>
+    <!-- %1$s is the number of products which are due soon -->
+    <string name="msg_due_products">%1$d скоро спливає термін</string>
+    <!-- %1$s is the number of products which are overdue -->
+    <string name="msg_overdue_products">%1$d прострочений</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d зіпсувалось</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">на %1$d нижче мінімального запасу</string>
+    <!-- %1$s is the number of products which are in stock -->
+    <string name="msg_in_stock_products">%1$d в запасах</string>
     <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
     <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
     <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
