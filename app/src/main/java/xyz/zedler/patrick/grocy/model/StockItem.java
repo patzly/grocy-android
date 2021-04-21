@@ -37,6 +37,9 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 @Entity(tableName = "stock_item_table")
 public class StockItem implements Parcelable {
 
+    public static int DUE_TYPE_BEST_BEFORE = 1;
+    public static int DUE_TYPE_EXPIRATION = 2;
+
     @ColumnInfo(name = "amount")
     @SerializedName("amount")
     private String amount;
@@ -64,6 +67,10 @@ public class StockItem implements Parcelable {
     @ColumnInfo(name = "is_aggregated_amount")
     @SerializedName("is_aggregated_amount")
     private int isAggregatedAmount;
+
+    @ColumnInfo(name = "due_type")
+    @SerializedName("due_type")
+    private int dueType;
 
     @PrimaryKey
     @ColumnInfo(name = "product_id")
@@ -94,6 +101,7 @@ public class StockItem implements Parcelable {
         this.amountOpened = String.valueOf(productDetails.getStockAmountOpened());
         this.amountOpenedAggregated = String.valueOf(productDetails.getStockAmountOpenedAggregated());
         this.isAggregatedAmount = productDetails.getIsAggregatedAmount();
+        this.dueType = productDetails.getProduct().getDueDateType();
         this.productId = productDetails.getProduct().getId();
         this.product = productDetails.getProduct();
     }
@@ -107,6 +115,7 @@ public class StockItem implements Parcelable {
         amountOpened = parcel.readString();
         amountOpenedAggregated = parcel.readString();
         isAggregatedAmount = parcel.readInt();
+        dueType = parcel.readInt();
         productId = parcel.readInt();
         product = parcel.readParcelable(Product.class.getClassLoader());
     }
@@ -120,6 +129,7 @@ public class StockItem implements Parcelable {
         dest.writeString(amountOpened);
         dest.writeString(amountOpenedAggregated);
         dest.writeInt(isAggregatedAmount);
+        dest.writeInt(dueType);
         dest.writeInt(productId);
         dest.writeParcelable(product, 0);
     }
@@ -221,14 +231,6 @@ public class StockItem implements Parcelable {
         this.isAggregatedAmount = isAggregatedAmount;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public String getAmount() {
         return amount;
     }
@@ -243,6 +245,22 @@ public class StockItem implements Parcelable {
 
     public String getAmountOpenedAggregated() {
         return amountOpenedAggregated;
+    }
+
+    public int getDueType() {
+        return dueType;
+    }
+
+    public void setDueType(int dueType) {
+        this.dueType = dueType;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public boolean isItemDue() {

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -160,7 +161,8 @@ public class StockOverviewFragment extends BaseFragment implements
                         viewModel.getItemsOverdueCount(),
                         viewModel.getItemsExpiredCount(),
                         viewModel.getItemsMissingCount(),
-                        viewModel.getItemsInStockCount()
+                        viewModel.getItemsInStockCount(),
+                        viewModel.getSortMode()
                 );
             } else {
                 binding.recycler.setAdapter(
@@ -172,9 +174,9 @@ public class StockOverviewFragment extends BaseFragment implements
                                 viewModel.getProductIdsMissingItems(),
                                 this,
                                 viewModel.getHorizontalFilterBarSingle(),
-                                false,
+                                true,
                                 5,
-                                Constants.STOCK.SORT.NAME
+                                viewModel.getSortMode()
                         )
                 );
             }
@@ -252,6 +254,43 @@ public class StockOverviewFragment extends BaseFragment implements
             search.setOnMenuItemClickListener(item -> {
                 IconUtil.start(item);
                 setUpSearch();
+                return true;
+            });
+        }
+        SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
+        if(menuSort == null) return;
+        MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
+        MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
+        switch (viewModel.getSortMode()) {
+            case Constants.STOCK.SORT.NAME:
+                sortName.setChecked(true);
+                break;
+            case Constants.STOCK.SORT.BBD:
+                sortBBD.setChecked(true);
+                break;
+        }
+        sortName.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                viewModel.setSortMode(Constants.STOCK.SORT.NAME);
+                viewModel.updateFilteredStockItems();
+            }
+            return true;
+        });
+        sortBBD.setOnMenuItemClickListener(item -> {
+            if(!item.isChecked()) {
+                item.setChecked(true);
+                viewModel.setSortMode(Constants.STOCK.SORT.BBD);
+                viewModel.updateFilteredStockItems();
+            }
+            return true;
+        });
+        MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
+        if(sortAscending != null) {
+            sortAscending.setChecked(viewModel.isSortAscending());
+            sortAscending.setOnMenuItemClickListener(item -> {
+                item.setChecked(!item.isChecked());
+                viewModel.setSortAscending(item.isChecked());
                 return true;
             });
         }

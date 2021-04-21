@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -61,7 +62,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
     private final HorizontalFilterBarSingle horizontalFilterBarSingle;
     private final boolean showDateTracking;
     private final int daysExpiringSoon;
-    private final String sortMode;
+    private String sortMode;
 
     public StockOverviewItemAdapter(
             Context context,
@@ -364,13 +365,15 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             holder.binding.textDays.setTypeface(
                     ResourcesCompat.getFont(context, R.font.jost_medium)
             );
-            holder.binding.textDays.setTextColor(
-                    ContextCompat.getColor(
-                            context, Integer.parseInt(days) < 0
-                                    ? R.color.retro_red_fg
-                                    : R.color.retro_yellow_fg
-                    )
-            );
+            @ColorRes int color;
+            if(Integer.parseInt(days) >= 0) {
+                color = R.color.retro_yellow_fg;
+            } else if(stockItem.getDueType() == StockItem.DUE_TYPE_BEST_BEFORE) {
+                color = R.color.retro_dirt_bg_light;
+            } else {
+                color = R.color.retro_red_fg;
+            }
+            holder.binding.textDays.setTextColor(ContextCompat.getColor(context, color));
         } else {
             holder.binding.textDays.setTypeface(
                     ResourcesCompat.getFont(context, R.font.jost_book)
@@ -405,7 +408,8 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             int itemsOverdueCount,
             int itemsExpiredCount,
             int itemsMissingCount,
-            int itemsInStockCount
+            int itemsInStockCount,
+            String sortMode
     ) {
         if(horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT) != itemsDueCount
                 || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE) != itemsOverdueCount
@@ -428,7 +432,9 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
                 this.quantityUnitHashMap,
                 quantityUnitHashMap,
                 this.missingItemsProductIds,
-                missingItemsProductIds
+                missingItemsProductIds,
+                this.sortMode,
+                sortMode
         );
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.stockItems.clear();
@@ -439,6 +445,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         this.quantityUnitHashMap.putAll(quantityUnitHashMap);
         this.missingItemsProductIds.clear();
         this.missingItemsProductIds.addAll(missingItemsProductIds);
+        this.sortMode = sortMode;
         diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
     }
 
@@ -451,6 +458,8 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
         ArrayList<Integer> missingProductIdsOld;
         ArrayList<Integer> missingProductIdsNew;
+        String sortModeOld;
+        String sortModeNew;
 
         public DiffCallback(
                 ArrayList<StockItem> oldItems,
@@ -460,7 +469,9 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
                 HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
                 HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
                 ArrayList<Integer> missingProductIdsOld,
-                ArrayList<Integer> missingProductIdsNew
+                ArrayList<Integer> missingProductIdsNew,
+                String sortModeOld,
+                String sortModeNew
         ) {
             this.newItems = newItems;
             this.oldItems = oldItems;
@@ -470,6 +481,8 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             this.quantityUnitHashMapNew = quantityUnitHashMapNew;
             this.missingProductIdsOld = missingProductIdsOld;
             this.missingProductIdsNew = missingProductIdsNew;
+            this.sortModeOld = sortModeOld;
+            this.sortModeNew = sortModeNew;
         }
 
         @Override
@@ -496,6 +509,8 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             StockItem newItem = newItems.get(newItemPos);
             StockItem oldItem = oldItems.get(oldItemPos);
             if(!compareContent) return newItem.getProductId() == oldItem.getProductId();
+
+            if(!sortModeOld.equals(sortModeNew)) return false;
 
             if(!newItem.getProduct().equals(oldItem.getProduct())) return false;
 

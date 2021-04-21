@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
@@ -84,6 +85,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
+    private String sortMode;
     private HorizontalFilterBarSingle horizontalFilterBarSingle;
     private HorizontalFilterBarMulti horizontalFilterBarMulti;
     private int itemsDueCount;
@@ -91,6 +93,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     private int itemsExpiredCount;
     private int itemsMissingCount;
     private int itemsInStockCount;
+    private boolean sortAscending;
     private final boolean debug;
 
     public StockOverviewViewModel(@NonNull Application application) {
@@ -124,6 +127,8 @@ public class StockOverviewViewModel extends BaseViewModel {
         horizontalFilterBarMulti = new HorizontalFilterBarMulti(
                 this::updateFilteredStockItems
         );
+        sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
+        sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
     }
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -358,6 +363,15 @@ public class StockOverviewViewModel extends BaseViewModel {
             ) filteredStockItems.add(item);
         }
 
+        switch (sortMode) {
+            case Constants.STOCK.SORT.NAME:
+                SortUtil.sortStockItemsByName(filteredStockItems, sortAscending);
+                break;
+            case Constants.STOCK.SORT.BBD:
+                SortUtil.sortStockItemsByBBD(filteredStockItems, sortAscending);
+                break;
+        }
+
         filteredStockItemsLive.setValue(filteredStockItems);
     }
 
@@ -484,6 +498,26 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
         return horizontalFilterBarMulti;
+    }
+
+    public String getSortMode() {
+        return sortMode;
+    }
+
+    public void setSortMode(String sortMode) {
+        this.sortMode = sortMode;
+        sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+        updateFilteredStockItems();
+    }
+
+    public boolean isSortAscending() {
+        return sortAscending;
+    }
+
+    public void setSortAscending(boolean sortAscending) {
+        this.sortAscending = sortAscending;
+        sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
+        updateFilteredStockItems();
     }
 
     public HashMap<Integer, Product> getProductHashMap() {
