@@ -79,12 +79,16 @@
     <string name="action_own_server">Eigener Server</string>
     <string name="action_enter_data_manually">Daten manuell eingeben</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d laufen bald ab</string>
+    <!-- %1$s is the number of products which are due soon -->
+    <string name="msg_due_products">%1$d bald fällig</string>
+    <!-- %1$s is the number of products which are overdue -->
+    <string name="msg_overdue_products">%1$d abgelaufen</string>
     <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d abgelaufen</string>
+    <string name="msg_expired_products">%1$d verdorben</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d unter Mindestbestand</string>
+    <!-- %1$s is the number of products which are in stock -->
+    <string name="msg_in_stock_products">%1$d im Bestand</string>
     <string name="msg_consumed">%1$s %2$s %3$s aus dem Bestand entfernt</string>
     <string name="msg_consumed_spoiled">%1$s %2$s %3$s als verdorben aus dem Bestand entfernt</string>
     <string name="msg_opened">%1$s %2$s %3$s als geöffnet markiert</string>
@@ -226,7 +230,6 @@
     <string name="error_failed_to_connect_to">Verbindung mit Server fehlgeschlagen</string>
     <string name="error_missing_information">Nicht alle benötigten Felder sind ausgefüllt</string>
     <string name="error_handshake">Ungültiges Zertifikat</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">Dieser Server benötigt ein Zertifikat, welches nicht im Android System verankert ist und ihm somit nicht vertraut wird.\nDas Server-Zertifikat muss von einer öffentlichen vertrauten Zertifizierungsstelle (CA) zertifiziert worden sein (z.B. letsencrypt.org) oder im Android Benutzer-Zertifikatspeicher liegen.</string>
     <string name="error_unexpected_response_code">Unerwarteter Antwort-Code</string>
     <string name="error_unexpected_response">Unerwartete Antwort vom Server</string>
@@ -345,6 +348,36 @@
     <plurals name="description_overview_stock">
         <item quantity="one">Sie haben ein Produkt im Bestand.</item>
         <item quantity="other">Sie haben %1$d Produkte im Bestand.</item>
+    </plurals>
+    <!-- %1$s and %2$s are numbers -->
+    <plurals name="description_overview_stock_due_soon">
+        <item quantity="one">%1$d Produkt ist innerhalb der nächsten %2$d Tage fällig.</item>
+        <item quantity="other">%1$d Produkte sind innerhalb der nächsten %2$d Tage fällig.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_overdue">
+        <item quantity="one">%1$d Produkt ist abgelaufen.</item>
+        <item quantity="other">%1$d Produkte sind abgelaufen.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_expired">
+        <item quantity="one">%1$d Produkt ist verdorben.</item>
+        <item quantity="other">%1$d Produkte sind verdorben.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing">
+        <item quantity="one">%1$d Produkt ist unter Mindestbestand.</item>
+        <item quantity="other">%1$d Produkte sind unter Mindestbestand.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing_shopping_list_single">
+        <item quantity="one">%1$d Produkt ist unter Mindestbestand und dieses steht auf Ihrer EInkaufsliste.</item>
+        <item quantity="other">%1$d Produkte sind unter Mindestbestand und eines davon ist auf Ihrer Einkaufsliste.</item>
+    </plurals>
+    <!-- %1$s and %2$s are numbers -->
+    <plurals name="description_overview_stock_missing_shopping_list_multi">
+        <item quantity="one">%1$d Produkt ist unter Mindestbestand und eines dieses ist auf Ihrer Einkaufsliste.</item>
+        <item quantity="other">%1$d Produkte sind unter Mindestbestand und %2$d davon stehen auf Ihrer Einkaufsliste.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
@@ -575,7 +608,7 @@
     <string name="setting_show_done_items">Erledigte Einträge anzeigen</string>
     <string name="setting_show_done_items_description">Am Listen-Ende</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="setting_expiring_soon_days">\"Bald ablaufend\"-Tage</string>
+    <string name="setting_expiring_soon_days">Verfallsdatum in Tagen</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
     <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
