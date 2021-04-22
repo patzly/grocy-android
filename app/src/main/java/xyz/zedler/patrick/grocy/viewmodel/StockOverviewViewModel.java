@@ -200,6 +200,12 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
 
         DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+            if(dueItemsTemp == null || overdueItemsTemp == null
+                    || expiredItemsTemp == null || missingItemsTemp == null) {
+                downloadDataForceUpdate();
+                return;
+            }
+
             HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
             for(StockItem stockItem : stockItems) {
                 stockItemHashMap.put(stockItem.getProductId(), stockItem);
@@ -247,6 +253,8 @@ public class StockOverviewViewModel extends BaseViewModel {
             }
             queue.start();
         };
+
+        sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null).apply();
 
         DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
         queue.append(

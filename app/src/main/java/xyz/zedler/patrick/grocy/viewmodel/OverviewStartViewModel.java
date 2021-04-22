@@ -269,6 +269,12 @@ public class OverviewStartViewModel extends BaseViewModel {
         }
 
         DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+            if(stockItemsTemp == null || dueItemsTemp == null || overdueItemsTemp == null
+                    || expiredItemsTemp == null || missingItemsTemp == null) {
+                downloadDataForceUpdate();
+                return;
+            }
+
             HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
             for(StockItem stockItem : stockItemsTemp) {
                 stockItemHashMap.put(stockItem.getProductId(), stockItem);

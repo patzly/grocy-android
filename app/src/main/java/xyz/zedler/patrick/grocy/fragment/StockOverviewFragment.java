@@ -181,6 +181,11 @@ public class StockOverviewFragment extends BaseFragment implements
                                 this,
                                 viewModel.getHorizontalFilterBarSingle(),
                                 viewModel.getHorizontalFilterBarMulti(),
+                                viewModel.getItemsDueCount(),
+                                viewModel.getItemsOverdueCount(),
+                                viewModel.getItemsExpiredCount(),
+                                viewModel.getItemsMissingCount(),
+                                viewModel.getItemsInStockCount(),
                                 true,
                                 5,
                                 viewModel.getSortMode()

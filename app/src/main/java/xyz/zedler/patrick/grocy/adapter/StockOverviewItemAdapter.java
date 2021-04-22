@@ -76,6 +76,11 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             StockOverviewItemAdapterListener listener,
             HorizontalFilterBarSingle horizontalFilterBarSingle,
             HorizontalFilterBarMulti horizontalFilterBarMulti,
+            int itemsDueCountInitial,
+            int itemsOverdueCountInitial,
+            int itemsExpiredCountInitial,
+            int itemsMissingCountInitial,
+            int itemsInStockCountInitial,
             boolean showDateTracking,
             int daysExpiringSoon,
             String sortMode
@@ -88,6 +93,11 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
         this.listener = listener;
         this.horizontalFilterBarSingle = horizontalFilterBarSingle;
         this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+        this.horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.DUE_NEXT, itemsDueCountInitial);
+        this.horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.OVERDUE, itemsOverdueCountInitial);
+        this.horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.EXPIRED, itemsExpiredCountInitial);
+        this.horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCountInitial);
+        this.horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.IN_STOCK, itemsInStockCountInitial);
         this.showDateTracking = showDateTracking;
         this.daysExpiringSoon = daysExpiringSoon;
         this.sortMode = sortMode;
@@ -134,7 +144,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             chipDueNext = new FilterChip(
                     context,
                     R.color.retro_yellow_bg,
-                    context.getString(R.string.msg_due_products, 0),
+                    context.getString(R.string.msg_due_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)),
                     () -> {
                         FilterChip.changeStateToInactive(chipOverdue, chipExpired, chipMissing, chipInStock);
                         horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.DUE_NEXT);
@@ -144,7 +154,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             chipOverdue = new FilterChip(
                     context,
                     R.color.retro_dirt_bg_light,
-                    context.getString(R.string.msg_overdue_products, 0),
+                    context.getString(R.string.msg_overdue_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)),
                     () -> {
                         FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
                         horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.OVERDUE);
@@ -154,7 +164,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             chipExpired = new FilterChip(
                     context,
                     R.color.retro_red_bg_black,
-                    context.getString(R.string.msg_expired_products, 0),
+                    context.getString(R.string.msg_expired_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)),
                     () -> {
                         FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipMissing, chipInStock);
                         horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.EXPIRED);
@@ -164,7 +174,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             chipMissing = new FilterChip(
                     context,
                     R.color.retro_blue_bg,
-                    context.getString(R.string.msg_missing_products, 0),
+                    context.getString(R.string.msg_missing_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)),
                     () -> {
                         FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipInStock);
                         horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.MISSING);
@@ -174,7 +184,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             chipInStock = new FilterChip(
                     context,
                     R.color.retro_green_bg_black,
-                    context.getString(R.string.msg_in_stock_products, 0),
+                    context.getString(R.string.msg_in_stock_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)),
                     () -> {
                         FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
                         horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.IN_STOCK);
