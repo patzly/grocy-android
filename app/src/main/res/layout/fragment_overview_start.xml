@@ -242,6 +242,14 @@
                                 android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}"
                                 android:textColor="@color/retro_blue_fg"/>
 
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"
+                                android:visibility="@{viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/retro_blue_fg"/>
+
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>

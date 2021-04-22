@@ -25,6 +25,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.PluralsRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -65,11 +66,13 @@ public class OverviewStartViewModel extends BaseViewModel {
     private final MutableLiveData<Integer> itemsOverdueCountLive;
     private final MutableLiveData<Integer> itemsExpiredCountLive;
     private final MutableLiveData<Integer> itemsMissingCountLive;
+    private final MutableLiveData<Integer> itemsMissingShoppingListCountLive;
     private final LiveData<String> stockDescriptionTextLive;
     private final LiveData<String> stockDescriptionDueNextTextLive;
     private final LiveData<String> stockDescriptionOverdueTextLive;
     private final LiveData<String> stockDescriptionExpiredTextLive;
     private final LiveData<String> stockDescriptionMissingTextLive;
+    private final LiveData<String> stockDescriptionMissingShoppingListTextLive;
     private final LiveData<String> shoppingListDescriptionTextLive;
     private final LiveData<String> masterDataDescriptionTextLive;
     private ArrayList<StockItem> stockItemsTemp;
@@ -77,7 +80,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     private ArrayList<StockItem> overdueItemsTemp;
     private ArrayList<StockItem> expiredItemsTemp;
     private ArrayList<MissingItem> missingItemsTemp;
-    private int missingItemsOnShoppingListCount;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -99,6 +101,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         itemsOverdueCountLive = new MutableLiveData<>();
         itemsExpiredCountLive = new MutableLiveData<>();
         itemsMissingCountLive = new MutableLiveData<>();
+        itemsMissingShoppingListCountLive = new MutableLiveData<>();
         shoppingListItemsLive = new MutableLiveData<>();
         productsLive = new MutableLiveData<>();
 
@@ -164,22 +167,23 @@ public class OverviewStartViewModel extends BaseViewModel {
                 itemsMissingCountLive,
                 count -> {
                     if(count == null) return null;
-                    if(missingItemsOnShoppingListCount == 0) {
-                        return getResources().getQuantityString(
-                                R.plurals.description_overview_stock_missing,
-                                count, count
-                        );
-                    } else if(missingItemsOnShoppingListCount == 1) {
-                        return getResources().getQuantityString(
-                                R.plurals.description_overview_stock_missing_shopping_list_single,
-                                count, count, missingItemsOnShoppingListCount
-                        );
+                    return getResources().getQuantityString(
+                            R.plurals.description_overview_stock_missing,
+                            count, count
+                    );
+                }
+        );
+        stockDescriptionMissingShoppingListTextLive = Transformations.map(
+                itemsMissingShoppingListCountLive,
+                count -> {
+                    if(count == null) return null;
+                    @PluralsRes int string;
+                    if(isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+                        string = R.plurals.description_overview_stock_missing_shopping_list_multi;
                     } else {
-                        return getResources().getQuantityString(
-                                R.plurals.description_overview_stock_missing_shopping_list_multi,
-                                count, count, missingItemsOnShoppingListCount
-                        );
+                        string = R.plurals.description_overview_stock_missing_shopping_list_single;
                     }
+                    return getResources().getQuantityString(string, count, count);
                 }
         );
         shoppingListDescriptionTextLive = Transformations.map(
@@ -227,7 +231,7 @@ public class OverviewStartViewModel extends BaseViewModel {
                     int itemsOverdueCount = 0;
                     int itemsExpiredCount = 0;
                     int itemsMissingCount = 0;
-                    missingItemsOnShoppingListCount = 0;
+                    int missingItemsOnShoppingListCount = 0;
                     for(StockItem stockItem : stockItems) {
                         if(stockItem.isItemDue()) itemsDueCount++;
                         if(stockItem.isItemOverdue()) itemsOverdueCount++;
@@ -243,6 +247,7 @@ public class OverviewStartViewModel extends BaseViewModel {
                     itemsOverdueCountLive.setValue(itemsOverdueCount);
                     itemsExpiredCountLive.setValue(itemsExpiredCount);
                     itemsMissingCountLive.setValue(itemsMissingCount);
+                    itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
 
                     if(downloadAfterLoading) downloadData();
                 }
@@ -295,7 +300,7 @@ public class OverviewStartViewModel extends BaseViewModel {
 
             DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
 
-            missingItemsOnShoppingListCount = 0;
+            int missingItemsOnShoppingListCount = 0;
 
             for(MissingItem missingItem : missingItemsTemp) {
 
@@ -315,6 +320,7 @@ public class OverviewStartViewModel extends BaseViewModel {
                     stockItemsTemp.add(stockItem);
                 }));
             }
+            itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
             if(queue.getSize() == 0) {
                 onQueueEmpty();
                 return;
@@ -420,6 +426,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     public LiveData<String> getStockDescriptionMissingTextLive() {
         return stockDescriptionMissingTextLive;
+    }
+
+    public LiveData<String> getStockDescriptionMissingShoppingListTextLive() {
+        return stockDescriptionMissingShoppingListTextLive;
     }
 
     public LiveData<String> getShoppingListDescriptionTextLive() {

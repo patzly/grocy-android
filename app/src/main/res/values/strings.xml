@@ -383,7 +383,7 @@
         <item quantity="one">%1$d of them is on your shopping list.</item>
         <item quantity="other">%1$d of them are on your shopping list.</item>
     </plurals>
-    <!-- %1$s and %2$s are numbers -->
+    <!-- %1$s is a number -->
     <plurals name="description_overview_stock_missing_shopping_list_multi">
         <item quantity="one">%1$d of them is on your shopping lists.</item>
         <item quantity="other">%1$d of them are on your shopping lists.</item>
