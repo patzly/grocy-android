@@ -131,7 +131,8 @@
                     android:layout_height="match_parent"
                     android:paddingTop="16dp"
                     android:paddingBottom="80dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -208,6 +209,38 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.stockDescriptionDueNextTextLive}"
+                                android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/retro_yellow_fg"/>
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.stockDescriptionOverdueTextLive}"
+                                android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/retro_dirt_bg_light"/>
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.stockDescriptionExpiredTextLive}"
+                                android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/retro_red_fg"/>
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.stockDescriptionMissingTextLive}"
+                                android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/retro_blue_fg"/>
 
                         </LinearLayout>
 

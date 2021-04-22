@@ -358,6 +358,36 @@
         <item quantity="one">You have %1$d product in stock.</item>
         <item quantity="other">You have %1$d products in stock.</item>
     </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_due_soon">
+        <item quantity="one">%1$d product is due within the next 5 days.</item>
+        <item quantity="other">%1$d products are due within the next 5 days.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_overdue">
+        <item quantity="one">%1$d product is overdue.</item>
+        <item quantity="other">%1$d products are overdue.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_expired">
+        <item quantity="one">%1$d product is expired.</item>
+        <item quantity="other">%1$d products are expired.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing">
+        <item quantity="one">%1$d product is below defined min. stock amount.</item>
+        <item quantity="other">%1$d products are below defined min. stock amount.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing_shopping_list_single">
+        <item quantity="one">%1$d product is below defined min. stock amount and one of them is on your shopping list.</item>
+        <item quantity="other">%1$d products are below defined min. stock amount and one of them is on your shopping list.</item>
+    </plurals>
+    <!-- %1$s and %2$s are numbers -->
+    <plurals name="description_overview_stock_missing_shopping_list_multi">
+        <item quantity="one">%1$d product is below defined min. stock amount and %2$d of them are on your shopping list.</item>
+        <item quantity="other">%1$d products are below defined min. stock amount and %2$d of them are on your shopping list.</item>
+    </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
         <item quantity="one">You have %1$d product in stock with a value of %2$s %3$s.</item>

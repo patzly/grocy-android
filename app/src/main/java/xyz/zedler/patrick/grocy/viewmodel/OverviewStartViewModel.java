@@ -33,10 +33,12 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -59,9 +61,23 @@ public class OverviewStartViewModel extends BaseViewModel {
     private final MutableLiveData<ArrayList<StockItem>> stockItemsLive;
     private final MutableLiveData<ArrayList<ShoppingListItem>> shoppingListItemsLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
+    private final MutableLiveData<Integer> itemsDueNextCountLive;
+    private final MutableLiveData<Integer> itemsOverdueCountLive;
+    private final MutableLiveData<Integer> itemsExpiredCountLive;
+    private final MutableLiveData<Integer> itemsMissingCountLive;
     private final LiveData<String> stockDescriptionTextLive;
+    private final LiveData<String> stockDescriptionDueNextTextLive;
+    private final LiveData<String> stockDescriptionOverdueTextLive;
+    private final LiveData<String> stockDescriptionExpiredTextLive;
+    private final LiveData<String> stockDescriptionMissingTextLive;
     private final LiveData<String> shoppingListDescriptionTextLive;
     private final LiveData<String> masterDataDescriptionTextLive;
+    private ArrayList<StockItem> stockItemsTemp;
+    private ArrayList<StockItem> dueItemsTemp;
+    private ArrayList<StockItem> overdueItemsTemp;
+    private ArrayList<StockItem> expiredItemsTemp;
+    private ArrayList<MissingItem> missingItemsTemp;
+    private int missingItemsOnShoppingListCount;
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
@@ -79,6 +95,10 @@ public class OverviewStartViewModel extends BaseViewModel {
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
         stockItemsLive = new MutableLiveData<>();
+        itemsDueNextCountLive = new MutableLiveData<>();
+        itemsOverdueCountLive = new MutableLiveData<>();
+        itemsExpiredCountLive = new MutableLiveData<>();
+        itemsMissingCountLive = new MutableLiveData<>();
         shoppingListItemsLive = new MutableLiveData<>();
         productsLive = new MutableLiveData<>();
 
@@ -89,6 +109,10 @@ public class OverviewStartViewModel extends BaseViewModel {
                     int products = stockItems.size();
                     double value = 0;
                     for(StockItem stockItem : stockItems) {
+                        if(stockItem.isItemMissing() && !stockItem.isItemMissingAndPartlyInStock()) {
+                            products--;
+                            continue;
+                        }
                         value += stockItem.getValueDouble();
                     }
                     if(isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
@@ -102,6 +126,58 @@ public class OverviewStartViewModel extends BaseViewModel {
                         return getResources().getQuantityString(
                                 R.plurals.description_overview_stock,
                                 products, products
+                        );
+                    }
+                }
+        );
+        stockDescriptionDueNextTextLive = Transformations.map(
+                itemsDueNextCountLive,
+                count -> {
+                    if(count == null) return null;
+                    return getResources().getQuantityString(
+                            R.plurals.description_overview_stock_due_soon,
+                            count, count
+                    );
+                }
+        );
+        stockDescriptionOverdueTextLive = Transformations.map(
+                itemsOverdueCountLive,
+                count -> {
+                    if(count == null) return null;
+                    return getResources().getQuantityString(
+                            R.plurals.description_overview_stock_overdue,
+                            count, count
+                    );
+                }
+        );
+        stockDescriptionExpiredTextLive = Transformations.map(
+                itemsExpiredCountLive,
+                count -> {
+                    if(count == null) return null;
+                    return getResources().getQuantityString(
+                            R.plurals.description_overview_stock_expired,
+                            count, count
+                    );
+                }
+        );
+        stockDescriptionMissingTextLive = Transformations.map(
+                itemsMissingCountLive,
+                count -> {
+                    if(count == null) return null;
+                    if(missingItemsOnShoppingListCount == 0) {
+                        return getResources().getQuantityString(
+                                R.plurals.description_overview_stock_missing,
+                                count, count
+                        );
+                    } else if(missingItemsOnShoppingListCount == 1) {
+                        return getResources().getQuantityString(
+                                R.plurals.description_overview_stock_missing_shopping_list_single,
+                                count, count, missingItemsOnShoppingListCount
+                        );
+                    } else {
+                        return getResources().getQuantityString(
+                                R.plurals.description_overview_stock_missing_shopping_list_multi,
+                                count, count, missingItemsOnShoppingListCount
                         );
                     }
                 }
@@ -140,6 +216,34 @@ public class OverviewStartViewModel extends BaseViewModel {
                     this.stockItemsLive.setValue(stockItems);
                     this.shoppingListItemsLive.setValue(shoppingListItems);
                     this.productsLive.setValue(products);
+
+                    ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
+                    for(ShoppingListItem item : shoppingListItems) {
+                        if(!item.hasProduct()) continue;
+                        shoppingListItemsProductIds.add(item.getProductIdInt());
+                    }
+
+                    int itemsDueCount = 0;
+                    int itemsOverdueCount = 0;
+                    int itemsExpiredCount = 0;
+                    int itemsMissingCount = 0;
+                    missingItemsOnShoppingListCount = 0;
+                    for(StockItem stockItem : stockItems) {
+                        if(stockItem.isItemDue()) itemsDueCount++;
+                        if(stockItem.isItemOverdue()) itemsOverdueCount++;
+                        if(stockItem.isItemExpired()) itemsExpiredCount++;
+                        if(stockItem.isItemMissing()) {
+                            itemsMissingCount++;
+                            if(shoppingListItemsProductIds.contains(stockItem.getProductId())) {
+                                missingItemsOnShoppingListCount++;
+                            }
+                        }
+                    }
+                    itemsDueNextCountLive.setValue(itemsDueCount);
+                    itemsOverdueCountLive.setValue(itemsOverdueCount);
+                    itemsExpiredCountLive.setValue(itemsExpiredCount);
+                    itemsMissingCountLive.setValue(itemsMissingCount);
+
                     if(downloadAfterLoading) downloadData();
                 }
         );
@@ -159,12 +263,80 @@ public class OverviewStartViewModel extends BaseViewModel {
             return;
         }
 
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+        DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
+            HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
+            for(StockItem stockItem : stockItemsTemp) {
+                stockItemHashMap.put(stockItem.getProductId(), stockItem);
+            }
+
+            for(StockItem stockItemDue : dueItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemDue.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemDue(true);
+            }
+            for(StockItem stockItemOverdue : overdueItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemOverdue.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemOverdue(true);
+            }
+            for(StockItem stockItemExpired : expiredItemsTemp) {
+                StockItem stockItem = stockItemHashMap.get(stockItemExpired.getProductId());
+                if(stockItem == null) continue;
+                stockItem.setItemExpired(true);
+            }
+
+            ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
+            if(shoppingListItemsLive.getValue() != null) {
+                for(ShoppingListItem item : shoppingListItemsLive.getValue()) {
+                    if(!item.hasProduct()) continue;
+                    shoppingListItemsProductIds.add(item.getProductIdInt());
+                }
+            }
+
+            DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+
+            missingItemsOnShoppingListCount = 0;
+
+            for(MissingItem missingItem : missingItemsTemp) {
+
+                if(shoppingListItemsProductIds.contains(missingItem.getId())) {
+                    missingItemsOnShoppingListCount++;
+                }
+                StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
+                if(missingStockItem != null) {
+                    missingStockItem.setItemMissing(true);
+                    missingStockItem.setItemMissingAndPartlyInStock(true);
+                    continue;
+                }
+                queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
+                    StockItem stockItem = new StockItem(productDetails);
+                    stockItem.setItemMissing(true);
+                    stockItem.setItemMissingAndPartlyInStock(false);
+                    stockItemsTemp.add(stockItem);
+                }));
+            }
+            if(queue.getSize() == 0) {
+                onQueueEmpty();
+                return;
+            }
+            queue.start();
+        };
+
+        DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
         queue.append(
-                dlHelper.updateStockItems(dbChangedTime, this.stockItemsLive::setValue),
+                dlHelper.updateStockItems(dbChangedTime, stockItems -> stockItemsTemp = stockItems),
                 dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue),
-                dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue)
-        );
+                dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
+                dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
+                    this.dueItemsTemp = due;
+                    itemsDueNextCountLive.setValue(due.size());
+                    this.overdueItemsTemp = overdue;
+                    itemsOverdueCountLive.setValue(overdue.size());
+                    this.expiredItemsTemp = expired;
+                    itemsExpiredCountLive.setValue(expired.size());
+                    this.missingItemsTemp = missing;
+                    itemsMissingCountLive.setValue(missing.size());
+                }));
         if(queue.isEmpty()) return;
 
         currentQueueLoading = queue;
@@ -180,6 +352,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
         editPrefs.apply();
         downloadData();
     }
@@ -188,10 +361,10 @@ public class OverviewStartViewModel extends BaseViewModel {
         if(isOffline()) setOfflineLive(false);
         infoFullscreenLive.setValue(null);
         repository.updateDatabase(
-                this.stockItemsLive.getValue(),
+                stockItemsTemp,
                 this.shoppingListItemsLive.getValue(),
                 this.productsLive.getValue(),
-                () -> {}
+                () -> this.stockItemsLive.setValue(stockItemsTemp)
         );
     }
 
@@ -231,6 +404,22 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     public LiveData<String> getStockDescriptionTextLive() {
         return stockDescriptionTextLive;
+    }
+
+    public LiveData<String> getStockDescriptionDueNextTextLive() {
+        return stockDescriptionDueNextTextLive;
+    }
+
+    public LiveData<String> getStockDescriptionOverdueTextLive() {
+        return stockDescriptionOverdueTextLive;
+    }
+
+    public LiveData<String> getStockDescriptionExpiredTextLive() {
+        return stockDescriptionExpiredTextLive;
+    }
+
+    public LiveData<String> getStockDescriptionMissingTextLive() {
+        return stockDescriptionMissingTextLive;
     }
 
     public LiveData<String> getShoppingListDescriptionTextLive() {
