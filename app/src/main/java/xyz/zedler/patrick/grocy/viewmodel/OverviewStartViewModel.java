@@ -136,7 +136,7 @@ public class OverviewStartViewModel extends BaseViewModel {
                     if(count == null) return null;
                     return getResources().getQuantityString(
                             R.plurals.description_overview_stock_due_soon,
-                            count, count
+                            count, count, 5
                     );
                 }
         );

@@ -358,10 +358,10 @@
         <item quantity="one">You have %1$d product in stock.</item>
         <item quantity="other">You have %1$d products in stock.</item>
     </plurals>
-    <!-- %1$s is a number -->
+    <!-- %1$s and %2$s are numbers -->
     <plurals name="description_overview_stock_due_soon">
-        <item quantity="one">%1$d product is due within the next 5 days.</item>
-        <item quantity="other">%1$d products are due within the next 5 days.</item>
+        <item quantity="one">%1$d product is due within the next %2$d days.</item>
+        <item quantity="other">%1$d products are due within the next %2$d days.</item>
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock_overdue">
