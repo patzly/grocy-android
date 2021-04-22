@@ -380,13 +380,13 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock_missing_shopping_list_single">
-        <item quantity="one">%1$d product is below defined min. stock amount and one of them is on your shopping list.</item>
-        <item quantity="other">%1$d products are below defined min. stock amount and one of them is on your shopping list.</item>
+        <item quantity="one">%1$d of them is on your shopping list.</item>
+        <item quantity="other">%1$d of them are on your shopping list.</item>
     </plurals>
     <!-- %1$s and %2$s are numbers -->
     <plurals name="description_overview_stock_missing_shopping_list_multi">
-        <item quantity="one">%1$d product is below defined min. stock amount and %2$d of them are on your shopping list.</item>
-        <item quantity="other">%1$d products are below defined min. stock amount and %2$d of them are on your shopping list.</item>
+        <item quantity="one">%1$d of them is on your shopping lists.</item>
+        <item quantity="other">%1$d of them are on your shopping lists.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
