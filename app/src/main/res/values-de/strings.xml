@@ -376,7 +376,7 @@
     </plurals>
     <!-- %1$s and %2$s are numbers -->
     <plurals name="description_overview_stock_missing_shopping_list_multi">
-        <item quantity="one">%1$d Produkt ist unter Mindestbestand und eines dieses ist auf Ihrer Einkaufsliste.</item>
+        <item quantity="one">%1$d Produkt ist unter Mindestbestand und dieses ist auf Ihrer Einkaufsliste.</item>
         <item quantity="other">%1$d Produkte sind unter Mindestbestand und %2$d davon stehen auf Ihrer Einkaufsliste.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
