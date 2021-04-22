@@ -376,8 +376,8 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock_missing_shopping_list_multi">
-        <item quantity="one">%1$d von ihnen ist auf Ihren Einkaufslisten.</item>
-        <item quantity="other">%1$d von ihnen sind auf Ihren Einkaufslisten.</item>
+        <item quantity="one">%1$d davon ist auf Ihren Einkaufslisten.</item>
+        <item quantity="other">%1$d davon sind auf Ihren Einkaufslisten.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
