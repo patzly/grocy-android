@@ -371,13 +371,13 @@
     </plurals>
     <!-- %1$s is a number -->
     <plurals name="description_overview_stock_missing_shopping_list_single">
-        <item quantity="one">%1$d Produkt ist unter Mindestbestand und dieses steht auf Ihrer EInkaufsliste.</item>
-        <item quantity="other">%1$d Produkte sind unter Mindestbestand und eines davon ist auf Ihrer Einkaufsliste.</item>
+        <item quantity="one">%1$d von ihnen ist auf Ihrer Einkaufsliste.</item>
+        <item quantity="other">%1$d von ihnen sind auf Ihrer EInkaufsliste.</item>
     </plurals>
-    <!-- %1$s and %2$s are numbers -->
+    <!-- %1$s is a number -->
     <plurals name="description_overview_stock_missing_shopping_list_multi">
-        <item quantity="one">%1$d Produkt ist unter Mindestbestand und dieses steht auf Ihrer Einkaufsliste.</item>
-        <item quantity="other">%1$d Produkte sind unter Mindestbestand und %2$d davon stehen auf Ihrer Einkaufsliste.</item>
+        <item quantity="one">%1$d von ihnen ist auf Ihren Einkaufslisten.</item>
+        <item quantity="other">%1$d von ihnen sind auf Ihren Einkaufslisten.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
