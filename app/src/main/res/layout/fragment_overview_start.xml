@@ -132,7 +132,8 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="80dp"
                     android:orientation="vertical"
-                    android:animateLayoutChanges="true">
+                    android:animateLayoutChanges="true"
+                    transitionTypeChanging="@{true}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -214,7 +215,8 @@
                               android:orientation="horizontal"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top">
+                              android:gravity="top"
+                              android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}">
 
                                 <FrameLayout
                                   android:layout_width="wrap_content"
@@ -245,8 +247,7 @@
                                   android:layout_width="0dp"
                                   android:layout_height="wrap_content"
                                   android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionDueNextTextLive}"
-                                  android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}"/>
+                                  android:text="@{viewModel.stockDescriptionDueNextTextLive}"/>
 
                             </LinearLayout>
 
@@ -254,7 +255,8 @@
                               android:orientation="horizontal"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top">
+                              android:gravity="top"
+                              android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}">
 
                                 <FrameLayout
                                   android:layout_width="wrap_content"
@@ -285,8 +287,7 @@
                                   android:layout_width="0dp"
                                   android:layout_height="wrap_content"
                                   android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionOverdueTextLive}"
-                                  android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}"/>
+                                  android:text="@{viewModel.stockDescriptionOverdueTextLive}"/>
 
                             </LinearLayout>
 
@@ -294,7 +295,8 @@
                               android:orientation="horizontal"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top">
+                              android:gravity="top"
+                              android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}">
 
                                 <FrameLayout
                                   android:layout_width="wrap_content"
@@ -325,8 +327,7 @@
                                   android:layout_width="0dp"
                                   android:layout_height="wrap_content"
                                   android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionExpiredTextLive}"
-                                  android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}"/>
+                                  android:text="@{viewModel.stockDescriptionExpiredTextLive}"/>
 
                             </LinearLayout>
 
@@ -334,7 +335,8 @@
                               android:orientation="horizontal"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top">
+                              android:gravity="top"
+                              android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}">
 
                                 <FrameLayout
                                   android:layout_width="wrap_content"
@@ -365,8 +367,7 @@
                                   android:layout_width="0dp"
                                   android:layout_height="wrap_content"
                                   android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionMissingTextLive}"
-                                  android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}"/>
+                                  android:text="@{viewModel.stockDescriptionMissingTextLive}"/>
 
                             </LinearLayout>
 
@@ -374,12 +375,14 @@
                               android:orientation="horizontal"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top">
+                              android:gravity="top"
+                              android:visibility="@{viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}">
 
                                 <FrameLayout
                                   android:layout_width="wrap_content"
                                   android:layout_height="wrap_content"
-                                  tools:ignore="TooDeepLayout">
+                                  tools:ignore="TooDeepLayout"
+                                  android:visibility="invisible">
 
                                     <View
                                       android:layout_width="4dp"
@@ -405,8 +408,7 @@
                                   android:layout_width="0dp"
                                   android:layout_height="wrap_content"
                                   android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"
-                                  android:visibility="@{viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}" />
+                                  android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"/>
 
                             </LinearLayout>
 

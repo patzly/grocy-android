@@ -136,7 +136,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         stockDescriptionDueNextTextLive = Transformations.map(
                 itemsDueNextCountLive,
                 count -> {
-                    if(count == null) return null;
+                    if(count == null || count == 0) return null;
                     return getResources().getQuantityString(
                             R.plurals.description_overview_stock_due_soon,
                             count, count, 5
@@ -146,7 +146,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         stockDescriptionOverdueTextLive = Transformations.map(
                 itemsOverdueCountLive,
                 count -> {
-                    if(count == null) return null;
+                    if(count == null || count == 0) return null;
                     return getResources().getQuantityString(
                             R.plurals.description_overview_stock_overdue,
                             count, count
@@ -156,7 +156,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         stockDescriptionExpiredTextLive = Transformations.map(
                 itemsExpiredCountLive,
                 count -> {
-                    if(count == null) return null;
+                    if(count == null || count == 0) return null;
                     return getResources().getQuantityString(
                             R.plurals.description_overview_stock_expired,
                             count, count
@@ -166,7 +166,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         stockDescriptionMissingTextLive = Transformations.map(
                 itemsMissingCountLive,
                 count -> {
-                    if(count == null) return null;
+                    if(count == null || count == 0) return null;
                     return getResources().getQuantityString(
                             R.plurals.description_overview_stock_missing,
                             count, count
