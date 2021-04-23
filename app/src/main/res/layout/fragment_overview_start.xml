@@ -210,45 +210,205 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.stockDescriptionTextLive}"/>
 
-                            <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.stockDescriptionDueNextTextLive}"
-                                android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}"
-                                android:textColor="@color/retro_yellow_fg"/>
+                            <LinearLayout
+                              android:orientation="horizontal"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:gravity="top">
 
-                            <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.stockDescriptionOverdueTextLive}"
-                                android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}"
-                                android:textColor="@color/retro_dirt_bg_light"/>
+                                <FrameLayout
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  tools:ignore="TooDeepLayout">
 
-                            <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.stockDescriptionExpiredTextLive}"
-                                android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}"
-                                android:textColor="@color/retro_red_fg"/>
+                                    <View
+                                      android:layout_width="4dp"
+                                      android:layout_height="4dp"
+                                      android:layout_marginStart="6dp"
+                                      android:layout_marginEnd="6dp"
+                                      android:layout_gravity="center_vertical"
+                                      android:background="@drawable/shape_circle"
+                                      android:backgroundTint="@color/on_background"/>
 
-                            <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.stockDescriptionMissingTextLive}"
-                                android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}"
-                                android:textColor="@color/retro_blue_fg"/>
+                                    <TextView
+                                      style="@style/Widget.Grocy.TextView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:text="E"
+                                      android:visibility="invisible"
+                                      tools:ignore="HardcodedText" />
 
-                            <TextView
-                                style="@style/Widget.Grocy.TextView.Paragraph"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"
-                                android:visibility="@{viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}"
-                                android:textColor="@color/retro_blue_fg"/>
+                                </FrameLayout>
+
+                                <TextView
+                                  style="@style/Widget.Grocy.TextView.Paragraph"
+                                  android:layout_width="0dp"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"
+                                  android:text="@{viewModel.stockDescriptionDueNextTextLive}"
+                                  android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                              android:orientation="horizontal"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:gravity="top">
+
+                                <FrameLayout
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  tools:ignore="TooDeepLayout">
+
+                                    <View
+                                      android:layout_width="4dp"
+                                      android:layout_height="4dp"
+                                      android:layout_marginStart="6dp"
+                                      android:layout_marginEnd="6dp"
+                                      android:layout_gravity="center_vertical"
+                                      android:background="@drawable/shape_circle"
+                                      android:backgroundTint="@color/on_background"/>
+
+                                    <TextView
+                                      style="@style/Widget.Grocy.TextView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:text="E"
+                                      android:visibility="invisible"
+                                      tools:ignore="HardcodedText" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                  style="@style/Widget.Grocy.TextView.Paragraph"
+                                  android:layout_width="0dp"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"
+                                  android:text="@{viewModel.stockDescriptionOverdueTextLive}"
+                                  android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                              android:orientation="horizontal"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:gravity="top">
+
+                                <FrameLayout
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  tools:ignore="TooDeepLayout">
+
+                                    <View
+                                      android:layout_width="4dp"
+                                      android:layout_height="4dp"
+                                      android:layout_marginStart="6dp"
+                                      android:layout_marginEnd="6dp"
+                                      android:layout_gravity="center_vertical"
+                                      android:background="@drawable/shape_circle"
+                                      android:backgroundTint="@color/on_background"/>
+
+                                    <TextView
+                                      style="@style/Widget.Grocy.TextView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:text="E"
+                                      android:visibility="invisible"
+                                      tools:ignore="HardcodedText" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                  style="@style/Widget.Grocy.TextView.Paragraph"
+                                  android:layout_width="0dp"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"
+                                  android:text="@{viewModel.stockDescriptionExpiredTextLive}"
+                                  android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                              android:orientation="horizontal"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:gravity="top">
+
+                                <FrameLayout
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  tools:ignore="TooDeepLayout">
+
+                                    <View
+                                      android:layout_width="4dp"
+                                      android:layout_height="4dp"
+                                      android:layout_marginStart="6dp"
+                                      android:layout_marginEnd="6dp"
+                                      android:layout_gravity="center_vertical"
+                                      android:background="@drawable/shape_circle"
+                                      android:backgroundTint="@color/on_background"/>
+
+                                    <TextView
+                                      style="@style/Widget.Grocy.TextView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:text="E"
+                                      android:visibility="invisible"
+                                      tools:ignore="HardcodedText" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                  style="@style/Widget.Grocy.TextView.Paragraph"
+                                  android:layout_width="0dp"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"
+                                  android:text="@{viewModel.stockDescriptionMissingTextLive}"
+                                  android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                              android:orientation="horizontal"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:gravity="top">
+
+                                <FrameLayout
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  tools:ignore="TooDeepLayout">
+
+                                    <View
+                                      android:layout_width="4dp"
+                                      android:layout_height="4dp"
+                                      android:layout_marginStart="6dp"
+                                      android:layout_marginEnd="6dp"
+                                      android:layout_gravity="center_vertical"
+                                      android:background="@drawable/shape_circle"
+                                      android:backgroundTint="@color/on_background"/>
+
+                                    <TextView
+                                      style="@style/Widget.Grocy.TextView"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:text="E"
+                                      android:visibility="invisible"
+                                      tools:ignore="HardcodedText" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                  style="@style/Widget.Grocy.TextView.Paragraph"
+                                  android:layout_width="0dp"
+                                  android:layout_height="wrap_content"
+                                  android:layout_weight="1"
+                                  android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"
+                                  android:visibility="@{viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
