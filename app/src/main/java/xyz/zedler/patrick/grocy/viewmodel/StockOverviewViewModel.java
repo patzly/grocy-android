@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -73,6 +74,8 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     private ArrayList<StockItem> stockItems;
     private ArrayList<Product> products;
+    private ArrayList<ProductBarcode> productBarcodesTemp;
+    private HashMap<String, ProductBarcode> productBarcodeHashMap;
     private HashMap<Integer, Product> productHashMap;
     private ArrayList<ShoppingListItem> shoppingListItems;
     private ArrayList<String> shoppingListItemsProductIds;
@@ -138,7 +141,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (quantityUnits, productGroups, stockItems, products, shoppingListItems, locations) -> {
+                (quantityUnits, productGroups, stockItems, products, barcodes, shoppingListItems, locations) -> {
                     this.quantityUnits = quantityUnits;
                     quantityUnitHashMap = new HashMap<>();
                     for(QuantityUnit quantityUnit : quantityUnits) {
@@ -150,7 +153,11 @@ public class StockOverviewViewModel extends BaseViewModel {
                     for(Product product : products) {
                         productHashMap.put(product.getId(), product);
                     }
-
+                    this.productBarcodesTemp = barcodes;
+                    productBarcodeHashMap = new HashMap<>();
+                    for(ProductBarcode barcode : barcodes) {
+                        productBarcodeHashMap.put(barcode.getBarcode(), barcode);
+                    }
                     itemsDueCount = 0;
                     itemsOverdueCount = 0;
                     itemsExpiredCount = 0;
@@ -281,6 +288,12 @@ public class StockOverviewViewModel extends BaseViewModel {
                     for(Product product : products) {
                         productHashMap.put(product.getId(), product);
                     }
+                }), dlHelper.updateProductBarcodes(dbChangedTime, productBarcodes -> {
+                    this.productBarcodesTemp = productBarcodes;
+                    productBarcodeHashMap = new HashMap<>();
+                    for(ProductBarcode barcode : productBarcodes) {
+                        productBarcodeHashMap.put(barcode.getBarcode(), barcode);
+                    }
                 }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
                     this.dueItemsTemp = due;
                     itemsDueCount = due.size();
@@ -320,6 +333,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
@@ -333,6 +347,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this.productGroupsLive.getValue(),
                 this.stockItems,
                 this.products,
+                this.productBarcodesTemp,
                 this.shoppingListItems,
                 this.locationsLive.getValue(),
                 this::updateFilteredStockItems
@@ -348,12 +363,17 @@ public class StockOverviewViewModel extends BaseViewModel {
     public void updateFilteredStockItems() {
         ArrayList<StockItem> filteredStockItems = new ArrayList<>();
 
+        ProductBarcode productBarcodeSearch = null;
+        if(searchInput != null && !searchInput.isEmpty()) {
+            productBarcodeSearch = productBarcodeHashMap.get(searchInput);
+        }
+
         for(StockItem item : this.stockItems) {
             boolean searchContainsItem = true;
             if(searchInput != null && !searchInput.isEmpty()) {
                 searchContainsItem = item.getProduct().getName().toLowerCase().contains(searchInput);
             }
-            if(!searchContainsItem) continue;
+            if(!searchContainsItem && productBarcodeSearch == null || !searchContainsItem && productBarcodeSearch.getProductId() != item.getProductId()) continue;
 
             if(horizontalFilterBarMulti.areFiltersActive()) {
                 HorizontalFilterBarMulti.Filter productGroup = horizontalFilterBarMulti
