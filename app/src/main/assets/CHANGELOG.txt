@@ -1,6 +1,7 @@
 2.0.0-alpha06
 - New: 'Scan mode' is now 'Quick mode' and has a better help text (#332)
 - New: Jost* typeface by Owen Earl
+- Improved: Stock information on start page
 - Improved: Lock current screen orientation while camera scanner frame is visible (#358)
 - Improved: Camera scanner frame now has a fixed width (#334)
 - Improved: Updated translations

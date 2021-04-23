@@ -31,25 +31,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
 
@@ -110,8 +105,7 @@ public class TextBottomSheet extends BaseBottomSheet {
 					),
 					TextView.BufferType.SPANNABLE
 			);
-			binding.textText.setLineSpacing(UnitUtil.getSp(requireContext(), 3), 1);
-			binding.textText.setTextSize(14.5f);
+			binding.textText.setTextSize(15.5f);
 		} else {
 			binding.textText.setText(content);
 		}
