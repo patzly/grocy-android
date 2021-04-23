@@ -153,7 +153,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             );
             chipOverdue = new FilterChip(
                     context,
-                    R.color.retro_dirt_bg_light,
+                    R.color.retro_dirt,
                     context.getString(R.string.msg_overdue_products, horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)),
                     () -> {
                         FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
@@ -454,7 +454,7 @@ public class StockOverviewItemAdapter extends RecyclerView.Adapter<StockOverview
             if(Integer.parseInt(days) >= 0) {
                 color = R.color.retro_yellow_fg;
             } else if(stockItem.getDueType() == StockItem.DUE_TYPE_BEST_BEFORE) {
-                color = R.color.retro_dirt_bg_light;
+                color = R.color.retro_dirt_fg;
             } else {
                 color = R.color.retro_red_fg;
             }
