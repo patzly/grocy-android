@@ -35,7 +35,8 @@
             android:layout_marginTop="1dp"
             android:layout_marginStart="6dp"
             android:visibility="gone"
-            android:background="@drawable/shape_is_on_shopping_list"/>
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="@color/retro_blue_fg"/>
 
     </LinearLayout>
 
@@ -59,7 +60,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/on_background_secondary"
-            android:background="@drawable/shape_is_on_shopping_list"/>
+            android:background="@drawable/shape_circle"/>
 
         <TextView
             android:id="@+id/text__days"

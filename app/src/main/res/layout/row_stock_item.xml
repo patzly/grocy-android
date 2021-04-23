@@ -33,7 +33,8 @@
             android:layout_marginTop="1dp"
             android:layout_marginStart="6dp"
             android:visibility="gone"
-            android:background="@drawable/shape_is_on_shopping_list"/>
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="@color/retro_blue_fg"/>
 
     </LinearLayout>
 
