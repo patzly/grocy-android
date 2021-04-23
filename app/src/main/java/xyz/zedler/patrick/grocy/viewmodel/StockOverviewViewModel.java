@@ -234,9 +234,13 @@ public class StockOverviewViewModel extends BaseViewModel {
 
                 StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
                 if(missingStockItem != null) {
+                    productIdsMissingStockItems.put(missingItem.getId(), missingStockItem);
+                }
+                if(missingStockItem != null && !missingStockItem.isItemMissing()) {
                     missingStockItem.setItemMissing(true);
                     missingStockItem.setItemMissingAndPartlyInStock(true);
-                    productIdsMissingStockItems.put(missingItem.getId(), missingStockItem);
+                    continue;
+                } else if(missingStockItem != null) {
                     continue;
                 }
                 queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
