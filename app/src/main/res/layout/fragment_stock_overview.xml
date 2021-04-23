@@ -30,7 +30,8 @@
             android:background="@color/primary"
             android:layout_alignParentTop="true"
             android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="true"
+            transitionTypeChanging="@{true}">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -82,57 +83,99 @@
                 <LinearLayout
                     android:id="@+id/app_bar_search"
                     android:layout_width="match_parent"
-                    android:layout_height="?android:actionBarSize"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:baselineAligned="false">
+                    android:layout_height="wrap_content"
+                    android:minHeight="?android:actionBarSize"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <FrameLayout
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="?attr/actionBarItemBackground"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:contentDescription="@string/action_close"
-                        android:tooltipText="@string/action_close"
-                        android:focusable="true"
-                        tools:targetApi="o"
-                        android:onClick="@{() -> fragment.dismissSearch()}">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="?android:actionBarSize"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_round_close" />
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="?attr/actionBarItemBackground"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:contentDescription="@string/action_close"
+                            android:tooltipText="@string/action_close"
+                            android:focusable="true"
+                            tools:targetApi="o"
+                            android:onClick="@{() -> fragment.dismissSearch()}">
 
-                    </FrameLayout>
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_round_close" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/text_input_search"
-                        style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="72dp">
+                        </FrameLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edit_text_search"
-                            style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/text_input_search"
+                            style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionSearch"
-                            android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                            android:singleLine="true"
-                            android:textColor="@color/on_background"
-                            android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
-                            app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}"/>
+                            android:layout_weight="1"
+                            android:layout_marginStart="0dp"
+                            android:layout_marginEnd="0dp"
+                            app:endIconMode="clear_text">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_search"
+                                style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionSearch"
+                                android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+                                android:singleLine="true"
+                                android:textColor="@color/on_background"
+                                android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
+                                app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <FrameLayout
+                            android:id="@+id/frame_scan"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="4dp"
+                            android:background="?attr/actionBarItemBackground"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:contentDescription="@string/action_scan"
+                            android:tooltipText="@string/action_scan"
+                            android:focusable="true"
+                            android:onClick="@{() -> fragment.toggleScannerVisibility()}"
+                            tools:targetApi="o">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_round_barcode_scan" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                        android:id="@+id/barcode_scan"
+                        android:layout_width="350dp"
+                        android:layout_height="160dp"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
+                        android:onClick="@{() -> fragment.toggleTorch()}"
+                        app:zxing_scanner_layout="@layout/partial_scanner_embedded_search" />
 
                 </LinearLayout>
 

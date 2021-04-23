@@ -69,6 +69,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
     private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
     private final MutableLiveData<ArrayList<Location>> locationsLive;
+    private final MutableLiveData<Boolean> scannerVisibilityLive;
 
     private ArrayList<StockItem> stockItems;
     private ArrayList<Product> products;
@@ -94,6 +95,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     private int itemsMissingCount;
     private int itemsInStockCount;
     private boolean sortAscending;
+    private boolean torchOn = false;
     private final boolean debug;
 
     public StockOverviewViewModel(@NonNull Application application) {
@@ -112,6 +114,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         filteredStockItemsLive = new MutableLiveData<>();
         productGroupsLive = new MutableLiveData<>();
         locationsLive = new MutableLiveData<>();
+        scannerVisibilityLive = new MutableLiveData<>(false);
 
         horizontalFilterBarSingle = new HorizontalFilterBarSingle(
                 this::updateFilteredStockItems,
@@ -557,6 +560,27 @@ public class StockOverviewViewModel extends BaseViewModel {
         return quantityUnitHashMap.get(id);
     }
 
+    public MutableLiveData<Boolean> getScannerVisibilityLive() {
+        return scannerVisibilityLive;
+    }
+
+    public boolean isScannerVisible() {
+        assert scannerVisibilityLive.getValue() != null;
+        return scannerVisibilityLive.getValue();
+    }
+
+    public void toggleScannerVisibility() {
+        scannerVisibilityLive.setValue(!isScannerVisible());
+    }
+
+    public boolean isTorchOn() {
+        return torchOn;
+    }
+
+    public void setTorchOn(boolean torchOn) {
+        this.torchOn = torchOn;
+    }
+
     @NonNull
     public MutableLiveData<Boolean> getOfflineLive() {
         return offlineLive;
@@ -587,6 +611,13 @@ public class StockOverviewViewModel extends BaseViewModel {
     public boolean isFeatureEnabled(String pref) {
         if(pref == null) return true;
         return sharedPrefs.getBoolean(pref, true);
+    }
+
+    public boolean getUseFrontCam() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.FRONT_CAM,
+                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+        );
     }
 
     @Override

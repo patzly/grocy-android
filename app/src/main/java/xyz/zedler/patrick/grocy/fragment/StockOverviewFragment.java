@@ -19,7 +19,9 @@ package xyz.zedler.patrick.grocy.fragment;
     Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
 */
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -33,6 +35,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import java.util.List;
 
@@ -55,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -62,7 +68,8 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
-        StockOverviewItemAdapter.StockOverviewItemAdapterListener {
+        StockOverviewItemAdapter.StockOverviewItemAdapterListener,
+        ScanInputCaptureManager.BarcodeListener {
 
     private final static String TAG = ShoppingListFragment.class.getSimpleName();
 
@@ -73,6 +80,7 @@ public class StockOverviewFragment extends BaseFragment implements
     private SwipeBehavior swipeBehavior;
     private FragmentStockOverviewBinding binding;
     private InfoFullscreenHelper infoFullscreenHelper;
+    private ScanInputCaptureManager capture;
 
     @Override
     public View onCreateView(
@@ -92,9 +100,11 @@ public class StockOverviewFragment extends BaseFragment implements
             infoFullscreenHelper.destroyInstance();
             infoFullscreenHelper = null;
         }
+        lockOrUnlockRotation(false);
         if(binding != null) {
             binding.recycler.animate().cancel();
             binding.recycler.setAdapter(null);
+            binding.barcodeScan.setTorchOff();
             binding = null;
         }
     }
@@ -194,6 +204,16 @@ public class StockOverviewFragment extends BaseFragment implements
             }
         });
 
+        viewModel.getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
+            if(visible) {
+                capture.onResume();
+                capture.decode();
+            } else {
+                capture.onPause();
+            }
+            lockOrUnlockRotation(visible);
+        });
+
         viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
             if(event.getType() == Event.SNACKBAR_MESSAGE) {
                 activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
@@ -232,6 +252,20 @@ public class StockOverviewFragment extends BaseFragment implements
 
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
 
+        binding.barcodeScan.setTorchOff();
+        binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+            @Override public void onTorchOn() {
+                viewModel.setTorchOn(true);
+            }
+            @Override public void onTorchOff() {
+                viewModel.setTorchOn(false);
+            }
+        });
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
+        binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
+        capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
+
         updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
                 && savedInstanceState == null);
     }
@@ -250,6 +284,56 @@ public class StockOverviewFragment extends BaseFragment implements
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if(appBarBehavior != null) appBarBehavior.saveInstanceState(outState);
+    }
+
+    public void toggleScannerVisibility() {
+        viewModel.toggleScannerVisibility();
+        if(viewModel.isScannerVisible()) {
+            binding.editTextSearch.clearFocus();
+            activity.hideKeyboard();
+        } else {
+            activity.showKeyboard(binding.editTextSearch);
+        }
+    }
+
+    public void toggleTorch() {
+        if(viewModel.isTorchOn()) {
+            binding.barcodeScan.setTorchOff();
+        } else {
+            binding.barcodeScan.setTorchOn();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(viewModel.isScannerVisible()) capture.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if(viewModel.isScannerVisible()) capture.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(viewModel.isScannerVisible()) {
+            return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        } return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(capture != null) capture.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBarcodeResult(BarcodeResult result) {
+        if(result.getText().isEmpty()) resumeScan();
+        viewModel.toggleScannerVisibility();
+        binding.editTextSearch.setText(result.getText());
     }
 
     private boolean showOfflineError() {
@@ -407,6 +491,15 @@ public class StockOverviewFragment extends BaseFragment implements
         activity.hideKeyboard();
         binding.editTextSearch.setText("");
         viewModel.setIsSearchVisible(false);
+        if(viewModel.isScannerVisible()) viewModel.toggleScannerVisibility();
+    }
+
+    private void lockOrUnlockRotation(boolean scannerIsVisible) {
+        if(scannerIsVisible) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+        }
     }
 
     private void showMessage(String msg) {
