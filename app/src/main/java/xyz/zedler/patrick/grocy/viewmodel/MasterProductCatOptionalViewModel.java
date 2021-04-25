@@ -89,7 +89,7 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
         grocyApi = new GrocyApi(getApplication());
         eventHandler = new EventHandler();
         repository = new MasterProductRepository(application);
-        formData = new FormDataMasterProductCatOptional(application);
+        formData = new FormDataMasterProductCatOptional(application, getBeginnerModeEnabled());
         args = startupArgs;
         isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
@@ -258,6 +258,13 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
 
     private String getString(@StringRes int resId) {
         return getApplication().getString(resId);
+    }
+
+    public boolean getBeginnerModeEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+                Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+        );
     }
 
     @Override

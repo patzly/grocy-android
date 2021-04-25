@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.R;
 
 public class FormDataMasterProductCatOptional {
     private final Application application;
+    private final MutableLiveData<Boolean> displayHelpLive;
     private final MutableLiveData<Boolean> isActiveLive;
     private final MutableLiveData<ArrayList<Product>> productsLive;
     private final MutableLiveData<Product> parentProductLive;
@@ -52,8 +53,9 @@ public class FormDataMasterProductCatOptional {
     private final MutableLiveData<Product> productLive;
     private boolean filledWithProduct;
 
-    public FormDataMasterProductCatOptional(Application application) {
+    public FormDataMasterProductCatOptional(Application application, boolean beginnerMode) {
         this.application = application;
+        displayHelpLive = new MutableLiveData<>(beginnerMode);
         isActiveLive = new MutableLiveData<>();
         productsLive = new MutableLiveData<>(new ArrayList<>());
         parentProductLive = new MutableLiveData<>();
@@ -74,6 +76,15 @@ public class FormDataMasterProductCatOptional {
 
         productLive = new MutableLiveData<>();
         filledWithProduct = false;
+    }
+
+    public MutableLiveData<Boolean> getDisplayHelpLive() {
+        return displayHelpLive;
+    }
+
+    public void toggleDisplayHelpLive() {
+        assert displayHelpLive.getValue() != null;
+        displayHelpLive.setValue(!displayHelpLive.getValue());
     }
 
     public MutableLiveData<Boolean> getIsActiveLive() {
