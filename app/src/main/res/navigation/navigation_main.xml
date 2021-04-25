@@ -794,5 +794,8 @@
             android:name="animateStart"
             android:defaultValue="true"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_stockOverviewFragment_to_productOverviewBottomSheetDialogFragment"
+            app:destination="@id/productOverviewBottomSheetDialogFragment" />
     </fragment>
 </navigation>

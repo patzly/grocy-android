@@ -87,6 +87,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     private ArrayList<StockItem> expiredItemsTemp;
     private ArrayList<MissingItem> missingItemsTemp;
     private HashMap<Integer, StockItem> productIdsMissingStockItems;
+    private HashMap<Integer, Location> locationHashMap;
     private ArrayList<StockLocation> stockCurrentLocationsTemp;
     private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
 
@@ -190,6 +191,10 @@ public class StockOverviewViewModel extends BaseViewModel {
                         }
                     }
                     this.locationsLive.setValue(locations);
+                    locationHashMap = new HashMap<>();
+                    for(Location location : locations) {
+                        locationHashMap.put(location.getId(), location);
+                    }
 
                     this.stockCurrentLocationsTemp = stockLocations;
                     stockLocationsHashMap = new HashMap<>();
@@ -325,7 +330,13 @@ public class StockOverviewViewModel extends BaseViewModel {
                             shoppingListItemsProductIds.add(item.getProductId());
                         }
                     }
-                }), dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue),
+                }), dlHelper.updateLocations(dbChangedTime, locations -> {
+                    this.locationsLive.setValue(locations);
+                    locationHashMap = new HashMap<>();
+                    for(Location location : locations) {
+                        locationHashMap.put(location.getId(), location);
+                    }
+                }),
                 dlHelper.updateStockCurrentLocations(dbChangedTime, stockLocations -> {
                     this.stockCurrentLocationsTemp = stockLocations;
 
@@ -603,6 +614,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public MutableLiveData<ArrayList<Location>> getLocationsLive() {
         return locationsLive;
+    }
+
+    public Location getLocationFromId(int id) {
+        return locationHashMap.get(id);
     }
 
     public HashMap<Integer, Product> getProductHashMap() {

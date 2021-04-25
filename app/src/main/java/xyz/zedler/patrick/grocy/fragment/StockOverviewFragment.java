@@ -437,7 +437,20 @@ public class StockOverviewFragment extends BaseFragment implements
         if(clickUtil.isDisabled()) return;
         if(stockItem == null) return;
         if(swipeBehavior != null) swipeBehavior.recoverLatestSwipedItem();
-        //showItemBottomSheet((ShoppingListItem) groupedListItem);
+        showProductOverview(stockItem);
+    }
+
+    private void showProductOverview(StockItem stockItem) {
+        if(stockItem == null) return;
+        QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(stockItem.getProduct().getQuIdStock());
+        Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
+        if(quantityUnit == null || location == null) return;
+        navigate(StockOverviewFragmentDirections
+                .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
+                .setShowActions(true)
+                .setStockItem(stockItem)
+                .setQuantityUnit(quantityUnit)
+                .setLocation(location));
     }
 
     @Override
