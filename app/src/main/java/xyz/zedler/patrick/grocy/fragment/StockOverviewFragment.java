@@ -234,7 +234,8 @@ public class StockOverviewFragment extends BaseFragment implements
                     int position = viewHolder.getAdapterPosition()-2;
                     ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
                             .getValue();
-                    if(displayedItems == null || position >= displayedItems.size()) return;
+                    if(displayedItems == null || position < 0
+                            || position >= displayedItems.size()) return;
                     StockItem stockItem = displayedItems.get(position);
                     if(stockItem.getAmountDouble() > 0
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
