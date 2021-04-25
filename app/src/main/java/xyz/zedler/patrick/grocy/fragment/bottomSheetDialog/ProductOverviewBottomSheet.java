@@ -250,6 +250,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
 		refreshButtonStates(false);
 		actionButtonConsume.setOnClickListener(v -> {
+			if(true) {
+				activity.showMessage(R.string.msg_not_implemented_yet);
+				return;
+			}
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
 					Constants.ACTION.CONSUME,
@@ -258,6 +262,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 			dismiss();
 		});
 		actionButtonOpen.setOnClickListener(v -> {
+			if(true) {
+				activity.showMessage(R.string.msg_not_implemented_yet);
+				return;
+			}
 			disableActions();
 			((StockFragment) activity.getCurrentFragment()).performAction(
 					Constants.ACTION.OPEN,
