@@ -398,6 +398,8 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
 
         for(StockItem item : this.stockItems) {
+            if(item.getProduct().getHideOnStockOverview() == 1) continue;
+
             boolean searchContainsItem = true;
             if(searchInput != null && !searchInput.isEmpty()) {
                 searchContainsItem = item.getProduct().getName().toLowerCase().contains(searchInput);

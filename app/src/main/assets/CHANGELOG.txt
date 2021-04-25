@@ -10,6 +10,7 @@
 - Fixed: Don't show inactive products on consume & purchase page (#382)
 - Fixed: 'Add' button was gone in shopping lists bottom sheet
 - Fixed: Location filter in new stock overview now behaves like on server (#248)
+- Fixed: Products are hidden in new stock overview if "hide on stock" is active
 
 2.0.0-alpha05
 - Improved: Language selection and behavior
