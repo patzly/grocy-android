@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.behavior;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,7 +37,6 @@ import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,22 +53,30 @@ import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
-    private static final String TAG = SwipeBehavior.class.getSimpleName();
-
-    private Context context;
+    private final Context context;
     private RecyclerView recyclerView;
     private List<UnderlayButton> buttons;
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
     private int swipedPos = -1;
     private float swipeThreshold = 0.5f;
-    private Map<Integer, List<UnderlayButton>> buttonsBuffer;
-    private Queue<Integer> recoverQueue;
-    private int buttonWidth;
+    private final Map<Integer, List<UnderlayButton>> buttonsBuffer;
+    private final Queue<Integer> recoverQueue;
+    private final int buttonWidth;
+    private final OnSwipeListener onSwipeListener;
+    private boolean swiping = false;
 
-    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent e) {
             view.performClick();
+
+            if(e.getAction() == MotionEvent.ACTION_MOVE && !swiping) {
+                swiping = true;
+                if(onSwipeListener != null) onSwipeListener.onSwipeStartedOrEnded(true);
+            } else if(e.getAction() == MotionEvent.ACTION_UP && swiping) {
+                swiping = false;
+                if(onSwipeListener != null) onSwipeListener.onSwipeStartedOrEnded(false);
+            }
 
             if (swipedPos < 0) return false;
             Point point = new Point((int) e.getRawX(), (int) e.getRawY());
@@ -98,7 +104,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         }
     };
 
-    protected SwipeBehavior(Context context) {
+    protected SwipeBehavior(Context context, OnSwipeListener onSwipeListener) {
         super(0, ItemTouchHelper.RIGHT);
         this.context = context;
         this.buttons = new ArrayList<>();
@@ -125,6 +131,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
                     return super.add(o);
             }
         };
+        this.onSwipeListener = onSwipeListener;
     }
 
     @Override
@@ -150,6 +157,11 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int pos = viewHolder.getAdapterPosition();
+
+        if(swiping) {
+            swiping = false;
+            if(onSwipeListener != null) onSwipeListener.onSwipeStartedOrEnded(false);
+        }
 
         if (swipedPos != pos)
             recoverQueue.add(swipedPos);
@@ -216,24 +228,15 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
                 translationX = dX * buffer.size() * buttonWidth / itemView.getWidth();
 
-                int limit = UnitUtil.getDp(context, 24);
+                /*int limit = UnitUtil.getDp(context, 24);
                 if(translationX < limit && itemView.getElevation() > 0) {
                     itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
-                    itemView.setBackgroundTintList(
-                            ColorStateList.valueOf(
-                                    ColorUtils.blendARGB(
-                                            ContextCompat.getColor(context, R.color.background),
-                                            ContextCompat.getColor(context, R.color.surface),
-                                            translationX / limit
-                                    )
-                            )
-                    );
                 } else if(isCurrentlyActive) {
-                    itemView.setBackgroundTintList(ColorStateList.valueOf(
-                            ContextCompat.getColor(context, R.color.surface)
-                    ));
                     itemView.setElevation(UnitUtil.getDp(context, 2));
-                }
+                } else {
+                    itemView.setElevation(0);
+                }*/
+                itemView.setElevation(0);
 
                 drawButtons(c, itemView, buffer, pos, translationX);
             } else if(swipedPos == pos && dX == 0) {
@@ -338,10 +341,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     }
 
     public static class UnderlayButton {
-        private int resId;
+        private final int resId;
         private int pos;
         private RectF clickRegion;
-        private UnderlayButtonClickListener clickListener;
+        private final UnderlayButtonClickListener clickListener;
 
         public UnderlayButton(
                 @DrawableRes int resId,
@@ -409,5 +412,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
             clickRegion = rect;
             this.pos = pos;
         }
+    }
+
+    public interface OnSwipeListener {
+        void onSwipeStartedOrEnded(boolean started);
     }
 }

@@ -210,15 +210,20 @@ public class ShoppingListFragment extends BaseFragment implements
         });
 
         if(swipeBehavior == null) {
-            swipeBehavior = new SwipeBehavior(activity) {
+            swipeBehavior = new SwipeBehavior(
+                    activity,
+                    swipeStarted -> binding.swipeShoppingList.setEnabled(!swipeStarted)
+            ) {
                 @Override
                 public void instantiateUnderlayButton(
                         RecyclerView.ViewHolder viewHolder,
                         List<UnderlayButton> underlayButtons
                 ) {
                     int position = viewHolder.getAdapterPosition()-1;
-                    ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredGroupedListItemsLive().getValue();
-                    if(groupedListItems == null || position < 0 || position >= groupedListItems.size()) return;
+                    ArrayList<GroupedListItem> groupedListItems = viewModel
+                            .getFilteredGroupedListItemsLive().getValue();
+                    if(groupedListItems == null || position < 0
+                            || position >= groupedListItems.size()) return;
                     GroupedListItem item = groupedListItems.get(position);
                     if(!(item instanceof ShoppingListItem)) return;
                     ShoppingListItem shoppingListItem = (ShoppingListItem) item;

@@ -203,7 +203,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_shopping_list"
+            android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -227,7 +227,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="120dp"
                     android:overScrollMode="never"
-                    android:clipToPadding="false" />
+                    android:clipToPadding="false"/>
 
             </FrameLayout>
 

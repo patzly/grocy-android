@@ -307,7 +307,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         binding.recyclerStock.setAdapter(new StockPlaceholderAdapter());
 
         if(swipeBehavior == null) {
-            swipeBehavior = new SwipeBehavior(activity) {
+            swipeBehavior = new SwipeBehavior(activity, null) {
                 @Override
                 public void instantiateUnderlayButton(
                         RecyclerView.ViewHolder viewHolder,

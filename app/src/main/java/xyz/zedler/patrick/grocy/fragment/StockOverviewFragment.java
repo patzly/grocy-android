@@ -39,6 +39,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
@@ -221,25 +222,56 @@ public class StockOverviewFragment extends BaseFragment implements
         });
 
         if(swipeBehavior == null) {
-            swipeBehavior = new SwipeBehavior(activity) {
+            swipeBehavior = new SwipeBehavior(
+                    activity,
+                    swipeStarted -> binding.swipe.setEnabled(!swipeStarted)
+            ) {
                 @Override
                 public void instantiateUnderlayButton(
                         RecyclerView.ViewHolder viewHolder,
                         List<UnderlayButton> underlayButtons
                 ) {
-                    int position = viewHolder.getAdapterPosition()-1;
-                    /*ArrayList<GroupedListItem> groupedListItems = viewModel.getFilteredStockItemsLive().getValue();
-                    if(groupedListItems == null || position < 0 || position >= groupedListItems.size()) return;
-                    GroupedListItem item = groupedListItems.get(position);
-                    if(!(item instanceof ShoppingListItem)) return;
-                    ShoppingListItem shoppingListItem = (ShoppingListItem) item;
-                    underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                            R.drawable.ic_round_done,
-                            pos -> {
-                                if(position >= groupedListItems.size()) return;
-                                viewModel.toggleDoneStatus(shoppingListItem);
-                            }
-                    ));*/
+                    int position = viewHolder.getAdapterPosition()-2;
+                    ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
+                            .getValue();
+                    if(displayedItems == null || position >= displayedItems.size()) return;
+                    StockItem stockItem = displayedItems.get(position);
+                    if(stockItem.getAmountDouble() > 0
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_consume_product,
+                                pos -> {
+                                    if(pos >= displayedItems.size()) return;
+                                    /*performAction(
+                                            Constants.ACTION.CONSUME,
+                                            displayedItems.get(pos).getProduct().getId()
+                                    );*/
+                                }
+                        ));
+                    }
+                    if(stockItem.getAmountDouble()
+                            > stockItem.getAmountOpenedDouble()
+                            && stockItem.getProduct().getEnableTareWeightHandling() == 0
+                            && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                    ) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_open,
+                                pos -> {
+                                    if(pos >= displayedItems.size()) return;
+                                    /*performAction(
+                                            Constants.ACTION.OPEN,
+                                            displayedItems.get(pos).getProduct().getId()
+                                    );*/
+                                }
+                        ));
+                    }
+                    if(underlayButtons.isEmpty()) {
+                        underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                                R.drawable.ic_round_close,
+                                pos -> swipeBehavior.recoverLatestSwipedItem()
+                        ));
+                    }
                 }
             };
             swipeBehavior.attachToRecyclerView(binding.recycler);
