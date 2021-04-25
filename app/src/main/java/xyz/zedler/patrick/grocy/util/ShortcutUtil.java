@@ -100,7 +100,7 @@ public class ShortcutUtil {
         intent.setClass(context, MainActivity.class);
         return new ShortcutInfo.Builder(context, STOCK_OVERVIEW)
                 .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_list))
+                .setIcon(Icon.createWithResource(context, R.mipmap.ic_stock))
                 .setIntent(intent).build();
     }
 
