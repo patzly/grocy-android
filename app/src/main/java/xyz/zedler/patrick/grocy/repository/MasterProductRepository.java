@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class MasterProductRepository {
@@ -55,6 +57,10 @@ public class MasterProductRepository {
 
     public interface QuantityUnitsListener {
         void actionFinished(ArrayList<QuantityUnit> quantityUnits);
+    }
+
+    public interface BarcodesQuantityUnitsStoresUnitConversionsListener {
+        void actionFinished(ArrayList<ProductBarcode> barcodes, ArrayList<QuantityUnit> quantityUnits, ArrayList<Store> stores, ArrayList<QuantityUnitConversion> conversions);
     }
 
     public interface DataUpdatedListener {
@@ -334,6 +340,100 @@ public class MasterProductRepository {
         protected final Void doInBackground(Void... params) {
             appDatabase.locationDao().deleteAll();
             appDatabase.quantityUnitDao().insertAll(quantityUnits);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished();
+        }
+    }
+
+    public void loadBarcodesQuantityUnitsStoresUnitConversions(BarcodesQuantityUnitsStoresUnitConversionsListener listener) {
+        new loadBarcodesQuantityUnitsStoresUnitConversionsAsyncTask(appDatabase, listener).execute();
+    }
+
+    private static class loadBarcodesQuantityUnitsStoresUnitConversionsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final BarcodesQuantityUnitsStoresUnitConversionsListener listener;
+
+        private ArrayList<ProductBarcode> barcodes;
+        private ArrayList<QuantityUnit> quantityUnits;
+        private ArrayList<Store> stores;
+        private ArrayList<QuantityUnitConversion> conversions;
+
+        loadBarcodesQuantityUnitsStoresUnitConversionsAsyncTask(AppDatabase appDatabase, BarcodesQuantityUnitsStoresUnitConversionsListener listener) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
+            quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
+            stores = new ArrayList<>(appDatabase.storeDao().getAll());
+            conversions = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) listener.actionFinished(barcodes, quantityUnits, stores, conversions);
+        }
+    }
+
+    public void updateBarcodesQuantityUnitsStoresUnitConversions(
+            ArrayList<ProductBarcode> barcodes,
+            ArrayList<QuantityUnit> quantityUnits,
+            ArrayList<Store> stores,
+            ArrayList<QuantityUnitConversion> conversions,
+            DataUpdatedListener listener
+    ) {
+        new updateBarcodesQuantityUnitsStoresUnitConversionsAsyncTask(
+                appDatabase,
+                barcodes,
+                quantityUnits,
+                stores,
+                conversions,
+                listener
+        ).execute();
+    }
+
+    private static class updateBarcodesQuantityUnitsStoresUnitConversionsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final AppDatabase appDatabase;
+        private final DataUpdatedListener listener;
+
+        private final ArrayList<ProductBarcode> barcodes;
+        private final ArrayList<QuantityUnit> quantityUnits;
+        private final ArrayList<Store> stores;
+        private final ArrayList<QuantityUnitConversion> conversions;
+
+        updateBarcodesQuantityUnitsStoresUnitConversionsAsyncTask(
+                AppDatabase appDatabase,
+                ArrayList<ProductBarcode> barcodes,
+                ArrayList<QuantityUnit> quantityUnits,
+                ArrayList<Store> stores,
+                ArrayList<QuantityUnitConversion> conversions,
+                DataUpdatedListener listener
+        ) {
+            this.appDatabase = appDatabase;
+            this.listener = listener;
+            this.barcodes = barcodes;
+            this.quantityUnits = quantityUnits;
+            this.stores = stores;
+            this.conversions = conversions;
+        }
+
+        @Override
+        protected final Void doInBackground(Void... params) {
+            appDatabase.productBarcodeDao().deleteAll();
+            appDatabase.productBarcodeDao().insertAll(barcodes);
+            appDatabase.quantityUnitDao().deleteAll();
+            appDatabase.quantityUnitDao().insertAll(quantityUnits);
+            appDatabase.storeDao().deleteAll();
+            appDatabase.storeDao().insertAll(stores);
+            appDatabase.quantityUnitConversionDao().deleteAll();
+            appDatabase.quantityUnitConversionDao().insertAll(conversions);
             return null;
         }
 

@@ -33,6 +33,7 @@ public class InfoFullscreen {
     public static final int INFO_EMPTY_STORES = 18;
     public static final int INFO_EMPTY_PRODUCT_GROUPS = 20;
     public static final int INFO_EMPTY_LOCATIONS = 22;
+    public static final int INFO_EMPTY_PRODUCT_BARCODES = 24;
 
     private final int type;
     private final String exact;

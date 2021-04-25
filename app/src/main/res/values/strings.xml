@@ -193,7 +193,9 @@
     <string name="error_empty_stock_sub">Go purchase some products</string>
     <string name="error_empty_shopping_list">Empty shopping list</string>
     <string name="error_empty_shopping_list_sub">Add some products you need</string>
+    <string name="error_empty_barcodes_sub">Add a barcode with the button below</string>
     <string name="error_empty_master_data_sub">Create some with the button below</string>
+    <string name="error_empty_product_barcodes">No product barcodes</string>
     <string name="error_empty_locations">No locations</string>
     <string name="error_empty_product_groups">No product groups</string>
     <string name="error_empty_products">No products</string>
@@ -342,6 +344,10 @@
     <string name="subtitle_supported">Supported</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Not supported</string>
+    <!-- %1$s is a number -->
+    <string name="subtitle_barcode_amount">Amount: %1$s</string>
+    <!-- %1$s is a unit -->
+    <string name="subtitle_barcode_unit">Quantity unit: %1$d</string>
 
     <string name="description_input_product_part1">Product field contains:</string>
     <string name="description_input_product_part2">Please choose how to proceed:</string>

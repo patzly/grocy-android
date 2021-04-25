@@ -137,6 +137,12 @@ public class InfoFullscreenView extends RelativeLayout {
                 subtitle = R.string.error_empty_master_data_sub;
                 inForeground = false;
                 break;
+            case INFO_EMPTY_PRODUCT_BARCODES:
+                picture = R.drawable.illustration_toast;
+                title = R.string.error_empty_product_barcodes;
+                subtitle = R.string.error_empty_barcodes_sub;
+                inForeground = false;
+                break;
         }
 
         if(picture != -1) {
