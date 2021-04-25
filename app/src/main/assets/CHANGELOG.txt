@@ -7,6 +7,7 @@
 - Improved: Lock current screen orientation while camera scanner frame is visible (#358)
 - Improved: Camera scanner frame now has a fixed width (#334)
 - Improved: Stock overview page shortcut is now available
+- Improved: Swipe behavior is now much better
 - Improved: Updated translations
 - Fixed: Filter didn't work on master data products page (#370)
 - Fixed: Don't show inactive products on consume & purchase page (#382)
