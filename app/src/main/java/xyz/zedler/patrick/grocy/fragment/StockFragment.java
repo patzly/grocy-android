@@ -263,7 +263,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 },
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
-        chipExpiring.setId(R.id.chip_stock_filter_expiring);
+        //chipExpiring.setId(R.id.chip_stock_filter_expiring);
         chipExpired = new FilterChip(
                 activity,
                 R.color.retro_red_bg_black,
@@ -275,7 +275,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 },
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
-        chipExpired.setId(R.id.chip_stock_filter_expired);
+        //chipExpired.setId(R.id.chip_stock_filter_expired);
         chipMissing = new FilterChip(
                 activity,
                 R.color.retro_blue_bg,
@@ -287,7 +287,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 },
                 () -> filterItems(Constants.STOCK.FILTER.ALL)
         );
-        chipMissing.setId(R.id.chip_stock_filter_missing);
+        //chipMissing.setId(R.id.chip_stock_filter_missing);
 
         // clear filter containers
         binding.linearStockFilterContainerTop.removeAllViews();
