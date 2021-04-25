@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class ShortcutUtil {
 
+    public final static String STOCK_OVERVIEW = "shortcut_stock_overview";
     public final static String SHOPPING_LIST = "shortcut_shopping_list";
     public final static String ADD_TO_SHOPPING_LIST = "shortcut_add_to_shopping_list";
     public final static String SHOPPING_MODE = "shortcut_shopping_mode";
@@ -56,7 +57,11 @@ public class ShortcutUtil {
         List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
         List<ShortcutInfo> newShortcutInfos = new ArrayList<>();
         for(ShortcutInfo shortcutInfo : shortcutInfos) {
-            if(shortcutInfo.getId().equals(SHOPPING_LIST)) {
+            if(shortcutInfo.getId().equals(STOCK_OVERVIEW)) {
+                newShortcutInfos.add(createShortcutStockOverview(
+                        context, context.getString(R.string.title_stock_overview)
+                ));
+            } else if(shortcutInfo.getId().equals(SHOPPING_LIST)) {
                 newShortcutInfos.add(createShortcutShoppingList(
                         context, context.getString(R.string.title_shopping_list)
                 ));
@@ -80,12 +85,23 @@ public class ShortcutUtil {
             }
         }
         List<String> shortcutIdsSorted = Arrays.asList(
-                SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
+                STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
                 SHOPPING_MODE, PURCHASE, CONSUME
         );
         shortcutManager.removeAllDynamicShortcuts();
         newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
         shortcutManager.setDynamicShortcuts(newShortcutInfos);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+    public static ShortcutInfo createShortcutStockOverview(Context context, CharSequence label) {
+        Uri uri = Uri.parse(context.getString(R.string.deep_link_stockOverviewFragment));
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setClass(context, MainActivity.class);
+        return new ShortcutInfo.Builder(context, STOCK_OVERVIEW)
+                .setShortLabel(label)
+                .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_list))
+                .setIntent(intent).build();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)

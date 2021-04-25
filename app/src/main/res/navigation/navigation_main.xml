@@ -797,5 +797,8 @@
         <action
             android:id="@+id/action_stockOverviewFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="@string/deep_link_stockOverviewFragment" />
     </fragment>
 </navigation>

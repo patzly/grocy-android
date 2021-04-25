@@ -58,6 +58,14 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/stock_overview"
+                        style="@style/Widget.Grocy.CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_stock_overview"
+                        android:onCheckedChanged="@{() -> sheet.checkLimitReached()}"/>
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
                         android:id="@+id/shopping_list"
                         style="@style/Widget.Grocy.CheckBox"
                         android:layout_width="match_parent"

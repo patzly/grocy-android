@@ -89,7 +89,9 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
 
         List<ShortcutInfo> shortcutInfos = ShortcutUtil.getDynamicShortcuts(requireContext());
         for(ShortcutInfo shortcutInfo : shortcutInfos) {
-            if(shortcutInfo.getId().equals(ShortcutUtil.SHOPPING_LIST)) {
+            if(shortcutInfo.getId().equals(ShortcutUtil.STOCK_OVERVIEW)) {
+                setCheckBoxChecked(R.id.stock_overview);
+            } else if(shortcutInfo.getId().equals(ShortcutUtil.SHOPPING_LIST)) {
                 setCheckBoxChecked(R.id.shopping_list);
             } else if(shortcutInfo.getId().equals(ShortcutUtil.ADD_TO_SHOPPING_LIST)) {
                 setCheckBoxChecked(R.id.add_to_shopping_list);
@@ -132,7 +134,9 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         for(int i=0; i<=binding.checkboxContainer.getChildCount(); i++) {
             MaterialCheckBox checkBox = (MaterialCheckBox) binding.checkboxContainer.getChildAt(i);
             if (checkBox == null || !checkBox.isChecked()) continue;
-            if(checkBox.getId() == R.id.shopping_list) {
+            if(checkBox.getId() == R.id.stock_overview) {
+                shortcutInfos.add(ShortcutUtil.createShortcutStockOverview(context, checkBox.getText()));
+            } else if(checkBox.getId() == R.id.shopping_list) {
                 shortcutInfos.add(ShortcutUtil.createShortcutShoppingList(context, checkBox.getText()));
             } else if(checkBox.getId() == R.id.add_to_shopping_list) {
                 Uri uriWithArgs = getUriWithArgs(R.string.deep_link_shoppingListItemEditFragment,

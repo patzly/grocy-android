@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="deep_link_stockOverviewFragment">grocy://stockOverviewFragment</string>
     <string name="deep_link_shoppingListFragment">grocy://shoppingListFragment</string>
     <string name="deep_link_shoppingListItemEditFragment">grocy://shoppingListItemEditFragment?action={action}</string>
     <string name="deep_link_shoppingModeFragment">grocy://shoppingModeFragment</string>
