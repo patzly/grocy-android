@@ -77,7 +77,6 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
 
     private DownloadHelper.Queue currentQueueLoading;
     private final boolean debug;
-    private final boolean isActionEdit;
 
     public MasterProductCatBarcodesViewModel(
             @NonNull Application application,
@@ -94,15 +93,10 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
         eventHandler = new EventHandler();
         repository = new MasterProductRepository(application);
         args = startupArgs;
-        isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
         productBarcodesLive = new MutableLiveData<>();
         infoFullscreenLive = new MutableLiveData<>();
         offlineLive = new MutableLiveData<>(false);
-    }
-
-    public boolean isActionEdit() {
-        return isActionEdit;
     }
 
     public Product getFilledProduct() {
@@ -115,7 +109,7 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
             this.quantityUnits = qUs;
             this.stores = stores;
             this.unitConversions = conversions;
-            productBarcodesLive.setValue(barcodes);
+            productBarcodesLive.setValue(filterBarcodes(barcodes));
             if(downloadAfterLoading) downloadData();
         });
     }
@@ -172,7 +166,7 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
 
     private void onQueueEmpty() {
         if(isOffline()) setOfflineLive(false);
-        productBarcodesLive.setValue(productBarcodes);
+        productBarcodesLive.setValue(filterBarcodes(productBarcodes));
         repository.updateBarcodesQuantityUnitsStoresUnitConversions(productBarcodes, quantityUnits, stores, unitConversions, () -> {});
     }
 
@@ -180,6 +174,18 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
         if(debug) Log.e(TAG, "onError: VolleyError: " + error);
         showMessage(getString(R.string.msg_no_connection));
         if(!isOffline()) setOfflineLive(true);
+    }
+
+    private ArrayList<ProductBarcode> filterBarcodes(ArrayList<ProductBarcode> barcodes) {
+        ArrayList<ProductBarcode> filteredBarcodes = new ArrayList<>();
+        assert args.getProduct() != null;
+        int productId = args.getProduct().getId();
+        for(ProductBarcode barcode : barcodes) {
+            if(barcode.getProductId() == productId) {
+                filteredBarcodes.add(barcode);
+            }
+        }
+        return filteredBarcodes;
     }
 
     public MutableLiveData<ArrayList<ProductBarcode>> getProductBarcodesLive() {

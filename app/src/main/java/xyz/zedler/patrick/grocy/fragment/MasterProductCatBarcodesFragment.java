@@ -157,7 +157,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements Pr
         activity.getScrollBehavior().setHideOnScroll(true);
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
-                viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+                R.menu.menu_master_product_edit,
                 animated,
                 this::setUpBottomMenu
         );
