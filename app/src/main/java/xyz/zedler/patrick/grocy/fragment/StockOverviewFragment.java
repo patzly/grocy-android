@@ -48,16 +48,13 @@ import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
@@ -461,25 +458,6 @@ public class StockOverviewFragment extends BaseFragment implements
     }
 
     private void hideDisabledFeatures() {
-    }
-
-    private void showItemBottomSheet(ShoppingListItem item) {
-        if(item == null) return;
-
-        Bundle bundle = new Bundle();
-        if(item.hasProduct()) {
-            Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
-            bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-            QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchase());
-            if(quantityUnit != null && item.getAmountDouble() == 1) {
-                bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
-            } else if(quantityUnit != null) {
-                bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getNamePlural());
-            }
-        }
-        bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, item);
-        bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
-        activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
     }
 
     private void setUpSearch() {

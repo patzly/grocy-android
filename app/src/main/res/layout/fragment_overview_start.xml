@@ -190,8 +190,8 @@
                         android:layout_marginStart="@dimen/main_side_margin"
                         android:layout_marginEnd="@dimen/main_side_margin"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{() -> fragment.navigate(R.id.stockFragment)}"
-                        android:onLongClickVoid="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
+                        android:onClick="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
+                        android:onLongClickVoid="@{() -> fragment.navigate(R.id.stockFragment)}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout
