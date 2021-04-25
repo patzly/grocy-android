@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 
 public class StockOverviewRepository {
     private final AppDatabase appDatabase;
@@ -48,7 +49,8 @@ public class StockOverviewRepository {
                 ArrayList<Product> products,
                 ArrayList<ProductBarcode> productBarcodes,
                 ArrayList<ShoppingListItem> shoppingListItems,
-                ArrayList<Location> locations
+                ArrayList<Location> locations,
+                ArrayList<StockLocation> stockCurrentLocations
         );
     }
 
@@ -71,6 +73,7 @@ public class StockOverviewRepository {
         private ArrayList<ProductBarcode> productBarcodes;
         private ArrayList<ShoppingListItem> shoppingListItems;
         private ArrayList<Location> locations;
+        private ArrayList<StockLocation> stockCurrentLocations;
 
         loadAsyncTask(AppDatabase appDatabase, StockOverviewDataListener listener) {
             this.appDatabase = appDatabase;
@@ -86,12 +89,13 @@ public class StockOverviewRepository {
             productBarcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
             shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
             locations = new ArrayList<>(appDatabase.locationDao().getAll());
+            stockCurrentLocations = new ArrayList<>(appDatabase.stockLocationDao().getAll());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(quantityUnits, productGroups, stockItems, products, productBarcodes, shoppingListItems, locations);
+            if(listener != null) listener.actionFinished(quantityUnits, productGroups, stockItems, products, productBarcodes, shoppingListItems, locations, stockCurrentLocations);
         }
     }
 
@@ -103,6 +107,7 @@ public class StockOverviewRepository {
             ArrayList<ProductBarcode> productBarcodes,
             ArrayList<ShoppingListItem> shoppingListItems,
             ArrayList<Location> locations,
+            ArrayList<StockLocation> stockCurrentLocations,
             StockOverviewDataUpdatedListener listener
     ) {
         new updateAsyncTask(
@@ -114,6 +119,7 @@ public class StockOverviewRepository {
                 productBarcodes,
                 shoppingListItems,
                 locations,
+                stockCurrentLocations,
                 listener
         ).execute();
     }
@@ -129,6 +135,7 @@ public class StockOverviewRepository {
         private final ArrayList<ProductBarcode> productBarcodes;
         private final ArrayList<ShoppingListItem> shoppingListItems;
         private final ArrayList<Location> locations;
+        private final ArrayList<StockLocation> stockCurrentLocations;
 
         updateAsyncTask(
                 AppDatabase appDatabase,
@@ -139,6 +146,7 @@ public class StockOverviewRepository {
                 ArrayList<ProductBarcode> productBarcodes,
                 ArrayList<ShoppingListItem> shoppingListItems,
                 ArrayList<Location> locations,
+                ArrayList<StockLocation> stockCurrentLocations,
                 StockOverviewDataUpdatedListener listener
         ) {
             this.appDatabase = appDatabase;
@@ -150,6 +158,7 @@ public class StockOverviewRepository {
             this.productBarcodes = productBarcodes;
             this.shoppingListItems = shoppingListItems;
             this.locations = locations;
+            this.stockCurrentLocations = stockCurrentLocations;
         }
 
         @Override
@@ -168,6 +177,8 @@ public class StockOverviewRepository {
             appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
             appDatabase.locationDao().deleteAll();
             appDatabase.locationDao().insertAll(locations);
+            appDatabase.stockLocationDao().deleteAll();
+            appDatabase.stockLocationDao().insertAll(stockCurrentLocations);
             return null;
         }
 

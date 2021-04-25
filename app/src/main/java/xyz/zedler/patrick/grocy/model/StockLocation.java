@@ -23,30 +23,43 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
+@Entity(tableName = "stock_current_location_table")
 public class StockLocation implements Parcelable {
 
+    @ColumnInfo(name = "id")
     @SerializedName("id")
-    private final int id;
+    private int id;
 
+    @PrimaryKey
+    @ColumnInfo(name = "product_id")
     @SerializedName("product_id")
-    private final int productId;
+    private int productId;
 
+    @ColumnInfo(name = "amount")
     @SerializedName("amount")
-    private final String amount;
+    private String amount;
 
+    @ColumnInfo(name = "location_id")
     @SerializedName("location_id")
-    private final int locationId;
+    private int locationId;
 
+    @ColumnInfo(name = "location_name")
     @SerializedName("location_name")
-    private final String locationName;
+    private String locationName;
 
+    @ColumnInfo(name = "location_is_freezer")
     @SerializedName("location_is_freezer")
-    private final String isFreezer;
+    private String isFreezer;
+
+    public StockLocation() {}  // for room
 
     private StockLocation(Parcel parcel) {
         id = parcel.readInt();
@@ -84,8 +97,16 @@ public class StockLocation implements Parcelable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getProductId() {
         return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getAmount() {
@@ -96,12 +117,24 @@ public class StockLocation implements Parcelable {
         return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
     }
 
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
     public int getLocationId() {
         return locationId;
     }
 
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
     public String getLocationName() {
         return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public String getIsFreezer() {
@@ -110,6 +143,10 @@ public class StockLocation implements Parcelable {
 
     public boolean getIsFreezerBoolean() {
         return NumUtil.isStringInt(isFreezer) && Integer.parseInt(isFreezer) == 1;
+    }
+
+    public void setIsFreezer(String isFreezer) {
+        this.isFreezer = isFreezer;
     }
 
     @Override

@@ -683,6 +683,63 @@ public class DownloadHelper {
         }
     }
 
+    public QueueItem getStockCurrentLocations(
+            OnStockLocationsResponseListener onResponseListener,
+            OnErrorListener onErrorListener
+    ) {
+        return new QueueItem() {
+            @Override
+            public void perform(
+                    @Nullable OnStringResponseListener responseListener,
+                    @Nullable OnErrorListener errorListener,
+                    @Nullable String uuid
+            ) {
+                get(
+                        grocyApi.getObjects(GrocyApi.ENTITY.STOCK_CURRENT_LOCATIONS),
+                        uuid,
+                        response -> {
+                            Type type = new TypeToken<List<StockLocation>>(){}.getType();
+                            ArrayList<StockLocation> locations = gson.fromJson(response, type);
+                            if(debug) Log.i(tag, "download StockCurrentLocations: " + locations);
+                            if(onResponseListener != null) {
+                                onResponseListener.onResponse(locations);
+                            }
+                            if(responseListener != null) responseListener.onResponse(response);
+                        },
+                        error -> {
+                            if(onErrorListener != null) onErrorListener.onError(error);
+                            if(errorListener != null) errorListener.onError(error);
+                        }
+                );
+            }
+        };
+    }
+
+    public QueueItem getStockCurrentLocations(OnStockLocationsResponseListener onResponseListener) {
+        return getStockCurrentLocations(onResponseListener, null);
+    }
+
+    public QueueItem updateStockCurrentLocations(
+            String dbChangedTime,
+            OnStockLocationsResponseListener onResponseListener
+    ) {
+        OnStockLocationsResponseListener newOnResponseListener = products -> {
+            SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+            editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime);
+            editPrefs.apply();
+            onResponseListener.onResponse(products);
+        };
+        String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+                Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null
+        );
+        if(lastTime == null || !lastTime.equals(dbChangedTime)) {
+            return getStockCurrentLocations(newOnResponseListener, null);
+        } else {
+            if(debug) Log.i(tag, "downloadData: skipped StockCurrentLocations download");
+            return null;
+        }
+    }
+
     public QueueItem getProducts(
             OnProductsResponseListener onResponseListener,
             OnErrorListener onErrorListener

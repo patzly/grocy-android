@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -86,6 +87,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     private ArrayList<StockItem> expiredItemsTemp;
     private ArrayList<MissingItem> missingItemsTemp;
     private HashMap<Integer, StockItem> productIdsMissingStockItems;
+    private ArrayList<StockLocation> stockCurrentLocationsTemp;
+    private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
 
     private DownloadHelper.Queue currentQueueLoading;
     private String searchInput;
@@ -141,7 +144,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     public void loadFromDatabase(boolean downloadAfterLoading) {
         repository.loadFromDatabase(
-                (quantityUnits, productGroups, stockItems, products, barcodes, shoppingListItems, locations) -> {
+                (quantityUnits, productGroups, stockItems, products, barcodes, shoppingListItems, locations, stockLocations) -> {
                     this.quantityUnits = quantityUnits;
                     quantityUnitHashMap = new HashMap<>();
                     for(QuantityUnit quantityUnit : quantityUnits) {
@@ -187,6 +190,17 @@ public class StockOverviewViewModel extends BaseViewModel {
                         }
                     }
                     this.locationsLive.setValue(locations);
+
+                    this.stockCurrentLocationsTemp = stockLocations;
+                    stockLocationsHashMap = new HashMap<>();
+                    for(StockLocation stockLocation : stockLocations) {
+                        HashMap<Integer, StockLocation> locationsForProductId = stockLocationsHashMap.get(stockLocation.getProductId());
+                        if(locationsForProductId == null) {
+                            locationsForProductId = new HashMap<>();
+                            stockLocationsHashMap.put(stockLocation.getProductId(), locationsForProductId);
+                        }
+                        locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
+                    }
 
                     updateFilteredStockItems();
                     if(downloadAfterLoading) downloadData();
@@ -311,7 +325,20 @@ public class StockOverviewViewModel extends BaseViewModel {
                             shoppingListItemsProductIds.add(item.getProductId());
                         }
                     }
-                }), dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue)
+                }), dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue),
+                dlHelper.updateStockCurrentLocations(dbChangedTime, stockLocations -> {
+                    this.stockCurrentLocationsTemp = stockLocations;
+
+                    stockLocationsHashMap = new HashMap<>();
+                    for(StockLocation stockLocation : stockLocations) {
+                        HashMap<Integer, StockLocation> locationsForProductId = stockLocationsHashMap.get(stockLocation.getProductId());
+                        if(locationsForProductId == null) {
+                            locationsForProductId = new HashMap<>();
+                            stockLocationsHashMap.put(stockLocation.getProductId(), locationsForProductId);
+                        }
+                        locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
+                    }
+                })
         );
 
         if(queue.isEmpty()) {
@@ -337,6 +364,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
         editPrefs.apply();
         downloadData();
     }
@@ -350,6 +378,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                 this.productBarcodesTemp,
                 this.shoppingListItems,
                 this.locationsLive.getValue(),
+                this.stockCurrentLocationsTemp,
                 this::updateFilteredStockItems
         );
     }
@@ -383,8 +412,14 @@ public class StockOverviewViewModel extends BaseViewModel {
                 if(productGroup != null && NumUtil.isStringInt(item.getProduct().getProductGroupId()) && productGroup.getObjectId() != Integer.parseInt(item.getProduct().getProductGroupId())) {
                     continue;
                 }
-                if(location != null && NumUtil.isStringInt(item.getProduct().getLocationId()) && location.getObjectId() != Integer.parseInt(item.getProduct().getLocationId())) {
-                    continue;
+                if(location != null) {
+                    HashMap<Integer, StockLocation> stockLocationsForProductId
+                            = stockLocationsHashMap.get(item.getProductId());
+                    if(stockLocationsForProductId == null
+                            || !stockLocationsForProductId.containsKey(location.getObjectId())
+                    ) {
+                        continue;
+                    }
                 }
             }
 

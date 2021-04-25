@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.dao.StockItemDao;
+import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 
 @Database(
@@ -60,9 +62,10 @@ import xyz.zedler.patrick.grocy.model.Store;
                 MissingItem.class,
                 QuantityUnitConversion.class,
                 ProductBarcode.class,
-                StockItem.class
+                StockItem.class,
+                StockLocation.class
         },
-        version = 15
+        version = 16
 )
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
@@ -88,6 +91,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ProductBarcodeDao productBarcodeDao();
 
     public abstract StockItemDao stockItemDao();
+
+    public abstract StockLocationDao stockLocationDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
