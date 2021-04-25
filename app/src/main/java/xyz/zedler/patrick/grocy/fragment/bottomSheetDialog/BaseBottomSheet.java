@@ -1,23 +1,23 @@
-package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
-
 /*
-    This file is part of Grocy Android.
+ * This file is part of Grocy Android.
+ *
+ * Grocy Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Grocy Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright (c) 2020-2021 by Patrick Zedler & Dominic Zedler
+ */
 
-    Grocy Android is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Grocy Android is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Grocy Android.  If not, see <http://www.gnu.org/licenses/>.
-
-    Copyright 2020-2021 by Patrick Zedler & Dominic Zedler
-*/
+package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -47,7 +47,6 @@ import java.net.URLEncoder;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
-
 
 /**
  * This is an extended BottomSheetDialogFragment class. The one overridden method fixes the
