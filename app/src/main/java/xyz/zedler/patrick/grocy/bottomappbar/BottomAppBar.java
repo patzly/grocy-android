@@ -1,4 +1,23 @@
 /*
+ * This file is part of Grocy Android.
+ *
+ * Grocy Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Grocy Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright (c) 2020-2021 by Patrick Zedler & Dominic Zedler
+ */
+
+/*
  * Copyright 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +35,9 @@
 
 package xyz.zedler.patrick.grocy.bottomappbar;
 
+import static com.google.android.material.shape.MaterialShapeDrawable.SHADOW_COMPAT_MODE_ALWAYS;
+import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wrap;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -32,7 +54,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.Dimension;
 import androidx.annotation.IntDef;
 import androidx.annotation.MenuRes;
@@ -48,7 +69,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewCompat.NestedScrollType;
 import androidx.core.view.ViewCompat.ScrollAxis;
 import androidx.customview.view.AbsSavedState;
-
 import com.google.android.material.R;
 import com.google.android.material.animation.TransformationCallback;
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
@@ -62,17 +82,15 @@ import com.google.android.material.shape.EdgeTreatment;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.MaterialShapeUtils;
 import com.google.android.material.shape.ShapeAppearanceModel;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.android.material.shape.MaterialShapeDrawable.SHADOW_COMPAT_MODE_ALWAYS;
-import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wrap;
-
 /**
+ * Modification of the official Material Components' BottomAppBar.
+ *
  * The Bottom App Bar is an extension of Toolbar that supports a shaped background that "cradles" an
  * attached {@link FloatingActionButton}. A FAB is anchored to {@link BottomAppBar} by calling
  * {@link CoordinatorLayout.LayoutParams#setAnchorId(int)}, or by setting {@code app:layout_anchor}
