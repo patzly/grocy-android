@@ -243,6 +243,8 @@ public class StockOverviewFragment extends BaseFragment implements
                                 R.drawable.ic_round_consume_product,
                                 pos -> {
                                     if(pos >= displayedItems.size()) return;
+                                    activity.showMessage(R.string.msg_not_implemented_yet);
+                                    swipeBehavior.recoverLatestSwipedItem();
                                     /*performAction(
                                             Constants.ACTION.CONSUME,
                                             displayedItems.get(pos).getProduct().getId()
@@ -259,6 +261,8 @@ public class StockOverviewFragment extends BaseFragment implements
                                 R.drawable.ic_round_open,
                                 pos -> {
                                     if(pos >= displayedItems.size()) return;
+                                    activity.showMessage(R.string.msg_not_implemented_yet);
+                                    swipeBehavior.recoverLatestSwipedItem();
                                     /*performAction(
                                             Constants.ACTION.OPEN,
                                             displayedItems.get(pos).getProduct().getId()
