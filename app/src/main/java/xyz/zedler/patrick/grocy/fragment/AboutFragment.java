@@ -112,7 +112,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             navigate(R.id.onboardingFragment);
         } else if(v.getId() == R.id.linear_changelog) {
             IconUtil.start(activity, R.id.image_changelog);
-            showTextBottomSheet("CHANGELOG", R.string.info_changelog, 0);
+            showTextBottomSheet("changelog", R.string.info_changelog, 0);
         } else if(v.getId() == R.id.linear_developers) {
             IconUtil.start(activity, R.id.image_developers);
             startActivity(new Intent(
@@ -127,42 +127,42 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         } else if(v.getId() == R.id.linear_license_material_components) {
             IconUtil.start(activity, R.id.image_license_material_components);
             showTextBottomSheet(
-                    "APACHE",
+                    "apache",
                     R.string.license_material_components,
                     R.string.url_material_components
             );
         } else if(v.getId() == R.id.linear_license_material_icons) {
             IconUtil.start(activity, R.id.image_license_material_icons);
             showTextBottomSheet(
-                    "APACHE",
+                    "apache",
                     R.string.license_material_icons,
                     R.string.url_material_icons
             );
         } else if(v.getId() == R.id.linear_license_jost) {
             IconUtil.start(activity, R.id.image_license_jost);
             showTextBottomSheet(
-                    "OFL",
+                    "ofl",
                     R.string.license_jost,
                     R.string.url_jost
             );
         } else if(v.getId() == R.id.linear_license_volley) {
             IconUtil.start(activity, R.id.image_license_volley);
             showTextBottomSheet(
-                    "APACHE",
+                    "apache",
                     R.string.license_volley,
                     R.string.url_volley
             );
         } else if(v.getId() == R.id.linear_license_gson) {
             IconUtil.start(activity, R.id.image_license_gson);
             showTextBottomSheet(
-                    "APACHE",
+                    "apache",
                     R.string.license_gson,
                     R.string.url_gson
             );
         } else if(v.getId() == R.id.linear_license_xzing_android) {
             IconUtil.start(activity, R.id.image_license_xzing_android);
             showTextBottomSheet(
-                    "APACHE",
+                    "apache",
                     R.string.license_xzing_android,
                     R.string.url_zxing_android
             );

@@ -93,7 +93,7 @@ public class TextBottomSheet extends BaseBottomSheet {
 
 		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
 		String content = TextUtil.readFromFile(context, file);
-		if(file.equals("CHANGELOG.txt")) {
+		if(file.equals("changelog.txt")) {
 			binding.textText.setText(
 					BulletUtil.makeBulletList(
 							context,

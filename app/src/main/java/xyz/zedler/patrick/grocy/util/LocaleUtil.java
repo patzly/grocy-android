@@ -64,7 +64,7 @@ public class LocaleUtil {
 
     public static List<Language> getLanguages(Context context) {
         List<Language> languages = new ArrayList<>();
-        String localesRaw = TextUtil.readFromFile(context, "LOCALES.txt");
+        String localesRaw = TextUtil.readFromFile(context, "locales.txt");
         if (localesRaw.trim().isEmpty()) return languages;
         String[] locales = localesRaw.split("\n\n");
         for (String locale : locales) {
