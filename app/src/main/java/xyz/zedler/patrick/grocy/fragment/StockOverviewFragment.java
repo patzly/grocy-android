@@ -368,6 +368,11 @@ public class StockOverviewFragment extends BaseFragment implements
         binding.editTextSearch.setText(result.getText());
     }
 
+    @Override
+    public void performAction(String action, StockItem stockItem) {
+        viewModel.performAction(action, stockItem);
+    }
+
     private boolean showOfflineError() {
         if(viewModel.isOffline()) {
             showMessage(getString(R.string.error_offline));

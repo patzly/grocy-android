@@ -475,16 +475,13 @@ public class StockOverviewViewModel extends BaseViewModel {
                 openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
                 break;
             case Constants.ACTION.CONSUME_ALL:
-                /*StockItem stockItem = getStockItem(productId);
-                if(stockItem != null) {
-                    consumeProduct(
-                            productId,
-                            stockItem.getProduct().getEnableTareWeightHandling() == 0
-                                    ? stockItem.getAmountDouble()
-                                    : stockItem.getProduct().getTareWeightDouble(),
-                            false
-                    );
-                }*/
+                consumeProduct(
+                        stockItem,
+                        stockItem.getProduct().getEnableTareWeightHandling() == 0
+                                ? stockItem.getAmountDouble()
+                                : stockItem.getProduct().getTareWeightDouble(),
+                        false
+                );
                 break;
             case Constants.ACTION.CONSUME_SPOILED:
                 consumeProduct(stockItem, 1, true);
