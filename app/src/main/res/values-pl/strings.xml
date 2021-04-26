@@ -98,8 +98,6 @@
     <string name="action_own_server">Własny serwer</string>
     <string name="action_enter_data_manually">Wpisz dane ręcznie</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d niedługo się przterminuje</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d po terminie przydatności</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -334,7 +332,6 @@
     <string name="subtitle_supported">Wspierane</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Nie wpierane</string>
-
     <string name="description_input_product_part1">Pole produktu zawiera:</string>
     <string name="description_input_product_part2">Wybierz jak kontynuować:</string>
     <string name="description_input_product_option1">Utwórz nowy produkt i użyj danej wejściowej jako nazwy</string>
