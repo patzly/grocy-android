@@ -29,6 +29,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,11 +50,13 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
@@ -461,6 +464,161 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
 
         filteredStockItemsLive.setValue(filteredStockItems);
+    }
+
+    public void performAction(String action, StockItem stockItem) {
+        switch (action) {
+            case Constants.ACTION.CONSUME:
+                consumeProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble(), false);
+                break;
+            case Constants.ACTION.OPEN:
+                openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
+                break;
+            case Constants.ACTION.CONSUME_ALL:
+                /*StockItem stockItem = getStockItem(productId);
+                if(stockItem != null) {
+                    consumeProduct(
+                            productId,
+                            stockItem.getProduct().getEnableTareWeightHandling() == 0
+                                    ? stockItem.getAmountDouble()
+                                    : stockItem.getProduct().getTareWeightDouble(),
+                            false
+                    );
+                }*/
+                break;
+            case Constants.ACTION.CONSUME_SPOILED:
+                consumeProduct(stockItem, 1, true);
+                break;
+        }
+    }
+
+    private void consumeProduct(StockItem stockItem, double amount, boolean spoiled) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", amount);
+            body.put("allow_subproduct_substitution", true);
+            body.put("spoiled", spoiled);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "consumeProduct: " + e);
+        }
+        dlHelper.postWithArray(
+                grocyApi.consumeProduct(stockItem.getProductId()),
+                body,
+                response -> {
+                    String transactionId = null;
+                    double amountConsumed = 0;
+                    try {
+                        transactionId = response.getJSONObject(0)
+                                .getString("transaction_id");
+                        for(int i = 0; i < response.length(); i++) {
+                            amountConsumed -= response.getJSONObject(i).getDouble("amount");
+                        }
+                    } catch (JSONException e) {
+                        if(debug) Log.e(TAG, "consumeProduct: " + e);
+                    }
+
+                    String msg = getApplication().getString(
+                            spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
+                            NumUtil.trim(amountConsumed),
+                            PluralUtil.getQuantityUnitPlural(
+                                    quantityUnitHashMap,
+                                    stockItem.getProduct().getQuIdStock(),
+                                    amountConsumed
+                            ), stockItem.getProduct().getName()
+                    );
+                    SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
+
+                    // set undo button on snackBar
+                    if(transactionId != null) {
+                        String finalTransactionId = transactionId;
+                        snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
+                                grocyApi.undoStockTransaction(finalTransactionId),
+                                response1 -> {
+                                    downloadData();
+                                    showSnackbar(new SnackbarMessage(
+                                            getString(R.string.msg_undone_transaction),
+                                            Snackbar.LENGTH_SHORT
+                                    ));
+                                    if(debug) Log.i(TAG, "consumeProduct: undone");
+                                },
+                                error -> showErrorMessage()
+                        ));
+                    }
+                    downloadData();
+                    showSnackbar(snackbarMsg);
+                    if(debug) Log.i(
+                            TAG, "consumeProduct: consumed " + amountConsumed
+                    );
+                },
+                error -> {
+                    showErrorMessage();
+                    if(debug) Log.i(TAG, "consumeProduct: " + error);
+                }
+        );
+    }
+
+    private void openProduct(StockItem stockItem, double amount) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("amount", amount);
+            body.put("allow_subproduct_substitution", true);
+        } catch (JSONException e) {
+            if(debug) Log.e(TAG, "openProduct: " + e);
+        }
+        dlHelper.postWithArray(
+                grocyApi.openProduct(stockItem.getProductId()),
+                body,
+                response -> {
+                    String transactionId = null;
+                    double amountOpened = 0;
+                    try {
+                        transactionId = response.getJSONObject(0)
+                                .getString("transaction_id");
+                        for(int i = 0; i < response.length(); i++) {
+                            amountOpened += response.getJSONObject(i).getDouble("amount");
+                        }
+                    } catch (JSONException e) {
+                        if(debug) Log.e(TAG, "openProduct: " + e);
+                    }
+
+                    String msg = getApplication().getString(
+                            R.string.msg_opened,
+                            NumUtil.trim(amountOpened),
+                            PluralUtil.getQuantityUnitPlural(
+                                    quantityUnitHashMap,
+                                    stockItem.getProduct().getQuIdStock(),
+                                    amountOpened
+                            ), stockItem.getProduct().getName()
+                    );
+                    SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
+
+                    // set undo button on snackBar
+                    if(transactionId != null) {
+                        String finalTransactionId = transactionId;
+                        snackbarMsg.setAction(getString(R.string.action_undo), v -> dlHelper.post(
+                                grocyApi.undoStockTransaction(finalTransactionId),
+                                response1 -> {
+                                    downloadData();
+                                    showSnackbar(new SnackbarMessage(
+                                            getString(R.string.msg_undone_transaction),
+                                            Snackbar.LENGTH_SHORT
+                                    ));
+                                    if(debug) Log.i(TAG, "openProduct: undone");
+                                },
+                                error -> showErrorMessage()
+                        ));
+                    }
+                    downloadData();
+                    showSnackbar(snackbarMsg);
+                    if(debug) Log.i(
+                            TAG, "openProduct: opened " + amountOpened
+                    );
+                },
+                error -> {
+                    showErrorMessage();
+                    if(debug) Log.i(TAG, "openProduct: " + error);
+                }
+        );
     }
 
     public boolean isSearchActive() {

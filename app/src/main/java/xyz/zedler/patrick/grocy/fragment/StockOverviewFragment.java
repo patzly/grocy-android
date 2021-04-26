@@ -237,24 +237,23 @@ public class StockOverviewFragment extends BaseFragment implements
                     if(displayedItems == null || position < 0
                             || position >= displayedItems.size()) return;
                     StockItem stockItem = displayedItems.get(position);
-                    if(stockItem.getAmountDouble() > 0
+                    if(stockItem.getAmountAggregatedDouble() > 0
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                     ) {
                         underlayButtons.add(new SwipeBehavior.UnderlayButton(
                                 R.drawable.ic_round_consume_product,
                                 pos -> {
                                     if(pos >= displayedItems.size()) return;
-                                    activity.showMessage(R.string.msg_not_implemented_yet);
                                     swipeBehavior.recoverLatestSwipedItem();
-                                    /*performAction(
+                                    viewModel.performAction(
                                             Constants.ACTION.CONSUME,
-                                            displayedItems.get(pos).getProduct().getId()
-                                    );*/
+                                            displayedItems.get(pos-2)
+                                    );
                                 }
                         ));
                     }
-                    if(stockItem.getAmountDouble()
-                            > stockItem.getAmountOpenedDouble()
+                    if(stockItem.getAmountAggregatedDouble()
+                            > stockItem.getAmountOpenedAggregatedDouble()
                             && stockItem.getProduct().getEnableTareWeightHandling() == 0
                             && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
                     ) {
@@ -262,12 +261,11 @@ public class StockOverviewFragment extends BaseFragment implements
                                 R.drawable.ic_round_open,
                                 pos -> {
                                     if(pos >= displayedItems.size()) return;
-                                    activity.showMessage(R.string.msg_not_implemented_yet);
                                     swipeBehavior.recoverLatestSwipedItem();
-                                    /*performAction(
+                                    viewModel.performAction(
                                             Constants.ACTION.OPEN,
-                                            displayedItems.get(pos).getProduct().getId()
-                                    );*/
+                                            displayedItems.get(pos-2)
+                                    );
                                 }
                         ));
                     }

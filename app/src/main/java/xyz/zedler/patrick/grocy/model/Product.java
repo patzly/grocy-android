@@ -543,7 +543,7 @@ public class Product implements Parcelable {
     }
 
     public double getQuickConsumeAmountDouble() {
-        return NumUtil.isDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 0;
+        return NumUtil.isDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 1;
     }
 
     public void setQuickConsumeAmount(String quickConsumeAmount) {
