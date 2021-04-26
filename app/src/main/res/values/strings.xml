@@ -588,8 +588,6 @@
     <string name="info_intro_description">Showcasing features</string>
     <string name="info_dev_beginning">Beginning of development</string>
     <string name="info_dev_beginning_date">April 2020</string>
-    <string name="info_material_components_built_with">Built with</string>
-    <string name="info_material_components" translatable="false">Material Components</string>
     <string name="info_version">Version</string>
     <string name="info_grocy_version">Grocy version</string>
     <string name="info_changelog">Changelog</string>

@@ -118,10 +118,6 @@
     <color name="icon">@color/grey800</color> <!-- dd0a373a -->
     <color name="icon_grayed_out">@color/grey400</color>
 
-    <color name="mdc_square">#212121</color>
-    <color name="mdc_circle">#b2ff59</color>
-    <color name="mdc_overlay">#00e676</color>
-
     <color name="logo">@color/retro_dark</color>
 
     <color name="shortcut_bg">#f5f5f5</color>
